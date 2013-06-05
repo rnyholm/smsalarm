@@ -1,0 +1,21 @@
+SmsAlarm changelog
+
+v2.0(version code 4)
+-importerat all befintlig funktionalitet från jfbk versionen se den changeloggen
+-bytt ikon i notifikationsfältet sekundäralarm
+-smsalarm kan lyssna till flera nummer för sekundärlarm
+-förbättrat, förnyat gränssnitt
+-lagt till klasser för hantering av shared preferences och loggning
+-mera loggning
+
+v1.1.2(version code 3)
+-Gjort om about dialogen
+-Lokaliserat appen till engelska, svenska och finska
+-Lagt till stöd för kompensering av flera landskoder(svenska, norska, danska, tyska)
+
+v1.1(version code 1)
+-Sms Alarm reagerar på två numer(primär- och sekundär).
+-Det är möjligt att ställa in appen så den tar hänsyn till telefonens ljudinställningar på ett korrekt sätt.
+-Bättre hantering av mottagna sms.
+-Förbättrat gränssnitt.
+-SmsReceivern har fått ökad prioritet

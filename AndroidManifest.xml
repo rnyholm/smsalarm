@@ -1,0 +1,38 @@
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="ax.ha.it.smsalarm"
+    android:versionCode="4"
+    android:versionName="2.1">
+
+    <uses-sdk android:minSdkVersion="8" android:targetSdkVersion="16" />
+    <uses-permission android:name="android.permission.CALL_PHONE" />
+    <uses-permission android:name="android.permission.RECEIVE_SMS" />
+    <uses-permission android:name="android.permission.WRITE_SMS" />
+    <uses-permission android:name="android.permission.READ_SMS" />
+    <uses-permission android:name="android.permission.VIBRATE" /> 
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" /> 
+    <application android:label="@string/app_name"
+        android:icon="@drawable/ic_launcher"
+        android:theme="@style/AppTheme">
+        <activity android:name=".Splash" android:label="@string/app_name" android:noHistory="true" android:screenOrientation="portrait">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />            
+        	</intent-filter>       	
+       	</activity>
+        <activity android:name=".SmsAlarm" android:noHistory="true" android:label="@string/app_name">
+            <intent-filter>
+ 				<!-- Future intents and services for this activity goes here -->
+            </intent-filter>
+        </activity>       
+        <activity android:name=".AcknowledgeHandler" android:noHistory="true" android:screenOrientation="portrait" android:label="@string/app_name">
+        </activity>        
+        <receiver android:name=".SmsReceiver">
+         	<intent-filter android:priority="1000"> 
+         		<action android:name="android.provider.Telephony.SMS_RECEIVED"/> 
+         	</intent-filter> 
+        </receiver>        
+        <service android:name=".NotificationHelper"></service>   
+        <service android:name=".AcknowledgeNotificationHelper"></service>   
+        <service android:name=".NoiseHandler"></service>
+    </application>
+</manifest>

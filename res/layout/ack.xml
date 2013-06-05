@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/linearLayout1"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:contentDescription="@string/ackIconContentDescr" >
+
+	<LinearLayout android:layout_height="match_parent" android:id="@+id/linearLayout3" android:orientation="vertical" android:layout_width="match_parent" android:weightSum="1" android:layout_gravity="center_horizontal">
+		<LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:id="@+id/linearLayout2">
+
+			<ImageView
+			    android:id="@+id/imageView1"
+			    android:layout_width="wrap_content"
+			    android:layout_height="wrap_content"
+			    android:layout_gravity="center_vertical"
+			    android:contentDescription="@string/ackIconContentDescr"
+			    android:src="@android:drawable/ic_delete" >
+
+</ImageView>
+
+			<TextView
+			    android:id="@+id/usrAlarmInfo"
+			    android:layout_width="0dip"
+			    android:layout_height="wrap_content"
+			    android:layout_gravity="center_vertical"
+			    android:layout_weight="1"
+			    android:text="@string/fireAlarm"
+			    android:textAppearance="?android:attr/textAppearanceMedium" >
+</TextView>
+		</LinearLayout>
+
+		<View
+		    android:id="@+id/ack_divider_1"
+		    android:layout_width="fill_parent"
+		    android:layout_height="1dip"
+		    android:background="@drawable/gradient_divider_11_and_up" >
+</View>           
+
+		<TextView
+		    android:id="@+id/fullAlarmMessage"
+		    android:layout_width="wrap_content"
+		    android:layout_height="wrap_content"
+		    android:layout_marginBottom="5sp"
+		    android:layout_marginLeft="5sp"
+		    android:layout_marginRight="5sp"
+		    android:layout_marginTop="2sp"
+		    android:text="@string/ackFullMessage"
+		    android:textAppearance="?android:attr/textAppearanceMedium" >
+</TextView>
+
+		<View
+		    android:id="@+id/ack_divider_2"
+		    android:layout_width="fill_parent"
+		    android:layout_height="1dip"
+		    android:background="@drawable/gradient_divider_11_and_up" >
+</View>           
+		<LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:id="@+id/linearLayout4" android:orientation="vertical">
+			<LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:id="@+id/linearLayout5" android:layout_marginTop="5sp" android:layout_marginLeft="5sp" android:layout_marginRight="5sp">
+				<Button android:drawableLeft="@android:drawable/sym_call_outgoing" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="@string/ack" android:layout_gravity="center" android:id="@+id/acknowledgeAlarm"></Button>
+				<Button android:drawableLeft="@android:drawable/sym_call_missed" android:layout_height="wrap_content" android:text="@string/cancel" android:layout_gravity="center" android:layout_width="wrap_content" android:id="@+id/abortAlarm"></Button>
+			</LinearLayout>
+		 </LinearLayout>
+
+		<LinearLayout
+		    android:layout_width="match_parent"
+		    android:layout_height="wrap_content"
+		    android:orientation="vertical" >
+
+			<TextView
+			    android:id="@+id/waitToAck"
+			    android:layout_width="wrap_content"
+			    android:layout_height="match_parent"
+			    android:layout_marginLeft="5sp"
+			    android:layout_marginTop="25sp"
+			    android:text="@string/waitAck"
+			    android:textAppearance="?android:attr/textAppearanceMedium" />
+
+		</LinearLayout>
+
+		<LinearLayout
+		    android:layout_width="match_parent"
+		    android:layout_height="wrap_content"
+		    android:orientation="vertical" >
+
+			<ProgressBar
+			    android:id="@+id/waitToAckProgressBar"
+			    style="@android:style/Widget.ProgressBar.Horizontal"
+			    android:layout_width="match_parent"
+			    android:layout_height="wrap_content"
+			    android:layout_marginLeft="5sp"
+			    android:layout_marginRight="5sp" />
+
+		</LinearLayout>
+
+		<LinearLayout
+		    android:layout_width="match_parent"
+		    android:layout_height="wrap_content"
+		    android:orientation="vertical" >
+
+			<TextView
+			    android:id="@+id/waitToAckInfo"
+			    android:layout_width="wrap_content"
+			    android:layout_height="wrap_content"
+			    android:layout_marginLeft="5sp"
+			    android:layout_marginRight="5sp"
+			    android:layout_marginTop="15sp"
+			    android:text="@string/waitAckInfo"
+			    android:textAppearance="?android:attr/textAppearanceMedium" />
+
+		</LinearLayout>
+
+	</LinearLayout>
+</LinearLayout>

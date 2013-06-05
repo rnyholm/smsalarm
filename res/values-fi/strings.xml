@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Sms Alarm</string>
+    <string name="editNumber">Muuta numero</string>   
+    <string name="editTone">Muuta soittoääni</string>
+    <string name="listenTone">Kuuntele ääntä</string>
+    <string name="about">Sms Alarm, lisää tiet.</string>
+    <string name="numberDefault">Asenna numero!</string>
+    <string name="numberPromptTitle">Asenna numero</string>
+    <string name="numberPromptMessage">Asenna numero johon applikointi tulee hälyyttää</string>
+    <string name="numberPromptHint">Puh. numero, vain numeroina!</string>
+    <string name="tonePromptTitle">Valitse hälytysääni</string>
+    <string name="ok">OK</string>
+    <string name="cancel">Keskeytä</string>
+    <string name="alarm">ENSISIJAINEN HÄLYTYS!</string>
+    <string name="secondaryAlarm">TOISSIJAINEN HÄLYTYS!</string>
+    <string name="duplicatedNumbers">Ensi- ja toissijaiset hälytysnumerot eivät saa olla samanlaiset! Anna uusi numero.</string>
+    <string name="numberInfo">SMS hälyyttää näistä numeroista</string>
+    <string name="primaryLarmNumberInfo">Ensisijainen hälytys</string>
+    <string name="secondaryLarmNumberInfo">Toissijainen hälytys</string>
+    <string name="toneSpinnerInfo">Hälytysääni sekä</string>
+    <string name="msgInfo">Valittu hälytysääni</string>
+    <string name="sysSettingInfo">Käyttä puhelin ääniasen.</string>
+    <string name="sysSettingInfoHint">Ota huom. äänetön asento</string>
+    <string name="aboutVersion">Versio: 1.1.2</string>
+    <string name="aboutBuild">Build: 20120309</string>
+    <string name="aboutCopyright">(c) copyright Robert Nyholm</string>
+    <string name="aboutRightsReserved">Kaikki oikeudet varattu</string>
+</resources>

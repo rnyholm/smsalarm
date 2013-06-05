@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="tones">
+        <item>Ambulance Alarm</item> 
+    	<item>Bosch Fme 88</item>      
+        <item>Chiefs Alarm</item> 
+        <item>Large Alarm</item>                        	
+        <item>Motorola Bmd</item>
+        <item>Motorola Minitor 1</item>
+        <item>Motorola Minitor 2</item>
+        <item>Motorola Minitor 3</item>
+        <item>Motorola Minitor 4</item>
+        <item>Motorola Minitor 5</item>
+        <item>Motorola Minitor 6</item>
+        <item>Motorola Minitor 7</item>
+        <item>Motorola Minitor 8</item>
+        <item>Motorola Minitor 9</item>
+        <item>Motorola Minitor 10</item>
+        <item>Motorola Pageboy II</item>
+        <item>Officers Alarm</item>         
+        <item>Pager 1</item>
+        <item>Pager 2</item>
+        <item>Pager 3</item>
+        <item>Siren</item>
+        <item>Small Alarm</item>         
+        <item>Station Alarm</item>   
+        <item>Swissphone Boss 1</item>
+        <item>Swissphone Boss 2</item>
+        <item>Swissphone Boss 3</item>
+        <item>Swissphone Boss 4</item>
+        <item>Swissphone Memo 1</item>
+        <item>Swissphone Memo 2</item>
+        <item>Swissphone Memo 3</item>
+        <item>Swissphone Memo 4</item>
+        <item>Swissphone Quattro 1</item>
+        <item>Swissphone Quattro 2</item>
+        <item>Swissphone Quattro 3</item>
+        <item>Swissphone Quattro 4</item>
+        <item>Swissphone Quattro 5</item>
+        <item>Swissphone Quattro 6</item>
+        <item>Swissphone Quattro 7</item>
+        <item>Swissphone Quattro 8</item>
+        <item>Swissphone RE609</item>
+    </string-array>
+</resources>
