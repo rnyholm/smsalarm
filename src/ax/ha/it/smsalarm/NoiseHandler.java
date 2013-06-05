@@ -242,7 +242,7 @@ public class NoiseHandler extends Service {
 		}
 		mPlayer.release();
 	}
-
+//
 //	/**
 //	 * Private constructor, is private due to it's singleton pattern.
 //	 */
