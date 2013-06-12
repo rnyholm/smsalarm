@@ -62,9 +62,9 @@
     <string name="enableAcknowledge">Aktivera kvittering av primärlarm</string>
     <string name="enableAcknowledgeHint">Om vald kan primärlarm kvitteras.</string>
     <string name="ackNumberTitle">Sms Alarm kvitterar till detta nummer</string>
-    <string name="aboutVersion">Version: 2.1</string>
+    <string name="aboutVersion">Version: 2.1 Beta Preview</string>
     <string name="splashVersion">v2.1 Beta Preview</string>
-    <string name="aboutBuild">Build: 20130429</string>
+    <string name="aboutBuild">Build: 20130612</string>
     <string name="aboutCopyright">&#169; copyright Robert Nyholm</string>
     <string name="aboutRightsReserved">Alla rättigheter reserverade</string>
     <string name="dividerDescr">Delare</string>
