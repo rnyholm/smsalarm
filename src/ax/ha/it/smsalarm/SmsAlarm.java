@@ -53,6 +53,8 @@ public class SmsAlarm extends Activity  {
 	// Log tag string
 	private final static String LOG_TAG = "SmsAlarm";
 	
+	private final static MediaPlayer mPlayer = new MediaPlayer();
+	
 	// Constants representing different types of input dialogs
 	private final int PRIMARY = 0;
 	private final int SECONDARY = 1;
@@ -1201,205 +1203,325 @@ public class SmsAlarm extends Activity  {
 	 *                preparing media player. Also when resolving message tone
 	 *                id
 	 */
-	public static void makeNoise(Context context, int id, boolean useSoundSettings, boolean playToneTwice) {
-		// Log information
-		logger.logCatTxt(logger.getINFO(), LOG_TAG + ":makeNoise()", "Preparing to play message tone and vibrate");
+	static void makeNoise(Context context, int id, boolean useSoundSettings, boolean playToneTwice) {
+        //The mediaplayer and assets file manager
+        AssetFileDescriptor afd = null;
+        
+        //Get reference to AudioManager, use to get solume levels and other sound settings
+        final AudioManager am = (AudioManager) context.getSystemService(Context.AUDIO_SERVICE);
 
-		// Declarations of different objects needed by makeNoise
-		MediaPlayer mPlayer = new MediaPlayer(); // MediaPlayer object
-		final AudioManager am = (AudioManager) context.getSystemService(Context.AUDIO_SERVICE); // AudioManager
-																								// used
-																								// to
-																								// get
-																								// and
-																								// set
-																								// different
-																								// volume
-																								// levels
-		Vibrator v = (Vibrator) context.getSystemService(Context.VIBRATOR_SERVICE); // Instance
-																					// of
-																					// Vibrator
-																					// from
-																					// context
-		AssetFileDescriptor afd = null; // AssetFileDescriptor to get mp3 file
-		final int currentMediaVolume = am.getStreamVolume(AudioManager.STREAM_MUSIC); // Store
-																						// current
-																						// media
-																						// volume
-		final int currentRingVolume = am.getStreamVolume(AudioManager.STREAM_RING); // Store
-																					// current
-																					// ring
-																					// volume
-		final int maxRingVolume = am.getStreamMaxVolume(AudioManager.STREAM_RING); // Store
-																					// max
-																					// ring
-																					// volume
-		float alarmVolume = 0; // To store calculated alarm volume in
-		final int toBePlayed; // Variable indicating how many times message tone
-								// should be played
+        //To store and get current media and ring volume levels
+        final int currentMediaVolume = am.getStreamVolume(AudioManager.STREAM_MUSIC);
+        int currentRingVolume = am.getStreamVolume(AudioManager.STREAM_RING);
+        
+        //To store maximum ring volume
+        int maxRingVolume = am.getStreamMaxVolume(AudioManager.STREAM_RING);
+        
+        //Store calculated alarm level
+        float alarmVolume = 0;
+        
+        //Set media volume to max level
+        am.setStreamVolume(AudioManager.STREAM_MUSIC,am.getStreamMaxVolume(AudioManager.STREAM_MUSIC),0);
+        
+        //Calculate correct alarm volume, depending on current ring volume
+        if(currentRingVolume > 0) {
+        	alarmVolume = (float)currentRingVolume/maxRingVolume;
+        }	else {
+        	alarmVolume = 0;
+        }
 
-		/*
-		 * SOS morsecode pattern from
-		 * http://android.konreu.com/developer-how-to/
-		 * vibration-examples-for-android-phone-development/
-		 */
-		// int dot = 500; // Length of a Morse Code "dot" in milliseconds
-		// int dash = 800; // Length of a Morse Code "dash" in milliseconds
-		// int short_gap = 200; // Length of Gap Between dots/dashes
-		// int medium_gap = 500; // Length of Gap Between Letters
-		// int long_gap = 1000; // Length of Gap Between Words
-		// long[] pattern = { 0, // Start immediately
-		// dot, short_gap, dot, short_gap, dot, // s
-		// medium_gap, dash, short_gap, dash, short_gap, dash, // o
-		// medium_gap, dot, short_gap, dot, short_gap, dot, // s
-		// long_gap };
-
-		// Custom vibration pattern
-		long[] pattern = { 0, 5000, 500, 5000, 500, 5000, 500, 5000 };
-
-		// Log information
-		logger.logCatTxt(logger.getINFO(), LOG_TAG + ":makeNoise()", "MediaPlayer initalized, Audio Service initalized, Vibrator initalized, AssetFileDescriptor initalized. Current MediaVolume stored, current RingVolume stored. Vibration pattern variables is set.");
-
-		// Set media volume to max level
-		am.setStreamVolume(AudioManager.STREAM_MUSIC, am.getStreamMaxVolume(AudioManager.STREAM_MUSIC), 0);
-
-		// Log information
-		logger.logCatTxt(logger.getINFO(), LOG_TAG + ":makeNoise()", "Device's media volume has been set to max");
-
-		// Calculate correct alarm volume, depending on current ring volume
-		if (currentRingVolume > 0) {
-			alarmVolume = (float) currentRingVolume / maxRingVolume;
-		} else {
-			alarmVolume = 0;
-		}
-
-		// Log information
-		logger.logCatTxt(logger.getINFO(), LOG_TAG + ":makeNoise()", "Correct alarm volume has been calculated");
-
-		// Unresolve correct tone depending on id
+        //Get instance of Vibrator from context
+        Vibrator v = (Vibrator) context.getSystemService(Context.VIBRATOR_SERVICE);
+         
+        /*
+         * SOS morsecode pattern from 
+         * http://android.konreu.com/developer-how-to/vibration-examples-for-android-phone-development/ 
+         */
+        int dot = 500;      	//Length of a Morse Code "dot" in milliseconds
+        int dash = 800;     	//Length of a Morse Code "dash" in milliseconds
+        int short_gap = 500;    //Length of Gap Between dots/dashes
+        int medium_gap = 800;   //Length of Gap Between Letters
+        int long_gap = 1300;    //Length of Gap Between Words
+        long[] pattern = {
+            0,  //Start immediately
+            dot, short_gap, dot, short_gap, dot,    //s
+            medium_gap,
+            dash, short_gap, dash, short_gap, dash, //o
+            medium_gap,
+            dot, short_gap, dot, short_gap, dot,    //s
+            long_gap
+        };
+         
+        //Play correct tone depending on id		
 		try {
-			logger.logCatTxt(logger.getINFO(), LOG_TAG + ":makeNoise()", "Try to unresolve message tone");
-			afd = context.getAssets().openFd("tones/alarm/" + msgToneLookup(context, id) + ".mp3");
+			afd = context.getAssets().openFd("tones/alarm/"+msgToneLookup(context,id)+".mp3");
 		} catch (IOException e) {
-			// IOException occurred, trace and log it
+			// TODO Auto-generated catch block
 			e.printStackTrace();
-			logger.logCatTxt(logger.getERROR(), LOG_TAG + ":makeNoise()", "An IOException occurred while unresolving message tone from id" + e);
 		}
-
-		// Set data source for mPlayer, common both for debug and ordinary mode
+			 		
+    	
+    	//Set data source for mPlayer, common both for debug and ordinary mode
 		try {
-			mPlayer.setDataSource(afd.getFileDescriptor(), afd.getStartOffset(), afd.getLength());
-			logger.logCatTxt(logger.getINFO(), LOG_TAG + ":makeNoise()", "Data source has been set for Media Player");
+			mPlayer.setDataSource(afd.getFileDescriptor(),afd.getStartOffset(),afd.getLength());
 		} catch (IllegalArgumentException e) {
-			// IllegalArgumentException occurred, trace and log it
+			// TODO Auto-generated catch block
 			e.printStackTrace();
-			logger.logCatTxt(logger.getERROR(), LOG_TAG + ":makeNoise()", "An IllegalArgumentException occurred while setting data source for media player" + e);
 		} catch (IllegalStateException e) {
-			// IllegalStateException occurred, trace and log it
+			// TODO Auto-generated catch block
 			e.printStackTrace();
-			logger.logCatTxt(logger.getERROR(), LOG_TAG + ":makeNoise()", "An IllegalStateException occurred while setting data source for media player" + e);
 		} catch (IOException e) {
-			// IOException occurred, trace and log it
+			// TODO Auto-generated catch block
 			e.printStackTrace();
-			logger.logCatTxt(logger.getERROR(), LOG_TAG + ":makeNoise()", "An IOException occurred while setting data source for media player" + e);
 		}
-
-		// Prepare mPlayer, also common for debug and ordinary mode
+		
+		//Prepare mPlayer, also common for debug and ordinary mode
 		try {
 			mPlayer.prepare();
-			logger.logCatTxt(logger.getINFO(), LOG_TAG + ":makeNoise()", "Media Player prepared");
 		} catch (IllegalStateException e) {
-			// IllegalStateException occurred, trace and log it
+			// TODO Auto-generated catch block
 			e.printStackTrace();
-			logger.logCatTxt(logger.getERROR(), LOG_TAG + ":makeNoise()", "An IllegalStateException occurred while preparing media player" + e);
 		} catch (IOException e) {
-			// IOException occurred, trace and log it
+			// TODO Auto-generated catch block
 			e.printStackTrace();
-			logger.logCatTxt(logger.getERROR(), LOG_TAG + ":makeNoise()", "An IOException occurred while preparing media player" + e);
 		}
-
-		// If false then just play message tone once else twice
-		if (!playToneTwice) {
-			toBePlayed = 1;
-			// Log information
-			logger.logCatTxt(logger.getINFO(), LOG_TAG + ":makeNoise()", "Message tone will be played once, if device not in RINGER_MODE_SILENT  or application is set to not consider device's sound settings");
-		} else {
-			toBePlayed = 2;
-			// Log information
-			logger.logCatTxt(logger.getINFO(), LOG_TAG + ":makeNoise()", "Message tone will be played twice, if device not in RINGER_MODE_SILENT or application is set to not consider device's sound settings");
-		}
-
+			
 		/*
-		 * If application use systems sound settings, check if phone is in
-		 * normal, silent or vibration mode else don't check phones status and
-		 * play tone and vibrate even if phone is in silent or vibrate mode
+		 * If application use systems sound settings, check if phone is in normal, silent or vibrate mode
+		 * else don't check phones status and play tone and vibrate even if phone is in silent or vibrate mode
 		 */
-		if (useSoundSettings) {
-			// Log information
-			logger.logCatTxt(logger.getINFO(), LOG_TAG + ":makeNoise()", "Application is set to take into account device's sound settings");
-
-			// Decide if phone are in normal, vibrate or silent state and take action
-			switch (am.getRingerMode()) {
-			case AudioManager.RINGER_MODE_SILENT:
-				// Do nothing except log information
-				logger.logCatTxt(logger.getINFO(), LOG_TAG + ":makeNoise()", "Device is in RINGER_MODE_SILENT, don't vibrate or play message tone");
-				break;
-			case AudioManager.RINGER_MODE_VIBRATE:
-				// Vibrate, -1 = no repeat
-				v.vibrate(pattern, -1);
-				logger.logCatTxt(logger.getINFO(), LOG_TAG + ":makeNoise()", "Device is in RINGER_MODE_VIBRATE, just vibrate");
-				break;
-			case AudioManager.RINGER_MODE_NORMAL:
-				// Set correct volume to mediaplayer
-				mPlayer.setVolume(alarmVolume, alarmVolume);
-				// Log information
-				logger.logCatTxt(logger.getINFO(), LOG_TAG + ":makeNoise()", "Correct volume has been set to media player from previously calculated alarm volume");
-				// Vibrate, -1 = no repeat
-				v.vibrate(pattern, -1);
-				// Start play message tone
-				mPlayer.start();
-				logger.logCatTxt(logger.getINFO(), LOG_TAG + ":makeNoise()", "Device is in RINGER_MODE_NORMAL, vibrate and play message tone");
-				break;
-			default: // <--Unsupported RINGER_MODE 
-				//Do nothing except log information
-				logger.logCatTxt(logger.getERROR(), LOG_TAG + ":makeNoise()", "Device is in a UNSUPPORTED ringer mode, can't decide what to do");
-			}
-		} else { // If not take into account OS sound setting, always ring at highest volume and vibrate
-			// Vibrate, -1 = no repeat
-			v.vibrate(pattern, -1);
-			// Start play message tone
-			mPlayer.start();
-			// Log information
-			logger.logCatTxt(logger.getINFO(), LOG_TAG + ":makeNoise()", "Application is set to don't take into account device's sound settings. Play message tone at max volume and vibrate");
+		if(useSoundSettings == true){
+			//Set correct volume to mediaplayer
+			mPlayer.setVolume(alarmVolume, alarmVolume);
+			
+			//Decide if phone are in normal, vibrate or silent state and take action
+	        switch (am.getRingerMode()) {
+	  		 case AudioManager.RINGER_MODE_SILENT:
+	  			 //Do nothing!
+				 break;
+	  		 case AudioManager.RINGER_MODE_VIBRATE:
+	  			 //Vibrate, -1 = no repeat
+	  			 v.vibrate(pattern, -1);
+				 break;
+	  		 case AudioManager.RINGER_MODE_NORMAL:
+	  			 //Vibrate, -1 = no repeat
+	  			 v.vibrate(pattern, -1);			 
+	  			 //Play msgTone
+	  			 mPlayer.start();
+				 break;
+	    	}
+		} else { //If not considerate OS sound setting, alwas ring at highest volume and vibrate
+			mPlayer.setVolume(1, 1);
+ 			v.vibrate(pattern, -1);			 
+ 			mPlayer.start();
 		}
-
-		// Listen to completion, in other words when media player has finished and reset media volume and media player
-		mPlayer.setOnCompletionListener(new OnCompletionListener() {
-			// Counter variable to count number of times played, we have already played the message tone once
-			int timesPlayed = 1;
-
-			/**
-			 * Listener to listen when message tone has finished playing.
-			 */
-			@Override
-			public void onCompletion(MediaPlayer mPlayer) {
-				// If message tone havn't been played enough times, else release
-				// mediaplayer
-				if (timesPlayed < toBePlayed) {
-					// Add to counter
-					timesPlayed++;
-					// Seek to beginning of message tone
-					mPlayer.seekTo(0);
-					// Start play message tone
-					mPlayer.start();
-				} else {
-					am.setStreamVolume(AudioManager.STREAM_MUSIC, currentMediaVolume, 0);
-					mPlayer.release();
-					// Log information
-					logger.logCatTxt(logger.getINFO(), LOG_TAG + ":makeNoise().MediaPlayer.onCompletion()", "Media player have been released and all sound levels have been restored");
-				}
-			}
-		});
+		
+		//Listen to completion, in other words when mediaplayer has finished and reset media volume and mediaplayer
+		mPlayer.setOnCompletionListener(new OnCompletionListener() {		  
+              public void onCompletion(MediaPlayer arg0) {
+                  am.setStreamVolume(AudioManager.STREAM_MUSIC, currentMediaVolume, 0);
+                  mPlayer.release();
+              }
+		});		
+    
+//		// Log information
+//		logger.logCatTxt(logger.getINFO(), LOG_TAG + ":makeNoise()", "Preparing to play message tone and vibrate");
+//
+//		// Declarations of different objects needed by makeNoise
+//		final MediaPlayer mPlayer = new MediaPlayer(); // MediaPlayer object
+//		final AudioManager am = (AudioManager) context.getSystemService(Context.AUDIO_SERVICE); // AudioManager
+//																								// used
+//																								// to
+//																								// get
+//																								// and
+//																								// set
+//																								// different
+//																								// volume
+//																								// levels
+//		Vibrator v = (Vibrator) context.getSystemService(Context.VIBRATOR_SERVICE); // Instance
+//																					// of
+//																					// Vibrator
+//																					// from
+//																					// context
+//		AssetFileDescriptor afd = null; // AssetFileDescriptor to get mp3 file
+//		final int currentMediaVolume = am.getStreamVolume(AudioManager.STREAM_MUSIC); // Store
+//																						// current
+//																						// media
+//																						// volume
+//		int currentRingVolume = am.getStreamVolume(AudioManager.STREAM_RING); // Store
+//																					// current
+//																					// ring
+//																					// volume
+//		int maxRingVolume = am.getStreamMaxVolume(AudioManager.STREAM_RING); // Store
+//																					// max
+//																					// ring
+//																					// volume
+//		float alarmVolume = 0; // To store calculated alarm volume in
+//		final int toBePlayed; // Variable indicating how many times message tone
+//								// should be played
+//
+//		/*
+//		 * SOS morsecode pattern from
+//		 * http://android.konreu.com/developer-how-to/
+//		 * vibration-examples-for-android-phone-development/
+//		 */
+//		// int dot = 500; // Length of a Morse Code "dot" in milliseconds
+//		// int dash = 800; // Length of a Morse Code "dash" in milliseconds
+//		// int short_gap = 200; // Length of Gap Between dots/dashes
+//		// int medium_gap = 500; // Length of Gap Between Letters
+//		// int long_gap = 1000; // Length of Gap Between Words
+//		// long[] pattern = { 0, // Start immediately
+//		// dot, short_gap, dot, short_gap, dot, // s
+//		// medium_gap, dash, short_gap, dash, short_gap, dash, // o
+//		// medium_gap, dot, short_gap, dot, short_gap, dot, // s
+//		// long_gap };
+//
+//		// Custom vibration pattern
+//		long[] pattern = { 0, 5000, 500, 5000, 500, 5000, 500, 5000 };
+//
+//		// Log information
+//		logger.logCatTxt(logger.getINFO(), LOG_TAG + ":makeNoise()", "MediaPlayer initalized, Audio Service initalized, Vibrator initalized, AssetFileDescriptor initalized. Current MediaVolume stored, current RingVolume stored. Vibration pattern variables is set.");
+//
+//		// Set media volume to max level
+//		am.setStreamVolume(AudioManager.STREAM_MUSIC, am.getStreamMaxVolume(AudioManager.STREAM_MUSIC), 0);
+//
+//		// Log information
+//		logger.logCatTxt(logger.getINFO(), LOG_TAG + ":makeNoise()", "Device's media volume has been set to max");
+//
+//		// Calculate correct alarm volume, depending on current ring volume
+//		if (currentRingVolume > 0) {
+//			alarmVolume = (float) currentRingVolume / maxRingVolume;
+//		} else {
+//			alarmVolume = 0;
+//		}
+//
+//		// Log information
+//		logger.logCatTxt(logger.getINFO(), LOG_TAG + ":makeNoise()", "Correct alarm volume has been calculated");
+//
+//		// Unresolve correct tone depending on id
+//		try {
+//			logger.logCatTxt(logger.getINFO(), LOG_TAG + ":makeNoise()", "Try to unresolve message tone");
+//			afd = context.getAssets().openFd("tones/alarm/" + msgToneLookup(context, id) + ".mp3");
+//		} catch (IOException e) {
+//			// IOException occurred, trace and log it
+//			e.printStackTrace();
+//			logger.logCatTxt(logger.getERROR(), LOG_TAG + ":makeNoise()", "An IOException occurred while unresolving message tone from id" + e);
+//		}
+//
+//		// Set data source for mPlayer, common both for debug and ordinary mode
+//		try {
+//			mPlayer.setDataSource(afd.getFileDescriptor(), afd.getStartOffset(), afd.getLength());
+//			logger.logCatTxt(logger.getINFO(), LOG_TAG + ":makeNoise()", "Data source has been set for Media Player");
+//		} catch (IllegalArgumentException e) {
+//			// IllegalArgumentException occurred, trace and log it
+//			e.printStackTrace();
+//			logger.logCatTxt(logger.getERROR(), LOG_TAG + ":makeNoise()", "An IllegalArgumentException occurred while setting data source for media player" + e);
+//		} catch (IllegalStateException e) {
+//			// IllegalStateException occurred, trace and log it
+//			e.printStackTrace();
+//			logger.logCatTxt(logger.getERROR(), LOG_TAG + ":makeNoise()", "An IllegalStateException occurred while setting data source for media player" + e);
+//		} catch (IOException e) {
+//			// IOException occurred, trace and log it
+//			e.printStackTrace();
+//			logger.logCatTxt(logger.getERROR(), LOG_TAG + ":makeNoise()", "An IOException occurred while setting data source for media player" + e);
+//		}
+//
+//		// Prepare mPlayer, also common for debug and ordinary mode
+//		try {
+//			mPlayer.prepare();
+//			logger.logCatTxt(logger.getINFO(), LOG_TAG + ":makeNoise()", "Media Player prepared");
+//		} catch (IllegalStateException e) {
+//			// IllegalStateException occurred, trace and log it
+//			e.printStackTrace();
+//			logger.logCatTxt(logger.getERROR(), LOG_TAG + ":makeNoise()", "An IllegalStateException occurred while preparing media player" + e);
+//		} catch (IOException e) {
+//			// IOException occurred, trace and log it
+//			e.printStackTrace();
+//			logger.logCatTxt(logger.getERROR(), LOG_TAG + ":makeNoise()", "An IOException occurred while preparing media player" + e);
+//		}
+//
+//		// If false then just play message tone once else twice
+//		if (!playToneTwice) {
+//			toBePlayed = 1;
+//			// Log information
+//			logger.logCatTxt(logger.getINFO(), LOG_TAG + ":makeNoise()", "Message tone will be played once, if device not in RINGER_MODE_SILENT  or application is set to not consider device's sound settings");
+//		} else {
+//			toBePlayed = 2;
+//			// Log information
+//			logger.logCatTxt(logger.getINFO(), LOG_TAG + ":makeNoise()", "Message tone will be played twice, if device not in RINGER_MODE_SILENT or application is set to not consider device's sound settings");
+//		}
+//
+//		/*
+//		 * If application use systems sound settings, check if phone is in
+//		 * normal, silent or vibration mode else don't check phones status and
+//		 * play tone and vibrate even if phone is in silent or vibrate mode
+//		 */
+//		if (useSoundSettings) {
+//			// Log information
+//			logger.logCatTxt(logger.getINFO(), LOG_TAG + ":makeNoise()", "Application is set to take into account device's sound settings");
+//
+//			// Decide if phone are in normal, vibrate or silent state and take action
+//			switch (am.getRingerMode()) {
+//			case AudioManager.RINGER_MODE_SILENT:
+//				// Do nothing except log information
+//				logger.logCatTxt(logger.getINFO(), LOG_TAG + ":makeNoise()", "Device is in RINGER_MODE_SILENT, don't vibrate or play message tone");
+//				break;
+//			case AudioManager.RINGER_MODE_VIBRATE:
+//				// Vibrate, -1 = no repeat
+//				v.vibrate(pattern, -1);
+//				logger.logCatTxt(logger.getINFO(), LOG_TAG + ":makeNoise()", "Device is in RINGER_MODE_VIBRATE, just vibrate");
+//				break;
+//			case AudioManager.RINGER_MODE_NORMAL:
+//				// Set correct volume to mediaplayer
+//				mPlayer.setVolume(alarmVolume, alarmVolume);
+//				// Log information
+//				logger.logCatTxt(logger.getINFO(), LOG_TAG + ":makeNoise()", "Correct volume has been set to media player from previously calculated alarm volume");
+//				// Vibrate, -1 = no repeat
+//				v.vibrate(pattern, -1);
+//				// Start play message tone
+//				mPlayer.start();
+//				logger.logCatTxt(logger.getINFO(), LOG_TAG + ":makeNoise()", "Device is in RINGER_MODE_NORMAL, vibrate and play message tone");
+//				break;
+//			default: // <--Unsupported RINGER_MODE 
+//				//Do nothing except log information
+//				logger.logCatTxt(logger.getERROR(), LOG_TAG + ":makeNoise()", "Device is in a UNSUPPORTED ringer mode, can't decide what to do");
+//			}
+//		} else { // If not take into account OS sound setting, always ring at highest volume and vibrate
+//			// Vibrate, -1 = no repeat
+//			v.vibrate(pattern, -1);
+//			// Start play message tone
+//			mPlayer.start();
+//			// Log information
+//			logger.logCatTxt(logger.getINFO(), LOG_TAG + ":makeNoise()", "Application is set to don't take into account device's sound settings. Play message tone at max volume and vibrate");
+//		}
+//
+//		// Listen to completion, in other words when media player has finished and reset media volume and media player
+//		mPlayer.setOnCompletionListener(new OnCompletionListener() {
+//			// Counter variable to count number of times played, we have already played the message tone once
+//			int timesPlayed = 1;
+//
+//			/**
+//			 * Listener to listen when message tone has finished playing.
+//			 */
+//			@Override
+//			public void onCompletion(MediaPlayer mPlayer) {
+//				// If message tone havn't been played enough times, else release
+//				// mediaplayer
+//				if (timesPlayed < toBePlayed) {
+//					// Add to counter
+//					timesPlayed++;
+//					// Seek to beginning of message tone
+//					mPlayer.seekTo(0);
+//					// Start play message tone
+//					mPlayer.start();
+//				} else {
+//					am.setStreamVolume(AudioManager.STREAM_MUSIC, currentMediaVolume, 0);
+//					mPlayer.release();
+//					// Log information
+//					logger.logCatTxt(logger.getINFO(), LOG_TAG + ":makeNoise().MediaPlayer.onCompletion()", "Media player have been released and all sound levels have been restored");
+//				}
+//			}
+//		});
 	}
 
 	/**

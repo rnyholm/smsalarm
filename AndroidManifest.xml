@@ -4,12 +4,6 @@
     android:versionName="2.1">
 
     <uses-sdk android:minSdkVersion="8" android:targetSdkVersion="16" />
-    <uses-permission android:name="android.permission.CALL_PHONE" />
-    <uses-permission android:name="android.permission.RECEIVE_SMS" />
-    <uses-permission android:name="android.permission.WRITE_SMS" />
-    <uses-permission android:name="android.permission.READ_SMS" />
-    <uses-permission android:name="android.permission.VIBRATE" /> 
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" /> 
     <application android:label="@string/app_name"
         android:icon="@drawable/ic_launcher"
         android:theme="@style/AppTheme">
@@ -33,6 +27,11 @@
         </receiver>        
         <service android:name=".NotificationHelper"></service>   
         <service android:name=".AcknowledgeNotificationHelper"></service>   
-        <service android:name=".NoiseHandler"></service>
     </application>
+    <uses-permission android:name="android.permission.CALL_PHONE" />
+    <uses-permission android:name="android.permission.RECEIVE_SMS" />
+    <uses-permission android:name="android.permission.WRITE_SMS" />
+    <uses-permission android:name="android.permission.READ_SMS" />
+    <uses-permission android:name="android.permission.VIBRATE" /> 
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />     
 </manifest>
