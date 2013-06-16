@@ -24,7 +24,7 @@ import android.telephony.SmsMessage;
  * @author Robert Nyholm <robert.nyholm@aland.net>
  * @version 2.1
  * @since 0.9beta
- * @date 2013-06-12
+ * @date 2013-06-16
  * 
  */
 public class SmsReceiver extends BroadcastReceiver {
@@ -41,6 +41,7 @@ public class SmsReceiver extends BroadcastReceiver {
 	// Objects needed for logging, shared preferences and noise handling
 	private LogHandler logger = LogHandler.getInstance();
 	private PreferencesHandler prefHandler = PreferencesHandler.getInstance();
+	private NoiseHandler noiseHandler = NoiseHandler.getInstance();
 
 	// String containing the primary listen number
 	private String primaryListenNumber = "";
@@ -250,15 +251,15 @@ public class SmsReceiver extends BroadcastReceiver {
 
 	/**
 	 * <Method to handle incoming SMS. Aborts the systems broadcast and stores
-	 * the SMS in the device inbox. This method is also responsible for making
-	 * noise(such as playing rintone, vibrate etc.) via
-	 * <code>ax.ha.it.smsalarm.SmsAlarm#makeNoise(Context, int, boolean, boolean)</code>
+	 * the SMS in the device inbox. This method is also responsible for playing
+	 * ringtone via
+	 * <code>ax.ha.it.smsalarm.SmsAlarm#playMsgToneVibrate(Context, int, boolean)</code>
 	 * , vibrate and start <code>intent</code>.
 	 * 
 	 * @param context
 	 *            Context
 	 * 
-	 * @see ax.ha.it.smsalarm#SmsAlarm.makeNoise(Context, int, boolean, boolean)
+	 * @see ax.ha.it.smsalarm#NoiseHandler.makeNoise(Context, int, boolean, boolean)
 	 * @see #onReceive(Context, Intent)
 	 * @see #getSmsReceivePrefs(Context)
 	 */
@@ -289,9 +290,9 @@ public class SmsReceiver extends BroadcastReceiver {
 		// Play message tone and vibrate, different method calls depending on
 		// alarm type
 		if (this.type.equals("primary")) {
-			SmsAlarm.makeNoise(context, this.primaryMessageToneId,useOsSoundSettings, this.playToneTwice);
+			this.noiseHandler.makeNoise(context, this.primaryMessageToneId, useOsSoundSettings, this.playToneTwice);
 		} else if (this.type.equals("secondary")) {
-			SmsAlarm.makeNoise(context, this.secondaryMessageToneId,useOsSoundSettings, this.playToneTwice);
+			this.noiseHandler.makeNoise(context, this.secondaryMessageToneId, useOsSoundSettings, this.playToneTwice);
 		} else {
 			// UNSUPPORTED LARM TYPE OCCURRED
 			this.logger

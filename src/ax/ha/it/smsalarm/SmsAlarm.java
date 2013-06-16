@@ -4,7 +4,6 @@
 
 package ax.ha.it.smsalarm;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -12,14 +11,10 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
-import android.content.res.AssetFileDescriptor;
+import android.content.Intent;
 import android.graphics.Color;
-import android.media.AudioManager;
-import android.media.MediaPlayer;
-import android.media.MediaPlayer.OnCompletionListener;
 import android.os.Build;
 import android.os.Bundle;
-import android.os.Vibrator;
 import android.text.InputType;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -43,7 +38,7 @@ import android.widget.Toast;
  * @author Robert Nyholm <robert.nyholm@aland.net>
  * @version 2.1
  * @since 0.9beta
- * @date 2013-06-12
+ * @date 2013-06-16
  *
  * @see #onCreate(Bundle)
  * @see #onPause()
@@ -51,9 +46,7 @@ import android.widget.Toast;
 public class SmsAlarm extends Activity  {
 	
 	// Log tag string
-	private final static String LOG_TAG = "SmsAlarm";
-	
-	private final static MediaPlayer mPlayer = new MediaPlayer();
+	private final String LOG_TAG = "SmsAlarm";
 	
 	// Constants representing different types of input dialogs
 	private final int PRIMARY = 0;
@@ -68,8 +61,9 @@ public class SmsAlarm extends Activity  {
 	private final int LIST = 3;	
 
 	// Objects needed for logging, shared preferences and noise handling
-	private static LogHandler logger = LogHandler.getInstance();
+	private LogHandler logger = LogHandler.getInstance();
 	private static final PreferencesHandler prefHandler = PreferencesHandler.getInstance();
+	private NoiseHandler noiseHandler = NoiseHandler.getInstance();
 	
 	// Variables of different UI elements and types
 	// The EdittextObjects
@@ -154,7 +148,7 @@ public class SmsAlarm extends Activity  {
         setContentView(R.layout.main);
         
         // Log in debugging and information purpose
-        logger.logCatTxt(logger.getINFO(), LOG_TAG + ":onCreate()", "Creation of Sms Alarm started");
+        this.logger.logCatTxt(this.logger.getINFO(), this.LOG_TAG + ":onCreate()", "Creation of Sms Alarm started");
         
         // Get sharedPreferences
         this.getSmsAlarmPrefs();
@@ -245,10 +239,12 @@ public class SmsAlarm extends Activity  {
 					// Logging
 					logger.logCatTxt(logger.getINFO(), LOG_TAG + ":onCreate().listenMsgToneButton.OnClickListener().onClick()", "Listen message tone Button pressed. Message tone for PRIMARY alarm will be played");
 					// Play message tone and vibrate
-					makeNoise(SmsAlarm.this, primaryMessageToneId, useOsSoundSettings, false);
+					noiseHandler.makeNoise(SmsAlarm.this, primaryMessageToneId, useOsSoundSettings, false);
+					Intent noiseIntent = new Intent(SmsAlarm.this, NoiseHandler.class);
+					startService(noiseIntent);
 				} else if(toneSpinnerPos == 1) {
 					logger.logCatTxt(logger.getINFO(), LOG_TAG + ":onCreate().listenMsgToneButton.OnClickListener().onClick()", "Listen message tone Button pressed. Message tone for SECONDARY alarm will be played");
-					makeNoise(SmsAlarm.this, secondaryMessageToneId, useOsSoundSettings, false);
+					noiseHandler.makeNoise(SmsAlarm.this, secondaryMessageToneId, useOsSoundSettings, false);
 				} else {
 		        	// DO NOTHING EXCEPT LOG ERROR MESSAGE
 		        	logger.logCatTxt(logger.getERROR(), LOG_TAG + ":onCreate().listenMsgToneButton.OnClickListener().onClick()", "Invalid spinner position occurred. Current tone Spinner position is: \"" + Integer.toString(toneSpinnerPos) + "\"");
@@ -369,7 +365,7 @@ public class SmsAlarm extends Activity  {
         this.updateWholeUI();      
         
         // Log in debugging and information purpose
-        logger.logCatTxt(logger.getINFO(), LOG_TAG + ":onCreate()", "Creation of Sms Alarm completed");        
+        this.logger.logCatTxt(this.logger.getINFO(), this.LOG_TAG + ":onCreate()", "Creation of Sms Alarm completed");        
     }
     
     /**
@@ -388,7 +384,7 @@ public class SmsAlarm extends Activity  {
     
     public void onDestroy() {
     	super.onDestroy();
-    	logger.logCatTxt(logger.getWARN(), LOG_TAG + ":onDestroy()", "Oh my god, they killed Kenny!");
+    	this.logger.logCatTxt(this.logger.getWARN(), this.LOG_TAG + ":onDestroy()", "Oh my god, they killed Kenny!");
     }
     
     /**
@@ -402,7 +398,7 @@ public class SmsAlarm extends Activity  {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
 		  // Logging
-		  logger.logCatTxt(logger.getINFO(), LOG_TAG + ":onCreateOptionsMenu()", "Menu created");
+		  this.logger.logCatTxt(this.logger.getINFO(), this.LOG_TAG + ":onCreateOptionsMenu()", "Menu created");
           MenuInflater inflater = getMenuInflater();
           inflater.inflate(R.menu.menu, menu);
           return true;
@@ -420,7 +416,7 @@ public class SmsAlarm extends Activity  {
 		switch (item.getItemId()) {
       		case R.id.item1:
       			// Logging
-      			logger.logCatTxt(logger.getINFO(), LOG_TAG + ":onOptionsSelected()", "Menu item 1 selected");
+      			this.logger.logCatTxt(this.logger.getINFO(), this.LOG_TAG + ":onOptionsSelected()", "Menu item 1 selected");
       			// Build up and show the about dialog
       			this.buildAndShowAboutDialog();
       			return true;            	
@@ -437,7 +433,7 @@ public class SmsAlarm extends Activity  {
      */
     private void findViews() {   	
     	// Logging
-    	logger.logCatTxt(logger.getINFO(), LOG_TAG + ":findViews()", "Start finding Views by their ID");
+    	this.logger.logCatTxt(this.logger.getINFO(), this.LOG_TAG + ":findViews()", "Start finding Views by their ID");
     	
         // Declare and initialize variables of type EditText
     	this.primaryListenNumberEditText = (EditText)findViewById(R.id.primaryNumber_et);
@@ -475,12 +471,12 @@ public class SmsAlarm extends Activity  {
         	this.divider2ImageView.setImageResource(R.drawable.gradient_divider_10_and_down);
         	this.divider3ImageView.setImageResource(R.drawable.gradient_divider_10_and_down);
         	// Logging
-        	logger.logCatTxt(logger.getDEBUG(), LOG_TAG + ":findViews()", "API level < 11, set bright gradients");
+        	this.logger.logCatTxt(this.logger.getDEBUG(), this.LOG_TAG + ":findViews()", "API level < 11, set bright gradients");
         } else {
         	this.divider1ImageView.setImageResource(R.drawable.gradient_divider_11_and_up); 
         	this.divider2ImageView.setImageResource(R.drawable.gradient_divider_11_and_up);
         	this.divider3ImageView.setImageResource(R.drawable.gradient_divider_11_and_up);
-        	logger.logCatTxt(logger.getDEBUG(), LOG_TAG + ":findViews()", "API level > 10, set dark gradients");
+        	this.logger.logCatTxt(this.logger.getDEBUG(), this.LOG_TAG + ":findViews()", "API level > 10, set dark gradients");
         }            
         
         // Set some attributes to the smsPrimaryNumberEditText
@@ -511,7 +507,7 @@ public class SmsAlarm extends Activity  {
         this.selectedToneEditText.setTextColor(Color.BLACK);   
         
     	// Logging
-    	logger.logCatTxt(logger.getINFO(), LOG_TAG + ":findViews()", "All Views found");
+    	this.logger.logCatTxt(this.logger.getINFO(), this.LOG_TAG + ":findViews()", "All Views found");
     }
     
     /**
@@ -523,21 +519,21 @@ public class SmsAlarm extends Activity  {
      */
     private void setSmsAlarmPrefs(){   	
     	// Some logging
-    	logger.logCatTxt(logger.getINFO(), LOG_TAG + ":setSmsAlarmPrefs()", "Start setting shared preferences used by class SmsAlarm");
+    	this.logger.logCatTxt(this.logger.getINFO(), this.LOG_TAG + ":setSmsAlarmPrefs()", "Start setting shared preferences used by class SmsAlarm");
     	
       	// Set preferences used by class Sms Alarm
-      	prefHandler.setPrefs(prefHandler.getSHARED_PREF(), prefHandler.getPRIMARY_LISTEN_NUMBER_KEY(), this.primaryListenNumber, this);
-      	prefHandler.setPrefs(prefHandler.getSHARED_PREF(), prefHandler.getSECONDARY_LISTEN_NUMBERS_KEY(), this.secondaryListenNumbers, this);
-      	prefHandler.setPrefs(prefHandler.getSHARED_PREF(), prefHandler.getPRIMARY_MESSAGE_TONE_KEY(), this.primaryMessageToneId, this);
-      	prefHandler.setPrefs(prefHandler.getSHARED_PREF(), prefHandler.getSECONDARY_MESSAGE_TONE_KEY(), this.secondaryMessageToneId, this);  
-      	prefHandler.setPrefs(prefHandler.getSHARED_PREF(), prefHandler.getUSE_OS_SOUND_SETTINGS_KEY(), this.useOsSoundSettings, this);        	
-      	prefHandler.setPrefs(prefHandler.getSHARED_PREF(), prefHandler.getENABLE_ACK_KEY(), this.useAlarmAcknowledge, this);
-      	prefHandler.setPrefs(prefHandler.getSHARED_PREF(), prefHandler.getACK_NUMBER_KEY(), this.acknowledgeNumber, this);  
-      	prefHandler.setPrefs(prefHandler.getSHARED_PREF(), prefHandler.getPLAY_TONE_TWICE_KEY(), this.playToneTwice, this);  
-      	prefHandler.setPrefs(prefHandler.getSHARED_PREF(), prefHandler.getENABLE_SMS_ALARM_KEY(), this.enableSmsAlarm, this);     
-      	prefHandler.setPrefs(prefHandler.getSHARED_PREF(), prefHandler.getRESCUE_SERVICE_KEY(), this.rescueService, this);         	
+      	this.prefHandler.setPrefs(this.prefHandler.getSHARED_PREF(), this.prefHandler.getPRIMARY_LISTEN_NUMBER_KEY(), this.primaryListenNumber, this);
+      	this.prefHandler.setPrefs(this.prefHandler.getSHARED_PREF(), this.prefHandler.getSECONDARY_LISTEN_NUMBERS_KEY(), this.secondaryListenNumbers, this);
+      	this.prefHandler.setPrefs(this.prefHandler.getSHARED_PREF(), this.prefHandler.getPRIMARY_MESSAGE_TONE_KEY(), this.primaryMessageToneId, this);
+      	this.prefHandler.setPrefs(this.prefHandler.getSHARED_PREF(), this.prefHandler.getSECONDARY_MESSAGE_TONE_KEY(), this.secondaryMessageToneId, this);  
+      	this.prefHandler.setPrefs(this.prefHandler.getSHARED_PREF(), this.prefHandler.getUSE_OS_SOUND_SETTINGS_KEY(), this.useOsSoundSettings, this);        	
+      	this.prefHandler.setPrefs(this.prefHandler.getSHARED_PREF(), this.prefHandler.getENABLE_ACK_KEY(), this.useAlarmAcknowledge, this);
+      	this.prefHandler.setPrefs(this.prefHandler.getSHARED_PREF(), this.prefHandler.getACK_NUMBER_KEY(), this.acknowledgeNumber, this);  
+      	this.prefHandler.setPrefs(this.prefHandler.getSHARED_PREF(), this.prefHandler.getPLAY_TONE_TWICE_KEY(), this.playToneTwice, this);  
+      	this.prefHandler.setPrefs(this.prefHandler.getSHARED_PREF(), this.prefHandler.getENABLE_SMS_ALARM_KEY(), this.enableSmsAlarm, this);     
+      	this.prefHandler.setPrefs(this.prefHandler.getSHARED_PREF(), this.prefHandler.getRESCUE_SERVICE_KEY(), this.rescueService, this);         	
 
-    	logger.logCatTxt(logger.getINFO(), LOG_TAG + ":setSmsAlarmPrefs()", "Shared preferences set");
+    	this.logger.logCatTxt(this.logger.getINFO(), this.LOG_TAG + ":setSmsAlarmPrefs()", "Shared preferences set");
     }
     
     /**
@@ -551,21 +547,21 @@ public class SmsAlarm extends Activity  {
 	@SuppressWarnings("unchecked")
 	private void getSmsAlarmPrefs() {
     	//Some logging
-    	logger.logCatTxt(logger.getINFO(), LOG_TAG + ":getSmsAlarmPrefs()", "Start retrieving shared preferences needed by class SmsAlarm");
+    	this.logger.logCatTxt(this.logger.getINFO(), this.LOG_TAG + ":getSmsAlarmPrefs()", "Start retrieving shared preferences needed by class SmsAlarm");
     	
     	//Get shared preferences needed by class Sms Alarm
-    	primaryListenNumber = (String) prefHandler.getPrefs(prefHandler.getSHARED_PREF(), prefHandler.getPRIMARY_LISTEN_NUMBER_KEY(), this.STRING, this);
-    	secondaryListenNumbers = (List<String>) prefHandler.getPrefs(prefHandler.getSHARED_PREF(), prefHandler.getSECONDARY_LISTEN_NUMBERS_KEY(), this.LIST, this);
-    	primaryMessageToneId = (Integer) prefHandler.getPrefs(prefHandler.getSHARED_PREF(), prefHandler.getPRIMARY_MESSAGE_TONE_KEY(), this.INTEGER, this);
-    	secondaryMessageToneId = (Integer) prefHandler.getPrefs(prefHandler.getSHARED_PREF(), prefHandler.getSECONDARY_MESSAGE_TONE_KEY(), this.INTEGER, this, 1);
-    	useOsSoundSettings = (Boolean) prefHandler.getPrefs(prefHandler.getSHARED_PREF(), prefHandler.getUSE_OS_SOUND_SETTINGS_KEY(), this.BOOLEAN, this);
-    	useAlarmAcknowledge = (Boolean) prefHandler.getPrefs(prefHandler.getSHARED_PREF(), prefHandler.getENABLE_ACK_KEY(), this.BOOLEAN, this);   
-    	acknowledgeNumber = (String) prefHandler.getPrefs(prefHandler.getSHARED_PREF(), prefHandler.getACK_NUMBER_KEY(), this.STRING, this);  
-    	playToneTwice = (Boolean) prefHandler.getPrefs(prefHandler.getSHARED_PREF(), prefHandler.getPLAY_TONE_TWICE_KEY(), this.BOOLEAN, this);    
-    	enableSmsAlarm = (Boolean) prefHandler.getPrefs(prefHandler.getSHARED_PREF(), prefHandler.getENABLE_SMS_ALARM_KEY(), this.BOOLEAN, this, true);  
-    	rescueService = (String) prefHandler.getPrefs(prefHandler.getSHARED_PREF(), prefHandler.getRESCUE_SERVICE_KEY(), this.STRING, this);    	
+    	this.primaryListenNumber = (String) this.prefHandler.getPrefs(this.prefHandler.getSHARED_PREF(), this.prefHandler.getPRIMARY_LISTEN_NUMBER_KEY(), this.STRING, this);
+    	this.secondaryListenNumbers = (List<String>) this.prefHandler.getPrefs(this.prefHandler.getSHARED_PREF(), this.prefHandler.getSECONDARY_LISTEN_NUMBERS_KEY(), this.LIST, this);
+    	this.primaryMessageToneId = (Integer) this.prefHandler.getPrefs(this.prefHandler.getSHARED_PREF(), this.prefHandler.getPRIMARY_MESSAGE_TONE_KEY(), this.INTEGER, this);
+    	this.secondaryMessageToneId = (Integer) this.prefHandler.getPrefs(this.prefHandler.getSHARED_PREF(), this.prefHandler.getSECONDARY_MESSAGE_TONE_KEY(), this.INTEGER, this, 1);
+    	this.useOsSoundSettings = (Boolean) this.prefHandler.getPrefs(this.prefHandler.getSHARED_PREF(), this.prefHandler.getUSE_OS_SOUND_SETTINGS_KEY(), this.BOOLEAN, this);
+    	this.useAlarmAcknowledge = (Boolean) this.prefHandler.getPrefs(this.prefHandler.getSHARED_PREF(), this.prefHandler.getENABLE_ACK_KEY(), this.BOOLEAN, this);   
+    	this.acknowledgeNumber = (String) this.prefHandler.getPrefs(this.prefHandler.getSHARED_PREF(), this.prefHandler.getACK_NUMBER_KEY(), this.STRING, this);  
+    	this.playToneTwice = (Boolean) this.prefHandler.getPrefs(this.prefHandler.getSHARED_PREF(), this.prefHandler.getPLAY_TONE_TWICE_KEY(), this.BOOLEAN, this);    
+    	this.enableSmsAlarm = (Boolean) this.prefHandler.getPrefs(this.prefHandler.getSHARED_PREF(), this.prefHandler.getENABLE_SMS_ALARM_KEY(), this.BOOLEAN, this, true);  
+    	this.rescueService = (String) this.prefHandler.getPrefs(this.prefHandler.getSHARED_PREF(), this.prefHandler.getRESCUE_SERVICE_KEY(), this.STRING, this);    	
 
-    	logger.logCatTxt(logger.getINFO(), LOG_TAG + ":getSmsAlarmPrefs()", "Shared preferences retrieved");  	 
+    	this.logger.logCatTxt(this.logger.getINFO(), this.LOG_TAG + ":getSmsAlarmPrefs()", "Shared preferences retrieved");  	 
     }
     
     /**
@@ -580,7 +576,7 @@ public class SmsAlarm extends Activity  {
      */
     private void buildAndShowDeleteSecondaryNumberDialog() {
     	// Logging
-    	logger.logCatTxt(logger.getINFO(), LOG_TAG + ":buildAndShowDeleteSecondaryNumberDialog()", "Start building delete SECONDARY number dialog");
+    	this.logger.logCatTxt(this.logger.getINFO(), this.LOG_TAG + ":buildAndShowDeleteSecondaryNumberDialog()", "Start building delete SECONDARY number dialog");
     	
     	//Store secondaryListenNumberSpinner position
     	final int position = secondaryListenNumberSpinner.getSelectedItemPosition();
@@ -600,7 +596,7 @@ public class SmsAlarm extends Activity  {
     	dialog.setCancelable(false);
     	
     	// Logging
-    	logger.logCatTxt(logger.getINFO(), LOG_TAG + ":buildAndShowDeleteSecondaryNumberDialog()", "Dialog attributes set");    	
+    	this.logger.logCatTxt(this.logger.getINFO(), this.LOG_TAG + ":buildAndShowDeleteSecondaryNumberDialog()", "Dialog attributes set");    	
     	
     	// Set a positive button and listen on it
     	dialog.setPositiveButton(R.string.yes, new DialogInterface.OnClickListener() {
@@ -626,7 +622,7 @@ public class SmsAlarm extends Activity  {
     	}); 
     	
     	// Logging
-    	logger.logCatTxt(logger.getINFO(), LOG_TAG + ":buildAndShowDeleteSecondaryNumberDialog()", "Showing dialog");	
+    	this.logger.logCatTxt(logger.getINFO(), LOG_TAG + ":buildAndShowDeleteSecondaryNumberDialog()", "Showing dialog");	
     	
     	//Show it
     	dialog.show();    	
@@ -652,7 +648,7 @@ public class SmsAlarm extends Activity  {
      */
     private void buildAndShowInputDialog(final int dialogType) {  
     	// Logging
-    	logger.logCatTxt(logger.getINFO(), LOG_TAG + ":buildAndShowInputDialog()", "Start building dialog");
+    	this.logger.logCatTxt(this.logger.getINFO(), this.LOG_TAG + ":buildAndShowInputDialog()", "Start building dialog");
     	
     	//Build up the alert dialog
     	AlertDialog.Builder dialog = new AlertDialog.Builder(this);
@@ -682,7 +678,7 @@ public class SmsAlarm extends Activity  {
         	// Bind dialog to input
         	dialog.setView(input);
         	// Logging
-        	logger.logCatTxt(logger.getINFO(), LOG_TAG + ":buildAndShowInputDialog()", "Dialog attributes is set for dialog type PRIMARY");
+        	this.logger.logCatTxt(this.logger.getINFO(), this.LOG_TAG + ":buildAndShowInputDialog()", "Dialog attributes is set for dialog type PRIMARY");
     		break;
     	case (SECONDARY): // <--1
         	dialog.setTitle(R.string.numberPromptTitle);
@@ -691,7 +687,7 @@ public class SmsAlarm extends Activity  {
         	input.setInputType(InputType.TYPE_CLASS_PHONE);
         	dialog.setCancelable(false);
         	dialog.setView(input);
-        	logger.logCatTxt(logger.getINFO(), LOG_TAG + ":buildAndShowInputDialog()", "Dialog attributes is set for dialog type SECONDARY");
+        	this.logger.logCatTxt(this.logger.getINFO(), this.LOG_TAG + ":buildAndShowInputDialog()", "Dialog attributes is set for dialog type SECONDARY");
     		break;
     	case (ACKNOWLEDGE): // <--2
         	dialog.setTitle(R.string.numberPromptTitle);
@@ -700,7 +696,7 @@ public class SmsAlarm extends Activity  {
         	input.setInputType(InputType.TYPE_CLASS_PHONE);
         	dialog.setCancelable(false);
         	dialog.setView(input);
-        	logger.logCatTxt(logger.getINFO(), LOG_TAG + ":buildAndShowInputDialog()", "Dialog attributes is set for dialog type ACKNOWLEDGE");
+        	this.logger.logCatTxt(this.logger.getINFO(), this.LOG_TAG + ":buildAndShowInputDialog()", "Dialog attributes is set for dialog type ACKNOWLEDGE");
     		break;
     	case (RESCUESERVICE): // <--3
         	dialog.setTitle(R.string.rescueServicePromptTitle);
@@ -709,13 +705,13 @@ public class SmsAlarm extends Activity  {
         	input.setInputType(InputType.TYPE_CLASS_TEXT);
         	dialog.setCancelable(false);
         	dialog.setView(input);
-        	logger.logCatTxt(logger.getINFO(), LOG_TAG + ":buildAndShowInputDialog()", "Dialog attributes is set for dialog type RESCUESERVICE");
+        	this.logger.logCatTxt(this.logger.getINFO(), this.LOG_TAG + ":buildAndShowInputDialog()", "Dialog attributes is set for dialog type RESCUESERVICE");
     		break;
     	default: // <--Unsupported dialog type. Displaying a dummy dialog!
         	dialog.setTitle("Congratulations!");
     		dialog.setMessage("Somehow you got this dialog to show up! I bet a monkey must have been messing around with the code;-)");
         	dialog.setCancelable(false);
-        	logger.logCatTxt(logger.getERROR(), LOG_TAG + ":buildAndShowInputDialog()", "A UNSUPPORTED dialog type has been given as parameter, a DUMMY dialog will be built and shown");
+        	this.logger.logCatTxt(this.logger.getERROR(), this.LOG_TAG + ":buildAndShowInputDialog()", "A UNSUPPORTED dialog type has been given as parameter, a DUMMY dialog will be built and shown");
     	}
     	
     	// Set a positive button and listen on it
@@ -840,7 +836,7 @@ public class SmsAlarm extends Activity  {
     	}
     	
     	// Logging
-    	logger.logCatTxt(logger.getINFO(), LOG_TAG + ":buildAndShowInputDialog()", "Showing dialog");	 
+    	this.logger.logCatTxt(logger.getINFO(), LOG_TAG + ":buildAndShowInputDialog()", "Showing dialog");	 
     	
     	//Show it
     	dialog.show();
@@ -858,7 +854,7 @@ public class SmsAlarm extends Activity  {
      */
     private void buildAndShowToneDialog() {    
     	// Logging
-    	logger.logCatTxt(logger.getINFO(), LOG_TAG + ":buildAndShowToneDialog()", "Start building tone dialog");
+    	this.logger.logCatTxt(this.logger.getINFO(), this.LOG_TAG + ":buildAndShowToneDialog()", "Start building tone dialog");
     	
        	// Build up the alert dialog
     	AlertDialog.Builder dialog = new AlertDialog.Builder(this);
@@ -869,7 +865,7 @@ public class SmsAlarm extends Activity  {
     	dialog.setCancelable(false);
     	
     	// Logging
-    	logger.logCatTxt(logger.getINFO(), LOG_TAG + ":buildAndShowToneDialog()", "Dialog attributes set");
+    	this.logger.logCatTxt(this.logger.getINFO(), this.LOG_TAG + ":buildAndShowToneDialog()", "Dialog attributes set");
     	
     	// Set items to list view from resource array tones
     	dialog.setItems(R.array.tones, new DialogInterface.OnClickListener() {			
@@ -882,14 +878,14 @@ public class SmsAlarm extends Activity  {
 					// Store primary message tone id from position of list
 					primaryMessageToneId = listPosition;
 					// Log information
-		        	logger.logCatTxt(logger.getDEBUG(), LOG_TAG + ":buildAndShowToneDialog().Item.OnClickListener().onClick()", "New PRIMARY message tone selected. Tone: \"" + msgToneLookup(SmsAlarm.this, primaryMessageToneId) + "\", id: \"" + primaryMessageToneId + "\" and tone Spinner position: \"" + Integer.toString(toneSpinnerPos) + "\"");			
+		        	logger.logCatTxt(logger.getDEBUG(), LOG_TAG + ":buildAndShowToneDialog().Item.OnClickListener().onClick()", "New PRIMARY message tone selected. Tone: \"" + noiseHandler.msgToneLookup(SmsAlarm.this, primaryMessageToneId) + "\", id: \"" + primaryMessageToneId + "\" and tone Spinner position: \"" + Integer.toString(toneSpinnerPos) + "\"");			
 					// Store primary message tone id to preferences to preferences
 			      	prefHandler.setPrefs(prefHandler.getSHARED_PREF(), prefHandler.getPRIMARY_MESSAGE_TONE_KEY(), primaryMessageToneId, SmsAlarm.this);
 			      	// Update selected tone EditText
 			      	updateSelectedToneEditText();
 				} else if(toneSpinnerPos == 1) { // <--SECONDARY MESSAGE TONE
 					secondaryMessageToneId = listPosition;
-		        	logger.logCatTxt(logger.getDEBUG(), LOG_TAG + ":buildAndShowToneDialog().Item.OnClickListener().onClick()", "New SECONDARY message tone selected. Tone: \"" + msgToneLookup(SmsAlarm.this, secondaryMessageToneId) + "\", id: \"" + secondaryMessageToneId + "\" and tone Spinner position: \"" + Integer.toString(toneSpinnerPos) + "\"");		
+		        	logger.logCatTxt(logger.getDEBUG(), LOG_TAG + ":buildAndShowToneDialog().Item.OnClickListener().onClick()", "New SECONDARY message tone selected. Tone: \"" + noiseHandler.msgToneLookup(SmsAlarm.this, secondaryMessageToneId) + "\", id: \"" + secondaryMessageToneId + "\" and tone Spinner position: \"" + Integer.toString(toneSpinnerPos) + "\"");		
 			      	prefHandler.setPrefs(prefHandler.getSHARED_PREF(), prefHandler.getSECONDARY_MESSAGE_TONE_KEY(), secondaryMessageToneId, SmsAlarm.this);  					
 					updateSelectedToneEditText();
 				} else { // <--UNSUPPORTED SPINNER POSITION
@@ -908,7 +904,7 @@ public class SmsAlarm extends Activity  {
     	});
 
     	// Logging
-    	logger.logCatTxt(logger.getINFO(), LOG_TAG + ":buildAndShowToneDialog()", "Showing dialog");
+    	this.logger.logCatTxt(this.logger.getINFO(), this.LOG_TAG + ":buildAndShowToneDialog()", "Showing dialog");
     	
     	//Show dialog
     	dialog.show();        
@@ -924,7 +920,7 @@ public class SmsAlarm extends Activity  {
      */
     private void buildAndShowAboutDialog() {  
     	// Logging
-    	logger.logCatTxt(logger.getINFO(), LOG_TAG + ":buildAndShowAboutDialog()", "Start building about dialog");   	
+    	this.logger.logCatTxt(this.logger.getINFO(), this.LOG_TAG + ":buildAndShowAboutDialog()", "Start building about dialog");   	
  
        	//Build up the alert dialog
     	AlertDialog.Builder dialog = new AlertDialog.Builder(this);
@@ -940,7 +936,7 @@ public class SmsAlarm extends Activity  {
     	dialog.setCancelable(false);
     	
     	// Logging
-    	logger.logCatTxt(logger.getINFO(), LOG_TAG + ":buildAndShowAboutDialog()", "Dialog attributes set");    	
+    	this.logger.logCatTxt(this.logger.getINFO(), this.LOG_TAG + ":buildAndShowAboutDialog()", "Dialog attributes set");    	
     	
     	//Set a neutral button
     	dialog.setNeutralButton(R.string.ok, new DialogInterface.OnClickListener() {
@@ -951,7 +947,7 @@ public class SmsAlarm extends Activity  {
     	});
     	
     	// Logging
-    	logger.logCatTxt(logger.getINFO(), LOG_TAG + ":buildAndShowAboutDialog()", "Showing dialog");    	
+    	this.logger.logCatTxt(this.logger.getINFO(), this.LOG_TAG + ":buildAndShowAboutDialog()", "Showing dialog");    	
 
     	// Show dialog
     	dialog.show();        
@@ -973,7 +969,7 @@ public class SmsAlarm extends Activity  {
      */
     private void updateWholeUI() {
     	// Logging
-    	logger.logCatTxt(logger.getINFO(), LOG_TAG + ":updateWholeUI", "Whole user interface is about to be updated");
+    	this.logger.logCatTxt(this.logger.getINFO(), this.LOG_TAG + ":updateWholeUI", "Whole user interface is about to be updated");
     	
     	// Update primary listen number EditText
     	this.updatePrimaryListenNumberEditText();
@@ -1003,7 +999,7 @@ public class SmsAlarm extends Activity  {
         this.updateAcknowledgeWidgets();
         
     	// Logging
-    	logger.logCatTxt(logger.getINFO(), LOG_TAG + ":updateWholeUI", "User interface updated");        
+    	this.logger.logCatTxt(this.logger.getINFO(), this.LOG_TAG + ":updateWholeUI", "User interface updated");        
     }    
     /**
      * To update primary listen number <code>EditText</code> widget.
@@ -1015,8 +1011,8 @@ public class SmsAlarm extends Activity  {
     	this.primaryListenNumberEditText.setText(this.primaryListenNumber);  
     	
 	    // Logging
-	    logger.logCatTxt(logger.getDEBUG(), LOG_TAG + ":updatePrimaryListenNumberEditText()", "PRIMARY listen number EditText set to: " + this.primaryListenNumber);    	
-	    logger.logCatTxt(logger.getINFO(), LOG_TAG + ":updatePrimaryListenNumberEditText()", "PRIMARY listen number EditText updated");    
+	    this.logger.logCatTxt(this.logger.getDEBUG(), this.LOG_TAG + ":updatePrimaryListenNumberEditText()", "PRIMARY listen number EditText set to: " + this.primaryListenNumber);    	
+	    this.logger.logCatTxt(this.logger.getINFO(), this.LOG_TAG + ":updatePrimaryListenNumberEditText()", "PRIMARY listen number EditText updated");    
     }
     
     /**
@@ -1031,18 +1027,18 @@ public class SmsAlarm extends Activity  {
 		    adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 		    this.secondaryListenNumberSpinner.setAdapter(adapter);	 
 		    // Logging
-		    logger.logCatTxt(logger.getDEBUG(), LOG_TAG + ":updateSecondaryListenNumberSpinner()", "Populate SECONDARY listen number spinner with values: " + this.secondaryListenNumbers);
+		    this.logger.logCatTxt(this.logger.getDEBUG(), this.LOG_TAG + ":updateSecondaryListenNumberSpinner()", "Populate SECONDARY listen number spinner with values: " + this.secondaryListenNumbers);
 	    } else {
 	    	this.emptySecondaryListenNumbers.add(getString(R.string.enterPhoneNumberHint));
 		    ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, this.emptySecondaryListenNumbers);
 		    adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 		    this.secondaryListenNumberSpinner.setAdapter(adapter);	
 		    // Logging
-		    logger.logCatTxt(logger.getDEBUG(), LOG_TAG + ":updateSecondaryListenNumberSpinner()", "List with SECONDARY listen numbers is empty, populating spinner with an empty list");		    
+		    this.logger.logCatTxt(this.logger.getDEBUG(), this.LOG_TAG + ":updateSecondaryListenNumberSpinner()", "List with SECONDARY listen numbers is empty, populating spinner with an empty list");		    
 	    }  
 	    
 	    // Logging
-	    logger.logCatTxt(logger.getINFO(), LOG_TAG + ":updateSecondaryListenNumberSpinner()", "SECONDARY listen numbers Spinner updated");
+	    this.logger.logCatTxt(this.logger.getINFO(), this.LOG_TAG + ":updateSecondaryListenNumberSpinner()", "SECONDARY listen numbers Spinner updated");
     }
     
     /**
@@ -1055,8 +1051,8 @@ public class SmsAlarm extends Activity  {
         this.ackNumberEditText.setText(this.acknowledgeNumber); 
         
 	    // Logging
-	    logger.logCatTxt(logger.getDEBUG(), LOG_TAG + ":updateAcknowledgeNumberEditText()", "Acknowledge number EditText set to: " + this.acknowledgeNumber);    	
-	    logger.logCatTxt(logger.getINFO(), LOG_TAG + ":updateAcknowledgeNumberEditText()", "Acknowledge number EditText updated");           
+	    this.logger.logCatTxt(this.logger.getDEBUG(), this.LOG_TAG + ":updateAcknowledgeNumberEditText()", "Acknowledge number EditText set to: " + this.acknowledgeNumber);    	
+	    this.logger.logCatTxt(this.logger.getINFO(), this.LOG_TAG + ":updateAcknowledgeNumberEditText()", "Acknowledge number EditText updated");           
     }
 
     /**
@@ -1066,18 +1062,18 @@ public class SmsAlarm extends Activity  {
      */
     private void updateSelectedToneEditText() {
     	// Log tone spinner position
-    	logger.logCatTxt(logger.getDEBUG(), LOG_TAG + ":updateSelectedToneEditText()", "Tone Spinner position is: " + Integer.toString(this.toneSpinnerPos));
+    	this.logger.logCatTxt(this.logger.getDEBUG(), this.LOG_TAG + ":updateSelectedToneEditText()", "Tone Spinner position is: " + Integer.toString(this.toneSpinnerPos));
     	
         // Set message tone to the selectedToneEditText, depending on which value spinner has. Also log this event
         if(this.toneSpinnerPos == 0) {
-        	this.selectedToneEditText.setText(msgToneLookup(this, this.primaryMessageToneId));
-        	logger.logCatTxt(logger.getINFO(), LOG_TAG + ":updateSelectedToneEditText()", "Selected tone EditText updated");
+        	this.selectedToneEditText.setText(this.noiseHandler.msgToneLookup(this, this.primaryMessageToneId));
+        	this.logger.logCatTxt(this.logger.getINFO(), this.LOG_TAG + ":updateSelectedToneEditText()", "Selected tone EditText updated");
         } else if(this.toneSpinnerPos == 1) {
-        	this.selectedToneEditText.setText(msgToneLookup(this, this.secondaryMessageToneId));
-        	logger.logCatTxt(logger.getINFO(), LOG_TAG + ":updateSelectedToneEditText()", "Selected tone EditText updated");
+        	this.selectedToneEditText.setText(this.noiseHandler.msgToneLookup(this, this.secondaryMessageToneId));
+        	this.logger.logCatTxt(this.logger.getINFO(), this.LOG_TAG + ":updateSelectedToneEditText()", "Selected tone EditText updated");
         } else {
         	// DO NOTHING EXCEPT LOG ERROR MESSAGE
-        	logger.logCatTxt(logger.getERROR(), LOG_TAG + ":updateSelectedToneEditText()", "Invalid spinner position occurred. Current tone Spinner position is: \"" + Integer.toString(this.toneSpinnerPos) + "\"");
+        	this.logger.logCatTxt(this.logger.getERROR(), this.LOG_TAG + ":updateSelectedToneEditText()", "Invalid spinner position occurred. Current tone Spinner position is: \"" + Integer.toString(this.toneSpinnerPos) + "\"");
         }    	
     }
     
@@ -1091,8 +1087,8 @@ public class SmsAlarm extends Activity  {
         this.rescueServiceEditText.setText(this.rescueService); 
         
 	    // Logging
-	    logger.logCatTxt(logger.getDEBUG(), LOG_TAG + ":updateRescueServiceEditText()", "Rescue service EditText set to: " + this.rescueService);    	
-	    logger.logCatTxt(logger.getINFO(), LOG_TAG + ":updateRescueServiceEditText()", "Rescue service EditText updated");          
+	    this.logger.logCatTxt(this.logger.getDEBUG(), this.LOG_TAG + ":updateRescueServiceEditText()", "Rescue service EditText set to: " + this.rescueService);    	
+	    this.logger.logCatTxt(this.logger.getINFO(), this.LOG_TAG + ":updateRescueServiceEditText()", "Rescue service EditText updated");          
     }
     
     /**
@@ -1104,13 +1100,13 @@ public class SmsAlarm extends Activity  {
         // Update use OS sound settings CheckBox
     	if(this.useOsSoundSettings) {
     		this.soundSettingCheckBox.setChecked(true);
-    	    logger.logCatTxt(logger.getDEBUG(), LOG_TAG + ":updateUseOsSoundSettingsCheckbox()", "Use OS sound settings CheckBox \"Checked\"(" + this.useOsSoundSettings + ")"); 
+    	    this.logger.logCatTxt(this.logger.getDEBUG(), this.LOG_TAG + ":updateUseOsSoundSettingsCheckbox()", "Use OS sound settings CheckBox \"Checked\"(" + this.useOsSoundSettings + ")"); 
     	} else {
-    		logger.logCatTxt(logger.getDEBUG(), LOG_TAG + ":updateUseOsSoundSettingsCheckbox()", "Use OS sound settings CheckBox \"Unchecked\"(" + this.useOsSoundSettings + ")"); 
+    		this.logger.logCatTxt(this.logger.getDEBUG(), this.LOG_TAG + ":updateUseOsSoundSettingsCheckbox()", "Use OS sound settings CheckBox \"Unchecked\"(" + this.useOsSoundSettings + ")"); 
     	}
     	
     	// Logging
-    	logger.logCatTxt(logger.getINFO(), LOG_TAG + ":updateUseOsSoundSettingsCheckbox()", "Use OS sound settings CheckBox updated");    
+    	this.logger.logCatTxt(this.logger.getINFO(), this.LOG_TAG + ":updateUseOsSoundSettingsCheckbox()", "Use OS sound settings CheckBox updated");    
     }
     
     /**
@@ -1122,13 +1118,13 @@ public class SmsAlarm extends Activity  {
     	// Update play tone twice CheckBox
     	if(this.playToneTwice) {
     		this.playToneTwiceSettingCheckBox.setChecked(true);
-    		logger.logCatTxt(logger.getDEBUG(), LOG_TAG + ":updatePlayToneTwiceCheckBox()", "Play tone twice CheckBox \"Checked\"(" + this.playToneTwice + ")"); 
+    		this.logger.logCatTxt(this.logger.getDEBUG(), this.LOG_TAG + ":updatePlayToneTwiceCheckBox()", "Play tone twice CheckBox \"Checked\"(" + this.playToneTwice + ")"); 
     	} else {
-    		logger.logCatTxt(logger.getDEBUG(), LOG_TAG + ":updatePlayToneTwiceCheckBox()", "Play tone twice CheckBox \"Unchecked\"(" + this.playToneTwice + ")"); 
+    		this.logger.logCatTxt(this.logger.getDEBUG(), this.LOG_TAG + ":updatePlayToneTwiceCheckBox()", "Play tone twice CheckBox \"Unchecked\"(" + this.playToneTwice + ")"); 
     	}
     	
     	// Logging
-    	logger.logCatTxt(logger.getINFO(), LOG_TAG + ":updatePlayToneTwiceCheckBox()", "Play tone twice CheckBox updated");  
+    	this.logger.logCatTxt(this.logger.getINFO(), this.LOG_TAG + ":updatePlayToneTwiceCheckBox()", "Play tone twice CheckBox updated");  
     }
     
     /**
@@ -1140,13 +1136,13 @@ public class SmsAlarm extends Activity  {
     	// Update enable Sms Alarm CheckBox(default checked=true)
     	if(!this.enableSmsAlarm) {
     		this.enableSmsAlarmCheckBox.setChecked(false);
-    		logger.logCatTxt(logger.getDEBUG(), LOG_TAG + ":updateEnableSmsAlarmCheckBox()", "Enable SmsAlarm CheckBox \"Unchecked\"(" + this.enableSmsAlarm + ")"); 
+    		this.logger.logCatTxt(this.logger.getDEBUG(), this.LOG_TAG + ":updateEnableSmsAlarmCheckBox()", "Enable SmsAlarm CheckBox \"Unchecked\"(" + this.enableSmsAlarm + ")"); 
     	} else {
-    		logger.logCatTxt(logger.getDEBUG(), LOG_TAG + ":updateEnableSmsAlarmCheckBox()", "Enable SmsAlarm CheckBox \"Checked\"(" + this.enableSmsAlarm + ")");     		
+    		this.logger.logCatTxt(this.logger.getDEBUG(), this.LOG_TAG + ":updateEnableSmsAlarmCheckBox()", "Enable SmsAlarm CheckBox \"Checked\"(" + this.enableSmsAlarm + ")");     		
     	}
     	
     	// Logging
-    	logger.logCatTxt(logger.getINFO(), LOG_TAG + ":updateEnableSmsAlarmCheckBox()", "Enable SmsAlarm CheckBox updated"); 
+    	this.logger.logCatTxt(this.logger.getINFO(), this.LOG_TAG + ":updateEnableSmsAlarmCheckBox()", "Enable SmsAlarm CheckBox updated"); 
     }
     
     /**
@@ -1165,380 +1161,14 @@ public class SmsAlarm extends Activity  {
     		this.enableAckCheckBox.setChecked(true);
     		this.ackNumberButton.setEnabled(true);
     		this.ackNumberEditText.setTextColor(Color.BLACK);
-    		logger.logCatTxt(logger.getDEBUG(), LOG_TAG + ":updateAcknowledgeWidgets()", "Enable acknowledge CheckBox \"Checked\"(" + this.useAlarmAcknowledge + "), acknowledge number Button is \"Enabled\" and acknowledge number EditText is \"Enabled\"");
+    		this.logger.logCatTxt(this.logger.getDEBUG(), this.LOG_TAG + ":updateAcknowledgeWidgets()", "Enable acknowledge CheckBox \"Checked\"(" + this.useAlarmAcknowledge + "), acknowledge number Button is \"Enabled\" and acknowledge number EditText is \"Enabled\"");
     	} else {
     		this.ackNumberButton.setEnabled(false);
     		this.ackNumberEditText.setTextColor(Color.GRAY);
-    		logger.logCatTxt(logger.getDEBUG(), LOG_TAG + ":updateAcknowledgeWidgets()", "Enable acknowledge CheckBox \"Unchecked\"(" + this.useAlarmAcknowledge + "), acknowledge number Button is \"Disabled\" and acknowledge number EditText is \"Disabled\"");
+    		this.logger.logCatTxt(this.logger.getDEBUG(), this.LOG_TAG + ":updateAcknowledgeWidgets()", "Enable acknowledge CheckBox \"Unchecked\"(" + this.useAlarmAcknowledge + "), acknowledge number Button is \"Disabled\" and acknowledge number EditText is \"Disabled\"");
     	}  
     	
     	// Logging
-    	logger.logCatTxt(logger.getINFO(), LOG_TAG + ":updateAcknowledgeWidgets()", "Acknowledge alarm UI widgets updated"); 
+    	this.logger.logCatTxt(this.logger.getINFO(), this.LOG_TAG + ":updateAcknowledgeWidgets()", "Acknowledge alarm UI widgets updated"); 
     }
-    
-	/**
-	 * Method to play message tone and vibrate, depending on application
-	 * settings. This method also takes in account the operating systems sound
-	 * settings, this depends on a input parameter.
-	 * 
-	 * @param context
-	 *            Context
-	 * @param id
-	 *            ToneId as Integer
-	 * @param useSoundSettings
-	 *            If this method should take consideration to the device's sound
-	 *            settings as Boolean
-	 * @param playToneTwice
-	 *            Indication whether message tone should be played once or
-	 *            twice, this is the same for vibration also
-	 * 
-	 * @exception IllegalArgumentException
-	 *                Can occur when setting data source for media player or
-	 *                preparing media player
-	 * @exception IllegalStateException
-	 *                Can occur when setting data source for media player or
-	 *                preparing media player
-	 * @exception IOException
-	 *                Can occur when setting data source for media player or
-	 *                preparing media player. Also when resolving message tone
-	 *                id
-	 */
-	static void makeNoise(Context context, int id, boolean useSoundSettings, boolean playToneTwice) {
-        //The mediaplayer and assets file manager
-        AssetFileDescriptor afd = null;
-        
-        //Get reference to AudioManager, use to get solume levels and other sound settings
-        final AudioManager am = (AudioManager) context.getSystemService(Context.AUDIO_SERVICE);
-
-        //To store and get current media and ring volume levels
-        final int currentMediaVolume = am.getStreamVolume(AudioManager.STREAM_MUSIC);
-        int currentRingVolume = am.getStreamVolume(AudioManager.STREAM_RING);
-        
-        //To store maximum ring volume
-        int maxRingVolume = am.getStreamMaxVolume(AudioManager.STREAM_RING);
-        
-        //Store calculated alarm level
-        float alarmVolume = 0;
-        
-        //Set media volume to max level
-        am.setStreamVolume(AudioManager.STREAM_MUSIC,am.getStreamMaxVolume(AudioManager.STREAM_MUSIC),0);
-        
-        //Calculate correct alarm volume, depending on current ring volume
-        if(currentRingVolume > 0) {
-        	alarmVolume = (float)currentRingVolume/maxRingVolume;
-        }	else {
-        	alarmVolume = 0;
-        }
-
-        //Get instance of Vibrator from context
-        Vibrator v = (Vibrator) context.getSystemService(Context.VIBRATOR_SERVICE);
-         
-        /*
-         * SOS morsecode pattern from 
-         * http://android.konreu.com/developer-how-to/vibration-examples-for-android-phone-development/ 
-         */
-        int dot = 500;      	//Length of a Morse Code "dot" in milliseconds
-        int dash = 800;     	//Length of a Morse Code "dash" in milliseconds
-        int short_gap = 500;    //Length of Gap Between dots/dashes
-        int medium_gap = 800;   //Length of Gap Between Letters
-        int long_gap = 1300;    //Length of Gap Between Words
-        long[] pattern = {
-            0,  //Start immediately
-            dot, short_gap, dot, short_gap, dot,    //s
-            medium_gap,
-            dash, short_gap, dash, short_gap, dash, //o
-            medium_gap,
-            dot, short_gap, dot, short_gap, dot,    //s
-            long_gap
-        };
-         
-        //Play correct tone depending on id		
-		try {
-			afd = context.getAssets().openFd("tones/alarm/"+msgToneLookup(context,id)+".mp3");
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-			 		
-    	
-    	//Set data source for mPlayer, common both for debug and ordinary mode
-		try {
-			mPlayer.setDataSource(afd.getFileDescriptor(),afd.getStartOffset(),afd.getLength());
-		} catch (IllegalArgumentException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (IllegalStateException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		
-		//Prepare mPlayer, also common for debug and ordinary mode
-		try {
-			mPlayer.prepare();
-		} catch (IllegalStateException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-			
-		/*
-		 * If application use systems sound settings, check if phone is in normal, silent or vibrate mode
-		 * else don't check phones status and play tone and vibrate even if phone is in silent or vibrate mode
-		 */
-		if(useSoundSettings == true){
-			//Set correct volume to mediaplayer
-			mPlayer.setVolume(alarmVolume, alarmVolume);
-			
-			//Decide if phone are in normal, vibrate or silent state and take action
-	        switch (am.getRingerMode()) {
-	  		 case AudioManager.RINGER_MODE_SILENT:
-	  			 //Do nothing!
-				 break;
-	  		 case AudioManager.RINGER_MODE_VIBRATE:
-	  			 //Vibrate, -1 = no repeat
-	  			 v.vibrate(pattern, -1);
-				 break;
-	  		 case AudioManager.RINGER_MODE_NORMAL:
-	  			 //Vibrate, -1 = no repeat
-	  			 v.vibrate(pattern, -1);			 
-	  			 //Play msgTone
-	  			 mPlayer.start();
-				 break;
-	    	}
-		} else { //If not considerate OS sound setting, alwas ring at highest volume and vibrate
-			mPlayer.setVolume(1, 1);
- 			v.vibrate(pattern, -1);			 
- 			mPlayer.start();
-		}
-		
-		//Listen to completion, in other words when mediaplayer has finished and reset media volume and mediaplayer
-		mPlayer.setOnCompletionListener(new OnCompletionListener() {		  
-              public void onCompletion(MediaPlayer arg0) {
-                  am.setStreamVolume(AudioManager.STREAM_MUSIC, currentMediaVolume, 0);
-                  mPlayer.release();
-              }
-		});		
-    
-//		// Log information
-//		logger.logCatTxt(logger.getINFO(), LOG_TAG + ":makeNoise()", "Preparing to play message tone and vibrate");
-//
-//		// Declarations of different objects needed by makeNoise
-//		final MediaPlayer mPlayer = new MediaPlayer(); // MediaPlayer object
-//		final AudioManager am = (AudioManager) context.getSystemService(Context.AUDIO_SERVICE); // AudioManager
-//																								// used
-//																								// to
-//																								// get
-//																								// and
-//																								// set
-//																								// different
-//																								// volume
-//																								// levels
-//		Vibrator v = (Vibrator) context.getSystemService(Context.VIBRATOR_SERVICE); // Instance
-//																					// of
-//																					// Vibrator
-//																					// from
-//																					// context
-//		AssetFileDescriptor afd = null; // AssetFileDescriptor to get mp3 file
-//		final int currentMediaVolume = am.getStreamVolume(AudioManager.STREAM_MUSIC); // Store
-//																						// current
-//																						// media
-//																						// volume
-//		int currentRingVolume = am.getStreamVolume(AudioManager.STREAM_RING); // Store
-//																					// current
-//																					// ring
-//																					// volume
-//		int maxRingVolume = am.getStreamMaxVolume(AudioManager.STREAM_RING); // Store
-//																					// max
-//																					// ring
-//																					// volume
-//		float alarmVolume = 0; // To store calculated alarm volume in
-//		final int toBePlayed; // Variable indicating how many times message tone
-//								// should be played
-//
-//		/*
-//		 * SOS morsecode pattern from
-//		 * http://android.konreu.com/developer-how-to/
-//		 * vibration-examples-for-android-phone-development/
-//		 */
-//		// int dot = 500; // Length of a Morse Code "dot" in milliseconds
-//		// int dash = 800; // Length of a Morse Code "dash" in milliseconds
-//		// int short_gap = 200; // Length of Gap Between dots/dashes
-//		// int medium_gap = 500; // Length of Gap Between Letters
-//		// int long_gap = 1000; // Length of Gap Between Words
-//		// long[] pattern = { 0, // Start immediately
-//		// dot, short_gap, dot, short_gap, dot, // s
-//		// medium_gap, dash, short_gap, dash, short_gap, dash, // o
-//		// medium_gap, dot, short_gap, dot, short_gap, dot, // s
-//		// long_gap };
-//
-//		// Custom vibration pattern
-//		long[] pattern = { 0, 5000, 500, 5000, 500, 5000, 500, 5000 };
-//
-//		// Log information
-//		logger.logCatTxt(logger.getINFO(), LOG_TAG + ":makeNoise()", "MediaPlayer initalized, Audio Service initalized, Vibrator initalized, AssetFileDescriptor initalized. Current MediaVolume stored, current RingVolume stored. Vibration pattern variables is set.");
-//
-//		// Set media volume to max level
-//		am.setStreamVolume(AudioManager.STREAM_MUSIC, am.getStreamMaxVolume(AudioManager.STREAM_MUSIC), 0);
-//
-//		// Log information
-//		logger.logCatTxt(logger.getINFO(), LOG_TAG + ":makeNoise()", "Device's media volume has been set to max");
-//
-//		// Calculate correct alarm volume, depending on current ring volume
-//		if (currentRingVolume > 0) {
-//			alarmVolume = (float) currentRingVolume / maxRingVolume;
-//		} else {
-//			alarmVolume = 0;
-//		}
-//
-//		// Log information
-//		logger.logCatTxt(logger.getINFO(), LOG_TAG + ":makeNoise()", "Correct alarm volume has been calculated");
-//
-//		// Unresolve correct tone depending on id
-//		try {
-//			logger.logCatTxt(logger.getINFO(), LOG_TAG + ":makeNoise()", "Try to unresolve message tone");
-//			afd = context.getAssets().openFd("tones/alarm/" + msgToneLookup(context, id) + ".mp3");
-//		} catch (IOException e) {
-//			// IOException occurred, trace and log it
-//			e.printStackTrace();
-//			logger.logCatTxt(logger.getERROR(), LOG_TAG + ":makeNoise()", "An IOException occurred while unresolving message tone from id" + e);
-//		}
-//
-//		// Set data source for mPlayer, common both for debug and ordinary mode
-//		try {
-//			mPlayer.setDataSource(afd.getFileDescriptor(), afd.getStartOffset(), afd.getLength());
-//			logger.logCatTxt(logger.getINFO(), LOG_TAG + ":makeNoise()", "Data source has been set for Media Player");
-//		} catch (IllegalArgumentException e) {
-//			// IllegalArgumentException occurred, trace and log it
-//			e.printStackTrace();
-//			logger.logCatTxt(logger.getERROR(), LOG_TAG + ":makeNoise()", "An IllegalArgumentException occurred while setting data source for media player" + e);
-//		} catch (IllegalStateException e) {
-//			// IllegalStateException occurred, trace and log it
-//			e.printStackTrace();
-//			logger.logCatTxt(logger.getERROR(), LOG_TAG + ":makeNoise()", "An IllegalStateException occurred while setting data source for media player" + e);
-//		} catch (IOException e) {
-//			// IOException occurred, trace and log it
-//			e.printStackTrace();
-//			logger.logCatTxt(logger.getERROR(), LOG_TAG + ":makeNoise()", "An IOException occurred while setting data source for media player" + e);
-//		}
-//
-//		// Prepare mPlayer, also common for debug and ordinary mode
-//		try {
-//			mPlayer.prepare();
-//			logger.logCatTxt(logger.getINFO(), LOG_TAG + ":makeNoise()", "Media Player prepared");
-//		} catch (IllegalStateException e) {
-//			// IllegalStateException occurred, trace and log it
-//			e.printStackTrace();
-//			logger.logCatTxt(logger.getERROR(), LOG_TAG + ":makeNoise()", "An IllegalStateException occurred while preparing media player" + e);
-//		} catch (IOException e) {
-//			// IOException occurred, trace and log it
-//			e.printStackTrace();
-//			logger.logCatTxt(logger.getERROR(), LOG_TAG + ":makeNoise()", "An IOException occurred while preparing media player" + e);
-//		}
-//
-//		// If false then just play message tone once else twice
-//		if (!playToneTwice) {
-//			toBePlayed = 1;
-//			// Log information
-//			logger.logCatTxt(logger.getINFO(), LOG_TAG + ":makeNoise()", "Message tone will be played once, if device not in RINGER_MODE_SILENT  or application is set to not consider device's sound settings");
-//		} else {
-//			toBePlayed = 2;
-//			// Log information
-//			logger.logCatTxt(logger.getINFO(), LOG_TAG + ":makeNoise()", "Message tone will be played twice, if device not in RINGER_MODE_SILENT or application is set to not consider device's sound settings");
-//		}
-//
-//		/*
-//		 * If application use systems sound settings, check if phone is in
-//		 * normal, silent or vibration mode else don't check phones status and
-//		 * play tone and vibrate even if phone is in silent or vibrate mode
-//		 */
-//		if (useSoundSettings) {
-//			// Log information
-//			logger.logCatTxt(logger.getINFO(), LOG_TAG + ":makeNoise()", "Application is set to take into account device's sound settings");
-//
-//			// Decide if phone are in normal, vibrate or silent state and take action
-//			switch (am.getRingerMode()) {
-//			case AudioManager.RINGER_MODE_SILENT:
-//				// Do nothing except log information
-//				logger.logCatTxt(logger.getINFO(), LOG_TAG + ":makeNoise()", "Device is in RINGER_MODE_SILENT, don't vibrate or play message tone");
-//				break;
-//			case AudioManager.RINGER_MODE_VIBRATE:
-//				// Vibrate, -1 = no repeat
-//				v.vibrate(pattern, -1);
-//				logger.logCatTxt(logger.getINFO(), LOG_TAG + ":makeNoise()", "Device is in RINGER_MODE_VIBRATE, just vibrate");
-//				break;
-//			case AudioManager.RINGER_MODE_NORMAL:
-//				// Set correct volume to mediaplayer
-//				mPlayer.setVolume(alarmVolume, alarmVolume);
-//				// Log information
-//				logger.logCatTxt(logger.getINFO(), LOG_TAG + ":makeNoise()", "Correct volume has been set to media player from previously calculated alarm volume");
-//				// Vibrate, -1 = no repeat
-//				v.vibrate(pattern, -1);
-//				// Start play message tone
-//				mPlayer.start();
-//				logger.logCatTxt(logger.getINFO(), LOG_TAG + ":makeNoise()", "Device is in RINGER_MODE_NORMAL, vibrate and play message tone");
-//				break;
-//			default: // <--Unsupported RINGER_MODE 
-//				//Do nothing except log information
-//				logger.logCatTxt(logger.getERROR(), LOG_TAG + ":makeNoise()", "Device is in a UNSUPPORTED ringer mode, can't decide what to do");
-//			}
-//		} else { // If not take into account OS sound setting, always ring at highest volume and vibrate
-//			// Vibrate, -1 = no repeat
-//			v.vibrate(pattern, -1);
-//			// Start play message tone
-//			mPlayer.start();
-//			// Log information
-//			logger.logCatTxt(logger.getINFO(), LOG_TAG + ":makeNoise()", "Application is set to don't take into account device's sound settings. Play message tone at max volume and vibrate");
-//		}
-//
-//		// Listen to completion, in other words when media player has finished and reset media volume and media player
-//		mPlayer.setOnCompletionListener(new OnCompletionListener() {
-//			// Counter variable to count number of times played, we have already played the message tone once
-//			int timesPlayed = 1;
-//
-//			/**
-//			 * Listener to listen when message tone has finished playing.
-//			 */
-//			@Override
-//			public void onCompletion(MediaPlayer mPlayer) {
-//				// If message tone havn't been played enough times, else release
-//				// mediaplayer
-//				if (timesPlayed < toBePlayed) {
-//					// Add to counter
-//					timesPlayed++;
-//					// Seek to beginning of message tone
-//					mPlayer.seekTo(0);
-//					// Start play message tone
-//					mPlayer.start();
-//				} else {
-//					am.setStreamVolume(AudioManager.STREAM_MUSIC, currentMediaVolume, 0);
-//					mPlayer.release();
-//					// Log information
-//					logger.logCatTxt(logger.getINFO(), LOG_TAG + ":makeNoise().MediaPlayer.onCompletion()", "Media player have been released and all sound levels have been restored");
-//				}
-//			}
-//		});
-	}
-
-	/**
-	 * Method to lookup proper message tone from media.
-	 * 
-	 * @param context
-	 *            Context
-	 * @param toneId
-	 *            ToneId as Integer
-	 * @return toneId Message tone as String
-	 */
-	private static String msgToneLookup(Context context, int toneId) {
-		// Resolve message tone from id
-		String[] tonesArr = context.getResources().getStringArray(R.array.tones);
-		// Some logging
-		logger.logCatTxt(logger.getINFO(), LOG_TAG + ":msgToneLookup()", "Message tone has been unresolved from id");
-		// Return tone as String
-		return tonesArr[toneId];
-	}
 }
