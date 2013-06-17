@@ -12,7 +12,7 @@
         android:layout_alignParentTop="true"
         android:contentDescription="@string/splashDescr"
         android:src="@drawable/splash" />
-
+
     <TextView
         android:id="@+id/splash_title_tv"
         android:layout_width="wrap_content"
@@ -21,8 +21,9 @@
         android:layout_centerHorizontal="true"
         android:layout_marginTop="26dp"
         android:text="@string/app_name"
-        android:textAppearance="?android:attr/textAppearanceLarge" />
-
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:textColor="#000000" />
+
     <TextView
         android:id="@+id/splash_descr_tv"
         android:layout_width="wrap_content"
@@ -30,8 +31,9 @@
         android:layout_below="@+id/splash_title_tv"
         android:layout_centerHorizontal="true"
         android:text="@string/appDescr"
-        android:textAppearance="?android:attr/textAppearanceMedium" />
-
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:textColor="#313031" />
+
     <TextView
         android:id="@+id/splash_version_tv"
         android:layout_width="wrap_content"
@@ -40,6 +42,7 @@
         android:layout_centerHorizontal="true"
         android:layout_marginBottom="14dp"
         android:text="@string/splashVersion"
-        android:textAppearance="?android:attr/textAppearanceSmall" />
+        android:textAppearance="?android:attr/textAppearanceSmall"
+        android:textColor="#313031" />
 
 </RelativeLayout>
