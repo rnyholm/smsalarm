@@ -522,16 +522,16 @@ public class SmsAlarm extends Activity  {
     	this.logger.logCatTxt(this.logger.getINFO(), this.LOG_TAG + ":setSmsAlarmPrefs()", "Start setting shared preferences used by class SmsAlarm");
     	
       	// Set preferences used by class Sms Alarm
-      	this.prefHandler.setPrefs(this.prefHandler.getSHARED_PREF(), this.prefHandler.getPRIMARY_LISTEN_NUMBER_KEY(), this.primaryListenNumber, this);
-      	this.prefHandler.setPrefs(this.prefHandler.getSHARED_PREF(), this.prefHandler.getSECONDARY_LISTEN_NUMBERS_KEY(), this.secondaryListenNumbers, this);
-      	this.prefHandler.setPrefs(this.prefHandler.getSHARED_PREF(), this.prefHandler.getPRIMARY_MESSAGE_TONE_KEY(), this.primaryMessageToneId, this);
-      	this.prefHandler.setPrefs(this.prefHandler.getSHARED_PREF(), this.prefHandler.getSECONDARY_MESSAGE_TONE_KEY(), this.secondaryMessageToneId, this);  
-      	this.prefHandler.setPrefs(this.prefHandler.getSHARED_PREF(), this.prefHandler.getUSE_OS_SOUND_SETTINGS_KEY(), this.useOsSoundSettings, this);        	
-      	this.prefHandler.setPrefs(this.prefHandler.getSHARED_PREF(), this.prefHandler.getENABLE_ACK_KEY(), this.useAlarmAcknowledge, this);
-      	this.prefHandler.setPrefs(this.prefHandler.getSHARED_PREF(), this.prefHandler.getACK_NUMBER_KEY(), this.acknowledgeNumber, this);  
-      	this.prefHandler.setPrefs(this.prefHandler.getSHARED_PREF(), this.prefHandler.getPLAY_TONE_TWICE_KEY(), this.playToneTwice, this);  
-      	this.prefHandler.setPrefs(this.prefHandler.getSHARED_PREF(), this.prefHandler.getENABLE_SMS_ALARM_KEY(), this.enableSmsAlarm, this);     
-      	this.prefHandler.setPrefs(this.prefHandler.getSHARED_PREF(), this.prefHandler.getRESCUE_SERVICE_KEY(), this.rescueService, this);         	
+      	prefHandler.setPrefs(prefHandler.getSHARED_PREF(), prefHandler.getPRIMARY_LISTEN_NUMBER_KEY(), this.primaryListenNumber, this);
+      	prefHandler.setPrefs(prefHandler.getSHARED_PREF(), prefHandler.getSECONDARY_LISTEN_NUMBERS_KEY(), this.secondaryListenNumbers, this);
+      	prefHandler.setPrefs(prefHandler.getSHARED_PREF(), prefHandler.getPRIMARY_MESSAGE_TONE_KEY(), this.primaryMessageToneId, this);
+      	prefHandler.setPrefs(prefHandler.getSHARED_PREF(), prefHandler.getSECONDARY_MESSAGE_TONE_KEY(), this.secondaryMessageToneId, this);  
+      	prefHandler.setPrefs(prefHandler.getSHARED_PREF(), prefHandler.getUSE_OS_SOUND_SETTINGS_KEY(), this.useOsSoundSettings, this);        	
+      	prefHandler.setPrefs(prefHandler.getSHARED_PREF(), prefHandler.getENABLE_ACK_KEY(), this.useAlarmAcknowledge, this);
+      	prefHandler.setPrefs(prefHandler.getSHARED_PREF(), prefHandler.getACK_NUMBER_KEY(), this.acknowledgeNumber, this);  
+      	prefHandler.setPrefs(prefHandler.getSHARED_PREF(), prefHandler.getPLAY_TONE_TWICE_KEY(), this.playToneTwice, this);  
+      	prefHandler.setPrefs(prefHandler.getSHARED_PREF(), prefHandler.getENABLE_SMS_ALARM_KEY(), this.enableSmsAlarm, this);     
+      	prefHandler.setPrefs(prefHandler.getSHARED_PREF(), prefHandler.getRESCUE_SERVICE_KEY(), this.rescueService, this);         	
 
     	this.logger.logCatTxt(this.logger.getINFO(), this.LOG_TAG + ":setSmsAlarmPrefs()", "Shared preferences set");
     }
