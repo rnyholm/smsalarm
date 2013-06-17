@@ -29,7 +29,7 @@
     <string name="ackFullMessage">Full alarm message</string>
 	<string name="ackIconContentDescr">Acknowledge alarm icon</string>    
     <string name="waitAck">Waiting for the alarm to be acknowledged..</string>
-    <string name="waitAckInfo">NOTE! It can take up to 40 seconds before the acknowledgment is performed.</string>    
+    <string name="waitAckInfo">NOTE! It can take up to 40 seconds before the acknowledgement is performed.</string>    
     <string name="alarm">PRIMARY ALARM!</string>
     <string name="secondaryAlarm">SECONDARY ALARM!</string>
     <string name="fireAlarm"> FIRE ALARM!</string>    
@@ -42,7 +42,7 @@
     <string name="soundSettingsInfo">Set alarm signals for primary and secondary alarm, if Sms Alarm should use the phone\'s sound settings and if the alarm signal should by played twice.</string>
     <string name="smsSettings">SMS Settings</string>
     <string name="ackSettings">Acknowledgment Settings</string>  
-    <string name="ackSettingsInfo">Set if the alarm acknowledgment is to be used and in such cases the telephone number as acknowledgment is made against.</string> 
+    <string name="ackSettingsInfo">Set if the alarm acknowledgement is to be used and in such cases the telephone number as acknowledgement is made against.</string> 
     <string name="miscSettings">Other settings</string>
     <string name="miscSettingsInfo">Set your rescue services name and enable/disable Sms Alarm.</string>         
     <string name="primaryAlarmTitle">Primary alarm</string>
@@ -59,7 +59,7 @@
 	<string name="enableDisableSmsAlarmHint">If selected, Sms Alarm trigger an alarm on the given phone numbers, else the application does not.</string>	   
     <string name="playToneTwiceSetting">Play alarm signal twice</string>    
     <string name="playToneTwiceSettingHint">If selected, Sms Alarm plays the alarmsignal for both primary and secondary alarm twice when an alarm is received.</string>    
-    <string name="enableAcknowledge">Enable acknowledgment of primary alarm</string>
+    <string name="enableAcknowledge">Enable acknowledgement</string>
     <string name="enableAcknowledgeHint">If selected, a primary alarm can be acknowledged.</string>
     <string name="ackNumberTitle">Sms Alarm acknowledge to this number</string>    
     <string name="aboutVersion">Version: 2.1 Beta Preview</string>
