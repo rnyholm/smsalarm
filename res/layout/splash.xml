@@ -2,16 +2,8 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/splash_rl"
     android:layout_width="match_parent"
-    android:layout_height="match_parent" >
-
-    <ImageView
-        android:id="@+id/splash_iv"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentTop="true"
-        android:contentDescription="@string/splashDescr"
-        android:src="@drawable/splash" />
+    android:layout_height="match_parent"
+    android:background="@drawable/splash" >
 
     <TextView
         android:id="@+id/splash_title_tv"
