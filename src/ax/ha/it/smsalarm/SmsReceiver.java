@@ -317,8 +317,8 @@ public class SmsReceiver extends BroadcastReceiver {
 					"SMS cleaned from unnecessary information");
 		}
 
-		// If Alarm acknowledge is enabled and larm type equals primary, store
-		// full larm message
+		// If Alarm acknowledge is enabled and alarm type equals primary, store
+		// full alarm message
 		if (this.enableAlarmAck == true && this.type.equals("primary")) {
 			// Log message
 			this.logger

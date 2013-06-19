@@ -38,7 +38,7 @@ import android.widget.Toast;
  * @author Robert Nyholm <robert.nyholm@aland.net>
  * @version 2.1
  * @since 0.9beta
- * @date 2013-06-16
+ * @date 2013-06-17
  *
  * @see #onCreate(Bundle)
  * @see #onPause()
