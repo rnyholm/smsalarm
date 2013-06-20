@@ -4,9 +4,8 @@
 
 package ax.ha.it.smsalarm;
 
-import java.util.List;
-
 import android.app.Activity;
+import android.content.Context;
 import android.os.Build;
 import android.os.Bundle;
 import android.view.View;
@@ -15,6 +14,7 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 /**
  * Responsible for the application <code>ax.ha.it.smsalarm</code> acknowledge activity.
@@ -65,6 +65,9 @@ public class AcknowledgeHandler extends Activity  {
     // Strings for the data presentation in UI
     private String rescueService = "";
     private String fullMessage = "";
+    
+    // String represinting phone number to which we acknowledge to
+    private String AcknowledgeNumber = "";
 		
  	/**
   	 * When activity starts, this method is the entry point.
@@ -94,24 +97,13 @@ public class AcknowledgeHandler extends Activity  {
         this.getAckHandlerPrefs();
         
         // Set TextViews
-        this.setTextViews();
-//        //Shared preferences
-//    	final SharedPreferences sharedPref = this.getSharedPreferences(SmsAlarm.SHARED_PREF, Context.MODE_PRIVATE);
-//    	
-//    	//Get full message as string
-//    	String fullMessage = sharedPref.getString(SmsAlarm.FULL_MESSAGE_KEY, "");
-//    	
-//    	//Get acknowledge number
-//    	final String ackNumber = sharedPref.getString(SmsAlarm.ACK_NUMBER_KEY, "");
-        
-        
-        //Set larm text message to ui
-//        messageTextView.setText(fullMessage);
-        
+        this.setTextViews();        
         
         //Create objects that acts as listeners to the buttons
         abortButton.setOnClickListener(new OnClickListener() {			
 			public void onClick(View v) {
+				// Logging
+				logger.logCatTxt(logger.getINFO(), LOG_TAG + ":onCreate().abortButton.OnClickListener().onClick()", "Abort button has been pressed, finishing activity");
 				finish();
 			}
 		});
@@ -119,7 +111,16 @@ public class AcknowledgeHandler extends Activity  {
         //Create objects that acts as listeners to the buttons
         acknowledgeButton.setOnClickListener(new OnClickListener() {			
 			public void onClick(View v) {
-				// TODO: Implement functionality
+				// Check to see if we have any phone number to acknowledge to
+				if(!AcknowledgeNumber.equals("")) {
+					// Logging
+					logger.logCatTxt(logger.getINFO(), LOG_TAG + ":onCreate().acknowledgeButton.OnClickListener().onClick()", "Acknowledge button has been pressed and phone number to acknowledge to exist. Continue acknowledge");
+					// TODO: Implement functionality
+				} else {
+					Toast.makeText(AcknowledgeHandler.this, R.string.cannotAck, Toast.LENGTH_LONG).show();
+					// Logging
+					logger.logCatTxt(logger.getWARN(), LOG_TAG + ":onCreate().acknowledgeButton.OnClickListener().onClick()", "Acknowledge button has been pressed but no phone number to acknowledge to has been given");
+				}			
 			}
 		});
         // Log in debugging and information purpose
@@ -199,9 +200,10 @@ public class AcknowledgeHandler extends Activity  {
     	//Some logging
     	this.logger.logCatTxt(this.logger.getINFO(), this.LOG_TAG + ":getAckHandlerPrefs()", "Start retrieving shared preferences needed by class AcknowledgeHandler");
     	
-    	//Get shared preferences needed by class Sms Alarm
+    	//Get shared preferences needed by class Acknowledge Handler
     	this.rescueService = (String) this.prefHandler.getPrefs(this.prefHandler.getSHARED_PREF(), this.prefHandler.getRESCUE_SERVICE_KEY(), Datatypes.STRING.ordinal(), this);
-    	this.fullMessage = (String) this.prefHandler.getPrefs(this.prefHandler.getSHARED_PREF(), this.prefHandler.getFULL_MESSAGE_KEY(), Datatypes.STRING.ordinal(), this);  	
+    	this.fullMessage = (String) this.prefHandler.getPrefs(this.prefHandler.getSHARED_PREF(), this.prefHandler.getFULL_MESSAGE_KEY(), Datatypes.STRING.ordinal(), this);
+    	this.AcknowledgeNumber = (String) this.prefHandler.getPrefs(this.prefHandler.getSHARED_PREF(), this.prefHandler.getACK_NUMBER_KEY(), Datatypes.STRING.ordinal(), this);
 
     	this.logger.logCatTxt(this.logger.getINFO(), this.LOG_TAG + ":getAckHandlerPrefs()", "Shared preferences retrieved");  	 
     }
