@@ -42,6 +42,7 @@ import android.widget.Toast;
  *
  * @see #onCreate(Bundle)
  * @see #onPause()
+ * @see #onDestroy()
  */
 public class SmsAlarm extends Activity  {
 	
@@ -136,6 +137,7 @@ public class SmsAlarm extends Activity  {
   	 * @see #buildAndShowDeleteSecondaryNumberDialog()
   	 * @see #buildAndShowToneDialog()
   	 * @see #onPause()
+  	 * @see #onDestroy()
   	 * @see ax.ha.it.smsalarm#NoiseHandler.makeNoise(Context, int, boolean, boolean)
   	 * @see ax.ha.it.smsalarm#PreferencesHandler.setPrefs(String, String, Object, Context)
   	 * @see ax.ha.it.smsalarm#LogHandler.logCatTxt(int, String , String)
@@ -373,6 +375,7 @@ public class SmsAlarm extends Activity  {
      * <b><i>Not yet implemented.</i></b>
      * 
      * @see #onCreate(Bundle)
+     * @see #onDestroy()
      * 
      * @Override
      */
@@ -382,6 +385,15 @@ public class SmsAlarm extends Activity  {
     	// DO NOTHING!
     }
     
+    /**
+     * To handle events to trigger when activity pauses.
+     * 
+     * @see #onCreate(Bundle)
+     * @see #onPause()
+     * 
+     * @Override
+     */
+    @Override
     public void onDestroy() {
     	super.onDestroy();
     	this.logger.logCatTxt(this.logger.getWARN(), this.LOG_TAG + ":onDestroy()", "Oh my god, they killed Kenny!");

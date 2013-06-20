@@ -53,18 +53,20 @@ public class AcknowledgeHandler extends Activity  {
     private ImageView divider1ImageView;
     private ImageView divider2ImageView;
 		
-  	/**
-  	 * Overridden method to build up UI and set different listeners for the UI elements.
-  	 * 
+ 	/**
   	 * When activity starts, this method is the entry point.
-  	 * The GUI is built up within this method.
+  	 * The User Interface is built up and different <code>Listeners</code>
+  	 * are set within this method.
   	 * 
-  	 * @param savedInstanceState
-  	 * @Override
+  	 * @param savedInstanceState Default Bundle
   	 * 
+  	 * @see #findViews()
+  	 * @see #getAckHandlerPrefs()
   	 * @see #onPause()
-  	 */  
-    @Override
+  	 * @see ax.ha.it.smsalarm#LogHandler.logCatTxt(int, String , String)
+  	 * 
+  	 * @Override
+  	 */   
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.ack);
@@ -108,9 +110,12 @@ public class AcknowledgeHandler extends Activity  {
     }
     
     /**
-     * Method to handle onPause.
+     * To handle events to trigger when activity pauses.
+     * <b><i>Not yet implemented.</i></b>
      * 
      * @see #onCreate(Bundle)
+     * 
+     * @Override
      */
     public void onPause(){
     	super.onPause(); 
