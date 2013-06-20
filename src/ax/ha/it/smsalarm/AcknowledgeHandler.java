@@ -4,32 +4,26 @@
 
 package ax.ha.it.smsalarm;
 
-import java.util.Random;
-
 import android.app.Activity;
-import android.content.Context;
-import android.content.Intent;
-import android.content.SharedPreferences;
-import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
-import android.os.Handler;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
-import android.widget.Toast;
 
 /**
  * Responsible for the application <code>ax.ha.it.smsalarm</code> acknowledge activity.
- * This class allows users acknowledge an received alarm by calling to specific phone
+ * This class allows users to acknowledge an received alarm by calling to specific phone
  * number.<br>
  * Also holds the acknowledge UI.
  * 
  * @author Robert Nyholm <robert.nyholm@aland.net>
  * @version 2.0
  * @since 1.1-SE
- * @date 2013-04-22
+ * @date 2013-06-20
  */
 public class AcknowledgeHandler extends Activity  {
 	
@@ -39,6 +33,25 @@ public class AcknowledgeHandler extends Activity  {
 	// Objects needed for logging and shared preferences handling
 	private LogHandler logger = LogHandler.getInstance();
 	private PreferencesHandler prefHandler = PreferencesHandler.getInstance();    
+	
+	// Variables of different UI elements and types
+	// The TextView Objects
+    private TextView titleTextView;
+    private TextView fullMessageTextView; 
+    private TextView lineBusyTextView;
+    private TextView countDownTextView;
+    private TextView secondsTextView;
+    
+    // The Button objects
+    private Button acknowledgeButton;
+    private Button abortButton;
+    
+    // The ProgressBar Object
+    private ProgressBar redialProgressBar;
+    
+    // The ImageView Objects
+    private ImageView divider1ImageView;
+    private ImageView divider2ImageView;
 		
   	/**
   	 * Overridden method to build up UI and set different listeners for the UI elements.
@@ -56,18 +69,12 @@ public class AcknowledgeHandler extends Activity  {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.ack);
         
-        //Find some TextViews and the progressbar
-        final TextView waitToAckTextView = (TextView)findViewById(R.id.waitToAck);
-        final ProgressBar waitToAckProgressBar = (ProgressBar)findViewById(R.id.waitToAckProgressBar);
-        final TextView waitToAckInfoTextView = (TextView)findViewById(R.id.waitToAckInfo);
-        
-        //Set the progress bar to indeterminate
-        waitToAckProgressBar.setIndeterminate(true);
-        
-        //Set views visible)
-        waitToAckTextView.setVisibility(View.GONE);
-        waitToAckProgressBar.setVisibility(View.GONE);
-        waitToAckInfoTextView.setVisibility(View.GONE);
+        // Log in debugging and information purpose
+        this.logger.logCatTxt(this.logger.getINFO(), this.LOG_TAG + ":onCreate()", "Creation of the Acknowledge Handler started");
+       
+        // FindViews
+        this.findViews();        
+
         
 //        //Shared preferences
 //    	final SharedPreferences sharedPref = this.getSharedPreferences(SmsAlarm.SHARED_PREF, Context.MODE_PRIVATE);
@@ -78,14 +85,10 @@ public class AcknowledgeHandler extends Activity  {
 //    	//Get acknowledge number
 //    	final String ackNumber = sharedPref.getString(SmsAlarm.ACK_NUMBER_KEY, "");
         
-        TextView messageTextView = (TextView)findViewById(R.id.fullAlarmMessage);
         
         //Set larm text message to ui
 //        messageTextView.setText(fullMessage);
         
-        //Find buttons and set the to button variables
-        Button abortButton = (Button)findViewById(R.id.abortAlarm);
-        Button ackButton = (Button)findViewById(R.id.acknowledgeAlarm);
         
         //Create objects that acts as listeners to the buttons
         abortButton.setOnClickListener(new OnClickListener() {			
@@ -95,43 +98,13 @@ public class AcknowledgeHandler extends Activity  {
 		});
         
         //Create objects that acts as listeners to the buttons
-        ackButton.setOnClickListener(new OnClickListener() {			
+        acknowledgeButton.setOnClickListener(new OnClickListener() {			
 			public void onClick(View v) {
-				//Check if user has given any number to call, else show toast
-//				if(!ackNumber.equals("")) {
-//			        //Set views visible
-//			        waitToAckTextView.setVisibility(View.VISIBLE);
-//			        waitToAckProgressBar.setVisibility(View.VISIBLE);
-//			        waitToAckInfoTextView.setVisibility(View.VISIBLE);
-//			        
-//					//Set min and max value for "random" delay before placing the phone call
-//					int min_delay = 1000;
-//					int max_delay = 40000;
-//					
-//					//Create a random object, used to randomize a delay before placing the phone call
-//					Random rndm = new Random();
-//					
-//					//Randomize delay
-//					int delay = rndm.nextInt(max_delay-min_delay+1) + min_delay;
-//					
-//					//Create an intent object, this intent is to place a call. Also set some options
-//					final Intent callIntent = new Intent(Intent.ACTION_CALL);
-//		    		callIntent.setData(Uri.parse("tel:"+ackNumber));
-//					
-//					//Initialize a handler object, used to put a thread to sleep
-//					Handler handler = new Handler();
-//					handler.postDelayed(new Runnable() {
-//						public void run() {
-//							//Place the call after thread has been a sleep for a random time
-//							startActivity(callIntent);
-//						}
-//					}, delay);
-//
-//				}	else {
-//					Toast.makeText(AcknowledgeHandler.this, R.string.cannotAck, Toast.LENGTH_LONG).show();
-//				}
+				// TODO: Implement functionality
 			}
 		});
+        // Log in debugging and information purpose
+        this.logger.logCatTxt(this.logger.getINFO(), this.LOG_TAG + ":onCreate()", "Creation of the Acknowledge Handler completed");
     }
     
     /**
@@ -141,5 +114,56 @@ public class AcknowledgeHandler extends Activity  {
      */
     public void onPause(){
     	super.onPause(); 
+    }
+    
+    /**
+     * To find UI widgets and get their reference by ID stored in class variables.
+     * 
+     * @see #onCreate(Bundle)
+  	 * @see ax.ha.it.smsalarm#LogHandler.logCatTxt(int, String , String)
+     */
+    private void findViews() {
+    	// Logging
+    	this.logger.logCatTxt(this.logger.getINFO(), this.LOG_TAG + ":findViews()", "Start finding Views by their ID");
+    	
+    	// Declare and initialize variables of type TextView
+    	this.titleTextView = (TextView)findViewById(R.id.ackTitle_tv);
+    	this.fullMessageTextView = (TextView)findViewById(R.id.ackFullAlarm_tv);
+    	this.lineBusyTextView = (TextView)findViewById(R.id.ackLineBusy_tv);
+    	this.countDownTextView = (TextView)findViewById(R.id.ackCountdown_tv);
+    	this.secondsTextView = (TextView)findViewById(R.id.ackSeconds_tv);
+    	
+    	// Declare and initialize variables of type Button
+    	this.acknowledgeButton = (Button)findViewById(R.id.ackAcknowledgeAlarm_btn);
+    	this.abortButton = (Button)findViewById(R.id.ackAbortAlarm_btn);
+    	
+    	// Declare and initialize variable of type ProgressBar
+    	this.redialProgressBar = (ProgressBar)findViewById(R.id.ackRedial_pb);
+    	
+        // Declare and initialize variables of type ImageView
+        this.divider1ImageView = (ImageView)findViewById(R.id.ackDivider1_iv);
+        this.divider2ImageView = (ImageView)findViewById(R.id.ackDivider2_iv);
+    	
+        // If Android API level less then 11 set bright gradient else set dark gradient
+        if(Build.VERSION.SDK_INT < 11) {
+        	this.divider1ImageView.setImageResource(R.drawable.gradient_divider_10_and_down); 
+        	this.divider2ImageView.setImageResource(R.drawable.gradient_divider_10_and_down);
+        	// Logging
+        	this.logger.logCatTxt(this.logger.getDEBUG(), this.LOG_TAG + ":findViews()", "API level < 11, set bright gradients");
+        } else {
+        	this.divider1ImageView.setImageResource(R.drawable.gradient_divider_11_and_up); 
+        	this.divider2ImageView.setImageResource(R.drawable.gradient_divider_11_and_up);
+        	this.logger.logCatTxt(this.logger.getDEBUG(), this.LOG_TAG + ":findViews()", "API level > 10, set dark gradients");
+        } 
+        
+        // Log and hide UI widgets that user don't need to see right now
+        this.logger.logCatTxt(this.logger.getINFO(), this.LOG_TAG + ":findViews()", "Hiding elements not needed to show right now");      
+        this.lineBusyTextView.setVisibility(View.GONE);
+        this.countDownTextView.setVisibility(View.GONE);
+        this.secondsTextView.setVisibility(View.GONE);
+        this.redialProgressBar.setVisibility(View.GONE);
+    	
+    	// Logging
+    	this.logger.logCatTxt(this.logger.getINFO(), this.LOG_TAG + ":findViews()", "All Views found");
     }
 }
