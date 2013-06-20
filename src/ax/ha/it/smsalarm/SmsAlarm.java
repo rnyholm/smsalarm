@@ -550,16 +550,16 @@ public class SmsAlarm extends Activity  {
     	this.logger.logCatTxt(this.logger.getINFO(), this.LOG_TAG + ":getSmsAlarmPrefs()", "Start retrieving shared preferences needed by class SmsAlarm");
     	
     	//Get shared preferences needed by class Sms Alarm
-    	this.primaryListenNumber = (String) this.prefHandler.getPrefs(this.prefHandler.getSHARED_PREF(), this.prefHandler.getPRIMARY_LISTEN_NUMBER_KEY(), this.STRING, this);
-    	this.secondaryListenNumbers = (List<String>) this.prefHandler.getPrefs(this.prefHandler.getSHARED_PREF(), this.prefHandler.getSECONDARY_LISTEN_NUMBERS_KEY(), this.LIST, this);
-    	this.primaryMessageToneId = (Integer) this.prefHandler.getPrefs(this.prefHandler.getSHARED_PREF(), this.prefHandler.getPRIMARY_MESSAGE_TONE_KEY(), this.INTEGER, this);
-    	this.secondaryMessageToneId = (Integer) this.prefHandler.getPrefs(this.prefHandler.getSHARED_PREF(), this.prefHandler.getSECONDARY_MESSAGE_TONE_KEY(), this.INTEGER, this, 1);
-    	this.useOsSoundSettings = (Boolean) this.prefHandler.getPrefs(this.prefHandler.getSHARED_PREF(), this.prefHandler.getUSE_OS_SOUND_SETTINGS_KEY(), this.BOOLEAN, this);
-    	this.useAlarmAcknowledge = (Boolean) this.prefHandler.getPrefs(this.prefHandler.getSHARED_PREF(), this.prefHandler.getENABLE_ACK_KEY(), this.BOOLEAN, this);   
-    	this.acknowledgeNumber = (String) this.prefHandler.getPrefs(this.prefHandler.getSHARED_PREF(), this.prefHandler.getACK_NUMBER_KEY(), this.STRING, this);  
-    	this.playToneTwice = (Boolean) this.prefHandler.getPrefs(this.prefHandler.getSHARED_PREF(), this.prefHandler.getPLAY_TONE_TWICE_KEY(), this.BOOLEAN, this);    
-    	this.enableSmsAlarm = (Boolean) this.prefHandler.getPrefs(this.prefHandler.getSHARED_PREF(), this.prefHandler.getENABLE_SMS_ALARM_KEY(), this.BOOLEAN, this, true);  
-    	this.rescueService = (String) this.prefHandler.getPrefs(this.prefHandler.getSHARED_PREF(), this.prefHandler.getRESCUE_SERVICE_KEY(), this.STRING, this);    	
+    	this.primaryListenNumber = (String) prefHandler.getPrefs(prefHandler.getSHARED_PREF(), prefHandler.getPRIMARY_LISTEN_NUMBER_KEY(), this.STRING, this);
+    	this.secondaryListenNumbers = (List<String>) prefHandler.getPrefs(prefHandler.getSHARED_PREF(), prefHandler.getSECONDARY_LISTEN_NUMBERS_KEY(), this.LIST, this);
+    	this.primaryMessageToneId = (Integer) prefHandler.getPrefs(prefHandler.getSHARED_PREF(), prefHandler.getPRIMARY_MESSAGE_TONE_KEY(), this.INTEGER, this);
+    	this.secondaryMessageToneId = (Integer) prefHandler.getPrefs(prefHandler.getSHARED_PREF(), prefHandler.getSECONDARY_MESSAGE_TONE_KEY(), this.INTEGER, this, 1);
+    	this.useOsSoundSettings = (Boolean) prefHandler.getPrefs(prefHandler.getSHARED_PREF(), prefHandler.getUSE_OS_SOUND_SETTINGS_KEY(), this.BOOLEAN, this);
+    	this.useAlarmAcknowledge = (Boolean) prefHandler.getPrefs(prefHandler.getSHARED_PREF(), prefHandler.getENABLE_ACK_KEY(), this.BOOLEAN, this);   
+    	this.acknowledgeNumber = (String) prefHandler.getPrefs(prefHandler.getSHARED_PREF(), prefHandler.getACK_NUMBER_KEY(), this.STRING, this);  
+    	this.playToneTwice = (Boolean) prefHandler.getPrefs(prefHandler.getSHARED_PREF(), prefHandler.getPLAY_TONE_TWICE_KEY(), this.BOOLEAN, this);    
+    	this.enableSmsAlarm = (Boolean) prefHandler.getPrefs(prefHandler.getSHARED_PREF(), prefHandler.getENABLE_SMS_ALARM_KEY(), this.BOOLEAN, this, true);  
+    	this.rescueService = (String) prefHandler.getPrefs(prefHandler.getSHARED_PREF(), prefHandler.getRESCUE_SERVICE_KEY(), this.STRING, this);    	
 
     	this.logger.logCatTxt(this.logger.getINFO(), this.LOG_TAG + ":getSmsAlarmPrefs()", "Shared preferences retrieved");  	 
     }
