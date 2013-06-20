@@ -64,9 +64,9 @@
     <string name="ackNumberTitle">Sms Alarm acknowledge to this number</string>    
     <string name="aboutVersion">Version: 2.1 Beta Preview</string>
     <string name="splashVersion">v2.1 Beta Preview</string>
-    <string name="aboutBuild">Build: 20130612</string>
-    <string name="aboutCopyright">&#169; copyright Robert Nyholm</string>
-    <string name="aboutRightsReserved">All rights reserved</string>
+    <string name="aboutBuild">Build: 20130620</string>
+    <string name="aboutCopyright">&#169;Copyright Robert Nyholm</string>
+    <string name="aboutRightsReserved">All rights reserved.</string>
 	<string name="dividerDescr">Divider</string>    
 	<string name="splashDescr">Splash</string>
 </resources>

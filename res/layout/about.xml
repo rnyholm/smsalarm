@@ -1,15 +1,59 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android" android:layout_height="match_parent" android:layout_width="match_parent" android:orientation="vertical" android:weightSum="1" android:isScrollContainer="true">
 
-    <ImageView
-        android:id="@+id/imageView1"
-        android:layout_width="72dp"
-        android:layout_height="72dp"
-        android:layout_gravity="center|top"
-        android:src="@drawable/ic_launcher" >
-</ImageView>
-    <TextView android:text="@string/aboutVersion" android:textAppearance="?android:attr/textAppearanceMedium" android:layout_height="wrap_content" android:layout_width="wrap_content" android:id="@+id/aboutVersion" android:layout_marginLeft="15sp" android:layout_marginTop="10sp"></TextView>
-    <TextView android:text="@string/aboutBuild" android:textAppearance="?android:attr/textAppearanceMedium" android:layout_height="wrap_content" android:layout_width="wrap_content" android:id="@+id/aboutBuild" android:layout_marginLeft="15sp"></TextView>
-    <TextView android:text="@string/aboutCopyright" android:textAppearance="?android:attr/textAppearanceMedium" android:layout_height="wrap_content" android:layout_width="wrap_content" android:id="@+id/aboutCopyright" android:layout_marginLeft="15sp"></TextView>
-    <TextView android:text="@string/aboutRightsReserved" android:textAppearance="?android:attr/textAppearanceMedium" android:layout_height="wrap_content" android:layout_width="wrap_content" android:id="@+id/aboutRightsReserved" android:layout_marginLeft="15sp"></TextView>
+    <TextView
+        android:id="@+id/aboutTitle_tv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="15sp"
+        android:layout_marginTop="10sp"
+        android:text="@string/app_name"
+        android:textAppearance="?android:attr/textAppearanceMedium" />
+
+    <TextView
+        android:id="@+id/aboutDescr_tv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="15sp"
+        android:text="@string/appDescr"
+        android:textAppearance="?android:attr/textAppearanceSmall" />
+
+    <TextView
+        android:id="@+id/aboutVersion_tv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="15sp"
+        android:layout_marginTop="10sp"
+        android:text="@string/aboutVersion"
+        android:textAppearance="?android:attr/textAppearanceMedium" >
+</TextView>
+
+    <TextView
+        android:id="@+id/aboutBuild_tv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="15sp"
+        android:text="@string/aboutBuild"
+        android:textAppearance="?android:attr/textAppearanceMedium" >
+</TextView>
+
+    <TextView
+        android:id="@+id/aboutCopyright_tv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="15sp"
+        android:text="@string/aboutCopyright"
+        android:textAppearance="?android:attr/textAppearanceMedium" >
+</TextView>
+
+    <TextView
+        android:id="@+id/aboutRightsReserved_tv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="10sp"
+        android:layout_marginLeft="15sp"
+        android:text="@string/aboutRightsReserved"
+        android:textAppearance="?android:attr/textAppearanceMedium" >
+
+</TextView>
 </LinearLayout>
