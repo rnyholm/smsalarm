@@ -4,6 +4,8 @@
 
 package ax.ha.it.smsalarm;
 
+import java.util.List;
+
 import android.app.Activity;
 import android.os.Build;
 import android.os.Bundle;
@@ -26,6 +28,13 @@ import android.widget.TextView;
  * @date 2013-06-20
  */
 public class AcknowledgeHandler extends Activity  {
+	// Enumeration for different datatypes needed when retrieving shared preferences
+	private enum Datatypes {
+		INTEGER,
+		STRING,
+		BOOLEAN,
+		LIST;
+	}
 	
     //Log tag string
     private final String LOG_TAG = "AcknowledgeHandler";
@@ -52,6 +61,10 @@ public class AcknowledgeHandler extends Activity  {
     // The ImageView Objects
     private ImageView divider1ImageView;
     private ImageView divider2ImageView;
+    
+    // Strings for the data presentation in UI
+    private String rescueService = "";
+    private String fullMessage = "";
 		
  	/**
   	 * When activity starts, this method is the entry point.
@@ -75,9 +88,13 @@ public class AcknowledgeHandler extends Activity  {
         this.logger.logCatTxt(this.logger.getINFO(), this.LOG_TAG + ":onCreate()", "Creation of the Acknowledge Handler started");
        
         // FindViews
-        this.findViews();        
-
+        this.findViews();  
         
+        // Get Shared Preferences
+        this.getAckHandlerPrefs();
+        
+        // Set TextViews
+        this.setTextViews();
 //        //Shared preferences
 //    	final SharedPreferences sharedPref = this.getSharedPreferences(SmsAlarm.SHARED_PREF, Context.MODE_PRIVATE);
 //    	
@@ -171,4 +188,34 @@ public class AcknowledgeHandler extends Activity  {
     	// Logging
     	this.logger.logCatTxt(this.logger.getINFO(), this.LOG_TAG + ":findViews()", "All Views found");
     }
+    
+    /**
+     * To get <code>Shared Preferences</code> used by class <code>AcknowledgeHandler</code>.
+     * 
+     * @see ax.ha.it.smsalarm#LogHandler.logCatTxt(int, String, String)
+     * @see ax.ha.it.smsalarm#PreferencesHandler.getPrefs(String, String, int, Context)   
+     */
+	private void getAckHandlerPrefs() {
+    	//Some logging
+    	this.logger.logCatTxt(this.logger.getINFO(), this.LOG_TAG + ":getAckHandlerPrefs()", "Start retrieving shared preferences needed by class AcknowledgeHandler");
+    	
+    	//Get shared preferences needed by class Sms Alarm
+    	this.rescueService = (String) this.prefHandler.getPrefs(this.prefHandler.getSHARED_PREF(), this.prefHandler.getRESCUE_SERVICE_KEY(), Datatypes.STRING.ordinal(), this);
+    	this.fullMessage = (String) this.prefHandler.getPrefs(this.prefHandler.getSHARED_PREF(), this.prefHandler.getFULL_MESSAGE_KEY(), Datatypes.STRING.ordinal(), this);  	
+
+    	this.logger.logCatTxt(this.logger.getINFO(), this.LOG_TAG + ":getAckHandlerPrefs()", "Shared preferences retrieved");  	 
+    }
+	
+	/**
+	 * To set <code>TextViews</code> with data for a proper presentation of the UI.
+	 * 
+	 * @see ax.ha.it.smsalarm#LogHandler.logCatTxt(int, String, String)
+	 */
+	private void setTextViews() {
+    	//Some logging
+    	this.logger.logCatTxt(this.logger.getINFO(), this.LOG_TAG + ":setTextViews()", "Setting TextViews with proper data");
+		// Set TextViews from variables and resources
+		this.titleTextView.setText(this.rescueService.toUpperCase() + " " + R.string.fireAlarm);
+		this.fullMessageTextView.setText(this.fullMessage);
+	}
 }

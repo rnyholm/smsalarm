@@ -35,7 +35,7 @@
     <string name="waitAckInfo">OBS! Det kan ta upp till 40 sekunder innan kvitteringen utförs.</string>
     <string name="alarm">PRIMÄR LARM!</string>
     <string name="secondaryAlarm">SEKUNDÄR LARM!</string>
-    <string name="fireAlarm">BRANDLARM!</string>
+    <string name="fireAlarm">LARM!</string>
     <string name="duplicatedNumbers">Telefonnummer för primär- och sekundärlarm får inte vara lika! Ange ett nytt telefonnummer.</string>
     <string name="emptySecondaryNumber">Det går inte att ange ett tomt telefonnummer för sekundärlarm. Ange ett nytt telefonnummer.</string>
     <string name="numberAlreadyInList">Angivet telefonnummer finns redan i listan över sekundärlarm! Ange ett nytt telefonnummer.</string>

@@ -36,7 +36,7 @@
     <string name="waitAckInfo">NOTE! It can take up to 40 seconds before the acknowledgement is performed.</string>    
     <string name="alarm">PRIMARY ALARM!</string>
     <string name="secondaryAlarm">SECONDARY ALARM!</string>
-    <string name="fireAlarm">FIRE ALARM!</string>    
+    <string name="fireAlarm">ALARM!</string>    
     <string name="duplicatedNumbers">The phone numbers for primary- and secondary alarm can not be the same! Enter another phone number.</string>
     <string name="emptySecondaryNumber">You can not specify an empty phone number for the secondary alarm. Enter another phone number.</string>    
     <string name="numberAlreadyInList">Given phone number already exists in the list for secondary alarms! Enter another phone number.</string>    
