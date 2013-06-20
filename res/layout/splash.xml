@@ -4,9 +4,9 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@drawable/splash" >
-
+
     <TextView
-        android:id="@+id/splash_title_tv"
+        android:id="@+id/splashTitle_tv"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
@@ -15,19 +15,19 @@
         android:text="@string/app_name"
         android:textAppearance="?android:attr/textAppearanceLarge"
         android:textColor="#000000" />
-
+
     <TextView
-        android:id="@+id/splash_descr_tv"
+        android:id="@+id/splashDescr_tv"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/splash_title_tv"
+        android:layout_below="@id/splashTitle_tv"
         android:layout_centerHorizontal="true"
         android:text="@string/appDescr"
         android:textAppearance="?android:attr/textAppearanceMedium"
         android:textColor="#313031" />
-
+
     <TextView
-        android:id="@+id/splash_version_tv"
+        android:id="@+id/splashVersion_tv"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
