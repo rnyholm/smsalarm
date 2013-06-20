@@ -72,4 +72,5 @@
     <string name="aboutRightsReserved">Alla rättigheter reserverade.</string>
     <string name="dividerDescr">Delare</string>
     <string name="splashDescr">Splash</string>
+    <string name="testShowAck">TEST VISA KVITTERINGSAKTIVITETEN</string>
 </resources>

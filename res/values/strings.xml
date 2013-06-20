@@ -73,4 +73,5 @@
     <string name="aboutRightsReserved">All rights reserved.</string>
 	<string name="dividerDescr">Divider</string>    
 	<string name="splashDescr">Splash</string>
+	<string name="testShowAck">TEST SHOW ACKNOWLEDGE ACTIVITY</string>
 </resources>

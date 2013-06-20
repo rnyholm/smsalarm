@@ -431,7 +431,15 @@ public class SmsAlarm extends Activity  {
       			this.logger.logCatTxt(this.logger.getINFO(), this.LOG_TAG + ":onOptionsSelected()", "Menu item 1 selected");
       			// Build up and show the about dialog
       			this.buildAndShowAboutDialog();
-      			return true;            	
+      			return true; 
+// >>>>DEBUG DELETE
+      		case R.id.item2:
+      			prefHandler.setPrefs(prefHandler.getSHARED_PREF(), prefHandler.getRESCUE_SERVICE_KEY(), "Jomala Fbk", this);
+      			prefHandler.setPrefs(prefHandler.getSHARED_PREF(), prefHandler.getFULL_MESSAGE_KEY(), "02.02.2012 23:55:40 2.5 Litet larm - Automatlarm vikingline lager(1682) Länsmanshägnan 7 jomala", this);
+	    		Intent i = new Intent(SmsAlarm.this, AcknowledgeHandler.class);
+				startActivityForResult(i, 10);
+				return true;
+// <<<<DEBUG DELETE				
       		default:
       			return super.onOptionsItemSelected(item);
 		}
