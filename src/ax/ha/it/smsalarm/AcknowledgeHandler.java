@@ -217,7 +217,7 @@ public class AcknowledgeHandler extends Activity  {
     	//Some logging
     	this.logger.logCatTxt(this.logger.getINFO(), this.LOG_TAG + ":setTextViews()", "Setting TextViews with proper data");
 		// Set TextViews from variables and resources
-		this.titleTextView.setText(this.rescueService.toUpperCase() + " " + R.string.fireAlarm);
+		this.titleTextView.setText(this.rescueService.toUpperCase() + " " + getResources().getString(R.string.fireAlarm));
 		this.fullMessageTextView.setText(this.fullMessage);
 	}
 }
