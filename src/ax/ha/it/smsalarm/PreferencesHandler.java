@@ -52,6 +52,8 @@ public class PreferencesHandler {
 	private final String PLAY_TONE_TWICE_KEY = "playToneTwice";
 	private final String ENABLE_SMS_ALARM_KEY = "enableSmsAlarm";
 	private final String RESCUE_SERVICE_KEY = "rescueService";
+	private final String HAS_CALLED_KEY = "hasCalled";
+	
 
 	// Variable used to log messages
 	private LogHandler logger;
@@ -220,6 +222,15 @@ public class PreferencesHandler {
 	 */
 	public String getRESCUE_SERVICE_KEY() {
 		return RESCUE_SERVICE_KEY;
+	}
+	
+	/**
+	 * Getter for the shared preferences constant HAS_CALLED_KEY
+	 * 
+	 * @return The HAS_CALLED_KEY constant
+	 */
+	public String getHAS_CALLED_KEY() {
+		return HAS_CALLED_KEY;
 	}
 
 	/**
