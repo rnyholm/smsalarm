@@ -17,7 +17,6 @@ import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.telephony.PhoneStateListener;
 import android.telephony.TelephonyManager;
-import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
@@ -35,7 +34,7 @@ import android.widget.Toast;
  * @author Robert Nyholm <robert.nyholm@aland.net>
  * @version 2.1
  * @since 1.1-SE
- * @date 2013-06-21
+ * @date 2013-06-28
  */
 public class AcknowledgeHandler extends Activity  {
 	// Enumeration for different datatypes needed when retrieving shared preferences
@@ -52,6 +51,9 @@ public class AcknowledgeHandler extends Activity  {
 	// Objects needed for logging and shared preferences handling
 	private LogHandler logger = LogHandler.getInstance();
 	private PreferencesHandler prefHandler = PreferencesHandler.getInstance();    
+	
+	// Object needed to listen for phones different states
+	ListenToPhoneState listener;
 	
 	// Variables of different UI elements and types
 	// The TextView Objects
@@ -76,7 +78,7 @@ public class AcknowledgeHandler extends Activity  {
     private String rescueService = "";
     private String fullMessage = "";
     
-    // String represinting phone number to which we acknowledge to
+    // String representing phone number to which we acknowledge to
     private String acknowledgeNumber = "";
     
     // Boolean to indicate if a called has been placed already
@@ -96,7 +98,7 @@ public class AcknowledgeHandler extends Activity  {
 	private int phoneState = -1;
 	
 	// Constants for the redial parameters
-	private int MIN_CALL_TIME = 5000; // Minimum call time(in milliseconds), if below this the application redials
+	private int MIN_CALL_TIME = 7000; // Minimum call time(in milliseconds), if below this the application redials
 	private int REDIAL_COUNTDOWN_TIME = 6000; // Count down time(in milliseconds) before redial should occur
 	private int REDIAL_COUNTDOWN_INTERVAL = 100;
 		
@@ -124,6 +126,13 @@ public class AcknowledgeHandler extends Activity  {
         
         // Log in debugging and information purpose
         this.logger.logCatTxt(this.logger.getINFO(), this.LOG_TAG + ":onCreate()", "Creation of the Acknowledge Handler started");
+        
+        // Declare a telephonymanager with propersystemservice and attach listener to it
+        TelephonyManager tManager = (TelephonyManager)getSystemService(Context.TELEPHONY_SERVICE);
+        listener = new ListenToPhoneState();
+        tManager.listen(listener, PhoneStateListener.LISTEN_CALL_STATE);
+        
+        this.logger.logCatTxt(this.logger.getDEBUG(), this.LOG_TAG + ":onCreate()", "Got TELEPHONY_SERVICE and attached PhoneStateListener to it");
        
         // FindViews
         this.findViews();  
@@ -230,7 +239,7 @@ public class AcknowledgeHandler extends Activity  {
 		try {
 			// Make a call intent
             Intent callIntent = new Intent(Intent.ACTION_CALL);
-            callIntent.setData(Uri.parse(acknowledgeNumber));
+            callIntent.setData(Uri.parse("tel:"+acknowledgeNumber));
             // Logging
             logger.logCatTxt(logger.getDEBUG(), LOG_TAG + ":placeAcknowledgeCall()", "A call intent has been initialized");    		            
             // Store variable to shared preferences indicating that a call has been placed
