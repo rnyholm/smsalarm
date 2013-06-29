@@ -24,15 +24,16 @@ import android.telephony.SmsMessage;
  * @author Robert Nyholm <robert.nyholm@aland.net>
  * @version 2.1
  * @since 0.9beta
- * @date 2013-06-16
+ * @date 2013-06-30
  * 
  */
 public class SmsReceiver extends BroadcastReceiver {
 
 	// Log tag string
 	private final String LOG_TAG = "SmsReceiver";
-	
-	// Constants representing different datatypes used by class PreferencesHandler
+
+	// Constants representing different datatypes used by class
+	// PreferencesHandler
 	private final int INTEGER = 0;
 	private final int STRING = 1;
 	private final int BOOLEAN = 2;
@@ -84,8 +85,7 @@ public class SmsReceiver extends BroadcastReceiver {
 	public void onReceive(Context context, Intent intent) {
 
 		// Log message for debugging/information purpose
-		this.logger.logCatTxt(this.logger.getINFO(), this.LOG_TAG
-				+ ":onReceive()", "SMS received");
+		this.logger.logCatTxt(this.logger.getINFO(), this.LOG_TAG + ":onReceive()", "SMS received");
 
 		// Retrieve shared preferences
 		this.getSmsReceivePrefs(context);
@@ -93,9 +93,7 @@ public class SmsReceiver extends BroadcastReceiver {
 		// Only if Sms Alarm is enabled
 		if (this.enableSmsAlarm) {
 			// Log that Sms Alarm is enabled
-			this.logger.logCatTxt(this.logger.getINFO(), this.LOG_TAG
-					+ ":onReceive()",
-					"Sms Alarm is enabled, continue handle SMS");
+			this.logger.logCatTxt(this.logger.getINFO(), this.LOG_TAG + ":onReceive()", "Sms Alarm is enabled, continue handle SMS");
 
 			// Variable indicating if an alarm is triggered or not
 			boolean alarmTriggered = false;
@@ -123,38 +121,24 @@ public class SmsReceiver extends BroadcastReceiver {
 				 */
 				if (this.msgHeader.contains("+358")) { // <--Finland
 					this.msgHeader = this.msgHeader.replace("+358", "0");
-					this.logger.logCatTxt(this.logger.getWARN(), this.LOG_TAG
-							+ ":onReceive()",
-							"Countrycode +358 found, replaced by 0");
+					this.logger.logCatTxt(this.logger.getWARN(), this.LOG_TAG + ":onReceive()", "Countrycode +358 found, replaced by 0");
 				} else if (this.msgHeader.contains("+33")) { // <--France
 					this.msgHeader = this.msgHeader.replace("+33", "0");
-					this.logger.logCatTxt(this.logger.getWARN(), this.LOG_TAG
-							+ ":onReceive()",
-							"Countrycode +33 found, replaced by 0");
+					this.logger.logCatTxt(this.logger.getWARN(), this.LOG_TAG + ":onReceive()", "Countrycode +33 found, replaced by 0");
 				} else if (this.msgHeader.contains("+45")) { // <--Denmark
 					this.msgHeader = this.msgHeader.replace("+45", "0");
-					this.logger.logCatTxt(this.logger.getWARN(), this.LOG_TAG
-							+ ":onReceive()",
-							"Countrycode +45 found, replaced by 0");
+					this.logger.logCatTxt(this.logger.getWARN(), this.LOG_TAG + ":onReceive()", "Countrycode +45 found, replaced by 0");
 				} else if (this.msgHeader.contains("+46")) { // <--Sweden
 					this.msgHeader = this.msgHeader.replace("+46", "0");
-					this.logger.logCatTxt(this.logger.getWARN(), this.LOG_TAG
-							+ ":onReceive()",
-							"Countrycode +46 found, replaced by 0");
+					this.logger.logCatTxt(this.logger.getWARN(), this.LOG_TAG + ":onReceive()", "Countrycode +46 found, replaced by 0");
 				} else if (this.msgHeader.contains("+47")) { // <--Norway
 					this.msgHeader = this.msgHeader.replace("+47", "0");
-					this.logger.logCatTxt(this.logger.getWARN(), this.LOG_TAG
-							+ ":onReceive()",
-							"Countrycode +47 found, replaced by 0");
+					this.logger.logCatTxt(this.logger.getWARN(), this.LOG_TAG + ":onReceive()", "Countrycode +47 found, replaced by 0");
 				} else if (this.msgHeader.contains("+49")) { // <--Germany
 					this.msgHeader = this.msgHeader.replace("+49", "0");
-					this.logger.logCatTxt(this.logger.getWARN(), this.LOG_TAG
-							+ ":onReceive()",
-							"Countrycode +49 found, replaced by 0");
+					this.logger.logCatTxt(this.logger.getWARN(), this.LOG_TAG + ":onReceive()", "Countrycode +49 found, replaced by 0");
 				} else {
-					this.logger.logCatTxt(this.logger.getINFO(), this.LOG_TAG
-							+ ":onReceive()",
-							"No countrycod found, nothing replaced");
+					this.logger.logCatTxt(this.logger.getINFO(), this.LOG_TAG + ":onReceive()", "No countrycod found, nothing replaced");
 				}
 
 				// If we got a SMS from the same primary number as the
@@ -162,17 +146,10 @@ public class SmsReceiver extends BroadcastReceiver {
 				// listens on
 				if (this.msgHeader.equals(this.primaryListenNumber)) {
 					// Log information
-					this.logger.logCatTxt(this.logger.getINFO(), this.LOG_TAG
-							+ ":onReceive()",
-							"SMS fulfilled the criteria for a PRIMARY alarm. SMS received from: \""
-									+ this.msgHeader + "\" with message: \""
-									+ this.msgBody + "\"");
+					this.logger.logCatTxt(this.logger.getINFO(), this.LOG_TAG + ":onReceive()", "SMS fulfilled the criteria for a PRIMARY alarm. SMS received from: \"" + this.msgHeader + "\" with message: \"" + this.msgBody + "\"");
 
 					// Put alarm type to shared preferences
-					this.prefHandler.setPrefs(
-							this.prefHandler.getSHARED_PREF(),
-							this.prefHandler.getLARM_TYPE_KEY(), "primary",
-							context);
+					this.prefHandler.setPrefs(this.prefHandler.getSHARED_PREF(), this.prefHandler.getLARM_TYPE_KEY(), "primary", context);
 
 					// Set larm typ to this object
 					this.type = "primary";
@@ -194,21 +171,12 @@ public class SmsReceiver extends BroadcastReceiver {
 							// If msg header equals a element in list
 							// application
 							// has received a SMS from a secondary listen number
-							if (this.msgHeader
-									.equals(this.secondaryListenNumbers.get(i))) {
+							if (this.msgHeader.equals(this.secondaryListenNumbers.get(i))) {
 								// Log information
-								this.logger.logCatTxt(this.logger.getINFO(),
-										this.LOG_TAG + ":onReceive()",
-										"SMS fulfilled the criteria for a SECONDARY alarm. SMS received from: \""
-												+ this.msgHeader
-												+ "\" with message: \""
-												+ this.msgBody + "\"");
+								this.logger.logCatTxt(this.logger.getINFO(), this.LOG_TAG + ":onReceive()", "SMS fulfilled the criteria for a SECONDARY alarm. SMS received from: \"" + this.msgHeader + "\" with message: \"" + this.msgBody + "\"");
 
 								// Put alarm type to shared preferences
-								this.prefHandler.setPrefs(
-										this.prefHandler.getSHARED_PREF(),
-										this.prefHandler.getLARM_TYPE_KEY(),
-										"secondary", context);
+								this.prefHandler.setPrefs(this.prefHandler.getSHARED_PREF(), this.prefHandler.getLARM_TYPE_KEY(), "secondary", context);
 
 								// Set larm typ to this object
 								this.type = "secondary";
@@ -224,28 +192,18 @@ public class SmsReceiver extends BroadcastReceiver {
 					} catch (Exception e) {
 						// An exception occurred print stack trace and log it
 						e.printStackTrace();
-						this.logger
-								.logCatTxt(
-										this.logger.getERROR(),
-										this.LOG_TAG + ":onReceive()",
-										"Failed to iterate through list of secondary alarms, operation endend with exception",
-										e);
+						this.logger.logCatTxt(this.logger.getERROR(), this.LOG_TAG + ":onReceive()", "Failed to iterate through list of secondary alarms, operation endend with exception", e);
 					}
 				}
 
 				// If no alarm has been triggered log it with proper message
 				if (!alarmTriggered) {
-					this.logger
-							.logCatTxt(
-									this.logger.getINFO(),
-									this.LOG_TAG + ":onReceive()",
-									"SMS didn't fulfill criterias for either PRIMARY or SECONDARY alarm, no action taken");
+					this.logger.logCatTxt(this.logger.getINFO(), this.LOG_TAG + ":onReceive()", "SMS didn't fulfill criterias for either PRIMARY or SECONDARY alarm, no action taken");
 				}
 			}
 		} else { // <--Sms Alarm isn't enabled
 			// Log that Sms Alarm is enabled
-			this.logger.logCatTxt(this.logger.getINFO(), this.LOG_TAG
-					+ ":onReceive()", "Sms Alarm is not enabled, do nothing");
+			this.logger.logCatTxt(this.logger.getINFO(), this.LOG_TAG + ":onReceive()", "Sms Alarm is not enabled, do nothing");
 		}
 	}
 
@@ -259,7 +217,8 @@ public class SmsReceiver extends BroadcastReceiver {
 	 * @param context
 	 *            Context
 	 * 
-	 * @see ax.ha.it.smsalarm#NoiseHandler.makeNoise(Context, int, boolean, boolean)
+	 * @see ax.ha.it.smsalarm#NoiseHandler.makeNoise(Context, int, boolean,
+	 *      boolean)
 	 * @see #onReceive(Context, Intent)
 	 * @see #getSmsReceivePrefs(Context)
 	 */
@@ -268,13 +227,11 @@ public class SmsReceiver extends BroadcastReceiver {
 		abortBroadcast();
 
 		// Log message for debugging/information purpose
-		this.logger.logCatTxt(this.logger.getINFO(), this.LOG_TAG
-				+ ":smsHandler()", "ABORTED OPERATING SYSTEMS BROADCAST");
+		this.logger.logCatTxt(this.logger.getINFO(), this.LOG_TAG + ":smsHandler()", "ABORTED OPERATING SYSTEMS BROADCAST");
 
 		// Pattern for regular expression like this; dd.dd.dddd dd:dd:dd: d.d,
 		// alarm from alarmcentralen has this pattern
-		Pattern p = Pattern
-				.compile("(\\d{2}).(\\d{2}).(\\d{4})(\\s)(\\d{2}):(\\d{2}):(\\d{2})(\\s)(\\d{1}).(\\d{1})");
+		Pattern p = Pattern.compile("(\\d{2}).(\\d{2}).(\\d{4})(\\s)(\\d{2}):(\\d{2}):(\\d{2})(\\s)(\\d{1}).(\\d{1})");
 		Matcher m = p.matcher(this.msgBody);
 
 		// Due to previous abort we have to store the SMS manually in phones
@@ -282,10 +239,8 @@ public class SmsReceiver extends BroadcastReceiver {
 		ContentValues values = new ContentValues();
 		values.put("address", this.msgHeader);
 		values.put("body", this.msgBody);
-		context.getContentResolver().insert(Uri.parse("content://sms/inbox"),
-				values);
-		this.logger.logCatTxt(this.logger.getINFO(), this.LOG_TAG
-				+ ":smsHandler()", "SMS stored in devices inbox");
+		context.getContentResolver().insert(Uri.parse("content://sms/inbox"), values);
+		this.logger.logCatTxt(this.logger.getINFO(), this.LOG_TAG + ":smsHandler()", "SMS stored in devices inbox");
 
 		// Play message tone and vibrate, different method calls depending on
 		// alarm type
@@ -295,67 +250,42 @@ public class SmsReceiver extends BroadcastReceiver {
 			this.noiseHandler.makeNoise(context, this.secondaryMessageToneId, useOsSoundSettings, this.playToneTwice);
 		} else {
 			// UNSUPPORTED LARM TYPE OCCURRED
-			this.logger
-					.logCatTxt(
-							this.logger.getERROR(),
-							this.LOG_TAG + ":smsHandler()",
-							"An unsupported alarm type has occurred, can't play tone or vibrate(trig SmsAlarm.playMsgToneVibrate(Context, int, boolean))");
+			this.logger.logCatTxt(this.logger.getERROR(), this.LOG_TAG + ":smsHandler()", "An unsupported alarm type has occurred, can't play tone or vibrate(trig SmsAlarm.playMsgToneVibrate(Context, int, boolean))");
 		}
 
 		// If message contain a string with correct pattern, remove the date and
 		// time stamp in message
 		if (m.find()) {
-			this.msgBody = this.msgBody.replace(m.group(1).toString() + "."
-					+ m.group(2).toString() + "." + m.group(3).toString()
-					+ m.group(4).toString() + m.group(5).toString() + ":"
-					+ m.group(6).toString() + ":" + m.group(7).toString()
-					+ m.group(8).toString() + m.group(9).toString() + "."
+			this.msgBody = this.msgBody.replace(m.group(1).toString() + "." + m.group(2).toString() + "." + m.group(3).toString() + m.group(4).toString() + m.group(5).toString() + ":" + m.group(6).toString() + ":" + m.group(7).toString() + m.group(8).toString() + m.group(9).toString() + "."
 					+ m.group(10).toString(), "");
 
-			this.logger.logCatTxt(this.logger.getWARN(), this.LOG_TAG
-					+ ":smsHandler()",
-					"SMS cleaned from unnecessary information");
+			this.logger.logCatTxt(this.logger.getWARN(), this.LOG_TAG + ":smsHandler()", "SMS cleaned from unnecessary information");
 		}
 
 		// If Alarm acknowledge is enabled and alarm type equals primary, store
 		// full alarm message
 		if (this.enableAlarmAck == true && this.type.equals("primary")) {
 			// Log message
-			this.logger
-					.logCatTxt(
-							this.logger.getINFO(),
-							this.LOG_TAG + ":smsHandler()",
-							"Alarm acknowledgement is enabled and alarm is of type primary, store full SMS to shared preferences");
+			this.logger.logCatTxt(this.logger.getINFO(), this.LOG_TAG + ":smsHandler()", "Alarm acknowledgement is enabled and alarm is of type primary, store full SMS to shared preferences");
 
 			// Enable acknowledge is enabled and alarm is of type primary
-			this.prefHandler.setPrefs(this.prefHandler.getSHARED_PREF(),
-					this.prefHandler.getFULL_MESSAGE_KEY(), this.msgBody,
-					context);
+			this.prefHandler.setPrefs(this.prefHandler.getSHARED_PREF(), this.prefHandler.getFULL_MESSAGE_KEY(), this.msgBody, context);
 		}
 		// Store message's body in shared prefs so it can be shown in
 		// notification
-		this.logger.logCatTxt(this.logger.getINFO(), this.LOG_TAG
-				+ ":smsHandler()",
-				"Store SMS to shared preferences for show in notification bar");
-		this.prefHandler.setPrefs(this.prefHandler.getSHARED_PREF(),
-				this.prefHandler.getMESSAGE_KEY(), this.msgBody, context);
+		this.logger.logCatTxt(this.logger.getINFO(), this.LOG_TAG + ":smsHandler()", "Store SMS to shared preferences for show in notification bar");
+		this.prefHandler.setPrefs(this.prefHandler.getSHARED_PREF(), this.prefHandler.getMESSAGE_KEY(), this.msgBody, context);
 
 		// Acknowledge is enabled and it is a primary alarm, show acknowledge
 		// notification, else show "ordinary" notification
 		if (this.enableAlarmAck == true && this.type.equals("primary")) {
-			this.logger
-					.logCatTxt(this.logger.getINFO(), this.LOG_TAG
-							+ ":smsHandler()",
-							"Preparing intent for the AcknowledgeNotificationHelper.class");
+			this.logger.logCatTxt(this.logger.getINFO(), this.LOG_TAG + ":smsHandler()", "Preparing intent for the AcknowledgeNotificationHelper.class");
 			// Start intent, AcknowledgeNotificationHelper - a helper to show
 			// acknowledge notification
-			Intent ackNotIntent = new Intent(context,
-					AcknowledgeNotificationHelper.class);
+			Intent ackNotIntent = new Intent(context, AcknowledgeNotificationHelper.class);
 			context.startService(ackNotIntent);
 		} else {
-			this.logger.logCatTxt(this.logger.getINFO(), this.LOG_TAG
-					+ ":smsHandler()",
-					"Preparing intent for the NotificationHelper.class");
+			this.logger.logCatTxt(this.logger.getINFO(), this.LOG_TAG + ":smsHandler()", "Preparing intent for the NotificationHelper.class");
 
 			// Start intent, NotificationHelper - a helper to show notification
 			Intent notIntent = new Intent(context, NotificationHelper.class);
@@ -375,38 +305,18 @@ public class SmsReceiver extends BroadcastReceiver {
 	@SuppressWarnings("unchecked")
 	private void getSmsReceivePrefs(Context context) {
 		// Some logging
-		this.logger
-				.logCatTxt(this.logger.getINFO(), this.LOG_TAG
-						+ ":getSmsReceivePrefs()",
-						"Start retrieving shared preferences needed by class SmsReceiver");
+		this.logger.logCatTxt(this.logger.getINFO(), this.LOG_TAG + ":getSmsReceivePrefs()", "Start retrieving shared preferences needed by class SmsReceiver");
 
 		// Get shared preferences needed by SmsReceiver
-		this.primaryListenNumber = (String) this.prefHandler.getPrefs(
-				this.prefHandler.getSHARED_PREF(),
-				this.prefHandler.getPRIMARY_LISTEN_NUMBER_KEY(), this.STRING, context);
-		this.secondaryListenNumbers = (List<String>) this.prefHandler.getPrefs(
-				this.prefHandler.getSHARED_PREF(),
-				this.prefHandler.getSECONDARY_LISTEN_NUMBERS_KEY(), this.LIST, context);
-		this.primaryMessageToneId = (Integer) this.prefHandler.getPrefs(
-				this.prefHandler.getSHARED_PREF(),
-				this.prefHandler.getPRIMARY_MESSAGE_TONE_KEY(), this.INTEGER, context);
-		this.secondaryMessageToneId = (Integer) this.prefHandler.getPrefs(
-				this.prefHandler.getSHARED_PREF(),
-				this.prefHandler.getSECONDARY_MESSAGE_TONE_KEY(), this.INTEGER, context);
-		this.useOsSoundSettings = (Boolean) this.prefHandler.getPrefs(
-				this.prefHandler.getSHARED_PREF(),
-				this.prefHandler.getUSE_OS_SOUND_SETTINGS_KEY(), this.BOOLEAN, context);
-		this.enableAlarmAck = (Boolean) this.prefHandler.getPrefs(
-				this.prefHandler.getSHARED_PREF(),
-				this.prefHandler.getENABLE_ACK_KEY(), this.BOOLEAN, context);
-		this.playToneTwice = (Boolean) this.prefHandler.getPrefs(
-				this.prefHandler.getSHARED_PREF(),
-				this.prefHandler.getPLAY_TONE_TWICE_KEY(), this.BOOLEAN, context);
-		this.enableSmsAlarm = (Boolean) this.prefHandler.getPrefs(
-				this.prefHandler.getSHARED_PREF(),
-				this.prefHandler.getENABLE_SMS_ALARM_KEY(), this.BOOLEAN, context);
+		this.primaryListenNumber = (String) this.prefHandler.getPrefs(this.prefHandler.getSHARED_PREF(), this.prefHandler.getPRIMARY_LISTEN_NUMBER_KEY(), this.STRING, context);
+		this.secondaryListenNumbers = (List<String>) this.prefHandler.getPrefs(this.prefHandler.getSHARED_PREF(), this.prefHandler.getSECONDARY_LISTEN_NUMBERS_KEY(), this.LIST, context);
+		this.primaryMessageToneId = (Integer) this.prefHandler.getPrefs(this.prefHandler.getSHARED_PREF(), this.prefHandler.getPRIMARY_MESSAGE_TONE_KEY(), this.INTEGER, context);
+		this.secondaryMessageToneId = (Integer) this.prefHandler.getPrefs(this.prefHandler.getSHARED_PREF(), this.prefHandler.getSECONDARY_MESSAGE_TONE_KEY(), this.INTEGER, context);
+		this.useOsSoundSettings = (Boolean) this.prefHandler.getPrefs(this.prefHandler.getSHARED_PREF(), this.prefHandler.getUSE_OS_SOUND_SETTINGS_KEY(), this.BOOLEAN, context);
+		this.enableAlarmAck = (Boolean) this.prefHandler.getPrefs(this.prefHandler.getSHARED_PREF(), this.prefHandler.getENABLE_ACK_KEY(), this.BOOLEAN, context);
+		this.playToneTwice = (Boolean) this.prefHandler.getPrefs(this.prefHandler.getSHARED_PREF(), this.prefHandler.getPLAY_TONE_TWICE_KEY(), this.BOOLEAN, context);
+		this.enableSmsAlarm = (Boolean) this.prefHandler.getPrefs(this.prefHandler.getSHARED_PREF(), this.prefHandler.getENABLE_SMS_ALARM_KEY(), this.BOOLEAN, context);
 
-		this.logger.logCatTxt(this.logger.getINFO(), this.LOG_TAG
-				+ ":getSmsReceivePrefs()", "Shared preferences retrieved");
+		this.logger.logCatTxt(this.logger.getINFO(), this.LOG_TAG + ":getSmsReceivePrefs()", "Shared preferences retrieved");
 	}
 }

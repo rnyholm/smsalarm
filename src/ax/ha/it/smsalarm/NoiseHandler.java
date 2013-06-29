@@ -25,7 +25,7 @@ import android.os.Vibrator;
  * @author Robert Nyholm <robert.nyholm@aland.net>
  * @version 2.1
  * @since 2.0
- * @date 2013-06-16
+ * @date 2013-06-30
  */
 public class NoiseHandler {
 	// Singleton instance of this class
@@ -36,7 +36,7 @@ public class NoiseHandler {
 
 	// Variable used to log messages
 	private LogHandler logger;
-	
+
 	// Initialize a MediaPlayer object
 	final MediaPlayer mPlayer = new MediaPlayer(); // MediaPlayer object
 
@@ -96,37 +96,23 @@ public class NoiseHandler {
 		// Log information
 		this.logger.logCatTxt(this.logger.getINFO(), this.LOG_TAG + ":makeNoise()", "Preparing to play message tone and vibrate");
 
-		// Declarations of different objects needed by makeNoise
-		final AudioManager am = (AudioManager) context.getSystemService(Context.AUDIO_SERVICE); // AudioManager
-																								// used
-																								// to
-																								// get
-																								// and
-																								// set
-																								// different
-																								// volume
-																								// levels
-		Vibrator v = (Vibrator) context.getSystemService(Context.VIBRATOR_SERVICE); // Instance
-																					// of
-																					// Vibrator
-																					// from
-																					// context
-		AssetFileDescriptor afd = null; // AssetFileDescriptor to get mp3 file
-		final int currentMediaVolume = am.getStreamVolume(AudioManager.STREAM_MUSIC); // Store
-																						// current
-																						// media
-																						// volume
-		final int currentRingVolume = am.getStreamVolume(AudioManager.STREAM_RING); // Store
-																					// current
-																					// ring
-																					// volume
-		final int maxRingVolume = am.getStreamMaxVolume(AudioManager.STREAM_RING); // Store
-																					// max
-																					// ring
-																					// volume
-		float alarmVolume = 0; // To store calculated alarm volume in
-		final int toBePlayed; // Variable indicating how many times message tone
-								// should be played
+		/*Declarations of different objects needed by makeNoise */
+		// AudioManager used to get and set different volume levels
+		final AudioManager am = (AudioManager) context.getSystemService(Context.AUDIO_SERVICE); 
+		// Instance of Vibrator from context
+		Vibrator v = (Vibrator) context.getSystemService(Context.VIBRATOR_SERVICE); 
+		// AssetFileDescriptor to get mp3 file
+		AssetFileDescriptor afd = null; 
+		// Store current media volume
+		final int currentMediaVolume = am.getStreamVolume(AudioManager.STREAM_MUSIC); 
+		// Store current ring volume
+		final int currentRingVolume = am.getStreamVolume(AudioManager.STREAM_RING); 
+		// Store max ring volume
+		final int maxRingVolume = am.getStreamMaxVolume(AudioManager.STREAM_RING); 
+		// To store calculated alarm volume in
+		float alarmVolume = 0; 
+		// Variable indicating how many times message tone should be played
+		final int toBePlayed; 
 
 		/*
 		 * SOS morsecode pattern from
@@ -259,8 +245,7 @@ public class NoiseHandler {
 				// Do nothing except log information
 				this.logger.logCatTxt(this.logger.getERROR(), this.LOG_TAG + ":makeNoise()", "Device is in a UNSUPPORTED ringer mode, can't decide what to do");
 			}
-		} else { // If not take into account OS sound setting, always ring at
-					// highest volume and vibrate
+		} else { // If not take into account OS sound setting, always ring at highest volume and vibrate
 			// Vibrate, -1 = no repeat
 			v.vibrate(pattern, -1);
 			// Start play message tone
@@ -270,11 +255,9 @@ public class NoiseHandler {
 			this.logger.logCatTxt(this.logger.getINFO(), this.LOG_TAG + ":makeNoise()", "Application is set to don't take into account device's sound settings. Play message tone at max volume and vibrate");
 		}
 
-		// Listen to completion, in other words when media player has finished
-		// and reset media volume and media player
+		// Listen to completion, in other words when media player has finished and reset media volume and media player
 		mPlayer.setOnCompletionListener(new OnCompletionListener() {
-			// Counter variable to count number of times played, we have already
-			// played the message tone once
+			// Counter variable to count number of times played, we have already played the message tone once
 			int timesPlayed = 1;
 
 			/**

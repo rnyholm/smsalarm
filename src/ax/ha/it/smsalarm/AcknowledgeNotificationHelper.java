@@ -20,7 +20,7 @@ import android.content.Intent;
  * @author Robert Nyholm <robert.nyholm@aland.net>
  * @version 2.1
  * @since 1.2.1-SE
- * @date 2013-04-29
+ * @date 2013-06-30
  */
 public class AcknowledgeNotificationHelper extends IntentService {
 
@@ -41,9 +41,7 @@ public class AcknowledgeNotificationHelper extends IntentService {
 		super("AcknowledgeNotificationHelper");
 
 		// Log message for debugging/information purpose
-		this.logger.logCatTxt(this.logger.getINFO(), this.LOG_TAG
-				+ ":AcknowledgeNotificationHelper()",
-				"NotificationHelper constructor called");
+		this.logger.logCatTxt(this.logger.getINFO(), this.LOG_TAG + ":AcknowledgeNotificationHelper()", "NotificationHelper constructor called");
 	}
 
 	/**
@@ -61,24 +59,16 @@ public class AcknowledgeNotificationHelper extends IntentService {
 	@Override
 	protected void onHandleIntent(Intent i) {
 		// Log information
-		this.logger
-				.logCatTxt(
-						this.logger.getINFO(),
-						this.LOG_TAG + ":onHandleIntent()",
-						"Start retrieving shared preferences needed by class AcknowledgeNotificationHelper");
+		this.logger.logCatTxt(this.logger.getINFO(), this.LOG_TAG + ":onHandleIntent()", "Start retrieving shared preferences needed by class AcknowledgeNotificationHelper");
 
 		// Get some values from the sharedprefs
-		String message = (String) this.prefHandler.getPrefs(
-				this.prefHandler.getSHARED_PREF(),
-				this.prefHandler.getMESSAGE_KEY(), 1, this);
+		String message = (String) this.prefHandler.getPrefs(this.prefHandler.getSHARED_PREF(), this.prefHandler.getMESSAGE_KEY(), 1, this);
 
-		this.logger.logCatTxt(this.logger.getINFO(), this.LOG_TAG
-				+ ":onHandleIntent()", "Shared preferences retrieved");
+		this.logger.logCatTxt(this.logger.getINFO(), this.LOG_TAG + ":onHandleIntent()", "Shared preferences retrieved");
 
 		// Set intent to AcknowledgeHandler
 		Intent notificationIntent = new Intent(this, AcknowledgeHandler.class);
-		this.logger.logCatTxt(this.logger.getINFO(), this.LOG_TAG
-				+ ":onHandleIntent()", "Intent has been set");
+		this.logger.logCatTxt(this.logger.getINFO(), this.LOG_TAG + ":onHandleIntent()", "Intent has been set");
 
 		// Setup a notification, directly from android development site
 		NotificationManager mNotificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
@@ -86,15 +76,10 @@ public class AcknowledgeNotificationHelper extends IntentService {
 		// Variables for notifications text and icon
 		CharSequence tickerText = this.getString(R.string.alarm);
 		CharSequence contentTitle = this.getString(R.string.alarm);
-		;
 		int icon = android.R.drawable.ic_delete;
-		;
 
 		// Log
-		this.logger
-				.logCatTxt(this.logger.getINFO(), this.LOG_TAG
-						+ ":onHandleIntent()",
-						"Notification has been set for a primary alarm with acknowledgement");
+		this.logger.logCatTxt(this.logger.getINFO(), this.LOG_TAG + ":onHandleIntent()", "Notification has been set for a primary alarm with acknowledgement");
 
 		// To get a unique refresh id for the intents
 		long REFRESH_ID = System.currentTimeMillis();
@@ -108,18 +93,13 @@ public class AcknowledgeNotificationHelper extends IntentService {
 
 		// Setup message and pendingintent
 		CharSequence contentText = message;
-		PendingIntent contentIntent = PendingIntent.getActivity(this, 0,
-				notificationIntent, 0);
-		notification.setLatestEventInfo(context, contentTitle, contentText,
-				contentIntent);
+		PendingIntent contentIntent = PendingIntent.getActivity(this, 0, notificationIntent, 0);
+		notification.setLatestEventInfo(context, contentTitle, contentText, contentIntent);
 
 		// This flag auto cancels the notification when clicked
 		notification.flags = Notification.FLAG_AUTO_CANCEL;
 
-		this.logger
-				.logCatTxt(this.logger.getINFO(), this.LOG_TAG
-						+ ":onHandleIntent()",
-						"Notification and it's intent has been configured and are ready to be shown");
+		this.logger.logCatTxt(this.logger.getINFO(), this.LOG_TAG + ":onHandleIntent()", "Notification and it's intent has been configured and are ready to be shown");
 
 		// Show the notification
 		mNotificationManager.notify((int) REFRESH_ID, notification);
