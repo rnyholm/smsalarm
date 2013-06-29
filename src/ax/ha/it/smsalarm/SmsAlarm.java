@@ -38,7 +38,7 @@ import android.widget.Toast;
  * @author Robert Nyholm <robert.nyholm@aland.net>
  * @version 2.1
  * @since 0.9beta
- * @date 2013-06-17
+ * @date 2013-06-30
  *
  * @see #onCreate(Bundle)
  * @see #onPause()
@@ -160,7 +160,7 @@ public class SmsAlarm extends Activity  {
          
 	    // Fill tone spinner with values
 	    ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(
-	            this, R.array.spinnerValues, android.R.layout.simple_spinner_item);
+	            this, R.array.alarmTypes, android.R.layout.simple_spinner_item);
 	    adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 	    
 	    // Set adapter to tone spinner
