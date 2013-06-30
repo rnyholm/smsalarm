@@ -24,6 +24,7 @@ import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
+import ax.ha.it.smsalarm.LogHandler.LogPriorities;
 
 /**
  * Responsible for the application <code>ax.ha.it.smsalarm</code> acknowledge
@@ -112,7 +113,7 @@ public class AcknowledgeHandler extends Activity {
 	 * @see #setTextViews()
 	 * @see #onResume()
 	 * @see #onPause()
-	 * @see ax.ha.it.smsalarm#LogHandler.logCatTxt(int, String , String)
+	 * @see {@link LogHandler#logCat(LogPriorities, String , String)}
 	 * @see #ListenToPhoneState()
 	 * 
 	 * @Override
@@ -123,7 +124,7 @@ public class AcknowledgeHandler extends Activity {
 		setContentView(R.layout.ack);
 
 		// Log in debugging and information purpose
-		this.logger.logCatTxt(this.logger.getINFO(), this.LOG_TAG + ":onCreate()", "Creation of the Acknowledge Handler started");
+		this.logger.logCat(LogPriorities.DEBUG, this.LOG_TAG + ":onCreate()", "Creation of the Acknowledge Handler started");
 
 		// Declare a telephonymanager with propersystemservice and attach
 		// listener to it
@@ -131,7 +132,7 @@ public class AcknowledgeHandler extends Activity {
 		listener = new ListenToPhoneState();
 		tManager.listen(listener, PhoneStateListener.LISTEN_CALL_STATE);
 
-		this.logger.logCatTxt(this.logger.getDEBUG(), this.LOG_TAG + ":onCreate()", "Got TELEPHONY_SERVICE and attached PhoneStateListener to it");
+		this.logger.logCat(LogPriorities.DEBUG, this.LOG_TAG + ":onCreate()", "Got TELEPHONY_SERVICE and attached PhoneStateListener to it");
 
 		// FindViews
 		this.findViews();
@@ -146,7 +147,7 @@ public class AcknowledgeHandler extends Activity {
 		abortButton.setOnClickListener(new OnClickListener() {
 			public void onClick(View v) {
 				// Logging
-				logger.logCatTxt(logger.getINFO(), LOG_TAG + ":onCreate().abortButton.OnClickListener().onClick()", "Abort button has been pressed, finishing activity");
+				logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":onCreate().abortButton.OnClickListener().onClick()", "Abort button has been pressed, finishing activity");
 				finish();
 			}
 		});
@@ -157,18 +158,18 @@ public class AcknowledgeHandler extends Activity {
 				// Check to see if we have any phone number to acknowledge to
 				if (!acknowledgeNumber.equals("")) {
 					// Logging
-					logger.logCatTxt(logger.getINFO(), LOG_TAG + ":onCreate().acknowledgeButton.OnClickListener().onClick()", "Acknowledge button has been pressed and phone number to acknowledge to exist. Continue acknowledge");
+					logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":onCreate().acknowledgeButton.OnClickListener().onClick()", "Acknowledge button has been pressed and phone number to acknowledge to exist. Continue acknowledge");
 					// Place the acknowledge call
 					placeAcknowledgeCall();
 				} else {
 					Toast.makeText(AcknowledgeHandler.this, R.string.cannotAck, Toast.LENGTH_LONG).show();
 					// Logging
-					logger.logCatTxt(logger.getWARN(), LOG_TAG + ":onCreate().acknowledgeButton.OnClickListener().onClick()", "Acknowledge button has been pressed but no phone number to acknowledge to has been given");
+					logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":onCreate().acknowledgeButton.OnClickListener().onClick()", "Acknowledge button has been pressed but no phone number to acknowledge to has been given");
 				}
 			}
 		});
 		// Log in debugging and information purpose
-		this.logger.logCatTxt(this.logger.getINFO(), this.LOG_TAG + ":onCreate()", "Creation of the Acknowledge Handler completed");
+		this.logger.logCat(LogPriorities.DEBUG, this.LOG_TAG + ":onCreate()", "Creation of the Acknowledge Handler completed");
 	}
 
 	/**
@@ -176,17 +177,17 @@ public class AcknowledgeHandler extends Activity {
 	 * 
 	 * @see #onCreate(Bundle)
 	 * @see #onPause()
-	 * @see ax.ha.it.smsalarm#LogHandler.logCatTxt(int, String , String)
+	 * @see {@link LogHandler.logCat(LogPriorities, String , String)}
 	 */
 	@Override
 	public void onResume() {
 		super.onResume();
 		// Log in debugging and information purpose
-		this.logger.logCatTxt(this.logger.getINFO(), this.LOG_TAG + ":onResume()", "Activity resumed");
+		this.logger.logCat(LogPriorities.DEBUG, this.LOG_TAG + ":onResume()", "Activity resumed");
 		// If we already have placed a call
 		if (this.hasCalled) {
 			// Logging
-			this.logger.logCatTxt(this.logger.getINFO(), this.LOG_TAG + ":onResume()", "An acknowledge call has already been placed, building up progressbar and countdown for a new acknowledge call");
+			this.logger.logCat(LogPriorities.DEBUG, this.LOG_TAG + ":onResume()", "An acknowledge call has already been placed, building up progressbar and countdown for a new acknowledge call");
 			// Initialize progress bar and textviews needed for countdown
 			this.redialProgressBar.setProgress(0);
 			this.countDownTextView.setText(Integer.toString(REDIAL_COUNTDOWN_TIME / 1000));
@@ -194,7 +195,7 @@ public class AcknowledgeHandler extends Activity {
 				@Override
 				public void onTick(long millisUntilFinished) {
 					// Logging
-					logger.logCatTxt(logger.getDEBUG(), LOG_TAG + ":onResume().CountDownTimer().onTick()", "Calculate redial countdown times and update UI widgets");
+					logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":onResume().CountDownTimer().onTick()", "Calculate redial countdown times and update UI widgets");
 					// Calculate new value of ProgressBar
 					float fraction = millisUntilFinished / (float) REDIAL_COUNTDOWN_TIME;
 					// Update ProgressBar and TextView with new values
@@ -205,7 +206,7 @@ public class AcknowledgeHandler extends Activity {
 				@Override
 				public void onFinish() {
 					// Logging
-					logger.logCatTxt(logger.getDEBUG(), LOG_TAG + ":onResume().CountDownTimer().onFinish()", "Redial countdown finished, continue to place new acknowledge call");
+					logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":onResume().CountDownTimer().onFinish()", "Redial countdown finished, continue to place new acknowledge call");
 					// Place the acknowledge call
 					placeAcknowledgeCall();
 				}
@@ -232,9 +233,8 @@ public class AcknowledgeHandler extends Activity {
 	 * 
 	 * @see #onCreate(Bundle)
 	 * @see #onResume()
-	 * @see ax.ha.it.smsalarm#LogHandler.logCatTxt(int, String , String)
-	 * @see ax.ha.it.smsalarm#LogHandler.logCatTxt(int, String , String,
-	 *      Throwable)
+	 * @see {@link LogHandler#logCat(LogPriorities, String , String)}
+	 * @see {@link LogHandler#logCatTxt(LogPriorities, String , String, Throwable)}
 	 */
 	private void placeAcknowledgeCall() {
 		try {
@@ -242,7 +242,7 @@ public class AcknowledgeHandler extends Activity {
 			Intent callIntent = new Intent(Intent.ACTION_CALL);
 			callIntent.setData(Uri.parse("tel:" + acknowledgeNumber));
 			// Logging
-			logger.logCatTxt(logger.getDEBUG(), LOG_TAG + ":placeAcknowledgeCall()", "A call intent has been initialized");
+			logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":placeAcknowledgeCall()", "A call intent has been initialized");
 			// Store variable to shared preferences indicating that a call has
 			// been placed
 			prefHandler.setPrefs(prefHandler.getSHARED_PREF(), prefHandler.getHAS_CALLED_KEY(), true, AcknowledgeHandler.this);
@@ -251,9 +251,9 @@ public class AcknowledgeHandler extends Activity {
 			// Kick off call intent
 			startActivity(callIntent);
 			// Logging
-			logger.logCatTxt(logger.getDEBUG(), LOG_TAG + ":placeAcknowledgeCall()", "A acknowledge call has been placed to phone number:\"" + acknowledgeNumber + "\" at the time:\"" + startCall.getTime() + "\"");
+			logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":placeAcknowledgeCall()", "A acknowledge call has been placed to phone number:\"" + acknowledgeNumber + "\" at the time:\"" + startCall.getTime() + "\"");
 		} catch (ActivityNotFoundException e) {
-			logger.logCatTxt(logger.getERROR(), LOG_TAG + ":placeAcknowledgeCall()", "Failed to place acknowledge call", e);
+			logger.logCatTxt(LogPriorities.ERROR, LOG_TAG + ":placeAcknowledgeCall()", "Failed to place acknowledge call", e);
 		}
 	}
 
@@ -262,11 +262,11 @@ public class AcknowledgeHandler extends Activity {
 	 * variables.
 	 * 
 	 * @see #onCreate(Bundle)
-	 * @see ax.ha.it.smsalarm#LogHandler.logCatTxt(int, String , String)
+	 * @see {@link LogHandler#logCat(LogPriorities, String , String)}
 	 */
 	private void findViews() {
 		// Logging
-		this.logger.logCatTxt(this.logger.getINFO(), this.LOG_TAG + ":findViews()", "Start finding Views by their ID");
+		this.logger.logCat(LogPriorities.DEBUG, this.LOG_TAG + ":findViews()", "Start finding Views by their ID");
 
 		// Declare and initialize variables of type TextView
 		this.titleTextView = (TextView) findViewById(R.id.ackTitle_tv);
@@ -292,35 +292,34 @@ public class AcknowledgeHandler extends Activity {
 			this.divider1ImageView.setImageResource(R.drawable.gradient_divider_10_and_down);
 			this.divider2ImageView.setImageResource(R.drawable.gradient_divider_10_and_down);
 			// Logging
-			this.logger.logCatTxt(this.logger.getDEBUG(), this.LOG_TAG + ":findViews()", "API level < 11, set bright gradients");
+			this.logger.logCat(LogPriorities.DEBUG, this.LOG_TAG + ":findViews()", "API level < 11, set bright gradients");
 		} else {
 			this.divider1ImageView.setImageResource(R.drawable.gradient_divider_11_and_up);
 			this.divider2ImageView.setImageResource(R.drawable.gradient_divider_11_and_up);
-			this.logger.logCatTxt(this.logger.getDEBUG(), this.LOG_TAG + ":findViews()", "API level > 10, set dark gradients");
+			this.logger.logCat(LogPriorities.DEBUG, this.LOG_TAG + ":findViews()", "API level > 10, set dark gradients");
 		}
 
 		// Log and hide UI widgets that user don't need to see right now
-		this.logger.logCatTxt(this.logger.getINFO(), this.LOG_TAG + ":findViews()", "Hiding elements not needed to show right now");
+		this.logger.logCat(LogPriorities.DEBUG, this.LOG_TAG + ":findViews()", "Hiding elements not needed to show right now");
 		this.lineBusyTextView.setVisibility(View.GONE);
 		this.countDownTextView.setVisibility(View.GONE);
 		this.secondsTextView.setVisibility(View.GONE);
 		this.redialProgressBar.setVisibility(View.GONE);
 
 		// Logging
-		this.logger.logCatTxt(this.logger.getINFO(), this.LOG_TAG + ":findViews()", "All Views found");
+		this.logger.logCat(LogPriorities.DEBUG, this.LOG_TAG + ":findViews()", "All Views found");
 	}
 
 	/**
 	 * To get <code>Shared Preferences</code> used by class
 	 * <code>AcknowledgeHandler</code>.
 	 * 
-	 * @see ax.ha.it.smsalarm#LogHandler.logCatTxt(int, String, String)
-	 * @see ax.ha.it.smsalarm#PreferencesHandler.getPrefs(String, String, int,
-	 *      Context)
+	 * @see {@link LogHandler#logCat(LogPriorities, String , String)}
+	 * @see {@link PreferencesHandler#getPrefs(String, String, int, Context)}
 	 */
 	private void getAckHandlerPrefs() {
 		// Some logging
-		this.logger.logCatTxt(this.logger.getINFO(), this.LOG_TAG + ":getAckHandlerPrefs()", "Start retrieving shared preferences needed by class AcknowledgeHandler");
+		this.logger.logCat(LogPriorities.DEBUG, this.LOG_TAG + ":getAckHandlerPrefs()", "Start retrieving shared preferences needed by class AcknowledgeHandler");
 
 		// Get shared preferences needed by class Acknowledge Handler
 		this.rescueService = (String) this.prefHandler.getPrefs(this.prefHandler.getSHARED_PREF(), this.prefHandler.getRESCUE_SERVICE_KEY(), Datatypes.STRING.ordinal(), this);
@@ -328,24 +327,24 @@ public class AcknowledgeHandler extends Activity {
 		this.acknowledgeNumber = (String) this.prefHandler.getPrefs(this.prefHandler.getSHARED_PREF(), this.prefHandler.getACK_NUMBER_KEY(), Datatypes.STRING.ordinal(), this);
 		this.hasCalled = (Boolean) this.prefHandler.getPrefs(this.prefHandler.getSHARED_PREF(), this.prefHandler.getHAS_CALLED_KEY(), Datatypes.BOOLEAN.ordinal(), this);
 
-		this.logger.logCatTxt(this.logger.getINFO(), this.LOG_TAG + ":getAckHandlerPrefs()", "Shared preferences retrieved");
+		this.logger.logCat(LogPriorities.DEBUG, this.LOG_TAG + ":getAckHandlerPrefs()", "Shared preferences retrieved");
 	}
 
 	/**
 	 * To set <code>TextViews</code> with data for a proper presentation of the
 	 * UI.
 	 * 
-	 * @see ax.ha.it.smsalarm#LogHandler.logCatTxt(int, String, String)
+	 * @see {@link LogHandler#logCat(LogPriorities, String , String)}
 	 */
 	private void setTextViews() {
 		// Some logging
-		this.logger.logCatTxt(this.logger.getINFO(), this.LOG_TAG + ":setTextViews()", "Setting TextViews with proper data");
+		this.logger.logCat(LogPriorities.DEBUG, this.LOG_TAG + ":setTextViews()", "Setting TextViews with proper data");
 		// Set TextViews from variables and resources
 		this.titleTextView.setText(this.rescueService.toUpperCase() + " " + getResources().getString(R.string.fireAlarm));
 		this.fullMessageTextView.setText(this.fullMessage);
 		// Check if the activity already has placed a call, in that case show TextViews for redial
 		if (this.hasCalled) {
-			this.logger.logCatTxt(this.logger.getDEBUG(), this.LOG_TAG + ":setTextViews()", "We have already placed a call, showing redial widgets");
+			this.logger.logCat(LogPriorities.DEBUG, this.LOG_TAG + ":setTextViews()", "We have already placed a call, showing redial widgets");
 			this.lineBusyTextView.setVisibility(View.VISIBLE);
 			this.countDownTextView.setVisibility(View.VISIBLE);
 			this.secondsTextView.setVisibility(View.VISIBLE);
@@ -361,9 +360,9 @@ public class AcknowledgeHandler extends Activity {
 	 * @author Robert Nyholm <robert.nyholm@aland.net>
 	 * @version 2.1
 	 * @since 2.1
-	 * @date 2013-06-21
+	 * @date 2013-06-30
 	 * 
-	 * @see #AcknowledgeHandler()
+	 * @see {@link AcknowledgeHandler()}
 	 */
 	private class ListenToPhoneState extends PhoneStateListener {
 
@@ -373,14 +372,13 @@ public class AcknowledgeHandler extends Activity {
 		 * 
 		 * @see #swapStates(int)
 		 * @see #stateName(int)
-		 * @see ax.ha.it.smsalarm#LogHandler.logCatTxt(int, String , String)
-		 * @see ax.ha.it.smsalarm#PreferencesHandler.setPrefs(String, String,
-		 *      Object, Context)
+		 * @see {@link LogHandler#logCat(LogPriorities, String , String)}
+		 * @see {@link PreferencesHandler.setPrefs(String, String, Object, Context)}
 		 * @see #AcknowledgeHandler()
 		 */
 		public void onCallStateChanged(int state, String incomingNumber) {
 			// Logging
-			logger.logCatTxt(logger.getINFO(), LOG_TAG + ":ListenToPhoneState().onCallStateChanged()", "Call state has changed");
+			logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":ListenToPhoneState().onCallStateChanged()", "Call state has changed");
 			// Swap the phone states
 			swapStates(state);
 			// Log phone states name(purely in debugging purpose)
@@ -389,7 +387,7 @@ public class AcknowledgeHandler extends Activity {
 			// Only do this if phone call go from OFFHOOK to IDLE state
 			if (prePhoneState == 2 && phoneState == 0 && NOT_EVALUATED) {
 				// Logging
-				logger.logCatTxt(logger.getDEBUG(), LOG_TAG + ":ListenToPhoneState().onCallStateChanged()", "Call state went from \"Off hook\" to \"Idle\"");
+				logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":ListenToPhoneState().onCallStateChanged()", "Call state went from \"Off hook\" to \"Idle\"");
 				// Set to false because we evaluate this right now
 				NOT_EVALUATED = false;
 				// Get date for end call
@@ -397,7 +395,7 @@ public class AcknowledgeHandler extends Activity {
 				// Calculate the call time
 				long time = endCall.getTime() - startCall.getTime();
 				// Logging
-				logger.logCatTxt(logger.getDEBUG(), LOG_TAG + ":ListenToPhoneState().onCallStateChanged()", "Start time of call is:\"" + startCall.getTime() + "\", end time is:\"" + endCall.getTime() + "\" and the call time was:\"" + time + "\"");
+				logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":ListenToPhoneState().onCallStateChanged()", "Start time of call is:\"" + startCall.getTime() + "\", end time is:\"" + endCall.getTime() + "\" and the call time was:\"" + time + "\"");
 
 				/*
 				 * If call time is less than preconfigured value the line was
@@ -406,17 +404,17 @@ public class AcknowledgeHandler extends Activity {
 				 */
 				if (endCall.getTime() - startCall.getTime() < MIN_CALL_TIME) {
 					// Logging
-					logger.logCatTxt(logger.getDEBUG(), LOG_TAG + ":ListenToPhoneState().onCallStateChanged()", "Call time was less than:\"" + MIN_CALL_TIME + "\", assumes the line was busy. Initializing and starting a new intent to place a new call");
+					logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":ListenToPhoneState().onCallStateChanged()", "Call time was less than:\"" + MIN_CALL_TIME + "\", assumes the line was busy. Initializing and starting a new intent to place a new call");
 					Intent i = new Intent(AcknowledgeHandler.this, AcknowledgeHandler.class);
 					i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
 					startActivity(i);
 				} else {
 					// Logging
-					logger.logCatTxt(logger.getDEBUG(), LOG_TAG + ":ListenToPhoneState().onCallStateChanged()", "Call time was more than:\"" + MIN_CALL_TIME + "\", assumes the call went through");
+					logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":ListenToPhoneState().onCallStateChanged()", "Call time was more than:\"" + MIN_CALL_TIME + "\", assumes the call went through");
 					// Store variable to shared preferences indicating that a
 					// call has been placed with success
 					prefHandler.setPrefs(prefHandler.getSHARED_PREF(), prefHandler.getHAS_CALLED_KEY(), false, AcknowledgeHandler.this);
-					logger.logCatTxt(logger.getDEBUG(), LOG_TAG + ":ListenToPhoneState().onCallStateChanged()", "Finishing activity");
+					logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":ListenToPhoneState().onCallStateChanged()", "Finishing activity");
 					// Finish this activity
 					finish();
 				}
@@ -433,22 +431,23 @@ public class AcknowledgeHandler extends Activity {
 		 * @return Phone state as String resolved from Integer
 		 * 
 		 * @see #onCallStateChanged(int, String)
-		 * @see ax.ha.it.smsalarm#LogHandler.logCatTxt(int, String , String)
+		 * @see {@link LogHandler#logCat(LogPriorities, String , String)}
+		 * @see {@link LogHandler#logCatTxt(LogPriorities, String , String)}
 		 */
 		String stateName(int state) {
 			// Switch through the different phone states
 			switch (state) {
 			case TelephonyManager.CALL_STATE_IDLE:
-				logger.logCatTxt(logger.getDEBUG(), LOG_TAG + ":ListenToPhoneState().stateName()", "Current call state is:\"Idle\"");
+				logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":ListenToPhoneState().stateName()", "Current call state is:\"Idle\"");
 				return "Idle";
 			case TelephonyManager.CALL_STATE_OFFHOOK:
-				logger.logCatTxt(logger.getDEBUG(), LOG_TAG + ":ListenToPhoneState().stateName()", "Current call state is:\"Off hook\"");
+				logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":ListenToPhoneState().stateName()", "Current call state is:\"Off hook\"");
 				return "Off hook";
 			case TelephonyManager.CALL_STATE_RINGING:
-				logger.logCatTxt(logger.getDEBUG(), LOG_TAG + ":ListenToPhoneState().stateName()", "Current call state is:\"Ringing\"");
+				logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":ListenToPhoneState().stateName()", "Current call state is:\"Ringing\"");
 				return "Ringing";
 			default:
-				logger.logCatTxt(logger.getWARN(), LOG_TAG + ":ListenToPhoneState().stateName()", "Unsupported call state occured, current state is:\"" + Integer.toString(state) + "\"");
+				logger.logCatTxt(LogPriorities.WARN, LOG_TAG + ":ListenToPhoneState().stateName()", "Unsupported call state occured, current state is:\"" + Integer.toString(state) + "\"");
 				return Integer.toString(state);
 			}
 		}
@@ -461,11 +460,11 @@ public class AcknowledgeHandler extends Activity {
 		 *            Phone state to be stored as the current phone state
 		 * 
 		 * @see #onCallStateChanged(int, String)
-		 * @see ax.ha.it.smsalarm#LogHandler.logCatTxt(int, String , String)
+		 * @see {@link LogHandler#logCat(LogPriorities, String , String)}
 		 */
 		void swapStates(int currentState) {
 			// Logging
-			logger.logCatTxt(logger.getINFO(), LOG_TAG + ":ListenToPhoneState().swapStates()", "Swapping phone states");
+			logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":ListenToPhoneState().swapStates()", "Swapping phone states");
 			// Swap phone states
 			prePhoneState = phoneState;
 			phoneState = currentState;
