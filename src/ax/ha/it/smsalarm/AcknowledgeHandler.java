@@ -114,7 +114,7 @@ public class AcknowledgeHandler extends Activity {
 	 * @see #onResume()
 	 * @see #onPause()
 	 * @see {@link LogHandler#logCat(LogPriorities, String , String)}
-	 * @see #ListenToPhoneState()
+	 * @see {@link ListenToPhoneState()}
 	 * 
 	 * @Override
 	 */

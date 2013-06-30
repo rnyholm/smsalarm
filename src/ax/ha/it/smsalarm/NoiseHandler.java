@@ -6,15 +6,13 @@ package ax.ha.it.smsalarm;
 
 import java.io.IOException;
 
-import android.app.Service;
 import android.content.Context;
-import android.content.Intent;
 import android.content.res.AssetFileDescriptor;
 import android.media.AudioManager;
 import android.media.MediaPlayer;
 import android.media.MediaPlayer.OnCompletionListener;
-import android.os.IBinder;
 import android.os.Vibrator;
+import ax.ha.it.smsalarm.LogHandler.LogPriorities;
 
 /**
  * This class is responsible for all sound and vibration handling. This means
@@ -42,13 +40,15 @@ public class NoiseHandler {
 
 	/**
 	 * Private constructor, is private due to it's singleton pattern.
+	 * 
+	 * @see {@link LogHandler#logCat(LogPriorities, String, String)}
 	 */
 	private NoiseHandler() {
 		// Get instance of logger
 		this.logger = LogHandler.getInstance();
 
 		// Log information
-		this.logger.logCatTxt(this.logger.getINFO(), this.LOG_TAG + ":NoiseHandler()", "New instance of NoiseHandler created");
+		this.logger.logCat(LogPriorities.DEBUG, this.LOG_TAG + ":NoiseHandler()", "New instance of NoiseHandler created");
 	}
 
 	/**
@@ -91,10 +91,14 @@ public class NoiseHandler {
 	 *                Can occur when setting data source for media player or
 	 *                preparing media player. Also when resolving message tone
 	 *                id
+	 *              
+ 	 * @see {@link LogHandler#logCat(LogPriorities, String, String)}
+ 	 * @see {@link LogHandler#logCatTxt(LogPriorities, String, String)}
+ 	 * @see {@link LogHandler#logCatTxt(LogPriorities, String, String, Throwable)}
 	 */
 	public void makeNoise(Context context, int id, boolean useSoundSettings, boolean playToneTwice) {
 		// Log information
-		this.logger.logCatTxt(this.logger.getINFO(), this.LOG_TAG + ":makeNoise()", "Preparing to play message tone and vibrate");
+		this.logger.logCat(LogPriorities.DEBUG, this.LOG_TAG + ":makeNoise()", "Preparing to play message tone and vibrate");
 
 		/*Declarations of different objects needed by makeNoise */
 		// AudioManager used to get and set different volume levels
@@ -134,13 +138,13 @@ public class NoiseHandler {
 		long[] pattern = { 0, 5000, 500, 5000, 500, 5000, 500, 5000 };
 
 		// Log information
-		this.logger.logCatTxt(this.logger.getINFO(), this.LOG_TAG + ":makeNoise()", "MediaPlayer initalized, Audio Service initalized, Vibrator initalized, AssetFileDescriptor initalized. Current MediaVolume stored, current RingVolume stored. Vibration pattern variables is set.");
+		this.logger.logCat(LogPriorities.DEBUG, this.LOG_TAG + ":makeNoise()", "MediaPlayer initalized, Audio Service initalized, Vibrator initalized, AssetFileDescriptor initalized. Current MediaVolume stored, current RingVolume stored. Vibration pattern variables is set.");
 
 		// Set media volume to max level
 		am.setStreamVolume(AudioManager.STREAM_MUSIC, am.getStreamMaxVolume(AudioManager.STREAM_MUSIC), 0);
 
 		// Log information
-		this.logger.logCatTxt(this.logger.getINFO(), this.LOG_TAG + ":makeNoise()", "Device's media volume has been set to max");
+		this.logger.logCat(LogPriorities.DEBUG, this.LOG_TAG + ":makeNoise()", "Device's media volume has been set to max");
 
 		// Calculate correct alarm volume, depending on current ring volume
 		if (currentRingVolume > 0) {
@@ -150,59 +154,53 @@ public class NoiseHandler {
 		}
 
 		// Log information
-		this.logger.logCatTxt(this.logger.getINFO(), this.LOG_TAG + ":makeNoise()", "Correct alarm volume has been calculated");
+		this.logger.logCat(LogPriorities.DEBUG, this.LOG_TAG + ":makeNoise()", "Correct alarm volume has been calculated");
 
-		// Unresolve correct tone depending on id
+		// Resolve correct tone depending on id
 		try {
-			this.logger.logCatTxt(this.logger.getINFO(), this.LOG_TAG + ":makeNoise()", "Try to unresolve message tone");
+			this.logger.logCat(LogPriorities.DEBUG, this.LOG_TAG + ":makeNoise()", "Try to resolve message tone");
 			afd = context.getAssets().openFd("tones/alarm/" + msgToneLookup(context, id) + ".mp3");
 		} catch (IOException e) {
-			// IOException occurred, trace and log it
-			e.printStackTrace();
-			this.logger.logCatTxt(this.logger.getERROR(), this.LOG_TAG + ":makeNoise()", "An IOException occurred while unresolving message tone from id" + e);
+			// Log IO Exception
+			this.logger.logCatTxt(LogPriorities.ERROR, this.LOG_TAG + ":makeNoise()", "An IOException occurred while resolving message tone from id", e);
 		}
 
 		// Set data source for mPlayer, common both for debug and ordinary mode
 		try {
 			mPlayer.setDataSource(afd.getFileDescriptor(), afd.getStartOffset(), afd.getLength());
-			this.logger.logCatTxt(this.logger.getINFO(), this.LOG_TAG + ":makeNoise()", "Data source has been set for Media Player");
+			this.logger.logCat(LogPriorities.DEBUG, this.LOG_TAG + ":makeNoise()", "Data source has been set for Media Player");
 		} catch (IllegalArgumentException e) {
-			// IllegalArgumentException occurred, trace and log it
-			e.printStackTrace();
-			this.logger.logCatTxt(this.logger.getERROR(), this.LOG_TAG + ":makeNoise()", "An IllegalArgumentException occurred while setting data source for media player" + e);
+			// Log IllegalArgumentException
+			this.logger.logCatTxt(LogPriorities.ERROR, this.LOG_TAG + ":makeNoise()", "An IllegalArgumentException occurred while setting data source for media player", e);
 		} catch (IllegalStateException e) {
-			// IllegalStateException occurred, trace and log it
-			e.printStackTrace();
-			this.logger.logCatTxt(this.logger.getERROR(), this.LOG_TAG + ":makeNoise()", "An IllegalStateException occurred while setting data source for media player" + e);
+			// Log IllegalStateException
+			this.logger.logCatTxt(LogPriorities.ERROR, this.LOG_TAG + ":makeNoise()", "An IllegalStateException occurred while setting data source for media player", e);
 		} catch (IOException e) {
-			// IOException occurred, trace and log it
-			e.printStackTrace();
-			this.logger.logCatTxt(this.logger.getERROR(), this.LOG_TAG + ":makeNoise()", "An IOException occurred while setting data source for media player" + e);
+			// Log IO Exception
+			this.logger.logCatTxt(LogPriorities.ERROR, this.LOG_TAG + ":makeNoise()", "An IOException occurred while setting data source for media player", e);
 		}
 
 		// Prepare mPlayer, also common for debug and ordinary mode
 		try {
 			mPlayer.prepare();
-			this.logger.logCatTxt(this.logger.getINFO(), this.LOG_TAG + ":makeNoise()", "Media Player prepared");
+			this.logger.logCat(LogPriorities.DEBUG, this.LOG_TAG + ":makeNoise()", "Media Player prepared");
 		} catch (IllegalStateException e) {
-			// IllegalStateException occurred, trace and log it
-			e.printStackTrace();
-			this.logger.logCatTxt(this.logger.getERROR(), this.LOG_TAG + ":makeNoise()", "An IllegalStateException occurred while preparing media player" + e);
+			// Log IllegalStateException
+			this.logger.logCatTxt(LogPriorities.ERROR, this.LOG_TAG + ":makeNoise()", "An IllegalStateException occurred while preparing media player", e);
 		} catch (IOException e) {
-			// IOException occurred, trace and log it
-			e.printStackTrace();
-			this.logger.logCatTxt(this.logger.getERROR(), this.LOG_TAG + ":makeNoise()", "An IOException occurred while preparing media player" + e);
+			// Log IO Exception
+			this.logger.logCatTxt(LogPriorities.ERROR, this.LOG_TAG + ":makeNoise()", "An IOException occurred while preparing media player", e);
 		}
 
 		// If false then just play message tone once else twice
 		if (!playToneTwice) {
 			toBePlayed = 1;
 			// Log information
-			this.logger.logCatTxt(this.logger.getINFO(), this.LOG_TAG + ":makeNoise()", "Message tone will be played once, if device not in RINGER_MODE_SILENT  or application is set to not consider device's sound settings");
+			this.logger.logCat(LogPriorities.DEBUG, this.LOG_TAG + ":makeNoise()", "Message tone will be played once, if device not in RINGER_MODE_SILENT  or application is set to not consider device's sound settings");
 		} else {
 			toBePlayed = 2;
 			// Log information
-			this.logger.logCatTxt(this.logger.getINFO(), this.LOG_TAG + ":makeNoise()", "Message tone will be played twice, if device not in RINGER_MODE_SILENT or application is set to not consider device's sound settings");
+			this.logger.logCat(LogPriorities.DEBUG, this.LOG_TAG + ":makeNoise()", "Message tone will be played twice, if device not in RINGER_MODE_SILENT or application is set to not consider device's sound settings");
 		}
 
 		/*
@@ -212,38 +210,38 @@ public class NoiseHandler {
 		 */
 		if (useSoundSettings) {
 			// Log information
-			this.logger.logCatTxt(this.logger.getINFO(), this.LOG_TAG + ":makeNoise()", "Application is set to take into account device's sound settings");
+			this.logger.logCat(LogPriorities.DEBUG, this.LOG_TAG + ":makeNoise()", "Application is set to take into account device's sound settings");
 
 			// Decide if phone are in normal, vibrate or silent state and take
 			// action
 			switch (am.getRingerMode()) {
 			case AudioManager.RINGER_MODE_SILENT:
 				// Do nothing except log information
-				this.logger.logCatTxt(this.logger.getINFO(), this.LOG_TAG + ":makeNoise()", "Device is in RINGER_MODE_SILENT, don't vibrate or play message tone");
+				this.logger.logCat(LogPriorities.DEBUG, this.LOG_TAG + ":makeNoise()", "Device is in \"RINGER_MODE_SILENT\", don't vibrate or play message tone");
 				break;
 			case AudioManager.RINGER_MODE_VIBRATE:
 				// Vibrate, -1 = no repeat
 				v.vibrate(pattern, -1);
 
-				this.logger.logCatTxt(this.logger.getINFO(), this.LOG_TAG + ":makeNoise()", "Device is in RINGER_MODE_VIBRATE, just vibrate");
+				this.logger.logCat(LogPriorities.DEBUG, this.LOG_TAG + ":makeNoise()", "Device is in \"RINGER_MODE_VIBRATE\", just vibrate");
 				break;
 			case AudioManager.RINGER_MODE_NORMAL:
 				// Set correct volume to mediaplayer
 				mPlayer.setVolume(alarmVolume, alarmVolume);
 
 				// Log information
-				this.logger.logCatTxt(this.logger.getINFO(), this.LOG_TAG + ":makeNoise()", "Correct volume has been set to media player from previously calculated alarm volume");
+				this.logger.logCat(LogPriorities.DEBUG, this.LOG_TAG + ":makeNoise()", "Correct volume has been set to media player from previously calculated alarm volume");
 
 				// Vibrate, -1 = no repeat
 				v.vibrate(pattern, -1);
 				// Start play message tone
 				mPlayer.start();
 
-				this.logger.logCatTxt(this.logger.getINFO(), this.LOG_TAG + ":makeNoise()", "Device is in RINGER_MODE_NORMAL, vibrate and play message tone");
+				this.logger.logCat(LogPriorities.DEBUG, this.LOG_TAG + ":makeNoise()", "Device is in \"RINGER_MODE_NORMAL\", vibrate and play message tone");
 				break;
 			default: // <--Unsupported RINGER_MODE
 				// Do nothing except log information
-				this.logger.logCatTxt(this.logger.getERROR(), this.LOG_TAG + ":makeNoise()", "Device is in a UNSUPPORTED ringer mode, can't decide what to do");
+				this.logger.logCatTxt(LogPriorities.ERROR, this.LOG_TAG + ":makeNoise()", "Device is in a \"UNSUPPORTED\" ringer mode, can't decide what to do");
 			}
 		} else { // If not take into account OS sound setting, always ring at highest volume and vibrate
 			// Vibrate, -1 = no repeat
@@ -252,7 +250,7 @@ public class NoiseHandler {
 			mPlayer.start();
 
 			// Log information
-			this.logger.logCatTxt(this.logger.getINFO(), this.LOG_TAG + ":makeNoise()", "Application is set to don't take into account device's sound settings. Play message tone at max volume and vibrate");
+			this.logger.logCat(LogPriorities.DEBUG, this.LOG_TAG + ":makeNoise()", "Application is set to don't take into account device's sound settings. Play message tone at max volume and vibrate");
 		}
 
 		// Listen to completion, in other words when media player has finished and reset media volume and media player
@@ -265,8 +263,7 @@ public class NoiseHandler {
 			 */
 			@Override
 			public void onCompletion(MediaPlayer mPlayer) {
-				// If message tone havn't been played enough times, else release
-				// mediaplayer
+				// If message tone havn't been played enough times, else release mediaplayer
 				if (timesPlayed < toBePlayed) {
 					// Add to counter
 					timesPlayed++;
@@ -278,7 +275,7 @@ public class NoiseHandler {
 					am.setStreamVolume(AudioManager.STREAM_MUSIC, currentMediaVolume, 0);
 					mPlayer.release();
 					// Log information
-					logger.logCatTxt(logger.getINFO(), LOG_TAG + ":makeNoise().MediaPlayer.onCompletion()", "Media player have been released and all sound levels have been restored");
+					logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":makeNoise().MediaPlayer.onCompletion()", "Media player have been released and all sound levels have been restored");
 				}
 			}
 		});
@@ -292,13 +289,15 @@ public class NoiseHandler {
 	 * @param toneId
 	 *            ToneId as Integer
 	 * @return toneId Message tone as String
+	 * 
+	 * @see {@link LogHandler#logCat(LogPriorities, String, String)}
 	 */
 	public String msgToneLookup(Context context, int toneId) {
 		// Resolve message tone from id
 		String[] tonesArr = context.getResources().getStringArray(R.array.tones);
 
 		// Some logging
-		this.logger.logCatTxt(this.logger.getINFO(), this.LOG_TAG + ":msgToneLookup()", "Message tone has been unresolved from id");
+		this.logger.logCat(LogPriorities.DEBUG, this.LOG_TAG + ":msgToneLookup()", "Message tone has been resolved from id");
 
 		return tonesArr[toneId];
 	}
