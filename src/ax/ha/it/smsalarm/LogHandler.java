@@ -82,9 +82,7 @@ public class LogHandler {
 	 * origin log message and current error.
 	 * 
 	 * @param priority
-	 *            Priority as LogPriorities see {@link #http
-	 *            ://www.http://developer.android
-	 *            .com/reference/android/util/Log.html}
+	 *            Priority as LogPriorities see {@link #http www.developer.android.com/reference/android/util/Log.html}
 	 * @param logTag
 	 *            Log tag as string
 	 * @param message
