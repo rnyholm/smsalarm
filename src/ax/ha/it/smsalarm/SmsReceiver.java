@@ -16,6 +16,7 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.telephony.SmsMessage;
+import ax.ha.it.smsalarm.LogHandler.LogPriorities;
 
 /**
  * Class extending <code>BroadcastReceiver</code>, receives SMS and handles them
@@ -80,12 +81,14 @@ public class SmsReceiver extends BroadcastReceiver {
 	 * 
 	 * @see #smsHandler(Context)
 	 * @see #getSmsReceivePrefs(Context)
+	 * @see {@link LogHandler#logCat(ax.ha.it.smsalarm.LogHandler.LogPriorities, String, String)}
+	 * @see {@link LogHandler#logCatTxt(ax.ha.it.smsalarm.LogHandler.LogPriorities, String, String)}
 	 */
 	@Override
 	public void onReceive(Context context, Intent intent) {
 
 		// Log message for debugging/information purpose
-		this.logger.logCatTxt(this.logger.getINFO(), this.LOG_TAG + ":onReceive()", "SMS received");
+		this.logger.logCat(LogPriorities.DEBUG, this.LOG_TAG + ":onReceive()", "SMS received");
 
 		// Retrieve shared preferences
 		this.getSmsReceivePrefs(context);
@@ -93,7 +96,7 @@ public class SmsReceiver extends BroadcastReceiver {
 		// Only if Sms Alarm is enabled
 		if (this.enableSmsAlarm) {
 			// Log that Sms Alarm is enabled
-			this.logger.logCatTxt(this.logger.getINFO(), this.LOG_TAG + ":onReceive()", "Sms Alarm is enabled, continue handle SMS");
+			this.logger.logCat(LogPriorities.DEBUG, this.LOG_TAG + ":onReceive()", "Sms Alarm is enabled, continue handle SMS");
 
 			// Variable indicating if an alarm is triggered or not
 			boolean alarmTriggered = false;
@@ -121,24 +124,24 @@ public class SmsReceiver extends BroadcastReceiver {
 				 */
 				if (this.msgHeader.contains("+358")) { // <--Finland
 					this.msgHeader = this.msgHeader.replace("+358", "0");
-					this.logger.logCatTxt(this.logger.getWARN(), this.LOG_TAG + ":onReceive()", "Countrycode +358 found, replaced by 0");
+					this.logger.logCat(LogPriorities.DEBUG, this.LOG_TAG + ":onReceive()", "Countrycode +358 found, replaced by 0");
 				} else if (this.msgHeader.contains("+33")) { // <--France
 					this.msgHeader = this.msgHeader.replace("+33", "0");
-					this.logger.logCatTxt(this.logger.getWARN(), this.LOG_TAG + ":onReceive()", "Countrycode +33 found, replaced by 0");
+					this.logger.logCat(LogPriorities.DEBUG, this.LOG_TAG + ":onReceive()", "Countrycode +33 found, replaced by 0");
 				} else if (this.msgHeader.contains("+45")) { // <--Denmark
 					this.msgHeader = this.msgHeader.replace("+45", "0");
-					this.logger.logCatTxt(this.logger.getWARN(), this.LOG_TAG + ":onReceive()", "Countrycode +45 found, replaced by 0");
+					this.logger.logCat(LogPriorities.DEBUG, this.LOG_TAG + ":onReceive()", "Countrycode +45 found, replaced by 0");
 				} else if (this.msgHeader.contains("+46")) { // <--Sweden
 					this.msgHeader = this.msgHeader.replace("+46", "0");
-					this.logger.logCatTxt(this.logger.getWARN(), this.LOG_TAG + ":onReceive()", "Countrycode +46 found, replaced by 0");
+					this.logger.logCat(LogPriorities.DEBUG, this.LOG_TAG + ":onReceive()", "Countrycode +46 found, replaced by 0");
 				} else if (this.msgHeader.contains("+47")) { // <--Norway
 					this.msgHeader = this.msgHeader.replace("+47", "0");
-					this.logger.logCatTxt(this.logger.getWARN(), this.LOG_TAG + ":onReceive()", "Countrycode +47 found, replaced by 0");
+					this.logger.logCat(LogPriorities.DEBUG, this.LOG_TAG + ":onReceive()", "Countrycode +47 found, replaced by 0");
 				} else if (this.msgHeader.contains("+49")) { // <--Germany
 					this.msgHeader = this.msgHeader.replace("+49", "0");
-					this.logger.logCatTxt(this.logger.getWARN(), this.LOG_TAG + ":onReceive()", "Countrycode +49 found, replaced by 0");
+					this.logger.logCat(LogPriorities.DEBUG, this.LOG_TAG + ":onReceive()", "Countrycode +49 found, replaced by 0");
 				} else {
-					this.logger.logCatTxt(this.logger.getINFO(), this.LOG_TAG + ":onReceive()", "No countrycod found, nothing replaced");
+					this.logger.logCat(LogPriorities.DEBUG, this.LOG_TAG + ":onReceive()", "No countrycod found, nothing replaced");
 				}
 
 				// If we got a SMS from the same primary number as the
