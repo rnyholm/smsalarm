@@ -10,6 +10,7 @@ import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
+import ax.ha.it.smsalarm.LogHandler.LogPriorities;
 
 /**
  * Helper class to build up and show notifications, also creates
@@ -35,13 +36,15 @@ public class NotificationHelper extends IntentService {
 	 * Mandatory constructor calling it's <code>super class</code>.
 	 * 
 	 * @see #onHandleIntent(Intent)
+	 * 
+	 * @see {@link LogHandler#logCat(ax.ha.it.smsalarm.LogHandler.LogPriorities, String, String)}
 	 */
 	public NotificationHelper() {
 		// Note: MUST call the super() constructor with an (arbitrary) string
 		super("NotificationHelper");
 
 		// Log message for debugging/information purpose
-		this.logger.logCatTxt(this.logger.getINFO(), this.LOG_TAG + ":NotificationHelper()", "NotificationHelper constructor called");
+		this.logger.logCat(LogPriorities.DEBUG, this.LOG_TAG + ":NotificationHelper()", "NotificationHelper constructor called");
 	}
 
 	/**
@@ -51,27 +54,30 @@ public class NotificationHelper extends IntentService {
 	 * 
 	 * @param Intent
 	 *            Intent for notification
-	 * @Override
-	 * @deprecated
 	 * 
 	 * @see #NotificationHelper()
+	 * @see {@link LogHandler#logCat(LogPriorities, String, String)}
+	 * @see {@link LogHandler#logCatTxt(LogPriorities, String, String)}
+	 * 
+	 * @deprecated
+	 * @Override
 	 */
 	@Override
 	protected void onHandleIntent(Intent i) {
 		// Log information
-		this.logger.logCatTxt(this.logger.getINFO(), this.LOG_TAG + ":onHandleIntent()", "Start retrieving shared preferences needed by class NotificationHelper");
+		this.logger.logCat(LogPriorities.DEBUG, this.LOG_TAG + ":onHandleIntent()", "Start retrieving shared preferences needed by class NotificationHelper");
 
 		// Get some values from the sharedprefs
 		String message = (String) this.prefHandler.getPrefs(this.prefHandler.getSHARED_PREF(), this.prefHandler.getMESSAGE_KEY(), 1, this);
 		String larmType = (String) this.prefHandler.getPrefs(this.prefHandler.getSHARED_PREF(), this.prefHandler.getLARM_TYPE_KEY(), 1, this);
 
-		this.logger.logCatTxt(this.logger.getINFO(), this.LOG_TAG + ":onHandleIntent()", "Shared preferences retrieved");
+		this.logger.logCat(LogPriorities.DEBUG, this.LOG_TAG + ":onHandleIntent()", "Shared preferences retrieved");
 
 		/*
 		 * This string and intent opens the messaging directory on phone,
 		 * however due to this page;
 		 * http://stackoverflow.com/questions/3708737/go-to-inbox-in-android
-		 * fetched 21.10-11, thisway of achieve the "go to messaging dir" is
+		 * fetched 21.10-11, this way of achieve the "go to messaging dir" is
 		 * highly unrecommended.Thats because this method uses undocumented API
 		 * and is not part of the Android core.This may or may not work on some
 		 * devices and versions!
@@ -80,7 +86,7 @@ public class NotificationHelper extends IntentService {
 		Intent notificationIntent = new Intent(Intent.ACTION_MAIN); // Don't want to start any activity!
 		notificationIntent.setType(SMS_MIME_TYPE);
 
-		this.logger.logCatTxt(this.logger.getINFO(), this.LOG_TAG + ":onHandleIntent()", "Intent has been set");
+		this.logger.logCat(LogPriorities.DEBUG, this.LOG_TAG + ":onHandleIntent()", "Intent has been set");
 
 		// Setup a notification, directly from android development site
 		NotificationManager mNotificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
@@ -103,14 +109,14 @@ public class NotificationHelper extends IntentService {
 			// Set content title
 			contentTitle = this.getString(R.string.alarm);
 			// Log
-			this.logger.logCatTxt(this.logger.getINFO(), this.LOG_TAG + ":onHandleIntent()", "Notification has been set for a primary alarm");
+			this.logger.logCat(LogPriorities.DEBUG, this.LOG_TAG + ":onHandleIntent()", "Notification has been set for a primary alarm");
 		} else if (larmType.equals("secondary")) {
 			icon = android.R.drawable.ic_menu_close_clear_cancel;
 			tickerText = this.getString(R.string.secondaryAlarm);
 			contentTitle = this.getString(R.string.secondaryAlarm);
-			this.logger.logCatTxt(this.logger.getINFO(), this.LOG_TAG + ":onHandleIntent()", "Notification has been set for a secondary alarm");
+			this.logger.logCat(LogPriorities.DEBUG, this.LOG_TAG + ":onHandleIntent()", "Notification has been set for a secondary alarm");
 		} else { // <--If this happens, something really weird is going on
-			this.logger.logCatTxt(this.logger.getERROR(), this.LOG_TAG + ":onHandleIntent()", "Alarm type couldn't be find when configuring notification");
+			this.logger.logCatTxt(LogPriorities.ERROR, this.LOG_TAG + ":onHandleIntent()", "Alarm type couldn't be find when configuring notification");
 		}
 
 		// Create notification
@@ -127,7 +133,7 @@ public class NotificationHelper extends IntentService {
 		// This flag auto cancels the notification when clicked
 		notification.flags = Notification.FLAG_AUTO_CANCEL;
 
-		this.logger.logCatTxt(this.logger.getINFO(), this.LOG_TAG + ":onHandleIntent()", "Notification and it's intent has been configured and are ready to be shown");
+		this.logger.logCat(LogPriorities.DEBUG, this.LOG_TAG + ":onHandleIntent()", "Notification and it's intent has been configured and are ready to be shown");
 
 		// Show the notification
 		mNotificationManager.notify((int) REFRESH_ID, notification);
