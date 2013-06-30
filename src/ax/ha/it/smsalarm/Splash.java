@@ -12,6 +12,7 @@ import android.view.Window;
 import android.widget.RelativeLayout;
 import android.app.Activity;
 import android.content.Intent;
+import ax.ha.it.smsalarm.LogHandler.LogPriorities;
 
 /**
  * Splash activity, just shows splash screen and after a certain time or a tap
@@ -46,6 +47,7 @@ public class Splash extends Activity {
 	 * 
 	 * @see #switchActivity()
 	 * @see #onPause()
+	 * @see {@link LogHandler#logCat(LogPriorities, String, String)}
 	 */
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -55,7 +57,7 @@ public class Splash extends Activity {
 		setContentView(R.layout.splash);
 
 		// Some logging for information and debugging
-		this.logger.logCatTxt(this.logger.getINFO(), this.LOG_TAG + ":onCreate()", "Layout has been set with correct settings");
+		this.logger.logCat(LogPriorities.DEBUG, this.LOG_TAG + ":onCreate()", "Layout has been set with correct settings");
 
 		// Get a handle to the layout by finding it's id
 		RelativeLayout splashRelativeLayout = (RelativeLayout) findViewById(R.id.splash_rl);
@@ -64,7 +66,7 @@ public class Splash extends Activity {
 		splashRelativeLayout.setOnClickListener(new OnClickListener() {
 			public void onClick(View v) {
 				// Some logging for information and debugging
-				logger.logCatTxt(logger.getINFO(), LOG_TAG + ":onCreate().onClickListener.onClick()", "User has tapped screen");
+				logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":onCreate().onClickListener.onClick()", "User has tapped screen");
 				// Switch activity
 				switchActivity();
 			}
@@ -75,14 +77,14 @@ public class Splash extends Activity {
 		this.handler.postDelayed(new Runnable() {
 			public void run() {
 				// Some logging for information and debugging
-				logger.logCatTxt(logger.getINFO(), LOG_TAG + ":onCreate().Handler.run()", "Time has elapsed");
+				logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":onCreate().Handler.run()", "Time has elapsed");
 				// Start activity after thread has been a sleep for a given
 				// delay time
 				switchActivity();
 			}
 		}, delay);
 
-		this.logger.logCatTxt(this.logger.getINFO(), this.LOG_TAG + ":onCreate()", "Listener and Handler have been set");
+		this.logger.logCat(LogPriorities.DEBUG, this.LOG_TAG + ":onCreate()", "Listener and Handler have been set");
 	}
 
 	/**
@@ -102,13 +104,14 @@ public class Splash extends Activity {
 	 * has passed.
 	 * 
 	 * @see #onCreate(Bundle)
+	 * @see {@link LogHandler#logCat(LogPriorities, String, String)}
 	 */
 	private void switchActivity() {
 		// Create intent and start next activity from it
 		Intent saIntent = new Intent(this, SmsAlarm.class);
 
 		// Some logging for information and debugging
-		this.logger.logCatTxt(this.logger.getINFO(), this.LOG_TAG + ":switchActivity()", "Intent has been set and application is about to switch activity to SmsAlarm");
+		this.logger.logCat(LogPriorities.DEBUG, this.LOG_TAG + ":switchActivity()", "Intent has been set and application is about to switch activity to SmsAlarm");
 
 		startActivity(saIntent);
 	}
@@ -117,11 +120,12 @@ public class Splash extends Activity {
 	 * Method to remove messages from handler.
 	 * 
 	 * @see #onPause()
+	 * @see {@link LogHandler#logCat(LogPriorities, String, String)}
 	 */
 	private void removeMsgFrHandler() {
 		this.handler.removeMessages(0);
 
 		// Some logging for information and debugging
-		this.logger.logCatTxt(this.logger.getINFO(), this.LOG_TAG + ":removeMsgFrHandler", "Messages have been removed from Handler");
+		this.logger.logCat(LogPriorities.DEBUG, this.LOG_TAG + ":removeMsgFrHandler", "Messages have been removed from Handler");
 	}
 }
