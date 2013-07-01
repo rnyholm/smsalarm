@@ -22,38 +22,74 @@ import ax.ha.it.smsalarm.LogHandler.LogPriorities;
  * @author Robert Nyholm <robert.nyholm@aland.net>
  * @version 2.1
  * @since 2.0
- * @date 2013-06-30
+ * @date 2013-07-01
  */
 public class PreferencesHandler {
+	/**
+	 * Enumeration for different datatypes needed when retrieving shared preferences.
+	 * 
+	 * @author Robert Nyholm <robert.nyholm@aland.net>
+	 * @version 2.1
+	 * @since 2.1
+	 * @date 2013-07-01
+	 */
+	public enum DataTypes {
+		INTEGER, STRING, BOOLEAN, LIST;
+	}
+
+	/**
+	 * Enumeration for the shared preferences keys.
+	 * 
+	 * @author Robert Nyholm <robert.nyholm@aland.net>
+	 * @version 2.1
+	 * @since 2.1
+	 * @date 2013-07-01
+	 */
+	public enum PrefKeys {
+		HARED_PREF("smsAlarmPrefs"),
+		NOT_KEY("notificationPref"),
+		PRIMARY_LISTEN_NUMBER_KEY("primaryListenNumberKey"),
+		SECONDARY_LISTEN_NUMBERS_KEY("secondaryListenNumbersKey"),
+		PRIMARY_MESSAGE_TONE_KEY("primaryMessageToneKey"),
+		SECONDARY_MESSAGE_TONE_KEY("secondaryMessageToneKey"),
+		MESSAGE_KEY("messageKey"),
+		FULL_MESSAGE_KEY("fullMessageKey"),
+		ENABLE_ACK_KEY("enableAckKey"),
+		ACK_NUMBER_KEY("ackNumber"),
+		USE_OS_SOUND_SETTINGS_KEY("useOsSoundSettings"),
+		LARM_TYPE_KEY("larmType"),
+		PLAY_TONE_TWICE_KEY("playToneTwice"),
+		ENABLE_SMS_ALARM_KEY("enableSmsAlarm"),
+		RESCUE_SERVICE_KEY("rescueService"),
+		HAS_CALLED_KEY("hasCalled");
+		
+		// Value in which enumerations values are stored
+		private final String key;
+		
+		/**
+		 * Constructor for this enumeration.
+		 * 
+		 * @param key Value to associate with the constructed enumeration as String
+		 */
+		PrefKeys(String key) {
+			this.key = key;
+		}
+		
+		/**
+		 * To return the value associated with a PrefKeys enumeration.
+		 * 
+		 * @return Value associated with PrefKey as String
+		 */
+		public String getKey() {
+			return this.key;
+		}
+	}
+	
 	// Singleton instance of this class
 	private static PreferencesHandler INSTANCE;
 
 	// Log tag
 	private final String LOG_TAG = "PreferencesHandler";
-
-	// Constants representing different datatypes
-	private final int INTEGER = 0;
-	private final int STRING = 1;
-	private final int BOOLEAN = 2;
-	private final int LIST = 3;
-
-	// Shared preferences constants
-	private final String SHARED_PREF = "smsAlarmPrefs";
-	private final String NOT_KEY = "notificationPref";
-	private final String PRIMARY_LISTEN_NUMBER_KEY = "primaryListenNumberKey";
-	private final String SECONDARY_LISTEN_NUMBERS_KEY = "secondaryListenNumbersKey";
-	private final String PRIMARY_MESSAGE_TONE_KEY = "primaryMessageToneKey";
-	private final String SECONDARY_MESSAGE_TONE_KEY = "secondaryMessageToneKey";
-	private final String MESSAGE_KEY = "messageKey";
-	private final String FULL_MESSAGE_KEY = "fullMessageKey";
-	private final String ENABLE_ACK_KEY = "enableAckKey";
-	private final String ACK_NUMBER_KEY = "ackNumber";
-	private final String USE_OS_SOUND_SETTINGS_KEY = "useOsSoundSettings";
-	private final String LARM_TYPE_KEY = "larmType";
-	private final String PLAY_TONE_TWICE_KEY = "playToneTwice";
-	private final String ENABLE_SMS_ALARM_KEY = "enableSmsAlarm";
-	private final String RESCUE_SERVICE_KEY = "rescueService";
-	private final String HAS_CALLED_KEY = "hasCalled";
 
 	// Variable used to log messages
 	private LogHandler logger;
@@ -90,150 +126,6 @@ public class PreferencesHandler {
 	}
 
 	/**
-	 * Getter for the shared preferences constant SHARED_PREF
-	 * 
-	 * @return The SHARED_PREF constant
-	 */
-	public String getSHARED_PREF() {
-		return SHARED_PREF;
-	}
-
-	/**
-	 * Getter for the shared preferences constant NOT_KEY
-	 * 
-	 * @return The NOT_KEY constant
-	 */
-	public String getNOT_KEY() {
-		return NOT_KEY;
-	}
-
-	/**
-	 * Getter for the shared preferences constant PRIMARY_LISTEN_NUMBER_KEY
-	 * 
-	 * @return The PRIMARY_LISTEN_NUMBER_KEY constant
-	 */
-	public String getPRIMARY_LISTEN_NUMBER_KEY() {
-		return PRIMARY_LISTEN_NUMBER_KEY;
-	}
-
-	/**
-	 * Getter for the shared preferences constant SECONDARY_LISTEN_NUMBERS_KEY
-	 * 
-	 * @return The SECONDARY_LISTEN_NUMBERS_KEY constant
-	 */
-	public String getSECONDARY_LISTEN_NUMBERS_KEY() {
-		return SECONDARY_LISTEN_NUMBERS_KEY;
-	}
-
-	/**
-	 * Getter for the shared preferences constant PRIMARY_MESSAGE_TONE_KEY
-	 * 
-	 * @return The PRIMARY_MESSAGE_TONE_KEY constant
-	 */
-	public String getPRIMARY_MESSAGE_TONE_KEY() {
-		return PRIMARY_MESSAGE_TONE_KEY;
-	}
-
-	/**
-	 * Getter for the shared preferences constant SECONDARY_MESSAGE_TONE_KEY
-	 * 
-	 * @return The SECONDARY_MESSAGE_TONE_KEY constant
-	 */
-	public String getSECONDARY_MESSAGE_TONE_KEY() {
-		return SECONDARY_MESSAGE_TONE_KEY;
-	}
-
-	/**
-	 * Getter for the shared preferences constant MESSAGE_KEY
-	 * 
-	 * @return The MESSAGE_KEY constant
-	 */
-	public String getMESSAGE_KEY() {
-		return MESSAGE_KEY;
-	}
-
-	/**
-	 * Getter for the shared preferences constant FULL_MESSAGE_KEY
-	 * 
-	 * @return The FULL_MESSAGE_KEY constant
-	 */
-	public String getFULL_MESSAGE_KEY() {
-		return FULL_MESSAGE_KEY;
-	}
-
-	/**
-	 * Getter for the shared preferences constant ENABLE_ACK_KEY
-	 * 
-	 * @return The ENABLE_ACK_KEY constant
-	 */
-	public String getENABLE_ACK_KEY() {
-		return ENABLE_ACK_KEY;
-	}
-
-	/**
-	 * Getter for the shared preferences constant ACK_NUMBER_KEY
-	 * 
-	 * @return The ACK_NUMBER_KEY constant
-	 */
-	public String getACK_NUMBER_KEY() {
-		return ACK_NUMBER_KEY;
-	}
-
-	/**
-	 * Getter for the shared preferences constant USE_OS_SOUND_SETTINGS_KEY
-	 * 
-	 * @return The USE_OS_SOUND_SETTINGS_KEY constant
-	 */
-	public String getUSE_OS_SOUND_SETTINGS_KEY() {
-		return USE_OS_SOUND_SETTINGS_KEY;
-	}
-
-	/**
-	 * Getter for the shared preferences constant LARM_TYPE_KEY
-	 * 
-	 * @return The LARM_TYPE_KEY constant
-	 */
-	public String getLARM_TYPE_KEY() {
-		return LARM_TYPE_KEY;
-	}
-
-	/**
-	 * Getter for the shared preferences constant PLAY_TONE_TWICE_KEY
-	 * 
-	 * @return The PLAY_TONE_TWICE_KEY constant
-	 */
-	public String getPLAY_TONE_TWICE_KEY() {
-		return PLAY_TONE_TWICE_KEY;
-	}
-
-	/**
-	 * Getter for the shared preferences constant ENABLE_SMS_ALARM_KEY
-	 * 
-	 * @return The ENABLE_SMS_ALARM_KEY constant
-	 */
-	public String getENABLE_SMS_ALARM_KEY() {
-		return ENABLE_SMS_ALARM_KEY;
-	}
-
-	/**
-	 * Getter for the shared preferences constant RESCUE_SERVICE_KEY
-	 * 
-	 * @return The RESCUE_SERVICE_KEY constant
-	 */
-	public String getRESCUE_SERVICE_KEY() {
-		return RESCUE_SERVICE_KEY;
-	}
-
-	/**
-	 * Getter for the shared preferences constant HAS_CALLED_KEY
-	 * 
-	 * @return The HAS_CALLED_KEY constant
-	 */
-	public String getHAS_CALLED_KEY() {
-		return HAS_CALLED_KEY;
-	}
-
-	/**
 	 * Method to get values in <b>Shared Preferences</b>. It retrieves different
 	 * values depending on input parameters. Returns retrieved value if all is
 	 * fine else an IllegalArgumentsException are thrown.<br>
@@ -265,21 +157,21 @@ public class PreferencesHandler {
 	 * @see {@link LogHandler#logCatTxt(LogPriorities, String, String)}
 	 * @see {@link LogHandler#logCatTxt(LogPriorities, String, String, Throwable)}
 	 */
-	public Object getPrefs(String sharedPreferences, String key, int type, Context context) throws IllegalArgumentException {
+	public Object getPrefs(String sharedPreferences, String key, DataTypes type, Context context) throws IllegalArgumentException {
 		// Set shared preferences from context
 		sharedPref = context.getSharedPreferences(sharedPreferences, Context.MODE_PRIVATE);
 
 		switch (type) {
-		case (INTEGER):
-			this.logger.logCat(LogPriorities.DEBUG, this.LOG_TAG + ":getPrefs()", "Integer with value \"" + Integer.toString(sharedPref.getInt(key, 0)) + "\" retrieved from shared preferences: \"" + sharedPreferences + "\", with key: \"" + key + "\", type: \"" + Integer.toString(type) + "\" and context: \"" + context.toString() + "\"");
+		case INTEGER:
+			this.logger.logCat(LogPriorities.DEBUG, this.LOG_TAG + ":getPrefs()", "Integer with value \"" + Integer.toString(sharedPref.getInt(key, 0)) + "\" retrieved from shared preferences: \"" + sharedPreferences + "\", with key: \"" + key + "\", type: \"" + type.name() + "\" and context: \"" + context.toString() + "\"");
 			return sharedPref.getInt(key, 0);
-		case (STRING):
-			this.logger.logCat(LogPriorities.DEBUG, this.LOG_TAG + ":getPrefs()", "String with value \"" + sharedPref.getString(key, "") + "\" retrieved from shared preferences: \"" + sharedPreferences + "\", with key: \"" + key + "\", type: \"" + Integer.toString(type) + "\" and context: \"" + context.toString() + "\"");
+		case STRING:
+			this.logger.logCat(LogPriorities.DEBUG, this.LOG_TAG + ":getPrefs()", "String with value \"" + sharedPref.getString(key, "") + "\" retrieved from shared preferences: \"" + sharedPreferences + "\", with key: \"" + key + "\", type: \"" + type.name() + "\" and context: \"" + context.toString() + "\"");
 			return sharedPref.getString(key, "");
-		case (BOOLEAN):
-			this.logger.logCat(LogPriorities.DEBUG, this.LOG_TAG + ":getPrefs()", "Boolean with value \"" + sharedPref.getBoolean(key, false) + "\" retrieved from shared preferences: \"" + sharedPreferences + "\", with key: \"" + key + "\", type: \"" + Integer.toString(type) + "\" and context: \"" + context.toString() + "\"");
+		case BOOLEAN:
+			this.logger.logCat(LogPriorities.DEBUG, this.LOG_TAG + ":getPrefs()", "Boolean with value \"" + sharedPref.getBoolean(key, false) + "\" retrieved from shared preferences: \"" + sharedPreferences + "\", with key: \"" + key + "\", type: \"" + type.name() + "\" and context: \"" + context.toString() + "\"");
 			return sharedPref.getBoolean(key, false);
-		case (LIST):
+		case LIST:
 			// Retrieve secondaryListenNumbers to json string and clear secondaryListenNumbers List just to be sure that it's empty
 			String json = sharedPref.getString(key, "");
 			// List of Strings containing
@@ -294,15 +186,15 @@ public class PreferencesHandler {
 						String secondaryListenNumber = a.optString(i);
 						list.add(secondaryListenNumber);
 					}
-					this.logger.logCat(LogPriorities.DEBUG, this.LOG_TAG + ":getPrefs()", "List<String> with value(s) \"" + json + "\"  retrieved from shared preferences: \"" + sharedPreferences + "\", with key: \"" + key + "\", type: \"" + Integer.toString(type) + "\" and context: \"" + context.toString() + "\"");
+					this.logger.logCat(LogPriorities.DEBUG, this.LOG_TAG + ":getPrefs()", "List<String> with value(s) \"" + json + "\"  retrieved from shared preferences: \"" + sharedPreferences + "\", with key: \"" + key + "\", type: \"" + type.name() + "\" and context: \"" + context.toString() + "\"");
 					// Return the list
 					return list;
 				} catch (JSONException e) {
 					// Log JSONException
-					this.logger.logCatTxt(LogPriorities.ERROR, this.LOG_TAG + ":getPrefs()", "Failed to retrieve List<String> from shared preferences: \"" + sharedPreferences + "\", with key: \"" + key + "\", type: \"" + Integer.toString(type) + "\" and context: \"" + context.toString() + "\"", e);
+					this.logger.logCatTxt(LogPriorities.ERROR, this.LOG_TAG + ":getPrefs()", "Failed to retrieve List<String> from shared preferences: \"" + sharedPreferences + "\", with key: \"" + key + "\", type: \"" + type.name() + "\" and context: \"" + context.toString() + "\"", e);
 				}
 			} else { // <--If JSON string is empty, return empty List
-				this.logger.logCat(LogPriorities.DEBUG, this.LOG_TAG + ":getPrefs()", "List<String> with value(s) \"" + json + "\"  retrieved from shared preferences: \"" + sharedPreferences + "\", with key: \"" + key + "\", type: \"" + Integer.toString(type) + "\" and context: \"" + context.toString() + "\"");
+				this.logger.logCat(LogPriorities.DEBUG, this.LOG_TAG + ":getPrefs()", "List<String> with value(s) \"" + json + "\"  retrieved from shared preferences: \"" + sharedPreferences + "\", with key: \"" + key + "\", type: \"" + type.name() + "\" and context: \"" + context.toString() + "\"");
 				// Return the list
 				return list;
 			}
@@ -312,7 +204,7 @@ public class PreferencesHandler {
 		}
 		
 		// We should never reach this far but if we do an error has occurred and an exception is thrown
-		throw new IllegalArgumentException("Unsupported data type was givien as parameter. Shared preferences: \"" + sharedPreferences + "\", with key: \"" + key + "\", type: \"" + Integer.toString(type) + "\" and context: \"" + context.toString() + "\". Valid DataTypes are: INTEGER, STRING, BOOLEAN and LIST");		
+		throw new IllegalArgumentException("Unsupported data type was givien as parameter. Shared preferences: \"" + sharedPreferences + "\", with key: \"" + key + "\", type: \"" + type.name() + "\" and context: \"" + context.toString() + "\". Valid DataTypes are: INTEGER, STRING, BOOLEAN and LIST");		
 	}
 
 	/**
@@ -353,46 +245,46 @@ public class PreferencesHandler {
 	 * @see {@link LogHandler#logCatTxt(LogPriorities, String, String)}
 	 * @see {@link LogHandler#logCatTxt(LogPriorities, String, String, Throwable)}
 	 */
-	public Object getPrefs(String sharedPreferences, String key, int type, Context context, Object defaultObject) throws IllegalArgumentException {
+	public Object getPrefs(String sharedPreferences, String key, DataTypes type, Context context, Object defaultObject) throws IllegalArgumentException {
 		// Set shared preferences from context
 		sharedPref = context.getSharedPreferences(sharedPreferences, Context.MODE_PRIVATE);
 
 		switch (type) {
-		case (INTEGER):
+		case INTEGER:
 			// Check that defaultObject is of correct instance else collect "hardcoded" default value of 0
 			if (defaultObject instanceof Integer) {
 				this.logger.logCat(LogPriorities.DEBUG, this.LOG_TAG + ":getPrefs()",
-						"Integer with value \"" + Integer.toString(sharedPref.getInt(key, (Integer) defaultObject)) + "\" retrieved from shared preferences: \"" + sharedPreferences + ", with key: " + key + "\", type: \"" + Integer.toString(type) + "\", context: \"" + context.toString() + "\" and default value: \"" + Integer.toString((Integer) defaultObject) + "\"");
+						"Integer with value \"" + Integer.toString(sharedPref.getInt(key, (Integer) defaultObject)) + "\" retrieved from shared preferences: \"" + sharedPreferences + ", with key: " + key + "\", type: \"" + type.name() + "\", context: \"" + context.toString() + "\" and default value: \"" + Integer.toString((Integer) defaultObject) + "\"");
 				return sharedPref.getInt(key, (Integer) defaultObject);
 			} else {
 				this.logger.logCatTxt(LogPriorities.ERROR, this.LOG_TAG + ":getPrefs()",
-						"Default value couldn't be set because of instance mismatch, hardcoded default value of 0 is used. However Integer with value \"" + Integer.toString(sharedPref.getInt(key, 0)) + "\" retrieved from shared preferences: \"" + sharedPreferences + "\", with key: \"" + key + "\", type: \"" + Integer.toString(type) + "\", context: \"" + context.toString()
+						"Default value couldn't be set because of instance mismatch, hardcoded default value of 0 is used. However Integer with value \"" + Integer.toString(sharedPref.getInt(key, 0)) + "\" retrieved from shared preferences: \"" + sharedPreferences + "\", with key: \"" + key + "\", type: \"" + type.name() + "\", context: \"" + context.toString()
 								+ "\" and default value: \"" + Integer.toString((Integer) defaultObject) + "\"");
 				return sharedPref.getInt(key, 0);
 			}
-		case (STRING):
+		case STRING:
 			// Check that defaultObject is of correct instance else collect "hardcoded" default value of ""
 			if (defaultObject instanceof String) {
-				this.logger.logCat(LogPriorities.DEBUG, this.LOG_TAG + ":getPrefs()", "String with value \"" + sharedPref.getString(key, (String) defaultObject) + "\" retrieved from shared preferences: \"" + sharedPreferences + "\", with key: \"" + key + "\", type: \"" + Integer.toString(type) + "\" and context: \"" + context.toString() + "\" and default value: \"" + (String) defaultObject
+				this.logger.logCat(LogPriorities.DEBUG, this.LOG_TAG + ":getPrefs()", "String with value \"" + sharedPref.getString(key, (String) defaultObject) + "\" retrieved from shared preferences: \"" + sharedPreferences + "\", with key: \"" + key + "\", type: \"" + type.name() + "\" and context: \"" + context.toString() + "\" and default value: \"" + (String) defaultObject
 						+ "\"");
 				return sharedPref.getString(key, (String) defaultObject);
 			} else {
-				this.logger.logCatTxt(LogPriorities.ERROR, this.LOG_TAG + ":getPrefs()", "Default value couldn't be set because of instance mismatch, hardcoded default value of \"\" is used. However String with value\"" + sharedPref.getString(key, "") + "\" retrieved from shared preferences: \"" + sharedPreferences + "\", with key: \"" + key + "\", type: \"" + Integer.toString(type)
+				this.logger.logCatTxt(LogPriorities.ERROR, this.LOG_TAG + ":getPrefs()", "Default value couldn't be set because of instance mismatch, hardcoded default value of \"\" is used. However String with value\"" + sharedPref.getString(key, "") + "\" retrieved from shared preferences: \"" + sharedPreferences + "\", with key: \"" + key + "\", type: \"" + type.name()
 						+ "\" and context: " + context.toString() + "\"");
 				return sharedPref.getString(key, "");
 			}
-		case (BOOLEAN):
+		case BOOLEAN:
 			// Check that defaultObject is of correct instance else collect "hardcoded" default value of false
 			if (defaultObject instanceof Boolean) {
-				this.logger.logCat(LogPriorities.DEBUG, this.LOG_TAG + ":getPrefs()", "Boolean with value \"" + sharedPref.getBoolean(key, (Boolean) defaultObject) + "\" retrieved from shared preferences: \"" + sharedPreferences + "\", with key: \"" + key + "\", type: \"" + Integer.toString(type) + "\" and context: \"" + context.toString() + "\" and default value: \""
+				this.logger.logCat(LogPriorities.DEBUG, this.LOG_TAG + ":getPrefs()", "Boolean with value \"" + sharedPref.getBoolean(key, (Boolean) defaultObject) + "\" retrieved from shared preferences: \"" + sharedPreferences + "\", with key: \"" + key + "\", type: \"" + type.name() + "\" and context: \"" + context.toString() + "\" and default value: \""
 						+ (Boolean) defaultObject + "\"");
 				return sharedPref.getBoolean(key, (Boolean) defaultObject);
 			} else {
-				this.logger.logCatTxt(LogPriorities.ERROR, this.LOG_TAG + ":getPrefs()", "Default value couldn't be set because of instance mismatch, hardcoded default value of false is used. However Boolean with value \"" + sharedPref.getBoolean(key, false) + "\" retrieved from shared preferences: \"" + sharedPreferences + "\", with key: \"" + key + "\", type: \"" + Integer.toString(type)
+				this.logger.logCatTxt(LogPriorities.ERROR, this.LOG_TAG + ":getPrefs()", "Default value couldn't be set because of instance mismatch, hardcoded default value of false is used. However Boolean with value \"" + sharedPref.getBoolean(key, false) + "\" retrieved from shared preferences: \"" + sharedPreferences + "\", with key: \"" + key + "\", type: \"" + type.name()
 						+ "\" and context: \"" + context.toString() + "\"");
 				return sharedPref.getBoolean(key, false);
 			}
-		case (LIST):
+		case LIST:
 			// Retrieve secondaryListenNumbers to json string and clear secondaryListenNumbers List just to be sure that it's empty
 			String json = sharedPref.getString(key, "");
 			// List of Strings containing
@@ -407,15 +299,15 @@ public class PreferencesHandler {
 						String secondaryListenNumber = a.optString(i);
 						list.add(secondaryListenNumber);
 					}
-					this.logger.logCat(LogPriorities.DEBUG, this.LOG_TAG + ":getPrefs()", "List<String> with value(s) \"" + json + "\"  retrieved from shared preferences: \"" + sharedPreferences + "\", with key: \"" + key + "\", type: \"" + Integer.toString(type) + "\" and context: \"" + context.toString() + "\"");
+					this.logger.logCat(LogPriorities.DEBUG, this.LOG_TAG + ":getPrefs()", "List<String> with value(s) \"" + json + "\"  retrieved from shared preferences: \"" + sharedPreferences + "\", with key: \"" + key + "\", type: \"" + type.name() + "\" and context: \"" + context.toString() + "\"");
 					// Return the list
 					return list;
 				} catch (JSONException e) {
 					// Log JSONException
-					this.logger.logCatTxt(LogPriorities.ERROR, this.LOG_TAG + ":getPrefs()", "Failed to retrieve List<String> from shared preferences: \"" + sharedPreferences + "\", with key: \"" + key + "\", type: \"" + Integer.toString(type) + "\" and context: \"" + context.toString() + "\"", e);
+					this.logger.logCatTxt(LogPriorities.ERROR, this.LOG_TAG + ":getPrefs()", "Failed to retrieve List<String> from shared preferences: \"" + sharedPreferences + "\", with key: \"" + key + "\", type: \"" + type.name() + "\" and context: \"" + context.toString() + "\"", e);
 				}
 			} else { // <--If JSON string is empty, return empty List
-				this.logger.logCat(LogPriorities.DEBUG, this.LOG_TAG + ":getPrefs()", "List<String> with value(s) \"" + json + "\"  retrieved from shared preferences: \"" + sharedPreferences + "\", with key: \"" + key + "\", type: \"" + Integer.toString(type) + "\" and context: \"" + context.toString() + "\"");
+				this.logger.logCat(LogPriorities.DEBUG, this.LOG_TAG + ":getPrefs()", "List<String> with value(s) \"" + json + "\"  retrieved from shared preferences: \"" + sharedPreferences + "\", with key: \"" + key + "\", type: \"" + type.name() + "\" and context: \"" + context.toString() + "\"");
 				// Return the list
 				return list;
 			}
@@ -425,7 +317,7 @@ public class PreferencesHandler {
 		}
 
 		// We should never reach this far but if we do an error has occurred and an exception is thrown
-		throw new IllegalArgumentException("Unsupported data type was givien as argument. Shared preferences: \"" + sharedPreferences + "\", with key: \"" + key + "\", type: \"" + Integer.toString(type) + "\" and context: \"" + context.toString() + "\". Valid DataTypes are: INTEGER, STRING, BOOLEAN and LIST");
+		throw new IllegalArgumentException("Unsupported data type was givien as argument. Shared preferences: \"" + sharedPreferences + "\", with key: \"" + key + "\", type: \"" + type.name() + "\" and context: \"" + context.toString() + "\". Valid DataTypes are: INTEGER, STRING, BOOLEAN and LIST");
 	}
 
 	/**

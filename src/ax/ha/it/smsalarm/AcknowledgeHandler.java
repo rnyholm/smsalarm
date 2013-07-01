@@ -35,14 +35,9 @@ import ax.ha.it.smsalarm.LogHandler.LogPriorities;
  * @author Robert Nyholm <robert.nyholm@aland.net>
  * @version 2.1
  * @since 1.1-SE
- * @date 2013-06-30
+ * @date 2013-07-01
  */
 public class AcknowledgeHandler extends Activity {
-	// Enumeration for different datatypes needed when retrieving shared preferences
-	private enum Datatypes {
-		INTEGER, STRING, BOOLEAN, LIST;
-	}
-
 	// Log tag string
 	private final String LOG_TAG = "AcknowledgeHandler";
 
