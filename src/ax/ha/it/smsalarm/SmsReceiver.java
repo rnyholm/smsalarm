@@ -17,6 +17,8 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.telephony.SmsMessage;
 import ax.ha.it.smsalarm.LogHandler.LogPriorities;
+import ax.ha.it.smsalarm.PreferencesHandler.DataTypes;
+import ax.ha.it.smsalarm.PreferencesHandler.PrefKeys;
 
 /**
  * Class extending <code>BroadcastReceiver</code>, receives SMS and handles them
@@ -25,20 +27,13 @@ import ax.ha.it.smsalarm.LogHandler.LogPriorities;
  * @author Robert Nyholm <robert.nyholm@aland.net>
  * @version 2.1
  * @since 0.9beta
- * @date 2013-07-01
+ * @date 2013-07-04
  * 
  */
 public class SmsReceiver extends BroadcastReceiver {
 
 	// Log tag string
 	private final String LOG_TAG = "SmsReceiver";
-
-	// Constants representing different datatypes used by class
-	// PreferencesHandler
-	private final int INTEGER = 0;
-	private final int STRING = 1;
-	private final int BOOLEAN = 2;
-	private final int LIST = 3;
 
 	// Objects needed for logging, shared preferences and noise handling
 	private LogHandler logger = LogHandler.getInstance();
@@ -83,6 +78,7 @@ public class SmsReceiver extends BroadcastReceiver {
 	 * @see #getSmsReceivePrefs(Context)
 	 * @see {@link LogHandler#logCat(LogPriorities, String, String)}
 	 * @see {@link LogHandler#logCatTxt(LogPriorities, String, String, Throwable)}
+	 * @see {@link PreferencesHandler#setPrefs(PrefKeys, PrefKeys, Object, Context)}
 	 */
 	@Override
 	public void onReceive(Context context, Intent intent) {
@@ -146,9 +142,13 @@ public class SmsReceiver extends BroadcastReceiver {
 					// Log information
 					this.logger.logCat(LogPriorities.DEBUG, this.LOG_TAG + ":onReceive()", "SMS fulfilled the criteria for a PRIMARY alarm. SMS received from: \"" + this.msgHeader + "\" with message: \"" + this.msgBody + "\"");
 
-					// Put alarm type to shared preferences
-					this.prefHandler.setPrefs(this.prefHandler.getSHARED_PREF(), this.prefHandler.getLARM_TYPE_KEY(), "primary", context);
-
+					try {
+						// Put alarm type to shared preferences
+						this.prefHandler.setPrefs(PrefKeys.SHARED_PREF, PrefKeys.LARM_TYPE_KEY, "primary", context);
+					} catch(IllegalArgumentException e) {
+						logger.logCatTxt(LogPriorities.ERROR, LOG_TAG + ":onReceive()", "An Object of unsupported instance was given as argument to PreferencesHandler.setPrefs()", e);
+					}
+					
 					// Set larm typ to this object
 					this.type = "primary";
 
@@ -167,9 +167,13 @@ public class SmsReceiver extends BroadcastReceiver {
 							if (this.msgHeader.equals(this.secondaryListenNumbers.get(i))) {
 								// Log information
 								this.logger.logCat(LogPriorities.DEBUG, this.LOG_TAG + ":onReceive()", "SMS fulfilled the criteria for a SECONDARY alarm. SMS received from: \"" + this.msgHeader + "\" with message: \"" + this.msgBody + "\"");
-
-								// Put alarm type to shared preferences
-								this.prefHandler.setPrefs(this.prefHandler.getSHARED_PREF(), this.prefHandler.getLARM_TYPE_KEY(), "secondary", context);
+								
+								try {
+									// Put alarm type to shared preferences
+									this.prefHandler.setPrefs(PrefKeys.SHARED_PREF, PrefKeys.LARM_TYPE_KEY, "secondary", context);
+								} catch(IllegalArgumentException e) {
+									logger.logCatTxt(LogPriorities.ERROR, LOG_TAG + ":onReceive()", "An Object of unsupported instance was given as argument to PreferencesHandler.setPrefs()", e);
+								}
 
 								// Set larm typ to this object
 								this.type = "secondary";
@@ -204,6 +208,8 @@ public class SmsReceiver extends BroadcastReceiver {
 	 * @see {@link NoiseHandler#makeNoise(Context, int, boolean, boolean)}
 	 * @see {@link LogHandler#logCat(LogPriorities, String, String)}
 	 * @see {@link LogHandler#logCatTxt(LogPriorities, String, String)}
+	 * @see {@link LogHandler#logCatTxt(LogPriorities, String, String, Throwable)}
+	 * @see {@link PreferencesHandler#setPrefs(PrefKeys, PrefKeys, Object, Context)}
 	 */
 	private void smsHandler(Context context) {
 		// To prevent the OS from ever see the incoming SMS
@@ -245,13 +251,20 @@ public class SmsReceiver extends BroadcastReceiver {
 		if (this.enableAlarmAck == true && this.type.equals("primary")) {
 			// Log message
 			this.logger.logCat(LogPriorities.DEBUG, this.LOG_TAG + ":smsHandler()", "Alarm acknowledgement is enabled and alarm is of type primary, store full SMS to shared preferences");
-
-			// Enable acknowledge is enabled and alarm is of type primary
-			this.prefHandler.setPrefs(this.prefHandler.getSHARED_PREF(), this.prefHandler.getFULL_MESSAGE_KEY(), this.msgBody, context);
+			try {
+				// Enable acknowledge is enabled and alarm is of type primary
+				this.prefHandler.setPrefs(PrefKeys.SHARED_PREF, PrefKeys.FULL_MESSAGE_KEY, this.msgBody, context);
+			} catch(IllegalArgumentException e) {
+				logger.logCatTxt(LogPriorities.ERROR, LOG_TAG + ":smsHandler()", "An Object of unsupported instance was given as argument to PreferencesHandler.setPrefs()", e);
+			}
 		}
 		// Store message's body in shared prefs so it can be shown in notification
 		this.logger.logCat(LogPriorities.DEBUG, this.LOG_TAG + ":smsHandler()", "Store SMS to shared preferences for show in notification bar");
-		this.prefHandler.setPrefs(this.prefHandler.getSHARED_PREF(), this.prefHandler.getMESSAGE_KEY(), this.msgBody, context);
+		try {
+			this.prefHandler.setPrefs(PrefKeys.SHARED_PREF, PrefKeys.MESSAGE_KEY, this.msgBody, context);
+		} catch(IllegalArgumentException e) {
+			logger.logCatTxt(LogPriorities.ERROR, LOG_TAG + ":smsHandler()", "An Object of unsupported instance was given as argument to PreferencesHandler.setPrefs()", e);
+		}
 
 		// Acknowledge is enabled and it is a primary alarm, show acknowledge notification, else show "ordinary" notification
 		if (this.enableAlarmAck == true && this.type.equals("primary")) {
@@ -276,22 +289,27 @@ public class SmsReceiver extends BroadcastReceiver {
 	 * @see #onReceive(Context, Intent)
 	 * @see #smsHandler(Context)
 	 * @see {@link LogHandler#logCat(LogPriorities, String, String)}
+	 * @see {@link LogHandler#logCatTxt(LogPriorities, String, String, Throwable)}
+	 * @see {@link PreferencesHandler#getPrefs(PrefKeys, PrefKeys, DataTypes, Context)}
 	 */
 	@SuppressWarnings("unchecked")
 	private void getSmsReceivePrefs(Context context) {
 		// Some logging
 		this.logger.logCat(LogPriorities.DEBUG, this.LOG_TAG + ":getSmsReceivePrefs()", "Start retrieving shared preferences needed by class SmsReceiver");
 
-		// Get shared preferences needed by SmsReceiver
-		this.primaryListenNumber = (String) this.prefHandler.getPrefs(this.prefHandler.getSHARED_PREF(), this.prefHandler.getPRIMARY_LISTEN_NUMBER_KEY(), this.STRING, context);
-		this.secondaryListenNumbers = (List<String>) this.prefHandler.getPrefs(this.prefHandler.getSHARED_PREF(), this.prefHandler.getSECONDARY_LISTEN_NUMBERS_KEY(), this.LIST, context);
-		this.primaryMessageToneId = (Integer) this.prefHandler.getPrefs(this.prefHandler.getSHARED_PREF(), this.prefHandler.getPRIMARY_MESSAGE_TONE_KEY(), this.INTEGER, context);
-		this.secondaryMessageToneId = (Integer) this.prefHandler.getPrefs(this.prefHandler.getSHARED_PREF(), this.prefHandler.getSECONDARY_MESSAGE_TONE_KEY(), this.INTEGER, context);
-		this.useOsSoundSettings = (Boolean) this.prefHandler.getPrefs(this.prefHandler.getSHARED_PREF(), this.prefHandler.getUSE_OS_SOUND_SETTINGS_KEY(), this.BOOLEAN, context);
-		this.enableAlarmAck = (Boolean) this.prefHandler.getPrefs(this.prefHandler.getSHARED_PREF(), this.prefHandler.getENABLE_ACK_KEY(), this.BOOLEAN, context);
-		this.playToneTwice = (Boolean) this.prefHandler.getPrefs(this.prefHandler.getSHARED_PREF(), this.prefHandler.getPLAY_TONE_TWICE_KEY(), this.BOOLEAN, context);
-		this.enableSmsAlarm = (Boolean) this.prefHandler.getPrefs(this.prefHandler.getSHARED_PREF(), this.prefHandler.getENABLE_SMS_ALARM_KEY(), this.BOOLEAN, context);
-
+		try {
+			// Get shared preferences needed by SmsReceiver
+			this.primaryListenNumber = (String) this.prefHandler.getPrefs(PrefKeys.SHARED_PREF, PrefKeys.PRIMARY_LISTEN_NUMBER_KEY, DataTypes.STRING, context);
+			this.secondaryListenNumbers = (List<String>) this.prefHandler.getPrefs(PrefKeys.SHARED_PREF, PrefKeys.SECONDARY_LISTEN_NUMBERS_KEY, DataTypes.LIST, context);
+			this.primaryMessageToneId = (Integer) this.prefHandler.getPrefs(PrefKeys.SHARED_PREF, PrefKeys.PRIMARY_MESSAGE_TONE_KEY, DataTypes.INTEGER, context);
+			this.secondaryMessageToneId = (Integer) this.prefHandler.getPrefs(PrefKeys.SHARED_PREF, PrefKeys.SECONDARY_MESSAGE_TONE_KEY, DataTypes.INTEGER, context);
+			this.useOsSoundSettings = (Boolean) this.prefHandler.getPrefs(PrefKeys.SHARED_PREF, PrefKeys.USE_OS_SOUND_SETTINGS_KEY, DataTypes.BOOLEAN, context);
+			this.enableAlarmAck = (Boolean) this.prefHandler.getPrefs(PrefKeys.SHARED_PREF, PrefKeys.ENABLE_ACK_KEY, DataTypes.BOOLEAN, context);
+			this.playToneTwice = (Boolean) this.prefHandler.getPrefs(PrefKeys.SHARED_PREF, PrefKeys.PLAY_TONE_TWICE_KEY, DataTypes.BOOLEAN, context);
+			this.enableSmsAlarm = (Boolean) this.prefHandler.getPrefs(PrefKeys.SHARED_PREF, PrefKeys.ENABLE_SMS_ALARM_KEY, DataTypes.BOOLEAN, context);
+		} catch(IllegalArgumentException e) {
+			logger.logCatTxt(LogPriorities.ERROR, this.LOG_TAG + ":getSmsReceivePrefs()", "An unsupported datatype was given as argument to PreferencesHandler.getPrefs()", e);
+		} 
 		this.logger.logCat(LogPriorities.DEBUG, this.LOG_TAG + ":getSmsReceivePrefs()", "Shared preferences retrieved");
 	}
 }
