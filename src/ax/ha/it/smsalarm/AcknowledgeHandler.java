@@ -25,6 +25,8 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 import ax.ha.it.smsalarm.LogHandler.LogPriorities;
+import ax.ha.it.smsalarm.PreferencesHandler.DataTypes;
+import ax.ha.it.smsalarm.PreferencesHandler.PrefKeys;
 
 /**
  * Responsible for the application <code>ax.ha.it.smsalarm</code> acknowledge
@@ -35,7 +37,7 @@ import ax.ha.it.smsalarm.LogHandler.LogPriorities;
  * @author Robert Nyholm <robert.nyholm@aland.net>
  * @version 2.1
  * @since 1.1-SE
- * @date 2013-07-01
+ * @date 2013-07-05
  */
 public class AcknowledgeHandler extends Activity {
 	// Log tag string
@@ -230,6 +232,7 @@ public class AcknowledgeHandler extends Activity {
 	 * @see #onResume()
 	 * @see {@link LogHandler#logCat(LogPriorities, String , String)}
 	 * @see {@link LogHandler#logCatTxt(LogPriorities, String , String, Throwable)}
+	 * @see {@link PreferencesHandler#setPrefs(PrefKeys, PrefKeys, Object, Context)}
 	 */
 	private void placeAcknowledgeCall() {
 		try {
@@ -238,9 +241,12 @@ public class AcknowledgeHandler extends Activity {
 			callIntent.setData(Uri.parse("tel:" + acknowledgeNumber));
 			// Logging
 			logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":placeAcknowledgeCall()", "A call intent has been initialized");
-			// Store variable to shared preferences indicating that a call has
-			// been placed
-			prefHandler.setPrefs(prefHandler.getSHARED_PREF(), prefHandler.getHAS_CALLED_KEY(), true, AcknowledgeHandler.this);
+			try {
+				// Store variable to shared preferences indicating that a call has been placed
+				prefHandler.setPrefs(PrefKeys.SHARED_PREF, PrefKeys.HAS_CALLED_KEY, true, AcknowledgeHandler.this);
+			} catch(IllegalArgumentException e) {
+				logger.logCatTxt(LogPriorities.ERROR, LOG_TAG + ":placeAcknowledgeCall()", "An Object of unsupported instance was given as argument to PreferencesHandler.setPrefs()", e);
+			}
 			// Set time when the call has been placed
 			startCall = Calendar.getInstance().getTime();
 			// Kick off call intent
@@ -310,17 +316,22 @@ public class AcknowledgeHandler extends Activity {
 	 * <code>AcknowledgeHandler</code>.
 	 * 
 	 * @see {@link LogHandler#logCat(LogPriorities, String , String)}
-	 * @see {@link PreferencesHandler#getPrefs(String, String, int, Context)}
+	 * @see {@link LogHandler#logCatTxt(LogPriorities, String, String, Throwable)}
+	 * @see {@link PreferencesHandler#getPrefs(PrefKeys, PrefKeys, DataTypes, Context)}
 	 */
 	private void getAckHandlerPrefs() {
 		// Some logging
 		this.logger.logCat(LogPriorities.DEBUG, this.LOG_TAG + ":getAckHandlerPrefs()", "Start retrieving shared preferences needed by class AcknowledgeHandler");
 
-		// Get shared preferences needed by class Acknowledge Handler
-		this.rescueService = (String) this.prefHandler.getPrefs(this.prefHandler.getSHARED_PREF(), this.prefHandler.getRESCUE_SERVICE_KEY(), Datatypes.STRING.ordinal(), this);
-		this.fullMessage = (String) this.prefHandler.getPrefs(this.prefHandler.getSHARED_PREF(), this.prefHandler.getFULL_MESSAGE_KEY(), Datatypes.STRING.ordinal(), this);
-		this.acknowledgeNumber = (String) this.prefHandler.getPrefs(this.prefHandler.getSHARED_PREF(), this.prefHandler.getACK_NUMBER_KEY(), Datatypes.STRING.ordinal(), this);
-		this.hasCalled = (Boolean) this.prefHandler.getPrefs(this.prefHandler.getSHARED_PREF(), this.prefHandler.getHAS_CALLED_KEY(), Datatypes.BOOLEAN.ordinal(), this);
+		try {
+			// Get shared preferences needed by class Acknowledge Handler
+			this.rescueService = (String) this.prefHandler.getPrefs(PrefKeys.SHARED_PREF, PrefKeys.RESCUE_SERVICE_KEY, DataTypes.STRING, this);
+			this.fullMessage = (String) this.prefHandler.getPrefs(PrefKeys.SHARED_PREF, PrefKeys.FULL_MESSAGE_KEY, DataTypes.STRING, this);
+			this.acknowledgeNumber = (String) this.prefHandler.getPrefs(PrefKeys.SHARED_PREF, PrefKeys.ACK_NUMBER_KEY, DataTypes.STRING, this);
+			this.hasCalled = (Boolean) this.prefHandler.getPrefs(PrefKeys.SHARED_PREF, PrefKeys.HAS_CALLED_KEY, DataTypes.BOOLEAN, this);
+		} catch(IllegalArgumentException e) {
+			logger.logCatTxt(LogPriorities.ERROR, this.LOG_TAG + ":getAckHandlerPrefs()", "An unsupported datatype was given as argument to PreferencesHandler.getPrefs()", e);
+		} 
 
 		this.logger.logCat(LogPriorities.DEBUG, this.LOG_TAG + ":getAckHandlerPrefs()", "Shared preferences retrieved");
 	}
@@ -368,7 +379,8 @@ public class AcknowledgeHandler extends Activity {
 		 * @see #swapStates(int)
 		 * @see #stateName(int)
 		 * @see {@link LogHandler#logCat(LogPriorities, String , String)}
-		 * @see {@link PreferencesHandler.setPrefs(String, String, Object, Context)}
+		 * @see {@link LogHandler#logCat(LogPriorities, String, String, Throwable)}
+		 * @see {@link PreferencesHandler#setPrefs(PrefKeys, PrefKeys, Object, Context)}
 		 * @see #AcknowledgeHandler()
 		 */
 		public void onCallStateChanged(int state, String incomingNumber) {
@@ -406,9 +418,12 @@ public class AcknowledgeHandler extends Activity {
 				} else {
 					// Logging
 					logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":ListenToPhoneState().onCallStateChanged()", "Call time was more than:\"" + MIN_CALL_TIME + "\", assumes the call went through");
-					// Store variable to shared preferences indicating that a
-					// call has been placed with success
-					prefHandler.setPrefs(prefHandler.getSHARED_PREF(), prefHandler.getHAS_CALLED_KEY(), false, AcknowledgeHandler.this);
+					try {
+						// Store variable to shared preferences indicating that a call has been placed with success
+						prefHandler.setPrefs(PrefKeys.SHARED_PREF, PrefKeys.HAS_CALLED_KEY, false, AcknowledgeHandler.this);
+					} catch(IllegalArgumentException e) {
+						logger.logCatTxt(LogPriorities.ERROR, LOG_TAG + ":ListenToPhoneState().onCallStateChanged()", "An Object of unsupported instance was given as argument to PreferencesHandler.setPrefs()", e);
+					}					
 					logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":ListenToPhoneState().onCallStateChanged()", "Finishing activity");
 					// Finish this activity
 					finish();
