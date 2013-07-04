@@ -32,6 +32,8 @@ import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.Toast;
 import ax.ha.it.smsalarm.LogHandler.LogPriorities;
+import ax.ha.it.smsalarm.PreferencesHandler.DataTypes;
+import ax.ha.it.smsalarm.PreferencesHandler.PrefKeys;
 
 /**
  * Main activity to configure application. Also holds the main User Interface.
@@ -39,7 +41,7 @@ import ax.ha.it.smsalarm.LogHandler.LogPriorities;
  * @author Robert Nyholm <robert.nyholm@aland.net>
  * @version 2.1
  * @since 0.9beta
- * @date 2013-07-01
+ * @date 2013-07-04
  *
  * @see #onCreate(Bundle)
  * @see #onPause()
@@ -54,13 +56,7 @@ public class SmsAlarm extends Activity  {
 	private final int PRIMARY = 0;
 	private final int SECONDARY = 1;
 	private final int ACKNOWLEDGE = 2;
-	private final int RESCUESERVICE = 3;
-	
-	// Constants representing different datatypes used by class PreferencesHandler
-	private final int INTEGER = 0;
-	private final int STRING = 1;
-	private final int BOOLEAN = 2;
-	private final int LIST = 3;	
+	private final int RESCUESERVICE = 3;	
 
 	// Objects needed for logging, shared preferences and noise handling
 	private LogHandler logger = LogHandler.getInstance();
@@ -141,7 +137,9 @@ public class SmsAlarm extends Activity  {
   	 * @see #onDestroy() 
   	 * @see {@link LogHandler#logCat(LogPriorities, String, String)}
   	 * @see {@link LogHandler#logCatTxt(LogPriorities, String, String)}
+  	 * @see {@link LogHandler#logCatTxt(LogPriorities, String, String, Throwable)}
   	 * @see {@link NoiseHandler#makeNoise(Context, int, boolean, boolean)}
+  	 * @see {@link PreferencesHandler#setPrefs(PrefKeys, PrefKeys, Object, Context)}
   	 * 
   	 * @Override
   	 */    
@@ -273,8 +271,12 @@ public class SmsAlarm extends Activity  {
 					logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":onCreate().soundSettingCheckBox.onCheckedChange()", "Use OS sound settings CheckBox \"Unchecked\"(" + useOsSoundSettings + ")");		
 				}
 				
-				// Store value to shared preferences
-		    	prefHandler.setPrefs(prefHandler.getSHARED_PREF(), prefHandler.getUSE_OS_SOUND_SETTINGS_KEY(), useOsSoundSettings, SmsAlarm.this); 
+				try {
+					// Store value to shared preferences
+					prefHandler.setPrefs(PrefKeys.SHARED_PREF, PrefKeys.USE_OS_SOUND_SETTINGS_KEY, useOsSoundSettings, SmsAlarm.this);
+				} catch(IllegalArgumentException e) {
+					logger.logCatTxt(LogPriorities.ERROR, LOG_TAG + ":onCreate().soundSettingCheckBox.onCheckedChange()", "An Object of unsupported instance was given as argument to PreferencesHandler.setPrefs()", e);
+				}
         	}
     	});
         
@@ -293,9 +295,12 @@ public class SmsAlarm extends Activity  {
 					 useAlarmAcknowledge = false;					 
 				}
 				
-				// Store value to shared preferences
-		      	prefHandler.setPrefs(prefHandler.getSHARED_PREF(), prefHandler.getENABLE_ACK_KEY(), useAlarmAcknowledge, SmsAlarm.this);
-				
+				try {
+					// Store value to shared preferences
+			      	prefHandler.setPrefs(PrefKeys.SHARED_PREF, PrefKeys.ENABLE_ACK_KEY, useAlarmAcknowledge, SmsAlarm.this);
+				} catch(IllegalArgumentException e) {
+					logger.logCatTxt(LogPriorities.ERROR, LOG_TAG + ":onCreate().enableAckCheckBox.onCheckedChange()", "An Object of unsupported instance was given as argument to PreferencesHandler.setPrefs()", e);
+				}				
 				// Update UI widgets affected by enable acknowledge
 				updateAcknowledgeWidgets();
         	}
@@ -319,8 +324,12 @@ public class SmsAlarm extends Activity  {
 					 logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":onCreate().playToneTwiceSettingCheckBox.onCheckedChange()", "Play tone twice CheckBox \"Unhecked\"(" + playToneTwice + ")"); 
 				}
 				
-				// Store value to shared preferences
-		      	prefHandler.setPrefs(prefHandler.getSHARED_PREF(), prefHandler.getPLAY_TONE_TWICE_KEY(), playToneTwice, SmsAlarm.this);  
+				try {
+					// Store value to shared preferences
+			      	prefHandler.setPrefs(PrefKeys.SHARED_PREF, PrefKeys.PLAY_TONE_TWICE_KEY, playToneTwice, SmsAlarm.this);
+				} catch(IllegalArgumentException e) {
+					logger.logCatTxt(LogPriorities.ERROR, LOG_TAG + ":onCreate().playToneTwiceSettingCheckBox.onCheckedChange()", "An Object of unsupported instance was given as argument to PreferencesHandler.setPrefs()", e);
+				}
         	}
     	});
         
@@ -342,8 +351,12 @@ public class SmsAlarm extends Activity  {
 		    		logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":onCreate().enableSmsAlarmCheckBox.onCheckedChange()", "Enable SmsAlarm CheckBox \"Unchecked\"(" + enableSmsAlarm + ")"); 
 				}
 				
-				// Store value to shared preferences
-		      	prefHandler.setPrefs(prefHandler.getSHARED_PREF(), prefHandler.getENABLE_SMS_ALARM_KEY(), enableSmsAlarm, SmsAlarm.this);
+				try {
+					// Store value to shared preferences
+			      	prefHandler.setPrefs(PrefKeys.SHARED_PREF, PrefKeys.ENABLE_SMS_ALARM_KEY, enableSmsAlarm, SmsAlarm.this);
+				} catch(IllegalArgumentException e) {
+					logger.logCatTxt(LogPriorities.ERROR, LOG_TAG + ":onCreate().enableSmsAlarmCheckBox.onCheckedChange()", "An Object of unsupported instance was given as argument to PreferencesHandler.setPrefs()", e);
+				}		      	
         	}
 
     	});        
@@ -424,6 +437,8 @@ public class SmsAlarm extends Activity  {
      * 
      * @see #buildAndShowAboutDialog()
      * @see {@link LogHandler#logCat(LogPriorities, String, String)}
+     * @see {@link LogHandler#logCatTxt(LogPriorities, String, String, Throwable)}
+     * @see {@link PreferencesHandler#setPrefs(PrefKeys, PrefKeys, Object, Context)}
      * 
      * @Override
      */
@@ -432,14 +447,18 @@ public class SmsAlarm extends Activity  {
 		switch (item.getItemId()) {
       		case R.id.item1:
       			// Logging
-      			this.logger.logCat(LogPriorities.DEBUG, this.LOG_TAG + ":onOptionsSelected()", "Menu item 1 selected");
+      			this.logger.logCat(LogPriorities.DEBUG, this.LOG_TAG + ":onOptionsItemSelected()", "Menu item 1 selected");
       			// Build up and show the about dialog
       			this.buildAndShowAboutDialog();
       			return true; 
 // >>>>DEBUG CASE (DELETE OR COMMENT FOR PRDO)
       		case R.id.item2:
-      			prefHandler.setPrefs(prefHandler.getSHARED_PREF(), prefHandler.getRESCUE_SERVICE_KEY(), "Jomala Fbk", this);
-      			prefHandler.setPrefs(prefHandler.getSHARED_PREF(), prefHandler.getFULL_MESSAGE_KEY(), "02.02.2012 23:55:40 2.5 Litet larm - Automatlarm vikingline lager(1682) Länsmanshägnan 7 jomala", this);
+      			try {
+	      			prefHandler.setPrefs(PrefKeys.SHARED_PREF, PrefKeys.RESCUE_SERVICE_KEY, "Jomala FBK", this);
+	      			prefHandler.setPrefs(PrefKeys.SHARED_PREF, PrefKeys.FULL_MESSAGE_KEY, "02.02.2012 23:55:40 2.5 Litet larm - Automatlarm vikingline lager(1682) Länsmanshägnan 7 jomala", this);
+				} catch(IllegalArgumentException e) {
+					logger.logCatTxt(LogPriorities.ERROR, this.LOG_TAG + ":onOptionsItemSelected()", "An Object of unsupported instance was given as argument to PreferencesHandler.setPrefs()", e);
+				}      			
 	    		Intent i = new Intent(SmsAlarm.this, AcknowledgeHandler.class);
 				startActivityForResult(i, 10);
 				return true;
@@ -538,25 +557,29 @@ public class SmsAlarm extends Activity  {
      * To set all <code>Shared Preferences</code> used by class <code>SmsAlarm</code>.
      * 
      * @see #getSmsAlarmPrefs()
-     * @see ax.ha.it.smsalarm#PreferencesHandler.setPrefs(String, String, Object, Context)
+     * @see {@link PreferencesHandler#setPrefs(PrefKeys, PrefKeys, Object, Context)}
      * @see {@link LogHandler#logCat(LogPriorities, String, String)}
+     * @see {@link LogHandler#logCatTxt(LogPriorities, String, String, Throwable)}
      */
     private void setSmsAlarmPrefs(){   	
     	// Some logging
     	this.logger.logCat(LogPriorities.DEBUG, this.LOG_TAG + ":setSmsAlarmPrefs()", "Start setting shared preferences used by class SmsAlarm");
     	
+    	try {
       	// Set preferences used by class Sms Alarm
-      	prefHandler.setPrefs(prefHandler.getSHARED_PREF(), prefHandler.getPRIMARY_LISTEN_NUMBER_KEY(), this.primaryListenNumber, this);
-      	prefHandler.setPrefs(prefHandler.getSHARED_PREF(), prefHandler.getSECONDARY_LISTEN_NUMBERS_KEY(), this.secondaryListenNumbers, this);
-      	prefHandler.setPrefs(prefHandler.getSHARED_PREF(), prefHandler.getPRIMARY_MESSAGE_TONE_KEY(), this.primaryMessageToneId, this);
-      	prefHandler.setPrefs(prefHandler.getSHARED_PREF(), prefHandler.getSECONDARY_MESSAGE_TONE_KEY(), this.secondaryMessageToneId, this);  
-      	prefHandler.setPrefs(prefHandler.getSHARED_PREF(), prefHandler.getUSE_OS_SOUND_SETTINGS_KEY(), this.useOsSoundSettings, this);        	
-      	prefHandler.setPrefs(prefHandler.getSHARED_PREF(), prefHandler.getENABLE_ACK_KEY(), this.useAlarmAcknowledge, this);
-      	prefHandler.setPrefs(prefHandler.getSHARED_PREF(), prefHandler.getACK_NUMBER_KEY(), this.acknowledgeNumber, this);  
-      	prefHandler.setPrefs(prefHandler.getSHARED_PREF(), prefHandler.getPLAY_TONE_TWICE_KEY(), this.playToneTwice, this);  
-      	prefHandler.setPrefs(prefHandler.getSHARED_PREF(), prefHandler.getENABLE_SMS_ALARM_KEY(), this.enableSmsAlarm, this);     
-      	prefHandler.setPrefs(prefHandler.getSHARED_PREF(), prefHandler.getRESCUE_SERVICE_KEY(), this.rescueService, this);         	
-
+	      	prefHandler.setPrefs(PrefKeys.SHARED_PREF, PrefKeys.PRIMARY_LISTEN_NUMBER_KEY, this.primaryListenNumber, this);
+	      	prefHandler.setPrefs(PrefKeys.SHARED_PREF, PrefKeys.SECONDARY_LISTEN_NUMBERS_KEY, this.secondaryListenNumbers, this);
+	      	prefHandler.setPrefs(PrefKeys.SHARED_PREF, PrefKeys.PRIMARY_MESSAGE_TONE_KEY, this.primaryMessageToneId, this);
+	      	prefHandler.setPrefs(PrefKeys.SHARED_PREF, PrefKeys.SECONDARY_MESSAGE_TONE_KEY, this.secondaryMessageToneId, this);  
+	      	prefHandler.setPrefs(PrefKeys.SHARED_PREF, PrefKeys.USE_OS_SOUND_SETTINGS_KEY, this.useOsSoundSettings, this);        	
+	      	prefHandler.setPrefs(PrefKeys.SHARED_PREF, PrefKeys.ENABLE_ACK_KEY, this.useAlarmAcknowledge, this);
+	      	prefHandler.setPrefs(PrefKeys.SHARED_PREF, PrefKeys.ACK_NUMBER_KEY, this.acknowledgeNumber, this);  
+	      	prefHandler.setPrefs(PrefKeys.SHARED_PREF, PrefKeys.PLAY_TONE_TWICE_KEY, this.playToneTwice, this);  
+	      	prefHandler.setPrefs(PrefKeys.SHARED_PREF, PrefKeys.ENABLE_SMS_ALARM_KEY, this.enableSmsAlarm, this);     
+	      	prefHandler.setPrefs(PrefKeys.SHARED_PREF, PrefKeys.RESCUE_SERVICE_KEY, this.rescueService, this);         	
+		} catch(IllegalArgumentException e) {
+			logger.logCatTxt(LogPriorities.ERROR, this.LOG_TAG + ":setSmsAlarmPrefs()", "An Object of unsupported instance was given as argument to PreferencesHandler.setPrefs()", e);
+		}     
     	this.logger.logCat(LogPriorities.DEBUG, this.LOG_TAG + ":setSmsAlarmPrefs()", "Shared preferences set");
     }
     
@@ -565,26 +588,30 @@ public class SmsAlarm extends Activity  {
      * 
      * @see #setSmsAlarmPrefs()
      * @see {@link LogHandler#logCat(LogPriorities, String, String)}
-     * @see ax.ha.it.smsalarm#PreferencesHandler.getPrefs(String, String, int, Context, Object)
-     * @see ax.ha.it.smsalarm#PreferencesHandler.getPrefs(String, String, int, Context)   
+     * @see {@link LogHandler#logCatTxt(LogPriorities, String, String, Throwable)}
+     * @see {@link PreferencesHandler#getPrefs(PrefKeys, PrefKeys, DataTypes, Context)}
+     * @see {@link PreferencesHandler#getPrefs(PrefKeys, PrefKeys, DataTypes, Context, Object)}
      */
 	@SuppressWarnings("unchecked")
 	private void getSmsAlarmPrefs() {
     	//Some logging
     	this.logger.logCat(LogPriorities.DEBUG, this.LOG_TAG + ":getSmsAlarmPrefs()", "Start retrieving shared preferences needed by class SmsAlarm");
     	
-    	//Get shared preferences needed by class Sms Alarm
-    	this.primaryListenNumber = (String) prefHandler.getPrefs(prefHandler.getSHARED_PREF(), prefHandler.getPRIMARY_LISTEN_NUMBER_KEY(), this.STRING, this);
-    	this.secondaryListenNumbers = (List<String>) prefHandler.getPrefs(prefHandler.getSHARED_PREF(), prefHandler.getSECONDARY_LISTEN_NUMBERS_KEY(), this.LIST, this);
-    	this.primaryMessageToneId = (Integer) prefHandler.getPrefs(prefHandler.getSHARED_PREF(), prefHandler.getPRIMARY_MESSAGE_TONE_KEY(), this.INTEGER, this);
-    	this.secondaryMessageToneId = (Integer) prefHandler.getPrefs(prefHandler.getSHARED_PREF(), prefHandler.getSECONDARY_MESSAGE_TONE_KEY(), this.INTEGER, this, 1);
-    	this.useOsSoundSettings = (Boolean) prefHandler.getPrefs(prefHandler.getSHARED_PREF(), prefHandler.getUSE_OS_SOUND_SETTINGS_KEY(), this.BOOLEAN, this);
-    	this.useAlarmAcknowledge = (Boolean) prefHandler.getPrefs(prefHandler.getSHARED_PREF(), prefHandler.getENABLE_ACK_KEY(), this.BOOLEAN, this);   
-    	this.acknowledgeNumber = (String) prefHandler.getPrefs(prefHandler.getSHARED_PREF(), prefHandler.getACK_NUMBER_KEY(), this.STRING, this);  
-    	this.playToneTwice = (Boolean) prefHandler.getPrefs(prefHandler.getSHARED_PREF(), prefHandler.getPLAY_TONE_TWICE_KEY(), this.BOOLEAN, this);    
-    	this.enableSmsAlarm = (Boolean) prefHandler.getPrefs(prefHandler.getSHARED_PREF(), prefHandler.getENABLE_SMS_ALARM_KEY(), this.BOOLEAN, this, true);  
-    	this.rescueService = (String) prefHandler.getPrefs(prefHandler.getSHARED_PREF(), prefHandler.getRESCUE_SERVICE_KEY(), this.STRING, this);    	
-
+    	try {
+	    	//Get shared preferences needed by class Sms Alarm
+	    	this.primaryListenNumber = (String) prefHandler.getPrefs(PrefKeys.SHARED_PREF, PrefKeys.PRIMARY_LISTEN_NUMBER_KEY, DataTypes.STRING, this);
+	    	this.secondaryListenNumbers = (List<String>) prefHandler.getPrefs(PrefKeys.SHARED_PREF, PrefKeys.SECONDARY_LISTEN_NUMBERS_KEY, DataTypes.LIST, this);
+	    	this.primaryMessageToneId = (Integer) prefHandler.getPrefs(PrefKeys.SHARED_PREF, PrefKeys.PRIMARY_MESSAGE_TONE_KEY, DataTypes.INTEGER, this);
+	    	this.secondaryMessageToneId = (Integer) prefHandler.getPrefs(PrefKeys.SHARED_PREF, PrefKeys.SECONDARY_MESSAGE_TONE_KEY, DataTypes.INTEGER, this, 1);
+	    	this.useOsSoundSettings = (Boolean) prefHandler.getPrefs(PrefKeys.SHARED_PREF, PrefKeys.USE_OS_SOUND_SETTINGS_KEY, DataTypes.BOOLEAN, this);
+	    	this.useAlarmAcknowledge = (Boolean) prefHandler.getPrefs(PrefKeys.SHARED_PREF, PrefKeys.ENABLE_ACK_KEY, DataTypes.BOOLEAN, this);   
+	    	this.acknowledgeNumber = (String) prefHandler.getPrefs(PrefKeys.SHARED_PREF, PrefKeys.ACK_NUMBER_KEY, DataTypes.STRING, this);  
+	    	this.playToneTwice = (Boolean) prefHandler.getPrefs(PrefKeys.SHARED_PREF, PrefKeys.PLAY_TONE_TWICE_KEY, DataTypes.BOOLEAN, this);    
+	    	this.enableSmsAlarm = (Boolean) prefHandler.getPrefs(PrefKeys.SHARED_PREF, PrefKeys.ENABLE_SMS_ALARM_KEY, DataTypes.BOOLEAN, this, true);  
+	    	this.rescueService = (String) prefHandler.getPrefs(PrefKeys.SHARED_PREF, PrefKeys.RESCUE_SERVICE_KEY, DataTypes.STRING, this);    	
+		} catch(IllegalArgumentException e) {
+			logger.logCatTxt(LogPriorities.ERROR, this.LOG_TAG + ":getSmsAlarmPrefs()", "An unsupported datatype was given as argument to PreferencesHandler.getPrefs()", e);
+		}   
     	this.logger.logCat(LogPriorities.DEBUG, this.LOG_TAG + ":getSmsAlarmPrefs()", "Shared preferences retrieved");  	 
     }
     
@@ -596,7 +623,8 @@ public class SmsAlarm extends Activity  {
      * @see #buildAndShowToneDialog()
      * @see #updateSecondaryListenNumberSpinner()
      * @see {@link LogHandler#logCat(LogPriorities, String, String)}
-     * @see ax.ha.it.smsalarm#PreferencesHandler.setPrefs(String, String, Object, Context)
+     * @see {@link LogHandler#logCatTxt(LogPriorities, String, String, Throwable)}
+     * @see {@link PreferencesHandler#setPrefs(PrefKeys, PrefKeys, Object, Context)}
      */
     private void buildAndShowDeleteSecondaryNumberDialog() {
     	// Logging
@@ -629,9 +657,13 @@ public class SmsAlarm extends Activity  {
 	        	logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":buildAndShowDeleteSecondaryNumberDialog().PosButton.OnClickListener().onClick()", "Positive Button pressed");	
 	        	logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":buildAndShowDeleteSecondaryNumberDialog().PosButton.OnClickListener().onClick()", "SECONDARY listen number: \"" + secondaryListenNumbers.get(position) + "\" is about to be removed from list of SECONDARY listen numbers");	        	
 	    		// Delete number from list
-	    		secondaryListenNumbers.remove(position);  		
-				// Store to shared preferences
-		      	prefHandler.setPrefs(prefHandler.getSHARED_PREF(), prefHandler.getSECONDARY_LISTEN_NUMBERS_KEY(), secondaryListenNumbers, SmsAlarm.this);
+	    		secondaryListenNumbers.remove(position);  	
+	    		try {
+					// Store to shared preferences
+			      	prefHandler.setPrefs(PrefKeys.SHARED_PREF, PrefKeys.SECONDARY_LISTEN_NUMBERS_KEY, secondaryListenNumbers, SmsAlarm.this);
+				} catch(IllegalArgumentException e) {
+					logger.logCatTxt(LogPriorities.ERROR, LOG_TAG + ":buildAndShowDeleteSecondaryNumberDialog().PosButton.OnClickListener().onClick()", "An Object of unsupported instance was given as argument to PreferencesHandler.setPrefs()", e);
+				}  		      	
 		      	// Update affected UI widgets
 		      	updateSecondaryListenNumberSpinner();	        
 	    	}  	
@@ -669,7 +701,8 @@ public class SmsAlarm extends Activity  {
      * @see #updateRescueServiceEditText()
      * @see {@link LogHandler#logCat(LogPriorities, String, String)}
      * @see {@link LogHandler#logCatTxt(LogPriorities, String, String)}
-     * @see ax.ha.it.smsalarm#PreferencesHandler.setPrefs(String, String, Object, Context)
+     * @see {@link LogHandler#logCatTxt(LogPriorities, String, String, Throwable)}
+     * @see {@link PreferencesHandler#setPrefs(PrefKeys, PrefKeys, Object, Context)}
      */
     private void buildAndShowInputDialog(final int dialogType) {  
     	// Logging
@@ -768,8 +801,12 @@ public class SmsAlarm extends Activity  {
         				if(!duplicatedNumbers) {
         					// Store input to class variable
         					primaryListenNumber = input.getText().toString();
-        					// Store to shared preferences
-        			      	prefHandler.setPrefs(prefHandler.getSHARED_PREF(), prefHandler.getPRIMARY_LISTEN_NUMBER_KEY(), primaryListenNumber, SmsAlarm.this);
+        					try {
+	        					// Store to shared preferences
+	        			      	prefHandler.setPrefs(PrefKeys.SHARED_PREF, PrefKeys.PRIMARY_LISTEN_NUMBER_KEY, primaryListenNumber, SmsAlarm.this);
+	        				} catch(IllegalArgumentException e) {
+	        					logger.logCatTxt(LogPriorities.ERROR, LOG_TAG + ":buildAndShowInputDialog().PositiveButton.OnClickListener().onClick()", "An Object of unsupported instance was given as argument to PreferencesHandler.setPrefs()", e);
+	        				}  	
         			      	// Update affected UI widgets
         			      	updatePrimaryListenNumberEditText();
         			      	// Log
@@ -781,7 +818,11 @@ public class SmsAlarm extends Activity  {
         				}    					
     				} else {
     					primaryListenNumber = input.getText().toString();
-    			      	prefHandler.setPrefs(prefHandler.getSHARED_PREF(), prefHandler.getPRIMARY_LISTEN_NUMBER_KEY(), primaryListenNumber, SmsAlarm.this);
+    					try {
+	    			      	prefHandler.setPrefs(PrefKeys.SHARED_PREF, PrefKeys.PRIMARY_LISTEN_NUMBER_KEY, primaryListenNumber, SmsAlarm.this);
+	    				} catch(IllegalArgumentException e) {
+	    					logger.logCatTxt(LogPriorities.ERROR, LOG_TAG + ":buildAndShowInputDialog().PositiveButton.OnClickListener().onClick()", "An Object of unsupported instance was given as argument to PreferencesHandler.setPrefs()", e);
+	    				}     			      	
     			      	updatePrimaryListenNumberEditText();    					
     					logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":buildAndShowInputDialog().PositiveButton.OnClickListener().onClick()", "New PRIMARY phone number has been stored from user input. New PRIMARY phone number is: \"" + primaryListenNumber + "\"");
     				} 
@@ -801,8 +842,12 @@ public class SmsAlarm extends Activity  {
         				if(!duplicatedNumbers) {
         					// Add given input to list
         					secondaryListenNumbers.add(input.getText().toString());
-        					// Store to shared preferences
-        			      	prefHandler.setPrefs(prefHandler.getSHARED_PREF(), prefHandler.getSECONDARY_LISTEN_NUMBERS_KEY(), secondaryListenNumbers, SmsAlarm.this);
+        					try {
+	        					// Store to shared preferences
+	        			      	prefHandler.setPrefs(PrefKeys.SHARED_PREF, PrefKeys.SECONDARY_LISTEN_NUMBERS_KEY, secondaryListenNumbers, SmsAlarm.this);
+		    				} catch(IllegalArgumentException e) {
+		    					logger.logCatTxt(LogPriorities.ERROR, LOG_TAG + ":buildAndShowInputDialog().PositiveButton.OnClickListener().onClick()", "An Object of unsupported instance was given as argument to PreferencesHandler.setPrefs()", e);
+		    				}         			      	
         			      	// Update affected UI widgets
         			      	updateSecondaryListenNumberSpinner();
         			      	// Log
@@ -826,8 +871,12 @@ public class SmsAlarm extends Activity  {
 	        	case (ACKNOWLEDGE): // <--2       
 	        		// Store input to class variable
 	        		acknowledgeNumber = input.getText().toString();
-	        		// Store to shared preferences
-	          	    prefHandler.setPrefs(prefHandler.getSHARED_PREF(), prefHandler.getACK_NUMBER_KEY(), acknowledgeNumber, SmsAlarm.this); 
+	        		try {
+		        		// Store to shared preferences
+		          	    prefHandler.setPrefs(PrefKeys.SHARED_PREF, PrefKeys.ACK_NUMBER_KEY, acknowledgeNumber, SmsAlarm.this); 
+					} catch(IllegalArgumentException e) {
+						logger.logCatTxt(LogPriorities.ERROR, LOG_TAG + ":buildAndShowInputDialog().PositiveButton.OnClickListener().onClick()", "An Object of unsupported instance was given as argument to PreferencesHandler.setPrefs()", e);
+					} 	          	    
 	          	    // update affected UI widgets
 	          	    updateAcknowledgeNumberEditText();
 	          	    // Log
@@ -836,8 +885,12 @@ public class SmsAlarm extends Activity  {
 	        	case (RESCUESERVICE): // <--3
 	        		// Store input to class variable
 	        		rescueService = input.getText().toString();
-	        		// Store to shared preferences
-	          		prefHandler.setPrefs(prefHandler.getSHARED_PREF(), prefHandler.getRESCUE_SERVICE_KEY(), rescueService, SmsAlarm.this); 
+	        		try {
+		        		// Store to shared preferences
+		          		prefHandler.setPrefs(PrefKeys.SHARED_PREF, PrefKeys.RESCUE_SERVICE_KEY, rescueService, SmsAlarm.this); 
+					} catch(IllegalArgumentException e) {
+						logger.logCatTxt(LogPriorities.ERROR, LOG_TAG + ":buildAndShowInputDialog().PositiveButton.OnClickListener().onClick()", "An Object of unsupported instance was given as argument to PreferencesHandler.setPrefs()", e);
+					} 	          		
 	          		// update affected UI widgets
 	          		updateRescueServiceEditText();
 	          		// Log
@@ -876,7 +929,8 @@ public class SmsAlarm extends Activity  {
      * @see #updateSelectedToneEditText()
      * @see {@link LogHandler#logCat(LogPriorities, String, String)}
      * @see {@link LogHandler#logCatTxt(LogPriorities, String, String)}
-     * @see ax.ha.it.smsalarm#PreferencesHandler.setPrefs(String, String, Object, Context)
+     * @see {@link LogHandler#logCatTxt(LogPriorities, String, String, Throwable)}
+     * @see {@link PreferencesHandler#setPrefs(PrefKeys, PrefKeys, Object, Context)}
      */
     private void buildAndShowToneDialog() {    
     	// Logging
@@ -905,14 +959,22 @@ public class SmsAlarm extends Activity  {
 					primaryMessageToneId = listPosition;
 					// Log information
 		        	logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":buildAndShowToneDialog().Item.OnClickListener().onClick()", "New PRIMARY message tone selected. Tone: \"" + noiseHandler.msgToneLookup(SmsAlarm.this, primaryMessageToneId) + "\", id: \"" + primaryMessageToneId + "\" and tone Spinner position: \"" + Integer.toString(toneSpinnerPos) + "\"");			
-					// Store primary message tone id to preferences to preferences
-			      	prefHandler.setPrefs(prefHandler.getSHARED_PREF(), prefHandler.getPRIMARY_MESSAGE_TONE_KEY(), primaryMessageToneId, SmsAlarm.this);
+					try {
+		        	// Store primary message tone id to preferences to preferences
+				      	prefHandler.setPrefs(PrefKeys.SHARED_PREF, PrefKeys.PRIMARY_MESSAGE_TONE_KEY, primaryMessageToneId, SmsAlarm.this);
+					} catch(IllegalArgumentException e) {
+						logger.logCatTxt(LogPriorities.ERROR, LOG_TAG + ":buildAndShowToneDialog().Item.OnClickListener().onClick()", "An Object of unsupported instance was given as argument to PreferencesHandler.setPrefs()", e);
+					} 			      	
 			      	// Update selected tone EditText
 			      	updateSelectedToneEditText();
 				} else if(toneSpinnerPos == 1) { // <--SECONDARY MESSAGE TONE
 					secondaryMessageToneId = listPosition;
-		        	logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":buildAndShowToneDialog().Item.OnClickListener().onClick()", "New SECONDARY message tone selected. Tone: \"" + noiseHandler.msgToneLookup(SmsAlarm.this, secondaryMessageToneId) + "\", id: \"" + secondaryMessageToneId + "\" and tone Spinner position: \"" + Integer.toString(toneSpinnerPos) + "\"");		
-			      	prefHandler.setPrefs(prefHandler.getSHARED_PREF(), prefHandler.getSECONDARY_MESSAGE_TONE_KEY(), secondaryMessageToneId, SmsAlarm.this);  					
+		        	logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":buildAndShowToneDialog().Item.OnClickListener().onClick()", "New SECONDARY message tone selected. Tone: \"" + noiseHandler.msgToneLookup(SmsAlarm.this, secondaryMessageToneId) + "\", id: \"" + secondaryMessageToneId + "\" and tone Spinner position: \"" + Integer.toString(toneSpinnerPos) + "\"");
+		        	try {
+			      		prefHandler.setPrefs(PrefKeys.SHARED_PREF, PrefKeys.SECONDARY_MESSAGE_TONE_KEY, secondaryMessageToneId, SmsAlarm.this);
+					} catch(IllegalArgumentException e) {
+						logger.logCatTxt(LogPriorities.ERROR, LOG_TAG + ":buildAndShowToneDialog().Item.OnClickListener().onClick()", "An Object of unsupported instance was given as argument to PreferencesHandler.setPrefs()", e);
+					} 			      	
 					updateSelectedToneEditText();
 				} else { // <--UNSUPPORTED SPINNER POSITION
 		        	// DO NOTHING EXCEPT LOG ERROR MESSAGE
