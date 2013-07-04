@@ -11,6 +11,8 @@ import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import ax.ha.it.smsalarm.LogHandler.LogPriorities;
+import ax.ha.it.smsalarm.PreferencesHandler.DataTypes;
+import ax.ha.it.smsalarm.PreferencesHandler.PrefKeys;
 
 /**
  * Helper class to build up and show notifications, also creates
@@ -21,7 +23,7 @@ import ax.ha.it.smsalarm.LogHandler.LogPriorities;
  * @author Robert Nyholm <robert.nyholm@aland.net>
  * @version 2.0
  * @since 0.9beta
- * @date 2013-06-30
+ * @date 2013-07-04
  */
 public class NotificationHelper extends IntentService {
 
@@ -58,18 +60,28 @@ public class NotificationHelper extends IntentService {
 	 * @see #NotificationHelper()
 	 * @see {@link LogHandler#logCat(LogPriorities, String, String)}
 	 * @see {@link LogHandler#logCatTxt(LogPriorities, String, String)}
+	 * @see {@link LogHandler#logCatTxt(LogPriorities, String, String, Throwable)}
+	 * @see {@link PreferencesHandler#getPrefs(PrefKeys, PrefKeys, DataTypes, Context)}
 	 * 
-	 * @deprecated
+	 * @deprecated 
 	 * @Override
 	 */
 	@Override
 	protected void onHandleIntent(Intent i) {
 		// Log information
 		this.logger.logCat(LogPriorities.DEBUG, this.LOG_TAG + ":onHandleIntent()", "Start retrieving shared preferences needed by class NotificationHelper");
-
-		// Get some values from the sharedprefs
-		String message = (String) this.prefHandler.getPrefs(this.prefHandler.getSHARED_PREF(), this.prefHandler.getMESSAGE_KEY(), 1, this);
-		String larmType = (String) this.prefHandler.getPrefs(this.prefHandler.getSHARED_PREF(), this.prefHandler.getLARM_TYPE_KEY(), 1, this);
+		
+		// To store alarm type and message in
+		String larmType = "";
+		String message = "";
+		
+		try {
+			// Get some values from the sharedprefs
+			message = (String) this.prefHandler.getPrefs(PrefKeys.SHARED_PREF, PrefKeys.MESSAGE_KEY, DataTypes.STRING, this);
+			larmType = (String) this.prefHandler.getPrefs(PrefKeys.SHARED_PREF, PrefKeys.LARM_TYPE_KEY, DataTypes.STRING, this);
+		} catch(IllegalArgumentException e) {
+			logger.logCatTxt(LogPriorities.ERROR, this.LOG_TAG + ":onHandleIntent()", "An unsupported datatype was given as argument to PreferencesHandler.getPrefs()", e);
+		} 			
 
 		this.logger.logCat(LogPriorities.DEBUG, this.LOG_TAG + ":onHandleIntent()", "Shared preferences retrieved");
 
@@ -101,7 +113,7 @@ public class NotificationHelper extends IntentService {
 		long when = System.currentTimeMillis();
 
 		// Configure notification depending on type
-		if (larmType.equals("primary")) {
+		if ("primary".equals(larmType)) {
 			// Set icon
 			icon = android.R.drawable.ic_delete;
 			// Set ticker text
@@ -110,7 +122,7 @@ public class NotificationHelper extends IntentService {
 			contentTitle = this.getString(R.string.alarm);
 			// Log
 			this.logger.logCat(LogPriorities.DEBUG, this.LOG_TAG + ":onHandleIntent()", "Notification has been set for a primary alarm");
-		} else if (larmType.equals("secondary")) {
+		} else if ("secondary".equals(larmType)) {
 			icon = android.R.drawable.ic_menu_close_clear_cancel;
 			tickerText = this.getString(R.string.secondaryAlarm);
 			contentTitle = this.getString(R.string.secondaryAlarm);
