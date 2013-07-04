@@ -22,7 +22,7 @@ import ax.ha.it.smsalarm.LogHandler.LogPriorities;
  * @author Robert Nyholm <robert.nyholm@aland.net>
  * @version 2.1
  * @since 2.0
- * @date 2013-07-01
+ * @date 2013-07-04
  */
 public class PreferencesHandler {
 	/**
@@ -43,10 +43,10 @@ public class PreferencesHandler {
 	 * @author Robert Nyholm <robert.nyholm@aland.net>
 	 * @version 2.1
 	 * @since 2.1
-	 * @date 2013-07-01
+	 * @date 2013-07-04
 	 */
 	public enum PrefKeys {
-		HARED_PREF("smsAlarmPrefs"),
+		SHARED_PREF("smsAlarmPrefs"),
 		NOT_KEY("notificationPref"),
 		PRIMARY_LISTEN_NUMBER_KEY("primaryListenNumberKey"),
 		SECONDARY_LISTEN_NUMBERS_KEY("secondaryListenNumbersKey"),
@@ -130,8 +130,8 @@ public class PreferencesHandler {
 	 * values depending on input parameters. Returns retrieved value if all is
 	 * fine else an IllegalArgumentsException are thrown.<br>
 	 * Example usage:<br>
-	 * <code>String s = getPrefs(SmsAlarm.SHARED_PREF, ACK_NUMBER_KEY, 1, this.context)</code>
-	 * , this will retrieve a string(<code>type = 1</code>) from key
+	 * <code>String s = getPrefs(PrefKeys.SHARED_PREF.getKey(), PrefKeys.ACK_NUMBER_KEY.getKey(), 
+	 * DataTypes.STRING, this.context)</code>, this will retrieve a String from key
 	 * <code>ACK_NUMBER_KEY</code> and with the given context.
 	 * 
 	 * @param sharedPreferences
@@ -140,8 +140,7 @@ public class PreferencesHandler {
 	 *            Key in which Shared Preference is stored
 	 * @param type
 	 *            Different type of values is retrieved from Shared Preferences,
-	 *            indicated by this value. 0 = Integer, 1 = String, 2 = Boolean
-	 *            and 3 = List of Strings
+	 *            datatype is decided depending on this given DataType
 	 * @param context
 	 *            Context from which the Shared Preferences should be retrieved
 	 * 
@@ -214,8 +213,8 @@ public class PreferencesHandler {
 	 * ONLY WORKING FOR DATATYPES Integer, String AND Boolean</i></b> Returns
 	 * retrieved value if all is fine else an IllegalArgumentsException are thrown.<br>
 	 * Example usage:<br>
-	 * <code>String s = getPrefs(SmsAlarm.SHARED_PREF, ACK_NUMBER_KEY, 1, this.context, "empty")</code>
-	 * , this will retrieve a string(<code>type = 1</code>) from key
+	 * <code>String s = getPrefs(PrefKeys.SHARED_PREF.getKey(), PrefKeys.ACK_NUMBER_KEY.getKey(), 
+	 * DataTypes.STRING, this.context, "empty")</code>, this will retrieve a String from key
 	 * <code>ACK_NUMBER_KEY</code> and with the given context.
 	 * 
 	 * @param sharedPreferences
@@ -224,8 +223,7 @@ public class PreferencesHandler {
 	 *            Key in which Shared Preference is stored
 	 * @param type
 	 *            Different type of values is retrieved from Shared Preferences,
-	 *            indicated by this value. 0 = Integer, 1 = String, 2 = Boolean
-	 *            and 3 = List of Strings
+	 *            datatype is decided depending on this given DataType
 	 * @param context
 	 *            Context from which the Shared Preferences should be retrieved
 	 * 
@@ -324,7 +322,7 @@ public class PreferencesHandler {
 	 * Method to set values to <b>Shared Preferences<b>. It sets different
 	 * values of different instances depending on input parameters.<br>
 	 * Example usage:<br>
-	 * <code>setPrefs(SmsAlarm.SHARED_PREF, ACKNUMBER_KEY, "0457 0000 000", this.context</code>
+	 * <code>setPrefs(PrefKeys.SHARED_PREF.getKey(), PrefKey.ACKNUMBER_KEY.getKey(), "0457 0000 000", this.context</code>
 	 * 
 	 * @param sharedPreferences
 	 *            SharedPreferences from which the values are retrieved from
