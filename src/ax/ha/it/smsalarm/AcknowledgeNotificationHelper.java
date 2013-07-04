@@ -11,6 +11,8 @@ import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import ax.ha.it.smsalarm.LogHandler.LogPriorities;
+import ax.ha.it.smsalarm.PreferencesHandler.DataTypes;
+import ax.ha.it.smsalarm.PreferencesHandler.PrefKeys;
 
 /**
  * Helper class to build up and show notifications, also creates pending
@@ -21,7 +23,7 @@ import ax.ha.it.smsalarm.LogHandler.LogPriorities;
  * @author Robert Nyholm <robert.nyholm@aland.net>
  * @version 2.1
  * @since 1.2.1-SE
- * @date 2013-06-30
+ * @date 2013-07-05
  */
 public class AcknowledgeNotificationHelper extends IntentService {
 
@@ -57,9 +59,11 @@ public class AcknowledgeNotificationHelper extends IntentService {
 	 * @deprecated
 	 * 
 	 * @see #AcknowledgeNotificationHelper()
-	 * @see {@link LogHandler#logCat(ax.ha.it.smsalarm.LogHandler.LogPriorities, String, String)}
-	 * @see {@link PreferencesHandler#getPrefs(String, String, int, Context)}
+	 * @see {@link LogHandler#logCat(LogPriorities, String, String)}
+	 * @see {@link LogHandler#logCatTxt(LogPriorities, String, String, Throwable)}
+	 * @see {@link PreferencesHandler#getPrefs(PrefKeys, PrefKeys, DataTypes, Context)}
 	 * 
+	 * @deprecated
 	 * @Override
 	 */
 	@Override
@@ -67,9 +71,16 @@ public class AcknowledgeNotificationHelper extends IntentService {
 		// Log information
 		this.logger.logCat(LogPriorities.DEBUG, this.LOG_TAG + ":onHandleIntent()", "Start retrieving shared preferences needed by class AcknowledgeNotificationHelper");
 
-		// Get some values from the sharedprefs
-		String message = (String) this.prefHandler.getPrefs(this.prefHandler.getSHARED_PREF(), this.prefHandler.getMESSAGE_KEY(), 1, this);
-
+		// To store message in
+		String message = "";
+		
+		try {
+			// Get some values from the sharedprefs
+			message = (String) this.prefHandler.getPrefs(PrefKeys.SHARED_PREF, PrefKeys.MESSAGE_KEY, DataTypes.STRING, this);
+		} catch(IllegalArgumentException e) {
+			logger.logCatTxt(LogPriorities.ERROR, this.LOG_TAG + ":onHandleIntent()", "An unsupported datatype was given as argument to PreferencesHandler.getPrefs()", e);
+		} 
+		
 		this.logger.logCat(LogPriorities.DEBUG, this.LOG_TAG + ":onHandleIntent()", "Shared preferences retrieved");
 
 		// Set intent to AcknowledgeHandler
