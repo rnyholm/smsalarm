@@ -48,15 +48,20 @@ import ax.ha.it.smsalarm.PreferencesHandler.PrefKeys;
  * @see #onDestroy()
  */
 public class SmsAlarm extends Activity  {
+	/**
+	 * Enumeration for different types of input dialogs.
+	 * 
+	 * @author Robert Nyholm <robert.nyholm@aland.net>
+	 * @version 2.1
+	 * @since 2.1
+	 * @date 2013-07-05
+	 */
+	private enum DialogTypes {
+		PRIMARY, SECONDARY, ACKNOWLEDGE, RESCUESERVICE;
+	}	
 	
 	// Log tag string
 	private final String LOG_TAG = "SmsAlarm";
-	
-	// Constants representing different types of input dialogs
-	private final int PRIMARY = 0;
-	private final int SECONDARY = 1;
-	private final int ACKNOWLEDGE = 2;
-	private final int RESCUESERVICE = 3;	
 
 	// Objects needed for logging, shared preferences and noise handling
 	private LogHandler logger = LogHandler.getInstance();
@@ -171,7 +176,7 @@ public class SmsAlarm extends Activity  {
 				// Logging
 				logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":onCreate().editPrimaryNumberButton.OnClickListener().onClick()", "Edit PRIMARY listen number Button pressed");					
 				// Build up and show input dialog of type primary number
-				buildAndShowInputDialog(PRIMARY);
+				buildAndShowInputDialog(DialogTypes.PRIMARY);
 			}
 		});
         
@@ -181,7 +186,7 @@ public class SmsAlarm extends Activity  {
 				// Logging
 				logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":onCreate().addSecondaryNumberButton.OnClickListener().onClick()", "Add SECONDARY listen number Button pressed");				
 				// Build up and show input dialog of type secondary number
-				buildAndShowInputDialog(SECONDARY);
+				buildAndShowInputDialog(DialogTypes.SECONDARY);
 			}
 		});
         
@@ -208,7 +213,7 @@ public class SmsAlarm extends Activity  {
 				// Logging
 				logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":onCreate().ackNumberButton.OnClickListener().onClick()", "Edit acknowledge number Button pressed");				
 				// Build up and show input dialog of type acknowledge number
-				buildAndShowInputDialog(ACKNOWLEDGE);
+				buildAndShowInputDialog(DialogTypes.ACKNOWLEDGE);
 			}
 		});
         
@@ -218,7 +223,7 @@ public class SmsAlarm extends Activity  {
 				// Logging
 				logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":onCreate().editRescueServiceButton.OnClickListener().onClick()", "Edit rescue service Button pressed");
 				// Build up and show input dialog of type primary number
-				buildAndShowInputDialog(RESCUESERVICE);
+				buildAndShowInputDialog(DialogTypes.RESCUESERVICE);
 			}
 		});         
         
@@ -690,7 +695,7 @@ public class SmsAlarm extends Activity  {
      * If a dialog type are given as parameter thats not supported a dummy dialog
      * will be built and shown.
      * 
-     * @param int Dialog type as integer
+     * @param DialogTypes Type of dialog to build up and show
      * 
      * @see #buildAndShowAboutDialog()
      * @see #buildAndShowToneDialog()
@@ -704,7 +709,7 @@ public class SmsAlarm extends Activity  {
      * @see {@link LogHandler#logCatTxt(LogPriorities, String, String, Throwable)}
      * @see {@link PreferencesHandler#setPrefs(PrefKeys, PrefKeys, Object, Context)}
      */
-    private void buildAndShowInputDialog(final int dialogType) {  
+    private void buildAndShowInputDialog(final DialogTypes type) {  
     	// Logging
     	this.logger.logCat(LogPriorities.DEBUG, this.LOG_TAG + ":buildAndShowInputDialog()", "Start building dialog");
     	
@@ -721,8 +726,8 @@ public class SmsAlarm extends Activity  {
     	 * Switch through the different dialog types and set correct strings and edittext to the dialog. 
     	 * If dialog type is non supported a default dialog DUMMY is built up.
     	 */
-    	switch(dialogType) {
-    	case (PRIMARY): // <--0
+    	switch(type) {
+    	case PRIMARY:
     		// Set title
         	dialog.setTitle(R.string.numberPromptTitle);
     		// Set message
@@ -738,7 +743,7 @@ public class SmsAlarm extends Activity  {
         	// Logging
         	this.logger.logCat(LogPriorities.DEBUG, this.LOG_TAG + ":buildAndShowInputDialog()", "Dialog attributes is set for dialog type PRIMARY");
     		break;
-    	case (SECONDARY): // <--1
+    	case SECONDARY:
         	dialog.setTitle(R.string.numberPromptTitle);
     		dialog.setMessage(R.string.secondaryNumberPromptMessage);
         	input.setHint(R.string.numberPromptHint);
@@ -747,7 +752,7 @@ public class SmsAlarm extends Activity  {
         	dialog.setView(input);
         	this.logger.logCat(LogPriorities.DEBUG, this.LOG_TAG + ":buildAndShowInputDialog()", "Dialog attributes is set for dialog type SECONDARY");
     		break;
-    	case (ACKNOWLEDGE): // <--2
+    	case ACKNOWLEDGE:
         	dialog.setTitle(R.string.numberPromptTitle);
     		dialog.setMessage(R.string.ackNumberPromptMessage);
         	input.setHint(R.string.numberPromptHint);
@@ -756,7 +761,7 @@ public class SmsAlarm extends Activity  {
         	dialog.setView(input);
         	this.logger.logCat(LogPriorities.DEBUG, this.LOG_TAG + ":buildAndShowInputDialog()", "Dialog attributes is set for dialog type ACKNOWLEDGE");
     		break;
-    	case (RESCUESERVICE): // <--3
+    	case RESCUESERVICE:
         	dialog.setTitle(R.string.rescueServicePromptTitle);
     		dialog.setMessage(R.string.rescueServicePromptMessage);
         	input.setHint(R.string.rescueServiceHint);
@@ -785,8 +790,8 @@ public class SmsAlarm extends Activity  {
 	        	 * Switch through the different dialog types and set proper input handling to each of them. 
 	        	 * If dialog type is non supported no input is taken.
 	        	 */
-	        	switch(dialogType) {
-	        	case (PRIMARY): // <--0
+	        	switch(type) {
+	        	case PRIMARY:
     				// If list is not empty there are numbers to equalize with each other, else just store the input
     				if(!secondaryListenNumbers.isEmpty()) {
     					// Iterate through all strings in the list
@@ -814,7 +819,7 @@ public class SmsAlarm extends Activity  {
         				} else {
         					Toast.makeText(SmsAlarm.this, R.string.duplicatedNumbers, Toast.LENGTH_LONG).show();
         					logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":buildAndShowInputDialog().PositiveButton.OnClickListener().onClick()", "Given PRIMARY phone number(" + input.getText().toString() + ") exists in the list of SECONDARY phone numbers and therefore cannot be stored. Showing dialog of type PRIMARY again");
-        					buildAndShowInputDialog(dialogType);
+        					buildAndShowInputDialog(type);
         				}    					
     				} else {
     					primaryListenNumber = input.getText().toString();
@@ -827,7 +832,7 @@ public class SmsAlarm extends Activity  {
     					logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":buildAndShowInputDialog().PositiveButton.OnClickListener().onClick()", "New PRIMARY phone number has been stored from user input. New PRIMARY phone number is: \"" + primaryListenNumber + "\"");
     				} 
 	        		break;
-	        	case (SECONDARY): // <--1
+	        	case SECONDARY:
     				// If input isn't equal with the primaryListenNumber and input isn't empty
     				if(!primaryListenNumber.equals(input.getText().toString()) && !input.getText().toString().equals("")) {    					
     					// Iterate through all strings in the list to check if number already exists in list
@@ -855,7 +860,7 @@ public class SmsAlarm extends Activity  {
         				} else {
         					Toast.makeText(SmsAlarm.this, R.string.numberAlreadyInList, Toast.LENGTH_LONG).show();
         					logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":buildAndShowInputDialog().PositiveButton.OnClickListener().onClick()", "Given SECONDARY phone number(" + input.getText().toString() + ") already exists in the list of SECONDARY phone numbers and therefore cannot be stored. Showing dialog of type SECONDARY again");        					
-        					buildAndShowInputDialog(dialogType);
+        					buildAndShowInputDialog(type);
         				}    					
     				} else {
     					if(primaryListenNumber.equals(input.getText().toString())) {
@@ -865,10 +870,10 @@ public class SmsAlarm extends Activity  {
     						Toast.makeText(SmsAlarm.this, R.string.emptySecondaryNumber, Toast.LENGTH_LONG).show();
         					logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":buildAndShowInputDialog().PositiveButton.OnClickListener().onClick()", "Given SECONDARY phone number is empty and therefore cannot be stored. Showing dialog of type SECONDARY again");    						
     					}
-    					buildAndShowInputDialog(dialogType);
+    					buildAndShowInputDialog(type);
     				}
 	        		break;
-	        	case (ACKNOWLEDGE): // <--2       
+	        	case ACKNOWLEDGE:     
 	        		// Store input to class variable
 	        		acknowledgeNumber = input.getText().toString();
 	        		try {
@@ -882,7 +887,7 @@ public class SmsAlarm extends Activity  {
 	          	    // Log
 					logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":buildAndShowInputDialog().PositiveButton.OnClickListener().onClick()", "New ACKNOWLEDGE phone number has been stored from user input . New ACKNOWLEDGE phone number is: \"" + acknowledgeNumber + "\"");	        					
 	        		break;
-	        	case (RESCUESERVICE): // <--3
+	        	case RESCUESERVICE:
 	        		// Store input to class variable
 	        		rescueService = input.getText().toString();
 	        		try {
@@ -897,13 +902,13 @@ public class SmsAlarm extends Activity  {
 					logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":buildAndShowInputDialog().PositiveButton.OnClickListener().onClick()", "New RESCUESERVICE name has been stored from user input . New RESCUESERVICE name is: \"" + rescueService + "\"");	        						        	
 	        		break;
 	        	default: // <--Unsupported dialog type
-					logger.logCatTxt(LogPriorities.ERROR, LOG_TAG + ":buildAndShowInputDialog().PositiveButton.OnClickListener().onClick()", "Nothing is stored beacause given dialog type is UNSUPPORTED, given dialog is of type number: \"" + dialogType + "\"");	        						        	
+					logger.logCatTxt(LogPriorities.ERROR, LOG_TAG + ":buildAndShowInputDialog().PositiveButton.OnClickListener().onClick()", "Nothing is stored beacause given dialog type is UNSUPPORTED, given dialog is of type number: \"" + type.name() + "\"");	        						        	
 	        	}	        
 	    	}  	
     	});
     	
     	// Only set neutral button if dialog type is supported
-    	if(dialogType >= PRIMARY && dialogType <= RESCUESERVICE) {
+    	if(type.ordinal() >= DialogTypes.PRIMARY.ordinal() && type.ordinal() <= DialogTypes.RESCUESERVICE.ordinal()) {
 	    	//Set a neutral button, due to documentation it has same functionality as "back" button
 	    	dialog.setNeutralButton(R.string.cancel, new DialogInterface.OnClickListener() {
 		    	  public void onClick(DialogInterface dialog, int whichButton) {
