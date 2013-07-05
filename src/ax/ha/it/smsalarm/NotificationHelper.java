@@ -39,7 +39,7 @@ public class NotificationHelper extends IntentService {
 	 * 
 	 * @see #onHandleIntent(Intent)
 	 * 
-	 * @see {@link LogHandler#logCat(ax.ha.it.smsalarm.LogHandler.LogPriorities, String, String)}
+	 * @see ax.ha.it.smsalarm.LogHandler#logCat(LogHandler.LogPriorities, String, String) logCat(LogHandler.LogPriorities, String, String)
 	 */
 	public NotificationHelper() {
 		// Note: MUST call the super() constructor with an (arbitrary) string
@@ -54,17 +54,16 @@ public class NotificationHelper extends IntentService {
 	 * <code>notification</code>. Contains some deprecated functionality just to
 	 * support <code>Android SDK</code> versions below 11.
 	 * 
-	 * @param Intent
+	 * @param i
 	 *            Intent for notification
 	 * 
 	 * @see #NotificationHelper()
-	 * @see {@link LogHandler#logCat(LogPriorities, String, String)}
-	 * @see {@link LogHandler#logCatTxt(LogPriorities, String, String)}
-	 * @see {@link LogHandler#logCatTxt(LogPriorities, String, String, Throwable)}
-	 * @see {@link PreferencesHandler#getPrefs(PrefKeys, PrefKeys, DataTypes, Context)}
+	 * @see ax.ha.it.smsalarm.LogHandler#logCat(LogPriorities, String, String) logCat(LogPriorities, String, String)
+	 * @see ax.ha.it.smsalarm.LogHandler#logCatTxt(LogPriorities, String, String) logCatTxt(LogPriorities, String, String)
+	 * @see ax.ha.it.smsalarm.LogHandler#logCatTxt(LogPriorities, String, String, Throwable) logCatTxt(LogPriorities, String, String, Throwable)
+	 * @see ax.ha.it.smsalarm.PreferencesHandler#getPrefs(PrefKeys, PrefKeys, DataTypes, Context) getPrefs(PrefKeys, PrefKeys, DataTypes, Context)
 	 * 
 	 * @deprecated 
-	 * @Override
 	 */
 	@Override
 	protected void onHandleIntent(Intent i) {

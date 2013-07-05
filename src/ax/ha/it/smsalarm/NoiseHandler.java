@@ -41,7 +41,7 @@ public class NoiseHandler {
 	/**
 	 * Private constructor, is private due to it's singleton pattern.
 	 * 
-	 * @see {@link LogHandler#logCat(LogPriorities, String, String)}
+	 * @see ax.ha.it.smsalarm.LogHandler#logCat(LogPriorities, String, String) logCat(LogPriorities, String, String)
 	 */
 	private NoiseHandler() {
 		// Get instance of logger
@@ -92,9 +92,9 @@ public class NoiseHandler {
 	 *                preparing media player. Also when resolving message tone
 	 *                id
 	 *              
- 	 * @see {@link LogHandler#logCat(LogPriorities, String, String)}
- 	 * @see {@link LogHandler#logCatTxt(LogPriorities, String, String)}
- 	 * @see {@link LogHandler#logCatTxt(LogPriorities, String, String, Throwable)}
+ 	 * @see ax.ha.it.smsalarm.LogHandler#logCat(LogPriorities, String, String) logCat(LogPriorities, String, String)
+ 	 * @see ax.ha.it.smsalarm.LogHandler#logCatTxt(LogPriorities, String, String) logCatTxt(LogPriorities, String, String)
+ 	 * @see ax.ha.it.smsalarm.LogHandler#logCatTxt(LogPriorities, String, String, Throwable) logCatTxt(LogPriorities, String, String, Throwable)
 	 */
 	public void makeNoise(Context context, int id, boolean useSoundSettings, boolean playToneTwice) {
 		// Log information
@@ -117,22 +117,6 @@ public class NoiseHandler {
 		float alarmVolume = 0; 
 		// Variable indicating how many times message tone should be played
 		final int toBePlayed; 
-
-		/*
-		 * SOS morsecode pattern from
-		 * http://android.konreu.com/developer-how-to/
-		 * vibration-examples-for-android-phone-development/
-		 */
-		// int dot = 500; // Length of a Morse Code "dot" in milliseconds
-		// int dash = 800; // Length of a Morse Code "dash" in milliseconds
-		// int short_gap = 200; // Length of Gap Between dots/dashes
-		// int medium_gap = 500; // Length of Gap Between Letters
-		// int long_gap = 1000; // Length of Gap Between Words
-		// long[] pattern = { 0, // Start immediately
-		// dot, short_gap, dot, short_gap, dot, // s
-		// medium_gap, dash, short_gap, dash, short_gap, dash, // o
-		// medium_gap, dot, short_gap, dot, short_gap, dot, // s
-		// long_gap };
 
 		// Custom vibration pattern
 		long[] pattern = { 0, 5000, 500, 5000, 500, 5000, 500, 5000 };
@@ -290,7 +274,7 @@ public class NoiseHandler {
 	 *            ToneId as Integer
 	 * @return toneId Message tone as String
 	 * 
-	 * @see {@link LogHandler#logCat(LogPriorities, String, String)}
+	 * @see ax.ha.it.smsalarm.LogHandler#logCat(LogPriorities, String, String) logCat(LogPriorities, String, String)
 	 */
 	public String msgToneLookup(Context context, int toneId) {
 		// Resolve message tone from id

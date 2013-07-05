@@ -17,26 +17,36 @@ import android.util.Log;
 
 /**
  * This class is responsible for all logging. This means logging to LogCat,
- * log.txt and alarms.html.<br>
+ * errlog.txt and alarms.html.<br>
  * <b><i>LogHandler is a singleton.</i></b>
  * 
  * @author Robert Nyholm <robert.nyholm@aland.net>
  * @version 2.1
  * @since 2.0
- * @date 2013-06-30
+ * @date 2013-07-05
  */
 public class LogHandler {
-	// Enumeration for different LogPriorities needed to decide which kind of logging we're suppose to do
+	/**
+	 * Enumeration for different LogPriorities needed to decide which kind of logging we're suppose to do.
+	 * 
+	 * @author Robert Nyholm <robert.nyholm@aland.net>
+	 * @version 2.1
+	 * @since 2.1
+	 * @date 2013-07-01
+	 * 
+	 * @see <a href="http://developer.android.com/reference/android/util/Log.html">Log reference at Android Developers</a>
+	 */
 	public enum LogPriorities {
 		ASSERT, DEBUG, ERROR, INFO, VERBOSE, WARN;
 	}
+	
 	// Singleton instance of this class
 	private static LogHandler INSTANCE;
 
 	// Log tag
 	private final String LOG_TAG = "LogHandler";
 	// Names for the txt and html file
-	private final String TXT_LOG_FILE = "log.txt";
+	private final String TXT_LOG_FILE = "errlog.txt";
 	// Name of directory for application
 	private final String DIRECTORY = "SmsAlarm";
 
@@ -82,7 +92,7 @@ public class LogHandler {
 	 * origin log message and current error.
 	 * 
 	 * @param priority
-	 *            Priority as LogPriorities see {@link #http www.developer.android.com/reference/android/util/Log.html}
+	 *            Logpriority as LogPriorities
 	 * @param logTag
 	 *            Log tag as string
 	 * @param message
@@ -126,9 +136,7 @@ public class LogHandler {
 	 * priority with the origin log message and current error.
 	 * 
 	 * @param priority
-	 *            Priority as LogPriorities see {@link #http
-	 *            ://www.http://developer.android
-	 *            .com/reference/android/util/Log.html}
+	 *            Logriority as LogPriorities
 	 * @param logTag
 	 *            Log tag as string
 	 * @param message
@@ -175,9 +183,7 @@ public class LogHandler {
 	 * Throws different exceptions depending on error.
 	 * 
 	 * @param priority
-	 *            Priority as LogPriorities see {@link #http
-	 *            ://www.http://developer.android
-	 *            .com/reference/android/util/Log.html}
+	 *            Logpriority as LogPriorities
 	 * @param logTag
 	 *            Log tag as string
 	 * @param message
@@ -229,7 +235,7 @@ public class LogHandler {
 				case ASSERT:
 					// HAS NO Log METHOD
 					break;
-				case DEBUG:// <-- 3
+				case DEBUG:
 					bW.write("DEBUG\t\t" + this.formatter.format(this.today) + "\t" + logTag + "#" + message + this.EOL);
 					bW.newLine();
 					break;
@@ -273,9 +279,7 @@ public class LogHandler {
 	 * Throws different exceptions depending on error.
 	 * 
 	 * @param priority
-	 *            Priority as LogPriorities see {@link #http
-	 *            ://www.http://developer.android
-	 *            .com/reference/android/util/Log.html}
+	 *            Logpriority as LogPriorities
 	 * @param logTag
 	 *            Log tag as string
 	 * @param message
@@ -376,9 +380,6 @@ public class LogHandler {
 	 *            Path and name of file as File
 	 * @param file
 	 *            File object used to create a new file or directory
-	 * 
-	 * @exception IOException
-	 *                if an error occur during file creation
 	 */
 	private void checkDirAndFile(File saDir, File saFile, File file) {
 		// If SmsAlarm directory doesn't exist create it and create file
@@ -423,9 +424,6 @@ public class LogHandler {
 	 * 
 	 * @param file
 	 *            File to write header to
-	 * 
-	 * @exception Exception
-	 *                if an error occur during writing to file
 	 */
 	private void writeLogHeader(File file) {
 		try {
@@ -451,9 +449,7 @@ public class LogHandler {
 	 * file.
 	 * 
 	 * @param priority
-	 *            Priority as LogPriorities see {@link #http
-	 *            ://www.http://developer.android
-	 *            .com/reference/android/util/Log.html}
+	 *            Logpriority as LogPriorities
 	 * @param logTag
 	 *            Log tag as string
 	 * @param message
@@ -474,9 +470,7 @@ public class LogHandler {
 	 * information to file.
 	 * 
 	 * @param priority
-	 *            Priority as LogPriorities see {@link #http
-	 *            ://www.http://developer.android
-	 *            .com/reference/android/util/Log.html}
+	 *            Logpriority as LogPriorities
 	 * @param logTag
 	 *            Log tag as string
 	 * @param message

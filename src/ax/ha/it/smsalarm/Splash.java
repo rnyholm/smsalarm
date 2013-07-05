@@ -21,7 +21,7 @@ import ax.ha.it.smsalarm.LogHandler.LogPriorities;
  * @author Robert Nyholm <robert.nyholm@aland.net>
  * @version 2.1
  * @since 2.1
- * @date 2013-06-30
+ * @date 2013-07-05
  * 
  * @see #onCreate(Bundle)
  */
@@ -47,7 +47,7 @@ public class Splash extends Activity {
 	 * 
 	 * @see #switchActivity()
 	 * @see #onPause()
-	 * @see {@link LogHandler#logCat(LogPriorities, String, String)}
+	 * @see ax.ha.it.smsalarm.LogHandler#logCat(LogPriorities, String, String) logCat(LogPriorities, String, String)
 	 */
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -104,7 +104,7 @@ public class Splash extends Activity {
 	 * has passed.
 	 * 
 	 * @see #onCreate(Bundle)
-	 * @see {@link LogHandler#logCat(LogPriorities, String, String)}
+	 * @see ax.ha.it.smsalarm.LogHandler#logCat(LogPriorities, String, String) logCat(LogPriorities, String, String)
 	 */
 	private void switchActivity() {
 		// Create intent and start next activity from it
@@ -120,7 +120,7 @@ public class Splash extends Activity {
 	 * Method to remove messages from handler.
 	 * 
 	 * @see #onPause()
-	 * @see {@link LogHandler#logCat(LogPriorities, String, String)}
+	 * @see ax.ha.it.smsalarm.LogHandler#logCat(LogPriorities, String, String) logCat(LogPriorities, String, String)
 	 */
 	private void removeMsgFrHandler() {
 		this.handler.removeMessages(0);

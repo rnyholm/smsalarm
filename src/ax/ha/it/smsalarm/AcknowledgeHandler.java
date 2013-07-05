@@ -110,10 +110,7 @@ public class AcknowledgeHandler extends Activity {
 	 * @see #setTextViews()
 	 * @see #onResume()
 	 * @see #onPause()
-	 * @see {@link LogHandler#logCat(LogPriorities, String , String)}
-	 * @see {@link ListenToPhoneState()}
-	 * 
-	 * @Override
+	 * @see ax.ha.it.smsalarm.LogHandler#logCat(LogPriorities, String , String) logCat(LogPriorities, String , String)
 	 */
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -174,7 +171,7 @@ public class AcknowledgeHandler extends Activity {
 	 * 
 	 * @see #onCreate(Bundle)
 	 * @see #onPause()
-	 * @see {@link LogHandler.logCat(LogPriorities, String , String)}
+	 * @see ax.ha.it.smsalarm.LogHandler#logCat(LogPriorities, String , String) logCat(LogPriorities, String , String)
 	 */
 	@Override
 	public void onResume() {
@@ -217,8 +214,6 @@ public class AcknowledgeHandler extends Activity {
 	 * 
 	 * @see #onCreate(Bundle)
 	 * @see #onResume()
-	 * 
-	 * @Override
 	 */
 	@Override
 	public void onPause() {
@@ -230,9 +225,9 @@ public class AcknowledgeHandler extends Activity {
 	 * 
 	 * @see #onCreate(Bundle)
 	 * @see #onResume()
-	 * @see {@link LogHandler#logCat(LogPriorities, String , String)}
-	 * @see {@link LogHandler#logCatTxt(LogPriorities, String , String, Throwable)}
-	 * @see {@link PreferencesHandler#setPrefs(PrefKeys, PrefKeys, Object, Context)}
+	 * @see ax.ha.it.smsalarm.LogHandler#logCat(LogPriorities, String , String) logCat(LogPriorities, String , String)
+	 * @see ax.ha.it.smsalarm.LogHandler#logCatTxt(LogPriorities, String , String, Throwable) logCatTxt(LogPriorities, String , String, Throwable)
+	 * @see ax.ha.it.smsalarm.PreferencesHandler#setPrefs(PrefKeys, PrefKeys, Object, Context) setPrefs(PrefKeys, PrefKeys, Object, Context)
 	 */
 	private void placeAcknowledgeCall() {
 		try {
@@ -263,7 +258,7 @@ public class AcknowledgeHandler extends Activity {
 	 * variables.
 	 * 
 	 * @see #onCreate(Bundle)
-	 * @see {@link LogHandler#logCat(LogPriorities, String , String)}
+	 * @see ax.ha.it.smsalarm.LogHandler#logCat(LogPriorities, String , String) logCat(LogPriorities, String , String)
 	 */
 	private void findViews() {
 		// Logging
@@ -315,9 +310,9 @@ public class AcknowledgeHandler extends Activity {
 	 * To get <code>Shared Preferences</code> used by class
 	 * <code>AcknowledgeHandler</code>.
 	 * 
-	 * @see {@link LogHandler#logCat(LogPriorities, String , String)}
-	 * @see {@link LogHandler#logCatTxt(LogPriorities, String, String, Throwable)}
-	 * @see {@link PreferencesHandler#getPrefs(PrefKeys, PrefKeys, DataTypes, Context)}
+	 * @see ax.ha.it.smsalarm.LogHandler#logCat(LogPriorities, String , String) logCat(LogPriorities, String , String)
+	 * @see ax.ha.it.smsalarm.LogHandler#logCatTxt(LogPriorities, String, String, Throwable) logCatTxt(LogPriorities, String, String, Throwable)
+	 * @see ax.ha.it.smsalarm.PreferencesHandler#getPrefs(PrefKeys, PrefKeys, DataTypes, Context) getPrefs(PrefKeys, PrefKeys, DataTypes, Context)
 	 */
 	private void getAckHandlerPrefs() {
 		// Some logging
@@ -340,7 +335,7 @@ public class AcknowledgeHandler extends Activity {
 	 * To set <code>TextViews</code> with data for a proper presentation of the
 	 * UI.
 	 * 
-	 * @see {@link LogHandler#logCat(LogPriorities, String , String)}
+	 * @see ax.ha.it.smsalarm.LogHandler#logCat(LogPriorities, String , String) logCat(LogPriorities, String , String)
 	 */
 	private void setTextViews() {
 		// Some logging
@@ -367,8 +362,6 @@ public class AcknowledgeHandler extends Activity {
 	 * @version 2.1
 	 * @since 2.1
 	 * @date 2013-06-30
-	 * 
-	 * @see {@link AcknowledgeHandler()}
 	 */
 	private class ListenToPhoneState extends PhoneStateListener {
 
@@ -378,11 +371,11 @@ public class AcknowledgeHandler extends Activity {
 		 * 
 		 * @see #swapStates(int)
 		 * @see #stateName(int)
-		 * @see {@link LogHandler#logCat(LogPriorities, String , String)}
-		 * @see {@link LogHandler#logCat(LogPriorities, String, String, Throwable)}
-		 * @see {@link PreferencesHandler#setPrefs(PrefKeys, PrefKeys, Object, Context)}
-		 * @see #AcknowledgeHandler()
+		 * @see ax.ha.it.smsalarm.LogHandler#logCat(LogPriorities, String , String) logCat(LogPriorities, String , String)
+		 * @see ax.ha.it.smsalarm.LogHandler#logCat(LogPriorities, String, String, Throwable) logCat(LogPriorities, String, String, Throwable)
+		 * @see ax.ha.it.smsalarm.PreferencesHandler#setPrefs(PrefKeys, PrefKeys, Object, Context) setPrefs(PrefKeys, PrefKeys, Object, Context)
 		 */
+		@Override
 		public void onCallStateChanged(int state, String incomingNumber) {
 			// Logging
 			logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":ListenToPhoneState().onCallStateChanged()", "Call state has changed");
@@ -441,8 +434,8 @@ public class AcknowledgeHandler extends Activity {
 		 * @return Phone state as String resolved from Integer
 		 * 
 		 * @see #onCallStateChanged(int, String)
-		 * @see {@link LogHandler#logCat(LogPriorities, String , String)}
-		 * @see {@link LogHandler#logCatTxt(LogPriorities, String , String)}
+		 * @see ax.ha.it.smsalarm.LogHandler#logCat(LogPriorities, String , String) logCat(LogPriorities, String , String)
+		 * @see ax.ha.it.smsalarm.LogHandler#logCatTxt(LogPriorities, String , String) logCatTxt(LogPriorities, String , String)
 		 */
 		String stateName(int state) {
 			// Switch through the different phone states
@@ -470,7 +463,7 @@ public class AcknowledgeHandler extends Activity {
 		 *            Phone state to be stored as the current phone state
 		 * 
 		 * @see #onCallStateChanged(int, String)
-		 * @see {@link LogHandler#logCat(LogPriorities, String , String)}
+		 * @see ax.ha.it.smsalarm.LogHandler#logCat(LogPriorities, String , String) logCat(LogPriorities, String , String)
 		 */
 		void swapStates(int currentState) {
 			// Logging

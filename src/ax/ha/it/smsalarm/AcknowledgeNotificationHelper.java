@@ -38,7 +38,7 @@ public class AcknowledgeNotificationHelper extends IntentService {
 	 * Mandatory constructor calling it's <code>super class</code>.
 	 * 
 	 * @see #onHandleIntent(Intent)
-	 * @see {@link LogHandler#logCat(ax.ha.it.smsalarm.LogHandler.LogPriorities, String, String)}
+	 * @see ax.ha.it.smsalarm.LogHandler#logCat(LogPriorities, String, String) logCat(LogPriorities, String, String)
 	 */
 	public AcknowledgeNotificationHelper() {
 		// Note: MUST call the super() constructor with an (arbitrary) string
@@ -53,18 +53,15 @@ public class AcknowledgeNotificationHelper extends IntentService {
 	 * <code>notification</code>. Contains some deprecated functionality just to
 	 * support <code>Android SDK</code> versions below 11.
 	 * 
-	 * @param Intent
+	 * @param i
 	 *            Intent for notification
-	 * @Override
-	 * @deprecated
 	 * 
 	 * @see #AcknowledgeNotificationHelper()
-	 * @see {@link LogHandler#logCat(LogPriorities, String, String)}
-	 * @see {@link LogHandler#logCatTxt(LogPriorities, String, String, Throwable)}
-	 * @see {@link PreferencesHandler#getPrefs(PrefKeys, PrefKeys, DataTypes, Context)}
+	 * @see ax.ha.it.smsalarm.LogHandler#logCat(LogPriorities, String, String) logCat(LogPriorities, String, String)
+	 * @see ax.ha.it.smsalarm.LogHandler#logCatTxt(LogPriorities, String, String, Throwable) logCatTxt(LogPriorities, String, String, Throwable)
+	 * @see ax.ha.it.smsalarm.PreferencesHandler#getPrefs(PrefKeys, PrefKeys, DataTypes, Context) getPrefs(PrefKeys, PrefKeys, DataTypes, Context)
 	 * 
 	 * @deprecated
-	 * @Override
 	 */
 	@Override
 	protected void onHandleIntent(Intent i) {

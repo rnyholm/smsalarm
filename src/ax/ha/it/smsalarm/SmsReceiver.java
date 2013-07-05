@@ -27,7 +27,7 @@ import ax.ha.it.smsalarm.PreferencesHandler.PrefKeys;
  * @author Robert Nyholm <robert.nyholm@aland.net>
  * @version 2.1
  * @since 0.9beta
- * @date 2013-07-04
+ * @date 2013-07-05
  * 
  */
 public class SmsReceiver extends BroadcastReceiver {
@@ -71,14 +71,11 @@ public class SmsReceiver extends BroadcastReceiver {
 	 * @param intent
 	 *            Intent
 	 * 
-	 * @exception Exception
-	 *                If List is out of bounds
-	 * 
 	 * @see #smsHandler(Context)
 	 * @see #getSmsReceivePrefs(Context)
-	 * @see {@link LogHandler#logCat(LogPriorities, String, String)}
-	 * @see {@link LogHandler#logCatTxt(LogPriorities, String, String, Throwable)}
-	 * @see {@link PreferencesHandler#setPrefs(PrefKeys, PrefKeys, Object, Context)}
+	 * @see ax.ha.it.smsalarm.LogHandler#logCat(LogPriorities, String, String) logCat(LogPriorities, String, String)
+	 * @see ax.ha.it.smsalarm.LogHandler#logCatTxt(LogPriorities, String, String, Throwable) logCatTxt(LogPriorities, String, String, Throwable)
+	 * @see ax.ha.it.smsalarm.PreferencesHandler#setPrefs(PrefKeys, PrefKeys, Object, Context) setPrefs(PrefKeys, PrefKeys, Object, Context)
 	 */
 	@Override
 	public void onReceive(Context context, Intent intent) {
@@ -197,7 +194,7 @@ public class SmsReceiver extends BroadcastReceiver {
 	/**
 	 * <Method to handle incoming SMS. Aborts the systems broadcast and stores
 	 * the SMS in the device inbox. This method is also responsible for playing
-	 * ringtone via <code>{@link NoiseHandler#makeNoise(Context, int, boolean, boolean)}</code>
+	 * ringtone via <code>{@link ax.ha.it.smsalarm.NoiseHandler#makeNoise(Context, int, boolean, boolean)}</code>
 	 * , vibrate and start <code>intent</code>.
 	 * 
 	 * @param context
@@ -205,11 +202,11 @@ public class SmsReceiver extends BroadcastReceiver {
 	 * 
 	 * @see #onReceive(Context, Intent)
 	 * @see #getSmsReceivePrefs(Context)
-	 * @see {@link NoiseHandler#makeNoise(Context, int, boolean, boolean)}
-	 * @see {@link LogHandler#logCat(LogPriorities, String, String)}
-	 * @see {@link LogHandler#logCatTxt(LogPriorities, String, String)}
-	 * @see {@link LogHandler#logCatTxt(LogPriorities, String, String, Throwable)}
-	 * @see {@link PreferencesHandler#setPrefs(PrefKeys, PrefKeys, Object, Context)}
+	 * @see ax.ha.it.smsalarm.NoiseHandler#makeNoise(Context, int, boolean, boolean) makeNoise(Context, int, boolean, boolean)
+	 * @see ax.ha.it.smsalarm.LogHandler#logCat(LogPriorities, String, String) logCat(LogPriorities, String, String)
+	 * @see ax.ha.it.smsalarm.LogHandler#logCatTxt(LogPriorities, String, String) logCatTxt(LogPriorities, String, String)
+	 * @see ax.ha.it.smsalarm.LogHandler#logCatTxt(LogPriorities, String, String, Throwable) logCatTxt(LogPriorities, String, String, Throwable)
+	 * @see ax.ha.it.smsalarm.PreferencesHandler#setPrefs(PrefKeys, PrefKeys, Object, Context) setPrefs(PrefKeys, PrefKeys, Object, Context)
 	 */
 	private void smsHandler(Context context) {
 		// To prevent the OS from ever see the incoming SMS
@@ -288,9 +285,9 @@ public class SmsReceiver extends BroadcastReceiver {
 	 * 
 	 * @see #onReceive(Context, Intent)
 	 * @see #smsHandler(Context)
-	 * @see {@link LogHandler#logCat(LogPriorities, String, String)}
-	 * @see {@link LogHandler#logCatTxt(LogPriorities, String, String, Throwable)}
-	 * @see {@link PreferencesHandler#getPrefs(PrefKeys, PrefKeys, DataTypes, Context)}
+	 * @see ax.ha.it.smsalarm.LogHandler#logCat(LogPriorities, String, String) logCat(LogPriorities, String, String)
+	 * @see ax.ha.it.smsalarm.LogHandler#logCatTxt(LogPriorities, String, String, Throwable) logCatTxt(LogPriorities, String, String, Throwable)
+	 * @see ax.ha.it.smsalarm.PreferencesHandler#getPrefs(PrefKeys, PrefKeys, DataTypes, Context) getPrefs(PrefKeys, PrefKeys, DataTypes, Context)
 	 */
 	@SuppressWarnings("unchecked")
 	private void getSmsReceivePrefs(Context context) {

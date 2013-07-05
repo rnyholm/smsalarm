@@ -41,7 +41,7 @@ import ax.ha.it.smsalarm.PreferencesHandler.PrefKeys;
  * @author Robert Nyholm <robert.nyholm@aland.net>
  * @version 2.1
  * @since 0.9beta
- * @date 2013-07-04
+ * @date 2013-07-06
  *
  * @see #onCreate(Bundle)
  * @see #onPause()
@@ -134,19 +134,17 @@ public class SmsAlarm extends Activity  {
   	 * @see #updateSelectedToneEditText()
   	 * @see #updateAcknowledgeWidgets()
   	 * @see #updateWholeUI()
-  	 * @see #buildAndShowInputDialog(int)
+  	 * @see #buildAndShowInputDialog(DialogTypes)
   	 * @see #getSmsAlarmPrefs()
   	 * @see #buildAndShowDeleteSecondaryNumberDialog()
   	 * @see #buildAndShowToneDialog()
   	 * @see #onPause()
   	 * @see #onDestroy() 
-  	 * @see {@link LogHandler#logCat(LogPriorities, String, String)}
-  	 * @see {@link LogHandler#logCatTxt(LogPriorities, String, String)}
-  	 * @see {@link LogHandler#logCatTxt(LogPriorities, String, String, Throwable)}
-  	 * @see {@link NoiseHandler#makeNoise(Context, int, boolean, boolean)}
-  	 * @see {@link PreferencesHandler#setPrefs(PrefKeys, PrefKeys, Object, Context)}
-  	 * 
-  	 * @Override
+  	 * @see ax.ha.it.smsalarm.LogHandler#logCat(LogPriorities, String, String) logCat(LogPriorities, String, String)
+  	 * @see ax.ha.it.smsalarm.LogHandler#logCatTxt(LogPriorities, String, String) logCatTxt(LogPriorities, String, String)
+  	 * @see ax.ha.it.smsalarm.LogHandler#logCatTxt(LogPriorities, String, String, Throwable) logCatTxt(LogPriorities, String, String, Throwable)
+  	 * @see ax.ha.it.smsalarm.NoiseHandler#makeNoise(Context, int, boolean, boolean) makeNoise(Context, int, boolean, boolean)
+  	 * @see ax.ha.it.smsalarm.PreferencesHandler#setPrefs(PrefKeys, PrefKeys, Object, Context) setPrefs(PrefKeys, PrefKeys, Object, Context)
   	 */    
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -171,7 +169,8 @@ public class SmsAlarm extends Activity  {
 	    this.toneSpinner.setAdapter(adapter);  
          
         // Set listener to editPrimaryNumberButton
-        this.editPrimaryNumberButton.setOnClickListener(new OnClickListener() {			
+        this.editPrimaryNumberButton.setOnClickListener(new OnClickListener() {	
+        	@Override
 			public void onClick(View v) {
 				// Logging
 				logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":onCreate().editPrimaryNumberButton.OnClickListener().onClick()", "Edit PRIMARY listen number Button pressed");					
@@ -181,7 +180,8 @@ public class SmsAlarm extends Activity  {
 		});
         
         // Set listener to addSecondaryNumberButton
-        this.addSecondaryNumberButton.setOnClickListener(new OnClickListener() {			
+        this.addSecondaryNumberButton.setOnClickListener(new OnClickListener() {	
+        	@Override
 			public void onClick(View v) {
 				// Logging
 				logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":onCreate().addSecondaryNumberButton.OnClickListener().onClick()", "Add SECONDARY listen number Button pressed");				
@@ -191,7 +191,8 @@ public class SmsAlarm extends Activity  {
 		});
         
         // Set listener to removeSecondaryNumberButton
-        this.removeSecondaryNumberButton.setOnClickListener(new OnClickListener() {			
+        this.removeSecondaryNumberButton.setOnClickListener(new OnClickListener() {	
+        	@Override
 			public void onClick(View v) {
 				// Logging
 				logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":onCreate().removeSecondaryNumberButton.OnClickListener().onClick()", "Remove SECONDARY listen number Button pressed");
@@ -208,7 +209,8 @@ public class SmsAlarm extends Activity  {
 		});        
         
         // Set listener to ackNumberButton
-        this.ackNumberButton.setOnClickListener(new OnClickListener() {			
+        this.ackNumberButton.setOnClickListener(new OnClickListener() {	
+        	@Override
 			public void onClick(View v) {
 				// Logging
 				logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":onCreate().ackNumberButton.OnClickListener().onClick()", "Edit acknowledge number Button pressed");				
@@ -218,7 +220,8 @@ public class SmsAlarm extends Activity  {
 		});
         
         // Set listener to editRescueServiceButton
-        this.editRescueServiceButton.setOnClickListener(new OnClickListener() {			
+        this.editRescueServiceButton.setOnClickListener(new OnClickListener() {	
+        	@Override
 			public void onClick(View v) {
 				// Logging
 				logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":onCreate().editRescueServiceButton.OnClickListener().onClick()", "Edit rescue service Button pressed");
@@ -228,7 +231,8 @@ public class SmsAlarm extends Activity  {
 		});         
         
         // Set listener to editMsgToneButton
-        this.editMsgToneButton.setOnClickListener(new OnClickListener() {			
+        this.editMsgToneButton.setOnClickListener(new OnClickListener() {	
+        	@Override
 			public void onClick(View v) {
 				// Logging
 				logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":onCreate().editMsgToneButton.OnClickListener().onClick()", "Edit message tone Button pressed");
@@ -238,7 +242,8 @@ public class SmsAlarm extends Activity  {
 		});
         
         // Set listener to listenMsgToneButton
-        this.listenMsgToneButton.setOnClickListener(new OnClickListener() {			
+        this.listenMsgToneButton.setOnClickListener(new OnClickListener() {	
+        	@Override
 			public void onClick(View v) {
 				// Play the correct tone and vibrate, depending on spinner value
 				if(toneSpinnerPos == 0) {
@@ -368,6 +373,7 @@ public class SmsAlarm extends Activity  {
         
         // Set listener to tone spinner
 		this.toneSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+			@Override
 			public void onItemSelected(AdapterView<?> parent,View view,int pos, long id) {	
 		        // Store tone spinners position to class variable
 		        toneSpinnerPos = toneSpinner.getSelectedItemPosition();
@@ -395,8 +401,6 @@ public class SmsAlarm extends Activity  {
      * 
      * @see #onCreate(Bundle)
      * @see #onDestroy()
-     * 
-     * @Override
      */
     @Override
     public void onPause(){
@@ -410,8 +414,6 @@ public class SmsAlarm extends Activity  {
      * 
      * @see #onCreate(Bundle)
      * @see #onPause()
-     * 
-     * @Override
      */
     @Override
     public void onDestroy() {
@@ -424,9 +426,7 @@ public class SmsAlarm extends Activity  {
 	 * is inflated.
 	 * 
 	 * @see #onOptionsItemSelected(MenuItem)
-	 * @see {@link LogHandler#logCat(LogPriorities, String, String)}
-     * 
-     * @Override
+	 * @see ax.ha.it.smsalarm.LogHandler#logCat(LogPriorities, String, String) logCat(LogPriorities, String, String)
      */
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -441,11 +441,9 @@ public class SmsAlarm extends Activity  {
 	 * Method to inflate menu with it's items.
      * 
      * @see #buildAndShowAboutDialog()
-     * @see {@link LogHandler#logCat(LogPriorities, String, String)}
-     * @see {@link LogHandler#logCatTxt(LogPriorities, String, String, Throwable)}
-     * @see {@link PreferencesHandler#setPrefs(PrefKeys, PrefKeys, Object, Context)}
-     * 
-     * @Override
+     * @see ax.ha.it.smsalarm.LogHandler#logCat(LogPriorities, String, String) logCat(LogPriorities, String, String)
+     * @see ax.ha.it.smsalarm.LogHandler#logCatTxt(LogPriorities, String, String, Throwable) logCatTxt(LogPriorities, String, String, Throwable)
+     * @see ax.ha.it.smsalarm.PreferencesHandler#setPrefs(PrefKeys, PrefKeys, Object, Context) setPrefs(PrefKeys, PrefKeys, Object, Context)
      */
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
@@ -477,7 +475,7 @@ public class SmsAlarm extends Activity  {
      * To find UI widgets and get their reference by ID stored in class variables.
      * 
      * @see #onCreate(Bundle)
-  	 * @see {@link LogHandler#logCat(LogPriorities, String, String)}
+  	 * @see ax.ha.it.smsalarm.LogHandler#logCat(LogPriorities, String, String) logCat(LogPriorities, String, String)
      */
     private void findViews() {   	
     	// Logging
@@ -562,9 +560,9 @@ public class SmsAlarm extends Activity  {
      * To set all <code>Shared Preferences</code> used by class <code>SmsAlarm</code>.
      * 
      * @see #getSmsAlarmPrefs()
-     * @see {@link PreferencesHandler#setPrefs(PrefKeys, PrefKeys, Object, Context)}
-     * @see {@link LogHandler#logCat(LogPriorities, String, String)}
-     * @see {@link LogHandler#logCatTxt(LogPriorities, String, String, Throwable)}
+     * @see ax.ha.it.smsalarm.PreferencesHandler#setPrefs(PrefKeys, PrefKeys, Object, Context) setPrefs(PrefKeys, PrefKeys, Object, Context)
+     * @see ax.ha.it.smsalarm.LogHandler#logCat(LogPriorities, String, String) logCat(LogPriorities, String, String)
+     * @see ax.ha.it.smsalarm.LogHandler#logCatTxt(LogPriorities, String, String, Throwable) logCatTxt(LogPriorities, String, String, Throwable)
      */
     private void setSmsAlarmPrefs(){   	
     	// Some logging
@@ -592,10 +590,10 @@ public class SmsAlarm extends Activity  {
      * To get <code>Shared Preferences</code> used by class <code>SmsAlarm</code>.
      * 
      * @see #setSmsAlarmPrefs()
-     * @see {@link LogHandler#logCat(LogPriorities, String, String)}
-     * @see {@link LogHandler#logCatTxt(LogPriorities, String, String, Throwable)}
-     * @see {@link PreferencesHandler#getPrefs(PrefKeys, PrefKeys, DataTypes, Context)}
-     * @see {@link PreferencesHandler#getPrefs(PrefKeys, PrefKeys, DataTypes, Context, Object)}
+     * @see ax.ha.it.smsalarm.LogHandler#logCat(LogPriorities, String, String) logCat(LogPriorities, String, String)
+     * @see ax.ha.it.smsalarm.LogHandler#logCatTxt(LogPriorities, String, String, Throwable) logCatTxt(LogPriorities, String, String, Throwable)
+     * @see ax.ha.it.smsalarm.PreferencesHandler#getPrefs(PrefKeys, PrefKeys, DataTypes, Context) getPrefs(PrefKeys, PrefKeys, DataTypes, Context)
+     * @see ax.ha.it.smsalarm.PreferencesHandler#getPrefs(PrefKeys, PrefKeys, DataTypes, Context, Object) getPrefs(PrefKeys, PrefKeys, DataTypes, Context, Object)
      */
 	@SuppressWarnings("unchecked")
 	private void getSmsAlarmPrefs() {
@@ -624,12 +622,12 @@ public class SmsAlarm extends Activity  {
      * To build up a dialog prompting user if it's okay to delete the selected secondary listen number.
      * 
      * @see #buildAndShowAboutDialog()
-     * @see #buildAndShowInputDialog(int)
+     * @see #buildAndShowInputDialog(DialogTypes)
      * @see #buildAndShowToneDialog()
      * @see #updateSecondaryListenNumberSpinner()
-     * @see {@link LogHandler#logCat(LogPriorities, String, String)}
-     * @see {@link LogHandler#logCatTxt(LogPriorities, String, String, Throwable)}
-     * @see {@link PreferencesHandler#setPrefs(PrefKeys, PrefKeys, Object, Context)}
+     * @see ax.ha.it.smsalarm.LogHandler#logCat(LogPriorities, String, String) logCat(LogPriorities, String, String)
+     * @see ax.ha.it.smsalarm.LogHandler#logCatTxt(LogPriorities, String, String, Throwable) logCatTxt(LogPriorities, String, String, Throwable)
+     * @see ax.ha.it.smsalarm.PreferencesHandler#setPrefs(PrefKeys, PrefKeys, Object, Context) setPrefs(PrefKeys, PrefKeys, Object, Context)
      */
     private void buildAndShowDeleteSecondaryNumberDialog() {
     	// Logging
@@ -657,6 +655,7 @@ public class SmsAlarm extends Activity  {
     	
     	// Set a positive button and listen on it
     	dialog.setPositiveButton(R.string.yes, new DialogInterface.OnClickListener() {
+    		@Override
 	    	public void onClick(DialogInterface dialog, int whichButton) {    		
 				// Log information
 	        	logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":buildAndShowDeleteSecondaryNumberDialog().PosButton.OnClickListener().onClick()", "Positive Button pressed");	
@@ -676,10 +675,11 @@ public class SmsAlarm extends Activity  {
     	
     	//Set a neutral button, due to documentation it has same functionality as "back" button
     	dialog.setNeutralButton(R.string.no, new DialogInterface.OnClickListener() {
-	    	  public void onClick(DialogInterface dialog, int whichButton) {
-	    		  // DO NOTHING, except logging
-	    		  logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":buildAndShowDeleteSecondaryNumberDialog().NeutralButton.OnClickListener().onClick()", "Neutral Button pressed in dialog, nothing done");	
-	    	  }
+    		@Override
+    		public void onClick(DialogInterface dialog, int whichButton) {
+    			// DO NOTHING, except logging
+    			logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":buildAndShowDeleteSecondaryNumberDialog().NeutralButton.OnClickListener().onClick()", "Neutral Button pressed in dialog, nothing done");	
+    		}
     	}); 
     	
     	// Logging
@@ -695,7 +695,7 @@ public class SmsAlarm extends Activity  {
      * If a dialog type are given as parameter thats not supported a dummy dialog
      * will be built and shown.
      * 
-     * @param DialogTypes Type of dialog to build up and show
+     * @param type Type of dialog to build up and show
      * 
      * @see #buildAndShowAboutDialog()
      * @see #buildAndShowToneDialog()
@@ -704,10 +704,10 @@ public class SmsAlarm extends Activity  {
      * @see #updateSecondaryListenNumberSpinner()
      * @see #updateAcknowledgeNumberEditText()
      * @see #updateRescueServiceEditText()
-     * @see {@link LogHandler#logCat(LogPriorities, String, String)}
-     * @see {@link LogHandler#logCatTxt(LogPriorities, String, String)}
-     * @see {@link LogHandler#logCatTxt(LogPriorities, String, String, Throwable)}
-     * @see {@link PreferencesHandler#setPrefs(PrefKeys, PrefKeys, Object, Context)}
+     * @see ax.ha.it.smsalarm.LogHandler#logCat(LogPriorities, String, String) logCat(LogPriorities, String, String)
+     * @see ax.ha.it.smsalarm.LogHandler#logCatTxt(LogPriorities, String, String) logCatTxt(LogPriorities, String, String)
+     * @see ax.ha.it.smsalarm.LogHandler#logCatTxt(LogPriorities, String, String, Throwable) logCatTxt(LogPriorities, String, String, Throwable)
+     * @see ax.ha.it.smsalarm.PreferencesHandler#setPrefs(PrefKeys, PrefKeys, Object, Context) setPrefs(PrefKeys, PrefKeys, Object, Context)
      */
     private void buildAndShowInputDialog(final DialogTypes type) {  
     	// Logging
@@ -779,6 +779,7 @@ public class SmsAlarm extends Activity  {
     	
     	// Set a positive button and listen on it
     	dialog.setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
+    		@Override
 	    	public void onClick(DialogInterface dialog, int whichButton) {
 				// Log information
 	        	logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":buildAndShowInputDialog().PositiveButton.OnClickListener().onClick()", "Positive Button pressed");	
@@ -911,10 +912,11 @@ public class SmsAlarm extends Activity  {
     	if(type.ordinal() >= DialogTypes.PRIMARY.ordinal() && type.ordinal() <= DialogTypes.RESCUESERVICE.ordinal()) {
 	    	//Set a neutral button, due to documentation it has same functionality as "back" button
 	    	dialog.setNeutralButton(R.string.cancel, new DialogInterface.OnClickListener() {
-		    	  public void onClick(DialogInterface dialog, int whichButton) {
-		    		  // DO NOTHING, except logging
-		    		  logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":buildAndShowInputDialog().NeutralButton.OnClickListener().onClick()", "Neutral Button pressed in dialog, nothing done");	 
-		    	  }
+	    		@Override
+	    		public void onClick(DialogInterface dialog, int whichButton) {
+	    			// DO NOTHING, except logging
+	    			logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":buildAndShowInputDialog().NeutralButton.OnClickListener().onClick()", "Neutral Button pressed in dialog, nothing done");	 
+	    		}
 	    	});
     	}
     	
@@ -929,13 +931,13 @@ public class SmsAlarm extends Activity  {
      * To build up and show a dialog with a list populated with message tones.
      * User chooses applications message tones from that list.
      * 
-     * @see #buildAndShowInputDialog(int)
+     * @see #buildAndShowInputDialog(DialogTypes)
      * @see #buildAndShowAboutDialog()
      * @see #updateSelectedToneEditText()
-     * @see {@link LogHandler#logCat(LogPriorities, String, String)}
-     * @see {@link LogHandler#logCatTxt(LogPriorities, String, String)}
-     * @see {@link LogHandler#logCatTxt(LogPriorities, String, String, Throwable)}
-     * @see {@link PreferencesHandler#setPrefs(PrefKeys, PrefKeys, Object, Context)}
+     * @see ax.ha.it.smsalarm.LogHandler#logCat(LogPriorities, String, String) logCat(LogPriorities, String, String)
+     * @see ax.ha.it.smsalarm.LogHandler#logCatTxt(LogPriorities, String, String) logCatTxt(LogPriorities, String, String)
+     * @see ax.ha.it.smsalarm.LogHandler#logCatTxt(LogPriorities, String, String, Throwable) logCatTxt(LogPriorities, String, String, Throwable)
+     * @see ax.ha.it.smsalarm.PreferencesHandler#setPrefs(PrefKeys, PrefKeys, Object, Context) setPrefs(PrefKeys, PrefKeys, Object, Context)
      */
     private void buildAndShowToneDialog() {    
     	// Logging
@@ -990,10 +992,11 @@ public class SmsAlarm extends Activity  {
     	
     	// Set a neutral button and listener
     	dialog.setNeutralButton(R.string.cancel, new DialogInterface.OnClickListener() {
-	    	  public void onClick(DialogInterface dialog, int whichButton) {
-	    		  // DO NOTHING, except logging
-	    		  logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":buildAndShowToneDialog().NeutralButton.OnClickListener().onClick()", "Neutral Button pressed in dialog, nothing done");	
-	    	  }
+    		@Override
+    		public void onClick(DialogInterface dialog, int whichButton) {
+    			// DO NOTHING, except logging
+    			logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":buildAndShowToneDialog().NeutralButton.OnClickListener().onClick()", "Neutral Button pressed in dialog, nothing done");	
+    		}
     	});
 
     	// Logging
@@ -1007,9 +1010,9 @@ public class SmsAlarm extends Activity  {
      * To build up and show an about dialog.
      * 
      * @see #buildAndShowDeleteSecondaryNumberDialog()
-     * @see #buildAndShowInputDialog(int)
+     * @see #buildAndShowInputDialog(DialogTypes)
      * @see #buildAndShowToneDialog()
-     * @see {@link LogHandler#logCat(LogPriorities, String, String)}
+     * @see ax.ha.it.smsalarm.LogHandler#logCat(LogPriorities, String, String) logCat(LogPriorities, String, String)
      */
     private void buildAndShowAboutDialog() {  
     	// Logging
@@ -1033,10 +1036,11 @@ public class SmsAlarm extends Activity  {
     	
     	//Set a neutral button
     	dialog.setNeutralButton(R.string.ok, new DialogInterface.OnClickListener() {
-	    	  public void onClick(DialogInterface dialog, int whichButton) {
-	    		  // DO NOTHING, except logging
-	    		  logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":buildAndShowAboutDialog().NeutralButton.OnClickListener().onClick()", "Neutral Button pressed in dialog, nothing done");	
-	    	  }
+    		@Override
+    		public void onClick(DialogInterface dialog, int whichButton) {
+    			// DO NOTHING, except logging
+    			logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":buildAndShowAboutDialog().NeutralButton.OnClickListener().onClick()", "Neutral Button pressed in dialog, nothing done");	
+    		}
     	});
     	
     	// Logging
@@ -1058,7 +1062,7 @@ public class SmsAlarm extends Activity  {
      * @see #updatePlayToneTwiceCheckBox()
      * @see #updateEnableSmsAlarmCheckBox()
      * @see #updateAcknowledgeWidgets()
-     * @see {@link LogHandler#logCat(LogPriorities, String, String)}    
+     * @see ax.ha.it.smsalarm.LogHandler#logCat(LogPriorities, String, String) logCat(LogPriorities, String, String)  
      */
     private void updateWholeUI() {
     	// Logging
@@ -1097,7 +1101,7 @@ public class SmsAlarm extends Activity  {
     /**
      * To update primary listen number <code>EditText</code> widget.
      * 
-     * @see {@link LogHandler#logCat(LogPriorities, String, String)}       
+     * @see ax.ha.it.smsalarm.LogHandler#logCat(LogPriorities, String, String) logCat(LogPriorities, String, String)       
      */
     private void updatePrimaryListenNumberEditText() {
         // Update primary listen number EditText with value
@@ -1111,7 +1115,7 @@ public class SmsAlarm extends Activity  {
     /**
      * To update secondary listen numbers <code>Spinner</code> with correct values.
      * 
-     * @see {@link LogHandler#logCat(LogPriorities, String, String)}         
+     * @see ax.ha.it.smsalarm.LogHandler#logCat(LogPriorities, String, String) logCat(LogPriorities, String, String)        
      */
     private void updateSecondaryListenNumberSpinner() {
 	    //Check if there are secondary listen numbers and build up a proper spinner according to that information
@@ -1137,7 +1141,7 @@ public class SmsAlarm extends Activity  {
     /**
      * To update acknowledge number <code>EditText</code> widget.
      * 
-     * @see {@link LogHandler#logCat(LogPriorities, String, String)}        
+     * @see ax.ha.it.smsalarm.LogHandler#logCat(LogPriorities, String, String) logCat(LogPriorities, String, String)          
      */
     private void updateAcknowledgeNumberEditText() {
         // Update acknowledge number EditText with value
@@ -1151,8 +1155,8 @@ public class SmsAlarm extends Activity  {
     /**
      * To update selected tone <code>EditText</code> widget with value of <code>toneSpinner</code> position.
      * 
-     * @see {@link LogHandler#logCat(LogPriorities, String, String)}   
-     * @see {@link LogHandler#logCatTxt(LogPriorities, String, String)}     
+     * @see ax.ha.it.smsalarm.LogHandler#logCat(LogPriorities, String, String) logCat(LogPriorities, String, String)   
+     * @see ax.ha.it.smsalarm.LogHandler#logCatTxt(LogPriorities, String, String) logCatTxt(LogPriorities, String, String)  
      */
     private void updateSelectedToneEditText() {
     	// Log tone spinner position
@@ -1188,7 +1192,7 @@ public class SmsAlarm extends Activity  {
     /**
      * To update use OS sound settings <code>CheckBox</code> widget.
      * 
-     * @see {@link LogHandler#logCat(LogPriorities, String, String)}   
+     * @see ax.ha.it.smsalarm.LogHandler#logCat(LogPriorities, String, String) logCat(LogPriorities, String, String)    
      */
     private void updateUseOsSoundSettingsCheckbox() {
         // Update use OS sound settings CheckBox
@@ -1206,7 +1210,7 @@ public class SmsAlarm extends Activity  {
     /**
      * To update play tone twice <code>CheckBox</code> widget.
      * 
-     * @see {@link LogHandler#logCat(LogPriorities, String, String)}        
+     * @see ax.ha.it.smsalarm.LogHandler#logCat(LogPriorities, String, String) logCat(LogPriorities, String, String)        
      */
     private void updatePlayToneTwiceCheckBox() {
     	// Update play tone twice CheckBox
@@ -1224,7 +1228,7 @@ public class SmsAlarm extends Activity  {
     /**
      * To update enable Sms Alarm <code>CheckBox</code> widget.
      * 
-     * @see {@link LogHandler#logCat(LogPriorities, String, String)}        
+     * @see ax.ha.it.smsalarm.LogHandler#logCat(LogPriorities, String, String) logCat(LogPriorities, String, String)          
      */
     private void updateEnableSmsAlarmCheckBox() {
     	// Update enable Sms Alarm CheckBox(default checked=true)
@@ -1244,7 +1248,7 @@ public class SmsAlarm extends Activity  {
      * type <code>CheckBox</code>, <code>Button</code> and <code>EditText</code>, they are
      * enableAckCheckBox, ackNumberButton and ackNumberEditText.
      * 
-     * @see {@link LogHandler#logCat(LogPriorities, String, String)}        
+     * @see ax.ha.it.smsalarm.LogHandler#logCat(LogPriorities, String, String) logCat(LogPriorities, String, String)         
      */
     private void updateAcknowledgeWidgets() {
     	/* 
