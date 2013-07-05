@@ -199,7 +199,7 @@
             android:layout_below="@+id/useSysSoundSettings_chk"
             android:layout_marginLeft="38dp"
             android:layout_marginRight="5dp"
-            android:layout_marginTop="-12dp"
+            android:layout_marginTop="-9dp"
             android:text="@string/useSysSoundSettingsHint"
             android:textAppearance="?android:attr/textAppearanceSmall" />
 
@@ -220,7 +220,7 @@
             android:layout_below="@+id/playToneTwiceSetting_chk"
             android:layout_marginLeft="38dp"
             android:layout_marginRight="5dp"
-            android:layout_marginTop="-12dp"
+            android:layout_marginTop="-9dp"
             android:text="@string/playToneTwiceSettingHint"
             android:textAppearance="?android:attr/textAppearanceSmall" />
 
@@ -272,7 +272,7 @@
             android:layout_below="@+id/enableAcknowledge_chk"
             android:layout_marginLeft="38dp"
             android:layout_marginRight="5dp"
-            android:layout_marginTop="-12dp"
+            android:layout_marginTop="-9dp"
             android:text="@string/enableAcknowledgeHint"
             android:textAppearance="?android:attr/textAppearanceSmall" />
 
@@ -376,7 +376,7 @@
             android:layout_below="@+id/enableSmsAlarm_chk"
             android:layout_marginLeft="38dp"
             android:layout_marginRight="5dp"
-            android:layout_marginTop="-12dp"
+            android:layout_marginTop="-9dp"
             android:text="@string/enableDisableSmsAlarmHint"
             android:textAppearance="?android:attr/textAppearanceSmall" />
 
