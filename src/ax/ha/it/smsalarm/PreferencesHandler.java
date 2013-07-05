@@ -22,7 +22,7 @@ import ax.ha.it.smsalarm.LogHandler.LogPriorities;
  * @author Robert Nyholm <robert.nyholm@aland.net>
  * @version 2.1
  * @since 2.0
- * @date 2013-07-04
+ * @date 2013-07-05
  */
 public class PreferencesHandler {
 	/**
@@ -79,8 +79,8 @@ public class PreferencesHandler {
 		 * Overridden <code>toString()</code> to return the value associated with a PrefKeys enumeration.
 		 * 
 		 * @return Value associated with PrefKey as String
-		 * @Override
 		 */
+		@Override
 		public String toString() {
 			return this.key;
 		}
@@ -102,7 +102,7 @@ public class PreferencesHandler {
 	/**
 	 * Private constructor, is private due to it's singleton pattern.
 	 * 
-	 * @see {@link LogHandler#logCat(LogPriorities, String, String)}
+	 * @see ax.ha.it.smsalarm.LogHandler#logCat(LogPriorities, String, String) logCat(LogPriorities, String, String)
 	 */
 	private PreferencesHandler() {
 		// Get instance of logger
@@ -131,7 +131,7 @@ public class PreferencesHandler {
 	 * values depending on input parameters. Returns retrieved value if all is
 	 * fine else an IllegalArgumentsException are thrown.<br>
 	 * Example usage:<br>
-	 * <code>String s = getPrefs(PrefKeys.SHARED_PREF.toString(), PrefKeys.ACK_NUMBER_KEY.toString(), 
+	 * <code>String s = getPrefs(PrefKeys.SHARED_PREF, PrefKeys.ACK_NUMBER_KEY, 
 	 * DataTypes.STRING, this.context)</code>, this will retrieve a String from key
 	 * <code>ACK_NUMBER_KEY</code> and with the given context.
 	 * 
@@ -151,11 +151,11 @@ public class PreferencesHandler {
 	 * @exception IllegalArgumentException
 	 * 				  if an incorrect datatype was given as parameter
 	 * 
-	 * @see #setPrefs(String, String, Object, Context)
-	 * @see #getPrefs(String, String, int, Context)
-	 * @see {@link LogHandler#logCat(LogPriorities, String, String)}
-	 * @see {@link LogHandler#logCatTxt(LogPriorities, String, String)}
-	 * @see {@link LogHandler#logCatTxt(LogPriorities, String, String, Throwable)}
+	 * @see #setPrefs(PrefKeys, PrefKeys, Object, Context)
+	 * @see #getPrefs(PrefKeys, PrefKeys, DataTypes, Context)
+	 * @see ax.ha.it.smsalarm.LogHandler#logCat(LogPriorities, String, String) logCat(LogPriorities, String, String)
+	 * @see ax.ha.it.smsalarm.LogHandler#logCatTxt(LogPriorities, String, String) logCatTxt(LogPriorities, String, String)
+	 * @see ax.ha.it.smsalarm.LogHandler#logCatTxt(LogPriorities, String, String, Throwable) logCatTxt(LogPriorities, String, String, Throwable)
 	 */
 	public Object getPrefs(PrefKeys sharedPreferences, PrefKeys key, DataTypes type, Context context) throws IllegalArgumentException {
 		// Set shared preferences from context
@@ -214,7 +214,7 @@ public class PreferencesHandler {
 	 * ONLY WORKING FOR DATATYPES Integer, String AND Boolean</i></b> Returns
 	 * retrieved value if all is fine else an IllegalArgumentsException are thrown.<br>
 	 * Example usage:<br>
-	 * <code>String s = getPrefs(PrefKeys.SHARED_PREF.toString(), PrefKeys.ACK_NUMBER_KEY.toString(), 
+	 * <code>String s = getPrefs(PrefKeys.SHARED_PREF, PrefKeys.ACK_NUMBER_KEY, 
 	 * DataTypes.STRING, this.context, "empty")</code>, this will retrieve a String from key
 	 * <code>ACK_NUMBER_KEY</code> and with the given context.
 	 * 
@@ -228,7 +228,7 @@ public class PreferencesHandler {
 	 * @param context
 	 *            Context from which the Shared Preferences should be retrieved
 	 * 
-	 * @param defaultValue
+	 * @param defaultObject
 	 *            Default value to be retrieved from shared preference if no
 	 *            previous value exist
 	 * 
@@ -238,11 +238,11 @@ public class PreferencesHandler {
 	 * @exception IllegalArgumentException
 	 * 				  if an incorrect datatype was given as parameter
 	 * 
-	 * @see #setPrefs(String, String, Object, Context)
-	 * @see #getPrefs(String, String, int, Context, Object)
-	 * @see {@link LogHandler#logCat(LogPriorities, String, String)}
-	 * @see {@link LogHandler#logCatTxt(LogPriorities, String, String)}
-	 * @see {@link LogHandler#logCatTxt(LogPriorities, String, String, Throwable)}
+	 * @see #setPrefs(PrefKeys, PrefKeys, Object, Context)
+	 * @see #getPrefs(PrefKeys, PrefKeys, DataTypes, Context, Object)
+	 * @see ax.ha.it.smsalarm.LogHandler#logCat(LogPriorities, String, String) logCat(LogPriorities, String, String)
+	 * @see ax.ha.it.smsalarm.LogHandler#logCatTxt(LogPriorities, String, String) logCatTxt(LogPriorities, String, String)
+	 * @see ax.ha.it.smsalarm.LogHandler#logCatTxt(LogPriorities, String, String, Throwable) logCatTxt(LogPriorities, String, String, Throwable)
 	 */
 	public Object getPrefs(PrefKeys sharedPreferences, PrefKeys key, DataTypes type, Context context, Object defaultObject) throws IllegalArgumentException {
 		// Set shared preferences from context
@@ -323,7 +323,7 @@ public class PreferencesHandler {
 	 * Method to set values to <b>Shared Preferences<b>. It sets different
 	 * values of different instances depending on input parameters.<br>
 	 * Example usage:<br>
-	 * <code>setPrefs(PrefKeys.SHARED_PREF.toString(), PrefKey.ACKNUMBER_KEY.toString(), "0457 0000 000", this.context</code>
+	 * <code>setPrefs(PrefKeys.SHARED_PREF, PrefKey.ACKNUMBER_KEY, "0457 0000 000", this.context</code>
 	 * 
 	 * @param sharedPreferences
 	 *            SharedPreferences from which the values are retrieved from
@@ -338,8 +338,8 @@ public class PreferencesHandler {
 	 * @exception IllegalArgumentException
 	 * 				  if an incorrect datatype was given as parameter           
 	 * 
-	 * @see #getPrefs(String, String, int, Context)
-	 * @see {@link LogHandler#logCat(LogPriorities, String, String)}
+	 * @see #getPrefs(PrefKeys, PrefKeys, DataTypes, Context)
+	 * @see ax.ha.it.smsalarm.LogHandler#logCat(LogPriorities, String, String) logCat(LogPriorities, String, String)
 	 */
 	@SuppressWarnings("unchecked")
 	public void setPrefs(PrefKeys sharedPreferences, PrefKeys key, Object object, Context context) throws IllegalArgumentException {
