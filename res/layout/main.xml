@@ -79,6 +79,7 @@
             android:layout_height="wrap_content"
             android:layout_alignLeft="@id/secondaryNumberSpinner_sp"
             android:layout_below="@id/secondaryNumberSpinner_sp"
+            android:layout_marginTop="-3dp"
             android:text="@string/addSecondaryNumber" />
 
         <Button
@@ -86,7 +87,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignBaseline="@id/addSecondaryNumber_btn"
-            android:layout_marginRight="5dp"
+            android:layout_marginRight="3dp"
             android:layout_toRightOf="@id/addSecondaryNumber_btn"
             android:text="@string/deleteSecondaryNumber" />
 
@@ -168,6 +169,7 @@
             android:layout_height="wrap_content"
             android:layout_alignLeft="@+id/msgTone_et"
             android:layout_below="@+id/msgTone_et"
+            android:layout_marginTop="2dp"
             android:text="@string/editMsgTone" />
 
         <Button
@@ -175,14 +177,15 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_below="@+id/msgTone_et"
-            android:layout_marginRight="5dp"
+            android:layout_marginRight="3dp"
+            android:layout_marginTop="2dp"
             android:layout_toRightOf="@id/editMsgTone_btn"
             android:text="@string/listenMsgTone" />
 
         <CheckBox
             android:id="@+id/useSysSoundSettings_chk"
             android:layout_width="wrap_content"
-            android:layout_height="19dp"
+            android:layout_height="wrap_content"
             android:layout_alignLeft="@id/editMsgTone_btn"
             android:layout_below="@id/listenMsgTone_btn"
             android:layout_marginRight="5dp"
@@ -194,15 +197,16 @@
             android:layout_height="wrap_content"
             android:layout_alignLeft="@+id/useSysSoundSettings_chk"
             android:layout_below="@+id/useSysSoundSettings_chk"
-            android:layout_marginLeft="39dp"
+            android:layout_marginLeft="38dp"
             android:layout_marginRight="5dp"
+            android:layout_marginTop="-12dp"
             android:text="@string/useSysSoundSettingsHint"
             android:textAppearance="?android:attr/textAppearanceSmall" />
 
         <CheckBox
             android:id="@+id/playToneTwiceSetting_chk"
             android:layout_width="wrap_content"
-            android:layout_height="19dp"
+            android:layout_height="wrap_content"
             android:layout_alignLeft="@+id/useSysSoundSettings_chk"
             android:layout_below="@+id/useSysSoundSettingsHint_tv"
             android:layout_marginRight="5dp"
@@ -214,8 +218,9 @@
             android:layout_height="wrap_content"
             android:layout_alignLeft="@+id/playToneTwiceSetting_chk"
             android:layout_below="@+id/playToneTwiceSetting_chk"
-            android:layout_marginLeft="39dp"
+            android:layout_marginLeft="38dp"
             android:layout_marginRight="5dp"
+            android:layout_marginTop="-12dp"
             android:text="@string/playToneTwiceSettingHint"
             android:textAppearance="?android:attr/textAppearanceSmall" />
 
@@ -253,7 +258,7 @@
         <CheckBox
             android:id="@+id/enableAcknowledge_chk"
             android:layout_width="wrap_content"
-            android:layout_height="19dp"
+            android:layout_height="wrap_content"
             android:layout_alignLeft="@+id/ackSettingsInfo_tv"
             android:layout_below="@+id/ackSettingsInfo_tv"
             android:layout_marginTop="5dp"
@@ -265,7 +270,9 @@
             android:layout_height="wrap_content"
             android:layout_alignLeft="@+id/enableAcknowledge_chk"
             android:layout_below="@+id/enableAcknowledge_chk"
-            android:layout_marginLeft="39dp"
+            android:layout_marginLeft="38dp"
+            android:layout_marginRight="5dp"
+            android:layout_marginTop="-12dp"
             android:text="@string/enableAcknowledgeHint"
             android:textAppearance="?android:attr/textAppearanceSmall" />
 
@@ -348,12 +355,13 @@
             android:layout_height="wrap_content"
             android:layout_alignLeft="@id/rescueServiceName_et"
             android:layout_below="@id/rescueServiceName_et"
+            android:layout_marginTop="2dp"
             android:text="@string/editRescueServiceName" />
 
         <CheckBox
             android:id="@+id/enableSmsAlarm_chk"
             android:layout_width="wrap_content"
-            android:layout_height="19dp"
+            android:layout_height="wrap_content"
             android:layout_alignLeft="@id/editRescueServiceName_btn"
             android:layout_below="@id/editRescueServiceName_btn"
             android:layout_marginRight="5dp"
@@ -366,8 +374,9 @@
             android:layout_height="wrap_content"
             android:layout_alignLeft="@+id/enableSmsAlarm_chk"
             android:layout_below="@+id/enableSmsAlarm_chk"
-            android:layout_marginLeft="39dp"
+            android:layout_marginLeft="38dp"
             android:layout_marginRight="5dp"
+            android:layout_marginTop="-12dp"
             android:text="@string/enableDisableSmsAlarmHint"
             android:textAppearance="?android:attr/textAppearanceSmall" />
 

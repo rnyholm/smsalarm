@@ -1,113 +1,123 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/linearLayout1"
-    android:layout_width="fill_parent"
-    android:layout_height="fill_parent"
-    android:contentDescription="@string/ackIconContentDescr" >
+    <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent" >
 
-	<LinearLayout android:layout_height="match_parent" android:id="@+id/linearLayout3" android:orientation="vertical" android:layout_width="match_parent" android:weightSum="1" android:layout_gravity="center_horizontal">
-		<LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:id="@+id/linearLayout2">
+        <ImageView
+            android:id="@+id/ackIcon_iv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentTop="true"
+            android:layout_marginLeft="5dp"
+            android:layout_marginTop="5dp"
+            android:contentDescription="@string/ackIconContentDescr"
+            android:src="@android:drawable/ic_delete" />
 
-			<ImageView
-			    android:id="@+id/imageView1"
-			    android:layout_width="wrap_content"
-			    android:layout_height="wrap_content"
-			    android:layout_gravity="center_vertical"
-			    android:contentDescription="@string/ackIconContentDescr"
-			    android:src="@android:drawable/ic_delete" >
+        <TextView
+            android:id="@+id/ackTitle_tv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignTop="@+id/ackIcon_iv"
+            android:layout_marginRight="5dp"
+            android:layout_marginTop="5dp"
+            android:layout_toRightOf="@+id/ackIcon_iv"
+            android:text="@string/ackTitle"
+            android:textAppearance="?android:attr/textAppearanceMedium" />
 
-</ImageView>
+        <ImageView
+            android:id="@+id/ackDivider1_iv"
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_alignParentLeft="true"
+            android:layout_below="@+id/ackTitle_tv"
+            android:layout_marginRight="5dp"
+            android:layout_marginTop="7dp"
+            android:contentDescription="@string/dividerDescr"
+            android:src="@drawable/gradient_divider_11_and_up" />
 
-			<TextView
-			    android:id="@+id/usrAlarmInfo"
-			    android:layout_width="0dip"
-			    android:layout_height="wrap_content"
-			    android:layout_gravity="center_vertical"
-			    android:layout_weight="1"
-			    android:text="@string/fireAlarm"
-			    android:textAppearance="?android:attr/textAppearanceMedium" >
-</TextView>
-		</LinearLayout>
+        <TextView
+            android:id="@+id/ackFullAlarm_tv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignLeft="@+id/ackIcon_iv"
+            android:layout_below="@+id/ackDivider1_iv"
+            android:layout_marginRight="5dp"
+            android:layout_marginTop="7dp"
+            android:text="@string/ackFullMessage"
+            android:textAppearance="?android:attr/textAppearanceMedium" />
 
-		<View
-		    android:id="@+id/ack_divider_1"
-		    android:layout_width="fill_parent"
-		    android:layout_height="1dip"
-		    android:background="@drawable/gradient_divider_11_and_up" >
-</View>           
+        <ImageView
+            android:id="@+id/ackDivider2_iv"
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_alignLeft="@+id/ackFullAlarm_tv"
+            android:layout_below="@+id/ackFullAlarm_tv"
+            android:layout_marginRight="5dp"
+            android:layout_marginTop="7dp"
+            android:contentDescription="@string/dividerDescr"
+            android:src="@drawable/gradient_divider_11_and_up" />
 
-		<TextView
-		    android:id="@+id/fullAlarmMessage"
-		    android:layout_width="wrap_content"
-		    android:layout_height="wrap_content"
-		    android:layout_marginBottom="5sp"
-		    android:layout_marginLeft="5sp"
-		    android:layout_marginRight="5sp"
-		    android:layout_marginTop="2sp"
-		    android:text="@string/ackFullMessage"
-		    android:textAppearance="?android:attr/textAppearanceMedium" >
-</TextView>
+        <Button
+            android:id="@+id/ackAcknowledgeAlarm_btn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_below="@+id/ackDivider2_iv"
+            android:layout_marginLeft="5dp"
+            android:layout_marginTop="5dp"
+            android:drawableLeft="@android:drawable/sym_call_outgoing"
+            android:text="@string/ack" />
 
-		<View
-		    android:id="@+id/ack_divider_2"
-		    android:layout_width="fill_parent"
-		    android:layout_height="1dip"
-		    android:background="@drawable/gradient_divider_11_and_up" >
-</View>           
-		<LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:id="@+id/linearLayout4" android:orientation="vertical">
-			<LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:id="@+id/linearLayout5" android:layout_marginTop="5sp" android:layout_marginLeft="5sp" android:layout_marginRight="5sp">
-				<Button android:drawableLeft="@android:drawable/sym_call_outgoing" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="@string/ack" android:layout_gravity="center" android:id="@+id/acknowledgeAlarm"></Button>
-				<Button android:drawableLeft="@android:drawable/sym_call_missed" android:layout_height="wrap_content" android:text="@string/cancel" android:layout_gravity="center" android:layout_width="wrap_content" android:id="@+id/abortAlarm"></Button>
-			</LinearLayout>
-		 </LinearLayout>
+        <Button
+            android:id="@+id/ackAbortAlarm_btn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignBaseline="@+id/ackAcknowledgeAlarm_btn"
+            android:layout_alignBottom="@+id/ackAcknowledgeAlarm_btn"
+            android:layout_toRightOf="@+id/ackAcknowledgeAlarm_btn"
+            android:drawableLeft="@android:drawable/sym_call_missed"
+            android:text="@string/cancel" />
 
-		<LinearLayout
-		    android:layout_width="match_parent"
-		    android:layout_height="wrap_content"
-		    android:orientation="vertical" >
+        <TextView
+            android:id="@+id/ackLineBusy_tv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignLeft="@+id/ackAcknowledgeAlarm_btn"
+            android:layout_below="@+id/ackAcknowledgeAlarm_btn"
+            android:layout_marginTop="40dp"
+            android:text="@string/ackLineBusy"
+            android:textAppearance="?android:attr/textAppearanceMedium" />
 
-			<TextView
-			    android:id="@+id/waitToAck"
-			    android:layout_width="wrap_content"
-			    android:layout_height="match_parent"
-			    android:layout_marginLeft="5sp"
-			    android:layout_marginTop="25sp"
-			    android:text="@string/waitAck"
-			    android:textAppearance="?android:attr/textAppearanceMedium" />
+        <TextView
+            android:id="@+id/ackCountdown_tv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignBaseline="@+id/ackLineBusy_tv"
+            android:layout_alignBottom="@+id/ackLineBusy_tv"
+            android:layout_marginLeft="2dp"
+            android:layout_toRightOf="@+id/ackLineBusy_tv"
+            android:text="@string/dash"
+            android:textAppearance="?android:attr/textAppearanceMedium" />
 
-		</LinearLayout>
+        <TextView
+            android:id="@+id/ackSeconds_tv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignBaseline="@+id/ackLineBusy_tv"
+            android:layout_alignBottom="@+id/ackLineBusy_tv"
+            android:layout_alignParentRight="true"
+            android:layout_toRightOf="@+id/ackCountdown_tv"
+            android:text="@string/secs"
+            android:textAppearance="?android:attr/textAppearanceMedium" />
 
-		<LinearLayout
-		    android:layout_width="match_parent"
-		    android:layout_height="wrap_content"
-		    android:orientation="vertical" >
+        <ProgressBar
+            android:id="@+id/ackRedial_pb"
+            style="?android:attr/progressBarStyleHorizontal"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignLeft="@+id/ackLineBusy_tv"
+            android:layout_below="@+id/ackLineBusy_tv"
+            android:layout_marginRight="5dp" />
 
-			<ProgressBar
-			    android:id="@+id/waitToAckProgressBar"
-			    style="@android:style/Widget.ProgressBar.Horizontal"
-			    android:layout_width="match_parent"
-			    android:layout_height="wrap_content"
-			    android:layout_marginLeft="5sp"
-			    android:layout_marginRight="5sp" />
-
-		</LinearLayout>
-
-		<LinearLayout
-		    android:layout_width="match_parent"
-		    android:layout_height="wrap_content"
-		    android:orientation="vertical" >
-
-			<TextView
-			    android:id="@+id/waitToAckInfo"
-			    android:layout_width="wrap_content"
-			    android:layout_height="wrap_content"
-			    android:layout_marginLeft="5sp"
-			    android:layout_marginRight="5sp"
-			    android:layout_marginTop="15sp"
-			    android:text="@string/waitAckInfo"
-			    android:textAppearance="?android:attr/textAppearanceMedium" />
-
-		</LinearLayout>
-
-	</LinearLayout>
-</LinearLayout>
+    </RelativeLayout>

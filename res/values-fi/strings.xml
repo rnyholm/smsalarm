@@ -23,7 +23,7 @@
     <string name="sysSettingInfo">Käyttä puhelin ääniasen.</string>
     <string name="sysSettingInfoHint">Ota huom. äänetön asento</string>
     <string name="aboutVersion">Versio: 1.1.2</string>
-    <string name="aboutBuild">Build: 20120309</string>
-    <string name="aboutCopyright">(c) copyright Robert Nyholm</string>
-    <string name="aboutRightsReserved">Kaikki oikeudet varattu</string>
+    <string name="aboutBuild">Build: 20130620</string>
+    <string name="aboutCopyright">&#169;Copyright Robert Nyholm</string>
+    <string name="aboutRightsReserved">Kaikki oikeudet varattu.</string>
 </resources>

@@ -10,6 +10,9 @@ import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
+import ax.ha.it.smsalarm.LogHandler.LogPriorities;
+import ax.ha.it.smsalarm.PreferencesHandler.DataTypes;
+import ax.ha.it.smsalarm.PreferencesHandler.PrefKeys;
 
 /**
  * Helper class to build up and show notifications, also creates pending
@@ -20,7 +23,7 @@ import android.content.Intent;
  * @author Robert Nyholm <robert.nyholm@aland.net>
  * @version 2.1
  * @since 1.2.1-SE
- * @date 2013-04-29
+ * @date 2013-07-05
  */
 public class AcknowledgeNotificationHelper extends IntentService {
 
@@ -35,15 +38,14 @@ public class AcknowledgeNotificationHelper extends IntentService {
 	 * Mandatory constructor calling it's <code>super class</code>.
 	 * 
 	 * @see #onHandleIntent(Intent)
+	 * @see {@link LogHandler#logCat(ax.ha.it.smsalarm.LogHandler.LogPriorities, String, String)}
 	 */
 	public AcknowledgeNotificationHelper() {
 		// Note: MUST call the super() constructor with an (arbitrary) string
 		super("AcknowledgeNotificationHelper");
 
 		// Log message for debugging/information purpose
-		this.logger.logCatTxt(this.logger.getINFO(), this.LOG_TAG
-				+ ":AcknowledgeNotificationHelper()",
-				"NotificationHelper constructor called");
+		this.logger.logCat(LogPriorities.DEBUG, this.LOG_TAG + ":AcknowledgeNotificationHelper()", "NotificationHelper constructor called");
 	}
 
 	/**
@@ -57,28 +59,33 @@ public class AcknowledgeNotificationHelper extends IntentService {
 	 * @deprecated
 	 * 
 	 * @see #AcknowledgeNotificationHelper()
+	 * @see {@link LogHandler#logCat(LogPriorities, String, String)}
+	 * @see {@link LogHandler#logCatTxt(LogPriorities, String, String, Throwable)}
+	 * @see {@link PreferencesHandler#getPrefs(PrefKeys, PrefKeys, DataTypes, Context)}
+	 * 
+	 * @deprecated
+	 * @Override
 	 */
 	@Override
 	protected void onHandleIntent(Intent i) {
 		// Log information
-		this.logger
-				.logCatTxt(
-						this.logger.getINFO(),
-						this.LOG_TAG + ":onHandleIntent()",
-						"Start retrieving shared preferences needed by class AcknowledgeNotificationHelper");
+		this.logger.logCat(LogPriorities.DEBUG, this.LOG_TAG + ":onHandleIntent()", "Start retrieving shared preferences needed by class AcknowledgeNotificationHelper");
 
-		// Get some values from the sharedprefs
-		String message = (String) this.prefHandler.getPrefs(
-				this.prefHandler.getSHARED_PREF(),
-				this.prefHandler.getMESSAGE_KEY(), 1, this);
-
-		this.logger.logCatTxt(this.logger.getINFO(), this.LOG_TAG
-				+ ":onHandleIntent()", "Shared preferences retrieved");
+		// To store message in
+		String message = "";
+		
+		try {
+			// Get some values from the sharedprefs
+			message = (String) this.prefHandler.getPrefs(PrefKeys.SHARED_PREF, PrefKeys.MESSAGE_KEY, DataTypes.STRING, this);
+		} catch(IllegalArgumentException e) {
+			logger.logCatTxt(LogPriorities.ERROR, this.LOG_TAG + ":onHandleIntent()", "An unsupported datatype was given as argument to PreferencesHandler.getPrefs()", e);
+		} 
+		
+		this.logger.logCat(LogPriorities.DEBUG, this.LOG_TAG + ":onHandleIntent()", "Shared preferences retrieved");
 
 		// Set intent to AcknowledgeHandler
 		Intent notificationIntent = new Intent(this, AcknowledgeHandler.class);
-		this.logger.logCatTxt(this.logger.getINFO(), this.LOG_TAG
-				+ ":onHandleIntent()", "Intent has been set");
+		this.logger.logCat(LogPriorities.DEBUG, this.LOG_TAG + ":onHandleIntent()", "Intent has been set");
 
 		// Setup a notification, directly from android development site
 		NotificationManager mNotificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
@@ -86,15 +93,10 @@ public class AcknowledgeNotificationHelper extends IntentService {
 		// Variables for notifications text and icon
 		CharSequence tickerText = this.getString(R.string.alarm);
 		CharSequence contentTitle = this.getString(R.string.alarm);
-		;
 		int icon = android.R.drawable.ic_delete;
-		;
 
 		// Log
-		this.logger
-				.logCatTxt(this.logger.getINFO(), this.LOG_TAG
-						+ ":onHandleIntent()",
-						"Notification has been set for a primary alarm with acknowledgement");
+		this.logger.logCat(LogPriorities.DEBUG, this.LOG_TAG + ":onHandleIntent()", "Notification has been set for a primary alarm with acknowledgement");
 
 		// To get a unique refresh id for the intents
 		long REFRESH_ID = System.currentTimeMillis();
@@ -108,18 +110,13 @@ public class AcknowledgeNotificationHelper extends IntentService {
 
 		// Setup message and pendingintent
 		CharSequence contentText = message;
-		PendingIntent contentIntent = PendingIntent.getActivity(this, 0,
-				notificationIntent, 0);
-		notification.setLatestEventInfo(context, contentTitle, contentText,
-				contentIntent);
+		PendingIntent contentIntent = PendingIntent.getActivity(this, 0, notificationIntent, 0);
+		notification.setLatestEventInfo(context, contentTitle, contentText, contentIntent);
 
 		// This flag auto cancels the notification when clicked
 		notification.flags = Notification.FLAG_AUTO_CANCEL;
 
-		this.logger
-				.logCatTxt(this.logger.getINFO(), this.LOG_TAG
-						+ ":onHandleIntent()",
-						"Notification and it's intent has been configured and are ready to be shown");
+		this.logger.logCat(LogPriorities.DEBUG, this.LOG_TAG + ":onHandleIntent()", "Notification and it's intent has been configured and are ready to be shown");
 
 		// Show the notification
 		mNotificationManager.notify((int) REFRESH_ID, notification);

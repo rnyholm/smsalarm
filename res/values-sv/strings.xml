@@ -25,14 +25,17 @@
     <string name="cancel">Avbryt</string>
     <string name="yes">Ja</string>
     <string name="no">Nej</string>
+    <string name="secs">sek.</string>
     <string name="ack">Kvittera Larm</string>
+    <string name="ackTitle">Kvitterings titel(med räddningstjänsts namn)</string>    
     <string name="ackFullMessage">Fullständigt larm meddelande</string>
+    <string name="ackLineBusy">Upptaget, återuppringer om:</string>
     <string name="ackIconContentDescr">Kvittera larm ikon</string>
     <string name="waitAck">Väntar på att larmet ska kvitteras..</string>
     <string name="waitAckInfo">OBS! Det kan ta upp till 40 sekunder innan kvitteringen utförs.</string>
     <string name="alarm">PRIMÄR LARM!</string>
     <string name="secondaryAlarm">SEKUNDÄR LARM!</string>
-    <string name="fireAlarm"> BRANDLARM!</string>
+    <string name="fireAlarm">LARM!</string>
     <string name="duplicatedNumbers">Telefonnummer för primär- och sekundärlarm får inte vara lika! Ange ett nytt telefonnummer.</string>
     <string name="emptySecondaryNumber">Det går inte att ange ett tomt telefonnummer för sekundärlarm. Ange ett nytt telefonnummer.</string>
     <string name="numberAlreadyInList">Angivet telefonnummer finns redan i listan över sekundärlarm! Ange ett nytt telefonnummer.</string>
@@ -62,11 +65,12 @@
     <string name="enableAcknowledge">Aktivera kvittering av primärlarm</string>
     <string name="enableAcknowledgeHint">Om vald kan primärlarm kvitteras.</string>
     <string name="ackNumberTitle">Sms Alarm kvitterar till detta nummer</string>
-    <string name="aboutVersion">Version: 2.1</string>
+    <string name="aboutVersion">Version: 2.1 Beta Preview</string>
     <string name="splashVersion">v2.1 Beta Preview</string>
-    <string name="aboutBuild">Build: 20130429</string>
-    <string name="aboutCopyright">&#169; copyright Robert Nyholm</string>
-    <string name="aboutRightsReserved">Alla rättigheter reserverade</string>
+    <string name="aboutBuild">Build: 20130620</string>
+    <string name="aboutCopyright">&#169;Copyright Robert Nyholm</string>
+    <string name="aboutRightsReserved">Alla rättigheter reserverade.</string>
     <string name="dividerDescr">Delare</string>
     <string name="splashDescr">Splash</string>
+    <string name="testShowAck">TEST VISA KVITTERINGSAKTIVITETEN</string>
 </resources>

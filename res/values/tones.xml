@@ -1,11 +1,24 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string-array name="tones">
+        <item>Aeg TSE80 1</item>
+        <item>Aeg TSE80 2</item>
         <item>Ambulance Alarm</item> 
-    	<item>Bosch Fme 88</item>      
+    	<item>Bosch FME87 1</item>
+    	<item>Bosch FME87 2</item> 
+    	<item>Bosch FME87 3</item> 
+    	<item>Bosch FME87 4</item>
+    	<item>Bosch FME88 1</item> 
+    	<item>Bosch FME88 2</item> 
+    	<item>Bosch FME88 3</item> 
+    	<item>Bosch FME88 4</item> 
+    	<item>Bosch FME88 5</item>       
         <item>Chiefs Alarm</item> 
         <item>Large Alarm</item>                        	
-        <item>Motorola Bmd</item>
+        <item>Motorola BMD 1</item>
+        <item>Motorola BMD 2</item>
+        <item>Motorola Firestorm 1</item>
+        <item>Motorola Firestorm 2</item>
         <item>Motorola Minitor 1</item>
         <item>Motorola Minitor 2</item>
         <item>Motorola Minitor 3</item>
@@ -16,22 +29,45 @@
         <item>Motorola Minitor 8</item>
         <item>Motorola Minitor 9</item>
         <item>Motorola Minitor 10</item>
+        <item>Motorola Pageboy2000 1</item>
+        <item>Motorola Pageboy2000 2</item>
+        <item>Motorola Pageboy2000 3</item>
+        <item>Motorola Pageboy2000 4</item>
+        <item>Motorola Pageboy2000 5</item>
+        <item>Motorola Pageboy2000 6</item>
+        <item>Motorola Pageboy2000 7</item>
         <item>Motorola Pageboy II</item>
         <item>Officers Alarm</item>         
         <item>Pager 1</item>
         <item>Pager 2</item>
-        <item>Pager 3</item>
         <item>Siren</item>
         <item>Small Alarm</item>         
         <item>Station Alarm</item>   
-        <item>Swissphone Boss 1</item>
-        <item>Swissphone Boss 2</item>
-        <item>Swissphone Boss 3</item>
-        <item>Swissphone Boss 4</item>
+        <item>Swissphone Boss900 1</item>
+        <item>Swissphone Boss900 2</item>
+        <item>Swissphone Boss900 3</item>
+        <item>Swissphone Boss900 4</item>
+        <item>Swissphone DE900</item>
         <item>Swissphone Memo 1</item>
         <item>Swissphone Memo 2</item>
         <item>Swissphone Memo 3</item>
         <item>Swissphone Memo 4</item>
+        <item>Swissphone PatronPro 1</item>
+        <item>Swissphone PatronPro 2</item>
+        <item>Swissphone PatronPro 3</item>
+        <item>Swissphone PatronPro 4</item>
+        <item>Swissphone PatronPro 5</item>
+        <item>Swissphone PatronPro 6</item>
+        <item>Swissphone PatronPro 7</item>
+        <item>Swissphone PatronPro 8</item>
+        <item>Swissphone PatronPro 9</item>
+        <item>Swissphone PatronPro 10</item>
+        <item>Swissphone PatronPro 11</item>
+        <item>Swissphone PatronPro 12</item>
+        <item>Swissphone PatronPro 13</item>
+        <item>Swissphone PatronPro 14</item>
+        <item>Swissphone PatronPro 15</item>
+        <item>Swissphone PatronPro 16</item>
         <item>Swissphone Quattro 1</item>
         <item>Swissphone Quattro 2</item>
         <item>Swissphone Quattro 3</item>
@@ -40,6 +76,20 @@
         <item>Swissphone Quattro 6</item>
         <item>Swissphone Quattro 7</item>
         <item>Swissphone Quattro 8</item>
+        <item>Swissphone Quattro86 1</item>
+        <item>Swissphone Quattro86 2</item>
+        <item>Swissphone Quattro86 3</item>
+        <item>Swissphone Quattro98 1</item>
+        <item>Swissphone Quattro98 2</item>
+        <item>Swissphone Quattro98 3</item>
+        <item>Swissphone QuattroXLS 1</item>
+        <item>Swissphone QuattroXLS 2</item>
+        <item>Swissphone QuattroXLS 3</item>
+        <item>Swissphone QuattroXLS 4</item>
+        <item>Swissphone QuattroXLS 5</item>
+        <item>Swissphone QuattroXLS 6</item>
+        <item>Swissphone QuattroXLS 7</item>
+        <item>Swissphone QuattroXLS 8</item>
         <item>Swissphone RE609</item>
     </string-array>
 </resources>

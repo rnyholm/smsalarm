@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string-array name="spinnerValues">
+    <string-array name="alarmTypes">
         <item>Primary alarm</item>
         <item>Secondary alarm</item>
     </string-array>

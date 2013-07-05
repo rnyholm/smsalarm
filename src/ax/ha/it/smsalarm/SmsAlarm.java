@@ -31,6 +31,9 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.Toast;
+import ax.ha.it.smsalarm.LogHandler.LogPriorities;
+import ax.ha.it.smsalarm.PreferencesHandler.DataTypes;
+import ax.ha.it.smsalarm.PreferencesHandler.PrefKeys;
 
 /**
  * Main activity to configure application. Also holds the main User Interface.
@@ -38,10 +41,11 @@ import android.widget.Toast;
  * @author Robert Nyholm <robert.nyholm@aland.net>
  * @version 2.1
  * @since 0.9beta
- * @date 2013-05-03
+ * @date 2013-07-04
  *
  * @see #onCreate(Bundle)
  * @see #onPause()
+ * @see #onDestroy()
  */
 public class SmsAlarm extends Activity  {
 	
@@ -52,18 +56,12 @@ public class SmsAlarm extends Activity  {
 	private final int PRIMARY = 0;
 	private final int SECONDARY = 1;
 	private final int ACKNOWLEDGE = 2;
-	private final int RESCUESERVICE = 3;
-	
-	// Constants representing different datatypes used by class PreferencesHandler
-	private final int INTEGER = 0;
-	private final int STRING = 1;
-	private final int BOOLEAN = 2;
-	private final int LIST = 3;	
+	private final int RESCUESERVICE = 3;	
 
 	// Objects needed for logging, shared preferences and noise handling
 	private LogHandler logger = LogHandler.getInstance();
 	private static final PreferencesHandler prefHandler = PreferencesHandler.getInstance();
-//	private NoiseHandler noiseHandler = NoiseHandler.getInstance();
+	private NoiseHandler noiseHandler = NoiseHandler.getInstance();
 	
 	// Variables of different UI elements and types
 	// The EdittextObjects
@@ -136,9 +134,12 @@ public class SmsAlarm extends Activity  {
   	 * @see #buildAndShowDeleteSecondaryNumberDialog()
   	 * @see #buildAndShowToneDialog()
   	 * @see #onPause()
-  	 * @see ax.ha.it.smsalarm#NoiseHandler.makeNoise(Context, int, boolean, boolean)
-  	 * @see ax.ha.it.smsalarm#PreferencesHandler.setPrefs(String, String, Object, Context)
-  	 * @see ax.ha.it.smsalarm#LogHandler.logCatTxt(int, String , String)
+  	 * @see #onDestroy() 
+  	 * @see {@link LogHandler#logCat(LogPriorities, String, String)}
+  	 * @see {@link LogHandler#logCatTxt(LogPriorities, String, String)}
+  	 * @see {@link LogHandler#logCatTxt(LogPriorities, String, String, Throwable)}
+  	 * @see {@link NoiseHandler#makeNoise(Context, int, boolean, boolean)}
+  	 * @see {@link PreferencesHandler#setPrefs(PrefKeys, PrefKeys, Object, Context)}
   	 * 
   	 * @Override
   	 */    
@@ -148,7 +149,7 @@ public class SmsAlarm extends Activity  {
         setContentView(R.layout.main);
         
         // Log in debugging and information purpose
-        this.logger.logCatTxt(this.logger.getINFO(), this.LOG_TAG + ":onCreate()", "Creation of Sms Alarm started");
+        this.logger.logCat(LogPriorities.DEBUG, this.LOG_TAG + ":onCreate()", "Creation of Sms Alarm started");
         
         // Get sharedPreferences
         this.getSmsAlarmPrefs();
@@ -158,7 +159,7 @@ public class SmsAlarm extends Activity  {
          
 	    // Fill tone spinner with values
 	    ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(
-	            this, R.array.spinnerValues, android.R.layout.simple_spinner_item);
+	            this, R.array.alarmTypes, android.R.layout.simple_spinner_item);
 	    adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 	    
 	    // Set adapter to tone spinner
@@ -168,7 +169,7 @@ public class SmsAlarm extends Activity  {
         this.editPrimaryNumberButton.setOnClickListener(new OnClickListener() {			
 			public void onClick(View v) {
 				// Logging
-				logger.logCatTxt(logger.getINFO(), LOG_TAG + ":onCreate().editPrimaryNumberButton.OnClickListener().onClick()", "Edit PRIMARY listen number Button pressed");					
+				logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":onCreate().editPrimaryNumberButton.OnClickListener().onClick()", "Edit PRIMARY listen number Button pressed");					
 				// Build up and show input dialog of type primary number
 				buildAndShowInputDialog(PRIMARY);
 			}
@@ -178,7 +179,7 @@ public class SmsAlarm extends Activity  {
         this.addSecondaryNumberButton.setOnClickListener(new OnClickListener() {			
 			public void onClick(View v) {
 				// Logging
-				logger.logCatTxt(logger.getINFO(), LOG_TAG + ":onCreate().addSecondaryNumberButton.OnClickListener().onClick()", "Add SECONDARY listen number Button pressed");				
+				logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":onCreate().addSecondaryNumberButton.OnClickListener().onClick()", "Add SECONDARY listen number Button pressed");				
 				// Build up and show input dialog of type secondary number
 				buildAndShowInputDialog(SECONDARY);
 			}
@@ -188,7 +189,7 @@ public class SmsAlarm extends Activity  {
         this.removeSecondaryNumberButton.setOnClickListener(new OnClickListener() {			
 			public void onClick(View v) {
 				// Logging
-				logger.logCatTxt(logger.getINFO(), LOG_TAG + ":onCreate().removeSecondaryNumberButton.OnClickListener().onClick()", "Remove SECONDARY listen number Button pressed");
+				logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":onCreate().removeSecondaryNumberButton.OnClickListener().onClick()", "Remove SECONDARY listen number Button pressed");
 				
 				// Only show delete dialog if secondary listen numbers exists, else show toast
 				if(!secondaryListenNumbers.isEmpty()) {
@@ -196,7 +197,7 @@ public class SmsAlarm extends Activity  {
 					buildAndShowDeleteSecondaryNumberDialog();
 				} else {
 					Toast.makeText(SmsAlarm.this, R.string.noSecondaryNumberExists, Toast.LENGTH_LONG).show();
-					logger.logCatTxt(logger.getWARN(), LOG_TAG + ":onCreate().removeSecondaryNumberButton.OnClickListener().onClick()", "Cannot build and show dialog because the list of SECONDARY listen numbers is empty so there is nothing to remove");
+					logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":onCreate().removeSecondaryNumberButton.OnClickListener().onClick()", "Cannot build and show dialog because the list of SECONDARY listen numbers is empty so there is nothing to remove");
 				}
 			}
 		});        
@@ -205,7 +206,7 @@ public class SmsAlarm extends Activity  {
         this.ackNumberButton.setOnClickListener(new OnClickListener() {			
 			public void onClick(View v) {
 				// Logging
-				logger.logCatTxt(logger.getINFO(), LOG_TAG + ":onCreate().ackNumberButton.OnClickListener().onClick()", "Edit acknowledge number Button pressed");				
+				logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":onCreate().ackNumberButton.OnClickListener().onClick()", "Edit acknowledge number Button pressed");				
 				// Build up and show input dialog of type acknowledge number
 				buildAndShowInputDialog(ACKNOWLEDGE);
 			}
@@ -215,7 +216,7 @@ public class SmsAlarm extends Activity  {
         this.editRescueServiceButton.setOnClickListener(new OnClickListener() {			
 			public void onClick(View v) {
 				// Logging
-				logger.logCatTxt(logger.getINFO(), LOG_TAG + ":onCreate().editRescueServiceButton.OnClickListener().onClick()", "Edit rescue service Button pressed");
+				logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":onCreate().editRescueServiceButton.OnClickListener().onClick()", "Edit rescue service Button pressed");
 				// Build up and show input dialog of type primary number
 				buildAndShowInputDialog(RESCUESERVICE);
 			}
@@ -225,7 +226,7 @@ public class SmsAlarm extends Activity  {
         this.editMsgToneButton.setOnClickListener(new OnClickListener() {			
 			public void onClick(View v) {
 				// Logging
-				logger.logCatTxt(logger.getINFO(), LOG_TAG + ":onCreate().editMsgToneButton.OnClickListener().onClick()", "Edit message tone Button pressed");
+				logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":onCreate().editMsgToneButton.OnClickListener().onClick()", "Edit message tone Button pressed");
 				// Build up and Show alert dialog(prompt for message tone)
 				buildAndShowToneDialog();
 			}
@@ -237,17 +238,17 @@ public class SmsAlarm extends Activity  {
 				// Play the correct tone and vibrate, depending on spinner value
 				if(toneSpinnerPos == 0) {
 					// Logging
-					logger.logCatTxt(logger.getINFO(), LOG_TAG + ":onCreate().listenMsgToneButton.OnClickListener().onClick()", "Listen message tone Button pressed. Message tone for PRIMARY alarm will be played");
+					logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":onCreate().listenMsgToneButton.OnClickListener().onClick()", "Listen message tone Button pressed. Message tone for PRIMARY alarm will be played");
 					// Play message tone and vibrate
-//					noiseHandler.makeNoise(SmsAlarm.this, primaryMessageToneId, useOsSoundSettings, false);
+					noiseHandler.makeNoise(SmsAlarm.this, primaryMessageToneId, useOsSoundSettings, false);
 					Intent noiseIntent = new Intent(SmsAlarm.this, NoiseHandler.class);
 					startService(noiseIntent);
 				} else if(toneSpinnerPos == 1) {
-					logger.logCatTxt(logger.getINFO(), LOG_TAG + ":onCreate().listenMsgToneButton.OnClickListener().onClick()", "Listen message tone Button pressed. Message tone for SECONDARY alarm will be played");
-//					noiseHandler.makeNoise(SmsAlarm.this, secondaryMessageToneId, useOsSoundSettings, false);
+					logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":onCreate().listenMsgToneButton.OnClickListener().onClick()", "Listen message tone Button pressed. Message tone for SECONDARY alarm will be played");
+					noiseHandler.makeNoise(SmsAlarm.this, secondaryMessageToneId, useOsSoundSettings, false);
 				} else {
 		        	// DO NOTHING EXCEPT LOG ERROR MESSAGE
-		        	logger.logCatTxt(logger.getERROR(), LOG_TAG + ":onCreate().listenMsgToneButton.OnClickListener().onClick()", "Invalid spinner position occurred. Current tone Spinner position is: \"" + Integer.toString(toneSpinnerPos) + "\"");
+		        	logger.logCatTxt(LogPriorities.ERROR, LOG_TAG + ":onCreate().listenMsgToneButton.OnClickListener().onClick()", "Invalid spinner position occurred. Current tone Spinner position is: \"" + Integer.toString(toneSpinnerPos) + "\"");
 				}
 			}
 		});     
@@ -257,21 +258,25 @@ public class SmsAlarm extends Activity  {
         	@Override
         	public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
         		// Log that CheckBox been pressed
-        		logger.logCatTxt(logger.getINFO(), LOG_TAG + ":onCreate().soundSettingCheckBox.onCheckedChange()", "Use OS sound settings CheckBox pressed(or CheckBox initialized)");	
+        		logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":onCreate().soundSettingCheckBox.onCheckedChange()", "Use OS sound settings CheckBox pressed(or CheckBox initialized)");	
         		
 				// Set checkbox depending on it's checked status and store variable
 				if(soundSettingCheckBox.isChecked()){
 					// Store value to variable
 					useOsSoundSettings = true;
 					// logging
-		    	    logger.logCatTxt(logger.getDEBUG(), LOG_TAG + ":onCreate().soundSettingCheckBox.onCheckedChange()", "Use OS sound settings CheckBox \"Checked\"(" + useOsSoundSettings + ")");					
+		    	    logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":onCreate().soundSettingCheckBox.onCheckedChange()", "Use OS sound settings CheckBox \"Checked\"(" + useOsSoundSettings + ")");					
 				} else {
 					useOsSoundSettings = false;
-					logger.logCatTxt(logger.getDEBUG(), LOG_TAG + ":onCreate().soundSettingCheckBox.onCheckedChange()", "Use OS sound settings CheckBox \"Unchecked\"(" + useOsSoundSettings + ")");		
+					logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":onCreate().soundSettingCheckBox.onCheckedChange()", "Use OS sound settings CheckBox \"Unchecked\"(" + useOsSoundSettings + ")");		
 				}
 				
-				// Store value to shared preferences
-		    	prefHandler.setPrefs(prefHandler.getSHARED_PREF(), prefHandler.getUSE_OS_SOUND_SETTINGS_KEY(), useOsSoundSettings, SmsAlarm.this); 
+				try {
+					// Store value to shared preferences
+					prefHandler.setPrefs(PrefKeys.SHARED_PREF, PrefKeys.USE_OS_SOUND_SETTINGS_KEY, useOsSoundSettings, SmsAlarm.this);
+				} catch(IllegalArgumentException e) {
+					logger.logCatTxt(LogPriorities.ERROR, LOG_TAG + ":onCreate().soundSettingCheckBox.onCheckedChange()", "An Object of unsupported instance was given as argument to PreferencesHandler.setPrefs()", e);
+				}
         	}
     	});
         
@@ -280,7 +285,7 @@ public class SmsAlarm extends Activity  {
         	@Override
         	public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {      		
         		// Log that CheckBox been pressed
-        		logger.logCatTxt(logger.getINFO(), LOG_TAG + ":onCreate().enableAckCheckBox.onCheckedChange()", "Enable acknowledge CheckBox pressed(or CheckBox initialized)");	
+        		logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":onCreate().enableAckCheckBox.onCheckedChange()", "Enable acknowledge CheckBox pressed(or CheckBox initialized)");	
         		
 				// Set checkbox depending on it's checked status and store variable
 				if(enableAckCheckBox.isChecked()){
@@ -290,9 +295,12 @@ public class SmsAlarm extends Activity  {
 					 useAlarmAcknowledge = false;					 
 				}
 				
-				// Store value to shared preferences
-		      	prefHandler.setPrefs(prefHandler.getSHARED_PREF(), prefHandler.getENABLE_ACK_KEY(), useAlarmAcknowledge, SmsAlarm.this);
-				
+				try {
+					// Store value to shared preferences
+			      	prefHandler.setPrefs(PrefKeys.SHARED_PREF, PrefKeys.ENABLE_ACK_KEY, useAlarmAcknowledge, SmsAlarm.this);
+				} catch(IllegalArgumentException e) {
+					logger.logCatTxt(LogPriorities.ERROR, LOG_TAG + ":onCreate().enableAckCheckBox.onCheckedChange()", "An Object of unsupported instance was given as argument to PreferencesHandler.setPrefs()", e);
+				}				
 				// Update UI widgets affected by enable acknowledge
 				updateAcknowledgeWidgets();
         	}
@@ -303,21 +311,25 @@ public class SmsAlarm extends Activity  {
         	@Override
         	public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
         		// Log that CheckBox been pressed
-        		logger.logCatTxt(logger.getINFO(), LOG_TAG + ":onCreate().playToneTwiceSettingCheckBox.onCheckedChange()", "Play tone twice CheckBox pressed(or CheckBox initialized)");	
+        		logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":onCreate().playToneTwiceSettingCheckBox.onCheckedChange()", "Play tone twice CheckBox pressed(or CheckBox initialized)");	
         		
 				// Set checkbox depending on it's checked status and store variable
 				if(playToneTwiceSettingCheckBox.isChecked()){
 					// Store value to variable
 					playToneTwice = true;
 					// Logging
-		    		logger.logCatTxt(logger.getDEBUG(), LOG_TAG + ":onCreate().playToneTwiceSettingCheckBox.onCheckedChange()", "Play tone twice CheckBox \"Checked\"(" + playToneTwice + ")"); 
+		    		logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":onCreate().playToneTwiceSettingCheckBox.onCheckedChange()", "Play tone twice CheckBox \"Checked\"(" + playToneTwice + ")"); 
 				} else {
 					 playToneTwice = false;
-					 logger.logCatTxt(logger.getDEBUG(), LOG_TAG + ":onCreate().playToneTwiceSettingCheckBox.onCheckedChange()", "Play tone twice CheckBox \"Unhecked\"(" + playToneTwice + ")"); 
+					 logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":onCreate().playToneTwiceSettingCheckBox.onCheckedChange()", "Play tone twice CheckBox \"Unhecked\"(" + playToneTwice + ")"); 
 				}
 				
-				// Store value to shared preferences
-		      	prefHandler.setPrefs(prefHandler.getSHARED_PREF(), prefHandler.getPLAY_TONE_TWICE_KEY(), playToneTwice, SmsAlarm.this);  
+				try {
+					// Store value to shared preferences
+			      	prefHandler.setPrefs(PrefKeys.SHARED_PREF, PrefKeys.PLAY_TONE_TWICE_KEY, playToneTwice, SmsAlarm.this);
+				} catch(IllegalArgumentException e) {
+					logger.logCatTxt(LogPriorities.ERROR, LOG_TAG + ":onCreate().playToneTwiceSettingCheckBox.onCheckedChange()", "An Object of unsupported instance was given as argument to PreferencesHandler.setPrefs()", e);
+				}
         	}
     	});
         
@@ -326,21 +338,25 @@ public class SmsAlarm extends Activity  {
         	@Override
         	public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
         		// Log that CheckBox been pressed
-        		logger.logCatTxt(logger.getINFO(), LOG_TAG + ":onCreate().enableSmsAlarmCheckBox.onCheckedChange(", "Enable Sms Alarm CheckBox pressed(or CheckBox initialized)");	
+        		logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":onCreate().enableSmsAlarmCheckBox.onCheckedChange(", "Enable Sms Alarm CheckBox pressed(or CheckBox initialized)");	
         		
 				//Set checkbox depending on it's checked status and store variable
 				if(enableSmsAlarmCheckBox.isChecked()){
 					// Store value to variable
 					enableSmsAlarm = true;
 					// Logging
-		    		logger.logCatTxt(logger.getDEBUG(), LOG_TAG + ":onCreate().enableSmsAlarmCheckBox.onCheckedChange()", "Enable SmsAlarm CheckBox \"Checked\"(" + enableSmsAlarm + ")"); 
+		    		logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":onCreate().enableSmsAlarmCheckBox.onCheckedChange()", "Enable SmsAlarm CheckBox \"Checked\"(" + enableSmsAlarm + ")"); 
 				} else {
 					enableSmsAlarm = false;
-		    		logger.logCatTxt(logger.getDEBUG(), LOG_TAG + ":onCreate().enableSmsAlarmCheckBox.onCheckedChange()", "Enable SmsAlarm CheckBox \"Unchecked\"(" + enableSmsAlarm + ")"); 
+		    		logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":onCreate().enableSmsAlarmCheckBox.onCheckedChange()", "Enable SmsAlarm CheckBox \"Unchecked\"(" + enableSmsAlarm + ")"); 
 				}
 				
-				// Store value to shared preferences
-		      	prefHandler.setPrefs(prefHandler.getSHARED_PREF(), prefHandler.getENABLE_SMS_ALARM_KEY(), enableSmsAlarm, SmsAlarm.this);
+				try {
+					// Store value to shared preferences
+			      	prefHandler.setPrefs(PrefKeys.SHARED_PREF, PrefKeys.ENABLE_SMS_ALARM_KEY, enableSmsAlarm, SmsAlarm.this);
+				} catch(IllegalArgumentException e) {
+					logger.logCatTxt(LogPriorities.ERROR, LOG_TAG + ":onCreate().enableSmsAlarmCheckBox.onCheckedChange()", "An Object of unsupported instance was given as argument to PreferencesHandler.setPrefs()", e);
+				}		      	
         	}
 
     	});        
@@ -351,13 +367,13 @@ public class SmsAlarm extends Activity  {
 		        // Store tone spinners position to class variable
 		        toneSpinnerPos = toneSpinner.getSelectedItemPosition();
 				// Logging
-				logger.logCatTxt(logger.getINFO(), LOG_TAG + ":onCreate().toneSpinner.OnItemSelectedListener().onItemSelected()", "Item in tone Spinner pressed(or Spinner initialized)");		        
+				logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":onCreate().toneSpinner.OnItemSelectedListener().onItemSelected()", "Item in tone Spinner pressed(or Spinner initialized)");		        
 		        // Update selected tone EditText widget
 		        updateSelectedToneEditText();
 			}
 
 			public void onNothingSelected(AdapterView<?> arg0) {
-				// TODO Auto-generated method stub			
+				// DO NOTHING!	
 			}
 		});
             
@@ -365,7 +381,7 @@ public class SmsAlarm extends Activity  {
         this.updateWholeUI();      
         
         // Log in debugging and information purpose
-        this.logger.logCatTxt(this.logger.getINFO(), this.LOG_TAG + ":onCreate()", "Creation of Sms Alarm completed");        
+        this.logger.logCat(LogPriorities.DEBUG, this.LOG_TAG + ":onCreate()", "Creation of Sms Alarm completed");        
     }
     
     /**
@@ -373,6 +389,7 @@ public class SmsAlarm extends Activity  {
      * <b><i>Not yet implemented.</i></b>
      * 
      * @see #onCreate(Bundle)
+     * @see #onDestroy()
      * 
      * @Override
      */
@@ -382,9 +399,19 @@ public class SmsAlarm extends Activity  {
     	// DO NOTHING!
     }
     
+    /**
+     * To handle events to trigger when activity destroys.
+     * <b><i>Not yet implemented.</i></b>
+     * 
+     * @see #onCreate(Bundle)
+     * @see #onPause()
+     * 
+     * @Override
+     */
+    @Override
     public void onDestroy() {
     	super.onDestroy();
-    	this.logger.logCatTxt(this.logger.getWARN(), this.LOG_TAG + ":onDestroy()", "Oh my god, they killed Kenny!");
+    	// DO NOTHING!
     }
     
     /**
@@ -392,13 +419,14 @@ public class SmsAlarm extends Activity  {
 	 * is inflated.
 	 * 
 	 * @see #onOptionsItemSelected(MenuItem)
+	 * @see {@link LogHandler#logCat(LogPriorities, String, String)}
      * 
      * @Override
      */
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
 		  // Logging
-		  this.logger.logCatTxt(this.logger.getINFO(), this.LOG_TAG + ":onCreateOptionsMenu()", "Menu created");
+		  this.logger.logCat(LogPriorities.DEBUG, this.LOG_TAG + ":onCreateOptionsMenu()", "Menu created");
           MenuInflater inflater = getMenuInflater();
           inflater.inflate(R.menu.menu, menu);
           return true;
@@ -408,6 +436,9 @@ public class SmsAlarm extends Activity  {
 	 * Method to inflate menu with it's items.
      * 
      * @see #buildAndShowAboutDialog()
+     * @see {@link LogHandler#logCat(LogPriorities, String, String)}
+     * @see {@link LogHandler#logCatTxt(LogPriorities, String, String, Throwable)}
+     * @see {@link PreferencesHandler#setPrefs(PrefKeys, PrefKeys, Object, Context)}
      * 
      * @Override
      */
@@ -416,10 +447,22 @@ public class SmsAlarm extends Activity  {
 		switch (item.getItemId()) {
       		case R.id.item1:
       			// Logging
-      			this.logger.logCatTxt(this.logger.getINFO(), this.LOG_TAG + ":onOptionsSelected()", "Menu item 1 selected");
+      			this.logger.logCat(LogPriorities.DEBUG, this.LOG_TAG + ":onOptionsItemSelected()", "Menu item 1 selected");
       			// Build up and show the about dialog
       			this.buildAndShowAboutDialog();
-      			return true;            	
+      			return true; 
+// >>>>DEBUG CASE (DELETE OR COMMENT FOR PRDO)
+      		case R.id.item2:
+      			try {
+	      			prefHandler.setPrefs(PrefKeys.SHARED_PREF, PrefKeys.RESCUE_SERVICE_KEY, "Jomala FBK", this);
+	      			prefHandler.setPrefs(PrefKeys.SHARED_PREF, PrefKeys.FULL_MESSAGE_KEY, "02.02.2012 23:55:40 2.5 Litet larm - Automatlarm vikingline lager(1682) Länsmanshägnan 7 jomala", this);
+				} catch(IllegalArgumentException e) {
+					logger.logCatTxt(LogPriorities.ERROR, this.LOG_TAG + ":onOptionsItemSelected()", "An Object of unsupported instance was given as argument to PreferencesHandler.setPrefs()", e);
+				}      			
+	    		Intent i = new Intent(SmsAlarm.this, AcknowledgeHandler.class);
+				startActivityForResult(i, 10);
+				return true;
+// <<<<DEBUG CASE (DELETE OR COMMENT FOR PROD)	
       		default:
       			return super.onOptionsItemSelected(item);
 		}
@@ -429,11 +472,11 @@ public class SmsAlarm extends Activity  {
      * To find UI widgets and get their reference by ID stored in class variables.
      * 
      * @see #onCreate(Bundle)
-  	 * @see ax.ha.it.smsalarm#LogHandler.logCatTxt(int, String , String)
+  	 * @see {@link LogHandler#logCat(LogPriorities, String, String)}
      */
     private void findViews() {   	
     	// Logging
-    	this.logger.logCatTxt(this.logger.getINFO(), this.LOG_TAG + ":findViews()", "Start finding Views by their ID");
+    	this.logger.logCat(LogPriorities.DEBUG, this.LOG_TAG + ":findViews()", "Start finding Views by their ID");
     	
         // Declare and initialize variables of type EditText
     	this.primaryListenNumberEditText = (EditText)findViewById(R.id.primaryNumber_et);
@@ -471,12 +514,12 @@ public class SmsAlarm extends Activity  {
         	this.divider2ImageView.setImageResource(R.drawable.gradient_divider_10_and_down);
         	this.divider3ImageView.setImageResource(R.drawable.gradient_divider_10_and_down);
         	// Logging
-        	this.logger.logCatTxt(this.logger.getDEBUG(), this.LOG_TAG + ":findViews()", "API level < 11, set bright gradients");
+        	this.logger.logCat(LogPriorities.DEBUG, this.LOG_TAG + ":findViews()", "API level < 11, set bright gradients");
         } else {
         	this.divider1ImageView.setImageResource(R.drawable.gradient_divider_11_and_up); 
         	this.divider2ImageView.setImageResource(R.drawable.gradient_divider_11_and_up);
         	this.divider3ImageView.setImageResource(R.drawable.gradient_divider_11_and_up);
-        	this.logger.logCatTxt(this.logger.getDEBUG(), this.LOG_TAG + ":findViews()", "API level > 10, set dark gradients");
+        	this.logger.logCat(LogPriorities.DEBUG, this.LOG_TAG + ":findViews()", "API level > 10, set dark gradients");
         }            
         
         // Set some attributes to the smsPrimaryNumberEditText
@@ -507,61 +550,69 @@ public class SmsAlarm extends Activity  {
         this.selectedToneEditText.setTextColor(Color.BLACK);   
         
     	// Logging
-    	this.logger.logCatTxt(this.logger.getINFO(), this.LOG_TAG + ":findViews()", "All Views found");
+    	this.logger.logCat(LogPriorities.DEBUG, this.LOG_TAG + ":findViews()", "All Views found");
     }
     
     /**
      * To set all <code>Shared Preferences</code> used by class <code>SmsAlarm</code>.
      * 
      * @see #getSmsAlarmPrefs()
-     * @see ax.ha.it.smsalarm#LogHandler.logCatTxt(int, String , String)
-     * @see ax.ha.it.smsalarm#PreferencesHandler.setPrefs(String, String, Object, Context)
+     * @see {@link PreferencesHandler#setPrefs(PrefKeys, PrefKeys, Object, Context)}
+     * @see {@link LogHandler#logCat(LogPriorities, String, String)}
+     * @see {@link LogHandler#logCatTxt(LogPriorities, String, String, Throwable)}
      */
     private void setSmsAlarmPrefs(){   	
     	// Some logging
-    	this.logger.logCatTxt(this.logger.getINFO(), this.LOG_TAG + ":setSmsAlarmPrefs()", "Start setting shared preferences used by class SmsAlarm");
+    	this.logger.logCat(LogPriorities.DEBUG, this.LOG_TAG + ":setSmsAlarmPrefs()", "Start setting shared preferences used by class SmsAlarm");
     	
+    	try {
       	// Set preferences used by class Sms Alarm
-      	this.prefHandler.setPrefs(this.prefHandler.getSHARED_PREF(), this.prefHandler.getPRIMARY_LISTEN_NUMBER_KEY(), this.primaryListenNumber, this);
-      	this.prefHandler.setPrefs(this.prefHandler.getSHARED_PREF(), this.prefHandler.getSECONDARY_LISTEN_NUMBERS_KEY(), this.secondaryListenNumbers, this);
-      	this.prefHandler.setPrefs(this.prefHandler.getSHARED_PREF(), this.prefHandler.getPRIMARY_MESSAGE_TONE_KEY(), this.primaryMessageToneId, this);
-      	this.prefHandler.setPrefs(this.prefHandler.getSHARED_PREF(), this.prefHandler.getSECONDARY_MESSAGE_TONE_KEY(), this.secondaryMessageToneId, this);  
-      	this.prefHandler.setPrefs(this.prefHandler.getSHARED_PREF(), this.prefHandler.getUSE_OS_SOUND_SETTINGS_KEY(), this.useOsSoundSettings, this);        	
-      	this.prefHandler.setPrefs(this.prefHandler.getSHARED_PREF(), this.prefHandler.getENABLE_ACK_KEY(), this.useAlarmAcknowledge, this);
-      	this.prefHandler.setPrefs(this.prefHandler.getSHARED_PREF(), this.prefHandler.getACK_NUMBER_KEY(), this.acknowledgeNumber, this);  
-      	this.prefHandler.setPrefs(this.prefHandler.getSHARED_PREF(), this.prefHandler.getPLAY_TONE_TWICE_KEY(), this.playToneTwice, this);  
-      	this.prefHandler.setPrefs(this.prefHandler.getSHARED_PREF(), this.prefHandler.getENABLE_SMS_ALARM_KEY(), this.enableSmsAlarm, this);     
-      	this.prefHandler.setPrefs(this.prefHandler.getSHARED_PREF(), this.prefHandler.getRESCUE_SERVICE_KEY(), this.rescueService, this);         	
-
-    	this.logger.logCatTxt(this.logger.getINFO(), this.LOG_TAG + ":setSmsAlarmPrefs()", "Shared preferences set");
+	      	prefHandler.setPrefs(PrefKeys.SHARED_PREF, PrefKeys.PRIMARY_LISTEN_NUMBER_KEY, this.primaryListenNumber, this);
+	      	prefHandler.setPrefs(PrefKeys.SHARED_PREF, PrefKeys.SECONDARY_LISTEN_NUMBERS_KEY, this.secondaryListenNumbers, this);
+	      	prefHandler.setPrefs(PrefKeys.SHARED_PREF, PrefKeys.PRIMARY_MESSAGE_TONE_KEY, this.primaryMessageToneId, this);
+	      	prefHandler.setPrefs(PrefKeys.SHARED_PREF, PrefKeys.SECONDARY_MESSAGE_TONE_KEY, this.secondaryMessageToneId, this);  
+	      	prefHandler.setPrefs(PrefKeys.SHARED_PREF, PrefKeys.USE_OS_SOUND_SETTINGS_KEY, this.useOsSoundSettings, this);        	
+	      	prefHandler.setPrefs(PrefKeys.SHARED_PREF, PrefKeys.ENABLE_ACK_KEY, this.useAlarmAcknowledge, this);
+	      	prefHandler.setPrefs(PrefKeys.SHARED_PREF, PrefKeys.ACK_NUMBER_KEY, this.acknowledgeNumber, this);  
+	      	prefHandler.setPrefs(PrefKeys.SHARED_PREF, PrefKeys.PLAY_TONE_TWICE_KEY, this.playToneTwice, this);  
+	      	prefHandler.setPrefs(PrefKeys.SHARED_PREF, PrefKeys.ENABLE_SMS_ALARM_KEY, this.enableSmsAlarm, this);     
+	      	prefHandler.setPrefs(PrefKeys.SHARED_PREF, PrefKeys.RESCUE_SERVICE_KEY, this.rescueService, this);         	
+		} catch(IllegalArgumentException e) {
+			logger.logCatTxt(LogPriorities.ERROR, this.LOG_TAG + ":setSmsAlarmPrefs()", "An Object of unsupported instance was given as argument to PreferencesHandler.setPrefs()", e);
+		}     
+    	this.logger.logCat(LogPriorities.DEBUG, this.LOG_TAG + ":setSmsAlarmPrefs()", "Shared preferences set");
     }
     
     /**
      * To get <code>Shared Preferences</code> used by class <code>SmsAlarm</code>.
      * 
      * @see #setSmsAlarmPrefs()
-     * @see ax.ha.it.smsalarm#LogHandler.logCatTxt(int, String , String)
-     * @see ax.ha.it.smsalarm#PreferencesHandler.getPrefs(String, String, int, Context, Object)
-     * @see ax.ha.it.smsalarm#PreferencesHandler.getPrefs(String, String, int, Context)   
+     * @see {@link LogHandler#logCat(LogPriorities, String, String)}
+     * @see {@link LogHandler#logCatTxt(LogPriorities, String, String, Throwable)}
+     * @see {@link PreferencesHandler#getPrefs(PrefKeys, PrefKeys, DataTypes, Context)}
+     * @see {@link PreferencesHandler#getPrefs(PrefKeys, PrefKeys, DataTypes, Context, Object)}
      */
 	@SuppressWarnings("unchecked")
 	private void getSmsAlarmPrefs() {
     	//Some logging
-    	this.logger.logCatTxt(this.logger.getINFO(), this.LOG_TAG + ":getSmsAlarmPrefs()", "Start retrieving shared preferences needed by class SmsAlarm");
+    	this.logger.logCat(LogPriorities.DEBUG, this.LOG_TAG + ":getSmsAlarmPrefs()", "Start retrieving shared preferences needed by class SmsAlarm");
     	
-    	//Get shared preferences needed by class Sms Alarm
-    	this.primaryListenNumber = (String) this.prefHandler.getPrefs(this.prefHandler.getSHARED_PREF(), this.prefHandler.getPRIMARY_LISTEN_NUMBER_KEY(), this.STRING, this);
-    	this.secondaryListenNumbers = (List<String>) this.prefHandler.getPrefs(this.prefHandler.getSHARED_PREF(), this.prefHandler.getSECONDARY_LISTEN_NUMBERS_KEY(), this.LIST, this);
-    	this.primaryMessageToneId = (Integer) this.prefHandler.getPrefs(this.prefHandler.getSHARED_PREF(), this.prefHandler.getPRIMARY_MESSAGE_TONE_KEY(), this.INTEGER, this);
-    	this.secondaryMessageToneId = (Integer) this.prefHandler.getPrefs(this.prefHandler.getSHARED_PREF(), this.prefHandler.getSECONDARY_MESSAGE_TONE_KEY(), this.INTEGER, this, 1);
-    	this.useOsSoundSettings = (Boolean) this.prefHandler.getPrefs(this.prefHandler.getSHARED_PREF(), this.prefHandler.getUSE_OS_SOUND_SETTINGS_KEY(), this.BOOLEAN, this);
-    	this.useAlarmAcknowledge = (Boolean) this.prefHandler.getPrefs(this.prefHandler.getSHARED_PREF(), this.prefHandler.getENABLE_ACK_KEY(), this.BOOLEAN, this);   
-    	this.acknowledgeNumber = (String) this.prefHandler.getPrefs(this.prefHandler.getSHARED_PREF(), this.prefHandler.getACK_NUMBER_KEY(), this.STRING, this);  
-    	this.playToneTwice = (Boolean) this.prefHandler.getPrefs(this.prefHandler.getSHARED_PREF(), this.prefHandler.getPLAY_TONE_TWICE_KEY(), this.BOOLEAN, this);    
-    	this.enableSmsAlarm = (Boolean) this.prefHandler.getPrefs(this.prefHandler.getSHARED_PREF(), this.prefHandler.getENABLE_SMS_ALARM_KEY(), this.BOOLEAN, this, true);  
-    	this.rescueService = (String) this.prefHandler.getPrefs(this.prefHandler.getSHARED_PREF(), this.prefHandler.getRESCUE_SERVICE_KEY(), this.STRING, this);    	
-
-    	this.logger.logCatTxt(this.logger.getINFO(), this.LOG_TAG + ":getSmsAlarmPrefs()", "Shared preferences retrieved");  	 
+    	try {
+	    	//Get shared preferences needed by class Sms Alarm
+	    	this.primaryListenNumber = (String) prefHandler.getPrefs(PrefKeys.SHARED_PREF, PrefKeys.PRIMARY_LISTEN_NUMBER_KEY, DataTypes.STRING, this);
+	    	this.secondaryListenNumbers = (List<String>) prefHandler.getPrefs(PrefKeys.SHARED_PREF, PrefKeys.SECONDARY_LISTEN_NUMBERS_KEY, DataTypes.LIST, this);
+	    	this.primaryMessageToneId = (Integer) prefHandler.getPrefs(PrefKeys.SHARED_PREF, PrefKeys.PRIMARY_MESSAGE_TONE_KEY, DataTypes.INTEGER, this);
+	    	this.secondaryMessageToneId = (Integer) prefHandler.getPrefs(PrefKeys.SHARED_PREF, PrefKeys.SECONDARY_MESSAGE_TONE_KEY, DataTypes.INTEGER, this, 1);
+	    	this.useOsSoundSettings = (Boolean) prefHandler.getPrefs(PrefKeys.SHARED_PREF, PrefKeys.USE_OS_SOUND_SETTINGS_KEY, DataTypes.BOOLEAN, this);
+	    	this.useAlarmAcknowledge = (Boolean) prefHandler.getPrefs(PrefKeys.SHARED_PREF, PrefKeys.ENABLE_ACK_KEY, DataTypes.BOOLEAN, this);   
+	    	this.acknowledgeNumber = (String) prefHandler.getPrefs(PrefKeys.SHARED_PREF, PrefKeys.ACK_NUMBER_KEY, DataTypes.STRING, this);  
+	    	this.playToneTwice = (Boolean) prefHandler.getPrefs(PrefKeys.SHARED_PREF, PrefKeys.PLAY_TONE_TWICE_KEY, DataTypes.BOOLEAN, this);    
+	    	this.enableSmsAlarm = (Boolean) prefHandler.getPrefs(PrefKeys.SHARED_PREF, PrefKeys.ENABLE_SMS_ALARM_KEY, DataTypes.BOOLEAN, this, true);  
+	    	this.rescueService = (String) prefHandler.getPrefs(PrefKeys.SHARED_PREF, PrefKeys.RESCUE_SERVICE_KEY, DataTypes.STRING, this);    	
+		} catch(IllegalArgumentException e) {
+			logger.logCatTxt(LogPriorities.ERROR, this.LOG_TAG + ":getSmsAlarmPrefs()", "An unsupported datatype was given as argument to PreferencesHandler.getPrefs()", e);
+		}   
+    	this.logger.logCat(LogPriorities.DEBUG, this.LOG_TAG + ":getSmsAlarmPrefs()", "Shared preferences retrieved");  	 
     }
     
     /**
@@ -571,12 +622,13 @@ public class SmsAlarm extends Activity  {
      * @see #buildAndShowInputDialog(int)
      * @see #buildAndShowToneDialog()
      * @see #updateSecondaryListenNumberSpinner()
-     * @see ax.ha.it.smsalarm#LogHandler.logCatTxt(int, String , String)
-     * @see ax.ha.it.smsalarm#PreferencesHandler.setPrefs(String, String, Object, Context)
+     * @see {@link LogHandler#logCat(LogPriorities, String, String)}
+     * @see {@link LogHandler#logCatTxt(LogPriorities, String, String, Throwable)}
+     * @see {@link PreferencesHandler#setPrefs(PrefKeys, PrefKeys, Object, Context)}
      */
     private void buildAndShowDeleteSecondaryNumberDialog() {
     	// Logging
-    	this.logger.logCatTxt(this.logger.getINFO(), this.LOG_TAG + ":buildAndShowDeleteSecondaryNumberDialog()", "Start building delete SECONDARY number dialog");
+    	this.logger.logCat(LogPriorities.DEBUG, this.LOG_TAG + ":buildAndShowDeleteSecondaryNumberDialog()", "Start building delete SECONDARY number dialog");
     	
     	//Store secondaryListenNumberSpinner position
     	final int position = secondaryListenNumberSpinner.getSelectedItemPosition();
@@ -596,18 +648,22 @@ public class SmsAlarm extends Activity  {
     	dialog.setCancelable(false);
     	
     	// Logging
-    	this.logger.logCatTxt(this.logger.getINFO(), this.LOG_TAG + ":buildAndShowDeleteSecondaryNumberDialog()", "Dialog attributes set");    	
+    	this.logger.logCat(LogPriorities.DEBUG, this.LOG_TAG + ":buildAndShowDeleteSecondaryNumberDialog()", "Dialog attributes set");    	
     	
     	// Set a positive button and listen on it
     	dialog.setPositiveButton(R.string.yes, new DialogInterface.OnClickListener() {
 	    	public void onClick(DialogInterface dialog, int whichButton) {    		
 				// Log information
-	        	logger.logCatTxt(logger.getINFO(), LOG_TAG + ":buildAndShowDeleteSecondaryNumberDialog().PosButton.OnClickListener().onClick()", "Positive Button pressed");	
-	        	logger.logCatTxt(logger.getDEBUG(), LOG_TAG + ":buildAndShowDeleteSecondaryNumberDialog().PosButton.OnClickListener().onClick()", "SECONDARY listen number: \"" + secondaryListenNumbers.get(position) + "\" is about to be removed from list of SECONDARY listen numbers");	        	
+	        	logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":buildAndShowDeleteSecondaryNumberDialog().PosButton.OnClickListener().onClick()", "Positive Button pressed");	
+	        	logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":buildAndShowDeleteSecondaryNumberDialog().PosButton.OnClickListener().onClick()", "SECONDARY listen number: \"" + secondaryListenNumbers.get(position) + "\" is about to be removed from list of SECONDARY listen numbers");	        	
 	    		// Delete number from list
-	    		secondaryListenNumbers.remove(position);  		
-				// Store to shared preferences
-		      	prefHandler.setPrefs(prefHandler.getSHARED_PREF(), prefHandler.getSECONDARY_LISTEN_NUMBERS_KEY(), secondaryListenNumbers, SmsAlarm.this);
+	    		secondaryListenNumbers.remove(position);  	
+	    		try {
+					// Store to shared preferences
+			      	prefHandler.setPrefs(PrefKeys.SHARED_PREF, PrefKeys.SECONDARY_LISTEN_NUMBERS_KEY, secondaryListenNumbers, SmsAlarm.this);
+				} catch(IllegalArgumentException e) {
+					logger.logCatTxt(LogPriorities.ERROR, LOG_TAG + ":buildAndShowDeleteSecondaryNumberDialog().PosButton.OnClickListener().onClick()", "An Object of unsupported instance was given as argument to PreferencesHandler.setPrefs()", e);
+				}  		      	
 		      	// Update affected UI widgets
 		      	updateSecondaryListenNumberSpinner();	        
 	    	}  	
@@ -617,12 +673,12 @@ public class SmsAlarm extends Activity  {
     	dialog.setNeutralButton(R.string.no, new DialogInterface.OnClickListener() {
 	    	  public void onClick(DialogInterface dialog, int whichButton) {
 	    		  // DO NOTHING, except logging
-	    		  logger.logCatTxt(logger.getINFO(), LOG_TAG + ":buildAndShowDeleteSecondaryNumberDialog().NeutralButton.OnClickListener().onClick()", "Neutral Button pressed in dialog, nothing done");	
+	    		  logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":buildAndShowDeleteSecondaryNumberDialog().NeutralButton.OnClickListener().onClick()", "Neutral Button pressed in dialog, nothing done");	
 	    	  }
     	}); 
     	
     	// Logging
-    	this.logger.logCatTxt(logger.getINFO(), LOG_TAG + ":buildAndShowDeleteSecondaryNumberDialog()", "Showing dialog");	
+    	this.logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":buildAndShowDeleteSecondaryNumberDialog()", "Showing dialog");	
     	
     	//Show it
     	dialog.show();    	
@@ -643,12 +699,14 @@ public class SmsAlarm extends Activity  {
      * @see #updateSecondaryListenNumberSpinner()
      * @see #updateAcknowledgeNumberEditText()
      * @see #updateRescueServiceEditText()
-     * @see ax.ha.it.smsalarm#LogHandler.logCatTxt(int, String , String)
-     * @see ax.ha.it.smsalarm#PreferencesHandler.setPrefs(String, String, Object, Context)
+     * @see {@link LogHandler#logCat(LogPriorities, String, String)}
+     * @see {@link LogHandler#logCatTxt(LogPriorities, String, String)}
+     * @see {@link LogHandler#logCatTxt(LogPriorities, String, String, Throwable)}
+     * @see {@link PreferencesHandler#setPrefs(PrefKeys, PrefKeys, Object, Context)}
      */
     private void buildAndShowInputDialog(final int dialogType) {  
     	// Logging
-    	this.logger.logCatTxt(this.logger.getINFO(), this.LOG_TAG + ":buildAndShowInputDialog()", "Start building dialog");
+    	this.logger.logCat(LogPriorities.DEBUG, this.LOG_TAG + ":buildAndShowInputDialog()", "Start building dialog");
     	
     	//Build up the alert dialog
     	AlertDialog.Builder dialog = new AlertDialog.Builder(this);
@@ -678,7 +736,7 @@ public class SmsAlarm extends Activity  {
         	// Bind dialog to input
         	dialog.setView(input);
         	// Logging
-        	this.logger.logCatTxt(this.logger.getINFO(), this.LOG_TAG + ":buildAndShowInputDialog()", "Dialog attributes is set for dialog type PRIMARY");
+        	this.logger.logCat(LogPriorities.DEBUG, this.LOG_TAG + ":buildAndShowInputDialog()", "Dialog attributes is set for dialog type PRIMARY");
     		break;
     	case (SECONDARY): // <--1
         	dialog.setTitle(R.string.numberPromptTitle);
@@ -687,7 +745,7 @@ public class SmsAlarm extends Activity  {
         	input.setInputType(InputType.TYPE_CLASS_PHONE);
         	dialog.setCancelable(false);
         	dialog.setView(input);
-        	this.logger.logCatTxt(this.logger.getINFO(), this.LOG_TAG + ":buildAndShowInputDialog()", "Dialog attributes is set for dialog type SECONDARY");
+        	this.logger.logCat(LogPriorities.DEBUG, this.LOG_TAG + ":buildAndShowInputDialog()", "Dialog attributes is set for dialog type SECONDARY");
     		break;
     	case (ACKNOWLEDGE): // <--2
         	dialog.setTitle(R.string.numberPromptTitle);
@@ -696,7 +754,7 @@ public class SmsAlarm extends Activity  {
         	input.setInputType(InputType.TYPE_CLASS_PHONE);
         	dialog.setCancelable(false);
         	dialog.setView(input);
-        	this.logger.logCatTxt(this.logger.getINFO(), this.LOG_TAG + ":buildAndShowInputDialog()", "Dialog attributes is set for dialog type ACKNOWLEDGE");
+        	this.logger.logCat(LogPriorities.DEBUG, this.LOG_TAG + ":buildAndShowInputDialog()", "Dialog attributes is set for dialog type ACKNOWLEDGE");
     		break;
     	case (RESCUESERVICE): // <--3
         	dialog.setTitle(R.string.rescueServicePromptTitle);
@@ -705,20 +763,20 @@ public class SmsAlarm extends Activity  {
         	input.setInputType(InputType.TYPE_CLASS_TEXT);
         	dialog.setCancelable(false);
         	dialog.setView(input);
-        	this.logger.logCatTxt(this.logger.getINFO(), this.LOG_TAG + ":buildAndShowInputDialog()", "Dialog attributes is set for dialog type RESCUESERVICE");
+        	this.logger.logCat(LogPriorities.DEBUG, this.LOG_TAG + ":buildAndShowInputDialog()", "Dialog attributes is set for dialog type RESCUESERVICE");
     		break;
     	default: // <--Unsupported dialog type. Displaying a dummy dialog!
         	dialog.setTitle("Congratulations!");
     		dialog.setMessage("Somehow you got this dialog to show up! I bet a monkey must have been messing around with the code;-)");
         	dialog.setCancelable(false);
-        	this.logger.logCatTxt(this.logger.getERROR(), this.LOG_TAG + ":buildAndShowInputDialog()", "A UNSUPPORTED dialog type has been given as parameter, a DUMMY dialog will be built and shown");
+        	this.logger.logCatTxt(LogPriorities.ERROR, this.LOG_TAG + ":buildAndShowInputDialog()", "A UNSUPPORTED dialog type has been given as parameter, a DUMMY dialog will be built and shown");
     	}
     	
     	// Set a positive button and listen on it
     	dialog.setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
 	    	public void onClick(DialogInterface dialog, int whichButton) {
 				// Log information
-	        	logger.logCatTxt(logger.getINFO(), LOG_TAG + ":buildAndShowInputDialog().PositiveButton.OnClickListener().onClick()", "Positive Button pressed");	
+	        	logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":buildAndShowInputDialog().PositiveButton.OnClickListener().onClick()", "Positive Button pressed");	
 	    		
 	        	// Boolean indicating if there are duplicates of primary and secondary alarm numbers
 	        	boolean duplicatedNumbers = false;
@@ -743,22 +801,30 @@ public class SmsAlarm extends Activity  {
         				if(!duplicatedNumbers) {
         					// Store input to class variable
         					primaryListenNumber = input.getText().toString();
-        					// Store to shared preferences
-        			      	prefHandler.setPrefs(prefHandler.getSHARED_PREF(), prefHandler.getPRIMARY_LISTEN_NUMBER_KEY(), primaryListenNumber, SmsAlarm.this);
+        					try {
+	        					// Store to shared preferences
+	        			      	prefHandler.setPrefs(PrefKeys.SHARED_PREF, PrefKeys.PRIMARY_LISTEN_NUMBER_KEY, primaryListenNumber, SmsAlarm.this);
+	        				} catch(IllegalArgumentException e) {
+	        					logger.logCatTxt(LogPriorities.ERROR, LOG_TAG + ":buildAndShowInputDialog().PositiveButton.OnClickListener().onClick()", "An Object of unsupported instance was given as argument to PreferencesHandler.setPrefs()", e);
+	        				}  	
         			      	// Update affected UI widgets
         			      	updatePrimaryListenNumberEditText();
         			      	// Log
-        					logger.logCatTxt(logger.getDEBUG(), LOG_TAG + ":buildAndShowInputDialog().PositiveButton.OnClickListener().onClick()", "New PRIMARY phone number has been stored from user input. New PRIMARY phone number is: \"" + primaryListenNumber +"\"");
+        					logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":buildAndShowInputDialog().PositiveButton.OnClickListener().onClick()", "New PRIMARY phone number has been stored from user input. New PRIMARY phone number is: \"" + primaryListenNumber +"\"");
         				} else {
         					Toast.makeText(SmsAlarm.this, R.string.duplicatedNumbers, Toast.LENGTH_LONG).show();
-        					logger.logCatTxt(logger.getWARN(), LOG_TAG + ":buildAndShowInputDialog().PositiveButton.OnClickListener().onClick()", "Given PRIMARY phone number(" + input.getText().toString() + ") exists in the list of SECONDARY phone numbers and therefore cannot be stored. Showing dialog of type PRIMARY again");
+        					logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":buildAndShowInputDialog().PositiveButton.OnClickListener().onClick()", "Given PRIMARY phone number(" + input.getText().toString() + ") exists in the list of SECONDARY phone numbers and therefore cannot be stored. Showing dialog of type PRIMARY again");
         					buildAndShowInputDialog(dialogType);
         				}    					
     				} else {
     					primaryListenNumber = input.getText().toString();
-    			      	prefHandler.setPrefs(prefHandler.getSHARED_PREF(), prefHandler.getPRIMARY_LISTEN_NUMBER_KEY(), primaryListenNumber, SmsAlarm.this);
+    					try {
+	    			      	prefHandler.setPrefs(PrefKeys.SHARED_PREF, PrefKeys.PRIMARY_LISTEN_NUMBER_KEY, primaryListenNumber, SmsAlarm.this);
+	    				} catch(IllegalArgumentException e) {
+	    					logger.logCatTxt(LogPriorities.ERROR, LOG_TAG + ":buildAndShowInputDialog().PositiveButton.OnClickListener().onClick()", "An Object of unsupported instance was given as argument to PreferencesHandler.setPrefs()", e);
+	    				}     			      	
     			      	updatePrimaryListenNumberEditText();    					
-    					logger.logCatTxt(logger.getDEBUG(), LOG_TAG + ":buildAndShowInputDialog().PositiveButton.OnClickListener().onClick()", "New PRIMARY phone number has been stored from user input. New PRIMARY phone number is: \"" + primaryListenNumber + "\"");
+    					logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":buildAndShowInputDialog().PositiveButton.OnClickListener().onClick()", "New PRIMARY phone number has been stored from user input. New PRIMARY phone number is: \"" + primaryListenNumber + "\"");
     				} 
 	        		break;
 	        	case (SECONDARY): // <--1
@@ -776,24 +842,28 @@ public class SmsAlarm extends Activity  {
         				if(!duplicatedNumbers) {
         					// Add given input to list
         					secondaryListenNumbers.add(input.getText().toString());
-        					// Store to shared preferences
-        			      	prefHandler.setPrefs(prefHandler.getSHARED_PREF(), prefHandler.getSECONDARY_LISTEN_NUMBERS_KEY(), secondaryListenNumbers, SmsAlarm.this);
+        					try {
+	        					// Store to shared preferences
+	        			      	prefHandler.setPrefs(PrefKeys.SHARED_PREF, PrefKeys.SECONDARY_LISTEN_NUMBERS_KEY, secondaryListenNumbers, SmsAlarm.this);
+		    				} catch(IllegalArgumentException e) {
+		    					logger.logCatTxt(LogPriorities.ERROR, LOG_TAG + ":buildAndShowInputDialog().PositiveButton.OnClickListener().onClick()", "An Object of unsupported instance was given as argument to PreferencesHandler.setPrefs()", e);
+		    				}         			      	
         			      	// Update affected UI widgets
         			      	updateSecondaryListenNumberSpinner();
         			      	// Log
-        					logger.logCatTxt(logger.getDEBUG(), LOG_TAG + ":buildAndShowInputDialog().PositiveButton.OnClickListener().onClick()", "New SECONDARY phone number has been stored from user input to the list of SECONDARY phone numbers . New SECONDARY phone number is: \"" + input.getText().toString() + "\"");	        					
+        					logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":buildAndShowInputDialog().PositiveButton.OnClickListener().onClick()", "New SECONDARY phone number has been stored from user input to the list of SECONDARY phone numbers . New SECONDARY phone number is: \"" + input.getText().toString() + "\"");	        					
         				} else {
         					Toast.makeText(SmsAlarm.this, R.string.numberAlreadyInList, Toast.LENGTH_LONG).show();
-        					logger.logCatTxt(logger.getWARN(), LOG_TAG + ":buildAndShowInputDialog().PositiveButton.OnClickListener().onClick()", "Given SECONDARY phone number(" + input.getText().toString() + ") already exists in the list of SECONDARY phone numbers and therefore cannot be stored. Showing dialog of type SECONDARY again");        					
+        					logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":buildAndShowInputDialog().PositiveButton.OnClickListener().onClick()", "Given SECONDARY phone number(" + input.getText().toString() + ") already exists in the list of SECONDARY phone numbers and therefore cannot be stored. Showing dialog of type SECONDARY again");        					
         					buildAndShowInputDialog(dialogType);
         				}    					
     				} else {
     					if(primaryListenNumber.equals(input.getText().toString())) {
     						Toast.makeText(SmsAlarm.this, R.string.duplicatedNumbers, Toast.LENGTH_LONG).show();
-        					logger.logCatTxt(logger.getWARN(), LOG_TAG + ":buildAndShowInputDialog().PositiveButton.OnClickListener().onClick()", "Given SECONDARY phone number(" + input.getText().toString() + ") is the same as the PRIMARY phone number and therefore cannot be stored. Showing dialog of type SECONDARY again");
+        					logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":buildAndShowInputDialog().PositiveButton.OnClickListener().onClick()", "Given SECONDARY phone number(" + input.getText().toString() + ") is the same as the PRIMARY phone number and therefore cannot be stored. Showing dialog of type SECONDARY again");
     					} else {
     						Toast.makeText(SmsAlarm.this, R.string.emptySecondaryNumber, Toast.LENGTH_LONG).show();
-        					logger.logCatTxt(logger.getWARN(), LOG_TAG + ":buildAndShowInputDialog().PositiveButton.OnClickListener().onClick()", "Given SECONDARY phone number is empty and therefore cannot be stored. Showing dialog of type SECONDARY again");    						
+        					logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":buildAndShowInputDialog().PositiveButton.OnClickListener().onClick()", "Given SECONDARY phone number is empty and therefore cannot be stored. Showing dialog of type SECONDARY again");    						
     					}
     					buildAndShowInputDialog(dialogType);
     				}
@@ -801,25 +871,33 @@ public class SmsAlarm extends Activity  {
 	        	case (ACKNOWLEDGE): // <--2       
 	        		// Store input to class variable
 	        		acknowledgeNumber = input.getText().toString();
-	        		// Store to shared preferences
-	          	    prefHandler.setPrefs(prefHandler.getSHARED_PREF(), prefHandler.getACK_NUMBER_KEY(), acknowledgeNumber, SmsAlarm.this); 
+	        		try {
+		        		// Store to shared preferences
+		          	    prefHandler.setPrefs(PrefKeys.SHARED_PREF, PrefKeys.ACK_NUMBER_KEY, acknowledgeNumber, SmsAlarm.this); 
+					} catch(IllegalArgumentException e) {
+						logger.logCatTxt(LogPriorities.ERROR, LOG_TAG + ":buildAndShowInputDialog().PositiveButton.OnClickListener().onClick()", "An Object of unsupported instance was given as argument to PreferencesHandler.setPrefs()", e);
+					} 	          	    
 	          	    // update affected UI widgets
 	          	    updateAcknowledgeNumberEditText();
 	          	    // Log
-					logger.logCatTxt(logger.getDEBUG(), LOG_TAG + ":buildAndShowInputDialog().PositiveButton.OnClickListener().onClick()", "New ACKNOWLEDGE phone number has been stored from user input . New ACKNOWLEDGE phone number is: \"" + acknowledgeNumber + "\"");	        					
+					logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":buildAndShowInputDialog().PositiveButton.OnClickListener().onClick()", "New ACKNOWLEDGE phone number has been stored from user input . New ACKNOWLEDGE phone number is: \"" + acknowledgeNumber + "\"");	        					
 	        		break;
 	        	case (RESCUESERVICE): // <--3
 	        		// Store input to class variable
 	        		rescueService = input.getText().toString();
-	        		// Store to shared preferences
-	          		prefHandler.setPrefs(prefHandler.getSHARED_PREF(), prefHandler.getRESCUE_SERVICE_KEY(), rescueService, SmsAlarm.this); 
+	        		try {
+		        		// Store to shared preferences
+		          		prefHandler.setPrefs(PrefKeys.SHARED_PREF, PrefKeys.RESCUE_SERVICE_KEY, rescueService, SmsAlarm.this); 
+					} catch(IllegalArgumentException e) {
+						logger.logCatTxt(LogPriorities.ERROR, LOG_TAG + ":buildAndShowInputDialog().PositiveButton.OnClickListener().onClick()", "An Object of unsupported instance was given as argument to PreferencesHandler.setPrefs()", e);
+					} 	          		
 	          		// update affected UI widgets
 	          		updateRescueServiceEditText();
 	          		// Log
-					logger.logCatTxt(logger.getDEBUG(), LOG_TAG + ":buildAndShowInputDialog().PositiveButton.OnClickListener().onClick()", "New RESCUESERVICE name has been stored from user input . New RESCUESERVICE name is: \"" + rescueService + "\"");	        						        	
+					logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":buildAndShowInputDialog().PositiveButton.OnClickListener().onClick()", "New RESCUESERVICE name has been stored from user input . New RESCUESERVICE name is: \"" + rescueService + "\"");	        						        	
 	        		break;
 	        	default: // <--Unsupported dialog type
-					logger.logCatTxt(logger.getERROR(), LOG_TAG + ":buildAndShowInputDialog().PositiveButton.OnClickListener().onClick()", "Nothing is stored beacause given dialog type is UNSUPPORTED, given dialog is of type number: \"" + dialogType + "\"");	        						        	
+					logger.logCatTxt(LogPriorities.ERROR, LOG_TAG + ":buildAndShowInputDialog().PositiveButton.OnClickListener().onClick()", "Nothing is stored beacause given dialog type is UNSUPPORTED, given dialog is of type number: \"" + dialogType + "\"");	        						        	
 	        	}	        
 	    	}  	
     	});
@@ -830,13 +908,13 @@ public class SmsAlarm extends Activity  {
 	    	dialog.setNeutralButton(R.string.cancel, new DialogInterface.OnClickListener() {
 		    	  public void onClick(DialogInterface dialog, int whichButton) {
 		    		  // DO NOTHING, except logging
-		    		  logger.logCatTxt(logger.getINFO(), LOG_TAG + ":buildAndShowInputDialog().NeutralButton.OnClickListener().onClick()", "Neutral Button pressed in dialog, nothing done");	 
+		    		  logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":buildAndShowInputDialog().NeutralButton.OnClickListener().onClick()", "Neutral Button pressed in dialog, nothing done");	 
 		    	  }
 	    	});
     	}
     	
     	// Logging
-    	this.logger.logCatTxt(logger.getINFO(), LOG_TAG + ":buildAndShowInputDialog()", "Showing dialog");	 
+    	this.logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":buildAndShowInputDialog()", "Showing dialog");	 
     	
     	//Show it
     	dialog.show();
@@ -849,12 +927,14 @@ public class SmsAlarm extends Activity  {
      * @see #buildAndShowInputDialog(int)
      * @see #buildAndShowAboutDialog()
      * @see #updateSelectedToneEditText()
-     * @see ax.ha.it.smsalarm#LogHandler.logCatTxt(int, String , String)
-     * @see ax.ha.it.smsalarm#PreferencesHandler.setPrefs(String, String, Object, Context)
+     * @see {@link LogHandler#logCat(LogPriorities, String, String)}
+     * @see {@link LogHandler#logCatTxt(LogPriorities, String, String)}
+     * @see {@link LogHandler#logCatTxt(LogPriorities, String, String, Throwable)}
+     * @see {@link PreferencesHandler#setPrefs(PrefKeys, PrefKeys, Object, Context)}
      */
     private void buildAndShowToneDialog() {    
     	// Logging
-    	this.logger.logCatTxt(this.logger.getINFO(), this.LOG_TAG + ":buildAndShowToneDialog()", "Start building tone dialog");
+    	this.logger.logCat(LogPriorities.DEBUG, this.LOG_TAG + ":buildAndShowToneDialog()", "Start building tone dialog");
     	
        	// Build up the alert dialog
     	AlertDialog.Builder dialog = new AlertDialog.Builder(this);
@@ -865,32 +945,40 @@ public class SmsAlarm extends Activity  {
     	dialog.setCancelable(false);
     	
     	// Logging
-    	this.logger.logCatTxt(this.logger.getINFO(), this.LOG_TAG + ":buildAndShowToneDialog()", "Dialog attributes set");
+    	this.logger.logCat(LogPriorities.DEBUG, this.LOG_TAG + ":buildAndShowToneDialog()", "Dialog attributes set");
     	
     	// Set items to list view from resource array tones
     	dialog.setItems(R.array.tones, new DialogInterface.OnClickListener() {			
 			public void onClick(DialogInterface arg0, int listPosition) {
 				// Log information
-	        	logger.logCatTxt(logger.getINFO(), LOG_TAG + ":buildAndShowToneDialog().Item.OnClickListener().onClick()", "Item in message tones list pressed");		
+	        	logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":buildAndShowToneDialog().Item.OnClickListener().onClick()", "Item in message tones list pressed");		
 				
 				// Store position(toneId) in correct variable, depending on spinner value
 				if(toneSpinnerPos == 0) { // <--PRIMARY MESSAGE TONE
 					// Store primary message tone id from position of list
 					primaryMessageToneId = listPosition;
 					// Log information
-//		        	logger.logCatTxt(logger.getDEBUG(), LOG_TAG + ":buildAndShowToneDialog().Item.OnClickListener().onClick()", "New PRIMARY message tone selected. Tone: \"" + noiseHandler.msgToneLookup(SmsAlarm.this, primaryMessageToneId) + "\", id: \"" + primaryMessageToneId + "\" and tone Spinner position: \"" + Integer.toString(toneSpinnerPos) + "\"");			
-					// Store primary message tone id to preferences to preferences
-			      	prefHandler.setPrefs(prefHandler.getSHARED_PREF(), prefHandler.getPRIMARY_MESSAGE_TONE_KEY(), primaryMessageToneId, SmsAlarm.this);
+		        	logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":buildAndShowToneDialog().Item.OnClickListener().onClick()", "New PRIMARY message tone selected. Tone: \"" + noiseHandler.msgToneLookup(SmsAlarm.this, primaryMessageToneId) + "\", id: \"" + primaryMessageToneId + "\" and tone Spinner position: \"" + Integer.toString(toneSpinnerPos) + "\"");			
+					try {
+		        	// Store primary message tone id to preferences to preferences
+				      	prefHandler.setPrefs(PrefKeys.SHARED_PREF, PrefKeys.PRIMARY_MESSAGE_TONE_KEY, primaryMessageToneId, SmsAlarm.this);
+					} catch(IllegalArgumentException e) {
+						logger.logCatTxt(LogPriorities.ERROR, LOG_TAG + ":buildAndShowToneDialog().Item.OnClickListener().onClick()", "An Object of unsupported instance was given as argument to PreferencesHandler.setPrefs()", e);
+					} 			      	
 			      	// Update selected tone EditText
 			      	updateSelectedToneEditText();
 				} else if(toneSpinnerPos == 1) { // <--SECONDARY MESSAGE TONE
 					secondaryMessageToneId = listPosition;
-//		        	logger.logCatTxt(logger.getDEBUG(), LOG_TAG + ":buildAndShowToneDialog().Item.OnClickListener().onClick()", "New SECONDARY message tone selected. Tone: \"" + noiseHandler.msgToneLookup(SmsAlarm.this, secondaryMessageToneId) + "\", id: \"" + secondaryMessageToneId + "\" and tone Spinner position: \"" + Integer.toString(toneSpinnerPos) + "\"");		
-			      	prefHandler.setPrefs(prefHandler.getSHARED_PREF(), prefHandler.getSECONDARY_MESSAGE_TONE_KEY(), secondaryMessageToneId, SmsAlarm.this);  					
+		        	logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":buildAndShowToneDialog().Item.OnClickListener().onClick()", "New SECONDARY message tone selected. Tone: \"" + noiseHandler.msgToneLookup(SmsAlarm.this, secondaryMessageToneId) + "\", id: \"" + secondaryMessageToneId + "\" and tone Spinner position: \"" + Integer.toString(toneSpinnerPos) + "\"");
+		        	try {
+			      		prefHandler.setPrefs(PrefKeys.SHARED_PREF, PrefKeys.SECONDARY_MESSAGE_TONE_KEY, secondaryMessageToneId, SmsAlarm.this);
+					} catch(IllegalArgumentException e) {
+						logger.logCatTxt(LogPriorities.ERROR, LOG_TAG + ":buildAndShowToneDialog().Item.OnClickListener().onClick()", "An Object of unsupported instance was given as argument to PreferencesHandler.setPrefs()", e);
+					} 			      	
 					updateSelectedToneEditText();
 				} else { // <--UNSUPPORTED SPINNER POSITION
 		        	// DO NOTHING EXCEPT LOG ERROR MESSAGE
-		        	logger.logCatTxt(logger.getERROR(), LOG_TAG + ":buildAndShowToneDialog().Item.OnClickListener().onClick()", "Invalid spinner position occurred. Current tone Spinner position is: \"" + Integer.toString(toneSpinnerPos) + "\"");
+		        	logger.logCatTxt(LogPriorities.ERROR, LOG_TAG + ":buildAndShowToneDialog().Item.OnClickListener().onClick()", "Invalid spinner position occurred. Current tone Spinner position is: \"" + Integer.toString(toneSpinnerPos) + "\"");
 				}
 			}
 		});
@@ -899,12 +987,12 @@ public class SmsAlarm extends Activity  {
     	dialog.setNeutralButton(R.string.cancel, new DialogInterface.OnClickListener() {
 	    	  public void onClick(DialogInterface dialog, int whichButton) {
 	    		  // DO NOTHING, except logging
-	    		  logger.logCatTxt(logger.getINFO(), LOG_TAG + ":buildAndShowToneDialog().NeutralButton.OnClickListener().onClick()", "Neutral Button pressed in dialog, nothing done");	
+	    		  logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":buildAndShowToneDialog().NeutralButton.OnClickListener().onClick()", "Neutral Button pressed in dialog, nothing done");	
 	    	  }
     	});
 
     	// Logging
-    	this.logger.logCatTxt(this.logger.getINFO(), this.LOG_TAG + ":buildAndShowToneDialog()", "Showing dialog");
+    	this.logger.logCat(LogPriorities.DEBUG, this.LOG_TAG + ":buildAndShowToneDialog()", "Showing dialog");
     	
     	//Show dialog
     	dialog.show();        
@@ -916,11 +1004,11 @@ public class SmsAlarm extends Activity  {
      * @see #buildAndShowDeleteSecondaryNumberDialog()
      * @see #buildAndShowInputDialog(int)
      * @see #buildAndShowToneDialog()
-     * @see ax.ha.it.smsalarm#LogHandler.logCatTxt(int, String , String)
+     * @see {@link LogHandler#logCat(LogPriorities, String, String)}
      */
     private void buildAndShowAboutDialog() {  
     	// Logging
-    	this.logger.logCatTxt(this.logger.getINFO(), this.LOG_TAG + ":buildAndShowAboutDialog()", "Start building about dialog");   	
+    	this.logger.logCat(LogPriorities.DEBUG, this.LOG_TAG + ":buildAndShowAboutDialog()", "Start building about dialog");   	
  
        	//Build up the alert dialog
     	AlertDialog.Builder dialog = new AlertDialog.Builder(this);
@@ -936,18 +1024,18 @@ public class SmsAlarm extends Activity  {
     	dialog.setCancelable(false);
     	
     	// Logging
-    	this.logger.logCatTxt(this.logger.getINFO(), this.LOG_TAG + ":buildAndShowAboutDialog()", "Dialog attributes set");    	
+    	this.logger.logCat(LogPriorities.DEBUG, this.LOG_TAG + ":buildAndShowAboutDialog()", "Dialog attributes set");    	
     	
     	//Set a neutral button
     	dialog.setNeutralButton(R.string.ok, new DialogInterface.OnClickListener() {
 	    	  public void onClick(DialogInterface dialog, int whichButton) {
 	    		  // DO NOTHING, except logging
-	    		  logger.logCatTxt(logger.getINFO(), LOG_TAG + ":buildAndShowAboutDialog().NeutralButton.OnClickListener().onClick()", "Neutral Button pressed in dialog, nothing done");	
+	    		  logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":buildAndShowAboutDialog().NeutralButton.OnClickListener().onClick()", "Neutral Button pressed in dialog, nothing done");	
 	    	  }
     	});
     	
     	// Logging
-    	this.logger.logCatTxt(this.logger.getINFO(), this.LOG_TAG + ":buildAndShowAboutDialog()", "Showing dialog");    	
+    	this.logger.logCat(LogPriorities.DEBUG, this.LOG_TAG + ":buildAndShowAboutDialog()", "Showing dialog");    	
 
     	// Show dialog
     	dialog.show();        
@@ -965,11 +1053,11 @@ public class SmsAlarm extends Activity  {
      * @see #updatePlayToneTwiceCheckBox()
      * @see #updateEnableSmsAlarmCheckBox()
      * @see #updateAcknowledgeWidgets()
-     * @see ax.ha.it.smsalarm#LogHandler.logCatTxt(int, String , String)     
+     * @see {@link LogHandler#logCat(LogPriorities, String, String)}    
      */
     private void updateWholeUI() {
     	// Logging
-    	this.logger.logCatTxt(this.logger.getINFO(), this.LOG_TAG + ":updateWholeUI", "Whole user interface is about to be updated");
+    	this.logger.logCat(LogPriorities.DEBUG, this.LOG_TAG + ":updateWholeUI", "Whole user interface is about to be updated");
     	
     	// Update primary listen number EditText
     	this.updatePrimaryListenNumberEditText();
@@ -999,26 +1087,26 @@ public class SmsAlarm extends Activity  {
         this.updateAcknowledgeWidgets();
         
     	// Logging
-    	this.logger.logCatTxt(this.logger.getINFO(), this.LOG_TAG + ":updateWholeUI", "User interface updated");        
+    	this.logger.logCat(LogPriorities.DEBUG, this.LOG_TAG + ":updateWholeUI", "User interface updated");        
     }    
     /**
      * To update primary listen number <code>EditText</code> widget.
      * 
-     * @see ax.ha.it.smsalarm#LogHandler.logCatTxt(int, String , String)        
+     * @see {@link LogHandler#logCat(LogPriorities, String, String)}       
      */
     private void updatePrimaryListenNumberEditText() {
         // Update primary listen number EditText with value
     	this.primaryListenNumberEditText.setText(this.primaryListenNumber);  
     	
 	    // Logging
-	    this.logger.logCatTxt(this.logger.getDEBUG(), this.LOG_TAG + ":updatePrimaryListenNumberEditText()", "PRIMARY listen number EditText set to: " + this.primaryListenNumber);    	
-	    this.logger.logCatTxt(this.logger.getINFO(), this.LOG_TAG + ":updatePrimaryListenNumberEditText()", "PRIMARY listen number EditText updated");    
+	    this.logger.logCat(LogPriorities.DEBUG, this.LOG_TAG + ":updatePrimaryListenNumberEditText()", "PRIMARY listen number EditText set to: " + this.primaryListenNumber);    	
+	    this.logger.logCat(LogPriorities.DEBUG, this.LOG_TAG + ":updatePrimaryListenNumberEditText()", "PRIMARY listen number EditText updated");    
     }
     
     /**
      * To update secondary listen numbers <code>Spinner</code> with correct values.
      * 
-     * @see ax.ha.it.smsalarm#LogHandler.logCatTxt(int, String , String)        
+     * @see {@link LogHandler#logCat(LogPriorities, String, String)}         
      */
     private void updateSecondaryListenNumberSpinner() {
 	    //Check if there are secondary listen numbers and build up a proper spinner according to that information
@@ -1027,53 +1115,54 @@ public class SmsAlarm extends Activity  {
 		    adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 		    this.secondaryListenNumberSpinner.setAdapter(adapter);	 
 		    // Logging
-		    this.logger.logCatTxt(this.logger.getDEBUG(), this.LOG_TAG + ":updateSecondaryListenNumberSpinner()", "Populate SECONDARY listen number spinner with values: " + this.secondaryListenNumbers);
+		    this.logger.logCat(LogPriorities.DEBUG, this.LOG_TAG + ":updateSecondaryListenNumberSpinner()", "Populate SECONDARY listen number spinner with values: " + this.secondaryListenNumbers);
 	    } else {
 	    	this.emptySecondaryListenNumbers.add(getString(R.string.enterPhoneNumberHint));
 		    ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, this.emptySecondaryListenNumbers);
 		    adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 		    this.secondaryListenNumberSpinner.setAdapter(adapter);	
 		    // Logging
-		    this.logger.logCatTxt(this.logger.getDEBUG(), this.LOG_TAG + ":updateSecondaryListenNumberSpinner()", "List with SECONDARY listen numbers is empty, populating spinner with an empty list");		    
+		    this.logger.logCat(LogPriorities.DEBUG, this.LOG_TAG + ":updateSecondaryListenNumberSpinner()", "List with SECONDARY listen numbers is empty, populating spinner with an empty list");		    
 	    }  
 	    
 	    // Logging
-	    this.logger.logCatTxt(this.logger.getINFO(), this.LOG_TAG + ":updateSecondaryListenNumberSpinner()", "SECONDARY listen numbers Spinner updated");
+	    this.logger.logCat(LogPriorities.DEBUG, this.LOG_TAG + ":updateSecondaryListenNumberSpinner()", "SECONDARY listen numbers Spinner updated");
     }
     
     /**
      * To update acknowledge number <code>EditText</code> widget.
      * 
-     * @see ax.ha.it.smsalarm#LogHandler.logCatTxt(int, String , String)        
+     * @see {@link LogHandler#logCat(LogPriorities, String, String)}        
      */
     private void updateAcknowledgeNumberEditText() {
         // Update acknowledge number EditText with value
         this.ackNumberEditText.setText(this.acknowledgeNumber); 
         
 	    // Logging
-	    this.logger.logCatTxt(this.logger.getDEBUG(), this.LOG_TAG + ":updateAcknowledgeNumberEditText()", "Acknowledge number EditText set to: " + this.acknowledgeNumber);    	
-	    this.logger.logCatTxt(this.logger.getINFO(), this.LOG_TAG + ":updateAcknowledgeNumberEditText()", "Acknowledge number EditText updated");           
+	    this.logger.logCat(LogPriorities.DEBUG, this.LOG_TAG + ":updateAcknowledgeNumberEditText()", "Acknowledge number EditText set to: " + this.acknowledgeNumber);    	
+	    this.logger.logCat(LogPriorities.DEBUG, this.LOG_TAG + ":updateAcknowledgeNumberEditText()", "Acknowledge number EditText updated");           
     }
 
     /**
      * To update selected tone <code>EditText</code> widget with value of <code>toneSpinner</code> position.
      * 
-     * @see ax.ha.it.smsalarm#LogHandler.logCatTxt(int, String , String)        
+     * @see {@link LogHandler#logCat(LogPriorities, String, String)}   
+     * @see {@link LogHandler#logCatTxt(LogPriorities, String, String)}     
      */
     private void updateSelectedToneEditText() {
     	// Log tone spinner position
-    	this.logger.logCatTxt(this.logger.getDEBUG(), this.LOG_TAG + ":updateSelectedToneEditText()", "Tone Spinner position is: " + Integer.toString(this.toneSpinnerPos));
+    	this.logger.logCat(LogPriorities.DEBUG, this.LOG_TAG + ":updateSelectedToneEditText()", "Tone Spinner position is: " + Integer.toString(this.toneSpinnerPos));
     	
         // Set message tone to the selectedToneEditText, depending on which value spinner has. Also log this event
         if(this.toneSpinnerPos == 0) {
-//        	this.selectedToneEditText.setText(this.noiseHandler.msgToneLookup(this, this.primaryMessageToneId));
-        	this.logger.logCatTxt(this.logger.getINFO(), this.LOG_TAG + ":updateSelectedToneEditText()", "Selected tone EditText updated");
+        	this.selectedToneEditText.setText(this.noiseHandler.msgToneLookup(this, this.primaryMessageToneId));
+        	this.logger.logCat(LogPriorities.DEBUG, this.LOG_TAG + ":updateSelectedToneEditText()", "Selected tone EditText updated");
         } else if(this.toneSpinnerPos == 1) {
-//        	this.selectedToneEditText.setText(this.noiseHandler.msgToneLookup(this, this.secondaryMessageToneId));
-        	this.logger.logCatTxt(this.logger.getINFO(), this.LOG_TAG + ":updateSelectedToneEditText()", "Selected tone EditText updated");
+        	this.selectedToneEditText.setText(this.noiseHandler.msgToneLookup(this, this.secondaryMessageToneId));
+        	this.logger.logCat(LogPriorities.DEBUG, this.LOG_TAG + ":updateSelectedToneEditText()", "Selected tone EditText updated");
         } else {
         	// DO NOTHING EXCEPT LOG ERROR MESSAGE
-        	this.logger.logCatTxt(this.logger.getERROR(), this.LOG_TAG + ":updateSelectedToneEditText()", "Invalid spinner position occurred. Current tone Spinner position is: \"" + Integer.toString(this.toneSpinnerPos) + "\"");
+        	this.logger.logCatTxt(LogPriorities.ERROR, this.LOG_TAG + ":updateSelectedToneEditText()", "Invalid spinner position occurred. Current tone Spinner position is: \"" + Integer.toString(this.toneSpinnerPos) + "\"");
         }    	
     }
     
@@ -1087,62 +1176,62 @@ public class SmsAlarm extends Activity  {
         this.rescueServiceEditText.setText(this.rescueService); 
         
 	    // Logging
-	    this.logger.logCatTxt(this.logger.getDEBUG(), this.LOG_TAG + ":updateRescueServiceEditText()", "Rescue service EditText set to: " + this.rescueService);    	
-	    this.logger.logCatTxt(this.logger.getINFO(), this.LOG_TAG + ":updateRescueServiceEditText()", "Rescue service EditText updated");          
+	    this.logger.logCat(LogPriorities.DEBUG, this.LOG_TAG + ":updateRescueServiceEditText()", "Rescue service EditText set to: " + this.rescueService);    	
+	    this.logger.logCat(LogPriorities.DEBUG, this.LOG_TAG + ":updateRescueServiceEditText()", "Rescue service EditText updated");          
     }
     
     /**
      * To update use OS sound settings <code>CheckBox</code> widget.
      * 
-     * @see ax.ha.it.smsalarm#LogHandler.logCatTxt(int, String , String)   
+     * @see {@link LogHandler#logCat(LogPriorities, String, String)}   
      */
     private void updateUseOsSoundSettingsCheckbox() {
         // Update use OS sound settings CheckBox
     	if(this.useOsSoundSettings) {
     		this.soundSettingCheckBox.setChecked(true);
-    	    this.logger.logCatTxt(this.logger.getDEBUG(), this.LOG_TAG + ":updateUseOsSoundSettingsCheckbox()", "Use OS sound settings CheckBox \"Checked\"(" + this.useOsSoundSettings + ")"); 
+    	    this.logger.logCat(LogPriorities.DEBUG, this.LOG_TAG + ":updateUseOsSoundSettingsCheckbox()", "Use OS sound settings CheckBox \"Checked\"(" + this.useOsSoundSettings + ")"); 
     	} else {
-    		this.logger.logCatTxt(this.logger.getDEBUG(), this.LOG_TAG + ":updateUseOsSoundSettingsCheckbox()", "Use OS sound settings CheckBox \"Unchecked\"(" + this.useOsSoundSettings + ")"); 
+    		this.logger.logCat(LogPriorities.DEBUG, this.LOG_TAG + ":updateUseOsSoundSettingsCheckbox()", "Use OS sound settings CheckBox \"Unchecked\"(" + this.useOsSoundSettings + ")"); 
     	}
     	
     	// Logging
-    	this.logger.logCatTxt(this.logger.getINFO(), this.LOG_TAG + ":updateUseOsSoundSettingsCheckbox()", "Use OS sound settings CheckBox updated");    
+    	this.logger.logCat(LogPriorities.DEBUG, this.LOG_TAG + ":updateUseOsSoundSettingsCheckbox()", "Use OS sound settings CheckBox updated");    
     }
     
     /**
      * To update play tone twice <code>CheckBox</code> widget.
      * 
-     * @see ax.ha.it.smsalarm#LogHandler.logCatTxt(int, String , String)        
+     * @see {@link LogHandler#logCat(LogPriorities, String, String)}        
      */
     private void updatePlayToneTwiceCheckBox() {
     	// Update play tone twice CheckBox
     	if(this.playToneTwice) {
     		this.playToneTwiceSettingCheckBox.setChecked(true);
-    		this.logger.logCatTxt(this.logger.getDEBUG(), this.LOG_TAG + ":updatePlayToneTwiceCheckBox()", "Play tone twice CheckBox \"Checked\"(" + this.playToneTwice + ")"); 
+    		this.logger.logCat(LogPriorities.DEBUG, this.LOG_TAG + ":updatePlayToneTwiceCheckBox()", "Play tone twice CheckBox \"Checked\"(" + this.playToneTwice + ")"); 
     	} else {
-    		this.logger.logCatTxt(this.logger.getDEBUG(), this.LOG_TAG + ":updatePlayToneTwiceCheckBox()", "Play tone twice CheckBox \"Unchecked\"(" + this.playToneTwice + ")"); 
+    		this.logger.logCat(LogPriorities.DEBUG, this.LOG_TAG + ":updatePlayToneTwiceCheckBox()", "Play tone twice CheckBox \"Unchecked\"(" + this.playToneTwice + ")"); 
     	}
     	
     	// Logging
-    	this.logger.logCatTxt(this.logger.getINFO(), this.LOG_TAG + ":updatePlayToneTwiceCheckBox()", "Play tone twice CheckBox updated");  
+    	this.logger.logCat(LogPriorities.DEBUG, this.LOG_TAG + ":updatePlayToneTwiceCheckBox()", "Play tone twice CheckBox updated");  
     }
     
     /**
      * To update enable Sms Alarm <code>CheckBox</code> widget.
      * 
-     * @see ax.ha.it.smsalarm#LogHandler.logCatTxt(int, String , String)        
+     * @see {@link LogHandler#logCat(LogPriorities, String, String)}        
      */
     private void updateEnableSmsAlarmCheckBox() {
     	// Update enable Sms Alarm CheckBox(default checked=true)
     	if(!this.enableSmsAlarm) {
     		this.enableSmsAlarmCheckBox.setChecked(false);
-    		this.logger.logCatTxt(this.logger.getDEBUG(), this.LOG_TAG + ":updateEnableSmsAlarmCheckBox()", "Enable SmsAlarm CheckBox \"Unchecked\"(" + this.enableSmsAlarm + ")"); 
+    		this.logger.logCat(LogPriorities.DEBUG, this.LOG_TAG + ":updateEnableSmsAlarmCheckBox()", "Enable SmsAlarm CheckBox \"Unchecked\"(" + this.enableSmsAlarm + ")"); 
     	} else {
-    		this.logger.logCatTxt(this.logger.getDEBUG(), this.LOG_TAG + ":updateEnableSmsAlarmCheckBox()", "Enable SmsAlarm CheckBox \"Checked\"(" + this.enableSmsAlarm + ")");     		
+    		this.logger.logCat(LogPriorities.DEBUG, this.LOG_TAG + ":updateEnableSmsAlarmCheckBox()", "Enable SmsAlarm CheckBox \"Checked\"(" + this.enableSmsAlarm + ")");     		
     	}
     	
     	// Logging
-    	this.logger.logCatTxt(this.logger.getINFO(), this.LOG_TAG + ":updateEnableSmsAlarmCheckBox()", "Enable SmsAlarm CheckBox updated"); 
+    	this.logger.logCat(LogPriorities.DEBUG, this.LOG_TAG + ":updateEnableSmsAlarmCheckBox()", "Enable SmsAlarm CheckBox updated"); 
     }
     
     /**
@@ -1150,7 +1239,7 @@ public class SmsAlarm extends Activity  {
      * type <code>CheckBox</code>, <code>Button</code> and <code>EditText</code>, they are
      * enableAckCheckBox, ackNumberButton and ackNumberEditText.
      * 
-     * @see ax.ha.it.smsalarm#LogHandler.logCatTxt(int, String , String)        
+     * @see {@link LogHandler#logCat(LogPriorities, String, String)}        
      */
     private void updateAcknowledgeWidgets() {
     	/* 
@@ -1161,14 +1250,14 @@ public class SmsAlarm extends Activity  {
     		this.enableAckCheckBox.setChecked(true);
     		this.ackNumberButton.setEnabled(true);
     		this.ackNumberEditText.setTextColor(Color.BLACK);
-    		this.logger.logCatTxt(this.logger.getDEBUG(), this.LOG_TAG + ":updateAcknowledgeWidgets()", "Enable acknowledge CheckBox \"Checked\"(" + this.useAlarmAcknowledge + "), acknowledge number Button is \"Enabled\" and acknowledge number EditText is \"Enabled\"");
+    		this.logger.logCat(LogPriorities.DEBUG, this.LOG_TAG + ":updateAcknowledgeWidgets()", "Enable acknowledge CheckBox \"Checked\"(" + this.useAlarmAcknowledge + "), acknowledge number Button is \"Enabled\" and acknowledge number EditText is \"Enabled\"");
     	} else {
     		this.ackNumberButton.setEnabled(false);
     		this.ackNumberEditText.setTextColor(Color.GRAY);
-    		this.logger.logCatTxt(this.logger.getDEBUG(), this.LOG_TAG + ":updateAcknowledgeWidgets()", "Enable acknowledge CheckBox \"Unchecked\"(" + this.useAlarmAcknowledge + "), acknowledge number Button is \"Disabled\" and acknowledge number EditText is \"Disabled\"");
+    		this.logger.logCat(LogPriorities.DEBUG, this.LOG_TAG + ":updateAcknowledgeWidgets()", "Enable acknowledge CheckBox \"Unchecked\"(" + this.useAlarmAcknowledge + "), acknowledge number Button is \"Disabled\" and acknowledge number EditText is \"Disabled\"");
     	}  
     	
     	// Logging
-    	this.logger.logCatTxt(this.logger.getINFO(), this.LOG_TAG + ":updateAcknowledgeWidgets()", "Acknowledge alarm UI widgets updated"); 
+    	this.logger.logCat(LogPriorities.DEBUG, this.LOG_TAG + ":updateAcknowledgeWidgets()", "Acknowledge alarm UI widgets updated"); 
     }
 }
