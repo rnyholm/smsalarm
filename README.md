@@ -1,9 +1,3 @@
-<<<<<<< HEAD
-smsalarm
-========
-
-Repository for the Android application SmsAlarm
-=======
 Sms Alarm
 =========
 
@@ -35,4 +29,3 @@ Developer: Robert Nyholm <robert.nyholm@aland.net><br />
 Development environment: Eclipse IDE Indigo Release v3.0.0<br />
 Android SDK: 2.0<br />
 Version control system: Git v1.8.3.1<br />
->>>>>>> refs/heads/v2.1
