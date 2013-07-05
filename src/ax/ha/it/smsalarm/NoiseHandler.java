@@ -23,7 +23,7 @@ import ax.ha.it.smsalarm.LogHandler.LogPriorities;
  * @author Robert Nyholm <robert.nyholm@aland.net>
  * @version 2.1
  * @since 2.0
- * @date 2013-06-30
+ * @date 2013-07-06
  */
 public class NoiseHandler {
 	// Singleton instance of this class
@@ -36,7 +36,7 @@ public class NoiseHandler {
 	private LogHandler logger;
 
 	// Initialize a MediaPlayer object
-	final MediaPlayer mPlayer = new MediaPlayer(); // MediaPlayer object
+	private final MediaPlayer mPlayer = new MediaPlayer();
 
 	/**
 	 * Private constructor, is private due to it's singleton pattern.
@@ -257,9 +257,9 @@ public class NoiseHandler {
 					mPlayer.start();
 				} else {
 					am.setStreamVolume(AudioManager.STREAM_MUSIC, currentMediaVolume, 0);
-					mPlayer.release();
+					mPlayer.reset();
 					// Log information
-					logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":makeNoise().MediaPlayer.onCompletion()", "Media player have been released and all sound levels have been restored");
+					logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":makeNoise().MediaPlayer.onCompletion()", "Media player and all sound levels have been restored");
 				}
 			}
 		});
