@@ -27,5 +27,5 @@ Development
 -----------
 Developer: Robert Nyholm <robert.nyholm@aland.net><br />
 Development environment: Eclipse IDE Indigo Release v3.0.0<br />
-Android SDK: 2.0<br />
+Android SDK: 2.2<br />
 Version control system: Git v1.8.3.1<br />
