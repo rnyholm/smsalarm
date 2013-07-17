@@ -251,8 +251,6 @@ public class SmsAlarm extends Activity  {
 					logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":onCreate().listenMsgToneButton.OnClickListener().onClick()", "Listen message tone Button pressed. Message tone for PRIMARY alarm will be played");
 					// Play message tone and vibrate
 					noiseHandler.makeNoise(SmsAlarm.this, primaryMessageToneId, useOsSoundSettings, false);
-					Intent noiseIntent = new Intent(SmsAlarm.this, NoiseHandler.class);
-					startService(noiseIntent);
 				} else if(toneSpinnerPos == 1) {
 					logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":onCreate().listenMsgToneButton.OnClickListener().onClick()", "Listen message tone Button pressed. Message tone for SECONDARY alarm will be played");
 					noiseHandler.makeNoise(SmsAlarm.this, secondaryMessageToneId, useOsSoundSettings, false);
