@@ -254,6 +254,9 @@ public class NoiseHandler {
 					}
 				}
 			});
+		} else {
+			// Log information
+			this.logger.logCat(LogPriorities.DEBUG, this.LOG_TAG + ":makeNoise()", "MediaPlayer is already playing, leave makeNoise()");
 		}
 	}
 
