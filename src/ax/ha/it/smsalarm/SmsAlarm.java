@@ -733,7 +733,7 @@ public class SmsAlarm extends Activity  {
     		// Set hint to edittext
         	input.setHint(R.string.numberPromptHint);
         	// Set Input type to edittext
-        	input.setInputType(InputType.TYPE_CLASS_PHONE);
+        	input.setInputType(InputType.TYPE_CLASS_NUMBER);
         	// Set dialog to non cancelable
         	dialog.setCancelable(false);
         	// Bind dialog to input
@@ -745,7 +745,7 @@ public class SmsAlarm extends Activity  {
         	dialog.setTitle(R.string.numberPromptTitle);
     		dialog.setMessage(R.string.secondaryNumberPromptMessage);
         	input.setHint(R.string.numberPromptHint);
-        	input.setInputType(InputType.TYPE_CLASS_PHONE);
+        	input.setInputType(InputType.TYPE_CLASS_NUMBER);
         	dialog.setCancelable(false);
         	dialog.setView(input);
         	this.logger.logCat(LogPriorities.DEBUG, this.LOG_TAG + ":buildAndShowInputDialog()", "Dialog attributes is set for dialog type SECONDARY");
@@ -754,7 +754,7 @@ public class SmsAlarm extends Activity  {
         	dialog.setTitle(R.string.numberPromptTitle);
     		dialog.setMessage(R.string.ackNumberPromptMessage);
         	input.setHint(R.string.numberPromptHint);
-        	input.setInputType(InputType.TYPE_CLASS_PHONE);
+        	input.setInputType(InputType.TYPE_CLASS_NUMBER);
         	dialog.setCancelable(false);
         	dialog.setView(input);
         	this.logger.logCat(LogPriorities.DEBUG, this.LOG_TAG + ":buildAndShowInputDialog()", "Dialog attributes is set for dialog type ACKNOWLEDGE");
