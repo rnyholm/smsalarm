@@ -23,7 +23,7 @@ import android.util.Log;
  * @author Robert Nyholm <robert.nyholm@aland.net>
  * @version 2.1
  * @since 2.0
- * @date 2013-07-05
+ * @date 2013-07-18
  */
 public class LogHandler {
 	/**
@@ -46,7 +46,7 @@ public class LogHandler {
 	// Log tag
 	private final String LOG_TAG = "LogHandler";
 	// Names for the txt and html file
-	private final String TXT_LOG_FILE = "errlog.txt";
+	private final String TXT_LOG_FILE = "errorlog.txt";
 	// Name of directory for application
 	private final String DIRECTORY = "SmsAlarm";
 
@@ -236,24 +236,19 @@ public class LogHandler {
 					// HAS NO Log METHOD
 					break;
 				case DEBUG:
-					bW.write("DEBUG\t\t" + this.formatter.format(this.today) + "\t" + logTag + "#" + message + this.EOL);
-					bW.newLine();
+					bW.write("DEBUG\t" + this.formatter.format(this.today) + "\t" + logTag + " - " + message  + this.EOL);
 					break;
 				case ERROR:
-					bW.write("ERROR\t\t" + this.formatter.format(this.today) + "\t" + logTag + "#" + message + this.EOL);
-					bW.newLine();
+					bW.write("ERROR\t" + this.formatter.format(this.today) + "\t" + logTag + " - " + message  + this.EOL);
 					break;
 				case INFO:
-					bW.write("INFO\t\t" + this.formatter.format(this.today) + "\t" + logTag + "#" + message + this.EOL);
-					bW.newLine();
+					bW.write("INFO\t" + this.formatter.format(this.today) + "\t" + logTag + " - " + message  + this.EOL);
 					break;
 				case VERBOSE:
-					bW.write("VERBOSE\t\t" + this.formatter.format(this.today) + "\t" + logTag + "#" + message + this.EOL);
-					bW.newLine();
+					bW.write("VERBOSE\t" + this.formatter.format(this.today) + "\t" + logTag + " - " + message  + this.EOL);
 					break;
 				case WARN:
-					bW.write("WARN\t\t" + this.formatter.format(this.today) + "\t" + logTag + "#" + message + this.EOL);
-					bW.newLine();
+					bW.write("WARN\t" + this.formatter.format(this.today) + "\t" + logTag + " - " + message  + this.EOL);
 					break;
 				default:
 					// Invalid log priority detected log another log message with this error and the origin log message
@@ -334,24 +329,19 @@ public class LogHandler {
 					// HAS NO Log METHOD
 					break;
 				case DEBUG:
-					bW.write("DEBUG\t\t" + this.formatter.format(this.today) + "\t" + logTag + "#" + message + "#" + thr + this.EOL);
-					bW.newLine();
+					bW.write("DEBUG\t" + this.formatter.format(this.today) + "\t" + logTag + " - " + message + " - " + thr + this.EOL);
 					break;
 				case ERROR:
-					bW.write("ERROR\t\t" + this.formatter.format(this.today) + "\t" + logTag + "#" + message + "#" + thr + this.EOL);
-					bW.newLine();
+					bW.write("ERROR\t" + this.formatter.format(this.today) + "\t" + logTag + " - " + message + " - " + thr  + this.EOL);
 					break;
 				case INFO:
-					bW.write("INFO\t\t" + this.formatter.format(this.today) + "\t" + logTag + "#" + message + "#" + thr + this.EOL);
-					bW.newLine();
+					bW.write("INFO\t" + this.formatter.format(this.today) + "\t" + logTag + " - " + message + " - " + thr  + this.EOL);
 					break;
 				case VERBOSE:
-					bW.write("VERBOSE\t\t" + this.formatter.format(this.today) + "\t" + logTag + "#" + message + "#" + thr + this.EOL);
-					bW.newLine();
+					bW.write("VERBOSE\t" + this.formatter.format(this.today) + "\t" + logTag + " - " + message + " - " + thr  + this.EOL);
 					break;
 				case WARN:
-					bW.write("WARN\t\t" + this.formatter.format(this.today) + "\t" + logTag + "#" + message + "#" + thr + this.EOL);
-					bW.newLine();
+					bW.write("WARN\t" + this.formatter.format(this.today) + "\t" + logTag + " - " + message + " - " + thr  + this.EOL);
 					break;
 				default:
 					// Invalid log priority detected log another log message with this error and the origin log message
@@ -371,7 +361,7 @@ public class LogHandler {
 	}
 
 	/**
-	 * Method to check if directory needed directory or file for application
+	 * Method to check if needed directory or file for application
 	 * exist, if not theyr'e created.
 	 * 
 	 * @param saDir
@@ -397,9 +387,6 @@ public class LogHandler {
 				// Log exception
 				this.logCat(LogPriorities.ERROR, this.LOG_TAG + ":logTxt()", "An IOException occurred during creation of file: \"" + this.TXT_LOG_FILE + "\"", e);
 			}
-
-			// To write log header
-			this.writeLogHeader(file);
 		}
 
 		// If log file don't exists, create it
@@ -414,33 +401,6 @@ public class LogHandler {
 				// Log exception
 				this.logCat(LogPriorities.ERROR, this.LOG_TAG + ":logTxt()", "An IOException occurred during creation of file: \"" + this.TXT_LOG_FILE + "\"", e);
 			}
-			// To write log header
-			this.writeLogHeader(file);
-		}
-	}
-
-	/**
-	 * Method to write header to log file.
-	 * 
-	 * @param file
-	 *            File to write header to
-	 */
-	private void writeLogHeader(File file) {
-		try {
-			// Create BufferedWriter with FileWriter of file, used to write to file
-			BufferedWriter bW = new BufferedWriter(new FileWriter(file, false));
-
-			// Write header to file
-			bW.write("SmsAlarm - Application Log" + this.EOL + this.EOL);
-			bW.write("Priority\tTime\t\t\tTag#Message#Throwable" + this.EOL);
-			bW.write("********\t****\t\t\t*********************" + this.EOL);
-
-			// Ensure that everything has been written to the file and close
-			bW.flush();
-			bW.close();
-		} catch (Exception e) {
-			// Log exception
-			this.logCat(LogPriorities.ERROR, this.LOG_TAG + ":logTxt()", "An Exception occurred during writing to file: \"" + this.TXT_LOG_FILE + "\"", e);
 		}
 	}
 
