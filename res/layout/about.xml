@@ -7,7 +7,7 @@
         android:layout_height="wrap_content"
         android:layout_marginLeft="5dp"
         android:layout_marginTop="5dp"
-        android:text="@string/app_name"
+        android:text="@string/APP_NAME"
         android:textAppearance="?android:attr/textAppearanceMedium" />
 
     <TextView
@@ -15,7 +15,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginLeft="5dp"
-        android:text="@string/appDescr"
+        android:text="@string/APP_DESCR"
         android:textAppearance="?android:attr/textAppearanceSmall" />
 
     <TextView

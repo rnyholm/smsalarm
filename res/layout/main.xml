@@ -12,7 +12,7 @@
             android:layout_marginLeft="5dp"
             android:layout_marginRight="5dp"
             android:layout_marginTop="5dp"
-            android:text="@string/smsSettings"
+            android:text="@string/TITLE_SMS_SETTINGS"
             android:textAppearance="?android:attr/textAppearanceMedium" />
         
         <TextView
@@ -22,7 +22,7 @@
             android:layout_alignLeft="@id/smsSettings_tv"
             android:layout_below="@id/smsSettings_tv"
             android:layout_marginRight="5dp"
-            android:text="@string/smsSettingsInfo"
+            android:text="@string/INFO_SMS_SETTINGS"
             android:textAppearance="?android:attr/textAppearanceSmall" />
 
         <TextView
@@ -32,7 +32,7 @@
             android:layout_alignLeft="@id/smsSettingsInfo_tv"
             android:layout_below="@id/smsSettingsInfo_tv"
             android:layout_marginTop="5dp"
-            android:text="@string/primaryAlarmTitle"
+            android:text="@string/TITLE_PRIMARY_ALARM"
             android:textAppearance="?android:attr/textAppearanceMedium" />
 
         <EditText
@@ -41,7 +41,7 @@
             android:layout_height="wrap_content"
             android:layout_alignLeft="@id/primaryAlarmTitle_tv"
             android:layout_below="@id/primaryAlarmTitle_tv"
-            android:hint="@string/enterPhoneNumberHint"
+            android:hint="@string/ENTER_PHONE_NUMBER_HINT"
             android:inputType="numberSigned|phone" >
 
         </EditText>
@@ -54,7 +54,7 @@
             android:layout_alignParentRight="true"
             android:layout_marginRight="5dp"
             android:layout_toRightOf="@id/primaryNumber_et"
-            android:text="@string/editNumber"
+            android:text="@string/EDIT_NUMBER"
             android:width="50dp" />
 
         <TextView
@@ -63,7 +63,7 @@
             android:layout_height="wrap_content"
             android:layout_alignLeft="@+id/primaryNumber_et"
             android:layout_below="@+id/primaryNumber_et"
-            android:text="@string/secondaryAlarmTitle"
+            android:text="@string/TITLE_SECONDARY_ALARM"
             android:textAppearance="?android:attr/textAppearanceMedium" />
 
         <Spinner
@@ -80,7 +80,7 @@
             android:layout_alignLeft="@id/secondaryNumberSpinner_sp"
             android:layout_below="@id/secondaryNumberSpinner_sp"
             android:layout_marginTop="-3dp"
-            android:text="@string/addSecondaryNumber" />
+            android:text="@string/ADD_SECONDARY_NUMBER" />
 
         <Button
             android:id="@+id/deleteSecondaryNumber_btn"
@@ -89,7 +89,7 @@
             android:layout_alignBaseline="@id/addSecondaryNumber_btn"
             android:layout_marginRight="3dp"
             android:layout_toRightOf="@id/addSecondaryNumber_btn"
-            android:text="@string/deleteSecondaryNumber" />
+            android:text="@string/DELETE_SECONDARY_NUMBER" />
 
         <ImageView
             android:id="@+id/mainDivider1_iv"
@@ -110,7 +110,7 @@
             android:layout_below="@+id/mainDivider1_iv"
             android:layout_marginRight="5dp"
             android:layout_marginTop="7dp"
-            android:text="@string/soundSettings"
+            android:text="@string/TITLE_SOUND_SETTINGS"
             android:textAppearance="?android:attr/textAppearanceMedium" />
 
         <TextView
@@ -120,7 +120,7 @@
             android:layout_alignLeft="@+id/soundSettings_tv"
             android:layout_below="@+id/soundSettings_tv"
             android:layout_marginRight="5dp"
-            android:text="@string/soundSettingsInfo"
+            android:text="@string/INFO_SOUND_SETTINGS"
             android:textAppearance="?android:attr/textAppearanceSmall" />
 
         <TextView
@@ -170,7 +170,7 @@
             android:layout_alignLeft="@+id/msgTone_et"
             android:layout_below="@+id/msgTone_et"
             android:layout_marginTop="2dp"
-            android:text="@string/editMsgTone" />
+            android:text="@string/EDIT_ALARM_SIGNAL" />
 
         <Button
             android:id="@+id/listenMsgTone_btn"
@@ -180,7 +180,7 @@
             android:layout_marginRight="3dp"
             android:layout_marginTop="2dp"
             android:layout_toRightOf="@id/editMsgTone_btn"
-            android:text="@string/listenMsgTone" />
+            android:text="@string/LISTEN_ALARM_SIGNAL" />
 
         <CheckBox
             android:id="@+id/useSysSoundSettings_chk"
@@ -242,7 +242,7 @@
             android:layout_alignLeft="@+id/mainDivider2_iv"
             android:layout_below="@+id/mainDivider2_iv"
             android:layout_marginTop="7dp"
-            android:text="@string/ackSettings"
+            android:text="@string/TITLE_ACK_SETTINGS"
             android:textAppearance="?android:attr/textAppearanceMedium" />
 
         <TextView
@@ -252,7 +252,7 @@
             android:layout_alignLeft="@+id/ackSettings_tv"
             android:layout_below="@+id/ackSettings_tv"
             android:layout_marginRight="5dp"
-            android:text="@string/ackSettingsInfo"
+            android:text="@string/INFO_ACK_SETTINGS"
             android:textAppearance="?android:attr/textAppearanceSmall" />
 
         <CheckBox
@@ -292,7 +292,7 @@
             android:layout_alignLeft="@id/acknowledgeNumberTitle_tv"
             android:layout_below="@id/acknowledgeNumberTitle_tv"
             android:layout_marginTop="2dp"
-            android:hint="@string/enterPhoneNumberHint"
+            android:hint="@string/ENTER_PHONE_NUMBER_HINT"
             android:inputType="number|numberSigned|phone"
             android:singleLine="true" />
 
@@ -314,7 +314,7 @@
             android:layout_alignLeft="@+id/mainDivider3_iv"
             android:layout_below="@+id/mainDivider3_iv"
             android:layout_marginTop="7dp"
-            android:text="@string/miscSettings"
+            android:text="@string/TITLE_MISC_SETTINGS"
             android:textAppearance="?android:attr/textAppearanceMedium" />
 
         <TextView
@@ -324,7 +324,7 @@
             android:layout_alignLeft="@+id/miscSettings_tv"
             android:layout_below="@+id/miscSettings_tv"
             android:layout_marginRight="5dp"
-            android:text="@string/miscSettingsInfo"
+            android:text="@string/INFO_MISC_SETTINGS"
             android:textAppearance="?android:attr/textAppearanceSmall" />
 
         <TextView
@@ -389,7 +389,7 @@
             android:layout_alignParentRight="true"
             android:layout_marginRight="5dp"
             android:layout_toRightOf="@+id/ackNumber_et"
-            android:text="@string/editNumber" />
+            android:text="@string/EDIT_NUMBER" />
 
     </RelativeLayout>
 

@@ -116,15 +116,15 @@ public class NotificationHelper extends IntentService {
 			// Set icon
 			icon = android.R.drawable.ic_delete;
 			// Set ticker text
-			tickerText = this.getString(R.string.alarm);
+			tickerText = this.getString(R.string.PRIMARY_ALARM);
 			// Set content title
-			contentTitle = this.getString(R.string.alarm);
+			contentTitle = this.getString(R.string.PRIMARY_ALARM);
 			// Log
 			this.logger.logCat(LogPriorities.DEBUG, this.LOG_TAG + ":onHandleIntent()", "Notification has been set for a primary alarm");
 		} else if ("secondary".equals(larmType)) {
 			icon = android.R.drawable.ic_menu_close_clear_cancel;
-			tickerText = this.getString(R.string.secondaryAlarm);
-			contentTitle = this.getString(R.string.secondaryAlarm);
+			tickerText = this.getString(R.string.SECONDARY_ALARM);
+			contentTitle = this.getString(R.string.SECONDARY_ALARM);
 			this.logger.logCat(LogPriorities.DEBUG, this.LOG_TAG + ":onHandleIntent()", "Notification has been set for a secondary alarm");
 		} else { // <--If this happens, something really weird is going on
 			this.logger.logCatTxt(LogPriorities.ERROR, this.LOG_TAG + ":onHandleIntent()", "Alarm type couldn't be find when configuring notification");

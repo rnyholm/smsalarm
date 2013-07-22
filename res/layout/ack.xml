@@ -11,7 +11,7 @@
             android:layout_alignParentTop="true"
             android:layout_marginLeft="5dp"
             android:layout_marginTop="5dp"
-            android:contentDescription="@string/ackIconContentDescr"
+            android:contentDescription="@string/ACK_ICON_CONTENT_DESCR"
             android:src="@android:drawable/ic_delete" />
 
         <TextView
@@ -22,7 +22,7 @@
             android:layout_marginRight="5dp"
             android:layout_marginTop="5dp"
             android:layout_toRightOf="@+id/ackIcon_iv"
-            android:text="@string/ackTitle"
+            android:text="@string/ACK_TITLE"
             android:textAppearance="?android:attr/textAppearanceMedium" />
 
         <ImageView
@@ -44,7 +44,7 @@
             android:layout_below="@+id/ackDivider1_iv"
             android:layout_marginRight="5dp"
             android:layout_marginTop="7dp"
-            android:text="@string/ackFullMessage"
+            android:text="@string/ACK_FULL_MESSAGE"
             android:textAppearance="?android:attr/textAppearanceMedium" />
 
         <ImageView
@@ -67,7 +67,7 @@
             android:layout_marginLeft="5dp"
             android:layout_marginTop="5dp"
             android:drawableLeft="@android:drawable/sym_call_outgoing"
-            android:text="@string/ack" />
+            android:text="@string/ACK" />
 
         <Button
             android:id="@+id/ackAbortAlarm_btn"
@@ -86,7 +86,7 @@
             android:layout_alignLeft="@+id/ackAcknowledgeAlarm_btn"
             android:layout_below="@+id/ackAcknowledgeAlarm_btn"
             android:layout_marginTop="40dp"
-            android:text="@string/ackLineBusy"
+            android:text="@string/ACK_LINE_BUSY"
             android:textAppearance="?android:attr/textAppearanceMedium" />
 
         <TextView
@@ -97,7 +97,7 @@
             android:layout_alignBottom="@+id/ackLineBusy_tv"
             android:layout_marginLeft="2dp"
             android:layout_toRightOf="@+id/ackLineBusy_tv"
-            android:text="@string/dash"
+            android:text="@string/DASH"
             android:textAppearance="?android:attr/textAppearanceMedium" />
 
         <TextView
@@ -108,7 +108,7 @@
             android:layout_alignBottom="@+id/ackLineBusy_tv"
             android:layout_alignParentRight="true"
             android:layout_toRightOf="@+id/ackCountdown_tv"
-            android:text="@string/secs"
+            android:text="@string/SECS"
             android:textAppearance="?android:attr/textAppearanceMedium" />
 
         <ProgressBar

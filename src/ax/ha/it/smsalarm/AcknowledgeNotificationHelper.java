@@ -88,8 +88,8 @@ public class AcknowledgeNotificationHelper extends IntentService {
 		NotificationManager mNotificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
 
 		// Variables for notifications text and icon
-		CharSequence tickerText = this.getString(R.string.alarm);
-		CharSequence contentTitle = this.getString(R.string.alarm);
+		CharSequence tickerText = this.getString(R.string.PRIMARY_ALARM);
+		CharSequence contentTitle = this.getString(R.string.PRIMARY_ALARM);
 		int icon = android.R.drawable.ic_delete;
 
 		// Log

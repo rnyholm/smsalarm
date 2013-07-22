@@ -156,7 +156,7 @@ public class AcknowledgeHandler extends Activity {
 					// Place the acknowledge call
 					placeAcknowledgeCall();
 				} else {
-					Toast.makeText(AcknowledgeHandler.this, R.string.cannotAck, Toast.LENGTH_LONG).show();
+					Toast.makeText(AcknowledgeHandler.this, R.string.ACK_CANNOT, Toast.LENGTH_LONG).show();
 					// Logging
 					logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":onCreate().acknowledgeButton.OnClickListener().onClick()", "Acknowledge button has been pressed but no phone number to acknowledge to has been given");
 				}
@@ -341,7 +341,7 @@ public class AcknowledgeHandler extends Activity {
 		// Some logging
 		this.logger.logCat(LogPriorities.DEBUG, this.LOG_TAG + ":setTextViews()", "Setting TextViews with proper data");
 		// Set TextViews from variables and resources
-		this.titleTextView.setText(this.rescueService.toUpperCase() + " " + getResources().getString(R.string.fireAlarm));
+		this.titleTextView.setText(this.rescueService.toUpperCase() + " " + getResources().getString(R.string.ALARM));
 		this.fullMessageTextView.setText(this.fullMessage);
 		// Check if the activity already has placed a call, in that case show TextViews for redial
 		if (this.hasCalled) {

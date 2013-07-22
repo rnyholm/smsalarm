@@ -4,21 +4,21 @@
     android:versionName="2.1">
 
     <uses-sdk android:minSdkVersion="8" android:targetSdkVersion="16" />
-    <application android:label="@string/app_name"
+    <application android:label="@string/APP_NAME"
         android:icon="@drawable/ic_launcher"
         android:theme="@style/AppTheme">
-        <activity android:name=".Splash" android:label="@string/app_name" android:noHistory="true" android:screenOrientation="portrait">
+        <activity android:name=".Splash" android:label="@string/APP_NAME" android:noHistory="true" android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />            
         	</intent-filter>       	
        	</activity>
-        <activity android:name=".SmsAlarm" android:noHistory="true" android:label="@string/app_name">
+        <activity android:name=".SmsAlarm" android:noHistory="true" android:label="@string/APP_NAME">
             <intent-filter>
  				<!-- Future intents and services for this activity goes here -->
             </intent-filter>
         </activity>       
-        <activity android:name=".AcknowledgeHandler" android:noHistory="true" android:screenOrientation="portrait" android:label="@string/app_name">
+        <activity android:name=".AcknowledgeHandler" android:noHistory="true" android:screenOrientation="portrait" android:label="@string/APP_NAME">
         </activity>        
         <receiver android:name=".SmsReceiver">
          	<intent-filter android:priority="1000"> 

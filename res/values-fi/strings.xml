@@ -1,20 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">Sms Alarm</string>
-    <string name="editNumber">Muuta numero</string>   
-    <string name="editTone">Muuta soittoääni</string>
-    <string name="listenTone">Kuuntele ääntä</string>
-    <string name="about">Sms Alarm, lisää tiet.</string>
+    <string name="APP_NAME">Sms Alarm</string>
+    <string name="EDIT_NUMBER">Muuta numero</string>   
+    <string name="EDIT_ALARM_SIGNAL">Muuta soittoääni</string>
+    <string name="LISTEN_ALARM_SIGNAL">Kuuntele ääntä</string>
+    <string name="ABOUT">Sms Alarm, lisää tiet.</string>
     <string name="numberDefault">Asenna numero!</string>
-    <string name="numberPromptTitle">Asenna numero</string>
+    <string name="NUMBER_PROMPT_TITLE">Asenna numero</string>
     <string name="numberPromptMessage">Asenna numero johon applikointi tulee hälyyttää</string>
-    <string name="numberPromptHint">Puh. numero, vain numeroina!</string>
-    <string name="tonePromptTitle">Valitse hälytysääni</string>
-    <string name="ok">OK</string>
-    <string name="cancel">Keskeytä</string>
-    <string name="alarm">ENSISIJAINEN HÄLYTYS!</string>
-    <string name="secondaryAlarm">TOISSIJAINEN HÄLYTYS!</string>
-    <string name="duplicatedNumbers">Ensi- ja toissijaiset hälytysnumerot eivät saa olla samanlaiset! Anna uusi numero.</string>
+    <string name="NUMBER_PROMPT_HINT">Puh. numero, vain numeroina!</string>
+    <string name="TONE_PROMPT_TITLE">Valitse hälytysääni</string>
+    <string name="OK">OK</string>
+    <string name="CANCEL">Keskeytä</string>
+    <string name="PRIMARY_ALARM">ENSISIJAINEN HÄLYTYS!</string>
+    <string name="SECONDARY_ALARM">TOISSIJAINEN HÄLYTYS!</string>
+    <string name="DUPLICATED_NUMBERS">Ensi- ja toissijaiset hälytysnumerot eivät saa olla samanlaiset! Anna uusi numero.</string>
     <string name="numberInfo">SMS hälyyttää näistä numeroista</string>
     <string name="primaryLarmNumberInfo">Ensisijainen hälytys</string>
     <string name="secondaryLarmNumberInfo">Toissijainen hälytys</string>

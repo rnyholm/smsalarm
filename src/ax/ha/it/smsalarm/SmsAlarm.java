@@ -202,7 +202,7 @@ public class SmsAlarm extends Activity  {
 					// Show alert dialog(prompt user for deleting number)
 					buildAndShowDeleteSecondaryNumberDialog();
 				} else {
-					Toast.makeText(SmsAlarm.this, R.string.noSecondaryNumberExists, Toast.LENGTH_LONG).show();
+					Toast.makeText(SmsAlarm.this, R.string.NO_SECONDARY_NUMBER_EXISTS, Toast.LENGTH_LONG).show();
 					logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":onCreate().removeSecondaryNumberButton.OnClickListener().onClick()", "Cannot build and show dialog because the list of SECONDARY listen numbers is empty so there is nothing to remove");
 				}
 			}
@@ -635,14 +635,14 @@ public class SmsAlarm extends Activity  {
     	final int position = secondaryListenNumberSpinner.getSelectedItemPosition();
     	
     	//String to store complete prompt message in
-    	String promptMessage = getString(R.string.deleteSecondaryNumberPromptMessage) + " " + secondaryListenNumbers.get(position) + "?";
+    	String promptMessage = getString(R.string.DELETE_SECONDARY_NUMBER_PROMPT_MESSAGE) + " " + secondaryListenNumbers.get(position) + "?";
     	
     	//Build up the alert dialog
     	AlertDialog.Builder dialog = new AlertDialog.Builder(this);
     	
     	//Set some attributes, title and message containing actual number
     	dialog.setIcon(android.R.drawable.ic_dialog_alert);
-    	dialog.setTitle(R.string.deleteSecondaryNumberPromptTitle); 
+    	dialog.setTitle(R.string.DELETE_SECONDARY_NUMBER_PROMPT_TITLE); 
     	dialog.setMessage(promptMessage);
     	
     	//Set dialog to non cancelable
@@ -652,7 +652,7 @@ public class SmsAlarm extends Activity  {
     	this.logger.logCat(LogPriorities.DEBUG, this.LOG_TAG + ":buildAndShowDeleteSecondaryNumberDialog()", "Dialog attributes set");    	
     	
     	// Set a positive button and listen on it
-    	dialog.setPositiveButton(R.string.yes, new DialogInterface.OnClickListener() {
+    	dialog.setPositiveButton(R.string.YES, new DialogInterface.OnClickListener() {
     		@Override
 	    	public void onClick(DialogInterface dialog, int whichButton) {    		
 				// Log information
@@ -672,7 +672,7 @@ public class SmsAlarm extends Activity  {
     	}); 
     	
     	//Set a neutral button, due to documentation it has same functionality as "back" button
-    	dialog.setNeutralButton(R.string.no, new DialogInterface.OnClickListener() {
+    	dialog.setNeutralButton(R.string.NO, new DialogInterface.OnClickListener() {
     		@Override
     		public void onClick(DialogInterface dialog, int whichButton) {
     			// DO NOTHING, except logging
@@ -727,11 +727,11 @@ public class SmsAlarm extends Activity  {
     	switch(type) {
     	case PRIMARY:
     		// Set title
-        	dialog.setTitle(R.string.numberPromptTitle);
+        	dialog.setTitle(R.string.NUMBER_PROMPT_TITLE);
     		// Set message
-    		dialog.setMessage(R.string.primaryNumberPromptMessage);
+    		dialog.setMessage(R.string.PRIMARY_NUMBER_PROMPT_MESSAGE);
     		// Set hint to edittext
-        	input.setHint(R.string.numberPromptHint);
+        	input.setHint(R.string.NUMBER_PROMPT_HINT);
         	// Set Input type to edittext
         	input.setInputType(InputType.TYPE_CLASS_NUMBER);
         	// Set dialog to non cancelable
@@ -742,27 +742,27 @@ public class SmsAlarm extends Activity  {
         	this.logger.logCat(LogPriorities.DEBUG, this.LOG_TAG + ":buildAndShowInputDialog()", "Dialog attributes is set for dialog type PRIMARY");
     		break;
     	case SECONDARY:
-        	dialog.setTitle(R.string.numberPromptTitle);
-    		dialog.setMessage(R.string.secondaryNumberPromptMessage);
-        	input.setHint(R.string.numberPromptHint);
+        	dialog.setTitle(R.string.NUMBER_PROMPT_TITLE);
+    		dialog.setMessage(R.string.SECONDARY_NUMBER_PROMPT_MESSAGE);
+        	input.setHint(R.string.NUMBER_PROMPT_HINT);
         	input.setInputType(InputType.TYPE_CLASS_NUMBER);
         	dialog.setCancelable(false);
         	dialog.setView(input);
         	this.logger.logCat(LogPriorities.DEBUG, this.LOG_TAG + ":buildAndShowInputDialog()", "Dialog attributes is set for dialog type SECONDARY");
     		break;
     	case ACKNOWLEDGE:
-        	dialog.setTitle(R.string.numberPromptTitle);
-    		dialog.setMessage(R.string.ackNumberPromptMessage);
-        	input.setHint(R.string.numberPromptHint);
+        	dialog.setTitle(R.string.NUMBER_PROMPT_TITLE);
+    		dialog.setMessage(R.string.ACK_NUMBER_PROMPT_MESSAGE);
+        	input.setHint(R.string.NUMBER_PROMPT_HINT);
         	input.setInputType(InputType.TYPE_CLASS_NUMBER);
         	dialog.setCancelable(false);
         	dialog.setView(input);
         	this.logger.logCat(LogPriorities.DEBUG, this.LOG_TAG + ":buildAndShowInputDialog()", "Dialog attributes is set for dialog type ACKNOWLEDGE");
     		break;
     	case RESCUESERVICE:
-        	dialog.setTitle(R.string.rescueServicePromptTitle);
-    		dialog.setMessage(R.string.rescueServicePromptMessage);
-        	input.setHint(R.string.rescueServiceHint);
+        	dialog.setTitle(R.string.RESCUE_SERVICE_PROMPT_TITLE);
+    		dialog.setMessage(R.string.RESCUE_SERVICE_PROMPT_MESSAGE);
+        	input.setHint(R.string.RESCUE_SERVICE_HINT);
         	input.setInputType(InputType.TYPE_CLASS_TEXT);
         	dialog.setCancelable(false);
         	dialog.setView(input);
@@ -776,7 +776,7 @@ public class SmsAlarm extends Activity  {
     	}
     	
     	// Set a positive button and listen on it
-    	dialog.setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
+    	dialog.setPositiveButton(R.string.OK, new DialogInterface.OnClickListener() {
     		@Override
 	    	public void onClick(DialogInterface dialog, int whichButton) {
 				// Log information
@@ -816,7 +816,7 @@ public class SmsAlarm extends Activity  {
         			      	// Log
         					logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":buildAndShowInputDialog().PositiveButton.OnClickListener().onClick()", "New PRIMARY phone number has been stored from user input. New PRIMARY phone number is: \"" + primaryListenNumber +"\"");
         				} else {
-        					Toast.makeText(SmsAlarm.this, R.string.duplicatedNumbers, Toast.LENGTH_LONG).show();
+        					Toast.makeText(SmsAlarm.this, R.string.DUPLICATED_NUMBERS, Toast.LENGTH_LONG).show();
         					logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":buildAndShowInputDialog().PositiveButton.OnClickListener().onClick()", "Given PRIMARY phone number(" + input.getText().toString() + ") exists in the list of SECONDARY phone numbers and therefore cannot be stored. Showing dialog of type PRIMARY again");
         					buildAndShowInputDialog(type);
         				}    					
@@ -857,16 +857,16 @@ public class SmsAlarm extends Activity  {
         			      	// Log
         					logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":buildAndShowInputDialog().PositiveButton.OnClickListener().onClick()", "New SECONDARY phone number has been stored from user input to the list of SECONDARY phone numbers . New SECONDARY phone number is: \"" + input.getText().toString() + "\"");	        					
         				} else {
-        					Toast.makeText(SmsAlarm.this, R.string.numberAlreadyInList, Toast.LENGTH_LONG).show();
+        					Toast.makeText(SmsAlarm.this, R.string.NUMBER_ALREADY_IN_LIST, Toast.LENGTH_LONG).show();
         					logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":buildAndShowInputDialog().PositiveButton.OnClickListener().onClick()", "Given SECONDARY phone number(" + input.getText().toString() + ") already exists in the list of SECONDARY phone numbers and therefore cannot be stored. Showing dialog of type SECONDARY again");        					
         					buildAndShowInputDialog(type);
         				}    					
     				} else {
     					if(primaryListenNumber.equals(input.getText().toString())) {
-    						Toast.makeText(SmsAlarm.this, R.string.duplicatedNumbers, Toast.LENGTH_LONG).show();
+    						Toast.makeText(SmsAlarm.this, R.string.DUPLICATED_NUMBERS, Toast.LENGTH_LONG).show();
         					logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":buildAndShowInputDialog().PositiveButton.OnClickListener().onClick()", "Given SECONDARY phone number(" + input.getText().toString() + ") is the same as the PRIMARY phone number and therefore cannot be stored. Showing dialog of type SECONDARY again");
     					} else {
-    						Toast.makeText(SmsAlarm.this, R.string.emptySecondaryNumber, Toast.LENGTH_LONG).show();
+    						Toast.makeText(SmsAlarm.this, R.string.EMPTY_SECONDARY_NUMBER, Toast.LENGTH_LONG).show();
         					logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":buildAndShowInputDialog().PositiveButton.OnClickListener().onClick()", "Given SECONDARY phone number is empty and therefore cannot be stored. Showing dialog of type SECONDARY again");    						
     					}
     					buildAndShowInputDialog(type);
@@ -909,7 +909,7 @@ public class SmsAlarm extends Activity  {
     	// Only set neutral button if dialog type is supported
     	if(type.ordinal() >= DialogTypes.PRIMARY.ordinal() && type.ordinal() <= DialogTypes.RESCUESERVICE.ordinal()) {
 	    	//Set a neutral button, due to documentation it has same functionality as "back" button
-	    	dialog.setNeutralButton(R.string.cancel, new DialogInterface.OnClickListener() {
+	    	dialog.setNeutralButton(R.string.CANCEL, new DialogInterface.OnClickListener() {
 	    		@Override
 	    		public void onClick(DialogInterface dialog, int whichButton) {
 	    			// DO NOTHING, except logging
@@ -946,7 +946,7 @@ public class SmsAlarm extends Activity  {
 
     	// Set attributes
     	dialog.setIcon(android.R.drawable.ic_dialog_info);
-    	dialog.setTitle(R.string.tonePromptTitle);
+    	dialog.setTitle(R.string.TONE_PROMPT_TITLE);
     	dialog.setCancelable(false);
     	
     	// Logging
@@ -989,7 +989,7 @@ public class SmsAlarm extends Activity  {
 		});
     	
     	// Set a neutral button and listener
-    	dialog.setNeutralButton(R.string.cancel, new DialogInterface.OnClickListener() {
+    	dialog.setNeutralButton(R.string.CANCEL, new DialogInterface.OnClickListener() {
     		@Override
     		public void onClick(DialogInterface dialog, int whichButton) {
     			// DO NOTHING, except logging
@@ -1025,7 +1025,7 @@ public class SmsAlarm extends Activity  {
 
     	//Set attributes
     	dialog.setIcon(android.R.drawable.ic_dialog_info);
-    	dialog.setTitle(R.string.about);
+    	dialog.setTitle(R.string.ABOUT);
     	dialog.setView(view);
     	dialog.setCancelable(false);
     	
@@ -1033,7 +1033,7 @@ public class SmsAlarm extends Activity  {
     	this.logger.logCat(LogPriorities.DEBUG, this.LOG_TAG + ":buildAndShowAboutDialog()", "Dialog attributes set");    	
     	
     	//Set a neutral button
-    	dialog.setNeutralButton(R.string.ok, new DialogInterface.OnClickListener() {
+    	dialog.setNeutralButton(R.string.OK, new DialogInterface.OnClickListener() {
     		@Override
     		public void onClick(DialogInterface dialog, int whichButton) {
     			// DO NOTHING, except logging

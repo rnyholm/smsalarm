@@ -4,7 +4,6 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@drawable/splash" >
-
     <TextView
         android:id="@+id/splashTitle_tv"
         android:layout_width="wrap_content"
@@ -12,20 +11,18 @@
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="26dp"
-        android:text="@string/app_name"
+        android:text="@string/APP_NAME"
         android:textAppearance="?android:attr/textAppearanceLarge"
         android:textColor="#000000" />
-
     <TextView
         android:id="@+id/splashDescr_tv"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@id/splashTitle_tv"
         android:layout_centerHorizontal="true"
-        android:text="@string/appDescr"
+        android:text="@string/APP_DESCR"
         android:textAppearance="?android:attr/textAppearanceMedium"
         android:textColor="#313031" />
-
     <TextView
         android:id="@+id/splashVersion_tv"
         android:layout_width="wrap_content"
@@ -36,5 +33,4 @@
         android:text="@string/splashVersion"
         android:textAppearance="?android:attr/textAppearanceSmall"
         android:textColor="#313031" />
-
 </RelativeLayout>
