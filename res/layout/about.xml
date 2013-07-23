@@ -24,7 +24,7 @@
         android:layout_height="wrap_content"
         android:layout_marginLeft="5dp"
         android:layout_marginTop="10dp"
-        android:text="@string/aboutVersion"
+        android:text="@string/ABOUT_VERSION"
         android:textAppearance="?android:attr/textAppearanceMedium" >
 </TextView>
 
@@ -33,7 +33,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginLeft="5dp"
-        android:text="@string/aboutBuild"
+        android:text="@string/ABOUT_BUILD"
         android:textAppearance="?android:attr/textAppearanceMedium" >
 </TextView>
 
@@ -42,7 +42,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginLeft="5dp"
-        android:text="@string/aboutCopyright"
+        android:text="@string/ABOUT_COPYRIGHT"
         android:textAppearance="?android:attr/textAppearanceMedium" >
 </TextView>
 
@@ -52,7 +52,7 @@
         android:layout_height="wrap_content"
         android:layout_marginBottom="5dp"
         android:layout_marginLeft="5dp"
-        android:text="@string/aboutRightsReserved"
+        android:text="@string/ABOUT_RIGHTS_RESERVED"
         android:textAppearance="?android:attr/textAppearanceMedium" >
 
 </TextView>

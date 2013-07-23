@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu
   xmlns:android="http://schemas.android.com/apk/res/android">
-    <item android:id="@+id/item1" android:title="@string/about"></item>
-    <item android:id="@+id/item2" android:title="@string/testShowAck"></item>
+    <item android:id="@+id/ABOUT" android:title="@string/ABOUT"></item>
+    <item android:id="@+id/TEST_SHOW_ACK" android:title="@string/TEST_SHOW_ACK"></item>
 </menu>

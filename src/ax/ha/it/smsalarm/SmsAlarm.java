@@ -41,7 +41,7 @@ import ax.ha.it.smsalarm.PreferencesHandler.PrefKeys;
  * @author Robert Nyholm <robert.nyholm@aland.net>
  * @version 2.1
  * @since 0.9beta
- * @date 2013-07-06
+ * @date 2013-07-23
  *
  * @see #onCreate(Bundle)
  * @see #onPause()
@@ -446,14 +446,14 @@ public class SmsAlarm extends Activity  {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
 		switch (item.getItemId()) {
-      		case R.id.item1:
+      		case R.id.ABOUT:
       			// Logging
       			this.logger.logCat(LogPriorities.DEBUG, this.LOG_TAG + ":onOptionsItemSelected()", "Menu item 1 selected");
       			// Build up and show the about dialog
       			this.buildAndShowAboutDialog();
       			return true; 
 // >>>>DEBUG CASE (DELETE OR COMMENT FOR PRDO)
-      		case R.id.item2:
+      		case R.id.TEST_SHOW_ACK:
       			try {
 	      			prefHandler.setPrefs(PrefKeys.SHARED_PREF, PrefKeys.RESCUE_SERVICE_KEY, "Jomala FBK", this);
 	      			prefHandler.setPrefs(PrefKeys.SHARED_PREF, PrefKeys.FULL_MESSAGE_KEY, "02.02.2012 23:55:40 2.5 Litet larm - Automatlarm vikingline lager(1682) Länsmanshägnan 7 jomala", this);
@@ -762,7 +762,7 @@ public class SmsAlarm extends Activity  {
     	case RESCUESERVICE:
         	dialog.setTitle(R.string.RESCUE_SERVICE_PROMPT_TITLE);
     		dialog.setMessage(R.string.RESCUE_SERVICE_PROMPT_MESSAGE);
-        	input.setHint(R.string.RESCUE_SERVICE_HINT);
+        	input.setHint(R.string.RESCUE_SERVICE_NAME_HINT);
         	input.setInputType(InputType.TYPE_CLASS_TEXT);
         	dialog.setCancelable(false);
         	dialog.setView(input);
@@ -1124,7 +1124,7 @@ public class SmsAlarm extends Activity  {
 		    // Logging
 		    this.logger.logCat(LogPriorities.DEBUG, this.LOG_TAG + ":updateSecondaryListenNumberSpinner()", "Populate SECONDARY listen number spinner with values: " + this.secondaryListenNumbers);
 	    } else {
-	    	this.emptySecondaryListenNumbers.add(getString(R.string.enterPhoneNumberHint));
+	    	this.emptySecondaryListenNumbers.add(getString(R.string.ENTER_PHONE_NUMBER_HINT));
 		    ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, this.emptySecondaryListenNumbers);
 		    adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 		    this.secondaryListenNumberSpinner.setAdapter(adapter);	

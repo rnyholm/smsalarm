@@ -99,7 +99,7 @@
             android:layout_below="@id/addSecondaryNumber_btn"
             android:layout_marginRight="5dp"
             android:layout_marginTop="9dp"
-            android:contentDescription="@string/dividerDescr"
+            android:contentDescription="@string/DIVIDER_DESCR"
             android:src="@drawable/gradient_divider_11_and_up" />
 
         <TextView
@@ -131,7 +131,7 @@
             android:layout_below="@id/soundSettingsInfo_tv"
             android:layout_marginRight="5dp"
             android:layout_marginTop="5dp"
-            android:text="@string/toneSpinnerTitle"
+            android:text="@string/TITLE_TONE_SPINNER"
             android:textAppearance="?android:attr/textAppearanceMedium" />
 
         <Spinner
@@ -149,7 +149,7 @@
             android:layout_alignLeft="@+id/toneSpinner_sp"
             android:layout_below="@+id/toneSpinner_sp"
             android:layout_marginRight="5dp"
-            android:text="@string/msgToneTitle"
+            android:text="@string/TITLE_ALARM_SIGNAL"
             android:textAppearance="?android:attr/textAppearanceMedium" />
 
         <EditText
@@ -189,7 +189,7 @@
             android:layout_alignLeft="@id/editMsgTone_btn"
             android:layout_below="@id/listenMsgTone_btn"
             android:layout_marginRight="5dp"
-            android:text="@string/useSysSoundSettings" />
+            android:text="@string/TITLE_USE_OS_SOUND_SETTINGS" />
 
         <TextView
             android:id="@+id/useSysSoundSettingsHint_tv"
@@ -200,7 +200,7 @@
             android:layout_marginLeft="38dp"
             android:layout_marginRight="5dp"
             android:layout_marginTop="-9dp"
-            android:text="@string/useSysSoundSettingsHint"
+            android:text="@string/INFO_USE_OS_SOUND_SETTINGS"
             android:textAppearance="?android:attr/textAppearanceSmall" />
 
         <CheckBox
@@ -210,7 +210,7 @@
             android:layout_alignLeft="@+id/useSysSoundSettings_chk"
             android:layout_below="@+id/useSysSoundSettingsHint_tv"
             android:layout_marginRight="5dp"
-            android:text="@string/playToneTwiceSetting" />
+            android:text="@string/TITLE_PLAY_TONE_TWICE_SETTING" />
 
         <TextView
             android:id="@+id/playToneTwiceSettingHint_tv"
@@ -221,7 +221,7 @@
             android:layout_marginLeft="38dp"
             android:layout_marginRight="5dp"
             android:layout_marginTop="-9dp"
-            android:text="@string/playToneTwiceSettingHint"
+            android:text="@string/INFO_PLAY_TONE_TWICE_SETTING"
             android:textAppearance="?android:attr/textAppearanceSmall" />
 
         <ImageView
@@ -232,7 +232,7 @@
             android:layout_alignRight="@+id/mainDivider1_iv"
             android:layout_below="@id/playToneTwiceSettingHint_tv"
             android:layout_marginTop="7dp"
-            android:contentDescription="@string/dividerDescr"
+            android:contentDescription="@string/DIVIDER_DESCR"
             android:src="@drawable/gradient_divider_11_and_up" />
 
         <TextView
@@ -262,7 +262,7 @@
             android:layout_alignLeft="@+id/ackSettingsInfo_tv"
             android:layout_below="@+id/ackSettingsInfo_tv"
             android:layout_marginTop="5dp"
-            android:text="@string/enableAcknowledge" />
+            android:text="@string/TITLE_ENABLE_ACKNOWLEDGE" />
 
         <TextView
             android:id="@+id/enableAcknowledgeHint_tv"
@@ -273,7 +273,7 @@
             android:layout_marginLeft="38dp"
             android:layout_marginRight="5dp"
             android:layout_marginTop="-9dp"
-            android:text="@string/enableAcknowledgeHint"
+            android:text="@string/INFO_ENABLE_ACKNOWLEDGE"
             android:textAppearance="?android:attr/textAppearanceSmall" />
 
         <TextView
@@ -282,7 +282,7 @@
             android:layout_height="wrap_content"
             android:layout_alignLeft="@+id/enableAcknowledge_chk"
             android:layout_below="@+id/enableAcknowledgeHint_tv"
-            android:text="@string/ackNumberTitle"
+            android:text="@string/TITLE_ACK_NUMBER"
             android:textAppearance="?android:attr/textAppearanceMedium" />
 
         <EditText
@@ -304,7 +304,7 @@
             android:layout_alignRight="@+id/mainDivider2_iv"
             android:layout_below="@+id/ackNumber_et"
             android:layout_marginTop="9dp"
-            android:contentDescription="@string/dividerDescr"
+            android:contentDescription="@string/DIVIDER_DESCR"
             android:src="@drawable/gradient_divider_11_and_up" />
 
         <TextView
@@ -334,7 +334,7 @@
             android:layout_alignLeft="@+id/miscSettingsInfo_tv"
             android:layout_below="@+id/miscSettingsInfo_tv"
             android:layout_marginTop="5dp"
-            android:text="@string/rescueServiceNameTitle"
+            android:text="@string/TITLE_RESCUE_SERVICE_NAME"
             android:textAppearance="?android:attr/textAppearanceMedium" />
 
         <EditText
@@ -345,7 +345,7 @@
             android:layout_alignRight="@+id/mainDivider3_iv"
             android:layout_below="@id/rescueServiceNameTitle_tv"
             android:ems="10"
-            android:hint="@string/rescueServiceNameHint"
+            android:hint="@string/RESCUE_SERVICE_NAME_HINT"
             android:inputType="text"
             android:singleLine="true" />
 
@@ -356,7 +356,7 @@
             android:layout_alignLeft="@id/rescueServiceName_et"
             android:layout_below="@id/rescueServiceName_et"
             android:layout_marginTop="2dp"
-            android:text="@string/editRescueServiceName" />
+            android:text="@string/EDIT_RESCUE_SERVICE_NAME" />
 
         <CheckBox
             android:id="@+id/enableSmsAlarm_chk"
@@ -366,7 +366,7 @@
             android:layout_below="@id/editRescueServiceName_btn"
             android:layout_marginRight="5dp"
             android:checked="true"
-            android:text="@string/enableDisableSmsAlarm" />
+            android:text="@string/TITLE_ENABLE_SMS_ALARM" />
 
         <TextView
             android:id="@+id/enableSmsAlarmHint_tv"
@@ -377,7 +377,7 @@
             android:layout_marginLeft="38dp"
             android:layout_marginRight="5dp"
             android:layout_marginTop="-9dp"
-            android:text="@string/enableDisableSmsAlarmHint"
+            android:text="@string/INFO_ENABLE_SMS_ALARM"
             android:textAppearance="?android:attr/textAppearanceSmall" />
 
         <Button

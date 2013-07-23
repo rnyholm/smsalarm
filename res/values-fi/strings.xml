@@ -20,10 +20,10 @@
     <string name="secondaryLarmNumberInfo">Toissijainen hälytys</string>
     <string name="toneSpinnerInfo">Hälytysääni sekä</string>
     <string name="msgInfo">Valittu hälytysääni</string>
-    <string name="sysSettingInfo">Käyttä puhelin ääniasen.</string>
-    <string name="sysSettingInfoHint">Ota huom. äänetön asento</string>
-    <string name="aboutVersion">Versio: 1.1.2</string>
-    <string name="aboutBuild">Build: 20130620</string>
-    <string name="aboutCopyright">&#169;Copyright Robert Nyholm</string>
-    <string name="aboutRightsReserved">Kaikki oikeudet varattu.</string>
+    <string name="TITLE_USE_OS_SOUND_SETTINGS">Käyttä puhelin ääniasen.</string>
+    <string name="INFO_USE_OS_SOUND_SETTINGS">Ota huom. äänetön asento</string>
+    <string name="ABOUT_VERSION">Versio: 1.1.2</string>
+    <string name="ABOUT_BUILD">Build: 20130620</string>
+    <string name="ABOUT_COPYRIGHT">&#169;Copyright Robert Nyholm</string>
+    <string name="ABOUT_RIGHTS_RESERVED">Kaikki oikeudet varattu.</string>
 </resources>

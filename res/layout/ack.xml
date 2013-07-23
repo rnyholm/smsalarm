@@ -33,7 +33,7 @@
             android:layout_below="@+id/ackTitle_tv"
             android:layout_marginRight="5dp"
             android:layout_marginTop="7dp"
-            android:contentDescription="@string/dividerDescr"
+            android:contentDescription="@string/DIVIDER_DESCR"
             android:src="@drawable/gradient_divider_11_and_up" />
 
         <TextView
@@ -55,7 +55,7 @@
             android:layout_below="@+id/ackFullAlarm_tv"
             android:layout_marginRight="5dp"
             android:layout_marginTop="7dp"
-            android:contentDescription="@string/dividerDescr"
+            android:contentDescription="@string/DIVIDER_DESCR"
             android:src="@drawable/gradient_divider_11_and_up" />
 
         <Button
@@ -77,7 +77,7 @@
             android:layout_alignBottom="@+id/ackAcknowledgeAlarm_btn"
             android:layout_toRightOf="@+id/ackAcknowledgeAlarm_btn"
             android:drawableLeft="@android:drawable/sym_call_missed"
-            android:text="@string/cancel" />
+            android:text="@string/CANCEL" />
 
         <TextView
             android:id="@+id/ackLineBusy_tv"
