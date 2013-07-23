@@ -3,7 +3,7 @@ SmsAlarm changelog
 v2.1(version code 4) 
 -Möjligt att kvittera ett inkommande primärlarm till ett telefonnummer
 -Kvitteringen återuppringer om upptaget vid kvittering
--Användnings och eventloggning till fil
+-Fel loggas till fil
 -Förbättrat hanteringen av datalagring och hämtning av data
 -Förbättrat gränssnitt, mera anpassat för Android version 4.0 och uppåt
 -SmsAlarm kan lyssna på flera telefonnummer än ett för sekundärlarm
@@ -15,6 +15,7 @@ v2.1(version code 4)
 -Nya ringsignaler för sökare Swissphone Quattro 86, Swissphone Quattro 98, Swissphone Quattro XLS,
  Swissphone Patron Pro, Swissphone DE 900, Motorola Pageboy 2000, Motorola Firestorm, Motorola BMD,
  Bosch FME 87, Bosch FME 88, AEG TSE80 samt några diverse sökarljud. Totalt 67 nya sökarljud
+-Applikationen följer enhetens ljudinställningar på ett mycket stabilare sätt
 
 v1.1.2(version code 3)
 -Gjort om about dialogen
