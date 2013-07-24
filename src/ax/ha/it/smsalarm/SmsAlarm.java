@@ -54,7 +54,7 @@ public class SmsAlarm extends Activity  {
 	 * @author Robert Nyholm <robert.nyholm@aland.net>
 	 * @version 2.1
 	 * @since 2.1
-	 * @date 2013-07-05
+	 * @date 2013-07-24
 	 */
 	private enum DialogTypes {
 		PRIMARY, SECONDARY, ACKNOWLEDGE, RESCUESERVICE;
@@ -162,7 +162,7 @@ public class SmsAlarm extends Activity  {
          
 	    // Fill tone spinner with values
 	    ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(
-	            this, R.array.alarmTypes, android.R.layout.simple_spinner_item);
+	            this, R.array.alarms, android.R.layout.simple_spinner_item);
 	    adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 	    
 	    // Set adapter to tone spinner

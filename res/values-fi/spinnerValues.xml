@@ -1,7 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-<resources>
-    <string-array name="spinnerValues">
-        <item>Ensisijainen hälytys</item>
-        <item>Toissijainen hälytys</item>
-    </string-array>
-</resources>
