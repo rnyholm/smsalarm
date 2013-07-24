@@ -27,10 +27,21 @@ import ax.ha.it.smsalarm.PreferencesHandler.PrefKeys;
  * @author Robert Nyholm <robert.nyholm@aland.net>
  * @version 2.1
  * @since 0.9beta
- * @date 2013-07-05
+ * @date 2013-07-24
  * 
  */
 public class SmsReceiver extends BroadcastReceiver {
+	/**
+	 * Enumeration for different types of alarms.
+	 * 
+	 * @author Robert Nyholm <robert.nyholm@aland.net>
+	 * @version 2.1
+	 * @since 2.1
+	 * @date 2013-07-24
+	 */
+	private enum AlarmTypes {
+		PRIMARY, SECONDARY;
+	}	
 
 	// Log tag string
 	private final String LOG_TAG = "SmsReceiver";
@@ -55,7 +66,7 @@ public class SmsReceiver extends BroadcastReceiver {
 	private boolean enableSmsAlarm = false;
 
 	// Variable to store type of alarm as string
-	private String type = "";
+	private AlarmTypes alarmType;
 
 	// To store incoming SMS phone number and body(message)
 	private String msgHeader = "";
@@ -147,7 +158,7 @@ public class SmsReceiver extends BroadcastReceiver {
 					}
 					
 					// Set larm typ to this object
-					this.type = "primary";
+					this.alarmType = AlarmTypes.PRIMARY;
 
 					// Continue handling of received SMS
 					this.smsHandler(context);
@@ -173,7 +184,7 @@ public class SmsReceiver extends BroadcastReceiver {
 								}
 
 								// Set larm typ to this object
-								this.type = "secondary";
+								this.alarmType = AlarmTypes.SECONDARY;
 
 								// Continue handling of received SMS
 								this.smsHandler(context);
@@ -227,9 +238,9 @@ public class SmsReceiver extends BroadcastReceiver {
 		this.logger.logCat(LogPriorities.DEBUG, this.LOG_TAG + ":smsHandler()", "SMS stored in devices inbox");
 
 		// Play message tone and vibrate, different method calls depending on alarm type
-		if (this.type.equals("primary")) {
+		if (this.alarmType.equals(AlarmTypes.PRIMARY)) {
 			this.noiseHandler.makeNoise(context, this.primaryMessageToneId, useOsSoundSettings, this.playToneTwice);
-		} else if (this.type.equals("secondary")) {
+		} else if (this.alarmType.equals(AlarmTypes.SECONDARY)) {
 			this.noiseHandler.makeNoise(context, this.secondaryMessageToneId, useOsSoundSettings, this.playToneTwice);
 		} else {
 			// UNSUPPORTED LARM TYPE OCCURRED
@@ -245,7 +256,7 @@ public class SmsReceiver extends BroadcastReceiver {
 		}
 
 		// If Alarm acknowledge is enabled and alarm type equals primary, store full alarm message
-		if (this.enableAlarmAck == true && this.type.equals("primary")) {
+		if (this.enableAlarmAck && this.alarmType.equals(AlarmTypes.PRIMARY)) {
 			// Log message
 			this.logger.logCat(LogPriorities.DEBUG, this.LOG_TAG + ":smsHandler()", "Alarm acknowledgement is enabled and alarm is of type primary, store full SMS to shared preferences");
 			try {
@@ -264,7 +275,7 @@ public class SmsReceiver extends BroadcastReceiver {
 		}
 
 		// Acknowledge is enabled and it is a primary alarm, show acknowledge notification, else show "ordinary" notification
-		if (this.enableAlarmAck == true && this.type.equals("primary")) {
+		if (this.enableAlarmAck && this.alarmType.equals(AlarmTypes.PRIMARY)) {
 			this.logger.logCat(LogPriorities.DEBUG, this.LOG_TAG + ":smsHandler()", "Preparing intent for the AcknowledgeNotificationHelper.class");
 			// Start intent, AcknowledgeNotificationHelper - a helper to show acknowledge notification
 			Intent ackNotIntent = new Intent(context, AcknowledgeNotificationHelper.class);
