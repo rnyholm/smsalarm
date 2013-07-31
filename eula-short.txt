@@ -1,8 +1,9 @@
 SV
 ==
-Sms Alarm är inte någon ersättning till personsökare eller annat system utvecklat för utalarmering av räddningspersonal.
-Utvecklaren av denna applikation kan inte hållas ansvarig för eventuella skador på liv, egendom eller miljö som uppstått i samband
-med användandet av Sms Alarm. 
+Sms Alarm är inte något substitut till personsökare eller annat system avsett för utalarmering av räddningspersonal.
+Utvecklaren av Sms Alarm tar ej ansvar för och kan inte hållas ansvarig för eventuella skador på liv, egendom eller miljö som uppstått i samband
+med användandet av Sms Alarm. Utvecklaren av Sms Alarm tar ej heller något ansvar för eventuella skador som uppstått på enheten
+i samband med användning av Sms Alarm.
 
 EN
 ==

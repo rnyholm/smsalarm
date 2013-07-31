@@ -12,10 +12,12 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.res.Resources;
 import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
 import android.text.InputType;
+import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -29,7 +31,11 @@ import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
+import android.widget.RelativeLayout.LayoutParams;
 import android.widget.Spinner;
+import android.widget.TextView;
 import android.widget.Toast;
 import ax.ha.it.smsalarm.LogHandler.LogPriorities;
 import ax.ha.it.smsalarm.PreferencesHandler.DataTypes;
@@ -54,7 +60,7 @@ public class SmsAlarm extends Activity  {
 	 * @author Robert Nyholm <robert.nyholm@aland.net>
 	 * @version 2.1
 	 * @since 2.1
-	 * @date 2013-07-04
+	 * @date 2013-07-31
 	 */
 	private enum DialogTypes {
 		PRIMARY, SECONDARY, ACKNOWLEDGE, RESCUESERVICE;
@@ -97,7 +103,13 @@ public class SmsAlarm extends Activity  {
     
     // The Spinner objects
     private Spinner toneSpinner;
-    private Spinner secondaryListenNumberSpinner;    
+    private Spinner secondaryListenNumberSpinner;   
+    
+    // The textView objects
+    private TextView soundSettingInfoTextView;
+    private TextView playToneTwiceInfoTextView;
+    private TextView enableSmsAlarmInfoTextView;
+    private TextView enableAckInfoTextView;
     
 	// Strings to store different important numbers
     private String primaryListenNumber = "";
@@ -480,37 +492,86 @@ public class SmsAlarm extends Activity  {
     	this.logger.logCat(LogPriorities.DEBUG, this.LOG_TAG + ":findViews()", "Start finding Views by their ID");
     	
         // Declare and initialize variables of type EditText
-    	this.primaryListenNumberEditText = (EditText)findViewById(R.id.primaryNumber_et);
-    	this.selectedToneEditText = (EditText)findViewById(R.id.msgTone_et);
-    	this.ackNumberEditText = (EditText)findViewById(R.id.ackNumber_et);
-    	this.rescueServiceEditText = (EditText)findViewById(R.id.rescueServiceName_et);
+    	this.primaryListenNumberEditText = (EditText) findViewById(R.id.primaryNumber_et);
+    	this.selectedToneEditText = (EditText) findViewById(R.id.msgTone_et);
+    	this.ackNumberEditText = (EditText) findViewById(R.id.ackNumber_et);
+    	this.rescueServiceEditText = (EditText) findViewById(R.id.rescueServiceName_et);
         
         // Declare and initialize variables of type button
-    	this.editPrimaryNumberButton = (Button)findViewById(R.id.editPrimaryNumber_btn);
-    	this.addSecondaryNumberButton = (Button)findViewById(R.id.addSecondaryNumber_btn);
-    	this.removeSecondaryNumberButton = (Button)findViewById(R.id.deleteSecondaryNumber_btn);
-    	this.editMsgToneButton = (Button)findViewById(R.id.editMsgTone_btn); 
-    	this.listenMsgToneButton = (Button)findViewById(R.id.listenMsgTone_btn);
-    	this.ackNumberButton = (Button)findViewById(R.id.editAckNumber_btn);
-        this.editRescueServiceButton = (Button)findViewById(R.id.editRescueServiceName_btn);
+    	this.editPrimaryNumberButton = (Button) findViewById(R.id.editPrimaryNumber_btn);
+    	this.addSecondaryNumberButton = (Button) findViewById(R.id.addSecondaryNumber_btn);
+    	this.removeSecondaryNumberButton = (Button) findViewById(R.id.deleteSecondaryNumber_btn);
+    	this.editMsgToneButton = (Button) findViewById(R.id.editMsgTone_btn); 
+    	this.listenMsgToneButton = (Button) findViewById(R.id.listenMsgTone_btn);
+    	this.ackNumberButton = (Button) findViewById(R.id.editAckNumber_btn);
+        this.editRescueServiceButton = (Button) findViewById(R.id.editRescueServiceName_btn);
         
         // Declare and initialize variables of type CheckBox
-        this.soundSettingCheckBox = (CheckBox)findViewById(R.id.useSysSoundSettings_chk);
-        this.enableAckCheckBox = (CheckBox)findViewById(R.id.enableAcknowledge_chk);
-        this.playToneTwiceSettingCheckBox = (CheckBox)findViewById(R.id.playToneTwiceSetting_chk);
-        this.enableSmsAlarmCheckBox = (CheckBox)findViewById(R.id.enableSmsAlarm_chk);
+        this.soundSettingCheckBox = (CheckBox) findViewById(R.id.useSysSoundSettings_chk);
+        this.enableAckCheckBox = (CheckBox) findViewById(R.id.enableAcknowledge_chk);
+        this.playToneTwiceSettingCheckBox = (CheckBox) findViewById(R.id.playToneTwiceSetting_chk);
+        this.enableSmsAlarmCheckBox = (CheckBox) findViewById(R.id.enableSmsAlarm_chk);
         
         // Declare and initialize variables of type Spinner
-        this.toneSpinner = (Spinner)findViewById(R.id.toneSpinner_sp);
-        this.secondaryListenNumberSpinner = (Spinner)findViewById(R.id.secondaryNumberSpinner_sp); 
+        this.toneSpinner = (Spinner) findViewById(R.id.toneSpinner_sp);
+        this.secondaryListenNumberSpinner = (Spinner) findViewById(R.id.secondaryNumberSpinner_sp); 
+        
+        // Declare and initialize variables of type TextView
+        this.soundSettingInfoTextView = (TextView) findViewById(R.id.useSysSoundSettingsHint_tv);
+        this.playToneTwiceInfoTextView = (TextView) findViewById(R.id.playToneTwiceSettingHint_tv);
+        this.enableSmsAlarmInfoTextView = (TextView) findViewById(R.id.enableSmsAlarmHint_tv);
+        this.enableAckInfoTextView = (TextView) findViewById(R.id.enableAcknowledgeHint_tv);
+        
+        // If Android API level is greater than 16 we need to adjust some margins
+        if (Build.VERSION.SDK_INT > 16) {
+        	// We need to get some Android resources in order to calculate proper pixel dimensions from dp
+        	Resources resources = getResources();
+        	// Calculate pixel dimensions for the different margins
+        	int pixelsLeft = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 32, resources.getDisplayMetrics()); // 32dp calculated to pixels
+        	int pixelsRight = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 5, resources.getDisplayMetrics()); // 5dp calculated to pixels
+        	int pixelsTop = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, -9, resources.getDisplayMetrics()); // -9dp calculated to pixels
+      	
+        	// Set layout parameters for the sound settings info textview
+        	RelativeLayout.LayoutParams paramsSoundSettingInfoTextView = new RelativeLayout.LayoutParams(LayoutParams.WRAP_CONTENT,LayoutParams.WRAP_CONTENT ); // Wrap content, both on height and width
+        	paramsSoundSettingInfoTextView.setMargins(pixelsLeft, pixelsTop, pixelsRight, 0); // Margins left, top, right, bottom
+        	paramsSoundSettingInfoTextView.addRule(RelativeLayout.BELOW, this.soundSettingCheckBox.getId()); // Add rule, below UI widget
+        	paramsSoundSettingInfoTextView.addRule(RelativeLayout.ALIGN_LEFT, this.soundSettingCheckBox.getId()); // Add rule, align left of UI widget
+        	
+        	// Set layout parameters for the play tone twice textview
+        	RelativeLayout.LayoutParams paramsPlayToneTwiceInfoTextView = new RelativeLayout.LayoutParams(LayoutParams.WRAP_CONTENT,LayoutParams.WRAP_CONTENT );
+        	paramsPlayToneTwiceInfoTextView.setMargins(pixelsLeft, pixelsTop, pixelsRight, 0);
+        	paramsPlayToneTwiceInfoTextView.addRule(RelativeLayout.BELOW, this.playToneTwiceSettingCheckBox.getId());
+        	paramsPlayToneTwiceInfoTextView.addRule(RelativeLayout.ALIGN_LEFT, this.playToneTwiceSettingCheckBox.getId());
+        	
+        	// Set layout parameters for the enable ack info textview
+        	RelativeLayout.LayoutParams paramsEnableAckInfoTextView = new RelativeLayout.LayoutParams(LayoutParams.WRAP_CONTENT,LayoutParams.WRAP_CONTENT );
+        	paramsEnableAckInfoTextView.setMargins(pixelsLeft, pixelsTop, pixelsRight, 0);
+        	paramsEnableAckInfoTextView.addRule(RelativeLayout.BELOW, this.enableAckCheckBox.getId());
+        	paramsEnableAckInfoTextView.addRule(RelativeLayout.ALIGN_LEFT, this.enableAckCheckBox.getId());
+        	
+        	// Set layout parameters for the enable sms alarm info textview
+        	RelativeLayout.LayoutParams paramsEnableSmsAlarmInfoTextView = new RelativeLayout.LayoutParams(LayoutParams.WRAP_CONTENT,LayoutParams.WRAP_CONTENT );
+        	paramsEnableSmsAlarmInfoTextView.setMargins(pixelsLeft, pixelsTop, pixelsRight, 0);
+        	paramsEnableSmsAlarmInfoTextView.addRule(RelativeLayout.BELOW, this.enableSmsAlarmCheckBox.getId());
+        	paramsEnableSmsAlarmInfoTextView.addRule(RelativeLayout.ALIGN_LEFT, this.enableSmsAlarmCheckBox.getId());
+        	
+        	// Apply the previously configured layout parameters to the correct textviews
+        	this.soundSettingInfoTextView.setLayoutParams(paramsSoundSettingInfoTextView);
+            this.playToneTwiceInfoTextView.setLayoutParams(paramsPlayToneTwiceInfoTextView);
+            this.enableAckInfoTextView.setLayoutParams(paramsEnableAckInfoTextView);            
+            this.enableSmsAlarmInfoTextView.setLayoutParams(paramsEnableSmsAlarmInfoTextView);
+            
+            // Logging
+        	this.logger.logCat(LogPriorities.DEBUG, this.LOG_TAG + ":findViews()", "API level > 16, edit margins on information TextViews for the checkboxes");
+        }
         
         // Declare and initialize variables of type ImageView
-        this.divider1ImageView = (ImageView)findViewById(R.id.mainDivider1_iv);
-        this.divider2ImageView = (ImageView)findViewById(R.id.mainDivider2_iv);
-        this.divider3ImageView = (ImageView)findViewById(R.id.mainDivider3_iv);
+        this.divider1ImageView = (ImageView) findViewById(R.id.mainDivider1_iv);
+        this.divider2ImageView = (ImageView) findViewById(R.id.mainDivider2_iv);
+        this.divider3ImageView = (ImageView) findViewById(R.id.mainDivider3_iv);
         
         // If Android API level less then 11 set bright gradient else set dark gradient
-        if(Build.VERSION.SDK_INT < 11) {
+        if (Build.VERSION.SDK_INT < 11) {
         	this.divider1ImageView.setImageResource(R.drawable.gradient_divider_10_and_down); 
         	this.divider2ImageView.setImageResource(R.drawable.gradient_divider_10_and_down);
         	this.divider3ImageView.setImageResource(R.drawable.gradient_divider_10_and_down);
