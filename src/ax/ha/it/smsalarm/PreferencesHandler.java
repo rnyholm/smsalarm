@@ -22,7 +22,7 @@ import ax.ha.it.smsalarm.LogHandler.LogPriorities;
  * @author Robert Nyholm <robert.nyholm@aland.net>
  * @version 2.1
  * @since 2.0
- * @date 2013-07-05
+ * @date 2013-08-01
  */
 public class PreferencesHandler {
 	/**
@@ -61,7 +61,8 @@ public class PreferencesHandler {
 		PLAY_TONE_TWICE_KEY("playToneTwice"),
 		ENABLE_SMS_ALARM_KEY("enableSmsAlarm"),
 		RESCUE_SERVICE_KEY("rescueService"),
-		HAS_CALLED_KEY("hasCalled");
+		HAS_CALLED_KEY("hasCalled"),
+		USER_LICENSE_AGREED("userLicenseAgreed");
 		
 		// Value in which enumerations values are stored
 		private final String key;
