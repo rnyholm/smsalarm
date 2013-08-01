@@ -30,6 +30,10 @@
     <string name="EDIT_RESCUE_SERVICE_NAME">Ändra räddningstjänst</string>
     <string name="EMPTY_SECONDARY_NUMBER">Det går inte att ange ett tomt telefonnummer för sekundärlarm. Ange ett nytt telefonnummer.</string>
     <string name="ENTER_PHONE_NUMBER_HINT">Ange nummer!</string>
+    <string name="EULA">Sms Alarm är inte något substitut till personsökare eller annat system avsett för utalarmering av räddningspersonal. Utvecklaren av Sms Alarm tar ej ansvar för och kan inte hållas ansvarig för eventuella skador på liv, egendom eller miljö som uppstått i samband med användandet av Sms Alarm. Utvecklaren av Sms Alarm tar ej heller något ansvar för eventuella skador som uppstått på enheten i samband med användning av Sms Alarm.</string>
+    <string name="EULA_AGREE">Godkänn</string>
+    <string name="EULA_DECLINE">Avböj</string>
+    <string name="EULA_TITLE">Användaravtal</string>
     <string name="INFO_ACK_SETTINGS">Ställ in om larmkvittering skall användas och i sådana fall vilket telefonnummer som kvitteringen sker mot.</string>
     <string name="INFO_ENABLE_ACKNOWLEDGE">Om vald kan primärlarm kvitteras.</string>
     <string name="INFO_ENABLE_SMS_ALARM">Om vald larmar Sms Alarm på angivna telefonnummer, annars gör applikationen inte det.</string>
