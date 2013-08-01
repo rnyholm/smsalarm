@@ -21,7 +21,7 @@ public abstract class WakeLocker {
 	// Log tag
 	private final static String LOG_TAG = "WakeLocker";
 	// Variable used to log messages
-	private static LogHandler logger;
+	private static LogHandler logger = LogHandler.getInstance();
 
 	// WakeLock variable used to wake up screen
     private static PowerManager.WakeLock wakeLock;
