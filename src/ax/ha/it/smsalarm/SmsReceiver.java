@@ -83,9 +83,9 @@ public class SmsReceiver extends BroadcastReceiver {
 	 * 
 	 * @see #smsHandler(Context)
 	 * @see #getSmsReceivePrefs(Context)
-	 * @see ax.ha.it.smsalarm.LogHandler#logCat(LogPriorities, String, String)
-	 * @see ax.ha.it.smsalarm.LogHandler#logCatTxt(LogPriorities, String, String, Throwable)
-	 * @see ax.ha.it.smsalarm.PreferencesHandler#setPrefs(PrefKeys, PrefKeys, Object, Context)
+	 * @see ax.ha.it.smsalarm.LogHandler#logCat(LogPriorities, String, String) logCat(LogPriorities, String, String)
+	 * @see ax.ha.it.smsalarm.LogHandler#logCatTxt(LogPriorities, String, String, Throwable) logCatTxt(LogPriorities, String, String, Throwable)
+	 * @see ax.ha.it.smsalarm.PreferencesHandler#setPrefs(PrefKeys, PrefKeys, Object, Context) setPrefs(PrefKeys, PrefKeys, Object, Context)
 	 */
 	@Override
 	public void onReceive(Context context, Intent intent) {
@@ -210,13 +210,13 @@ public class SmsReceiver extends BroadcastReceiver {
 	 * 
 	 * @see #onReceive(Context, Intent)
 	 * @see #getSmsReceivePrefs(Context)
-	 * @see ax.ha.it.smsalarm.NoiseHandler#makeNoise(Context, int, boolean, boolean)
-	 * @see ax.ha.it.smsalarm.LogHandler#logCat(LogPriorities, String, String)
-	 * @see ax.ha.it.smsalarm.LogHandler#logCatTxt(LogPriorities, String, String)
-	 * @see ax.ha.it.smsalarm.LogHandler#logCatTxt(LogPriorities, String, String, Throwable)
-	 * @see ax.ha.it.smsalarm.PreferencesHandler#setPrefs(PrefKeys, PrefKeys, Object, Context)
-	 * @see ax.ha.it.smsalarm.WakeLocker#acquire(Context)
-	 * @see ax.ha.it.smsalarm.WakeLocker#release()
+	 * @see ax.ha.it.smsalarm.NoiseHandler#makeNoise(Context, int, boolean, boolean) makeNoise(Context, int, boolean, boolean)
+	 * @see ax.ha.it.smsalarm.LogHandler#logCat(LogPriorities, String, String) logCat(LogPriorities, String, String)
+	 * @see ax.ha.it.smsalarm.LogHandler#logCatTxt(LogPriorities, String, String) logCatTxt(LogPriorities, String, String)
+	 * @see ax.ha.it.smsalarm.LogHandler#logCatTxt(LogPriorities, String, String, Throwable) logCatTxt(LogPriorities, String, String, Throwable)
+	 * @see ax.ha.it.smsalarm.PreferencesHandler#setPrefs(PrefKeys, PrefKeys, Object, Context) setPrefs(PrefKeys, PrefKeys, Object, Context)
+	 * @see ax.ha.it.smsalarm.WakeLocker#acquire(Context) acquire(Context)
+	 * @see ax.ha.it.smsalarm.WakeLocker#release() release()
 	 */
 	private void smsHandler(Context context) {
 		// To prevent the OS from ever see the incoming SMS
@@ -307,9 +307,9 @@ public class SmsReceiver extends BroadcastReceiver {
 	 * 
 	 * @see #onReceive(Context, Intent)
 	 * @see #smsHandler(Context)
-	 * @see ax.ha.it.smsalarm.LogHandler#logCat(LogPriorities, String, String)
-	 * @see ax.ha.it.smsalarm.LogHandler#logCatTxt(LogPriorities, String, String, Throwable)
-	 * @see ax.ha.it.smsalarm.PreferencesHandler#getPrefs(PrefKeys, PrefKeys, DataTypes, Context)
+	 * @see ax.ha.it.smsalarm.LogHandler#logCat(LogPriorities, String, String) logCat(LogPriorities, String, String)
+	 * @see ax.ha.it.smsalarm.LogHandler#logCatTxt(LogPriorities, String, String, Throwable) logCatTxt(LogPriorities, String, String, Throwable)
+	 * @see ax.ha.it.smsalarm.PreferencesHandler#getPrefs(PrefKeys, PrefKeys, DataTypes, Context) getPrefs(PrefKeys, PrefKeys, DataTypes, Context)
 	 */
 	@SuppressWarnings("unchecked")
 	private void getSmsReceivePrefs(Context context) {

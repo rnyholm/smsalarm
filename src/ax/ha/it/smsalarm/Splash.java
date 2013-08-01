@@ -58,8 +58,10 @@ public class Splash extends Activity {
 	 * @see #onPause()
 	 * @see ax.ha.it.smsalarm.LogHandler#logCat(LogPriorities, String, String)
 	 *      logCat(LogPriorities, String, String)
-	 * @see ax.ha.it.smsalarm.PreferencesHandler#getPrefs(PrefKeys, PrefKeys,
-	 *      DataTypes, android.content.Context, Object)
+	 * @see ax.ha.it.smsalarm.PreferencesHandler#getPrefs(PrefKeys,
+	 *      PrefKeys,DataTypes, android.content.Context, Object)
+	 *      getPrefs(PrefKeys, PrefKeys,DataTypes, android.content.Context,
+	 *      Object)
 	 */
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -72,14 +74,14 @@ public class Splash extends Activity {
 		this.logger.logCat(LogPriorities.DEBUG, this.LOG_TAG + ":onCreate()", "Layout has been set with correct settings");
 
 		/*
-		 * Retrieve value from shared preferences, this is to decide if 
-		 * user has agreed user the user license before or not
+		 * Retrieve value from shared preferences, this is to decide if user has
+		 * agreed user the user license before or not
 		 */
 		this.endUserLicenseAgreed = (Boolean) this.prefHandler.getPrefs(PrefKeys.SHARED_PREF, PrefKeys.END_USER_LICENSE_AGREED, DataTypes.BOOLEAN, this, false);
 
 		/*
-		 * Only set up onClickListener and start Runnable if user 
-		 * has agreed the end user license agreement
+		 * Only set up onClickListener and start Runnable if user has agreed the
+		 * end user license agreement
 		 */
 		if (this.endUserLicenseAgreed) {
 			// Get a handle to the layout by finding it's id
@@ -100,7 +102,8 @@ public class Splash extends Activity {
 				public void run() {
 					// Some logging for information and debugging
 					logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":onCreate().Handler.run()", "Time has elapsed");
-					// Start activity after thread has been a sleep for a given delay time
+					// Start activity after thread has been a sleep for a given
+					// delay time
 					switchActivity();
 				}
 			}, delay);
@@ -127,7 +130,9 @@ public class Splash extends Activity {
 	 * To build up and show an EULA dialog.
 	 * 
 	 * @see ax.ha.it.smsalarm.LogHandler#logCat(LogPriorities, String, String)
+	 *      logCat(LogPriorities, String, String)
 	 * @see ax.ha.it.smsalarm.PreferencesHandler#setPrefs(PrefKeys, PrefKeys,
+	 *      Object, android.content.Context) setPrefs(PrefKeys, PrefKeys,
 	 *      Object, android.content.Context)
 	 */
 	private void buildAndShowEULADialog() {
@@ -152,7 +157,8 @@ public class Splash extends Activity {
 			public void onClick(DialogInterface dialog, int which) {
 				// Debug logging
 				logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":buildAndShowEULADialog().PositiveButton.OnClickListener().onClick()", "Positive Button pressed in dialog, store shared preferences and switch activity");
-				// Put end user license agreed in shared preferences so we don't show this dialog again
+				// Put end user license agreed in shared preferences so we don't
+				// show this dialog again
 				prefHandler.setPrefs(PrefKeys.SHARED_PREF, PrefKeys.END_USER_LICENSE_AGREED, true, Splash.this);
 				// Switch activity
 				switchActivity();

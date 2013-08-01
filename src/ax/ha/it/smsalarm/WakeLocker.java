@@ -32,7 +32,7 @@ public abstract class WakeLocker {
      * 
      * @param context Context to acquire <code>SystemService</code> from
      * 
-     * @see ax.ha.it.smsalarm.LogHandler#logCat(LogPriorities, String, String)
+     * @see ax.ha.it.smsalarm.LogHandler#logCat(LogPriorities, String, String) logCat(LogPriorities, String, String)
      */
     @SuppressLint("Wakelock")
 	public static void acquire(Context context) {
@@ -62,7 +62,7 @@ public abstract class WakeLocker {
      * Static method to release WakeLock.<br/>
      * <b><i>Should be null safe</i></b>.
      * 
-     * @see ax.ha.it.smsalarm.LogHandler#logCat(LogPriorities, String, String)
+     * @see ax.ha.it.smsalarm.LogHandler#logCat(LogPriorities, String, String) logCat(LogPriorities, String, String)
      */
     public static void release() {
     	// Null check, so we don't release wakeLock if it's not necessary
