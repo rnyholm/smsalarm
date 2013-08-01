@@ -1,7 +1,6 @@
 /*
  * Copyright (c) 2013 Robert Nyholm. All rights reserved.
  */
-
 package ax.ha.it.smsalarm;
 
 import java.util.ArrayList;
@@ -103,7 +102,7 @@ public class PreferencesHandler {
 	/**
 	 * Private constructor, is private due to it's singleton pattern.
 	 * 
-	 * @see ax.ha.it.smsalarm.LogHandler#logCat(LogPriorities, String, String) logCat(LogPriorities, String, String)
+	 * @see ax.ha.it.smsalarm.LogHandler#logCat(LogPriorities, String, String)
 	 */
 	private PreferencesHandler() {
 		// Get instance of logger
@@ -154,9 +153,9 @@ public class PreferencesHandler {
 	 * 
 	 * @see #setPrefs(PrefKeys, PrefKeys, Object, Context)
 	 * @see #getPrefs(PrefKeys, PrefKeys, DataTypes, Context)
-	 * @see ax.ha.it.smsalarm.LogHandler#logCat(LogPriorities, String, String) logCat(LogPriorities, String, String)
-	 * @see ax.ha.it.smsalarm.LogHandler#logCatTxt(LogPriorities, String, String) logCatTxt(LogPriorities, String, String)
-	 * @see ax.ha.it.smsalarm.LogHandler#logCatTxt(LogPriorities, String, String, Throwable) logCatTxt(LogPriorities, String, String, Throwable)
+	 * @see ax.ha.it.smsalarm.LogHandler#logCat(LogPriorities, String, String)
+	 * @see ax.ha.it.smsalarm.LogHandler#logCatTxt(LogPriorities, String, String)
+	 * @see ax.ha.it.smsalarm.LogHandler#logCatTxt(LogPriorities, String, String, Throwable)
 	 */
 	public Object getPrefs(PrefKeys sharedPreferences, PrefKeys key, DataTypes type, Context context) throws IllegalArgumentException {
 		// Set shared preferences from context
@@ -241,9 +240,9 @@ public class PreferencesHandler {
 	 * 
 	 * @see #setPrefs(PrefKeys, PrefKeys, Object, Context)
 	 * @see #getPrefs(PrefKeys, PrefKeys, DataTypes, Context, Object)
-	 * @see ax.ha.it.smsalarm.LogHandler#logCat(LogPriorities, String, String) logCat(LogPriorities, String, String)
-	 * @see ax.ha.it.smsalarm.LogHandler#logCatTxt(LogPriorities, String, String) logCatTxt(LogPriorities, String, String)
-	 * @see ax.ha.it.smsalarm.LogHandler#logCatTxt(LogPriorities, String, String, Throwable) logCatTxt(LogPriorities, String, String, Throwable)
+	 * @see ax.ha.it.smsalarm.LogHandler#logCat(LogPriorities, String, String)
+	 * @see ax.ha.it.smsalarm.LogHandler#logCatTxt(LogPriorities, String, String)
+	 * @see ax.ha.it.smsalarm.LogHandler#logCatTxt(LogPriorities, String, String, Throwable)
 	 */
 	public Object getPrefs(PrefKeys sharedPreferences, PrefKeys key, DataTypes type, Context context, Object defaultObject) throws IllegalArgumentException {
 		// Set shared preferences from context
@@ -340,7 +339,7 @@ public class PreferencesHandler {
 	 * 				  if an incorrect datatype was given as parameter           
 	 * 
 	 * @see #getPrefs(PrefKeys, PrefKeys, DataTypes, Context)
-	 * @see ax.ha.it.smsalarm.LogHandler#logCat(LogPriorities, String, String) logCat(LogPriorities, String, String)
+	 * @see ax.ha.it.smsalarm.LogHandler#logCat(LogPriorities, String, String)
 	 */
 	@SuppressWarnings("unchecked")
 	public void setPrefs(PrefKeys sharedPreferences, PrefKeys key, Object object, Context context) throws IllegalArgumentException {
