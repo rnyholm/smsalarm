@@ -141,7 +141,10 @@ public class NotificationHelper extends IntentService {
 		notification.setLatestEventInfo(context, contentTitle, contentText, contentIntent);
 
 		// This flag auto cancels the notification when clicked
-		notification.flags = Notification.FLAG_AUTO_CANCEL;
+		notification.flags = Notification.FLAG_SHOW_LIGHTS | Notification.FLAG_AUTO_CANCEL;
+		notification.ledARGB = 0xFFff0000;
+		notification.ledOnMS = 100;
+		notification.ledOffMS = 100;
 
 		this.logger.logCat(LogPriorities.DEBUG, this.LOG_TAG + ":onHandleIntent()", "Notification and it's intent has been configured and are ready to be shown");
 
