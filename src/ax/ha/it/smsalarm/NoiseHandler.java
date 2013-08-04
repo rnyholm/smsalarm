@@ -104,7 +104,7 @@ public class NoiseHandler {
 		
 		// Check if mediaplayer isn't playing already, in case it's playing we don't need to set up the player
 		if(!this.mPlayer.isPlaying()) {
-			/*Declarations of different objects needed by makeNoise */
+			/* Declarations of different objects needed by makeNoise */
 			// AudioManager used to get and set different volume levels
 			final AudioManager am = (AudioManager) context.getSystemService(Context.AUDIO_SERVICE); 
 			// AssetFileDescriptor to get mp3 file

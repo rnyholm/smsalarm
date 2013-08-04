@@ -14,6 +14,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.PowerManager;
 import android.telephony.SmsMessage;
 import ax.ha.it.smsalarm.LogHandler.LogPriorities;
 import ax.ha.it.smsalarm.PreferencesHandler.DataTypes;
@@ -225,8 +226,14 @@ public class SmsReceiver extends BroadcastReceiver {
 		// Log message for debugging/information purpose
 		this.logger.logCat(LogPriorities.DEBUG, this.LOG_TAG + ":smsHandler()", "ABORTED OPERATING SYSTEMS BROADCAST");
 		
-		// Wake up device
-		WakeLocker.acquire(context);
+		// PowerManager to detect whether screen is on or off, if it's off we need to wake it
+		PowerManager pm = (PowerManager) context.getSystemService(Context.POWER_SERVICE);
+		if (!pm.isScreenOn()) {
+			// Log message for debugging/information purpose
+			this.logger.logCat(LogPriorities.DEBUG, this.LOG_TAG + ":smsHandler()", "Screen is:\"OFF\", need to acquire WakeLock");
+			// Wake up device by acquire a wakelock and then release it after given time
+			WakeLocker.acquireAndRelease(context, 20000);
+		}
 
 		// Pattern for regular expression like this; dd.dd.dddd dd:dd:dd: d.d, alarm from alarmcentralen.ax has this pattern
 		Pattern p = Pattern.compile("(\\d{2}).(\\d{2}).(\\d{4})(\\s)(\\d{2}):(\\d{2}):(\\d{2})(\\s)(\\d{1}).(\\d{1})");
@@ -283,16 +290,12 @@ public class SmsReceiver extends BroadcastReceiver {
 
 		// Acknowledge is enabled and it is a primary alarm, show acknowledge notification, else show "ordinary" notification
 		if (this.enableAlarmAck && this.alarmType.equals(AlarmTypes.PRIMARY)) {
-			this.logger.logCat(LogPriorities.DEBUG, this.LOG_TAG + ":smsHandler()", "Preparing intent for the AcknowledgeNotificationHelper.class");			
-			// Release WakeLock
-			WakeLocker.release();			
+			this.logger.logCat(LogPriorities.DEBUG, this.LOG_TAG + ":smsHandler()", "Preparing intent for the AcknowledgeNotificationHelper.class");				
 			// Start intent, AcknowledgeNotificationHelper - a helper to show acknowledge notification
 			Intent ackNotIntent = new Intent(context, AcknowledgeNotificationHelper.class);
 			context.startService(ackNotIntent);
 		} else {
 			this.logger.logCat(LogPriorities.DEBUG, this.LOG_TAG + ":smsHandler()", "Preparing intent for the NotificationHelper.class");		
-			// Release WakeLock
-			WakeLocker.release();
 			// Start intent, NotificationHelper - a helper to show notification
 			Intent notIntent = new Intent(context, NotificationHelper.class);
 			context.startService(notIntent);

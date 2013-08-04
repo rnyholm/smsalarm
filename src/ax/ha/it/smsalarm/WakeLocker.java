@@ -3,6 +3,9 @@
  */
 package ax.ha.it.smsalarm;
 
+import java.util.Timer;
+import java.util.TimerTask;
+
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.os.PowerManager;
@@ -15,7 +18,7 @@ import ax.ha.it.smsalarm.LogHandler.LogPriorities;
  * @author Robert Nyholm <robert.nyholm@aland.net>
  * @version 2.1
  * @since 2.1
- * @date 2013-08-01
+ * @date 2013-08-04
  */
 public abstract class WakeLocker {
 	// Log tag
@@ -34,7 +37,8 @@ public abstract class WakeLocker {
      * 
      * @see ax.ha.it.smsalarm.LogHandler#logCat(LogPriorities, String, String) logCat(LogPriorities, String, String)
      */
-    @SuppressLint("Wakelock")
+    @SuppressWarnings("deprecation")
+	@SuppressLint("Wakelock")
 	public static void acquire(Context context) {
     	// Debug logging
     	logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":acquire()", "Begin to acquire wakelock");
@@ -73,5 +77,33 @@ public abstract class WakeLocker {
             logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":release()", "WakeLock has been released");
         }
         wakeLock = null;
+    }
+    
+    /**
+     * To acquire a WakeLock and release it after given time in milliseconds.
+     * 
+     * @param context Context to acquire <code>SystemService</code> from
+     * @param releaseTime Time in milliseconds until the acquired WakeLock is released
+     * 
+     * @see #acquire(Context)
+     * @see #release()
+     */
+    public static void acquireAndRelease(Context context, int releaseTime) {
+        // Debug logging
+        logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":acquireAndRelease()", "WakeLock is to acquired and it will be released after:\"" + releaseTime + "\"milliseconds");
+    	// To release acquired wakelock after a specific time
+    	Timer releaseTimer = new Timer();
+    	// Acquire wakelock
+    	acquire(context);
+    	
+    	/*
+    	 * Setup new timertask and start it. This timertask releases
+    	 * acquired wakelock efter given time in milliseconds.
+    	 */
+    	releaseTimer.schedule(new TimerTask() {
+    		public void run() {
+    			release();
+    		}
+		}, releaseTime);
     }
 }
