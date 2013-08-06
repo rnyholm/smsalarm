@@ -1,12 +1,12 @@
-/*
+/**
  * Copyright (c) 2013 Robert Nyholm. All rights reserved.
  */
-
 package ax.ha.it.smsalarm;
 
 import java.util.Calendar;
 import java.util.Date;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.ActivityNotFoundException;
 import android.content.Context;
@@ -337,11 +337,16 @@ public class AcknowledgeHandler extends Activity {
 	 * 
 	 * @see ax.ha.it.smsalarm.LogHandler#logCat(LogPriorities, String , String) logCat(LogPriorities, String , String)
 	 */
+	@SuppressLint("DefaultLocale")
 	private void setTextViews() {
 		// Some logging
 		this.logger.logCat(LogPriorities.DEBUG, this.LOG_TAG + ":setTextViews()", "Setting TextViews with proper data");
 		// Set TextViews from variables and resources
-		this.titleTextView.setText(this.rescueService.toUpperCase() + " " + getResources().getString(R.string.ALARM));
+		if (!this.rescueService.isEmpty()) {
+			this.titleTextView.setText(this.rescueService.toUpperCase() + " " + getResources().getString(R.string.ALARM));
+		} else {
+			this.titleTextView.setText(getString(R.string.ALARM));
+		}
 		this.fullMessageTextView.setText(this.fullMessage);
 		// Check if the activity already has placed a call, in that case show TextViews for redial
 		if (this.hasCalled) {

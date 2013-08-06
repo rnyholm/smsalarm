@@ -76,7 +76,11 @@ public class Splash extends Activity {
 		 * Retrieve value from shared preferences, this is to decide if user has
 		 * agreed user the user license before or not
 		 */
-		this.endUserLicenseAgreed = (Boolean) this.prefHandler.getPrefs(PrefKeys.SHARED_PREF, PrefKeys.END_USER_LICENSE_AGREED, DataTypes.BOOLEAN, this, false);
+		try {
+			this.endUserLicenseAgreed = (Boolean) this.prefHandler.getPrefs(PrefKeys.SHARED_PREF, PrefKeys.END_USER_LICENSE_AGREED, DataTypes.BOOLEAN, this, false);
+		} catch(IllegalArgumentException e) {
+			logger.logCatTxt(LogPriorities.ERROR, this.LOG_TAG + ":onCreate()", "An unsupported datatype was given as argument to PreferencesHandler.getPrefs()", e);
+		} 
 
 		/*
 		 * Only set up onClickListener and start Runnable if user has agreed the

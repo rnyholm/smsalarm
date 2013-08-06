@@ -31,18 +31,6 @@ import ax.ha.it.smsalarm.PreferencesHandler.PrefKeys;
  * 
  */
 public class SmsReceiver extends BroadcastReceiver {
-	/**
-	 * Enumeration for different types of alarms.
-	 * 
-	 * @author Robert Nyholm <robert.nyholm@aland.net>
-	 * @version 2.1
-	 * @since 2.1
-	 * @date 2013-07-24
-	 */
-	private enum AlarmTypes {
-		PRIMARY, SECONDARY;
-	}	
-
 	// Log tag string
 	private final String LOG_TAG = "SmsReceiver";
 
@@ -151,7 +139,7 @@ public class SmsReceiver extends BroadcastReceiver {
 
 					try {
 						// Put alarm type to shared preferences
-						this.prefHandler.setPrefs(PrefKeys.SHARED_PREF, PrefKeys.LARM_TYPE_KEY, "primary", context);
+						this.prefHandler.setPrefs(PrefKeys.SHARED_PREF, PrefKeys.LARM_TYPE_KEY, AlarmTypes.PRIMARY.ordinal(), context);
 					} catch(IllegalArgumentException e) {
 						logger.logCatTxt(LogPriorities.ERROR, LOG_TAG + ":onReceive()", "An Object of unsupported instance was given as argument to PreferencesHandler.setPrefs()", e);
 					}
@@ -177,7 +165,7 @@ public class SmsReceiver extends BroadcastReceiver {
 								
 								try {
 									// Put alarm type to shared preferences
-									this.prefHandler.setPrefs(PrefKeys.SHARED_PREF, PrefKeys.LARM_TYPE_KEY, "secondary", context);
+									this.prefHandler.setPrefs(PrefKeys.SHARED_PREF, PrefKeys.LARM_TYPE_KEY, AlarmTypes.SECONDARY.ordinal(), context);
 								} catch(IllegalArgumentException e) {
 									logger.logCatTxt(LogPriorities.ERROR, LOG_TAG + ":onReceive()", "An Object of unsupported instance was given as argument to PreferencesHandler.setPrefs()", e);
 								}
@@ -257,14 +245,6 @@ public class SmsReceiver extends BroadcastReceiver {
 			this.logger.logCatTxt(LogPriorities.ERROR, this.LOG_TAG + ":smsHandler()", "An unsupported alarm type has occurred, can't decide what to do");
 		}
 
-		// If message contain a string with correct pattern, remove the date and time stamp in message
-		if (m.find()) {
-			this.msgBody = this.msgBody.replace(m.group(1).toString() + "." + m.group(2).toString() + "." + m.group(3).toString() + m.group(4).toString() + m.group(5).toString() + ":" + m.group(6).toString() + ":" + m.group(7).toString() + m.group(8).toString() + m.group(9).toString() + "."
-					+ m.group(10).toString(), "");
-			// Debug logging
-			this.logger.logCat(LogPriorities.DEBUG, this.LOG_TAG + ":smsHandler()", "SMS cleaned from unnecessary information");
-		}
-
 		// If Alarm acknowledge is enabled and alarm type equals primary, store full alarm message
 		if (this.enableAlarmAck && this.alarmType.equals(AlarmTypes.PRIMARY)) {
 			// Debug logging
@@ -276,6 +256,14 @@ public class SmsReceiver extends BroadcastReceiver {
 			} catch(IllegalArgumentException e) {
 				logger.logCatTxt(LogPriorities.ERROR, LOG_TAG + ":smsHandler()", "An Object of unsupported instance was given as argument to PreferencesHandler.setPrefs()", e);
 			}
+		}
+		
+		// If message contain a string with correct pattern, remove the date and time stamp in message
+		if (m.find()) {
+			this.msgBody = this.msgBody.replace(m.group(1).toString() + "." + m.group(2).toString() + "." + m.group(3).toString() + m.group(4).toString() + m.group(5).toString() + ":" + m.group(6).toString() + ":" + m.group(7).toString() + m.group(8).toString() + m.group(9).toString() + "."
+					+ m.group(10).toString(), "");
+			// Debug logging
+			this.logger.logCat(LogPriorities.DEBUG, this.LOG_TAG + ":smsHandler()", "SMS cleaned from unnecessary information");
 		}
 		
 		// Debug logging
