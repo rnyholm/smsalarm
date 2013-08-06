@@ -2,12 +2,12 @@ SmsAlarm changelog
 
 v2.1(version code 4) 
 -Möjligt att kvittera ett inkommande primärlarm till ett telefonnummer
--Kvitteringen återuppringer om upptaget vid kvittering
+-Kvitteringen återuppringer om upptaget vid kvittering, beta stadie ännu
 -Fel loggas till fil
 -Förbättrat hanteringen av datalagring och hämtning av data
 -Förbättrat gränssnitt, mera anpassat för Android version 4.0 och uppåt
 -SmsAlarm kan lyssna på flera telefonnummer än ett för sekundärlarm
--Ny ikon i notifikationsfältet för sekundärlarm
+-Ny ikon i notifikationsfältet för sekundärlarm, grått kryss
 -Notifikationern skriver inte över varandra
 -Möjlighet att spela upp larmsignalen två gånger vid larm
 -Möjlighet att inaktivera SmsAlarm helt och hållet
@@ -17,6 +17,8 @@ v2.1(version code 4)
  Bosch FME 87, Bosch FME 88, AEG TSE80 samt några diverse sökarljud. Totalt 67 nya sökarljud
 -Applikationen följer enhetens ljudinställningar på ett mycket stabilare sätt
 -Skärmen tänds vid inkommande larm(om den är mörk), och är tänd i 20 sekunder innan den släcks igen
+-Lysdioden blinkar rött vid inkommande larm, när skärmen släcks, detta beror helt förstås också på om enheten stöder detta
+-Kontakt information finns i "Om Sms Alarm" dialogen
 
 v1.1.2(version code 3)
 -Gjort om about dialogen

@@ -1084,7 +1084,7 @@ public class SmsAlarm extends Activity  {
     	final View view = factory.inflate(R.layout.about, null);
 
     	//Set attributes
-    	dialog.setIcon(android.R.drawable.ic_dialog_info);
+    	dialog.setIcon(R.drawable.ic_launcher_trans);
     	dialog.setTitle(R.string.ABOUT);
     	dialog.setView(view);
     	dialog.setCancelable(false);
