@@ -37,6 +37,11 @@
     <string name="EULA_AGREE">Godkänn</string>
     <string name="EULA_DECLINE">Avböj</string>
     <string name="EULA_TITLE">Användaravtal</string>
+    <string name="HTML_ACK_TIME">Kvitterat</string>    
+    <string name="HTML_LARM">Larm</string>    
+    <string name="HTML_RECEIVED_ALARM">Mottagna Larm</string>
+    <string name="HTML_RECEIVED_TIME">Mottaget</string>
+    <string name="HTML_SENDER">Avsändare</string>
     <string name="INFO_ACK_SETTINGS">Ställ in om larmkvittering skall användas och i sådana fall vilket telefonnummer som kvitteringen sker mot.</string>
     <string name="INFO_ENABLE_ACKNOWLEDGE">Om vald kan primärlarm kvitteras.</string>
     <string name="INFO_ENABLE_SMS_ALARM">Om vald larmar Sms Alarm på angivna telefonnummer, annars gör applikationen inte det.</string>
