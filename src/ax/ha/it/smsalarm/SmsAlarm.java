@@ -1,4 +1,4 @@
-/*
+/**
  * Copyright (c) 2013 Robert Nyholm. All rights reserved.
  */
 package ax.ha.it.smsalarm;
