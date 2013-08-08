@@ -71,9 +71,9 @@ public class Alarm {
 	}
 
 	/**
-	 * To get datetime when Alarm was received.
+	 * To get date and time when an Alarm was received.
 	 * 
-	 * @return Datetime when Alarm was received as <code>String</code>
+	 * @return Datetime when an Alarm was received as <code>String</code>
 	 */
 	public String getReceived() {
 		// Log in debug purpose
@@ -82,15 +82,15 @@ public class Alarm {
 	}
 
 	/**
-	 * To set datetime when Alarm was received.
+	 * To set date and time when an Alarm was received.
 	 * 
-	 * @param date Date when Alarm was received as <code>Date</code>
+	 * @param date Date when an Alarm was received as <code>Date</code>
 	 */
 	public void setReceived(Date date) {
 		// Create and store a localized timestamp, this depends on users locale and/or settings
 		this.received = DateFormat.getDateTimeInstance().format(date);
 		// Log in debug purpose
-		this.logger.logCat(LogPriorities.DEBUG, this.LOG_TAG + ":setReceived()", "New alarm received date and time has been set to:\"" + this.received + "\"");
+		this.logger.logCat(LogPriorities.DEBUG, this.LOG_TAG + ":setReceived()", "Alarm received date and time has been set to:\"" + this.received + "\"");
 	}
 
 	/**
@@ -144,12 +144,12 @@ public class Alarm {
 	 */
 	public String getAcknowledged() {
 		// Log in debug purpose
-		this.logger.logCat(LogPriorities.DEBUG, this.LOG_TAG + ":getId()", "Returning alarm id:\"" + this.id + "\"");
+		this.logger.logCat(LogPriorities.DEBUG, this.LOG_TAG + ":getAcknowledged()", "Returning alarm acknowledge date and time:\"" + this.acknowledged + "\"");
 		return this.acknowledged;
 	}
 	
 	/**
-	 * To set datetime when Alarm was acknowledged.
+	 * To set date and time when an Alarm was acknowledged.
 	 * 
 	 * @param date Date when Alarm was acknowledged as <code>Date</code>
 	 */
@@ -157,29 +157,29 @@ public class Alarm {
 		// Create and store a localized timestamp, this depends on users locale and/or settings
 		this.acknowledged = DateFormat.getDateTimeInstance().format(date);
 		// Log in debug purpose
-		this.logger.logCat(LogPriorities.DEBUG, this.LOG_TAG + ":getId()", "Returning alarm id:\"" + this.id + "\"");
+		this.logger.logCat(LogPriorities.DEBUG, this.LOG_TAG + ":setAcknowledged()", "Alarm acknowledge date and time has been set to:\"" + this.acknowledged + "\"");
 	}
 	
 	/**
-	 * To update/set datetime when Alarm was received. 
-	 * Datetime will be set to now.
+	 * To update/set date and time when an Alarm was received. 
+	 * Date and time will be set to now.
 	 */
 	public void updateReceived() {
 		// Create and store a localized timestamp, this depends on users locale and/or settings
 		this.received = DateFormat.getDateTimeInstance().format(Calendar.getInstance().getTime());	
 		// Log in debug purpose
-		this.logger.logCat(LogPriorities.DEBUG, this.LOG_TAG + ":getId()", "Returning alarm id:\"" + this.id + "\"");
+		this.logger.logCat(LogPriorities.DEBUG, this.LOG_TAG + ":updateReceived()", "Alarm received date and time has been updated to:\"" + this.received + "\"");
 	}
 	
 	/**
-	 * To update/set datetime when Alarm was acknowledged. 
-	 * Datetime will be set to now.
+	 * To update/set date and time when an Alarm was acknowledged. 
+	 * Date and time will be set to now.
 	 */	
 	public void updateAcknowledged() {
 		// Create and store a localized timestamp, this depends on users locale and/or settings
 		this.acknowledged = DateFormat.getDateTimeInstance().format(Calendar.getInstance().getTime());	
 		// Log in debug purpose
-		this.logger.logCat(LogPriorities.DEBUG, this.LOG_TAG + ":getId()", "Returning alarm id:\"" + this.id + "\"");
+		this.logger.logCat(LogPriorities.DEBUG, this.LOG_TAG + ":updateAcknowledged()", "Alarm acknowledge date and time has been updated to:\"" + this.acknowledged + "\"");
 	}
 
 	/**
