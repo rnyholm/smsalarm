@@ -12,6 +12,7 @@ v2.1(version code 4)
 -Möjlighet att spela upp larmsignalen två gånger vid larm
 -Möjlighet att inaktivera SmsAlarm helt och hållet
 -Möjlighet att ange sin räddningstjänsts namn
+-Nytt vibrationsmönster
 -Nya ringsignaler för sökare Swissphone Quattro 86, Swissphone Quattro 98, Swissphone Quattro XLS,
  Swissphone Patron Pro, Swissphone DE 900, Motorola Pageboy 2000, Motorola Firestorm, Motorola BMD,
  Bosch FME 87, Bosch FME 88, AEG TSE80 samt några diverse sökarljud. Totalt 67 nya sökarljud
