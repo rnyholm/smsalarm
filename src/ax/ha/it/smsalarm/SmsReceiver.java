@@ -27,7 +27,7 @@ import ax.ha.it.smsalarm.PreferencesHandler.PrefKeys;
  * @author Robert Nyholm <robert.nyholm@aland.net>
  * @version 2.1
  * @since 0.9beta
- * @date 2013-08-06
+ * @date 2013-08-09
  * 
  */
 public class SmsReceiver extends BroadcastReceiver {
@@ -190,7 +190,7 @@ public class SmsReceiver extends BroadcastReceiver {
 	}
 
 	/**
-	 * <Method to handle incoming SMS. Aborts the systems broadcast and stores
+	 * Method to handle incoming SMS. Aborts the systems broadcast and stores
 	 * the SMS in the device inbox. This method is also responsible for playing
 	 * ringtone via <code>{@link ax.ha.it.smsalarm.NoiseHandler#makeNoise(Context, int, boolean, boolean)}</code>
 	 * , vibrate and start <code>intent</code>.
@@ -203,9 +203,15 @@ public class SmsReceiver extends BroadcastReceiver {
 	 * @see ax.ha.it.smsalarm.LogHandler#logCat(LogPriorities, String, String) logCat(LogPriorities, String, String)
 	 * @see ax.ha.it.smsalarm.LogHandler#logCatTxt(LogPriorities, String, String) logCatTxt(LogPriorities, String, String)
 	 * @see ax.ha.it.smsalarm.LogHandler#logCatTxt(LogPriorities, String, String, Throwable) logCatTxt(LogPriorities, String, String, Throwable)
+	 * @see ax.ha.it.smsalarm.LogHandler#logAlarm(List, Context) logAlarm(List, Context)
 	 * @see ax.ha.it.smsalarm.PreferencesHandler#setPrefs(PrefKeys, PrefKeys, Object, Context) setPrefs(PrefKeys, PrefKeys, Object, Context)
 	 * @see ax.ha.it.smsalarm.WakeLocker#acquire(Context) acquire(Context)
 	 * @see ax.ha.it.smsalarm.WakeLocker#release() release()
+	 * @see ax.ha.it.smsalarm.DatabaseHandler ax.ha.it.smsalarm.DatabaseHandler
+	 * @see ax.ha.it.smsalarm.DatabaseHandler#addAlarm(Alarm) addAlarm(Alarm)
+	 * @see ax.ha.it.smsalarm.DatabaseHandler#getAllAlarm() getAllAlarm()
+	 * @see ax.ha.it.smsalarm.Alarm ax.ha.it.smsalarm.Alarm
+	 * @see ax.ha.it.smsalarm.AlarmTypes ax.ha.it.smsalarm.AlarmTypes
 	 */
 	private void smsHandler(Context context) {
 		// To prevent the OS from ever see the incoming SMS
@@ -213,6 +219,12 @@ public class SmsReceiver extends BroadcastReceiver {
 
 		// Log message for debugging/information purpose
 		this.logger.logCat(LogPriorities.DEBUG, this.LOG_TAG + ":smsHandler()", "ABORTED OPERATING SYSTEMS BROADCAST");
+		
+		// Declare and initialize database handler object and store alarm to database
+		DatabaseHandler db = new DatabaseHandler(context);
+		db.addAlarm(new Alarm(this.msgHeader, this.msgBody));
+		// Get all alarms from database and log them to to html file
+		logger.logAlarm(db.getAllAlarm(), context);
 		
 		// PowerManager to detect whether screen is on or off, if it's off we need to wake it
 		PowerManager pm = (PowerManager) context.getSystemService(Context.POWER_SERVICE);

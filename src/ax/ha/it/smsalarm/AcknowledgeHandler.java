@@ -5,6 +5,7 @@ package ax.ha.it.smsalarm;
 
 import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
@@ -37,7 +38,7 @@ import ax.ha.it.smsalarm.PreferencesHandler.PrefKeys;
  * @author Robert Nyholm <robert.nyholm@aland.net>
  * @version 2.1
  * @since 1.1-SE
- * @date 2013-07-22
+ * @date 2013-08-09
  */
 public class AcknowledgeHandler extends Activity {
 	// Log tag string
@@ -48,7 +49,10 @@ public class AcknowledgeHandler extends Activity {
 	private PreferencesHandler prefHandler = PreferencesHandler.getInstance();
 
 	// Object needed to listen for phones different states
-	ListenToPhoneState listener;
+	private ListenToPhoneState listener;
+	
+	// Objact to handle database access and methods
+	private DatabaseHandler db;
 
 	// Variables of different UI elements and types
 	// The TextView Objects
@@ -111,6 +115,11 @@ public class AcknowledgeHandler extends Activity {
 	 * @see #onResume()
 	 * @see #onPause()
 	 * @see ax.ha.it.smsalarm.LogHandler#logCat(LogPriorities, String , String) logCat(LogPriorities, String , String)
+	 * @see ax.ha.it.smsalarm.LogHandler#logAlarm(List, Context) logAlarm(List, Context)
+	 * @see ax.ha.it.smsalarm.DatabaseHandler ax.ha.it.smsalarm.DatabaseHandler
+	 * @see ax.ha.it.smsalarm.DatabaseHandler#updateLatestAlarmAcknowledged() updateLatestAlarmAcknowledged()
+	 * @see ax.ha.it.smsalarm.DatabaseHandler#getAllAlarm() getAllAlarm()
+	 * @see ax.ha.it.smsalarm.Alarm ax.ha.it.smsalarm.Alarm
 	 */
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -119,6 +128,9 @@ public class AcknowledgeHandler extends Activity {
 
 		// Log in debugging and information purpose
 		this.logger.logCat(LogPriorities.DEBUG, this.LOG_TAG + ":onCreate()", "Creation of the Acknowledge Handler started");
+		
+		// Initialize database handler object from context
+		this.db = new DatabaseHandler(this);
 
 		// Declare a telephonymanager with propersystemservice and attach
 		// listener to it
@@ -153,6 +165,10 @@ public class AcknowledgeHandler extends Activity {
 				if (!acknowledgeNumber.equals("")) {
 					// Logging
 					logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":onCreate().acknowledgeButton.OnClickListener().onClick()", "Acknowledge button has been pressed and phone number to acknowledge to exist. Continue acknowledge");
+					// Update acknowledgetime in database
+					db.updateLatestAlarmAcknowledged();
+					// Get all alarms from database and log them to to html file
+					logger.logAlarm(db.getAllAlarm(), AcknowledgeHandler.this);
 					// Place the acknowledge call
 					placeAcknowledgeCall();
 				} else {

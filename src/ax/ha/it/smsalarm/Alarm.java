@@ -16,7 +16,7 @@ import ax.ha.it.smsalarm.LogHandler.LogPriorities;
  * @author Robert Nyholm <robert.nyholm@aland.net>
  * @version 2.1
  * @since 2.1beta
- * @date 2013-08-08
+ * @date 2013-08-09
  */
 public class Alarm {
 	// Log tag string

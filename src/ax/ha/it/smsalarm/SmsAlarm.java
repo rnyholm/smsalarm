@@ -58,7 +58,7 @@ public class SmsAlarm extends Activity  {
 	 * @author Robert Nyholm <robert.nyholm@aland.net>
 	 * @version 2.1
 	 * @since 2.1
-	 * @date 2013-07-31
+	 * @date 2013-08-09
 	 */
 	private enum DialogTypes {
 		PRIMARY, SECONDARY, ACKNOWLEDGE, RESCUESERVICE;
@@ -71,6 +71,9 @@ public class SmsAlarm extends Activity  {
 	private LogHandler logger = LogHandler.getInstance();
 	private static final PreferencesHandler prefHandler = PreferencesHandler.getInstance();
 	private NoiseHandler noiseHandler = NoiseHandler.getInstance();
+	
+	// Objact to handle database access and methods
+	private DatabaseHandler db;
 	
 	// Variables of different UI elements and types
 	// The EdittextObjects
@@ -155,6 +158,7 @@ public class SmsAlarm extends Activity  {
   	 * @see ax.ha.it.smsalarm.LogHandler#logCatTxt(LogPriorities, String, String, Throwable) logCatTxt(LogPriorities, String, String, Throwable)
   	 * @see ax.ha.it.smsalarm.NoiseHandler#makeNoise(Context, int, boolean, boolean) makeNoise(Context, int, boolean, boolean)
   	 * @see ax.ha.it.smsalarm.PreferencesHandler#setPrefs(PrefKeys, PrefKeys, Object, Context) setPrefs(PrefKeys, PrefKeys, Object, Context)
+  	 * @see ax.ha.it.smsalarm.DatabaseHandler ax.ha.it.smsalarm.DatabaseHandler
   	 */    
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -169,6 +173,9 @@ public class SmsAlarm extends Activity  {
        
         // FindViews
         this.findViews();
+        
+		// Initialize database handler object from context
+		this.db = new DatabaseHandler(this);
          
 	    // Fill tone spinner with values
 	    ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(
@@ -418,15 +425,22 @@ public class SmsAlarm extends Activity  {
     
     /**
      * To handle events to trigger when activity destroys.
-     * <b><i>Not yet implemented.</i></b>
+     * Writes all alarms in database into a <code>.html</code> log file.
      * 
+ 	 * @see ax.ha.it.smsalarm.LogHandler#logAlarm(List, Context) logAlarm(List, Context)
+ 	 * @see ax.ha.it.smsalarm.LogHandler#logCat(LogPriorities, String, String) logCat(LogPriorities, String, String)
+	 * @see ax.ha.it.smsalarm.DatabaseHandler#getAllAlarm() getAllAlarm()
+	 * @see ax.ha.it.smsalarm.Alarm ax.ha.it.smsalarm.Alarm
      * @see #onCreate(Bundle)
      * @see #onPause()
      */
     @Override
     public void onDestroy() {
     	super.onDestroy();
-    	// DO NOTHING!
+    	// Log in debug purpose
+    	this.logger.logCat(LogPriorities.DEBUG, this.LOG_TAG + ":onDestroy()", this.LOG_TAG + " is about to be destroyed");
+		// Get all alarms from database and log them to to html file
+		this.logger.logAlarm(this.db.getAllAlarm(), this);
     }
     
     /**
