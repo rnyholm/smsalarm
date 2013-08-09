@@ -15,11 +15,12 @@ v2.1(version code 4)
 -Nytt vibrationsmönster
 -Nya ringsignaler för sökare Swissphone Quattro 86, Swissphone Quattro 98, Swissphone Quattro XLS,
  Swissphone Patron Pro, Swissphone DE 900, Motorola Pageboy 2000, Motorola Firestorm, Motorola BMD,
- Bosch FME 87, Bosch FME 88, AEG TSE80 samt några diverse sökarljud. Totalt 67 nya sökarljud
+ Bosch FME 87, Bosch FME 88, AEG TSE80, Virve samt några diverse sökarljud. Totalt 67 nya sökarljud
 -Applikationen följer enhetens ljudinställningar på ett mycket stabilare sätt
 -Skärmen tänds vid inkommande larm(om den är mörk), och är tänd i 20 sekunder innan den släcks igen
 -Lysdioden blinkar rött vid inkommande larm, när skärmen släcks, detta beror helt förstås också på om enheten stöder detta
 -Kontakt information finns i "Om Sms Alarm" dialogen
+-Inkommande larm(sms som applikationen reagerar på) loggas till en html fil
 
 v1.1.2(version code 3)
 -Gjort om about dialogen
