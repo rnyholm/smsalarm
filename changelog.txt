@@ -1,34 +1,33 @@
 SmsAlarm changelog
 
 v2.1(version code 4) 
--Mï¿½jligt att kvittera ett inkommande primï¿½rlarm till ett telefonnummer
--Kvitteringen ï¿½teruppringer om upptaget vid kvittering, beta stadie ï¿½nnu
+-Möjligt att kvittera ett inkommande primärlarm till ett telefonnummer
+-Kvitteringen återuppringer om upptaget vid kvittering, beta stadie ännu
 -Fel loggas till fil
--Fï¿½rbï¿½ttrat hanteringen av datalagring och hï¿½mtning av data
--Fï¿½rbï¿½ttrat grï¿½nssnitt, mera anpassat fï¿½r Android version 4.0 och uppï¿½t
--SmsAlarm kan lyssna pï¿½ flera telefonnummer ï¿½n ett fï¿½r sekundï¿½rlarm
--Ny ikon i notifikationsfï¿½ltet fï¿½r sekundï¿½rlarm, grï¿½tt kryss
--Notifikationern skriver inte ï¿½ver varandra
--Mï¿½jlighet att spela upp larmsignalen tvï¿½ gï¿½nger vid larm
--Mï¿½jlighet att inaktivera SmsAlarm helt och hï¿½llet
--Mï¿½jlighet att ange sin rï¿½ddningstjï¿½nsts namn
--Nya ringsignaler fï¿½r sï¿½kare Swissphone Quattro 86, Swissphone Quattro 98, Swissphone Quattro XLS,
+-Förbättrat hanteringen av datalagring och hämtning av data
+-Förbättrat gränssnitt, mera anpassat för Android version 4.0 och uppåt
+-SmsAlarm kan lyssna på flera telefonnummer än ett för sekundärlarm
+-Ny ikon i notifikationsfältet för sekundärlarm, grått kryss
+-Notifikationern skriver inte över varandra
+-Möjlighet att spela upp larmsignalen två gånger vid larm
+-Möjlighet att inaktivera SmsAlarm helt och hållet
+-Möjlighet att ange sin räddningstjänsts namn
+-Nya ringsignaler för sökare Swissphone Quattro 86, Swissphone Quattro 98, Swissphone Quattro XLS,
  Swissphone Patron Pro, Swissphone DE 900, Motorola Pageboy 2000, Motorola Firestorm, Motorola BMD,
- Bosch FME 87, Bosch FME 88, AEG TSE80 samt nï¿½gra diverse sï¿½karljud. Totalt 67 nya sï¿½karljud
--Applikationen fï¿½ljer enhetens ljudinstï¿½llningar pï¿½ ett mycket stabilare sï¿½tt
--Skï¿½rmen tï¿½nds vid inkommande larm(om den ï¿½r mï¿½rk), och ï¿½r tï¿½nd i 20 sekunder innan den slï¿½cks igen
--Lysdioden blinkar rï¿½tt vid inkommande larm, nï¿½r skï¿½rmen slï¿½cks, detta beror helt fï¿½rstï¿½s ocksï¿½ pï¿½ om enheten stï¿½der detta
+ Bosch FME 87, Bosch FME 88, AEG TSE80 samt några diverse sökarljud. Totalt 67 nya sökarljud
+-Applikationen följer enhetens ljudinställningar på ett mycket stabilare sätt
+-Skärmen tänds vid inkommande larm(om den är mörk), och är tänd i 20 sekunder innan den släcks igen
+-Lysdioden blinkar rött vid inkommande larm, när skärmen släcks, detta beror helt förstås också på om enheten stöder detta
 -Kontakt information finns i "Om Sms Alarm" dialogen
--Nytt vibrationsmÃ¶nster
 
 v1.1.2(version code 3)
 -Gjort om about dialogen
 -Lokaliserat appen till engelska, svenska och finska
--Lagt till stï¿½d fï¿½r kompensering av flera landskoder(svenska, norska, danska, tyska)
+-Lagt till stöd för kompensering av flera landskoder(svenska, norska, danska, tyska)
 
 v1.1(version code 1)
--Sms Alarm reagerar pï¿½ tvï¿½ numer(primï¿½r- och sekundï¿½r).
--Det ï¿½r mï¿½jligt att stï¿½lla in appen sï¿½ den tar hï¿½nsyn till telefonens ljudinstï¿½llningar pï¿½ ett korrekt sï¿½tt.
--Bï¿½ttre hantering av mottagna sms.
--Fï¿½rbï¿½ttrat grï¿½nssnitt.
--SmsReceivern har fï¿½tt ï¿½kad prioritet
+-Sms Alarm reagerar på två numer(primär- och sekundär).
+-Det är möjligt att ställa in appen så den tar hänsyn till telefonens ljudinställningar på ett korrekt sätt.
+-Bättre hantering av mottagna sms.
+-Förbättrat gränssnitt.
+-SmsReceivern har fått ökad prioritet
