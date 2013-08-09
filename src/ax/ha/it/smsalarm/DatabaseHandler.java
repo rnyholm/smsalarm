@@ -1,5 +1,5 @@
 /**
- * 
+ * Copyright (c) 2013 Robert Nyholm. All rights reserved.
  */
 package ax.ha.it.smsalarm;
 
@@ -20,7 +20,7 @@ import ax.ha.it.smsalarm.LogHandler.LogPriorities;
  * @author Robert Nyholm <robert.nyholm@aland.net>
  * @version 2.1
  * @since 2.1beta
- * @date 2013-08-08
+ * @date 2013-08-09
  */
 public class DatabaseHandler extends SQLiteOpenHelper {
 	// Log tag string
@@ -143,7 +143,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 	    // CHeck if we got any results from the query
 	    if (cursor != null) {
 			// Log in debug purpose
-			logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":getAlarm()", "Cursor is not NULL --> Got results from query");
+			logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":getAlarm()", "Got results from query");
 			// Move to first element so we can fetch data from the cursor later
 	    	cursor.moveToFirst();    	
 	    }
@@ -235,7 +235,10 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 	 * 
 	 * @param alarm <code>Alarm</code> to be inserted in database.
 	 * 
-	 * @return <code>int</code> DON*T REALLY KNOW!?!?
+	 * @return <code>int</code> DON'T REALLY KNOW!?!?
+	 * 
+ 	 * @see ax.ha.it.smsalarm.LogHandler#logCat(LogPriorities, String, String) logCat(LogPriorities, String, String)
+	 * @see ax.ha.it.smsalarm.Alarm
 	 */
 	public int updateAlarm(Alarm alarm) {
 		// Get a writable database handle
@@ -256,10 +259,47 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 	}
 	
 	/**
+	 * To update latest <code>Alarm</code> entry's acknowledge time in database.
+	 * 
+	 * @see #getAlarmsCount()
+	 * @see #getAlarm(int)
+	 * @see #updateAlarm(Alarm)
+ 	 * @see ax.ha.it.smsalarm.LogHandler#logCat(LogPriorities, String, String) logCat(LogPriorities, String, String)
+ 	 * @see ax.ha.it.smsalarm.LogHandler#logCatTxt(LogPriorities, String, String, Throwable) logCat(LogPriorities, String, String, Throwable)
+	 * @see ax.ha.it.smsalarm.Alarm
+	 */
+	public void updateLatestAlarmAcknowledged() {				
+		try {
+			// Log in debug purpose
+			logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":updateLatestAlarmAcknowledged()", "Trying to update latest alarms acknowledge time in database");
+			
+			// Get and store number of entries(alarms) in database
+			int alarmsCount = this.getAlarmsCount();
+			
+			// Get latest entry(alarm) in database
+			Alarm alarm = this.getAlarm(alarmsCount);
+			// Update alarms acknowledge time
+			alarm.updateAcknowledged();
+			
+			// Update alarm entry
+			this.updateAlarm(alarm);
+			
+			// Log in debug purpose
+			logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":updateLatestAlarmAcknowledged()", "Latest alarms acknowledge time has been updated");			
+		} catch (android.database.CursorIndexOutOfBoundsException e) {
+			// Log error
+			logger.logCatTxt(LogPriorities.ERROR, LOG_TAG + ":updateLatestAlarmAcknowledged()", "android.database.CursorIndexOutOfBoundsException occured while getting alarm from database", e);
+		}
+	}
+	
+	/**
 	 * To delete an existing <code>Alarm</code> entry in database. 
 	 * It finds correct entry to delete on alarms <code>id</code>.
 	 * 
 	 * @param alarm <code>Alarm</code> to be deleted from database.
+	 * 
+ 	 * @see ax.ha.it.smsalarm.LogHandler#logCat(LogPriorities, String, String) logCat(LogPriorities, String, String)
+	 * @see ax.ha.it.smsalarm.Alarm
 	 */
 	public void deleteAlarm(Alarm alarm) {
 		// Get a writable database handle
