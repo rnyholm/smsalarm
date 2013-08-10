@@ -49,7 +49,8 @@
     <string name="INFO_PLAY_TONE_TWICE_SETTING">Om vald spelar Sms Alarm upp larmsignalen för både primär- och sekundärlarm två gånger vid larm.</string>
     <string name="INFO_SMS_SETTINGS">Ställ in vilka nummer som Sms Alarm ska larma på SMS ifrån. Det är möjligt att ställa in flera nummer för sekundärlarm genom knapparna Lägg till och Ta bort. Vilka nummer som är inställda som sekundärlarm kan ses i listan nedan.</string>
     <string name="INFO_SOUND_SETTINGS">Ställ in larmsignaler för primär- och sekundär larm, om Sms Alarm ska följa telefonens ljudinställningar samt om larmsignalen ska spelas upp två gånger.</string>
-    <string name="INFO_USE_OS_SOUND_SETTINGS">Om vald tar Sms Alarm hänsyn till telefonens ringvolym och ljudlöst läge.</string>  
+    <string name="INFO_USE_OS_SOUND_SETTINGS">Om vald tar Sms Alarm hänsyn till telefonens ringvolym och ljudlöst läge.</string>
+    <string name="LATEST_RECEIVED_ALARM">Inga larm har tagits emot ännu!</string>  
     <string name="LISTEN_ALARM_SIGNAL">Lyssna på signal</string>    
     <string name="NO">Nej</string>
     <string name="NO_SECONDARY_NUMBER_EXISTS">Inga nummer för sekundärlarm finns, kan ej ta bort nummer!</string>
@@ -66,6 +67,8 @@
     <string name="SECONDARY_ALARM">SEKUNDÄR LARM!</string> 
     <string name="SECONDARY_ALARM_NUMBER_DONT_EXISTS">Inga nummer för sekundärlarm angivna!</string>
     <string name="SECONDARY_NUMBER_PROMPT_MESSAGE">Ange ett telefonnummer som Sms Alarm larmar sekundär larm på. Telefonnumret läggs till i listan för sekundärlarm.</string>
+    <string name="SMS_ALARM_STATUS">Sms Alarm är AKTIVERAT.</string>
+    <string name="SOUND_SETTINGS_STATUS">Applikationen FÖLJER EJ enhetens ljudinställningar.</string>
     <string name="SPLASH_DESCR">Splash</string>
     <string name="SPLASH_VERSION">v2.1 Beta Preview</string>    
     <string name="TITLE_ACK_NUMBER">Sms Alarm kvitterar till detta nummer</string> 
@@ -80,9 +83,12 @@
     <string name="TITLE_SECONDARY_ALARM">Sekundärlarm</string>
     <string name="TITLE_SMS_SETTINGS">SMS-inställningar</string>
     <string name="TITLE_SOUND_SETTINGS">Ljudinställningar</string>
+    <string name="TITLE_SOUND_SETTINGS_STATUS_2">enhetens ljudinställningar</string>
     <string name="TITLE_TONE_SPINNER">Larmsignal för</string>
     <string name="TITLE_USE_OS_SOUND_SETTINGS">Använd telefonens ljudinställningar</string>
     <string name="TEST_SHOW_ACK">TEST VISA KVITTERINGSAKTIVITETEN</string>
   	<string name="TONE_PROMPT_TITLE">Välj larmsignal</string>   
+    <string name="VERTICAL_DIVIDER_DESCR">Vertikal delare</string>
+  	<string name="WIDGET_ICON_CONTENT_DESCR">Widget smsalarm ikon</string>
     <string name="YES">Ja</string>  
 </resources>
