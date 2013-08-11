@@ -32,7 +32,14 @@
          	<intent-filter android:priority="1000"> 
          		<action android:name="android.provider.Telephony.SMS_RECEIVED"/> 
          	</intent-filter> 
-        </receiver>        
+        </receiver>
+        <receiver android:name=".WidgetProvider" >
+            <intent-filter >
+               	<action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+           	</intent-filter>
+           	<meta-data android:name="android.appwidget.provider"
+               	android:resource="@xml/widget_configuration" />
+       	</receiver>      
         <service android:name=".NotificationHelper"></service>   
         <service android:name=".AcknowledgeNotificationHelper"></service>   
     </application>    

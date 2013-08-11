@@ -1,9 +1,8 @@
-<?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<?xml version="1.0" encoding="utf-8"?><RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/widget_rl"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#55FFFFFF" xmlns:android1="http://schemas.android.com/apk/res/android">
+    android:background="#FFFFFFFF" xmlns:android1="http://schemas.android.com/apk/res/android">
 
     <ImageView
         android1:id="@+id/widget_logo_iv"
@@ -18,10 +17,10 @@
         android1:contentDescription="@string/WIDGET_ICON_CONTENT_DESCR"
         android1:src="@drawable/ic_launcher_trans" />
 
-    <View
-        android1:id="@+id/widget_divider1_vw"
+    <TextView
+        android1:id="@+id/widget_divider1_tv"
         android1:layout_width="1dp"
-        android1:layout_height="wrap_content"
+        android1:layout_height="match_parent"
         android1:layout_alignParentTop="true"
         android1:layout_alignTop="@+id/widget_logo_iv"
         android1:layout_marginBottom="5dp"
@@ -35,34 +34,59 @@
         android1:layout_width="wrap_content"
         android1:layout_height="wrap_content"
         android1:layout_alignParentTop="true"
+        android1:layout_marginBottom="6dp"
         android1:layout_marginLeft="5dp"
         android1:layout_marginRight="5dp"
-        android1:layout_marginTop="5dp"
-        android1:layout_toRightOf="@+id/widget_divider1_vw"
+        android1:layout_marginTop="8dp"
+        android1:layout_toRightOf="@+id/widget_divider1_tv"
         android1:text="@string/SMS_ALARM_STATUS"
-        android1:textAppearance="?android:attr/textAppearanceSmall" />
+        android1:textAppearance="?android:attr/textAppearanceSmall"
+        android1:textColor="#99000000" />
+
+    <ImageView
+        android1:id="@+id/widget_divider2_iv"
+        android1:layout_width="match_parent"
+        android1:layout_height="1dp"
+        android1:layout_alignLeft="@+id/widget_smsalarm_status_tv"
+        android1:layout_below="@+id/widget_smsalarm_status_tv"
+        android1:layout_marginRight="5dp"
+        android1:contentDescription="@string/DIVIDER_DESCR"
+        android1:src="@drawable/gradient_divider_widget" />
 
     <TextView
         android1:id="@+id/widget_soundsettings_status_tv"
         android1:layout_width="wrap_content"
         android1:layout_height="wrap_content"
         android1:layout_alignLeft="@+id/widget_smsalarm_status_tv"
-        android1:layout_below="@+id/widget_smsalarm_status_tv"
+        android1:layout_below="@id/widget_divider2_iv"
+        android1:layout_marginBottom="6dp"
         android1:layout_marginRight="5dp"
-        android1:layout_marginTop="5dp"
+        android1:layout_marginTop="6dp"
         android1:text="@string/SOUND_SETTINGS_STATUS"
-        android1:textAppearance="?android:attr/textAppearanceSmall" />
+        android1:textAppearance="?android:attr/textAppearanceSmall"
+        android1:textColor="#99000000" />
+
+    <ImageView
+        android1:id="@+id/widget_divider3_iv"
+        android1:layout_width="match_parent"
+        android1:layout_height="1dp"
+        android1:layout_alignLeft="@+id/widget_soundsettings_status_tv"
+        android1:layout_below="@+id/widget_soundsettings_status_tv"
+        android1:layout_marginRight="5dp"
+        android1:contentDescription="@string/DIVIDER_DESCR"
+        android1:src="@drawable/gradient_divider_widget" />
 
     <TextView
         android1:id="@+id/widget_latest_received_alarm_tv"
         android1:layout_width="wrap_content"
         android1:layout_height="wrap_content"
         android1:layout_alignLeft="@+id/widget_soundsettings_status_tv"
-        android1:layout_below="@+id/widget_soundsettings_status_tv"
-        android1:layout_marginBottom="5dp"
+        android1:layout_below="@id/widget_divider3_iv"
+        android1:layout_marginBottom="8dp"
         android1:layout_marginRight="5dp"
-        android1:layout_marginTop="5dp"
+        android1:layout_marginTop="6dp"
         android1:text="@string/LATEST_RECEIVED_ALARM"
-        android1:textAppearance="?android:attr/textAppearanceSmall" />
+        android1:textAppearance="?android:attr/textAppearanceSmall"
+        android1:textColor="#99000000" />
 
 </RelativeLayout>
