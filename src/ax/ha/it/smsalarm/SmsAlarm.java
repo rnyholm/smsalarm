@@ -58,7 +58,7 @@ public class SmsAlarm extends Activity  {
 	 * @author Robert Nyholm <robert.nyholm@aland.net>
 	 * @version 2.1
 	 * @since 2.1
-	 * @date 2013-08-09
+	 * @date 2013-08-12
 	 */
 	private enum DialogTypes {
 		PRIMARY, SECONDARY, ACKNOWLEDGE, RESCUESERVICE;
@@ -476,7 +476,7 @@ public class SmsAlarm extends Activity  {
       			// Build up and show the about dialog
       			this.buildAndShowAboutDialog();
       			return true; 
-// >>>>DEBUG CASE (DELETE OR COMMENT FOR PRDO)
+// >>>>DEBUG CASE (DELETE OR COMMENT FOR PROD)
       		case R.id.TEST_SHOW_ACK:
       			try {
 	      			prefHandler.setPrefs(PrefKeys.SHARED_PREF, PrefKeys.RESCUE_SERVICE_KEY, "Jomala FBK", this);
@@ -935,12 +935,13 @@ public class SmsAlarm extends Activity  {
         					buildAndShowInputDialog(type);
         				}    					
     				} else {
-    					if(primaryListenNumber.equals(input.getText().toString())) {
-    						Toast.makeText(SmsAlarm.this, R.string.DUPLICATED_NUMBERS, Toast.LENGTH_LONG).show();
-        					logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":buildAndShowInputDialog().PositiveButton.OnClickListener().onClick()", "Given SECONDARY phone number(" + input.getText().toString() + ") is the same as the PRIMARY phone number and therefore cannot be stored. Showing dialog of type SECONDARY again");
-    					} else {
+    					// Empty secondary number was given
+    					if(input.getText().toString().equals("")) {
     						Toast.makeText(SmsAlarm.this, R.string.EMPTY_SECONDARY_NUMBER, Toast.LENGTH_LONG).show();
-        					logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":buildAndShowInputDialog().PositiveButton.OnClickListener().onClick()", "Given SECONDARY phone number is empty and therefore cannot be stored. Showing dialog of type SECONDARY again");    						
+        					logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":buildAndShowInputDialog().PositiveButton.OnClickListener().onClick()", "Given SECONDARY phone number is empty and therefore cannot be stored. Showing dialog of type SECONDARY again"); 
+    					} else { // Given secondary number is the same as primary number
+    						Toast.makeText(SmsAlarm.this, R.string.DUPLICATED_NUMBERS, Toast.LENGTH_LONG).show();
+        					logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":buildAndShowInputDialog().PositiveButton.OnClickListener().onClick()", "Given SECONDARY phone number(" + input.getText().toString() + ") is the same as the PRIMARY phone number and therefore cannot be stored. Showing dialog of type SECONDARY again");  						
     					}
     					buildAndShowInputDialog(type);
     				}
