@@ -55,7 +55,13 @@ public class WidgetProvider extends AppWidgetProvider {
 		
 		if (intent.getAction().equals(TOGGLE_ENABLE_SMS_ALARM)) {
 			// Some logging for information and debugging
-			this.logger.logCat(LogPriorities.DEBUG, this.LOG_TAG + ":onReceive()", "Received intent:\"" + TOGGLE_ENABLE_SMS_ALARM + "\"");			
+			this.logger.logCat(LogPriorities.DEBUG, this.LOG_TAG + ":onReceive()", "Received intent:\"" + TOGGLE_ENABLE_SMS_ALARM + "\"");		
+			if (this.enableSmsAlarm) {
+				this.setEnableSmsAlarmPref(context, false);
+			} else {
+				this.setEnableSmsAlarmPref(context, true);
+			}
+			WidgetProvider.updateWidgets(context);
 		} else if (intent.getAction().equals(TOGGLE_USE_OS_SOUND_SETTINGS)) {
 			// Some logging for information and debugging
 			this.logger.logCat(LogPriorities.DEBUG, this.LOG_TAG + ":onReceive()", "Received intent:\"" + TOGGLE_USE_OS_SOUND_SETTINGS + "\"");		
@@ -264,6 +270,17 @@ public class WidgetProvider extends AppWidgetProvider {
 		} 
 
 		this.logger.logCat(LogPriorities.DEBUG, this.LOG_TAG + ":getWidgetPrefs()", "Shared preferences retrieved");
+	}
+	
+	private void setEnableSmsAlarmPref(Context context, boolean enabled) {
+		// Logging
+		logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":setEnableSmsAlarmPref()", "Setting enable SmsAlarm to:\"" + enabled + "\""); 
+		
+		try {
+			this.prefHandler.setPrefs(PrefKeys.SHARED_PREF, PrefKeys.ENABLE_SMS_ALARM_KEY, enabled, context);
+		} catch(IllegalArgumentException e) {
+			this.logger.logCatTxt(LogPriorities.ERROR, this.LOG_TAG + ":setEnableSmsAlarmPref()", "An Object of unsupported instance was given as argument to PreferencesHandler.setPrefs()", e);
+		} 
 	}
 	
     /**

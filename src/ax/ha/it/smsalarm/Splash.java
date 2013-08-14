@@ -162,7 +162,11 @@ public class Splash extends Activity {
 				logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":buildAndShowEULADialog().PositiveButton.OnClickListener().onClick()", "Positive Button pressed in dialog, store shared preferences and switch activity");
 				// Put end user license agreed in shared preferences so we don't
 				// show this dialog again
-				prefHandler.setPrefs(PrefKeys.SHARED_PREF, PrefKeys.END_USER_LICENSE_AGREED, true, Splash.this);
+				try {
+					prefHandler.setPrefs(PrefKeys.SHARED_PREF, PrefKeys.END_USER_LICENSE_AGREED, true, Splash.this);
+				} catch(IllegalArgumentException e) {
+					logger.logCatTxt(LogPriorities.ERROR, LOG_TAG + ":buildAndShowEULADialog().PositiveButton.OnClickListener().onClick()", "An Object of unsupported instance was given as argument to PreferencesHandler.setPrefs()", e);
+				} 
 				// Switch activity
 				switchActivity();
 			}

@@ -655,7 +655,7 @@ public class SmsAlarm extends Activity  {
 	      	prefHandler.setPrefs(PrefKeys.SHARED_PREF, PrefKeys.ENABLE_SMS_ALARM_KEY, this.enableSmsAlarm, this);     
 	      	prefHandler.setPrefs(PrefKeys.SHARED_PREF, PrefKeys.RESCUE_SERVICE_KEY, this.rescueService, this);         	
 		} catch(IllegalArgumentException e) {
-			logger.logCatTxt(LogPriorities.ERROR, this.LOG_TAG + ":setSmsAlarmPrefs()", "An Object of unsupported instance was given as argument to PreferencesHandler.setPrefs()", e);
+			this.logger.logCatTxt(LogPriorities.ERROR, this.LOG_TAG + ":setSmsAlarmPrefs()", "An Object of unsupported instance was given as argument to PreferencesHandler.setPrefs()", e);
 		}     
     	this.logger.logCat(LogPriorities.DEBUG, this.LOG_TAG + ":setSmsAlarmPrefs()", "Shared preferences set");
     }
