@@ -20,11 +20,11 @@ import ax.ha.it.smsalarm.LogHandler.LogPriorities;
  * @author Robert Nyholm <robert.nyholm@aland.net>
  * @version 2.1
  * @since 2.1beta
- * @date 2013-08-09
+ * @date 2013-08-14
  */
 public class DatabaseHandler extends SQLiteOpenHelper {
 	// Log tag string
-	private static final String LOG_TAG = "DatabaseHandler";
+	private final String LOG_TAG = this.getClass().getSimpleName();
 
 	// Object for logging
 	private static final LogHandler logger = LogHandler.getInstance();
@@ -238,6 +238,33 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 	}
 	
 	/**
+	 * To get the latest <code>Alarm</code> entry in the database.
+	 * 
+	 * @see #getAlarmsCount()
+	 * @see #getAlarm(int)
+ 	 * @see ax.ha.it.smsalarm.LogHandler#logCat(LogPriorities, String, String) logCat(LogPriorities, String, String)
+ 	 * @see ax.ha.it.smsalarm.LogHandler#logCatTxt(LogPriorities, String, String, Throwable) logCat(LogPriorities, String, String, Throwable)
+	 * @see ax.ha.it.smsalarm.Alarm ax.ha.it.smsalarm.Alarm
+	 */
+	public Alarm getLatestAlarm() {
+		// Log in debug purpose
+		logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":getLatestAlarm()", "Try to return latest alarm(entry) in database");		
+		
+		try {
+			// Returning latest alarm in database
+			return this.getAlarm(this.getAlarmsCount());
+		} catch (android.database.CursorIndexOutOfBoundsException e) {
+			// Log error
+			logger.logCatTxt(LogPriorities.ERROR, LOG_TAG + ":getLatestAlarm()", "android.database.CursorIndexOutOfBoundsException occurred while getting alarm from database", e);
+		}
+		
+		// Log in debug purpose
+		logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":getLatestAlarm()", "Returning an empty Alarm object");		
+		// If an exception occurred return a new Alarm object
+		return new Alarm();
+	}
+	
+	/**
 	 * To update an existing <code>Alarm</code> entry in database. 
 	 * It finds correct entry to update on alarms <code>id</code>.
 	 * 
@@ -301,7 +328,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 			logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":updateLatestAlarmAcknowledged()", "Latest alarms acknowledge time has been updated");			
 		} catch (android.database.CursorIndexOutOfBoundsException e) {
 			// Log error
-			logger.logCatTxt(LogPriorities.ERROR, LOG_TAG + ":updateLatestAlarmAcknowledged()", "android.database.CursorIndexOutOfBoundsException occured while getting alarm from database", e);
+			logger.logCatTxt(LogPriorities.ERROR, LOG_TAG + ":updateLatestAlarmAcknowledged()", "android.database.CursorIndexOutOfBoundsException occurred while getting alarm from database", e);
 		}
 	}
 	

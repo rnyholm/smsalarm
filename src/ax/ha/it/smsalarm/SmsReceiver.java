@@ -27,12 +27,12 @@ import ax.ha.it.smsalarm.PreferencesHandler.PrefKeys;
  * @author Robert Nyholm <robert.nyholm@aland.net>
  * @version 2.1
  * @since 0.9beta
- * @date 2013-08-09
+ * @date 2013-08-14
  * 
  */
 public class SmsReceiver extends BroadcastReceiver {
 	// Log tag string
-	private final String LOG_TAG = "SmsReceiver";
+	private final String LOG_TAG = this.getClass().getSimpleName();
 
 	// Objects needed for logging, shared preferences and noise handling
 	private LogHandler logger = LogHandler.getInstance();
@@ -225,6 +225,9 @@ public class SmsReceiver extends BroadcastReceiver {
 		db.addAlarm(new Alarm(this.msgHeader, this.msgBody));
 		// Get all alarms from database and log them to to html file
 		logger.logAlarm(db.getAllAlarm(), context);
+		
+		// Update all widgets associated with this application
+		WidgetProvider.updateWidgets(context);
 		
 		// PowerManager to detect whether screen is on or off, if it's off we need to wake it
 		PowerManager pm = (PowerManager) context.getSystemService(Context.POWER_SERVICE);

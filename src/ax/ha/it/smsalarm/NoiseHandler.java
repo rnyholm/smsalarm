@@ -29,7 +29,7 @@ public class NoiseHandler {
 	private static NoiseHandler INSTANCE;
 
 	// Log tag
-	private String LOG_TAG = "NoiseHandler";
+	private String LOG_TAG = this.getClass().getSimpleName();
 
 	// Variable used to log messages
 	private LogHandler logger;

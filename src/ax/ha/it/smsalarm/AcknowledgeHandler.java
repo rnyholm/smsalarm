@@ -42,7 +42,7 @@ import ax.ha.it.smsalarm.PreferencesHandler.PrefKeys;
  */
 public class AcknowledgeHandler extends Activity {
 	// Log tag string
-	private final String LOG_TAG = "AcknowledgeHandler";
+	private final String LOG_TAG = this.getClass().getSimpleName();
 
 	// Objects needed for logging and shared preferences handling
 	private LogHandler logger = LogHandler.getInstance();
@@ -120,6 +120,7 @@ public class AcknowledgeHandler extends Activity {
 	 * @see ax.ha.it.smsalarm.DatabaseHandler#updateLatestAlarmAcknowledged() updateLatestAlarmAcknowledged()
 	 * @see ax.ha.it.smsalarm.DatabaseHandler#getAllAlarm() getAllAlarm()
 	 * @see ax.ha.it.smsalarm.Alarm ax.ha.it.smsalarm.Alarm
+	 * @see ax.ha.it.smsalarm.WidgetProvider#updateWidgets(Context) @see ax.ha.it.smsalarm.WidgetProvider#updateWidgets(Context)
 	 */
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -169,6 +170,8 @@ public class AcknowledgeHandler extends Activity {
 					db.updateLatestAlarmAcknowledged();
 					// Get all alarms from database and log them to to html file
 					logger.logAlarm(db.getAllAlarm(), AcknowledgeHandler.this);
+					// Update all widgets associated with this application
+					WidgetProvider.updateWidgets(AcknowledgeHandler.this);
 					// Place the acknowledge call
 					placeAcknowledgeCall();
 				} else {

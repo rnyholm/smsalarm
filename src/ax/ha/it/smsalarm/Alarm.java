@@ -16,21 +16,21 @@ import ax.ha.it.smsalarm.LogHandler.LogPriorities;
  * @author Robert Nyholm <robert.nyholm@aland.net>
  * @version 2.1
  * @since 2.1beta
- * @date 2013-08-09
+ * @date 2013-08-14
  */
 public class Alarm {
 	// Log tag string
-	private final String LOG_TAG = "Alarm";
+	private final String LOG_TAG = this.getClass().getSimpleName();
 
 	// Object for logging
 	private LogHandler logger = LogHandler.getInstance();
 	
 	// Variables holding data for an alarm
-	int id;					// Unique id for this alarm
-	String received;		// Localized datetime when the alarm was received
-	String sender;			// Sender of alarm(e-mail or phone number)
-	String message;			// Alarm message
-	String acknowledged;	// Localized datetime when the alarm was acknowledged
+	private int id;					// Unique id for this alarm
+	private String received;		// Localized datetime when the alarm was received
+	private String sender;			// Sender of alarm(e-mail or phone number)
+	private String message;			// Alarm message
+	private String acknowledged;	// Localized datetime when the alarm was acknowledged
 	
 	/**
 	 * To create a new empty Alarm object.
@@ -40,6 +40,26 @@ public class Alarm {
 	public Alarm() {
 		// Log in debug purpose
 		this.logger.logCat(LogPriorities.DEBUG, this.LOG_TAG + ":Alarm()", "A new empty Alarm object was created");
+	}
+	
+	/**
+	 * To indicate whether this Alarm object is empty or not. An Alarm object is defined empty if all member variables are empty.
+	 * 
+	 * @return <code>true</code> if this object is empty, else <code>false</code>
+	 * 
+	 * @see ax.ha.it.smsalarm.LogHandler#logCat(LogPriorities, String, String) logCat(LogPriorities, String, String)
+	 */
+	public boolean isEmpty() {
+		// Check to see if the member variables are empty
+		if(this.getId() == 0 && this.received.isEmpty() && this.sender.isEmpty() && this.message.isEmpty() && this.acknowledged.isEmpty()) {
+			// Log in debug purpose
+			this.logger.logCat(LogPriorities.DEBUG, this.LOG_TAG + ":isEmpty()", "This Alarm object is empty, returning true");
+			return true;
+		} else {
+			// Log in debug purpose
+			this.logger.logCat(LogPriorities.DEBUG, this.LOG_TAG + ":isEmpty()", "This Alarm object is not empty, returning false");
+			return false;
+		}
 	}
 	
 	/**

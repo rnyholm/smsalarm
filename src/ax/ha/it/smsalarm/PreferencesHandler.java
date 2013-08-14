@@ -90,7 +90,7 @@ public class PreferencesHandler {
 	private static PreferencesHandler INSTANCE;
 
 	// Log tag
-	private final String LOG_TAG = "PreferencesHandler";
+	private final String LOG_TAG = this.getClass().getSimpleName();
 
 	// Variable used to log messages
 	private LogHandler logger;

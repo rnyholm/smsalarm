@@ -28,7 +28,7 @@ import ax.ha.it.smsalarm.PreferencesHandler.PrefKeys;
 public class NotificationHelper extends IntentService {
 
 	// Log tag string
-	private final String LOG_TAG = "NotificationHelper";
+	private final String LOG_TAG = this.getClass().getSimpleName();
 
 	// Objects needed for logging and shared preferences handling
 	private LogHandler logger = LogHandler.getInstance();

@@ -39,7 +39,7 @@
         android1:layout_marginRight="5dp"
         android1:layout_marginTop="8dp"
         android1:layout_toRightOf="@+id/widget_divider1_tv"
-        android1:text="@string/SMS_ALARM_STATUS"
+        android1:text="@string/SMS_ALARM_STATUS_DISABLED"
         android1:textAppearance="?android:attr/textAppearanceSmall"
         android1:textColor="#99000000" />
 
@@ -62,7 +62,7 @@
         android1:layout_marginBottom="6dp"
         android1:layout_marginRight="5dp"
         android1:layout_marginTop="6dp"
-        android1:text="@string/SOUND_SETTINGS_STATUS"
+        android1:text="@string/SOUND_SETTINGS_STATUS_DISABLED"
         android1:textAppearance="?android:attr/textAppearanceSmall"
         android1:textColor="#99000000" />
 
@@ -85,7 +85,7 @@
         android1:layout_marginBottom="8dp"
         android1:layout_marginRight="5dp"
         android1:layout_marginTop="6dp"
-        android1:text="@string/LATEST_RECEIVED_ALARM"
+        android1:text="@string/NO_RECEIVED_ALARMS_EXISTS"
         android1:textAppearance="?android:attr/textAppearanceSmall"
         android1:textColor="#99000000" />
 

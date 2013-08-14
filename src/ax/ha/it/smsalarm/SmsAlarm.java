@@ -45,7 +45,7 @@ import ax.ha.it.smsalarm.PreferencesHandler.PrefKeys;
  * @author Robert Nyholm <robert.nyholm@aland.net>
  * @version 2.1
  * @since 0.9beta
- * @date 2013-07-24
+ * @date 2013-08-14
  *
  * @see #onCreate(Bundle)
  * @see #onPause()
@@ -65,14 +65,14 @@ public class SmsAlarm extends Activity  {
 	}	
 	
 	// Log tag string
-	private final String LOG_TAG = "SmsAlarm";
+	private final String LOG_TAG = this.getClass().getSimpleName();
 
 	// Objects needed for logging, shared preferences and noise handling
 	private LogHandler logger = LogHandler.getInstance();
 	private static final PreferencesHandler prefHandler = PreferencesHandler.getInstance();
 	private NoiseHandler noiseHandler = NoiseHandler.getInstance();
 	
-	// Objact to handle database access and methods
+	// Object to handle database access and methods
 	private DatabaseHandler db;
 	
 	// Variables of different UI elements and types
@@ -431,6 +431,7 @@ public class SmsAlarm extends Activity  {
  	 * @see ax.ha.it.smsalarm.LogHandler#logCat(LogPriorities, String, String) logCat(LogPriorities, String, String)
 	 * @see ax.ha.it.smsalarm.DatabaseHandler#getAllAlarm() getAllAlarm()
 	 * @see ax.ha.it.smsalarm.Alarm ax.ha.it.smsalarm.Alarm
+	 * @see ax.ha.it.smsalarm.WidgetProvider#updateWidgets(Context) @see ax.ha.it.smsalarm.WidgetProvider#updateWidgets(Context)
      * @see #onCreate(Bundle)
      * @see #onPause()
      */
@@ -440,7 +441,9 @@ public class SmsAlarm extends Activity  {
     	// Log in debug purpose
     	this.logger.logCat(LogPriorities.DEBUG, this.LOG_TAG + ":onDestroy()", this.LOG_TAG + " is about to be destroyed");
 		// Get all alarms from database and log them to to html file
-		this.logger.logAlarm(this.db.getAllAlarm(), this);
+		this.logger.logAlarm(this.db.getAllAlarm(), this);	
+		// Update alla widgets associated to this application
+		WidgetProvider.updateWidgets(this);
     }
     
     /**

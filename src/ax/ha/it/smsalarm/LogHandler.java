@@ -24,7 +24,7 @@ import android.util.Log;
  * @author Robert Nyholm <robert.nyholm@aland.net>
  * @version 2.1
  * @since 2.0
- * @date 2013-08-09
+ * @date 2013-08-14
  */
 public class LogHandler {
 	/**
@@ -48,7 +48,7 @@ public class LogHandler {
 	private static LogHandler INSTANCE;
 
 	// Log tag
-	private final String LOG_TAG = "LogHandler";
+	private final String LOG_TAG = this.getClass().getSimpleName();
 	// Names for the txt and html file
 	private final String TXT_LOG_FILE = "errorlog.txt";
 	private final String HTML_ALARM_FILE = "alarms.html";
@@ -473,14 +473,14 @@ public class LogHandler {
 				bW.write("\t</head>" + this.EOL);
 				bW.write("" + this.EOL);
 				bW.write("\t<body>" + this.EOL);
-				bW.write("\t\t<h1>" + context.getString(R.string.APP_NAME) + " " + context.getString(R.string.DASH) + " " + context.getString(R.string.HTML_RECEIVED_ALARM) + "</h1>" + this.EOL);
+				bW.write("\t\t<h1>" + context.getString(R.string.APP_NAME) + " " + context.getString(R.string.DASH) + " " + context.getString(R.string.HTML_WIDGET_RECEIVED_ALARMS) + "</h1>" + this.EOL);
 				bW.write("" + this.EOL);
 				bW.write("\t\t<table id=\"smsalarm\">" + this.EOL);
 				bW.write("\t\t\t<tr>" + this.EOL);
-				bW.write("\t\t\t\t<th>" + context.getString(R.string.HTML_RECEIVED_TIME) + "</th>" + this.EOL);
-				bW.write("\t\t\t\t<th>" + context.getString(R.string.HTML_SENDER) + "</th>" + this.EOL);
-				bW.write("\t\t\t\t<th>" + context.getString(R.string.HTML_LARM) + "</th>" + this.EOL);
-				bW.write("\t\t\t\t<th>" + context.getString(R.string.HTML_ACK_TIME) + "</th>" + this.EOL);
+				bW.write("\t\t\t\t<th>" + context.getString(R.string.HTML_WIDGET_RECEIVED) + "</th>" + this.EOL);
+				bW.write("\t\t\t\t<th>" + context.getString(R.string.HTML_WIDGET_SENDER) + "</th>" + this.EOL);
+				bW.write("\t\t\t\t<th>" + context.getString(R.string.HTML_WIDGET_LARM) + "</th>" + this.EOL);
+				bW.write("\t\t\t\t<th>" + context.getString(R.string.HTML_WIDGET_ACK) + "</th>" + this.EOL);
 				bW.write("\t\t\t</tr>" + this.EOL);
 
 				// Populate table with alarms from list

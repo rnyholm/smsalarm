@@ -22,6 +22,7 @@
     <string name="APP_DESCR">Larmapplikationen för Android&#8482;</string>
     <string name="APP_NAME">Sms Alarm</string>
     <string name="CANCEL">Avbryt</string>
+    <string name="COLON">:</string>
     <string name="DASH">-</string>
     <string name="DELETE_SECONDARY_NUMBER">Ta bort</string>
     <string name="DELETE_SECONDARY_NUMBER_PROMPT_MESSAGE">Vill du ta bort följande nummer från listan över sekundärlarm: </string>
@@ -31,17 +32,19 @@
     <string name="EDIT_ALARM_SIGNAL">Ändra signal</string>
     <string name="EDIT_NUMBER">Ändra nummer</string>   
     <string name="EDIT_RESCUE_SERVICE_NAME">Ändra räddningstjänst</string>
+    <string name="EMPTY_STRING">""</string>
     <string name="EMPTY_SECONDARY_NUMBER">Det går inte att ange ett tomt telefonnummer för sekundärlarm. Ange ett nytt telefonnummer.</string>
     <string name="ENTER_PHONE_NUMBER_HINT">Ange nummer!</string>
+    <string name="ERROR_RETRIEVING_FROM_DB">Ett fel inträffade vid hämtande av larm från databasen. Se felloggen för mer information.</string>
     <string name="EULA">Sms Alarm är inte något substitut till personsökare eller annat system avsett för utalarmering av räddningspersonal. Utvecklaren av Sms Alarm tar ej ansvar för och kan inte hållas ansvarig för eventuella skador på liv, egendom eller miljö som uppstått i samband med användandet av Sms Alarm. Utvecklaren av Sms Alarm tar ej heller något ansvar för eventuella skador som uppstått på enheten i samband med användning av Sms Alarm.</string>
     <string name="EULA_AGREE">Godkänn</string>
     <string name="EULA_DECLINE">Avböj</string>
     <string name="EULA_TITLE">Användaravtal</string>
-    <string name="HTML_ACK_TIME">Kvitterat</string>    
-    <string name="HTML_LARM">Larm</string>    
-    <string name="HTML_RECEIVED_ALARM">Mottagna Larm</string>
-    <string name="HTML_RECEIVED_TIME">Mottaget</string>
-    <string name="HTML_SENDER">Avsändare</string>
+    <string name="HTML_WIDGET_ACK">Kvitterat</string>    
+    <string name="HTML_WIDGET_LARM">Larm</string>    
+    <string name="HTML_WIDGET_RECEIVED_ALARMS">Mottagna Larm</string>
+    <string name="HTML_WIDGET_RECEIVED">Mottaget</string>
+    <string name="HTML_WIDGET_SENDER">Avsändare</string>
     <string name="INFO_ACK_SETTINGS">Ställ in om larmkvittering skall användas och i sådana fall vilket telefonnummer som kvitteringen sker mot.</string>
     <string name="INFO_ENABLE_ACKNOWLEDGE">Om vald kan primärlarm kvitteras.</string>
     <string name="INFO_ENABLE_SMS_ALARM">Om vald larmar Sms Alarm på angivna telefonnummer, annars gör applikationen inte det.</string>
@@ -50,9 +53,10 @@
     <string name="INFO_SMS_SETTINGS">Ställ in vilka nummer som Sms Alarm ska larma på SMS ifrån. Det är möjligt att ställa in flera nummer för sekundärlarm genom knapparna Lägg till och Ta bort. Vilka nummer som är inställda som sekundärlarm kan ses i listan nedan.</string>
     <string name="INFO_SOUND_SETTINGS">Ställ in larmsignaler för primär- och sekundär larm, om Sms Alarm ska följa telefonens ljudinställningar samt om larmsignalen ska spelas upp två gånger.</string>
     <string name="INFO_USE_OS_SOUND_SETTINGS">Om vald tar Sms Alarm hänsyn till telefonens ringvolym och ljudlöst läge.</string>
-    <string name="LATEST_RECEIVED_ALARM">Inga larm har tagits emot ännu!</string>  
     <string name="LISTEN_ALARM_SIGNAL">Lyssna på signal</string>    
+    <string name="NEW_LINE">\n</string>
     <string name="NO">Nej</string>
+    <string name="NO_RECEIVED_ALARMS_EXISTS">Inga larm har tagits emot ännu!</string>  
     <string name="NO_SECONDARY_NUMBER_EXISTS">Inga nummer för sekundärlarm finns, kan ej ta bort nummer!</string>
     <string name="NUMBER_ALREADY_IN_LIST">Angivet telefonnummer finns redan i listan över sekundärlarm! Ange ett nytt telefonnummer.</string>
     <string name="NUMBER_PROMPT_HINT">Telefonnummer..</string>
@@ -67,8 +71,10 @@
     <string name="SECONDARY_ALARM">SEKUNDÄR LARM!</string> 
     <string name="SECONDARY_ALARM_NUMBER_DONT_EXISTS">Inga nummer för sekundärlarm angivna!</string>
     <string name="SECONDARY_NUMBER_PROMPT_MESSAGE">Ange ett telefonnummer som Sms Alarm larmar sekundär larm på. Telefonnumret läggs till i listan för sekundärlarm.</string>
-    <string name="SMS_ALARM_STATUS">Sms Alarm är AKTIVERAT.</string>
-    <string name="SOUND_SETTINGS_STATUS">Applikationen FÖLJER EJ enhetens ljudinställningar.</string>
+    <string name="SMS_ALARM_STATUS_ENABLED">Sms Alarm är AKTIVERAT.</string>
+    <string name="SMS_ALARM_STATUS_DISABLED">Sms Alarm är EJ AKTIVERAT.</string>
+    <string name="SOUND_SETTINGS_STATUS_ENABLED">Applikationen FÖLJER enhetens ljudinställningar.</string>
+    <string name="SOUND_SETTINGS_STATUS_DISABLED">Applikationen FÖLJER EJ enhetens ljudinställningar.</string>
     <string name="SPLASH_DESCR">Splash</string>
     <string name="SPLASH_VERSION">v2.1 Beta Preview</string>    
     <string name="TITLE_ACK_NUMBER">Sms Alarm kvitterar till detta nummer</string> 
@@ -90,5 +96,6 @@
   	<string name="TONE_PROMPT_TITLE">Välj larmsignal</string>   
     <string name="VERTICAL_DIVIDER_DESCR">Vertikal delare</string>
   	<string name="WIDGET_ICON_CONTENT_DESCR">Widget smsalarm ikon</string>
+  	<string name="WIDGET_NOT_AGREED_EULA">Du måste starta Sms Alarm och godkänna användaravtalet innan du kan använda denna widget.</string>
     <string name="YES">Ja</string>  
 </resources>

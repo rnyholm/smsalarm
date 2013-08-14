@@ -30,7 +30,7 @@ import ax.ha.it.smsalarm.PreferencesHandler.PrefKeys;
  */
 public class Splash extends Activity {
 	// Log tag string
-	private String LOG_TAG = "Splash";
+	private String LOG_TAG = this.getClass().getSimpleName();
 
 	// Objects needed for logging, shared preferences and noise handling
 	private LogHandler logger = LogHandler.getInstance();
