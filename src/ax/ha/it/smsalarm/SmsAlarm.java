@@ -480,16 +480,16 @@ public class SmsAlarm extends Activity  {
       			this.buildAndShowAboutDialog();
       			return true; 
 // >>>>DEBUG CASE (DELETE OR COMMENT FOR PROD)
-      		case R.id.TEST_SHOW_ACK:
-      			try {
-	      			prefHandler.setPrefs(PrefKeys.SHARED_PREF, PrefKeys.RESCUE_SERVICE_KEY, "Jomala FBK", this);
-	      			prefHandler.setPrefs(PrefKeys.SHARED_PREF, PrefKeys.FULL_MESSAGE_KEY, "02.02.2012 23:55:40 2.5 Litet larm - Automatlarm vikingline lager(1682) Länsmanshägnan 7 jomala", this);
-				} catch(IllegalArgumentException e) {
-					logger.logCatTxt(LogPriorities.ERROR, this.LOG_TAG + ":onOptionsItemSelected()", "An Object of unsupported instance was given as argument to PreferencesHandler.setPrefs()", e);
-				}      			
-	    		Intent i = new Intent(SmsAlarm.this, AcknowledgeHandler.class);
-				startActivityForResult(i, 10);
-				return true;
+//      		case R.id.TEST_SHOW_ACK:
+//      			try {
+//	      			prefHandler.setPrefs(PrefKeys.SHARED_PREF, PrefKeys.RESCUE_SERVICE_KEY, "Jomala FBK", this);
+//	      			prefHandler.setPrefs(PrefKeys.SHARED_PREF, PrefKeys.FULL_MESSAGE_KEY, "02.02.2012 23:55:40 2.5 Litet larm - Automatlarm vikingline lager(1682) Länsmanshägnan 7 jomala", this);
+//				} catch(IllegalArgumentException e) {
+//					logger.logCatTxt(LogPriorities.ERROR, this.LOG_TAG + ":onOptionsItemSelected()", "An Object of unsupported instance was given as argument to PreferencesHandler.setPrefs()", e);
+//				}      			
+//	    		Intent i = new Intent(SmsAlarm.this, AcknowledgeHandler.class);
+//				startActivityForResult(i, 10);
+//				return true;
 // <<<<DEBUG CASE (DELETE OR COMMENT FOR PROD)	
       		default:
       			return super.onOptionsItemSelected(item);

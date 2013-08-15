@@ -24,7 +24,7 @@ import android.util.Log;
  * @author Robert Nyholm <robert.nyholm@aland.net>
  * @version 2.1
  * @since 2.0
- * @date 2013-08-14
+ * @date 2013-08-15
  */
 public class LogHandler {
 	/**
@@ -381,6 +381,46 @@ public class LogHandler {
 			this.logCat(LogPriorities.WARN, this.LOG_TAG + ":logTxt()", "Cannot log to file because external storage isn't available, check earlier logs fore more details");
 		}
 	}
+	
+	/**
+	 * To return complete path to the alarm log file. Throws exception if alarm log file doesn't exist or
+	 * if external storage isn't available for reading.
+	 * 
+	 * @return Full path to alarm log file as string
+	 * 
+	 * @throws IOException If alarm log file doesn't exist or if external storage isn't available for reading
+	 */
+	public String getAlarmLogPath() throws IOException {
+		// Check external storage status
+		this.checkExternalStorageState();	
+		
+		// Check if external storage is available for reading
+		if (this.mExternalStorageAvailable) {
+			// Get path to root
+			String root = Environment.getExternalStorageDirectory().toString();		
+			
+			// New file object from root, sms alarm directory and alarm log file name 
+			File file = new File(root + "/" + this.DIRECTORY + "/" + this.HTML_ALARM_FILE);
+			
+			// Check if alarm log file exists
+			if (file.exists()) {
+				// Return path of alarm log file
+				return file.getPath();
+			} else {
+				// Alarm log file doesn't exist
+				this.logCat(LogPriorities.WARN, this.LOG_TAG + ":getAlarmLogPath()", "Cannot return path to alarm log file because it doesn't exist");
+				
+				// Throw new exception
+				throw new IOException("Alarm log file:\"" + file.getPath() + "\" doesn't exist");
+			}
+		} else {
+			// External storage is not available, log it
+			this.logCat(LogPriorities.WARN, this.LOG_TAG + ":getAlarmLogPath()", "Cannot log to file because external storage isn't available, check earlier logs fore more details");
+
+			// Throw new exception
+			throw new IOException("External storage isn't available for reading");
+		}
+	}
 
 	/**
 	 * Method to write alarm log file as an <code>.html</code> file.
@@ -401,7 +441,7 @@ public class LogHandler {
 
 		// Only if external storage is fully available can directory and file
 		// creating continue
-		if (this.mExternalStorageAvailable == true && this.mExternalStorageWriteable == true) {
+		if (this.mExternalStorageAvailable && this.mExternalStorageWriteable) {
 
 			// To calculate when table row should have background color
 			int alt = 0;

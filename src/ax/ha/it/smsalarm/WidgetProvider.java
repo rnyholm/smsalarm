@@ -3,13 +3,18 @@
  */
 package ax.ha.it.smsalarm;
 
+import java.io.File;
+import java.io.IOException;
+
 import android.app.PendingIntent;
 import android.appwidget.AppWidgetManager;
 import android.appwidget.AppWidgetProvider;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
+import android.webkit.MimeTypeMap;
 import android.widget.RemoteViews;
 import ax.ha.it.smsalarm.LogHandler.LogPriorities;
 import ax.ha.it.smsalarm.PreferencesHandler.DataTypes;
@@ -22,7 +27,7 @@ import ax.ha.it.smsalarm.PreferencesHandler.PrefKeys;
  * @author Robert Nyholm <robert.nyholm@aland.net>
  * @version 2.1
  * @since 2.1
- * @date 2013-08-14
+ * @date 2013-08-15
  * 
  * @see #onCreate(Bundle)
  */
@@ -45,7 +50,7 @@ public class WidgetProvider extends AppWidgetProvider {
 	
     // Some booleans for retrieving preferences into
     private boolean useOsSoundSettings = false;
-    private boolean enableSmsAlarm = true;
+    private boolean enableSmsAlarm = false;
 	private boolean endUserLicenseAgreed = false;
 	
 	@Override
@@ -53,21 +58,55 @@ public class WidgetProvider extends AppWidgetProvider {
 		// Get AppWidgetManager from context
 		AppWidgetManager manager = AppWidgetManager.getInstance(context);
 		
+		// Get Shared preferences needed by widget
+    	this.getWidgetPrefs(context);
+		
 		if (intent.getAction().equals(TOGGLE_ENABLE_SMS_ALARM)) {
 			// Some logging for information and debugging
-			this.logger.logCat(LogPriorities.DEBUG, this.LOG_TAG + ":onReceive()", "Received intent:\"" + TOGGLE_ENABLE_SMS_ALARM + "\"");		
+			this.logger.logCat(LogPriorities.DEBUG, this.LOG_TAG + ":onReceive()", "Received intent:\"" + TOGGLE_ENABLE_SMS_ALARM + "\"");	
+			
 			if (this.enableSmsAlarm) {
 				this.setEnableSmsAlarmPref(context, false);
 			} else {
 				this.setEnableSmsAlarmPref(context, true);
 			}
+			
 			WidgetProvider.updateWidgets(context);
 		} else if (intent.getAction().equals(TOGGLE_USE_OS_SOUND_SETTINGS)) {
 			// Some logging for information and debugging
-			this.logger.logCat(LogPriorities.DEBUG, this.LOG_TAG + ":onReceive()", "Received intent:\"" + TOGGLE_USE_OS_SOUND_SETTINGS + "\"");		
+			this.logger.logCat(LogPriorities.DEBUG, this.LOG_TAG + ":onReceive()", "Received intent:\"" + TOGGLE_USE_OS_SOUND_SETTINGS + "\"");	
+			
+			if (this.useOsSoundSettings) {
+				this.setUseOsSoundSettingsPref(context, false);
+			} else {
+				this.setUseOsSoundSettingsPref(context, true);
+			}
+			
+			WidgetProvider.updateWidgets(context);
 		} else if (intent.getAction().equals(SHOW_RECEIVED_ALARMS)) {
 			// Some logging for information and debugging
 			this.logger.logCat(LogPriorities.DEBUG, this.LOG_TAG + ":onReceive()", "Received intent:\"" + SHOW_RECEIVED_ALARMS + "\"");		
+			
+			try {
+				String alarmLogFilePath = this.logger.getAlarmLogPath();
+				
+	            Intent showReceivedAlarmsIntent = new Intent();
+	            showReceivedAlarmsIntent.setAction(android.content.Intent.ACTION_VIEW);
+	            showReceivedAlarmsIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+	            File file = new File(alarmLogFilePath);
+	           
+	            MimeTypeMap mime = MimeTypeMap.getSingleton();
+	            String ext=file.getName().substring(file.getName().indexOf(".")+1);
+	            String type = mime.getMimeTypeFromExtension(ext);
+	          
+	            showReceivedAlarmsIntent.setDataAndType(Uri.fromFile(file),type);
+	           
+	            context.startActivity(showReceivedAlarmsIntent);
+			} catch (IOException e) {
+				this.logger.logCatTxt(LogPriorities.WARN, this.LOG_TAG + ":onReceive()", "An IOException occurred while retrieving path to alarm log file", e);
+			}
+
+
 		} else if (intent.getAction().equals(UPDATE_WIDGETS)) {
 			// Some logging for information and debugging
 			this.logger.logCat(LogPriorities.DEBUG, this.LOG_TAG + ":onReceive()", "Received intent:\"" + UPDATE_WIDGETS + "\"");
@@ -280,6 +319,17 @@ public class WidgetProvider extends AppWidgetProvider {
 			this.prefHandler.setPrefs(PrefKeys.SHARED_PREF, PrefKeys.ENABLE_SMS_ALARM_KEY, enabled, context);
 		} catch(IllegalArgumentException e) {
 			this.logger.logCatTxt(LogPriorities.ERROR, this.LOG_TAG + ":setEnableSmsAlarmPref()", "An Object of unsupported instance was given as argument to PreferencesHandler.setPrefs()", e);
+		} 
+	}
+	
+	private void setUseOsSoundSettingsPref(Context context, boolean enabled) {
+		// Logging
+		logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":setUseOsSoundSettingsPref()", "Setting use OS sound settings to:\"" + enabled + "\""); 	
+		
+		try {
+			this.prefHandler.setPrefs(PrefKeys.SHARED_PREF, PrefKeys.USE_OS_SOUND_SETTINGS_KEY, enabled, context);
+		} catch(IllegalArgumentException e) {
+			this.logger.logCatTxt(LogPriorities.ERROR, this.LOG_TAG + ":setUseOsSoundSettingsPref()", "An Object of unsupported instance was given as argument to PreferencesHandler.setPrefs()", e);
 		} 
 	}
 	
