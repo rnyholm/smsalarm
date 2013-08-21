@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="ABOUT">Om Sms Alarm</string>
-    <string name="ABOUT_BUILD">Bygge: 20130806</string>
+    <string name="ABOUT_BUILD">Bygge: 20130821</string>
     <string name="ABOUT_COPYRIGHT">&#169;Copyright Robert Nyholm</string>
     <string name="ABOUT_RIGHTS_RESERVED">Alla rättigheter reserverade.</string>  
-    <string name="ABOUT_VERSION">Version: 2.1 Beta Preview</string>  
+    <string name="ABOUT_VERSION">Version: 2.1 Beta</string>  
     <string name="ABOUT_THIS_APPLICATION">Denna applikation utvecklas och distribueras i hopp om att den ska komma till nytta, men helt utan någon garanti att den kommer fungera som tänkt i alla situationer.</string>
     <string name="ABOUT_CONTACT">Vid frågor, skicka ett mail till:\ninfo@smsalarm-app.net</string>
     <string name="ABOUT_VISIT">För mer information besök:\nsmsalarm-app.net</string>
@@ -16,7 +16,6 @@
     <string name="ACK_NUMBER_PROMPT_MESSAGE">Ange ett telefonnummer som applikationen kvitterar till.</string>  
     <string name="ACK_TITLE">Kvitterings titel(med räddningstjänsts namn)</string>  
     <string name="ACK_WAIT">Väntar på att larmet ska kvitteras..</string>
-    <string name="ACK_WAIT_INFO">OBS! Det kan ta upp till 40 sekunder innan kvitteringen utförs.</string>
 	<string name="ADD_SECONDARY_NUMBER">Lägg till</string>       
     <string name="ALARM">LARM!</string>
     <string name="APP_DESCR">Larmapplikationen för Android&#8482;</string>
@@ -76,7 +75,7 @@
     <string name="SOUND_SETTINGS_STATUS_ENABLED">Applikationen FÖLJER enhetens ljudinställningar.</string>
     <string name="SOUND_SETTINGS_STATUS_DISABLED">Applikationen FÖLJER EJ enhetens ljudinställningar.</string>
     <string name="SPLASH_DESCR">Splash</string>
-    <string name="SPLASH_VERSION">v2.1 Beta Preview</string>    
+    <string name="SPLASH_VERSION">v2.1 Beta</string>    
     <string name="TITLE_ACK_NUMBER">Sms Alarm kvitterar till detta nummer</string> 
     <string name="TITLE_ACK_SETTINGS">Kvitteringsinställningar</string>
     <string name="TITLE_ALARM_SIGNAL">Vald larmsignal</string>
@@ -92,7 +91,6 @@
     <string name="TITLE_SOUND_SETTINGS_STATUS_2">enhetens ljudinställningar</string>
     <string name="TITLE_TONE_SPINNER">Larmsignal för</string>
     <string name="TITLE_USE_OS_SOUND_SETTINGS">Använd telefonens ljudinställningar</string>
-    <string name="TEST_SHOW_ACK">TEST VISA KVITTERINGSAKTIVITETEN</string>
   	<string name="TONE_PROMPT_TITLE">Välj larmsignal</string>   
     <string name="VERTICAL_DIVIDER_DESCR">Vertikal delare</string>
   	<string name="WIDGET_ICON_CONTENT_DESCR">Widget smsalarm ikon</string>
