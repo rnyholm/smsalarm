@@ -15,7 +15,6 @@
     <string name="ACK_LINE_BUSY">Upptaget, återuppringer om:</string>
     <string name="ACK_NUMBER_PROMPT_MESSAGE">Ange ett telefonnummer som applikationen kvitterar till.</string>  
     <string name="ACK_TITLE">Kvitterings titel(med räddningstjänsts namn)</string>  
-    <string name="ACK_WAIT">Väntar på att larmet ska kvitteras..</string>
 	<string name="ADD_SECONDARY_NUMBER">Lägg till</string>       
     <string name="ALARM">LARM!</string>
     <string name="APP_DESCR">Larmapplikationen för Android&#8482;</string>
@@ -88,7 +87,6 @@
     <string name="TITLE_SECONDARY_ALARM">Sekundärlarm</string>
     <string name="TITLE_SMS_SETTINGS">SMS-inställningar</string>
     <string name="TITLE_SOUND_SETTINGS">Ljudinställningar</string>
-    <string name="TITLE_SOUND_SETTINGS_STATUS_2">enhetens ljudinställningar</string>
     <string name="TITLE_TONE_SPINNER">Larmsignal för</string>
     <string name="TITLE_USE_OS_SOUND_SETTINGS">Använd telefonens ljudinställningar</string>
   	<string name="TONE_PROMPT_TITLE">Välj larmsignal</string>   
