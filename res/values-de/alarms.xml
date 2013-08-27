@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string-array name="alarms">
-        <item>Primary alarm</item>
-        <item>Secondary alarm</item>
+        <item>Primäralarm</item>
+        <item>Sekundäralarm</item>
     </string-array>
 </resources>

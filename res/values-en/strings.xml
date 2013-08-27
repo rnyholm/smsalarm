@@ -2,7 +2,6 @@
 <resources>
     <string name="ABOUT">About Sms Alarm</string>
     <string name="ABOUT_BUILD">Build: 20130827</string>
-	<string name="ABOUT_COPYRIGHT">&#169;Copyright Robert Nyholm</string>
     <string name="ABOUT_RIGHTS_RESERVED">All rights reserved</string>  
     <string name="ABOUT_VERSION">Version: 2.1</string>  
     <string name="ABOUT_THIS_APPLICATION">This application is developed and distributed in the hope that it will be of use, but without any warranty that it will function as intended in all situations.</string>
@@ -20,8 +19,6 @@
     <string name="APP_DESCR">The Alarm application for Android&#8482;</string>
     <string name="APP_NAME">Sms Alarm</string>
     <string name="CANCEL">Cancel</string>
-	<string name="COLON">:</string>
-    <string name="DASH">-</string>
     <string name="DELETE_SECONDARY_NUMBER">Remove</string>
     <string name="DELETE_SECONDARY_NUMBER_PROMPT_MESSAGE">Do you want to remove following number from the list of secondary alarms:</string>
     <string name="DELETE_SECONDARY_NUMBER_PROMPT_TITLE">Remove number</string> 
@@ -31,7 +28,6 @@
     <string name="EDIT_NUMBER">Edit number</string>   
     <string name="EDIT_RESCUE_SERVICE_NAME">Edit rescue service</string>
     <string name="EMPTY_SECONDARY_NUMBER">It is not possible to enter an empty telephone number for secondary alarm. Enter a new telephone number.</string>
-	<string name="EMPTY_STRING">""</string>
     <string name="ENTER_PHONE_NUMBER_HINT">Enter number!</string>
     <string name="ERROR_RETRIEVING_FROM_DB">An error occurred retrieving alarm from the database. See the error log for more information.</string>
     <string name="EULA">Sms Alarm is not a substitute for pagers or other systems designed for alerting rescue personnel. The developer of Sms Alarm is not responsible for and can not be held responsible for any damages to life, property or the environment arising from the use of Sms Alarm. The developer of the Sms Alarm will also not be responsible for any damage incurred to the device in connection with the use of Sms Alarm.</string>
@@ -52,14 +48,12 @@
     <string name="INFO_SOUND_SETTINGS">Set alarm signals for primary and secondary alarms, if Sms Alarm should follow the device sound settings and if the alarm signal shoul be played twice.</string>
     <string name="INFO_USE_OS_SOUND_SETTINGS">If selected Sms Alarm will take into account the device ring volume and silent mode.</string>
     <string name="LISTEN_ALARM_SIGNAL">Listen to the signal</string> 
-	<string name="NEW_LINE">\n</string>	
     <string name="NO">No</string>
     <string name="NO_RECEIVED_ALARMS_EXISTS">No alarm has yet been received!</string>  
     <string name="NO_SECONDARY_NUMBER_EXISTS">No telephone number for secondary alarm exists, can not remove telephone number!</string>
     <string name="NUMBER_ALREADY_IN_LIST">Given number is already in the list for secondary alarm! Enter a new telephone number.</string>
     <string name="NUMBER_PROMPT_HINT">Telephone number..</string>
     <string name="NUMBER_PROMPT_TITLE">Enter a telephone number</string>
-    <string name="OK">OK</string>
     <string name="PRIMARY_ALARM">PRIMARY ALARM!</string>
     <string name="PRIMARY_NUMBER_PROMPT_MESSAGE">Enter a telephone number for Sms Alarm to alert for primary alarm.</string>
     <string name="RESCUE_SERVICE_NAME_HINT">Enter rescue service name!</string>
@@ -73,8 +67,6 @@
     <string name="SMS_ALARM_STATUS_DISABLED">Sms Alarm is NOT ENABLED.</string>
     <string name="SOUND_SETTINGS_STATUS_ENABLED">The application DETECTS the device sound settings.</string>
     <string name="SOUND_SETTINGS_STATUS_DISABLED">The application DOES NOT DETECT the device sound settings.</string> 
-	<string name="SPLASH_DESCR">Splash</string>
-    <string name="SPLASH_VERSION">v2.1</string> 
     <string name="TITLE_ACK_NUMBER">Sms Alarm acknowledges to this telephone number</string> 
     <string name="TITLE_ACK_SETTINGS">Acknowledgment settings</string>
     <string name="TITLE_ALARM_SIGNAL">Selected alarm signal</string>
