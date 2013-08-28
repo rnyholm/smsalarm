@@ -65,7 +65,6 @@
             android:layout_alignParentLeft="true"
             android:layout_below="@+id/ackDivider2_iv"
             android:layout_marginLeft="5dp"
-            android:layout_marginRight="5dp"
             android:layout_marginTop="5dp"
             android:drawableLeft="@android:drawable/sym_call_outgoing"
             android:text="@string/ACK" />
@@ -74,9 +73,9 @@
             android:id="@+id/ackAbortAlarm_btn"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignLeft="@id/ackAcknowledgeAlarm_btn"
-            android:layout_below="@id/ackAcknowledgeAlarm_btn"
-            android:layout_marginRight="5dp"
+            android:layout_alignBaseline="@+id/ackAcknowledgeAlarm_btn"
+            android:layout_alignBottom="@+id/ackAcknowledgeAlarm_btn"
+            android:layout_toRightOf="@+id/ackAcknowledgeAlarm_btn"
             android:drawableLeft="@android:drawable/sym_call_missed"
             android:text="@string/CANCEL" />
 
@@ -84,8 +83,8 @@
             android:id="@+id/ackLineBusy_tv"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignLeft="@id/ackAbortAlarm_btn"
-            android:layout_below="@id/ackAbortAlarm_btn"
+            android:layout_alignLeft="@+id/ackAcknowledgeAlarm_btn"
+            android:layout_below="@+id/ackAcknowledgeAlarm_btn"
             android:layout_marginTop="40dp"
             android:text="@string/ACK_LINE_BUSY"
             android:textAppearance="?android:attr/textAppearanceMedium" />

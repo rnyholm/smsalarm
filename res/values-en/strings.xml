@@ -70,7 +70,7 @@
     <string name="TITLE_ACK_NUMBER">Sms Alarm acknowledges to this telephone number</string> 
     <string name="TITLE_ACK_SETTINGS">Acknowledgment settings</string>
     <string name="TITLE_ALARM_SIGNAL">Selected alarm signal</string>
-    <string name="TITLE_ENABLE_ACKNOWLEDGE">Enable acknowledgment of primary alarm</string>
+    <string name="TITLE_ENABLE_ACKNOWLEDGE">Enable acknowledgment</string>
     <string name="TITLE_ENABLE_SMS_ALARM">Enable Sms Alarm</string>
     <string name="TITLE_MISC_SETTINGS">Other settings</string>
     <string name="TITLE_PLAY_TONE_TWICE_SETTING">Play alarm signal twice</string>
