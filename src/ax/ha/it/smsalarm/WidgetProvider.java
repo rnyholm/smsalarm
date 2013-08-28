@@ -28,7 +28,7 @@ import ax.ha.it.smsalarm.PreferencesHandler.PrefKeys;
  * @author Robert Nyholm <robert.nyholm@aland.net>
  * @version 2.1
  * @since 2.1
- * @date 2013-08-21
+ * @date 2013-08-28
  */
 public class WidgetProvider extends AppWidgetProvider {
 	// Log tag string
@@ -42,7 +42,7 @@ public class WidgetProvider extends AppWidgetProvider {
 	private DatabaseHandler db;
 
 	// Max length of the latest alarm length in widget
-	private static final int ALARM_TEXT_MAX_LENGTH = 130;
+	private static final int ALARM_TEXT_MAX_LENGTH = 125;
 
 	// Strings representing different intents used to run different methods from intent
 	public static final String TOGGLE_ENABLE_SMS_ALARM = "ax.ha.it.smsalarm.TOGGLE_SMS_ALARM_ENABLE";
@@ -261,18 +261,8 @@ public class WidgetProvider extends AppWidgetProvider {
 				rv.setTextViewText(R.id.widget_soundsettings_status_tv, context.getString(R.string.SOUND_SETTINGS_STATUS_DISABLED));
 			}
 
-			// Get latest alarm as stringbuilder and check if it is longer than the limits for the textview in widget
-			StringBuilder alarm = new StringBuilder(this.getLatestAlarm(context));
-			if (alarm.length() > ALARM_TEXT_MAX_LENGTH) {
-				// Some logging
-				this.logger.logCat(LogPriorities.DEBUG, this.LOG_TAG + ":setWidgetTextViews()", "Lates Alarm message is longer than " + Integer.toString(ALARM_TEXT_MAX_LENGTH) + " characters, message is shortened");
-				
-				// If longer than textview limit shorten it of and add dots to it
-				alarm.substring(0, (ALARM_TEXT_MAX_LENGTH - 3));
-				alarm.append("...");
-			}
-			// Set the (shortened) larm to textview
-			rv.setTextViewText(R.id.widget_latest_received_alarm_tv, alarm.toString());
+			// Set the (shortened) alarm to textview
+			rv.setTextViewText(R.id.widget_latest_received_alarm_tv, this.getLatestAlarm(context));
 
 			// Set correct dividers to widget
 			rv.setImageViewResource(R.id.widget_divider2_iv, R.drawable.gradient_divider_widget);
@@ -311,8 +301,9 @@ public class WidgetProvider extends AppWidgetProvider {
 			this.logger.logCat(LogPriorities.DEBUG, this.LOG_TAG + ":getLatestAlarm()", "Database is not empty, continue retrieving alarm");
 			// To store latest alarm into
 			Alarm alarm = db.getLatestAlarm();
-			// To build upp string into
-			StringBuilder sb = new StringBuilder();
+			// To build up string into
+			StringBuilder alarmInfo = new StringBuilder();
+			StringBuilder alarmMessage = new StringBuilder();
 
 			// Sanity check to see whether alarm object is empty or not
 			if (!alarm.isEmpty()) {
@@ -320,27 +311,40 @@ public class WidgetProvider extends AppWidgetProvider {
 				this.logger.logCat(LogPriorities.DEBUG, this.LOG_TAG + ":getLatestAlarm()", "Retrieved alarm object wasn't empty, start build up alarm string");
 
 				// Build up the string representing the latest alarm from alarm object
-				sb.append(context.getString(R.string.HTML_WIDGET_RECEIVED));
-				sb.append(context.getString(R.string.COLON));
-				sb.append(alarm.getReceived());
-				sb.append(context.getString(R.string.NEW_LINE));
+				alarmInfo.append(context.getString(R.string.HTML_WIDGET_RECEIVED));
+				alarmInfo.append(context.getString(R.string.COLON));
+				alarmInfo.append(alarm.getReceived());
+				alarmInfo.append(context.getString(R.string.NEW_LINE));
 
-				sb.append(context.getString(R.string.HTML_WIDGET_SENDER));
-				sb.append(context.getString(R.string.COLON));
-				sb.append(alarm.getSender());
-				sb.append(context.getString(R.string.NEW_LINE));
+				alarmInfo.append(context.getString(R.string.HTML_WIDGET_SENDER));
+				alarmInfo.append(context.getString(R.string.COLON));
+				alarmInfo.append(alarm.getSender());
+				alarmInfo.append(context.getString(R.string.NEW_LINE));
+				
+				// Build up the alarm message in separate stringbuilder so we can shorten it if we need
+				alarmMessage.append(context.getString(R.string.HTML_WIDGET_LARM));
+				alarmMessage.append(context.getString(R.string.COLON));
+				alarmMessage.append(alarm.getMessage());
+				
+				// Check if alarm message is longer than the limits for the textview
+				if (alarmMessage.length() > ALARM_TEXT_MAX_LENGTH) {
+					// Some logging
+					this.logger.logCat(LogPriorities.DEBUG, this.LOG_TAG + ":getLatestAlarm()", "Lates Alarm message is longer than " + Integer.toString(ALARM_TEXT_MAX_LENGTH) + " characters, message is shortened");
+					
+					// If longer than textview limit shorten it of and add dots to it
+					alarmMessage.substring(0, (ALARM_TEXT_MAX_LENGTH - 3));
+					alarmMessage.append("...");
+				}
+				
+				alarmInfo.append(alarmMessage.toString());
+				alarmInfo.append(context.getString(R.string.NEW_LINE));
 
-				sb.append(context.getString(R.string.HTML_WIDGET_LARM));
-				sb.append(context.getString(R.string.COLON));
-				sb.append(alarm.getMessage());
-				sb.append(context.getString(R.string.NEW_LINE));
-
-				sb.append(context.getString(R.string.HTML_WIDGET_ACK));
-				sb.append(context.getString(R.string.COLON));
-				sb.append(alarm.getAcknowledged());
+				alarmInfo.append(context.getString(R.string.HTML_WIDGET_ACK));
+				alarmInfo.append(context.getString(R.string.COLON));
+				alarmInfo.append(alarm.getAcknowledged());
 
 				// Return latest alarm as string
-				return sb.toString();
+				return alarmInfo.toString();
 			} else {
 				// Some logging
 				this.logger.logCat(LogPriorities.DEBUG, this.LOG_TAG + ":getLatestAlarm()", "Retrieved alarm object was empty");
