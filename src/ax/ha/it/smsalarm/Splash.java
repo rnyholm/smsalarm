@@ -120,12 +120,12 @@ public class Splash extends Activity {
 	 * Removes messages from handler when application pauses. Also calls it's
 	 * superclass.
 	 * 
-	 * @see #removeMsgFrHandler()
+	 * @see #removeMessagesFromHandler()
 	 */
 	@Override
 	public void onPause() {
 		super.onPause();
-		this.removeMsgFrHandler();
+		this.removeMessagesFromHandler();
 	}
 
 	/**
@@ -214,12 +214,12 @@ public class Splash extends Activity {
 	 * @see ax.ha.it.smsalarm.LogHandler#logCat(LogPriorities, String, String)
 	 *      logCat(LogPriorities, String, String)
 	 */
-	private void removeMsgFrHandler() {
+	private void removeMessagesFromHandler() {
 		// Null check in case user didn't agree the EULA
 		if (handler != null) {
 			this.handler.removeMessages(0);
 			// Some logging for information and debugging
-			this.logger.logCat(LogPriorities.DEBUG, this.LOG_TAG + ":removeMsgFrHandler", "Messages have been removed from Handler");
+			this.logger.logCat(LogPriorities.DEBUG, this.LOG_TAG + ":removeMessagesFromHandler", "Messages have been removed from Handler");
 		}
 	}
 }
