@@ -18,7 +18,6 @@ import ax.ha.it.smsalarm.LogHandler.LogPriorities;
  * @author Robert Nyholm <robert.nyholm@aland.net>
  * @version 2.1
  * @since 2.1
- * @date 2013-08-04
  */
 public abstract class WakeLocker {
 	// Log tag

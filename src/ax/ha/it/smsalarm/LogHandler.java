@@ -24,7 +24,6 @@ import android.util.Log;
  * @author Robert Nyholm <robert.nyholm@aland.net>
  * @version 2.1
  * @since 2.0
- * @date 2013-08-15
  */
 public class LogHandler {
 	/**
@@ -34,7 +33,6 @@ public class LogHandler {
 	 * @author Robert Nyholm <robert.nyholm@aland.net>
 	 * @version 2.1
 	 * @since 2.1
-	 * @date 2013-07-01
 	 * 
 	 * @see <a
 	 *      href="http://developer.android.com/reference/android/util/Log.html">Log
@@ -533,7 +531,6 @@ public class LogHandler {
 					}
 
 					// Write the rest html for the table row
-					bW.write("\t\t\t<tr>" + this.EOL);
 					bW.write("\t\t\t\t<td>" + alarm.getReceived() + "</td>" + this.EOL);
 					bW.write("\t\t\t\t<td>" + alarm.getSender() + "</td>" + this.EOL);
 					bW.write("\t\t\t\t<td>" + alarm.getMessage() + "</td>" + this.EOL);

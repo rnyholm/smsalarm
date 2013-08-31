@@ -28,7 +28,6 @@ import ax.ha.it.smsalarm.PreferencesHandler.PrefKeys;
  * @author Robert Nyholm <robert.nyholm@aland.net>
  * @version 2.1
  * @since 2.1
- * @date 2013-08-28
  */
 public class WidgetProvider extends AppWidgetProvider {
 	// Log tag string

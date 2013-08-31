@@ -22,7 +22,6 @@ import ax.ha.it.smsalarm.LogHandler.LogPriorities;
  * @author Robert Nyholm <robert.nyholm@aland.net>
  * @version 2.1
  * @since 2.0
- * @date 2013-07-17
  */
 public class NoiseHandler {
 	// Singleton instance of this class

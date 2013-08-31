@@ -38,7 +38,6 @@ import ax.ha.it.smsalarm.PreferencesHandler.PrefKeys;
  * @author Robert Nyholm <robert.nyholm@aland.net>
  * @version 2.1
  * @since 1.1-SE
- * @date 2013-08-09
  */
 public class AcknowledgeHandler extends Activity {
 	// Log tag string
@@ -385,7 +384,6 @@ public class AcknowledgeHandler extends Activity {
 	 * @author Robert Nyholm <robert.nyholm@aland.net>
 	 * @version 2.1
 	 * @since 2.1
-	 * @date 2013-06-30
 	 */
 	private class ListenToPhoneState extends PhoneStateListener {
 

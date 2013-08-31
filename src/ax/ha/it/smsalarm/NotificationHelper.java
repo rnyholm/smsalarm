@@ -23,7 +23,6 @@ import ax.ha.it.smsalarm.PreferencesHandler.PrefKeys;
  * @author Robert Nyholm <robert.nyholm@aland.net>
  * @version 2.0
  * @since 0.9beta
- * @date 2013-08-06
  */
 public class NotificationHelper extends IntentService {
 

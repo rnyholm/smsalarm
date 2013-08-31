@@ -16,7 +16,6 @@ import ax.ha.it.smsalarm.LogHandler.LogPriorities;
  * @author Robert Nyholm <robert.nyholm@aland.net>
  * @version 2.1
  * @since 2.1beta
- * @date 2013-08-14
  */
 public class Alarm {
 	// Log tag string
@@ -84,7 +83,7 @@ public class Alarm {
 	 * To create a new Alarm object.
 	 * 
 	 * @param id Alarm id as <code>int</code>
-	 * @param rececived Alarm received date and time as <code>String</code>
+	 * @param received Alarm received date and time as <code>String</code>
 	 * @param sender Alarm sender as <code>String</code>
 	 * @param message Alarm message as <code>String</code>
 	 * @param acknowledged Alarm acknowledge date and time as <code>String</code>

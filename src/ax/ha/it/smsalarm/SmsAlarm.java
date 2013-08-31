@@ -45,7 +45,6 @@ import ax.ha.it.smsalarm.PreferencesHandler.PrefKeys;
  * @author Robert Nyholm <robert.nyholm@aland.net>
  * @version 2.1
  * @since 0.9beta
- * @date 2013-08-14
  *
  * @see #onCreate(Bundle)
  * @see #onPause()
@@ -58,7 +57,6 @@ public class SmsAlarm extends Activity  {
 	 * @author Robert Nyholm <robert.nyholm@aland.net>
 	 * @version 2.1
 	 * @since 2.1
-	 * @date 2013-08-12
 	 */
 	private enum DialogTypes {
 		PRIMARY, SECONDARY, ACKNOWLEDGE, RESCUESERVICE;

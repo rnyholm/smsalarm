@@ -21,7 +21,6 @@ import ax.ha.it.smsalarm.LogHandler.LogPriorities;
  * @author Robert Nyholm <robert.nyholm@aland.net>
  * @version 2.1
  * @since 2.0
- * @date 2013-08-01
  */
 public class PreferencesHandler {
 	/**
@@ -30,7 +29,6 @@ public class PreferencesHandler {
 	 * @author Robert Nyholm <robert.nyholm@aland.net>
 	 * @version 2.1
 	 * @since 2.1
-	 * @date 2013-07-01
 	 */
 	public enum DataTypes {
 		INTEGER, STRING, BOOLEAN, LIST;
@@ -42,7 +40,6 @@ public class PreferencesHandler {
 	 * @author Robert Nyholm <robert.nyholm@aland.net>
 	 * @version 2.1
 	 * @since 2.1
-	 * @date 2013-07-04
 	 */
 	public enum PrefKeys {
 		SHARED_PREF("smsAlarmPrefs"),

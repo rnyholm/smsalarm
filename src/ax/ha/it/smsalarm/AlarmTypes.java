@@ -9,7 +9,6 @@ package ax.ha.it.smsalarm;
  * @author Robert Nyholm <robert.nyholm@aland.net>
  * @version 2.1
  * @since 2.1
- * @date 2013-08-06
  */
 public enum AlarmTypes {
 	PRIMARY, SECONDARY, UNDEFINED;
