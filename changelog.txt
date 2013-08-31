@@ -23,6 +23,7 @@ v2.1(version code 4)
 -Inkommande larm(sms som applikationen reagerar på) loggas till en html fil
 -Widget har lagts till med vilken man kan toggla om sms alarm ska vara aktiverat och om enheten ska använda sig av enhetens ljudinställningar.
 Dessutom visas senast mottagna larm(primär och sekundär). Man kan även komma direkt till Sms Alarm härifrån och även komma till alarmlog-filen.
+-Sms Alarm finns nu på svenska, engelska, tyska och finska.
 
 v1.1.2(version code 3)
 -Gjort om about dialogen
