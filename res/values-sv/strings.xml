@@ -28,7 +28,7 @@
     <string name="EDIT_NUMBER">Ändra nummer</string>   
     <string name="EDIT_RESCUE_SERVICE_NAME">Ändra räddningstjänst</string>
     <string name="EMPTY_SECONDARY_NUMBER">Det går inte att ange ett tomt telefonnummer för sekundärlarm. Ange ett nytt telefonnummer.</string>
-    <string name="ENTER_PHONE_NUMBER_HINT">Ange nummer!</string>
+    <string name="ENTER_PHONE_NUMBER_HINT">Ange nummer..</string>
     <string name="ERROR_RETRIEVING_FROM_DB">Ett fel inträffade vid hämtande av larm från databasen. Se felloggen för mer information.</string>
     <string name="EULA">Sms Alarm är inte något substitut till personsökare eller annat system avsett för utalarmering av räddningspersonal. Utvecklaren av Sms Alarm tar ej ansvar för och kan inte hållas ansvarig för eventuella skador på liv, egendom eller miljö som uppstått i samband med användandet av Sms Alarm. Utvecklaren av Sms Alarm tar ej heller något ansvar för eventuella skador som uppstått på enheten i samband med användning av Sms Alarm.</string>
     <string name="EULA_AGREE">Godkänn</string>
@@ -55,14 +55,14 @@
     <string name="NUMBER_PROMPT_HINT">Telefonnummer..</string>
     <string name="NUMBER_PROMPT_TITLE">Ange ett telefonnummer</string>
     <string name="PRIMARY_ALARM">PRIMÄR LARM!</string>
-    <string name="PRIMARY_NUMBER_PROMPT_MESSAGE">Ange ett telefonnummer som Sms Alarm larmar primär larm på.</string>
-    <string name="RESCUE_SERVICE_NAME_HINT">Ange räddningstjänstens namn!</string>
+    <string name="PRIMARY_NUMBER_PROMPT_MESSAGE">Ange ett telefonnummer som Sms Alarm larmar primärlarm på.</string>
+    <string name="RESCUE_SERVICE_NAME_HINT">Ange räddningstjänstens namn..</string>
     <string name="RESCUE_SERVICE_PROMPT_MESSAGE">Ange din räddningstjänsts namn.</string>
     <string name="RESCUE_SERVICE_PROMPT_TITLE">Ange räddningstjänst</string>
     <string name="SECS">sek.</string>
     <string name="SECONDARY_ALARM">SEKUNDÄR LARM!</string> 
     <string name="SECONDARY_ALARM_NUMBER_DONT_EXISTS">Inga nummer för sekundärlarm angivna!</string>
-    <string name="SECONDARY_NUMBER_PROMPT_MESSAGE">Ange ett telefonnummer som Sms Alarm larmar sekundär larm på. Telefonnumret läggs till i listan för sekundärlarm.</string>
+    <string name="SECONDARY_NUMBER_PROMPT_MESSAGE">Ange ett telefonnummer som Sms Alarm larmar sekundärlarm på. Telefonnumret läggs till i listan för sekundärlarm.</string>
     <string name="SMS_ALARM_STATUS_ENABLED">Sms Alarm är AKTIVERAT.</string>
     <string name="SMS_ALARM_STATUS_DISABLED">Sms Alarm är EJ AKTIVERAT.</string>
     <string name="SOUND_SETTINGS_STATUS_ENABLED">Applikationen FÖLJER enhetens ljudinställningar.</string>

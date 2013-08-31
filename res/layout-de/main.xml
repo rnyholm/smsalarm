@@ -1,0 +1,396 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="fill_parent" android:layout_height="wrap_content">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="978dp"
+        android:layout_marginBottom="5dp" >
+
+        <TextView
+            android:id="@+id/smsSettings_tv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="5dp"
+            android:layout_marginRight="5dp"
+            android:layout_marginTop="5dp"
+            android:text="@string/TITLE_SMS_SETTINGS"
+            android:textAppearance="?android:attr/textAppearanceMedium" />
+        
+        <TextView
+            android:id="@+id/smsSettingsInfo_tv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignLeft="@id/smsSettings_tv"
+            android:layout_below="@id/smsSettings_tv"
+            android:layout_marginRight="5dp"
+            android:text="@string/INFO_SMS_SETTINGS"
+            android:textAppearance="?android:attr/textAppearanceSmall" />
+
+        <TextView
+            android:id="@+id/primaryAlarmTitle_tv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignLeft="@id/smsSettingsInfo_tv"
+            android:layout_below="@id/smsSettingsInfo_tv"
+            android:layout_marginTop="5dp"
+            android:text="@string/TITLE_PRIMARY_ALARM"
+            android:textAppearance="?android:attr/textAppearanceMedium" />
+
+        <EditText
+            android:id="@+id/primaryNumber_et"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignLeft="@id/primaryAlarmTitle_tv"
+            android:layout_below="@id/primaryAlarmTitle_tv"
+            android:hint="@string/ENTER_PHONE_NUMBER_HINT"
+            android:inputType="numberSigned|phone" >
+
+        </EditText>
+
+        <Button
+            android:id="@+id/editPrimaryNumber_btn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignBottom="@id/primaryNumber_et"
+            android:layout_alignParentRight="true"
+            android:layout_marginRight="5dp"
+            android:layout_toRightOf="@id/primaryNumber_et"
+            android:text="@string/EDIT_NUMBER"
+            android:width="50dp" />
+
+        <TextView
+            android:id="@+id/secondaryAlarmTitle_tv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignLeft="@+id/primaryNumber_et"
+            android:layout_below="@+id/primaryNumber_et"
+            android:text="@string/TITLE_SECONDARY_ALARM"
+            android:textAppearance="?android:attr/textAppearanceMedium" />
+
+        <Spinner
+            android:id="@+id/secondaryNumberSpinner_sp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignLeft="@id/secondaryAlarmTitle_tv"
+            android:layout_below="@id/secondaryAlarmTitle_tv" />
+
+        <Button
+            android:id="@+id/addSecondaryNumber_btn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignLeft="@id/secondaryNumberSpinner_sp"
+            android:layout_below="@id/secondaryNumberSpinner_sp"
+            android:layout_marginTop="-3dp"
+            android:text="@string/ADD_SECONDARY_NUMBER" />
+
+        <Button
+            android:id="@+id/deleteSecondaryNumber_btn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignBaseline="@id/addSecondaryNumber_btn"
+            android:layout_marginRight="3dp"
+            android:layout_toRightOf="@id/addSecondaryNumber_btn"
+            android:text="@string/DELETE_SECONDARY_NUMBER" />
+
+        <ImageView
+            android:id="@+id/mainDivider1_iv"
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_alignLeft="@id/addSecondaryNumber_btn"
+            android:layout_below="@id/addSecondaryNumber_btn"
+            android:layout_marginRight="5dp"
+            android:layout_marginTop="9dp"
+            android:contentDescription="@string/DIVIDER_DESCR"
+            android:src="@drawable/gradient_divider_11_and_up" />
+
+        <TextView
+            android:id="@+id/soundSettings_tv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignLeft="@+id/mainDivider1_iv"
+            android:layout_below="@+id/mainDivider1_iv"
+            android:layout_marginRight="5dp"
+            android:layout_marginTop="7dp"
+            android:text="@string/TITLE_SOUND_SETTINGS"
+            android:textAppearance="?android:attr/textAppearanceMedium" />
+
+        <TextView
+            android:id="@+id/soundSettingsInfo_tv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignLeft="@+id/soundSettings_tv"
+            android:layout_below="@+id/soundSettings_tv"
+            android:layout_marginRight="5dp"
+            android:text="@string/INFO_SOUND_SETTINGS"
+            android:textAppearance="?android:attr/textAppearanceSmall" />
+
+        <TextView
+            android:id="@+id/toneSpinnerTitle_tv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignLeft="@id/soundSettingsInfo_tv"
+            android:layout_below="@id/soundSettingsInfo_tv"
+            android:layout_marginRight="5dp"
+            android:layout_marginTop="5dp"
+            android:text="@string/TITLE_TONE_SPINNER"
+            android:textAppearance="?android:attr/textAppearanceMedium" />
+
+        <Spinner
+            android:id="@+id/toneSpinner_sp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignLeft="@id/toneSpinnerTitle_tv"
+            android:layout_below="@id/toneSpinnerTitle_tv"
+            android:layout_marginRight="5dp" />
+
+        <TextView
+            android:id="@+id/msgToneTitle_tv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignLeft="@+id/toneSpinner_sp"
+            android:layout_below="@+id/toneSpinner_sp"
+            android:layout_marginRight="5dp"
+            android:text="@string/TITLE_ALARM_SIGNAL"
+            android:textAppearance="?android:attr/textAppearanceMedium" />
+
+        <EditText
+            android:id="@+id/msgTone_et"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignLeft="@id/msgToneTitle_tv"
+            android:layout_alignRight="@id/soundSettingsInfo_tv"
+            android:layout_below="@id/msgToneTitle_tv"
+            android:ems="10"
+            android:inputType="text"
+            android:singleLine="true" />
+
+        <Button
+            android:id="@+id/editMsgTone_btn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignLeft="@+id/msgTone_et"
+            android:layout_below="@+id/msgTone_et"
+            android:layout_marginTop="2dp"
+            android:text="@string/EDIT_ALARM_SIGNAL" />
+
+        <Button
+            android:id="@+id/listenMsgTone_btn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/msgTone_et"
+            android:layout_marginRight="3dp"
+            android:layout_marginTop="2dp"
+            android:layout_toRightOf="@id/editMsgTone_btn"
+            android:text="@string/LISTEN_ALARM_SIGNAL" />
+
+        <CheckBox
+            android:id="@+id/useSysSoundSettings_chk"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignLeft="@id/editMsgTone_btn"
+            android:layout_below="@id/listenMsgTone_btn"
+            android:layout_marginRight="5dp"
+            android:text="@string/TITLE_USE_OS_SOUND_SETTINGS" />
+
+        <TextView
+            android:id="@+id/useSysSoundSettingsHint_tv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignLeft="@+id/useSysSoundSettings_chk"
+            android:layout_below="@+id/useSysSoundSettings_chk"
+            android:layout_marginLeft="38dp"
+            android:layout_marginRight="5dp"
+            android:layout_marginTop="-6dp"
+            android:text="@string/INFO_USE_OS_SOUND_SETTINGS"
+            android:textAppearance="?android:attr/textAppearanceSmall" />
+
+        <CheckBox
+            android:id="@+id/playToneTwiceSetting_chk"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignLeft="@+id/useSysSoundSettings_chk"
+            android:layout_below="@+id/useSysSoundSettingsHint_tv"
+            android:layout_marginRight="5dp"
+            android:text="@string/TITLE_PLAY_TONE_TWICE_SETTING" />
+
+        <TextView
+            android:id="@+id/playToneTwiceSettingHint_tv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignLeft="@+id/playToneTwiceSetting_chk"
+            android:layout_below="@+id/playToneTwiceSetting_chk"
+            android:layout_marginLeft="38dp"
+            android:layout_marginRight="5dp"
+            android:layout_marginTop="-6dp"
+            android:text="@string/INFO_PLAY_TONE_TWICE_SETTING"
+            android:textAppearance="?android:attr/textAppearanceSmall" />
+
+        <ImageView
+            android:id="@+id/mainDivider2_iv"
+            android:layout_width="wrap_content"
+            android:layout_height="1dp"
+            android:layout_alignLeft="@id/mainDivider1_iv"
+            android:layout_alignRight="@+id/mainDivider1_iv"
+            android:layout_below="@id/playToneTwiceSettingHint_tv"
+            android:layout_marginTop="7dp"
+            android:contentDescription="@string/DIVIDER_DESCR"
+            android:src="@drawable/gradient_divider_11_and_up" />
+
+        <TextView
+            android:id="@+id/ackSettings_tv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignLeft="@+id/mainDivider2_iv"
+            android:layout_below="@+id/mainDivider2_iv"
+            android:layout_marginTop="7dp"
+            android:text="@string/TITLE_ACK_SETTINGS"
+            android:textAppearance="?android:attr/textAppearanceMedium" />
+
+        <TextView
+            android:id="@+id/ackSettingsInfo_tv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignLeft="@+id/ackSettings_tv"
+            android:layout_below="@+id/ackSettings_tv"
+            android:layout_marginRight="5dp"
+            android:text="@string/INFO_ACK_SETTINGS"
+            android:textAppearance="?android:attr/textAppearanceSmall" />
+
+        <CheckBox
+            android:id="@+id/enableAcknowledge_chk"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignLeft="@+id/ackSettingsInfo_tv"
+            android:layout_below="@+id/ackSettingsInfo_tv"
+            android:layout_marginTop="5dp"
+            android:text="@string/TITLE_ENABLE_ACKNOWLEDGE" />
+
+        <TextView
+            android:id="@+id/enableAcknowledgeHint_tv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignLeft="@+id/enableAcknowledge_chk"
+            android:layout_below="@+id/enableAcknowledge_chk"
+            android:layout_marginLeft="38dp"
+            android:layout_marginRight="5dp"
+            android:layout_marginTop="-6dp"
+            android:text="@string/INFO_ENABLE_ACKNOWLEDGE"
+            android:textAppearance="?android:attr/textAppearanceSmall" />
+
+        <TextView
+            android:id="@+id/acknowledgeNumberTitle_tv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignLeft="@+id/enableAcknowledge_chk"
+            android:layout_below="@+id/enableAcknowledgeHint_tv"
+            android:text="@string/TITLE_ACK_NUMBER"
+            android:textAppearance="?android:attr/textAppearanceMedium" />
+
+        <EditText
+            android:id="@+id/ackNumber_et"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignLeft="@id/acknowledgeNumberTitle_tv"
+            android:layout_below="@id/acknowledgeNumberTitle_tv"
+            android:layout_marginTop="6dp"
+            android:hint="@string/ENTER_PHONE_NUMBER_HINT"
+            android:inputType="number|numberSigned|phone"
+            android:singleLine="true" />
+
+        <ImageView
+            android:id="@+id/mainDivider3_iv"
+            android:layout_width="wrap_content"
+            android:layout_height="1dp"
+            android:layout_alignLeft="@id/ackNumber_et"
+            android:layout_alignRight="@+id/mainDivider2_iv"
+            android:layout_below="@+id/ackNumber_et"
+            android:layout_marginTop="9dp"
+            android:contentDescription="@string/DIVIDER_DESCR"
+            android:src="@drawable/gradient_divider_11_and_up" />
+
+        <TextView
+            android:id="@+id/miscSettings_tv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignLeft="@+id/mainDivider3_iv"
+            android:layout_below="@+id/mainDivider3_iv"
+            android:layout_marginTop="7dp"
+            android:text="@string/TITLE_MISC_SETTINGS"
+            android:textAppearance="?android:attr/textAppearanceMedium" />
+
+        <TextView
+            android:id="@+id/miscSettingsInfo_tv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignLeft="@+id/miscSettings_tv"
+            android:layout_below="@+id/miscSettings_tv"
+            android:layout_marginRight="5dp"
+            android:text="@string/INFO_MISC_SETTINGS"
+            android:textAppearance="?android:attr/textAppearanceSmall" />
+
+        <TextView
+            android:id="@+id/rescueServiceNameTitle_tv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignLeft="@+id/miscSettingsInfo_tv"
+            android:layout_below="@+id/miscSettingsInfo_tv"
+            android:layout_marginTop="5dp"
+            android:text="@string/TITLE_RESCUE_SERVICE_NAME"
+            android:textAppearance="?android:attr/textAppearanceMedium" />
+
+        <EditText
+            android:id="@+id/rescueServiceName_et"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignLeft="@id/rescueServiceNameTitle_tv"
+            android:layout_alignRight="@+id/mainDivider3_iv"
+            android:layout_below="@id/rescueServiceNameTitle_tv"
+            android:ems="10"
+            android:hint="@string/RESCUE_SERVICE_NAME_HINT"
+            android:inputType="text"
+            android:singleLine="true" />
+
+        <Button
+            android:id="@+id/editRescueServiceName_btn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignLeft="@id/rescueServiceName_et"
+            android:layout_below="@id/rescueServiceName_et"
+            android:layout_marginTop="2dp"
+            android:text="@string/EDIT_RESCUE_SERVICE_NAME" />
+
+        <CheckBox
+            android:id="@+id/enableSmsAlarm_chk"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignLeft="@id/editRescueServiceName_btn"
+            android:layout_below="@id/editRescueServiceName_btn"
+            android:layout_marginRight="5dp"
+            android:checked="true"
+            android:text="@string/TITLE_ENABLE_SMS_ALARM" />
+
+        <TextView
+            android:id="@+id/enableSmsAlarmHint_tv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignLeft="@+id/enableSmsAlarm_chk"
+            android:layout_below="@+id/enableSmsAlarm_chk"
+            android:layout_marginLeft="38dp"
+            android:layout_marginRight="5dp"
+            android:layout_marginTop="-6dp"
+            android:text="@string/INFO_ENABLE_SMS_ALARM"
+            android:textAppearance="?android:attr/textAppearanceSmall" />
+
+        <Button
+            android:id="@+id/editAckNumber_btn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignBottom="@+id/ackNumber_et"
+            android:layout_alignParentRight="true"
+            android:layout_marginRight="5dp"
+            android:layout_toRightOf="@+id/ackNumber_et"
+            android:text="@string/EDIT_NUMBER" />
+
+    </RelativeLayout>
+
+</ScrollView>

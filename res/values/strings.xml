@@ -32,7 +32,7 @@
     <string name="EDIT_RESCUE_SERVICE_NAME">Edit rescue service</string>
     <string name="EMPTY_SECONDARY_NUMBER">It is not possible to enter an empty telephone number for secondary alarm. Enter a new telephone number.</string>
 	<string name="EMPTY_STRING">""</string>
-    <string name="ENTER_PHONE_NUMBER_HINT">Enter number!</string>
+    <string name="ENTER_PHONE_NUMBER_HINT">Enter number..</string>
     <string name="ERROR_RETRIEVING_FROM_DB">An error occurred retrieving alarm from the database. See the error log for more information.</string>
     <string name="EULA">Sms Alarm is not a substitute for pagers or other systems designed for alerting rescue personnel. The developer of Sms Alarm is not responsible for and can not be held responsible for any damages to life, property or the environment arising from the use of Sms Alarm. The developer of the Sms Alarm will also not be responsible for any damage incurred to the device in connection with the use of Sms Alarm.</string>
     <string name="EULA_AGREE">Agree</string>
@@ -62,7 +62,7 @@
     <string name="OK">OK</string>
     <string name="PRIMARY_ALARM">PRIMARY ALARM!</string>
     <string name="PRIMARY_NUMBER_PROMPT_MESSAGE">Enter a telephone number for Sms Alarm to alert for primary alarm.</string>
-    <string name="RESCUE_SERVICE_NAME_HINT">Enter rescue service name!</string>
+    <string name="RESCUE_SERVICE_NAME_HINT">Enter rescue service name..</string>
     <string name="RESCUE_SERVICE_PROMPT_MESSAGE">Enter your rescue service name.</string>
     <string name="RESCUE_SERVICE_PROMPT_TITLE">Enter rescue service</string>
     <string name="SECS">secs.</string>
