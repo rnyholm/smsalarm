@@ -53,6 +53,7 @@
             android:layout_height="wrap_content"
             android:layout_alignBottom="@id/primaryNumber_et"
             android:layout_alignParentRight="true"
+            android:layout_marginBottom="-6dp"
             android:layout_marginRight="5dp"
             android:layout_toRightOf="@id/primaryNumber_et"
             android:text="@string/EDIT_NUMBER"
@@ -387,6 +388,7 @@
             android:layout_height="wrap_content"
             android:layout_alignBottom="@+id/ackNumber_et"
             android:layout_alignParentRight="true"
+            android:layout_marginBottom="-6dp"
             android:layout_marginRight="5dp"
             android:layout_toRightOf="@+id/ackNumber_et"
             android:text="@string/EDIT_NUMBER" />

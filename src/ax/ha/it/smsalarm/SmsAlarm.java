@@ -574,6 +574,8 @@ public class SmsAlarm extends Activity {
 			int pixelsTop = 0;
 			// If the locale on device is german(de) set pixelstop to -6dp else -9dp
 			if ("de".equals(Locale.getDefault().getLanguage())) {
+				// Logging
+				this.logger.logCat(LogPriorities.DEBUG, this.LOG_TAG + ":findViews()", "The device has german(de) locale, set different margin-top on information TextViews for the checkboxes than other locales");
 				pixelsTop = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, -6, resources.getDisplayMetrics()); // -6dp calculated to pixels
 			} else {
 				pixelsTop = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, -9, resources.getDisplayMetrics()); // -9dp calculated to pixels
@@ -612,6 +614,51 @@ public class SmsAlarm extends Activity {
 
 			// Logging
 			this.logger.logCat(LogPriorities.DEBUG, this.LOG_TAG + ":findViews()", "API level > 16, edit margins on information TextViews for the checkboxes");
+		} else { // The device has API level < 17, we just need to check if the locale is german
+			// If the locale on device is german(de) we need to adjust the margin top for the information textviews for the chockboxes to -6dp
+			if ("de".equals(Locale.getDefault().getLanguage())) {
+				// We need to get some Android resources in order to calculate proper pixel dimensions from dp
+				Resources resources = getResources();
+				
+				// Calculate pixel dimensions for the different margins
+				int pixelsLeft = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 38, resources.getDisplayMetrics()); // 38dp calculated to pixels
+				int pixelsRight = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 5, resources.getDisplayMetrics()); // 5dp calculated to pixels
+				int pixelsTop = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, -6, resources.getDisplayMetrics()); // -6dp calculated to pixels
+				
+				// Set layout parameters for the sound settings info textview
+				RelativeLayout.LayoutParams paramsSoundSettingInfoTextView = new RelativeLayout.LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT); // Wrap content, both on height and width
+				paramsSoundSettingInfoTextView.setMargins(pixelsLeft, pixelsTop, pixelsRight, 0); // Margins left, top, right, bottom
+				paramsSoundSettingInfoTextView.addRule(RelativeLayout.BELOW, this.soundSettingCheckBox.getId()); // Add rule, below UI widget
+				paramsSoundSettingInfoTextView.addRule(RelativeLayout.ALIGN_LEFT, this.soundSettingCheckBox.getId()); // Add rule, align left of UI widget
+
+				// Set layout parameters for the play tone twice textview
+				RelativeLayout.LayoutParams paramsPlayToneTwiceInfoTextView = new RelativeLayout.LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
+				paramsPlayToneTwiceInfoTextView.setMargins(pixelsLeft, pixelsTop, pixelsRight, 0);
+				paramsPlayToneTwiceInfoTextView.addRule(RelativeLayout.BELOW, this.playToneTwiceSettingCheckBox.getId());
+				paramsPlayToneTwiceInfoTextView.addRule(RelativeLayout.ALIGN_LEFT, this.playToneTwiceSettingCheckBox.getId());
+
+				// Set layout parameters for the enable ack info textview
+				RelativeLayout.LayoutParams paramsEnableAckInfoTextView = new RelativeLayout.LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
+				paramsEnableAckInfoTextView.setMargins(pixelsLeft, pixelsTop, pixelsRight, 0);
+				paramsEnableAckInfoTextView.addRule(RelativeLayout.BELOW, this.enableAckCheckBox.getId());
+				paramsEnableAckInfoTextView.addRule(RelativeLayout.ALIGN_LEFT, this.enableAckCheckBox.getId());
+
+				// Set layout parameters for the enable sms alarm info textview
+				RelativeLayout.LayoutParams paramsEnableSmsAlarmInfoTextView = new RelativeLayout.LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
+				paramsEnableSmsAlarmInfoTextView.setMargins(pixelsLeft, pixelsTop, pixelsRight, 0);
+				paramsEnableSmsAlarmInfoTextView.addRule(RelativeLayout.BELOW, this.enableSmsAlarmCheckBox.getId());
+				paramsEnableSmsAlarmInfoTextView.addRule(RelativeLayout.ALIGN_LEFT, this.enableSmsAlarmCheckBox.getId());
+
+				// Apply the previously configured layout parameters to the correct
+				// textviews
+				this.soundSettingInfoTextView.setLayoutParams(paramsSoundSettingInfoTextView);
+				this.playToneTwiceInfoTextView.setLayoutParams(paramsPlayToneTwiceInfoTextView);
+				this.enableAckInfoTextView.setLayoutParams(paramsEnableAckInfoTextView);
+				this.enableSmsAlarmInfoTextView.setLayoutParams(paramsEnableSmsAlarmInfoTextView);
+
+				// Logging
+				this.logger.logCat(LogPriorities.DEBUG, this.LOG_TAG + ":findViews()", "API level < 17 but the device has german(de) locale, set different margin-top on information TextViews for the checkboxes to fit the language");	
+			} 		
 		}
 
 		// Declare and initialize variables of type ImageView
@@ -619,8 +666,7 @@ public class SmsAlarm extends Activity {
 		this.divider2ImageView = (ImageView) findViewById(R.id.mainDivider2_iv);
 		this.divider3ImageView = (ImageView) findViewById(R.id.mainDivider3_iv);
 
-		// If Android API level less then 11 set bright gradient else set dark
-		// gradient
+		// If Android API level less then 11 set bright gradient else set dark gradient
 		if (Build.VERSION.SDK_INT < 11) {
 			this.divider1ImageView.setImageResource(R.drawable.gradient_divider_10_and_down);
 			this.divider2ImageView.setImageResource(R.drawable.gradient_divider_10_and_down);
@@ -1168,8 +1214,16 @@ public class SmsAlarm extends Activity {
 
 		final View view = factory.inflate(R.layout.about, null);
 
-		// Set attributes
-		dialog.setIcon(R.drawable.ic_launcher_trans);
+		// Set correct icon depending on api level
+		if (Build.VERSION.SDK_INT < 11) {
+			dialog.setIcon(R.drawable.ic_launcher_trans_10_and_down);
+			this.logger.logCat(LogPriorities.DEBUG, this.LOG_TAG + ":buildAndShowAboutDialog()", "API level < 11, set icon adapted to black background color");
+		} else {
+			dialog.setIcon(R.drawable.ic_launcher_trans);
+			this.logger.logCat(LogPriorities.DEBUG, this.LOG_TAG + ":buildAndShowAboutDialog()", "API level > 10, set icon adapted to white background color");
+		}
+		
+		// Set rest of the attributes
 		dialog.setTitle(R.string.ABOUT);
 		dialog.setView(view);
 		dialog.setCancelable(false);
