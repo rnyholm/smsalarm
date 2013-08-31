@@ -152,6 +152,11 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 	    }
 	    // Create a new alarm object with data resolved from cursor
 	    Alarm alarm = new Alarm(Integer.parseInt(cursor.getString(0)), cursor.getString(1), cursor.getString(2), cursor.getString(3), cursor.getString(4));
+	    
+        // Close cursor and database
+        cursor.close();
+        db.close();
+	    
 	    // Return alarm
 	    return alarm;
 	}
@@ -199,6 +204,10 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 				alarmList.add(alarm);
 			} while (cursor.moveToNext());
 		}
+		
+        // Close cursor and database
+        cursor.close();
+        db.close();
  
 		// Log in debug purpose
 		logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":getAllAlarm()", "Returning following list of Alarms:\"" + alarmList.toString() + "\"");		
@@ -227,7 +236,10 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         
         // Store number of elements in cursor before closing it
         alarmsCount = cursor.getCount();
+        
+        // Close cursor and database
         cursor.close();
+        db.close();
  
 		// Log in debug purpose
 		logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":getAlarmsCount()", "Number of alarms(entries) in database are:\"" + Integer.toString(alarmsCount) + "\"");
