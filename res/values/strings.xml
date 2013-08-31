@@ -9,7 +9,7 @@
     <string name="ABOUT_CONTACT">For questions, send an email to:\ninfo@smsalarm-app.net</string>
     <string name="ABOUT_VISIT">For more information visit:\nsmsalarm-app.net</string>
     <string name="ACK">Acknowledge Alarm</string>  
-    <string name="ACK_CANNOT">Can not acknowledge! No telephone number for acknowledgment is given!</string> 
+    <string name="ACK_CANNOT">Can not acknowledge! No telephone number for acknowledgment is given.</string> 
     <string name="ACK_FULL_MESSAGE">Complete alarm message</string>
     <string name="ACK_ICON_CONTENT_DESCR">Acknowledge alarm icon</string>
     <string name="ACK_LINE_BUSY">Line busy, will call back in:</string>
@@ -26,7 +26,7 @@
     <string name="DELETE_SECONDARY_NUMBER_PROMPT_MESSAGE">Do you want to remove following number from the list of secondary alarms:</string>
     <string name="DELETE_SECONDARY_NUMBER_PROMPT_TITLE">Remove number</string> 
     <string name="DIVIDER_DESCR">Divider</string>
-    <string name="DUPLICATED_NUMBERS">Telephone number for primary and secondary alarms may not be the same! Enter a new telephone number.</string>
+    <string name="DUPLICATED_NUMBERS">Telephone number for primary and secondary alarms may not be the same. Enter a new telephone number.</string>
     <string name="EDIT_ALARM_SIGNAL">Edit signal</string>
     <string name="EDIT_NUMBER">Edit number</string>   
     <string name="EDIT_RESCUE_SERVICE_NAME">Edit rescue service</string>
@@ -54,9 +54,9 @@
     <string name="LISTEN_ALARM_SIGNAL">Listen to the signal</string> 
 	<string name="NEW_LINE">\n</string>	
     <string name="NO">No</string>
-    <string name="NO_RECEIVED_ALARMS_EXISTS">No alarm has yet been received!</string>  
-    <string name="NO_SECONDARY_NUMBER_EXISTS">No telephone number for secondary alarm exists, can not remove telephone number!</string>
-    <string name="NUMBER_ALREADY_IN_LIST">Given number is already in the list for secondary alarm! Enter a new telephone number.</string>
+    <string name="NO_RECEIVED_ALARMS_EXISTS">No alarm has yet been received.</string>  
+    <string name="NO_SECONDARY_NUMBER_EXISTS">No telephone number for secondary alarm exists, can not remove telephone number.</string>
+    <string name="NUMBER_ALREADY_IN_LIST">Given number is already in the list for secondary alarm. Enter a new telephone number.</string>
     <string name="NUMBER_PROMPT_HINT">Telephone number..</string>
     <string name="NUMBER_PROMPT_TITLE">Enter a telephone number</string>
     <string name="OK">OK</string>
@@ -67,7 +67,6 @@
     <string name="RESCUE_SERVICE_PROMPT_TITLE">Enter rescue service</string>
     <string name="SECS">secs.</string>
     <string name="SECONDARY_ALARM">SECONDARY ALARM!</string> 
-    <string name="SECONDARY_ALARM_NUMBER_DONT_EXISTS">No telephone number for secondary alarm has been given!</string>
     <string name="SECONDARY_NUMBER_PROMPT_MESSAGE">Enter a telephone number for Sms Alarm to alert. The telephone number will be added to the list for secondary alarm.</string>
     <string name="SMS_ALARM_STATUS_ENABLED">Sms Alarm is ENABLED.</string>
     <string name="SMS_ALARM_STATUS_DISABLED">Sms Alarm is NOT ENABLED.</string>

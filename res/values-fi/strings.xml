@@ -8,7 +8,7 @@
     <string name="ABOUT_CONTACT">Jos sinulla on kysyttävää, lähetä sähköpostia osoitteeseen:\ninfo@smsalarm-app.net</string>
     <string name="ABOUT_VISIT">Lisätietoja osoitteesta:\nsmsalarm-app.net</string>
     <string name="ACK">Kuittaa hälytykset</string>  
-    <string name="ACK_CANNOT">Ei voi kuitata! Kuittauspuh.nro. puuttuu!</string> 
+    <string name="ACK_CANNOT">Ei voi kuitata! Kuittauspuh.nro. puuttuu.</string> 
     <string name="ACK_FULL_MESSAGE">Täysihälytysilmoitus</string>
     <string name="ACK_ICON_CONTENT_DESCR">Kuittaa hälytyskuvake</string>
     <string name="ACK_LINE_BUSY">Varattu, soitaa takaisin, jos:</string>
@@ -23,7 +23,7 @@
     <string name="DELETE_SECONDARY_NUMBER_PROMPT_MESSAGE">Haluatko poistaa seuraavat numerot toissijaisista hälytyksistä: </string>
     <string name="DELETE_SECONDARY_NUMBER_PROMPT_TITLE">Poista numerot</string> 
     <string name="DIVIDER_DESCR">Jakaja</string>
-    <string name="DUPLICATED_NUMBERS">Puhelinnumero ensisijaiseen ja toissijaiseen hälytykseen ei voi olla sama! Anna uusi puhelinnumero.</string>
+    <string name="DUPLICATED_NUMBERS">Puhelinnumero ensisijaiseen ja toissijaiseen hälytykseen ei voi olla sama. Anna uusi puhelinnumero.</string>
     <string name="EDIT_ALARM_SIGNAL">Vaihda signaali</string>
     <string name="EDIT_NUMBER">Vaihda numero</string>   
     <string name="EDIT_RESCUE_SERVICE_NAME">Vaihda pelastuspalvelu</string>
@@ -49,9 +49,8 @@
     <string name="INFO_USE_OS_SOUND_SETTINGS">Jos valittu, ottaa Sms Alarm huomioon puhelimen äänen voim, ja äänettömyyden.</string>
     <string name="LISTEN_ALARM_SIGNAL">Kuuntele signaali</string>    
     <string name="NO">Ei</string>
-    <string name="NO_RECEIVED_ALARMS_EXISTS">Hälytystä ei ole saatu vielä!</string>  
-    <string name="NO_SECONDARY_NUMBER_EXISTS">Ei numeroita toissijaisessa hälytyksessä, ei voi poistaa numeroita!</string>
-    <string name="NUMBER_ALREADY_IN_LIST">Annetta puh.nro. on jo toissijaishälytyslistalla! Anna uusi puhelinnumero.</string>
+    <string name="NO_RECEIVED_ALARMS_EXISTS">Hälytystä ei ole saatu vielä.</string>  
+    <string name="NUMBER_ALREADY_IN_LIST">Annetta puh.nro. on jo toissijaishälytyslistalla. Anna uusi puhelinnumero.</string>
     <string name="NUMBER_PROMPT_HINT">Puhelin..</string>
     <string name="NUMBER_PROMPT_TITLE">Anna puhelinnumero</string>
     <string name="PRIMARY_ALARM">ENSISIJAINEN HÄLYTYS!</string>

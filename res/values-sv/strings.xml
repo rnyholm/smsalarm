@@ -8,7 +8,7 @@
     <string name="ABOUT_CONTACT">Vid frågor, skicka ett mail till:\ninfo@smsalarm-app.net</string>
     <string name="ABOUT_VISIT">För mer information besök:\nsmsalarm-app.net</string>
     <string name="ACK">Kvittera Larm</string>  
-    <string name="ACK_CANNOT">Kan ej kvittera! Inget telefonnummer att kvittera till är angivet!</string> 
+    <string name="ACK_CANNOT">Kan ej kvittera! Inget telefonnummer att kvittera till är angivet.</string> 
     <string name="ACK_FULL_MESSAGE">Fullständigt larm meddelande</string>
     <string name="ACK_ICON_CONTENT_DESCR">Kvittera larm ikon</string>
     <string name="ACK_LINE_BUSY">Upptaget, återuppringer om:</string>
@@ -23,7 +23,7 @@
     <string name="DELETE_SECONDARY_NUMBER_PROMPT_MESSAGE">Vill du ta bort följande nummer från listan över sekundärlarm: </string>
     <string name="DELETE_SECONDARY_NUMBER_PROMPT_TITLE">Ta bort nummer</string> 
     <string name="DIVIDER_DESCR">Delare</string>
-    <string name="DUPLICATED_NUMBERS">Telefonnummer för primär- och sekundärlarm får inte vara lika! Ange ett nytt telefonnummer.</string>
+    <string name="DUPLICATED_NUMBERS">Telefonnummer för primär- och sekundärlarm får inte vara lika. Ange ett nytt telefonnummer.</string>
     <string name="EDIT_ALARM_SIGNAL">Ändra signal</string>
     <string name="EDIT_NUMBER">Ändra nummer</string>   
     <string name="EDIT_RESCUE_SERVICE_NAME">Ändra räddningstjänst</string>
@@ -49,9 +49,9 @@
     <string name="INFO_USE_OS_SOUND_SETTINGS">Om vald tar Sms Alarm hänsyn till telefonens ringvolym och ljudlöst läge.</string>
     <string name="LISTEN_ALARM_SIGNAL">Lyssna på signal</string>    
     <string name="NO">Nej</string>
-    <string name="NO_RECEIVED_ALARMS_EXISTS">Inga larm har tagits emot ännu!</string>  
-    <string name="NO_SECONDARY_NUMBER_EXISTS">Inga nummer för sekundärlarm finns, kan ej ta bort nummer!</string>
-    <string name="NUMBER_ALREADY_IN_LIST">Angivet telefonnummer finns redan i listan över sekundärlarm! Ange ett nytt telefonnummer.</string>
+    <string name="NO_RECEIVED_ALARMS_EXISTS">Inga larm har tagits emot ännu.</string>  
+    <string name="NO_SECONDARY_NUMBER_EXISTS">Inga nummer för sekundärlarm finns, kan ej ta bort nummer.</string>
+    <string name="NUMBER_ALREADY_IN_LIST">Angivet telefonnummer finns redan i listan över sekundärlarm. Ange ett nytt telefonnummer.</string>
     <string name="NUMBER_PROMPT_HINT">Telefonnummer..</string>
     <string name="NUMBER_PROMPT_TITLE">Ange ett telefonnummer</string>
     <string name="PRIMARY_ALARM">PRIMÄR LARM!</string>
@@ -61,7 +61,6 @@
     <string name="RESCUE_SERVICE_PROMPT_TITLE">Ange räddningstjänst</string>
     <string name="SECS">sek.</string>
     <string name="SECONDARY_ALARM">SEKUNDÄR LARM!</string> 
-    <string name="SECONDARY_ALARM_NUMBER_DONT_EXISTS">Inga nummer för sekundärlarm angivna!</string>
     <string name="SECONDARY_NUMBER_PROMPT_MESSAGE">Ange ett telefonnummer som Sms Alarm larmar sekundärlarm på. Telefonnumret läggs till i listan för sekundärlarm.</string>
     <string name="SMS_ALARM_STATUS_ENABLED">Sms Alarm är AKTIVERAT.</string>
     <string name="SMS_ALARM_STATUS_DISABLED">Sms Alarm är EJ AKTIVERAT.</string>

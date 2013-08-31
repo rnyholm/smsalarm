@@ -8,7 +8,7 @@
     <string name="ABOUT_CONTACT">Bei Fragen senden Sie eine E-Mail an:\ninfo@smsalarm-app.net</string>
     <string name="ABOUT_VISIT">Für weitere Informationen besuchen Sie:\nsmsalarm-app.net</string>
     <string name="ACK">Bestätigungsbenachrichtigung</string>  
-    <string name="ACK_CANNOT">Kann nicht bestätigen! Keine Telefonnummer zur Bestätigung wurde eingegeben!</string> 
+    <string name="ACK_CANNOT">Kann nicht bestätigen! Keine Telefonnummer zur Bestätigung wurde eingegeben.</string> 
     <string name="ACK_FULL_MESSAGE">Kompletter Benachrichtigungstext</string>
     <string name="ACK_ICON_CONTENT_DESCR">Bestätigungsbenachrichtigungssymbol</string>
     <string name="ACK_LINE_BUSY">Leitung besetzt, rufe zurück in:</string>
@@ -23,7 +23,7 @@
     <string name="DELETE_SECONDARY_NUMBER_PROMPT_MESSAGE">MÖCHTEN Sie die folgende Nummer aus der Liste für Sekundäralarme entfernen:</string>
     <string name="DELETE_SECONDARY_NUMBER_PROMPT_TITLE">Nummer entfernen</string> 
     <string name="DIVIDER_DESCR">Teiler</string>
-    <string name="DUPLICATED_NUMBERS">Telefonnummer für Primär- und Sekundäralarm können nicht gleich sein! Eine neue Telefonnummer eingeben.</string>
+    <string name="DUPLICATED_NUMBERS">Telefonnummer für Primär- und Sekundäralarm können nicht gleich sein. Eine neue Telefonnummer eingeben.</string>
     <string name="EDIT_ALARM_SIGNAL">Signal bearbeiten</string>
     <string name="EDIT_NUMBER">Nummer bearbeiten</string>   
     <string name="EDIT_RESCUE_SERVICE_NAME">Rettungsdienst bearbeiten</string>
@@ -49,9 +49,9 @@
     <string name="INFO_USE_OS_SOUND_SETTINGS">Falls gewählt, berücksichtigt Sms Alarm die Klingeltonlautstärke und den Lautlos-Modus des Geräts.</string>
     <string name="LISTEN_ALARM_SIGNAL">Signal anhören</string>    
     <string name="NO">Nein</string>
-    <string name="NO_RECEIVED_ALARMS_EXISTS">Keine Benachrichtigungen wurden bisher empfangen!</string>  
-    <string name="NO_SECONDARY_NUMBER_EXISTS">Keine Telefonnummer für Sekundäralarm vorhanden, kann Telefonnummer nicht entfernen!</string>
-    <string name="NUMBER_ALREADY_IN_LIST">Die eingegebene Nummer befindet sich bereits in der Liste für den Sekundäralarm! Eine neue Telefonnummer eingeben.</string>
+    <string name="NO_RECEIVED_ALARMS_EXISTS">Keine Benachrichtigungen wurden bisher empfangen.</string>  
+    <string name="NO_SECONDARY_NUMBER_EXISTS">Keine Telefonnummer für Sekundäralarm vorhanden, kann Telefonnummer nicht entfernen.</string>
+    <string name="NUMBER_ALREADY_IN_LIST">Die eingegebene Nummer befindet sich bereits in der Liste für den Sekundäralarm. Eine neue Telefonnummer eingeben.</string>
     <string name="NUMBER_PROMPT_HINT">Telefonnummer..</string>
     <string name="NUMBER_PROMPT_TITLE">Eine Telefonnummer eingeben</string>
     <string name="PRIMARY_ALARM">PRIMÄRALARM!</string>
@@ -61,7 +61,6 @@
     <string name="RESCUE_SERVICE_PROMPT_TITLE">Rettungsdienst eingeben</string>
     <string name="SECS">Sek.</string>
     <string name="SECONDARY_ALARM">SEKUNDÄRALARM!</string> 
-    <string name="SECONDARY_ALARM_NUMBER_DONT_EXISTS">Keine Telefonnummer für Sekundäralarm wurde eingegeben!</string>
     <string name="SECONDARY_NUMBER_PROMPT_MESSAGE">Eine Telefonnummer für Sms Alarm eingeben. Die Telefonnummer wird zur Liste für den Sekundäralarm hinzugefügt.</string>
     <string name="SMS_ALARM_STATUS_ENABLED">Sms Alarm ist AKTIVIERT.</string>
     <string name="SMS_ALARM_STATUS_DISABLED">Sms Alarm ist DEAKTIVIERT.</string>
