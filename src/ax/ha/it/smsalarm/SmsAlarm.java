@@ -1328,7 +1328,10 @@ public class SmsAlarm extends Activity {
 			// Logging
 			this.logger.logCat(LogPriorities.DEBUG, this.LOG_TAG + ":updateSecondaryListenNumberSpinner()", "Populate SECONDARY listen number spinner with values: " + this.secondaryListenNumbers);
 		} else {
-			this.emptySecondaryListenNumbers.add(getString(R.string.ENTER_PHONE_NUMBER_HINT));
+			// Only add item to list if it's empty
+			if (this.emptySecondaryListenNumbers.isEmpty()) {
+				this.emptySecondaryListenNumbers.add(getString(R.string.ENTER_PHONE_NUMBER_HINT));
+			}
 			ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, this.emptySecondaryListenNumbers);
 			adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 			this.secondaryListenNumberSpinner.setAdapter(adapter);
