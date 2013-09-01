@@ -165,8 +165,8 @@ public class AcknowledgeHandler extends Activity {
 				if (!acknowledgeNumber.equals("")) {
 					// Logging
 					logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":onCreate().acknowledgeButton.OnClickListener().onClick()", "Acknowledge button has been pressed and phone number to acknowledge to exist. Continue acknowledge");
-					// Update acknowledgetime in database
-					db.updateLatestAlarmAcknowledged();
+					// Update acknowledge time of latest received primary alarm in database
+					db.updateLatestPrimaryAlarmAcknowledged();
 					// Get all alarms from database and log them to to html file
 					logger.logAlarm(db.getAllAlarm(), AcknowledgeHandler.this);
 					// Update all widgets associated with this application

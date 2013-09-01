@@ -43,6 +43,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 	private static final String KEY_SENDER = "sender";
 	private static final String KEY_MESSAGE = "message";
 	private static final String KEY_ACKNOWLEDGED = "acknowledged";
+	private static final String KEY_ALARM_TYPE = "alarmType";
 	
 	/**
 	 * Constructor for the <code>DatabaseHandler</code>, takes just context as
@@ -68,7 +69,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 	public void onCreate(SQLiteDatabase db) {
 		// Build up the query for creating the table
         String CREATE_ALARMS_TABLE = "CREATE TABLE " + TABLE_ALARMS + "("+ KEY_ID + " INTEGER PRIMARY KEY," + KEY_RECEIVED + " TEXT,"
-            							+ KEY_SENDER + " TEXT," + KEY_MESSAGE + " TEXT," + KEY_ACKNOWLEDGED + " TEXT)";
+            							+ KEY_SENDER + " TEXT," + KEY_MESSAGE + " TEXT," + KEY_ACKNOWLEDGED + " TEXT," + KEY_ALARM_TYPE + " INTEGER)";
         // Run query
         db.execSQL(CREATE_ALARMS_TABLE);
 		// Log in debug purpose
@@ -103,6 +104,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 	 * @see ax.ha.it.smsalarm.Alarm#getSender() getSender()
 	 * @see ax.ha.it.smsalarm.Alarm#getMessage() getMessage()
 	 * @see ax.ha.it.smsalarm.Alarm#getAcknowledged() getAcknowledged()
+	 * @see ax.ha.it.smsalarm.Alarm#getAlarmType() getAlarmType()
 	 */
 	public void addAlarm(Alarm alarm) {
 		// Get a writable database handle
@@ -110,11 +112,12 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 		
 		// Fetch values from alarm and put the into a ContentValues variable
 	    ContentValues values = new ContentValues();    
-	    values.put(KEY_RECEIVED, alarm.getReceived());			// Date and time when alarm was received
-	    values.put(KEY_SENDER, alarm.getSender());				// Sender of the alarm
-	    values.put(KEY_MESSAGE, alarm.getMessage());			// Alarm message
-	    values.put(KEY_ACKNOWLEDGED, alarm.getAcknowledged());	// Date and time the alarm was acknowledged
-	 
+	    values.put(KEY_RECEIVED, alarm.getReceived());				// Date and time when alarm was received
+	    values.put(KEY_SENDER, alarm.getSender());					// Sender of the alarm
+	    values.put(KEY_MESSAGE, alarm.getMessage());				// Alarm message
+	    values.put(KEY_ACKNOWLEDGED, alarm.getAcknowledged());		// Date and time the alarm was acknowledged
+	    values.put(KEY_ALARM_TYPE, alarm.getAlarmType().ordinal());	// Type of alarm
+	    
 	    // Inserting Row
 	    db.insert(TABLE_ALARMS, null, values);
 	    db.close(); // Closing database connection	
@@ -140,7 +143,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 	    SQLiteDatabase db = this.getReadableDatabase();
 	    
 	    // Create query and execute it, store result in cursor
-	    Cursor cursor = db.query(TABLE_ALARMS, new String[] { KEY_ID, KEY_RECEIVED, KEY_SENDER, KEY_MESSAGE, KEY_ACKNOWLEDGED }, 
+	    Cursor cursor = db.query(TABLE_ALARMS, new String[] { KEY_ID, KEY_RECEIVED, KEY_SENDER, KEY_MESSAGE, KEY_ACKNOWLEDGED, KEY_ALARM_TYPE }, 
 	    						 KEY_ID + "=?", new String[] { String.valueOf(id) }, null, null, null, null);
 	    
 	    // CHeck if we got any results from the query
@@ -151,7 +154,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 	    	cursor.moveToFirst();    	
 	    }
 	    // Create a new alarm object with data resolved from cursor
-	    Alarm alarm = new Alarm(Integer.parseInt(cursor.getString(0)), cursor.getString(1), cursor.getString(2), cursor.getString(3), cursor.getString(4));
+	    Alarm alarm = new Alarm(Integer.parseInt(cursor.getString(0)), cursor.getString(1), cursor.getString(2), cursor.getString(3), cursor.getString(4), AlarmTypes.of(Integer.parseInt(cursor.getString(5))));
 	    
         // Close cursor and database
         cursor.close();
@@ -169,11 +172,6 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 	 * 
  	 * @see ax.ha.it.smsalarm.LogHandler#logCat(LogPriorities, String, String) logCat(LogPriorities, String, String)
 	 * @see ax.ha.it.smsalarm.Alarm ax.ha.it.smsalarm.Alarm
-	 * @see ax.ha.it.smsalarm.Alarm#setId(int) setId(int)
-	 * @see ax.ha.it.smsalarm.Alarm#setReceived(String) setReceived(String)
-	 * @see ax.ha.it.smsalarm.Alarm#setSender(String) setSender(String)
-	 * @see ax.ha.it.smsalarm.Alarm#setMessage(String) setMessage(String)
-	 * @see ax.ha.it.smsalarm.Alarm#setAcknowledged(String) setAcknowledged(String)
 	 */
 	public List<Alarm> getAllAlarm() {
 		// List to store all alarms in
@@ -193,15 +191,8 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 		// Iterate through all rows and adding to list
 		if (cursor.moveToFirst()) {
 			do {
-				// Create a new alarm object and fill it with data from cursor
-				Alarm alarm = new Alarm();
-				alarm.setId(Integer.parseInt(cursor.getString(0)));
-				alarm.setReceived(cursor.getString(1));
-				alarm.setSender(cursor.getString(2));
-				alarm.setMessage(cursor.getString(3));
-				alarm.setAcknowledged(cursor.getString(4));
-				// Adding contact to list
-				alarmList.add(alarm);
+				// Create a new alarm object and fill it with data from cursor and add it to the list
+				alarmList.add(new Alarm(Integer.parseInt(cursor.getString(0)), cursor.getString(1), cursor.getString(2), cursor.getString(3), cursor.getString(4), AlarmTypes.of(Integer.parseInt(cursor.getString(5)))));
 			} while (cursor.moveToNext());
 		}
 		
@@ -289,6 +280,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 	 * @see ax.ha.it.smsalarm.Alarm#getSender() getSender()
 	 * @see ax.ha.it.smsalarm.Alarm#getMessage() getMessage()
 	 * @see ax.ha.it.smsalarm.Alarm#getAcknowledged() getAcknowledged()
+	 * @see ax.ha.it.smsalarm.Alarm#getAlarmType() getAlarmType()
 	 */
 	public int updateAlarm(Alarm alarm) {
 		// Get a writable database handle
@@ -296,10 +288,11 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 	    
 		// Fetch values from alarm and put the into a ContentValues variable
 	    ContentValues values = new ContentValues();    
-	    values.put(KEY_RECEIVED, alarm.getReceived());			// Date and time when alarm was received
-	    values.put(KEY_SENDER, alarm.getSender());				// Sender of the alarm
-	    values.put(KEY_MESSAGE, alarm.getMessage());			// Alarm message
-	    values.put(KEY_ACKNOWLEDGED, alarm.getAcknowledged());	// Date and time the alarm was acknowledged
+	    values.put(KEY_RECEIVED, alarm.getReceived());				// Date and time when alarm was received
+	    values.put(KEY_SENDER, alarm.getSender());					// Sender of the alarm
+	    values.put(KEY_MESSAGE, alarm.getMessage());				// Alarm message
+	    values.put(KEY_ACKNOWLEDGED, alarm.getAcknowledged());		// Date and time the alarm was acknowledged
+	    values.put(KEY_ALARM_TYPE, alarm.getAlarmType().ordinal());	// Type of alarm
 	    
 		// Log in debug purpose
 		logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":updateAlarm()", "Values have been retrieved from Alarm object and database entry is going to be updated");
@@ -340,6 +333,50 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 		} catch (android.database.CursorIndexOutOfBoundsException e) {
 			// Log error
 			logger.logCatTxt(LogPriorities.ERROR, LOG_TAG + ":updateLatestAlarmAcknowledged()", "android.database.CursorIndexOutOfBoundsException occurred while getting alarm from database", e);
+		}
+	}
+	
+	/**
+	 * To update latest <b><i>PRIMARY</i></b> <code>Alarm</code> entry's acknowledge time in database.
+	 * 
+	 * @parm primaryAlarmNumber Phone number of primary alarms sender as String.
+	 * 
+	 * @see #getAlarmsCount()
+	 * @see #getAlarm(int)
+	 * @see #updateAlarm(Alarm)
+ 	 * @see ax.ha.it.smsalarm.LogHandler#logCat(LogPriorities, String, String) logCat(LogPriorities, String, String)
+ 	 * @see ax.ha.it.smsalarm.LogHandler#logCatTxt(LogPriorities, String, String, Throwable) logCat(LogPriorities, String, String, Throwable)
+	 * @see ax.ha.it.smsalarm.Alarm ax.ha.it.smsalarm.Alarm
+	 * @see ax.ha.it.smsalarm.Alarm#updateAcknowledged() updateAcknowledged()
+	 * @see ax.ha.it.smsalarm.Alarm#getAlarmType() getAlarmType()
+	 */
+	public void updateLatestPrimaryAlarmAcknowledged() {				
+		try {
+			// Log in debug purpose
+			logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":updateLatestPrimaryAlarmAcknowledged()", "Trying to update latest primary alarms acknowledge time in database");
+			
+			// Iterate through all alarms in database from the last one and down
+			for (int i = this.getAlarmsCount(); i > 0; i--) {
+				// Get entry(alarm) in database
+				Alarm alarm = this.getAlarm(i);
+				
+				// If alarm type is primary we want to update it's acknowledge time
+				if (alarm.getAlarmType().equals(AlarmTypes.PRIMARY)) {
+					// Update alarms acknowledge time
+					alarm.updateAcknowledged();	
+					// Update alarm entry
+					this.updateAlarm(alarm);
+					
+					// Log in debug purpose
+					logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":updateLatestPrimaryAlarmAcknowledged()", "Latest primary alarms acknowledge time has been updated");	
+					
+					// Get out of the loop
+					break;
+				}
+			}
+		} catch (android.database.CursorIndexOutOfBoundsException e) {
+			// Log error
+			logger.logCatTxt(LogPriorities.ERROR, LOG_TAG + ":updateLatestPrimaryAlarmAcknowledged()", "android.database.CursorIndexOutOfBoundsException occurred while getting alarm from database", e);
 		}
 	}
 	

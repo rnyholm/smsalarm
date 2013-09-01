@@ -221,7 +221,7 @@ public class SmsReceiver extends BroadcastReceiver {
 		
 		// Declare and initialize database handler object and store alarm to database
 		DatabaseHandler db = new DatabaseHandler(context);
-		db.addAlarm(new Alarm(this.msgHeader, this.msgBody));
+		db.addAlarm(new Alarm(this.msgHeader, this.msgBody, this.alarmType));
 		// Get all alarms from database and log them to to html file
 		logger.logAlarm(db.getAllAlarm(), context);
 		

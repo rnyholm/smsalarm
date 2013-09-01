@@ -30,6 +30,7 @@ public class Alarm {
 	private String sender;			// Sender of alarm(e-mail or phone number)
 	private String message;			// Alarm message
 	private String acknowledged;	// Localized datetime when the alarm was acknowledged
+	private AlarmTypes alarmType = AlarmTypes.UNDEFINED; // Indicating which kind of alarm this object is
 	
 	/**
 	 * To create a new empty Alarm object.
@@ -50,7 +51,7 @@ public class Alarm {
 	 */
 	public boolean isEmpty() {
 		// Check to see if the member variables are empty
-		if(this.getId() == 0 && this.received.isEmpty() && this.sender.isEmpty() && this.message.isEmpty() && this.acknowledged.isEmpty()) {
+		if(this.getId() == 0 && this.received.isEmpty() && this.sender.isEmpty() && this.message.isEmpty() && this.acknowledged.isEmpty() && this.alarmType.equals(AlarmTypes.UNDEFINED)) {
 			// Log in debug purpose
 			this.logger.logCat(LogPriorities.DEBUG, this.LOG_TAG + ":isEmpty()", "This Alarm object is empty, returning true");
 			return true;
@@ -66,15 +67,17 @@ public class Alarm {
 	 * 
 	 * @param sender Alarm sender as <code>String</code>
 	 * @param message Alarm message as <code>String</code>
+	 * @param alarmType Alarm type as <code>AlarmTypes</code>
 	 * 
 	 * @see ax.ha.it.smsalarm.LogHandler#logCat(LogPriorities, String, String) logCat(LogPriorities, String, String)
 	 */
-	public Alarm(String sender, String message) {
+	public Alarm(String sender, String message, AlarmTypes alarmType) {
 		// Create and store a localized timestamp, this depends on users locale and/or settings
 		this.received = DateFormat.getDateTimeInstance().format(Calendar.getInstance().getTime());
 		this.sender = sender;
 		this.message = message;
 		this.acknowledged  = "-";
+		this.alarmType = alarmType;
 		// Log in debug purpose
 		this.logger.logCat(LogPriorities.DEBUG, this.LOG_TAG + ":Alarm()", "A new Alarm object was created with following data: [" + this.toString() + "]");
 	}
@@ -87,15 +90,17 @@ public class Alarm {
 	 * @param sender Alarm sender as <code>String</code>
 	 * @param message Alarm message as <code>String</code>
 	 * @param acknowledged Alarm acknowledge date and time as <code>String</code>
+	 * @param alarmType Alarm type as <code>AlarmTypes</code>
 	 * 
 	 * @see ax.ha.it.smsalarm.LogHandler#logCat(LogPriorities, String, String) logCat(LogPriorities, String, String)
 	 */
-	public Alarm(int id, String received, String sender, String message, String acknowledged) {
+	public Alarm(int id, String received, String sender, String message, String acknowledged, AlarmTypes alarmType) {
 		this.id = id;
 		this.received = received;
 		this.sender = sender;
 		this.message = message;
 		this.acknowledged  = acknowledged;
+		this.alarmType = alarmType;
 		// Log in debug purpose
 		this.logger.logCat(LogPriorities.DEBUG, this.LOG_TAG + ":Alarm()", "A new Alarm object was created with following data: [" + this.toString() + "]");
 	}	
@@ -282,7 +287,34 @@ public class Alarm {
 		// Log in debug purpose
 		this.logger.logCat(LogPriorities.DEBUG, this.LOG_TAG + ":updateReceived()", "Alarm received date and time has been updated to:\"" + this.received + "\"");
 	}
-	
+
+	/**
+	 * To get Alarm's type.
+	 * 
+	 * @return Alarm type as <code>AlarmTypes</code>
+	 * 
+	 * @see ax.ha.it.smsalarm.LogHandler#logCat(LogPriorities, String, String) logCat(LogPriorities, String, String)
+	 */
+	public AlarmTypes getAlarmType() {
+		// Log in debug purpose
+		this.logger.logCat(LogPriorities.DEBUG, this.LOG_TAG + ":getAlarmType()", "Returning alarmType:\"" + this.alarmType.toString() + "\"");
+		return alarmType;
+	}
+
+	/**
+	 * To set Alarm's type.
+	 * 
+	 * @param alarmType Alarm type as <code>AlarmTypes</code>
+	 * 
+	 * @see ax.ha.it.smsalarm.LogHandler#logCat(LogPriorities, String, String) logCat(LogPriorities, String, String)
+	 */
+	public void setAlarmType(AlarmTypes alarmType) {
+		// Set alarm type
+		this.alarmType = alarmType;
+		// Log in debug purpose
+		this.logger.logCat(LogPriorities.DEBUG, this.LOG_TAG + ":getId()", "Alarm type has been set to:\"" + this.alarmType.toString() + "\"");
+	}
+
 	/**
 	 * To update/set date and time when an Alarm was acknowledged. 
 	 * Date and time will be set to now.
@@ -303,6 +335,6 @@ public class Alarm {
 	 */
 	@Override
 	public String toString() {
-		return "id:\"" + Integer.toString(this.id) + "\", received:\"" + this.received + "\", sender:\"" + this.sender + "\", message:\"" + this.message + "\" and acknowledged:\"" + this.acknowledged + "\"";
+		return "id:\"" + Integer.toString(this.id) + "\", received:\"" + this.received + "\", sender:\"" + this.sender + "\", message:\"" + this.message + "\", acknowledged:\"" + this.acknowledged + "\" and alarmType:\"" + this.alarmType.toString() + "\"";
 	}
 }
