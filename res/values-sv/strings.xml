@@ -82,7 +82,7 @@
     <string name="TITLE_USE_OS_SOUND_SETTINGS">Använd telefonens ljudinställningar</string>
   	<string name="TONE_PROMPT_TITLE">Välj larmsignal</string>   
     <string name="VERTICAL_DIVIDER_DESCR">Vertikal delare</string>
-  	<string name="WIDGET_ICON_CONTENT_DESCR">Widget smsalarm ikon</string>
+  	<string name="WIDGET_ICON_CONTENT_DESCR">Widget smsalarmikon</string>
   	<string name="WIDGET_NOT_AGREED_EULA">Du måste starta Sms Alarm och godkänna användaravtalet innan du kan använda denna widget.</string>
     <string name="YES">Ja</string>  
 </resources>
