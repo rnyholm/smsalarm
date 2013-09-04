@@ -170,7 +170,7 @@ public class NotificationHelper extends IntentService {
 		// Set icon for notification
 		this.icon = icon;
 		// Set ticker text, with rescue service name if it exists
-		if (!rescueService.isEmpty()) {
+		if (!"".equals(rescueService)) {
 			this.tickerText = rescueService + " " + tickerText;
 		} else {
 			this.tickerText = tickerText;

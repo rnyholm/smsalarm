@@ -20,3 +20,6 @@ Verwendung von Sms Alarm entstehen können.
 
 FI
 ==
+Sms Alarm ei korvaa henkilöhakulaitteita tai muita hälytysjärjestelmiä hätäkeskuksessa. Sms Alarmin kehittäjä ei vastaa eikä voida pitää
+vastuussa mahdollisista henkivahingoista, omaisuus- tai ympäristövahingoista Sms Alarmia käytettäessä. Sms Alarmin kehittäjä ei myöskään 
+ole vastuussa mahdollisista vahingoista jotka voivat syntyä Sms Alarmin käyttöönottoyhteydessä.

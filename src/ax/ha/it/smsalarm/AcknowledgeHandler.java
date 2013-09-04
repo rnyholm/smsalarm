@@ -360,7 +360,7 @@ public class AcknowledgeHandler extends Activity {
 		// Some logging
 		this.logger.logCat(LogPriorities.DEBUG, this.LOG_TAG + ":setTextViews()", "Setting TextViews with proper data");
 		// Set TextViews from variables and resources
-		if (!this.rescueService.isEmpty()) {
+		if (!"".equals(this.rescueService)) {
 			this.titleTextView.setText(this.rescueService.toUpperCase() + " " + getResources().getString(R.string.ALARM));
 		} else {
 			this.titleTextView.setText(getString(R.string.ALARM));

@@ -1,27 +1,17 @@
 Sms Alarm
 =========
 
-Sms Alarm is a Android&trade; application which makes the device act in a very specific way when an SMS is received from a pre-configured phone number. This configuration occurs in Sms Alarm.
+Sms Alarm is an application for Android&Ttrade; devices which makes it's easier for you to notice when you have received an alarm, or just an important sms.
 
 Overview
 --------
-This application is implemented in view of the rescue services that receiving alarms via sms. But the application can also be used by people who receive alerts and other important information through SMS, for example, janitors, supervisors etc.
-
-Sms Alarm works briefly so that you set set different phone numbers that the application listens for incoming sms on. It also sets the tones for the different numbers so that you can hear the difference between a regular sms and an important sms, or alarms as we call them in this context. In addition to that Sms Alarm plays a different tone the device also vibrates in a very distinctive way, and that other notifications, than the system defaults, appears in the notification bar. It is also possible to activate acknowledge alarms through dials, set if Sms Alarm shall take into account the devices sound settings, disable the application entirely and various other settings.
+Sms Alarm is developed with first response persons (rescue services and so on) in mind and the purpose with this application is to make it easier for those to notice an incoming alarm and thereby respond faster. 
+It works by listening to sms from user configured phone numbers, when an sms is received from any of the configured numbers the application plays another signal and vibrate in another pattern. By doing this the user immediately knows whether it was a "normal" sms or an important sms(alarm). This is just a short description about the basic concept but it has a couple more features that's explained in more detail on other sections on this website.
 
 Installation & prerequisites
 ----------------------------
 In order to run this application you obviously needs a device running Android&trade;. Sms Alarm is developed for Android&trade; version 4.3(Jellybean) but runs fine on minimum 2.2(Froyo).<br />
 Sms Alarm is available through Google Play&trade; and is installed just as a normal application.
-
-Issue tracker
------------------------------
-All kinds of issues, bugs and improvements will be tracked on GitHub under the applications repository, smsalarm. All tracked issues begin with a prefix of SA followed by a issue number, SA comes from <u>S</u>ms <u>A</u>larm. The issue number will be commited as well when an issue is fixed. In this way it will be easy to follow along what has been done and what's left to do.
-
-Wiki
-----
-A kind of Wiki/FAQ/User guide will be at [Sms Alarm's official webpage]( http://www.smsalarm-app.net/).
-
 
 Development
 -----------
