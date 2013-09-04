@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="ABOUT">Sms Alarm</string>
-    <string name="ABOUT_BUILD">Rakenne: 20130827</string>
+    <string name="ABOUT_BUILD">Rakenne: 20130905</string>
     <string name="ABOUT_RIGHTS_RESERVED">Kaikki oikeudet pidätetään</string>  
     <string name="ABOUT_VERSION">Versio: 2.1</string>  
     <string name="ABOUT_THIS_APPLICATION">Tämä sovellus on kehitetty ja levitetään siinä toivossa, että se olisi hyödyllinen, mutta ilman mitään takeita siitä, että se toimii tarkoitetulla tavalla kaikissa tilanteissa.</string>

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="ABOUT">Om Sms Alarm</string>
-    <string name="ABOUT_BUILD">Bygge: 20130827</string>
+    <string name="ABOUT_BUILD">Bygge: 20130905</string>
     <string name="ABOUT_RIGHTS_RESERVED">Alla rättigheter reserverade</string>  
     <string name="ABOUT_VERSION">Version: 2.1</string>  
     <string name="ABOUT_THIS_APPLICATION">Denna applikation utvecklas och distribueras i hopp om att den ska komma till nytta, men helt utan någon garanti att den kommer fungera som tänkt i alla situationer.</string>

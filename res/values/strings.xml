@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <resources>
     <string name="ABOUT">About Sms Alarm</string>
-    <string name="ABOUT_BUILD">Build: 20130827</string>
+    <string name="ABOUT_BUILD">Build: 20130905</string>
 	<string name="ABOUT_COPYRIGHT">&#169;Copyright Robert Nyholm</string>
     <string name="ABOUT_RIGHTS_RESERVED">All rights reserved</string>  
     <string name="ABOUT_VERSION">Version: 2.1</string>  
