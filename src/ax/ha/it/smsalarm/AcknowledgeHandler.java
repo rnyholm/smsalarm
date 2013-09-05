@@ -96,7 +96,7 @@ public class AcknowledgeHandler extends Activity {
 	private int phoneState = -1;
 
 	// Constants for the redial parameters
-	private int MIN_CALL_TIME = 7000; // Minimum call time(in milliseconds), if below this the application redials
+	private int MIN_CALL_TIME = 6000; // Minimum call time(in milliseconds), if below this the application redials
 	private int REDIAL_COUNTDOWN_TIME = 6000; // Count down time(in milliseconds) before redial should occur
 	private int REDIAL_COUNTDOWN_INTERVAL = 100;
 
