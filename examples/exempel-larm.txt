@@ -1,0 +1,4 @@
+Exempel larm
+
+02.02.2012 23:55:40 2.5 Litet larm - Automatlarm vikingline lager(1682) Länsmanshägnan 7 jomala
+00.00.0000 00:00:00 0.0 Litet larm - Testar SmsAlarm

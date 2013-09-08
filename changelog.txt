@@ -1,5 +1,8 @@
 SmsAlarm changelog
 
+v2.1.1(version code 5)
+-Patch, ökade tiden för hur länge ett samtal måste vara utan att återuppringning ska ske
+
 v2.1(version code 4) 
 -Möjligt att kvittera ett inkommande primärlarm till ett telefonnummer
 -Kvitteringen återuppringer om upptaget vid kvittering, beta stadie ännu
