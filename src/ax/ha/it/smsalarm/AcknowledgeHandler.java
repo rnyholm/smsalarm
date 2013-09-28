@@ -5,6 +5,7 @@ package ax.ha.it.smsalarm;
 
 import java.util.Calendar;
 import java.util.Date;
+import java.util.GregorianCalendar;
 import java.util.List;
 
 import android.annotation.SuppressLint;
@@ -85,8 +86,9 @@ public class AcknowledgeHandler extends Activity {
 	// Boolean to keep track if we have evaluated a certain phone state
 	private boolean NOT_EVALUATED = true;
 
-	// Date variable to keep track of call times
-	private Date startCall;
+	// Date variable to keep track of call times NB. Must be initialized to avoid NPE, 
+	// initialized with release date of the first Sms Alarm version (26.11-2011) in milliseconds
+	private Date startCall = new Date(1319576400000L);
 
 	// To countdown a new call
 	private CountDownTimer redialCountDown;

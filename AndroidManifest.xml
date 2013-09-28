@@ -1,7 +1,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="ax.ha.it.smsalarm"
-    android:versionCode="5"
-    android:versionName="2.1.1">
+    android:versionCode="6"
+    android:versionName="2.1.2">
 
     <uses-sdk android:minSdkVersion="8" android:targetSdkVersion="18" />
     <uses-feature android:name="android.hardware.telephony" android:required="true"/>

@@ -1,5 +1,8 @@
 SmsAlarm changelog
 
+v2.1.2(version code 6)
+-Patch, fixade bug som ledde till att applikationen tvångsavslutas om man avbryter kvittering och sedan ringer ett samtal
+
 v2.1.1(version code 5)
 -Patch, ökade tiden för hur länge ett samtal måste vara utan att återuppringning ska ske
 
