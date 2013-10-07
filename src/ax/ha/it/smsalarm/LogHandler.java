@@ -22,7 +22,7 @@ import android.util.Log;
  * <b><i>LogHandler is a singleton.</i></b>
  * 
  * @author Robert Nyholm <robert.nyholm@aland.net>
- * @version 2.1
+ * @version 2.1.3
  * @since 2.0
  */
 public class LogHandler {
@@ -686,7 +686,7 @@ public class LogHandler {
 			 * all we need to know is we can neither read nor write
 			 */
 			this.mExternalStorageAvailable = this.mExternalStorageWriteable = false;
-			this.logCatTxt(LogPriorities.ERROR, this.LOG_TAG + ":checkExternalStorageState()", "Cannot write log, cause: External storage is not available for writing or reading");
+			this.logCat(LogPriorities.ERROR, this.LOG_TAG + ":checkExternalStorageState()", "Cannot write log, cause: External storage is not available for writing or reading");
 		}
 	}
 }

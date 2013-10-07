@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <resources>
     <string name="ABOUT">Über Sms Alarm</string>
-    <string name="ABOUT_BUILD">Build: 20130928</string>
+    <string name="ABOUT_BUILD">Build: 20131007</string>
     <string name="ABOUT_RIGHTS_RESERVED">Alle Rechte vorbehalten</string>  
-    <string name="ABOUT_VERSION">Version: 2.1.2</string>  
+    <string name="ABOUT_VERSION">Version: 2.1.3</string>  
     <string name="ABOUT_THIS_APPLICATION">Diese Anwendung wird in der Hoffnung entwickelt und vertrieben, dass sie von Nutzen ist, aber ohne jede Garantie, dass sie in jeder Situation wie beabsichtigt funktioniert.</string>
     <string name="ABOUT_CONTACT">Bei Fragen senden Sie eine E-Mail an:\ninfo@smsalarm-app.net</string>
     <string name="ABOUT_VISIT">Für weitere Informationen besuchen Sie:\nsmsalarm-app.net</string>
