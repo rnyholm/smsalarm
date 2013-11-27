@@ -25,7 +25,7 @@ import ax.ha.it.smsalarm.PreferencesHandler.PrefKeys;
  * accordingly to application settings and SMS senders phone number.
  * 
  * @author Robert Nyholm <robert.nyholm@aland.net>
- * @version 2.1
+ * @version 2.1.4
  * @since 0.9beta
  * 
  */
@@ -70,6 +70,8 @@ public class SmsReceiver extends BroadcastReceiver {
 	 *            Intent
 	 * 
 	 * @see #smsHandler(Context)
+	 * @see #removeCountryCode()
+	 * @see #isAlarm(Context)
 	 * @see #getSmsReceivePrefs(Context)
 	 * @see ax.ha.it.smsalarm.LogHandler#logCat(LogPriorities, String, String) logCat(LogPriorities, String, String)
 	 * @see ax.ha.it.smsalarm.LogHandler#logCatTxt(LogPriorities, String, String, Throwable) logCatTxt(LogPriorities, String, String, Throwable)
@@ -102,84 +104,29 @@ public class SmsReceiver extends BroadcastReceiver {
 					this.msgHeader = msgs[i].getOriginatingAddress();
 					this.msgBody += msgs[i].getMessageBody().toString();
 				}
+				
+				// Remove any country codes, if there are any
+				removeCountryCode();
 
-				/*
-				 * If number has a country code, recognized by +NUM, replace it
-				 * with 0. Following countries are supported: Finland, Åland,
-				 * Sweden, Norway, Denmark, France and Germany. In each case
-				 * information is logged.
-				 */
-				if (this.msgHeader.contains("+358")) { // <--Finland
-					this.msgHeader = this.msgHeader.replace("+358", "0");
-					this.logger.logCat(LogPriorities.DEBUG, this.LOG_TAG + ":onReceive()", "Countrycode +358 found, replaced by 0");
-				} else if (this.msgHeader.contains("+33")) { // <--France
-					this.msgHeader = this.msgHeader.replace("+33", "0");
-					this.logger.logCat(LogPriorities.DEBUG, this.LOG_TAG + ":onReceive()", "Countrycode +33 found, replaced by 0");
-				} else if (this.msgHeader.contains("+45")) { // <--Denmark
-					this.msgHeader = this.msgHeader.replace("+45", "0");
-					this.logger.logCat(LogPriorities.DEBUG, this.LOG_TAG + ":onReceive()", "Countrycode +45 found, replaced by 0");
-				} else if (this.msgHeader.contains("+46")) { // <--Sweden
-					this.msgHeader = this.msgHeader.replace("+46", "0");
-					this.logger.logCat(LogPriorities.DEBUG, this.LOG_TAG + ":onReceive()", "Countrycode +46 found, replaced by 0");
-				} else if (this.msgHeader.contains("+47")) { // <--Norway
-					this.msgHeader = this.msgHeader.replace("+47", "0");
-					this.logger.logCat(LogPriorities.DEBUG, this.LOG_TAG + ":onReceive()", "Countrycode +47 found, replaced by 0");
-				} else if (this.msgHeader.contains("+49")) { // <--Germany
-					this.msgHeader = this.msgHeader.replace("+49", "0");
-					this.logger.logCat(LogPriorities.DEBUG, this.LOG_TAG + ":onReceive()", "Countrycode +49 found, replaced by 0");
-				} else {
-					this.logger.logCat(LogPriorities.DEBUG, this.LOG_TAG + ":onReceive()", "No countrycod found, nothing replaced");
-				}
+				// Check if income SMS was an alarm
+				isAlarm(context);
 
-				// If we got a SMS from the same primary number as the application listens on
-				if (this.msgHeader.equals(this.primaryListenNumber)) {
+				// Check if the income SMS was any alarm
+				if (this.alarmType.equals(AlarmTypes.PRIMARY)) {
 					// Log information
-					this.logger.logCat(LogPriorities.DEBUG, this.LOG_TAG + ":onReceive()", "SMS fulfilled the criteria for a PRIMARY alarm. SMS received from: \"" + this.msgHeader + "\" with message: \"" + this.msgBody + "\"");
-
-					try {
-						// Put alarm type to shared preferences
-						this.prefHandler.setPrefs(PrefKeys.SHARED_PREF, PrefKeys.LARM_TYPE_KEY, AlarmTypes.PRIMARY.ordinal(), context);
-					} catch(IllegalArgumentException e) {
-						logger.logCatTxt(LogPriorities.ERROR, LOG_TAG + ":onReceive()", "An Object of unsupported instance was given as argument to PreferencesHandler.setPrefs()", e);
-					}
-					
-					// Set larm typ to this object
-					this.alarmType = AlarmTypes.PRIMARY;
+					this.logger.logCat(LogPriorities.DEBUG, this.LOG_TAG + ":onReceive()", "SMS fulfilled the criteria for a PRIMARY alarm, handle SMS further");
 
 					// Continue handling of received SMS
 					this.smsHandler(context);
-				}
-				// If list with secondary listen numbers is not empty check if we got a SMS from one of the secondaryListenNumbers
-				else if (!this.secondaryListenNumbers.isEmpty()) {
-					try {
-						// Loop through each element in list
-						for (int i = 0; i < this.secondaryListenNumbers.size(); i++) {
-							/*
-							 * If msg header equals a element in list application has 
-							 * received a SMS from a secondary listen number
-							 */
-							if (this.msgHeader.equals(this.secondaryListenNumbers.get(i))) {
-								// Log information
-								this.logger.logCat(LogPriorities.DEBUG, this.LOG_TAG + ":onReceive()", "SMS fulfilled the criteria for a SECONDARY alarm. SMS received from: \"" + this.msgHeader + "\" with message: \"" + this.msgBody + "\"");
-								
-								try {
-									// Put alarm type to shared preferences
-									this.prefHandler.setPrefs(PrefKeys.SHARED_PREF, PrefKeys.LARM_TYPE_KEY, AlarmTypes.SECONDARY.ordinal(), context);
-								} catch(IllegalArgumentException e) {
-									logger.logCatTxt(LogPriorities.ERROR, LOG_TAG + ":onReceive()", "An Object of unsupported instance was given as argument to PreferencesHandler.setPrefs()", e);
-								}
+				} else if (this.alarmType.equals(AlarmTypes.SECONDARY)) {
+					// Log information
+					this.logger.logCat(LogPriorities.DEBUG, this.LOG_TAG + ":onReceive()", "SMS fulfilled the criteria for a SECONDARY alarm, handle SMS further");
 
-								// Set larm typ to this object
-								this.alarmType = AlarmTypes.SECONDARY;
-
-								// Continue handling of received SMS
-								this.smsHandler(context);
-							}
-						}
-					} catch (Exception e) {
-						// Log exception
-						this.logger.logCatTxt(LogPriorities.ERROR, this.LOG_TAG + ":onReceive()", "Failed to iterate through list of secondary alarms, operation endend with exception", e);
-					}
+					// Continue handling of received SMS
+					this.smsHandler(context);
+				} else {
+					// Log information
+					this.logger.logCat(LogPriorities.DEBUG, this.LOG_TAG + ":onReceive()", "SMS with AlarmType: \"UNDEFINED\" received, do nothing");					
 				}
 			}
 		} else { // <--Sms Alarm isn't enabled
@@ -302,6 +249,151 @@ public class SmsReceiver extends BroadcastReceiver {
 			Intent notIntent = new Intent(context, NotificationHelper.class);
 			context.startService(notIntent);
 		}
+	}
+	
+	/**
+	 * To check if received SMS is any alarm.
+	 * The check is done by a equality control of the senders phone number
+	 * and the phone numbers read from <code>SharedPreferences</code>. 
+	 * An additional "0" is added to the senders phone number and a equality
+	 * control is done by that number also, this behavior is needed because
+	 * a country code could have been removed and this compensates for that.
+	 * 
+	 * @param context
+	 *            Context
+	 * 
+	 * @see ax.ha.it.smsalarm.LogHandler#logCat(LogPriorities, String, String) logCat(LogPriorities, String, String)
+	 * @see ax.ha.it.smsalarm.LogHandler#logCatTxt(LogPriorities, String, String, Throwable) logCatTxt(LogPriorities, String, String, Throwable)
+	 * @see ax.ha.it.smsalarm.PreferencesHandler#setPrefs(PrefKeys, PrefKeys, Object, Context) setPrefs(PrefKeys, PrefKeys, Object, Context)
+	 */
+	private void isAlarm(Context context) {
+		// Log message for debugging/information purpose
+		this.logger.logCat(LogPriorities.DEBUG, this.LOG_TAG + ":isAlarm()", "Checking if income SMS is an alarm");
+		
+		// If we got a SMS from the same primary number as the application listens on, concatenate with 0 to compensate for any removed country code
+		if (this.msgHeader.equals(this.primaryListenNumber) || ("0" + this.msgHeader).equals(this.primaryListenNumber)) {
+			// Need to concatenate a 0 to the primary phone number if this is true in order to get the correct number
+			if (("0" + this.msgHeader).equals(this.primaryListenNumber)) {
+				this.msgHeader = "0" + this.msgHeader; 
+			}
+			
+			// Log information
+			this.logger.logCat(LogPriorities.DEBUG, this.LOG_TAG + ":isAlarm()", "SMS fulfilled the criteria for a PRIMARY alarm. SMS received from: \"" + this.msgHeader + "\" with message: \"" + this.msgBody + "\"");
+			
+			try {
+				// Put alarm type to shared preferences
+				this.prefHandler.setPrefs(PrefKeys.SHARED_PREF, PrefKeys.LARM_TYPE_KEY, AlarmTypes.PRIMARY.ordinal(), context);
+			} catch(IllegalArgumentException e) {
+				logger.logCatTxt(LogPriorities.ERROR, LOG_TAG + ":isAlarm()", "An Object of unsupported instance was given as argument to PreferencesHandler.setPrefs()", e);
+			}
+			
+			// Set larm typ to this object
+			this.alarmType = AlarmTypes.PRIMARY;
+		} else if (!this.secondaryListenNumbers.isEmpty()) { // If list with secondary listen numbers is not empty check if we got a SMS from one of the secondaryListenNumbers
+			try {
+				// Loop through each element in list
+				for (int i = 0; i < this.secondaryListenNumbers.size(); i++) {
+					/*
+					 * If msg header equals a element in list application has 
+					 * received a SMS from a secondary listen number, concatenate with 0 to compensate for any removed country code
+					 */
+					if (this.msgHeader.equals(this.secondaryListenNumbers.get(i)) || ("0" + this.msgHeader).equals(this.secondaryListenNumbers.get(i))) {
+						// Need to concatenate a 0 to the secondary phone number if this is true in order to get the correct number
+						if (("0" + this.msgHeader).equals(this.secondaryListenNumbers.get(i))) {
+							this.msgHeader = "0" + msgHeader;
+						}
+						
+						// Log information
+						this.logger.logCat(LogPriorities.DEBUG, this.LOG_TAG + ":isAlarm()", "SMS fulfilled the criteria for a SECONDARY alarm. SMS received from: \"" + this.msgHeader + "\" with message: \"" + this.msgBody + "\"");
+						
+						try {
+							// Put alarm type to shared preferences
+							this.prefHandler.setPrefs(PrefKeys.SHARED_PREF, PrefKeys.LARM_TYPE_KEY, AlarmTypes.SECONDARY.ordinal(), context);
+						} catch(IllegalArgumentException e) {
+							logger.logCatTxt(LogPriorities.ERROR, LOG_TAG + ":isAlarm()", "An Object of unsupported instance was given as argument to PreferencesHandler.setPrefs()", e);
+						}
+
+						// Set larm typ to this object
+						this.alarmType = AlarmTypes.SECONDARY;
+					}
+				}
+			} catch (Exception e) {
+				// Log exception
+				this.logger.logCatTxt(LogPriorities.ERROR, this.LOG_TAG + ":isAlarm()", "Failed to iterate through list of secondary alarms, operation endend with exception", e);
+			}
+		} else {
+			// Log information
+			this.logger.logCat(LogPriorities.DEBUG, this.LOG_TAG + ":isAlarm()", "SMS didn't fulfill any criteria for either primary or secondary alarm. SMS received from: \"" + this.msgHeader + "\" with message: \"" + this.msgBody + "\"");
+			
+			// Set Alarm type to undefined
+			this.alarmType = AlarmTypes.UNDEFINED;
+		}
+	}
+	
+	/**
+	 * To remove any country code from the SMS senders phone number.<br>
+	 * Following county codes are supported:<br>
+	 * <li><code>USA, Canada - +1<code></li>
+	 * <li><code>France - +33<code></li>
+	 * <li><code>Finland - +358<code></li>
+	 * <li><code>Slovenia - +386<code></li>
+	 * <li><code>Austria - +43<code></li>
+	 * <li><code>United Kingdom - +44<code></li>
+	 * <li><code>Denmark - +45<code></li>
+	 * <li><code>Sweden - +46<code></li>
+	 * <li><code>Norway - +47<code></li>
+	 * <li><code>Germany - +49<code></li>
+	 * <li><code>New Zeeland - +64<code></li>
+	 * 
+	 * @see ax.ha.it.smsalarm.LogHandler#logCat(LogPriorities, String, String) logCat(LogPriorities, String, String)
+	 */
+	private void removeCountryCode() {
+		// Log message for debugging/information purpose
+		this.logger.logCat(LogPriorities.DEBUG, this.LOG_TAG + ":removeCountryCode()", "Checking if any country code exist");
+		
+		/*
+		 * If number has a country code, recognized by +NUM, remove it. 
+		 * Following countries are supported: Finland, Åland,
+		 * Sweden, Norway, Denmark, France and Germany, United Kingdom, New Zeeland,
+		 * Slovenia, Austria, Canada and USA. In each case
+		 * information is logged.
+		 */
+		if (this.msgHeader.contains("+1")) { // <--USA, Canada
+			this.msgHeader = this.msgHeader.replace("+1", "");
+			this.logger.logCat(LogPriorities.DEBUG, this.LOG_TAG + ":removeCountryCode()", "Countrycode +1 found, removed countrycode");
+		} else if (this.msgHeader.contains("+33")) { // <--France
+			this.msgHeader = this.msgHeader.replace("+33", "");
+			this.logger.logCat(LogPriorities.DEBUG, this.LOG_TAG + ":removeCountryCode()", "Countrycode +33 found, removed countrycode");
+		} else if (this.msgHeader.contains("+358")) { // <--Finland
+			this.msgHeader = this.msgHeader.replace("+358", "");
+			this.logger.logCat(LogPriorities.DEBUG, this.LOG_TAG + ":removeCountryCode()", "Countrycode +358 found, removed countrycode");
+		} else if (this.msgHeader.contains("+386")) { // <--Slovenia
+			this.msgHeader = this.msgHeader.replace("+386", "");
+			this.logger.logCat(LogPriorities.DEBUG, this.LOG_TAG + ":removeCountryCode()", "Countrycode +386 found, removed countrycode");
+		} else if (this.msgHeader.contains("+43")) { // <--Austria
+			this.msgHeader = this.msgHeader.replace("+43", "");
+			this.logger.logCat(LogPriorities.DEBUG, this.LOG_TAG + ":removeCountryCode()", "Countrycode +43 found, removed countrycode");
+		} else if (this.msgHeader.contains("+44")) { // <--UK
+			this.msgHeader = this.msgHeader.replace("+44", "");
+			this.logger.logCat(LogPriorities.DEBUG, this.LOG_TAG + ":removeCountryCode()", "Countrycode +44 found, removed countrycode");
+		} else if (this.msgHeader.contains("+45")) { // <--Denmark
+			this.msgHeader = this.msgHeader.replace("+45", "");
+			this.logger.logCat(LogPriorities.DEBUG, this.LOG_TAG + ":removeCountryCode()", "Countrycode +45 found, removed countrycode");
+		} else if (this.msgHeader.contains("+46")) { // <--Sweden
+			this.msgHeader = this.msgHeader.replace("+46", "");
+			this.logger.logCat(LogPriorities.DEBUG, this.LOG_TAG + ":removeCountryCode()", "Countrycode +46 found, removed countrycode");
+		} else if (this.msgHeader.contains("+47")) { // <--Norway
+			this.msgHeader = this.msgHeader.replace("+47", "");
+			this.logger.logCat(LogPriorities.DEBUG, this.LOG_TAG + ":removeCountryCode()", "Countrycode +47 found, removed countrycode");
+		} else if (this.msgHeader.contains("+49")) { // <--Germany
+			this.msgHeader = this.msgHeader.replace("+49", "");
+			this.logger.logCat(LogPriorities.DEBUG, this.LOG_TAG + ":removeCountryCode()", "Countrycode +49 found, removed countrycode");
+		} else if (this.msgHeader.contains("+64")) { // <--New Zeeland
+			this.msgHeader = this.msgHeader.replace("+64", "");
+			this.logger.logCat(LogPriorities.DEBUG, this.LOG_TAG + ":removeCountryCode()", "Countrycode +64 found, removed countrycode");
+		} else {
+			this.logger.logCat(LogPriorities.DEBUG, this.LOG_TAG + ":removeCountryCode()", "No countrycod found or an unsupported countrycode was found, nothing removed");
+		}		
 	}
 
 	/**

@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="ABOUT">Sms Alarm</string>
-    <string name="ABOUT_BUILD">Rakenne: 20131007</string>
+    <string name="ABOUT_BUILD">Rakenne: 20131126</string>
     <string name="ABOUT_RIGHTS_RESERVED">Kaikki oikeudet pidätetään</string>  
-    <string name="ABOUT_VERSION">Versio: 2.1.3</string>  
+    <string name="ABOUT_VERSION">Versio: 2.1.4</string>  
     <string name="ABOUT_THIS_APPLICATION">Tämä sovellus on kehitetty ja levitetään siinä toivossa, että se olisi hyödyllinen, mutta ilman mitään takeita siitä, että se toimii tarkoitetulla tavalla kaikissa tilanteissa.</string>
     <string name="ABOUT_CONTACT">Jos sinulla on kysyttävää, lähetä sähköpostia osoitteeseen:\ninfo@smsalarm-app.net</string>
     <string name="ABOUT_VISIT">Lisätietoja osoitteesta:\nsmsalarm-app.net</string>
