@@ -27,7 +27,6 @@ import ax.ha.it.smsalarm.PreferencesHandler.PrefKeys;
  * @author Robert Nyholm <robert.nyholm@aland.net>
  * @version 2.1.4
  * @since 0.9beta
- * 
  */
 public class SmsReceiver extends BroadcastReceiver {
 	// Log tag string
@@ -51,9 +50,10 @@ public class SmsReceiver extends BroadcastReceiver {
 	private boolean enableAlarmAck = false;
 	private boolean playToneTwice = false;
 	private boolean enableSmsAlarm = false;
+	private boolean countryCodeRemoved = true;
 
 	// Variable to store type of alarm as string
-	private AlarmTypes alarmType;
+	private AlarmTypes alarmType = AlarmTypes.UNDEFINED;
 
 	// To store incoming SMS phone number and body(message)
 	private String msgHeader = "";
@@ -71,7 +71,7 @@ public class SmsReceiver extends BroadcastReceiver {
 	 * 
 	 * @see #smsHandler(Context)
 	 * @see #removeCountryCode()
-	 * @see #isAlarm(Context)
+	 * @see #checkAndGetAlarm(Context)
 	 * @see #getSmsReceivePrefs(Context)
 	 * @see ax.ha.it.smsalarm.LogHandler#logCat(LogPriorities, String, String) logCat(LogPriorities, String, String)
 	 * @see ax.ha.it.smsalarm.LogHandler#logCatTxt(LogPriorities, String, String, Throwable) logCatTxt(LogPriorities, String, String, Throwable)
@@ -261,6 +261,8 @@ public class SmsReceiver extends BroadcastReceiver {
 	 * 
 	 * @param context
 	 *            Context
+	 * @return <code>AlarmType</code> of income SMS, if no <code>AlarmType</code> could be resolved
+	 * 		   <code>AlarmTypes.UNDEFINED</code> is returned.
 	 * 
 	 * @see ax.ha.it.smsalarm.LogHandler#logCat(LogPriorities, String, String) logCat(LogPriorities, String, String)
 	 * @see ax.ha.it.smsalarm.LogHandler#logCatTxt(LogPriorities, String, String, Throwable) logCatTxt(LogPriorities, String, String, Throwable)
@@ -271,7 +273,7 @@ public class SmsReceiver extends BroadcastReceiver {
 		this.logger.logCat(LogPriorities.DEBUG, this.LOG_TAG + ":isAlarm()", "Checking if income SMS is an alarm");
 		
 		// If we got a SMS from the same primary number as the application listens on, concatenate with 0 to compensate for any removed country code
-		if (this.msgHeader.equals(this.primaryListenNumber) || ("0" + this.msgHeader).equals(this.primaryListenNumber)) {
+		if (this.msgHeader.equals(this.primaryListenNumber) || (("0" + this.msgHeader).equals(this.primaryListenNumber) && this.countryCodeRemoved)) {
 			// Need to concatenate a 0 to the primary phone number if this is true in order to get the correct number
 			if (("0" + this.msgHeader).equals(this.primaryListenNumber)) {
 				this.msgHeader = "0" + this.msgHeader; 
@@ -287,19 +289,19 @@ public class SmsReceiver extends BroadcastReceiver {
 				logger.logCatTxt(LogPriorities.ERROR, LOG_TAG + ":isAlarm()", "An Object of unsupported instance was given as argument to PreferencesHandler.setPrefs()", e);
 			}
 			
-			// Set larm typ to this object
-			this.alarmType = AlarmTypes.PRIMARY;
+			// Set correct AlarmType
+			alarmType = AlarmTypes.PRIMARY;
 		} else if (!this.secondaryListenNumbers.isEmpty()) { // If list with secondary listen numbers is not empty check if we got a SMS from one of the secondaryListenNumbers
 			try {
 				// Loop through each element in list
-				for (int i = 0; i < this.secondaryListenNumbers.size(); i++) {
+				for (String secondaryListenNumber : this.secondaryListenNumbers) {
 					/*
 					 * If msg header equals a element in list application has 
 					 * received a SMS from a secondary listen number, concatenate with 0 to compensate for any removed country code
 					 */
-					if (this.msgHeader.equals(this.secondaryListenNumbers.get(i)) || ("0" + this.msgHeader).equals(this.secondaryListenNumbers.get(i))) {
+					if (this.msgHeader.equals(secondaryListenNumber) || (("0" + this.msgHeader).equals(secondaryListenNumber) && this.countryCodeRemoved)) {
 						// Need to concatenate a 0 to the secondary phone number if this is true in order to get the correct number
-						if (("0" + this.msgHeader).equals(this.secondaryListenNumbers.get(i))) {
+						if (("0" + this.msgHeader).equals(secondaryListenNumber)) {
 							this.msgHeader = "0" + msgHeader;
 						}
 						
@@ -313,23 +315,20 @@ public class SmsReceiver extends BroadcastReceiver {
 							logger.logCatTxt(LogPriorities.ERROR, LOG_TAG + ":isAlarm()", "An Object of unsupported instance was given as argument to PreferencesHandler.setPrefs()", e);
 						}
 
-						// Set larm typ to this object
-						this.alarmType = AlarmTypes.SECONDARY;
+						// Set correct AlarmType
+						alarmType = AlarmTypes.SECONDARY;
 					}
 				}
 			} catch (Exception e) {
 				// Log exception
 				this.logger.logCatTxt(LogPriorities.ERROR, this.LOG_TAG + ":isAlarm()", "Failed to iterate through list of secondary alarms, operation endend with exception", e);
 			}
-		} else {
-			// Log information
-			this.logger.logCat(LogPriorities.DEBUG, this.LOG_TAG + ":isAlarm()", "SMS didn't fulfill any criteria for either primary or secondary alarm. SMS received from: \"" + this.msgHeader + "\" with message: \"" + this.msgBody + "\"");
-			
-			// Set Alarm type to undefined
-			this.alarmType = AlarmTypes.UNDEFINED;
-		}
+		} 		
+		// Log information
+		this.logger.logCat(LogPriorities.DEBUG, this.LOG_TAG + ":isAlarm()", "SMS didn't fulfill any criteria for either primary or secondary alarm. SMS received from: \"" + this.msgHeader + "\" with message: \"" + this.msgBody + "\"");
 	}
 	
+
 	/**
 	 * To remove any country code from the SMS senders phone number.<br>
 	 * Following county codes are supported:<br>
@@ -392,7 +391,8 @@ public class SmsReceiver extends BroadcastReceiver {
 			this.msgHeader = this.msgHeader.replace("+64", "");
 			this.logger.logCat(LogPriorities.DEBUG, this.LOG_TAG + ":removeCountryCode()", "Countrycode +64 found, removed countrycode");
 		} else {
-			this.logger.logCat(LogPriorities.DEBUG, this.LOG_TAG + ":removeCountryCode()", "No countrycod found or an unsupported countrycode was found, nothing removed");
+			this.countryCodeRemoved = false;
+			this.logger.logCat(LogPriorities.DEBUG, this.LOG_TAG + ":removeCountryCode()", "No or an unsupported countrycode was found, nothing removed");
 		}		
 	}
 

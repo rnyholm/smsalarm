@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <resources>
     <string name="ABOUT">About Sms Alarm</string>
-    <string name="ABOUT_BUILD">Build: 20131126</string>
+    <string name="ABOUT_BUILD">Build: %s</string>
 	<string name="ABOUT_COPYRIGHT">&#169;Copyright Robert Nyholm</string>
     <string name="ABOUT_RIGHTS_RESERVED">All rights reserved</string>  
-    <string name="ABOUT_VERSION">Version: 2.1.4</string>  
+    <string name="ABOUT_VERSION">Version: %s</string>  
     <string name="ABOUT_THIS_APPLICATION">This application is developed and distributed in the hope that it will be of use, but without any warranty that it will function as intended in all situations.</string>
     <string name="ABOUT_CONTACT">For questions, send an email to:\ninfo@smsalarm-app.net</string>
     <string name="ABOUT_VISIT">For more information visit:\nsmsalarm-app.net</string>
@@ -17,8 +17,12 @@
     <string name="ACK_TITLE">Acknowledgment title (with rescue service name)</string>  
 	<string name="ADD_SECONDARY_NUMBER">Add</string>       
     <string name="ALARM">ALARM!</string>
-    <string name="APP_DESCR">The Alarm application for Android&#8482;</string>
+    <!-- Application info begin -->
     <string name="APP_NAME">Sms Alarm</string>
+    <string name="APP_DESCR">The Alarm application for Android&#8482;</string>
+	<string name="APP_VERSION">2.1.4</string>   
+	<string name="APP_BUILD">20131202</string>
+	<!-- Application info end -->
     <string name="CANCEL">Cancel</string>
 	<string name="COLON">:</string>
     <string name="DASH">-</string>
@@ -73,7 +77,7 @@
     <string name="SOUND_SETTINGS_STATUS_ENABLED">The application DETECTS the device sound settings.</string>
     <string name="SOUND_SETTINGS_STATUS_DISABLED">The application DOES NOT DETECT the device sound settings.</string> 
 	<string name="SPLASH_DESCR">Splash</string>
-    <string name="SPLASH_VERSION">v2.1.4</string> 
+    <string name="SPLASH_VERSION">v%s</string> 
     <string name="TITLE_ACK_NUMBER">Sms Alarm acknowledges to this telephone number</string> 
     <string name="TITLE_ACK_SETTINGS">Acknowledgment settings</string>
     <string name="TITLE_ALARM_SIGNAL">Selected alarm signal</string>

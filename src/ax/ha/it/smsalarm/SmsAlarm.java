@@ -43,7 +43,7 @@ import ax.ha.it.smsalarm.PreferencesHandler.PrefKeys;
  * Main activity to configure application. Also holds the main User Interface.
  * 
  * @author Robert Nyholm <robert.nyholm@aland.net>
- * @version 2.1
+ * @version 2.1.4
  * @since 0.9beta
  * 
  * @see #onCreate(Bundle)
@@ -1214,6 +1214,14 @@ public class SmsAlarm extends Activity {
 
 		final View view = factory.inflate(R.layout.about, null);
 
+		// Get TextViews from its view
+		TextView buildTextView = (TextView) view.findViewById(R.id.aboutBuild_tv);
+		TextView versionTextView = (TextView) view.findViewById(R.id.aboutVersion_tv);
+		
+		// Set correct text, build and version number, to the TextViews
+		buildTextView.setText(String.format(getString(R.string.ABOUT_BUILD), getString(R.string.APP_BUILD)));
+		versionTextView.setText(String.format(getString(R.string.ABOUT_VERSION), getString(R.string.APP_VERSION)));
+		
 		// Set correct icon depending on api level
 		if (Build.VERSION.SDK_INT < 11) {
 			dialog.setIcon(R.drawable.ic_launcher_trans_10_and_down);

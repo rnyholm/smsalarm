@@ -31,7 +31,7 @@ public class LogHandler {
 	 * logging we're suppose to do.
 	 * 
 	 * @author Robert Nyholm <robert.nyholm@aland.net>
-	 * @version 2.1
+	 * @version 2.1.4
 	 * @since 2.1
 	 * 
 	 * @see <a
@@ -543,7 +543,7 @@ public class LogHandler {
 
 				// Write html footer
 				bW.write("\t\t</table>" + this.EOL);
-				bW.write("\t\t<p class=\"center\">" + context.getString(R.string.APP_NAME) + " " + context.getString(R.string.DASH) + " " + context.getString(R.string.APP_DESCR) + "<br />&#169;Robert Nyholm " + Integer.toString(Calendar.getInstance().get(Calendar.YEAR)) + "<br /><a href=\"http://www.smsalarm-app.net\" target=\"_blank\">www.smsalarm-app.net</a><br />" + context.getString(R.string.SPLASH_VERSION) + "</p>" + this.EOL);
+				bW.write("\t\t<p class=\"center\">" + context.getString(R.string.APP_NAME) + " " + context.getString(R.string.DASH) + " " + context.getString(R.string.APP_DESCR) + "<br />&#169;Robert Nyholm " + Integer.toString(Calendar.getInstance().get(Calendar.YEAR)) + "<br /><a href=\"http://www.smsalarm-app.net\" target=\"_blank\">www.smsalarm-app.net</a><br />" + String.format(context.getString(R.string.SPLASH_VERSION), context.getString(R.string.APP_VERSION)) + "</p>" + this.EOL);
 				bW.write("\t</body>" + this.EOL);
 				bW.write("</html>" + this.EOL);
 

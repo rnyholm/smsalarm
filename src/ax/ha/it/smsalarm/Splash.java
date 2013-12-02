@@ -3,16 +3,17 @@
  */
 package ax.ha.it.smsalarm;
 
+import android.app.Activity;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.Window;
 import android.widget.RelativeLayout;
-import android.app.Activity;
-import android.app.AlertDialog;
-import android.content.DialogInterface;
-import android.content.Intent;
+import android.widget.TextView;
 import ax.ha.it.smsalarm.LogHandler.LogPriorities;
 import ax.ha.it.smsalarm.PreferencesHandler.DataTypes;
 import ax.ha.it.smsalarm.PreferencesHandler.PrefKeys;
@@ -22,7 +23,7 @@ import ax.ha.it.smsalarm.PreferencesHandler.PrefKeys;
  * on screen activity switch to SmsAlarm.
  * 
  * @author Robert Nyholm <robert.nyholm@aland.net>
- * @version 2.1
+ * @version 2.1.4
  * @since 2.1
  * 
  * @see #onCreate(Bundle)
@@ -43,6 +44,9 @@ public class Splash extends Activity {
 
 	// Variable indicating whether user license is agreed or not
 	private boolean endUserLicenseAgreed = false;
+	
+	// For the textview displaying version, needed in order to edit it 
+	private TextView versionTextView;
 
 	/**
 	 * When activity starts, this method is the entry point. The splash screen
@@ -67,6 +71,10 @@ public class Splash extends Activity {
 		// Remove title on activity
 		requestWindowFeature(Window.FEATURE_NO_TITLE);
 		setContentView(R.layout.splash);
+		
+		// Text with correct version number
+		versionTextView = (TextView) findViewById(R.id.splashVersion_tv);
+		versionTextView.setText(String.format(getString(R.string.SPLASH_VERSION), getString(R.string.APP_VERSION)));
 
 		// Some logging for information and debugging
 		this.logger.logCat(LogPriorities.DEBUG, this.LOG_TAG + ":onCreate()", "Layout has been set with correct settings");

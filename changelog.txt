@@ -2,6 +2,7 @@ SmsAlarm changelog
 
 v2.1.4(version code 8)
 -Lade till hantering för ytterligare landskoder(USA, Canada, Slovenia, Österrike, Nya Zeeland och Storbrittanien)
+-Bättre versionshantering, behöver bara ändra versionsnumret i manifest och i default string resursen
 
 v2.1.3(version code 7)
 -Patch, fixade bug som ledde till att applikationen stoppas om SD kortet inte är tillgängligt för skrivning.
