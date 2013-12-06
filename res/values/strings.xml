@@ -1,5 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <resources>
+    <!-- NEW STRINGS IN V2.2 BEGIN, SORT THESE LATER -->
+    <string name="TITLE_FREE_TEXT_TRIGGER_SETTINGS">Fritext inställningar</string>
+    <string name="INFO_FREE_TEXT_TRIGGER_SETTINGS">Ställ in vilka ord eller teckensekvenser som Sms Alarm ska larma på om de finns i inkommande sms. Notera att denna funktion inte är skiftlägeskänslig.</string>
+    <!-- NEW STRINGS END -->
     <string name="ABOUT">About Sms Alarm</string>
     <string name="ABOUT_BUILD">Build: %s</string>
 	<string name="ABOUT_COPYRIGHT">&#169;Copyright Robert Nyholm</string>
@@ -15,7 +19,7 @@
     <string name="ACK_LINE_BUSY">Line busy, will call back in:</string>
     <string name="ACK_NUMBER_PROMPT_MESSAGE">Enter a telephone number for the application to send an acknowledgment to.</string>  
     <string name="ACK_TITLE">Acknowledgment title (with rescue service name)</string>  
-	<string name="ADD_SECONDARY_NUMBER">Add</string>       
+	<string name="ADD">Add</string>       
     <string name="ALARM">ALARM!</string>
     <!-- Application info begin -->
     <string name="APP_NAME">Sms Alarm</string>
@@ -26,7 +30,7 @@
     <string name="CANCEL">Cancel</string>
 	<string name="COLON">:</string>
     <string name="DASH">-</string>
-    <string name="DELETE_SECONDARY_NUMBER">Remove</string>
+    <string name="DELETE">Remove</string>
     <string name="DELETE_SECONDARY_NUMBER_PROMPT_MESSAGE">Do you want to remove following number from the list of secondary alarms:</string>
     <string name="DELETE_SECONDARY_NUMBER_PROMPT_TITLE">Remove number</string> 
     <string name="DIVIDER_DESCR">Divider</string>

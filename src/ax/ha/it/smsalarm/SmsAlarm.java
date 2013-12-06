@@ -534,15 +534,15 @@ public class SmsAlarm extends Activity {
 		this.logger.logCat(LogPriorities.DEBUG, this.LOG_TAG + ":findViews()", "Start finding Views by their ID");
 
 		// Declare and initialize variables of type EditText
-		this.primaryListenNumberEditText = (EditText) findViewById(R.id.primaryNumber_et);
+		this.primaryListenNumberEditText = (EditText) findViewById(R.id.primarySmsNumber_et);
 		this.selectedToneEditText = (EditText) findViewById(R.id.msgTone_et);
 		this.ackNumberEditText = (EditText) findViewById(R.id.ackNumber_et);
 		this.rescueServiceEditText = (EditText) findViewById(R.id.rescueServiceName_et);
 
 		// Declare and initialize variables of type button
-		this.editPrimaryNumberButton = (Button) findViewById(R.id.editPrimaryNumber_btn);
-		this.addSecondaryNumberButton = (Button) findViewById(R.id.addSecondaryNumber_btn);
-		this.removeSecondaryNumberButton = (Button) findViewById(R.id.deleteSecondaryNumber_btn);
+		this.editPrimaryNumberButton = (Button) findViewById(R.id.editPrimarySmsNumber_btn);
+		this.addSecondaryNumberButton = (Button) findViewById(R.id.addSecondarySmsNumber_btn);
+		this.removeSecondaryNumberButton = (Button) findViewById(R.id.deleteSecondarySmsNumber_btn);
 		this.editMsgToneButton = (Button) findViewById(R.id.editMsgTone_btn);
 		this.listenMsgToneButton = (Button) findViewById(R.id.listenMsgTone_btn);
 		this.ackNumberButton = (Button) findViewById(R.id.editAckNumber_btn);
@@ -556,7 +556,7 @@ public class SmsAlarm extends Activity {
 
 		// Declare and initialize variables of type Spinner
 		this.toneSpinner = (Spinner) findViewById(R.id.toneSpinner_sp);
-		this.secondaryListenNumberSpinner = (Spinner) findViewById(R.id.secondaryNumberSpinner_sp);
+		this.secondaryListenNumberSpinner = (Spinner) findViewById(R.id.secondarySmsNumberSpinner_sp);
 
 		// Declare and initialize variables of type TextView
 		this.soundSettingInfoTextView = (TextView) findViewById(R.id.useSysSoundSettingsHint_tv);
@@ -664,7 +664,7 @@ public class SmsAlarm extends Activity {
 		// Declare and initialize variables of type ImageView
 		this.divider1ImageView = (ImageView) findViewById(R.id.mainDivider1_iv);
 		this.divider2ImageView = (ImageView) findViewById(R.id.mainDivider2_iv);
-		this.divider3ImageView = (ImageView) findViewById(R.id.mainDivider3_iv);
+		this.divider3ImageView = (ImageView) findViewById(R.id.mainDivider4_iv);
 
 		// If Android API level less then 11 set bright gradient else set dark gradient
 		if (Build.VERSION.SDK_INT < 11) {

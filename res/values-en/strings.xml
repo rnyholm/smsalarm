@@ -14,12 +14,12 @@
     <string name="ACK_LINE_BUSY">Line busy, will call back in:</string>
     <string name="ACK_NUMBER_PROMPT_MESSAGE">Enter a telephone number for the application to send an acknowledgment to.</string>  
     <string name="ACK_TITLE">Acknowledgment title (with rescue service name)</string>  
-	<string name="ADD_SECONDARY_NUMBER">Add</string>       
+	<string name="ADD">Add</string>       
     <string name="ALARM">ALARM!</string>
     <string name="APP_DESCR">The Alarm application for Android&#8482;</string>
     <string name="APP_NAME">Sms Alarm</string>
     <string name="CANCEL">Cancel</string>
-    <string name="DELETE_SECONDARY_NUMBER">Remove</string>
+    <string name="DELETE">Remove</string>
     <string name="DELETE_SECONDARY_NUMBER_PROMPT_MESSAGE">Do you want to remove following number from the list of secondary alarms:</string>
     <string name="DELETE_SECONDARY_NUMBER_PROMPT_TITLE">Remove number</string> 
     <string name="DIVIDER_DESCR">Divider</string>

@@ -14,12 +14,12 @@
     <string name="ACK_LINE_BUSY">Varattu, soitaa takaisin, jos:</string>
     <string name="ACK_NUMBER_PROMPT_MESSAGE">Anna puh.nro. johon applikaatio kuittaa.</string>  
     <string name="ACK_TITLE">Kuittauksen otsikko(pelastustoimen nimiellä)</string>  
-	<string name="ADD_SECONDARY_NUMBER">Lisää</string>       
+	<string name="ADD">Lisää</string>       
     <string name="ALARM">Hälytys!</string>
     <string name="APP_DESCR">Hälytyssovellus Android&#8482;</string>
     <string name="APP_NAME">Sms Alarm</string>
     <string name="CANCEL">Peruuta</string>
-    <string name="DELETE_SECONDARY_NUMBER">Poista</string>
+    <string name="DELETE">Poista</string>
     <string name="DELETE_SECONDARY_NUMBER_PROMPT_MESSAGE">Haluatko poistaa seuraavat numerot toissijaisesta hälytyksestä: </string>
     <string name="DELETE_SECONDARY_NUMBER_PROMPT_TITLE">Poista numerot</string> 
     <string name="DIVIDER_DESCR">Jakaja</string>

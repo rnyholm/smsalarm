@@ -14,12 +14,12 @@
     <string name="ACK_LINE_BUSY">Upptaget, återuppringer om:</string>
     <string name="ACK_NUMBER_PROMPT_MESSAGE">Ange ett telefonnummer som applikationen kvitterar till.</string>  
     <string name="ACK_TITLE">Kvitterings titel(med räddningstjänsts namn)</string>  
-	<string name="ADD_SECONDARY_NUMBER">Lägg till</string>       
+	<string name="ADD">Lägg till</string>       
     <string name="ALARM">LARM!</string>
     <string name="APP_DESCR">Larmapplikationen för Android&#8482;</string>
     <string name="APP_NAME">Sms Alarm</string>
     <string name="CANCEL">Avbryt</string>
-    <string name="DELETE_SECONDARY_NUMBER">Ta bort</string>
+    <string name="DELETE">Ta bort</string>
     <string name="DELETE_SECONDARY_NUMBER_PROMPT_MESSAGE">Vill du ta bort följande nummer från listan över sekundärlarm: </string>
     <string name="DELETE_SECONDARY_NUMBER_PROMPT_TITLE">Ta bort nummer</string> 
     <string name="DIVIDER_DESCR">Delare</string>

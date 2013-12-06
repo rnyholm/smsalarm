@@ -27,7 +27,7 @@
             android:textAppearance="?android:attr/textAppearanceSmall" />
 
         <TextView
-            android:id="@+id/primaryAlarmTitle_tv"
+            android:id="@+id/smsPrimaryAlarmTitle_tv"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignLeft="@id/smsSettingsInfo_tv"
@@ -37,68 +37,163 @@
             android:textAppearance="?android:attr/textAppearanceMedium" />
 
         <EditText
-            android:id="@+id/primaryNumber_et"
+            android:id="@+id/primarySmsNumber_et"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignLeft="@id/primaryAlarmTitle_tv"
-            android:layout_below="@id/primaryAlarmTitle_tv"
+            android:layout_alignLeft="@id/smsPrimaryAlarmTitle_tv"
+            android:layout_below="@id/smsPrimaryAlarmTitle_tv"
             android:hint="@string/ENTER_PHONE_NUMBER_HINT"
             android:inputType="numberSigned|phone" >
 
         </EditText>
 
         <Button
-            android:id="@+id/editPrimaryNumber_btn"
+            android:id="@+id/editPrimarySmsNumber_btn"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignBaseline="@id/primaryNumber_et"
+            android:layout_alignBaseline="@id/primarySmsNumber_et"
             android:layout_alignParentRight="true"
             android:layout_marginRight="5dp"
-            android:layout_toRightOf="@id/primaryNumber_et"
+            android:layout_toRightOf="@id/primarySmsNumber_et"
             android:text="@string/EDIT_NUMBER"
             android:width="50dp" />
 
         <TextView
-            android:id="@+id/secondaryAlarmTitle_tv"
+            android:id="@+id/smsSecondaryAlarmTitle_tv"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignLeft="@+id/primaryNumber_et"
-            android:layout_below="@+id/primaryNumber_et"
+            android:layout_alignLeft="@+id/primarySmsNumber_et"
+            android:layout_below="@+id/primarySmsNumber_et"
             android:text="@string/TITLE_SECONDARY_ALARM"
             android:textAppearance="?android:attr/textAppearanceMedium" />
 
         <Spinner
-            android:id="@+id/secondaryNumberSpinner_sp"
+            android:id="@+id/secondarySmsNumberSpinner_sp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignLeft="@id/secondaryAlarmTitle_tv"
-            android:layout_below="@id/secondaryAlarmTitle_tv" />
+            android:layout_alignLeft="@id/smsSecondaryAlarmTitle_tv"
+            android:layout_below="@id/smsSecondaryAlarmTitle_tv"
+            android:layout_marginRight="5dp" />
 
         <Button
-            android:id="@+id/addSecondaryNumber_btn"
+            android:id="@+id/addSecondarySmsNumber_btn"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignLeft="@id/secondaryNumberSpinner_sp"
-            android:layout_below="@id/secondaryNumberSpinner_sp"
+            android:layout_alignLeft="@id/secondarySmsNumberSpinner_sp"
+            android:layout_below="@id/secondarySmsNumberSpinner_sp"
             android:layout_marginTop="-3dp"
-            android:text="@string/ADD_SECONDARY_NUMBER" />
+            android:text="@string/ADD" />
 
         <Button
-            android:id="@+id/deleteSecondaryNumber_btn"
+            android:id="@+id/deleteSecondarySmsNumber_btn"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignBaseline="@id/addSecondaryNumber_btn"
-            android:layout_marginRight="3dp"
-            android:layout_toRightOf="@id/addSecondaryNumber_btn"
-            android:text="@string/DELETE_SECONDARY_NUMBER" />
+            android:layout_alignBaseline="@id/addSecondarySmsNumber_btn"
+            android:layout_marginRight="5dp"
+            android:layout_toRightOf="@id/addSecondarySmsNumber_btn"
+            android:text="@string/DELETE" />
 
         <ImageView
             android:id="@+id/mainDivider1_iv"
             android:layout_width="match_parent"
             android:layout_height="1dp"
-            android:layout_alignLeft="@id/addSecondaryNumber_btn"
-            android:layout_below="@id/addSecondaryNumber_btn"
+            android:layout_alignLeft="@id/addSecondarySmsNumber_btn"
+            android:layout_below="@id/addSecondarySmsNumber_btn"
             android:layout_marginRight="5dp"
+            android:layout_marginTop="9dp"
+            android:contentDescription="@string/DIVIDER_DESCR"
+            android:src="@drawable/gradient_divider_11_and_up" />
+
+        <TextView
+            android:id="@+id/freeTextSettings_tv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignLeft="@id/mainDivider1_iv"
+            android:layout_below="@+id/mainDivider1_iv"
+            android:layout_marginRight="5dp"
+            android:layout_marginTop="7dp"
+            android:text="@string/TITLE_FREE_TEXT_TRIGGER_SETTINGS"
+            android:textAppearance="?android:attr/textAppearanceMedium" />
+
+        <TextView
+            android:id="@+id/freeTextSettingsInfo_tv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignLeft="@id/mainDivider1_iv"
+            android:layout_below="@id/freeTextSettings_tv"
+            android:layout_marginRight="5dp"
+            android:text="@string/INFO_FREE_TEXT_TRIGGER_SETTINGS"
+            android:textAppearance="?android:attr/textAppearanceSmall" />
+
+        <TextView
+            android:id="@+id/freeTextPrimaryAlarmTitle_tv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignLeft="@id/mainDivider1_iv"
+            android:layout_below="@id/freeTextSettingsInfo_tv"
+            android:layout_marginTop="5dp"
+            android:text="@string/TITLE_PRIMARY_ALARM"
+            android:textAppearance="?android:attr/textAppearanceMedium" />
+
+        <Spinner
+            android:id="@+id/primaryFreeTextSpinner_sp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignLeft="@id/mainDivider1_iv"
+            android:layout_below="@id/freeTextPrimaryAlarmTitle_tv"
+            android:layout_marginRight="5dp" />
+
+        <Button
+            android:id="@+id/deletePrimaryFreeText_btn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignBaseline="@id/addPrimaryFreeText_btn"
+            android:layout_marginRight="5dp"
+            android:layout_toRightOf="@id/addPrimaryFreeText_btn"
+            android:text="@string/DELETE" />
+
+        <TextView
+            android:id="@+id/freeTextSecondaryAlarmTitle_tv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignLeft="@id/mainDivider1_iv"
+            android:layout_below="@id/addPrimaryFreeText_btn"
+            android:text="@string/TITLE_SECONDARY_ALARM"
+            android:textAppearance="?android:attr/textAppearanceMedium" />
+
+        <Spinner
+            android:id="@+id/secondaryFreeTextSpinner_sp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignLeft="@id/mainDivider1_iv"
+            android:layout_below="@id/freeTextSecondaryAlarmTitle_tv"
+            android:layout_marginRight="5dp" />
+
+        <Button
+            android:id="@+id/addSecondaryFreeText_btn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignLeft="@id/mainDivider1_iv"
+            android:layout_below="@id/secondaryFreeTextSpinner_sp"
+            android:layout_marginTop="-3dp"
+            android:text="@string/ADD" />
+
+        <Button
+            android:id="@+id/deleteSecondaryFreeText_btn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignBaseline="@id/addSecondaryFreeText_btn"
+            android:layout_marginRight="5dp"
+            android:layout_toRightOf="@id/addSecondaryFreeText_btn"
+            android:text="@string/DELETE" />
+
+        <ImageView
+            android:id="@+id/mainDivider2_iv"
+            android:layout_width="wrap_content"
+            android:layout_height="1dp"
+            android:layout_alignLeft="@id/mainDivider1_iv"
+            android:layout_alignRight="@+id/mainDivider1_iv"
+            android:layout_below="@id/addSecondaryFreeText_btn"
             android:layout_marginTop="9dp"
             android:contentDescription="@string/DIVIDER_DESCR"
             android:src="@drawable/gradient_divider_11_and_up" />
@@ -108,7 +203,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignLeft="@+id/mainDivider1_iv"
-            android:layout_below="@+id/mainDivider1_iv"
+            android:layout_below="@+id/mainDivider2_iv"
             android:layout_marginRight="5dp"
             android:layout_marginTop="7dp"
             android:text="@string/TITLE_SOUND_SETTINGS"
@@ -226,7 +321,7 @@
             android:textAppearance="?android:attr/textAppearanceSmall" />
 
         <ImageView
-            android:id="@+id/mainDivider2_iv"
+            android:id="@+id/mainDivider3_iv"
             android:layout_width="wrap_content"
             android:layout_height="1dp"
             android:layout_alignLeft="@id/mainDivider1_iv"
@@ -241,7 +336,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignLeft="@+id/mainDivider2_iv"
-            android:layout_below="@+id/mainDivider2_iv"
+            android:layout_below="@+id/mainDivider3_iv"
             android:layout_marginTop="7dp"
             android:text="@string/TITLE_ACK_SETTINGS"
             android:textAppearance="?android:attr/textAppearanceMedium" />
@@ -298,7 +393,7 @@
             android:singleLine="true" />
 
         <ImageView
-            android:id="@+id/mainDivider3_iv"
+            android:id="@+id/mainDivider4_iv"
             android:layout_width="wrap_content"
             android:layout_height="1dp"
             android:layout_alignLeft="@id/ackNumber_et"
@@ -313,7 +408,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignLeft="@+id/mainDivider3_iv"
-            android:layout_below="@+id/mainDivider3_iv"
+            android:layout_below="@+id/mainDivider4_iv"
             android:layout_marginTop="7dp"
             android:text="@string/TITLE_MISC_SETTINGS"
             android:textAppearance="?android:attr/textAppearanceMedium" />
@@ -391,6 +486,15 @@
             android:layout_marginRight="5dp"
             android:layout_toRightOf="@+id/ackNumber_et"
             android:text="@string/EDIT_NUMBER" />
+
+        <Button
+            android:id="@+id/addPrimaryFreeText_btn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/primaryFreeTextSpinner_sp"
+            android:layout_marginTop="-3dp"
+            android:layout_toLeftOf="@+id/deleteSecondarySmsNumber_btn"
+            android:text="@string/ADD" />
 
     </RelativeLayout>
 

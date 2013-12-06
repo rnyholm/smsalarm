@@ -14,12 +14,12 @@
     <string name="ACK_LINE_BUSY">Leitung besetzt, rufe zurück in:</string>
     <string name="ACK_NUMBER_PROMPT_MESSAGE">Eine Telefonnummer für die Anwendung eingeben, an welche eine Bestätigung gesendet wird.</string>  
     <string name="ACK_TITLE">Bestätigungstitel (mit Name des Rettungsdienstes)</string>  
-	<string name="ADD_SECONDARY_NUMBER">Hinzufügen</string>       
+	<string name="ADD">Hinzufügen</string>       
     <string name="ALARM">ALARM!</string>
     <string name="APP_DESCR">Alarmanwendung für Android&#8482;</string>
     <string name="APP_NAME">Sms Alarm</string>
     <string name="CANCEL">Abbrechen</string>
-    <string name="DELETE_SECONDARY_NUMBER">Entfernen</string>
+    <string name="DELETE">Entfernen</string>
     <string name="DELETE_SECONDARY_NUMBER_PROMPT_MESSAGE">MÖCHTEN Sie die folgende Nummer aus der Liste für Sekundäralarme entfernen:</string>
     <string name="DELETE_SECONDARY_NUMBER_PROMPT_TITLE">Nummer entfernen</string> 
     <string name="DIVIDER_DESCR">Teiler</string>
