@@ -75,15 +75,19 @@ public class SmsAlarm extends Activity {
 
 	// Variables of different UI elements and types
 	// The EdittextObjects
-	private EditText primaryListenNumberEditText;
+	private EditText primarySmsNumberEditText;
 	private EditText selectedToneEditText;
 	private EditText ackNumberEditText;
 	private EditText rescueServiceEditText;
 
 	// The Button objects
-	private Button editPrimaryNumberButton;
-	private Button addSecondaryNumberButton;
-	private Button removeSecondaryNumberButton;
+	private Button editPrimarySmsNumberButton;
+	private Button addSecondarySmsNumberButton;
+	private Button removeSecondarySmsNumberButton;
+	private Button addPrimaryFreeTextButton;
+	private Button removePrimaryFreeTextButton;
+	private Button addSecondaryFreeTextButton;
+	private Button removeSecondaryFreeTextButton;
 	private Button editMsgToneButton;
 	private Button listenMsgToneButton;
 	private Button ackNumberButton;
@@ -99,10 +103,13 @@ public class SmsAlarm extends Activity {
 	private ImageView divider1ImageView;
 	private ImageView divider2ImageView;
 	private ImageView divider3ImageView;
+	private ImageView divider4ImageView;
 
 	// The Spinner objects
 	private Spinner toneSpinner;
-	private Spinner secondaryListenNumberSpinner;
+	private Spinner secondarySmsNumberSpinner;
+	private Spinner primaryFreeTextSpinner;
+	private Spinner secondaryFreeTextSpinner;
 
 	// The textView objects
 	private TextView soundSettingInfoTextView;
@@ -191,33 +198,33 @@ public class SmsAlarm extends Activity {
 		this.toneSpinner.setAdapter(adapter);
 
 		// Set listener to editPrimaryNumberButton
-		this.editPrimaryNumberButton.setOnClickListener(new OnClickListener() {
+		this.editPrimarySmsNumberButton.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
 				// Logging
-				logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":onCreate().editPrimaryNumberButton.OnClickListener().onClick()", "Edit PRIMARY listen number Button pressed");
+				logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":onCreate().editPrimaryNumberButton.OnClickListener().onClick()", "Edit PRIMARY sms number Button pressed");
 				// Build up and show input dialog of type primary number
 				buildAndShowInputDialog(DialogTypes.PRIMARY);
 			}
 		});
 
 		// Set listener to addSecondaryNumberButton
-		this.addSecondaryNumberButton.setOnClickListener(new OnClickListener() {
+		this.addSecondarySmsNumberButton.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
 				// Logging
-				logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":onCreate().addSecondaryNumberButton.OnClickListener().onClick()", "Add SECONDARY listen number Button pressed");
+				logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":onCreate().addSecondaryNumberButton.OnClickListener().onClick()", "Add SECONDARY sms number Button pressed");
 				// Build up and show input dialog of type secondary number
 				buildAndShowInputDialog(DialogTypes.SECONDARY);
 			}
 		});
 
-		// Set listener to removeSecondaryNumberButton
-		this.removeSecondaryNumberButton.setOnClickListener(new OnClickListener() {
+		// Set listener to removeSecondarySmsNumberButton
+		this.removeSecondarySmsNumberButton.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
 				// Logging
-				logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":onCreate().removeSecondaryNumberButton.OnClickListener().onClick()", "Remove SECONDARY listen number Button pressed");
+				logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":onCreate().removeSecondaryNumberButton.OnClickListener().onClick()", "Remove SECONDARY sms number Button pressed");
 
 				// Only show delete dialog if secondary listen numbers exists,
 				// else show toast
@@ -228,6 +235,46 @@ public class SmsAlarm extends Activity {
 					Toast.makeText(SmsAlarm.this, R.string.NO_SECONDARY_NUMBER_EXISTS, Toast.LENGTH_LONG).show();
 					logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":onCreate().removeSecondaryNumberButton.OnClickListener().onClick()", "Cannot build and show dialog because the list of SECONDARY listen numbers is empty so there is nothing to remove");
 				}
+			}
+		});
+		
+		// Set listener to addPrimaryFreeTextButton
+		this.addPrimaryFreeTextButton.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				// Logging
+				logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":onCreate().addPrimaryFreeTextButton.OnClickListener().onClick()", "Add PRIMARY free text Button pressed");
+				Toast.makeText(getApplicationContext(), "Add PRIMARY free text Button pressed, not yet implemented!", Toast.LENGTH_SHORT).show();
+			}
+		});
+		
+		// Set listener to removePrimaryFreeTextButton
+		this.removePrimaryFreeTextButton.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				// Logging
+				logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":onCreate().removePrimaryFreeTextButton.OnClickListener().onClick()", "Remove PRIMARY free text Button pressed");
+				Toast.makeText(getApplicationContext(), "Remove PRIMARY free text Button pressed, not yet implemented!", Toast.LENGTH_SHORT).show();
+			}
+		});
+		
+		// Set listener to addSecondaryFreeTextButton
+		this.addSecondaryFreeTextButton.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				// Logging
+				logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":onCreate().addSecondaryFreeTextButton.OnClickListener().onClick()", "Add SECONDARY free text Button pressed");
+				Toast.makeText(getApplicationContext(), "Add SECONDARY free text Button pressed, not yet implemented!", Toast.LENGTH_SHORT).show();
+			}
+		});
+		
+		// Set listener to removeSecondaryFreeTextButton
+		this.removeSecondaryFreeTextButton.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				// Logging
+				logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":onCreate().removeSecondaryFreeTextButton.OnClickListener().onClick()", "Remove SECONDARY free text Button pressed");
+				Toast.makeText(getApplicationContext(), "Remove SECONDARY free text Button pressed, not yet implemented!", Toast.LENGTH_SHORT).show();
 			}
 		});
 
@@ -534,15 +581,19 @@ public class SmsAlarm extends Activity {
 		this.logger.logCat(LogPriorities.DEBUG, this.LOG_TAG + ":findViews()", "Start finding Views by their ID");
 
 		// Declare and initialize variables of type EditText
-		this.primaryListenNumberEditText = (EditText) findViewById(R.id.primarySmsNumber_et);
+		this.primarySmsNumberEditText = (EditText) findViewById(R.id.primarySmsNumber_et);
 		this.selectedToneEditText = (EditText) findViewById(R.id.msgTone_et);
 		this.ackNumberEditText = (EditText) findViewById(R.id.ackNumber_et);
 		this.rescueServiceEditText = (EditText) findViewById(R.id.rescueServiceName_et);
 
 		// Declare and initialize variables of type button
-		this.editPrimaryNumberButton = (Button) findViewById(R.id.editPrimarySmsNumber_btn);
-		this.addSecondaryNumberButton = (Button) findViewById(R.id.addSecondarySmsNumber_btn);
-		this.removeSecondaryNumberButton = (Button) findViewById(R.id.deleteSecondarySmsNumber_btn);
+		this.editPrimarySmsNumberButton = (Button) findViewById(R.id.editPrimarySmsNumber_btn);
+		this.addSecondarySmsNumberButton = (Button) findViewById(R.id.addSecondarySmsNumber_btn);
+		this.addPrimaryFreeTextButton = (Button) findViewById(R.id.addPrimaryFreeText_btn);
+		this.removePrimaryFreeTextButton = (Button) findViewById(R.id.deletePrimaryFreeText_btn);
+		this.addSecondaryFreeTextButton = (Button) findViewById(R.id.addSecondaryFreeText_btn);
+		this.removeSecondaryFreeTextButton = (Button) findViewById(R.id.deleteSecondaryFreeText_btn);
+		this.removeSecondarySmsNumberButton = (Button) findViewById(R.id.deleteSecondarySmsNumber_btn);
 		this.editMsgToneButton = (Button) findViewById(R.id.editMsgTone_btn);
 		this.listenMsgToneButton = (Button) findViewById(R.id.listenMsgTone_btn);
 		this.ackNumberButton = (Button) findViewById(R.id.editAckNumber_btn);
@@ -556,7 +607,9 @@ public class SmsAlarm extends Activity {
 
 		// Declare and initialize variables of type Spinner
 		this.toneSpinner = (Spinner) findViewById(R.id.toneSpinner_sp);
-		this.secondaryListenNumberSpinner = (Spinner) findViewById(R.id.secondarySmsNumberSpinner_sp);
+		this.secondarySmsNumberSpinner = (Spinner) findViewById(R.id.secondarySmsNumberSpinner_sp);
+		this.primaryFreeTextSpinner = (Spinner) findViewById(R.id.primaryFreeTextSpinner_sp);
+		this.secondaryFreeTextSpinner = (Spinner) findViewById(R.id.secondaryFreeTextSpinner_sp);
 
 		// Declare and initialize variables of type TextView
 		this.soundSettingInfoTextView = (TextView) findViewById(R.id.useSysSoundSettingsHint_tv);
@@ -615,7 +668,7 @@ public class SmsAlarm extends Activity {
 			// Logging
 			this.logger.logCat(LogPriorities.DEBUG, this.LOG_TAG + ":findViews()", "API level > 16, edit margins on information TextViews for the checkboxes");
 		} else { // The device has API level < 17, we just need to check if the locale is german
-			// If the locale on device is german(de) we need to adjust the margin top for the information textviews for the chockboxes to -6dp
+			// If the locale on device is german(de) we need to adjust the margin top for the information textviews for the checkboxes to -6dp
 			if ("de".equals(Locale.getDefault().getLanguage())) {
 				// We need to get some Android resources in order to calculate proper pixel dimensions from dp
 				Resources resources = getResources();
@@ -664,28 +717,31 @@ public class SmsAlarm extends Activity {
 		// Declare and initialize variables of type ImageView
 		this.divider1ImageView = (ImageView) findViewById(R.id.mainDivider1_iv);
 		this.divider2ImageView = (ImageView) findViewById(R.id.mainDivider2_iv);
-		this.divider3ImageView = (ImageView) findViewById(R.id.mainDivider4_iv);
+		this.divider3ImageView = (ImageView) findViewById(R.id.mainDivider3_iv);
+		this.divider4ImageView = (ImageView) findViewById(R.id.mainDivider4_iv);
 
 		// If Android API level less then 11 set bright gradient else set dark gradient
 		if (Build.VERSION.SDK_INT < 11) {
 			this.divider1ImageView.setImageResource(R.drawable.gradient_divider_10_and_down);
 			this.divider2ImageView.setImageResource(R.drawable.gradient_divider_10_and_down);
 			this.divider3ImageView.setImageResource(R.drawable.gradient_divider_10_and_down);
+			this.divider4ImageView.setImageResource(R.drawable.gradient_divider_10_and_down);
 			// Logging
 			this.logger.logCat(LogPriorities.DEBUG, this.LOG_TAG + ":findViews()", "API level < 11, set bright gradients");
 		} else {
 			this.divider1ImageView.setImageResource(R.drawable.gradient_divider_11_and_up);
 			this.divider2ImageView.setImageResource(R.drawable.gradient_divider_11_and_up);
 			this.divider3ImageView.setImageResource(R.drawable.gradient_divider_11_and_up);
+			this.divider4ImageView.setImageResource(R.drawable.gradient_divider_11_and_up);
 			this.logger.logCat(LogPriorities.DEBUG, this.LOG_TAG + ":findViews()", "API level > 10, set dark gradients");
 		}
 
 		// Set some attributes to the smsPrimaryNumberEditText
-		this.primaryListenNumberEditText.setEnabled(false);
-		this.primaryListenNumberEditText.setClickable(false);
-		this.primaryListenNumberEditText.setFocusable(false);
-		this.primaryListenNumberEditText.setBackgroundColor(Color.WHITE);
-		this.primaryListenNumberEditText.setTextColor(Color.BLACK);
+		this.primarySmsNumberEditText.setEnabled(false);
+		this.primarySmsNumberEditText.setClickable(false);
+		this.primarySmsNumberEditText.setFocusable(false);
+		this.primarySmsNumberEditText.setBackgroundColor(Color.WHITE);
+		this.primarySmsNumberEditText.setTextColor(Color.BLACK);
 
 		// Set some attributes to the ackNumberEditText
 		this.ackNumberEditText.setEnabled(false);
@@ -806,7 +862,7 @@ public class SmsAlarm extends Activity {
 		this.logger.logCat(LogPriorities.DEBUG, this.LOG_TAG + ":buildAndShowDeleteSecondaryNumberDialog()", "Start building delete SECONDARY number dialog");
 
 		// Store secondaryListenNumberSpinner position
-		final int position = secondaryListenNumberSpinner.getSelectedItemPosition();
+		final int position = secondarySmsNumberSpinner.getSelectedItemPosition();
 
 		// String to store complete prompt message in
 		String promptMessage = getString(R.string.DELETE_SECONDARY_NUMBER_PROMPT_MESSAGE) + " " + secondaryListenNumbers.get(position) + "?";
@@ -1313,7 +1369,7 @@ public class SmsAlarm extends Activity {
 	 */
 	private void updatePrimaryListenNumberEditText() {
 		// Update primary listen number EditText with value
-		this.primaryListenNumberEditText.setText(this.primaryListenNumber);
+		this.primarySmsNumberEditText.setText(this.primaryListenNumber);
 
 		// Logging
 		this.logger.logCat(LogPriorities.DEBUG, this.LOG_TAG + ":updatePrimaryListenNumberEditText()", "PRIMARY listen number EditText set to: " + this.primaryListenNumber);
@@ -1332,7 +1388,7 @@ public class SmsAlarm extends Activity {
 		if (!this.secondaryListenNumbers.isEmpty()) {
 			ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, this.secondaryListenNumbers);
 			adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-			this.secondaryListenNumberSpinner.setAdapter(adapter);
+			this.secondarySmsNumberSpinner.setAdapter(adapter);
 			// Logging
 			this.logger.logCat(LogPriorities.DEBUG, this.LOG_TAG + ":updateSecondaryListenNumberSpinner()", "Populate SECONDARY listen number spinner with values: " + this.secondaryListenNumbers);
 		} else {
@@ -1342,7 +1398,7 @@ public class SmsAlarm extends Activity {
 			}
 			ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, this.emptySecondaryListenNumbers);
 			adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-			this.secondaryListenNumberSpinner.setAdapter(adapter);
+			this.secondarySmsNumberSpinner.setAdapter(adapter);
 			// Logging
 			this.logger.logCat(LogPriorities.DEBUG, this.LOG_TAG + ":updateSecondaryListenNumberSpinner()", "List with SECONDARY listen numbers is empty, populating spinner with an empty list");
 		}
