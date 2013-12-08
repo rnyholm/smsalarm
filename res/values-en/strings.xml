@@ -61,7 +61,6 @@
     <string name="RESCUE_SERVICE_PROMPT_TITLE">Enter rescue service</string>
     <string name="SECS">secs.</string>
     <string name="SECONDARY_ALARM">SECONDARY ALARM!</string> 
-    <string name="SECONDARY_NUMBER_PROMPT_MESSAGE">Enter a telephone number for Sms Alarm to alert. The telephone number will be added to the list for secondary alarm.</string>
     <string name="SMS_ALARM_STATUS_ENABLED">Sms Alarm is ENABLED.</string>
     <string name="SMS_ALARM_STATUS_DISABLED">Sms Alarm is NOT ENABLED.</string>
     <string name="SOUND_SETTINGS_STATUS_ENABLED">The application DETECTS the device sound settings.</string>

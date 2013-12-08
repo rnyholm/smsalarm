@@ -61,7 +61,6 @@
     <string name="RESCUE_SERVICE_PROMPT_TITLE">Ange räddningstjänst</string>
     <string name="SECS">sek.</string>
     <string name="SECONDARY_ALARM">SEKUNDÄR LARM!</string> 
-    <string name="SECONDARY_NUMBER_PROMPT_MESSAGE">Ange ett telefonnummer som Sms Alarm larmar sekundärlarm på. Telefonnumret läggs till i listan för sekundärlarm.</string>
     <string name="SMS_ALARM_STATUS_ENABLED">Sms Alarm är AKTIVERAT.</string>
     <string name="SMS_ALARM_STATUS_DISABLED">Sms Alarm är EJ AKTIVERAT.</string>
     <string name="SOUND_SETTINGS_STATUS_ENABLED">Applikationen FÖLJER enhetens ljudinställningar.</string>

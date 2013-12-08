@@ -61,7 +61,6 @@
     <string name="SECS">sek.</string>
     <string name="SECONDARY_ALARM">TOISSIJAINEN HÄLYTYS!</string> 
     <string name="SECONDARY_ALARM_NUMBER_DONT_EXISTS">Ei annettuja numeroita toissijaiseen hälytykseen!</string>
-    <string name="SECONDARY_NUMBER_PROMPT_MESSAGE">Anna puhelinnumero johon Sms Alarm hälyttää toissijaisesti. Puhelinnumero laitetaan toissijaisten hälytysten listalle.</string>
     <string name="SMS_ALARM_STATUS_ENABLED">Sms Alarm on AKTIVOITU.</string>
     <string name="SMS_ALARM_STATUS_DISABLED">Sms Alarm EI OLE AKTIVOITU.</string>
     <string name="SOUND_SETTINGS_STATUS_ENABLED">Sovellus SEURAA laitteen ääniasetuksia.</string>

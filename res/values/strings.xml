@@ -3,6 +3,15 @@
     <!-- NEW STRINGS IN V2.2 BEGIN, SORT THESE LATER -->
     <string name="TITLE_FREE_TEXT_TRIGGER_SETTINGS">Fritext inställningar</string>
     <string name="INFO_FREE_TEXT_TRIGGER_SETTINGS">Ställ in vilka ord eller teckensekvenser som Sms Alarm ska larma på om de finns i inkommande sms. Notera att denna funktion inte är skiftlägeskänslig.</string>
+    <string name="ENTER_FREE_TEXT_HINT">Ange text..</string>
+    <string name="FREE_TEXT_PROMPT_TITLE">Ange text</string>
+    <string name="PRIMARY_FREE_TEXT_PROMPT_MESSAGE">Ange en text som Sms Alarm ska larma primärlarm på om det finns i mottaget sms.</string>
+    <string name="SECONDARY_FREE_TEXT_PROMPT_MESSAGE">Ange en text som Sms Alarm ska larma sekundärlarm på om det finns i mottaget sms.</string>
+    <string name="FREE_TEXT_PROMPT_HINT">Text..</string>
+    <string name="SECONDARY_NUMBER_PROMPT_MESSAGE">Ange ett telefonnummer som Sms Alarm larmar sekundärlarm på.</string>
+    <string name="EMPTY_FREE_TEXT">Det går inte att ange en tom text för fritext alarmering. Ange en ny text.</string>
+    <string name="DUPLICATED_FREE_TEXTS">Texter för primär- och sekundär larm får inte vara lika. Ange en ny text.</string>
+    <string name="FREE_TEXT_ALREADY_IN_PRIMARY_LIST">Angiven text finns redan i listan av texter för primärlarm. Ange en ny text.</string>
     <!-- NEW STRINGS END -->
     <string name="ABOUT">About Sms Alarm</string>
     <string name="ABOUT_BUILD">Build: %s</string>
@@ -75,7 +84,6 @@
     <string name="RESCUE_SERVICE_PROMPT_TITLE">Enter rescue service</string>
     <string name="SECS">secs.</string>
     <string name="SECONDARY_ALARM">SECONDARY ALARM!</string> 
-    <string name="SECONDARY_NUMBER_PROMPT_MESSAGE">Enter a telephone number for Sms Alarm to alert. The telephone number will be added to the list for secondary alarm.</string>
     <string name="SMS_ALARM_STATUS_ENABLED">Sms Alarm is ENABLED.</string>
     <string name="SMS_ALARM_STATUS_DISABLED">Sms Alarm is NOT ENABLED.</string>
     <string name="SOUND_SETTINGS_STATUS_ENABLED">The application DETECTS the device sound settings.</string>

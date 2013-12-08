@@ -43,7 +43,7 @@ import ax.ha.it.smsalarm.PreferencesHandler.PrefKeys;
  * Main activity to configure application. Also holds the main User Interface.
  * 
  * @author Robert Nyholm <robert.nyholm@aland.net>
- * @version 2.1.4
+ * @version 2.2
  * @since 0.9beta
  * 
  * @see #onCreate(Bundle)
@@ -55,11 +55,11 @@ public class SmsAlarm extends Activity {
 	 * Enumeration for different types of input dialogs.
 	 * 
 	 * @author Robert Nyholm <robert.nyholm@aland.net>
-	 * @version 2.1
+	 * @version 2.2
 	 * @since 2.1
 	 */
 	private enum DialogTypes {
-		PRIMARY, SECONDARY, ACKNOWLEDGE, RESCUESERVICE;
+		SMS_PRIMARY, SMS_SECONDARY, FREE_TEXT_PRIMARY, FREE_TEXT_SECONDARY, ACKNOWLEDGE, RESCUESERVICE;
 	}
 
 	// Log tag string
@@ -118,12 +118,15 @@ public class SmsAlarm extends Activity {
 	private TextView enableAckInfoTextView;
 
 	// Strings to store different important numbers
-	private String primaryListenNumber = "";
+	private String primaryListenSmsNumber = "";
 	private String acknowledgeNumber = "";
 
-	// List of Strings containing secondaryListenNumbers
-	private List<String> secondaryListenNumbers = new ArrayList<String>();
-	private List<String> emptySecondaryListenNumbers = new ArrayList<String>(); // <-- A "dummy" list just containing one element, one string
+	// List of Strings containing secondaryListenSmsNumbers, and texts for the primary and secondaryListenFreeTexts
+	private List<String> secondaryListenSmsNumbers = new ArrayList<String>();
+	private List<String> primaryListenFreeTexts = new ArrayList<String>();
+	private List<String> secondaryListenFreeTexts = new ArrayList<String>();
+	private List<String> emptyListenNumbers = new ArrayList<String>(); // <-- A "dummy" list just containing one element, one string
+	private List<String> emptyListenFreeTexts = new ArrayList<String>(); // <-- A "dummy" list just containing one element, on string
 
 	// String to store firedepartments name in
 	private String rescueService = "";
@@ -204,7 +207,7 @@ public class SmsAlarm extends Activity {
 				// Logging
 				logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":onCreate().editPrimaryNumberButton.OnClickListener().onClick()", "Edit PRIMARY sms number Button pressed");
 				// Build up and show input dialog of type primary number
-				buildAndShowInputDialog(DialogTypes.PRIMARY);
+				buildAndShowInputDialog(DialogTypes.SMS_PRIMARY);
 			}
 		});
 
@@ -215,7 +218,7 @@ public class SmsAlarm extends Activity {
 				// Logging
 				logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":onCreate().addSecondaryNumberButton.OnClickListener().onClick()", "Add SECONDARY sms number Button pressed");
 				// Build up and show input dialog of type secondary number
-				buildAndShowInputDialog(DialogTypes.SECONDARY);
+				buildAndShowInputDialog(DialogTypes.SMS_SECONDARY);
 			}
 		});
 
@@ -228,7 +231,7 @@ public class SmsAlarm extends Activity {
 
 				// Only show delete dialog if secondary listen numbers exists,
 				// else show toast
-				if (!secondaryListenNumbers.isEmpty()) {
+				if (!secondaryListenSmsNumbers.isEmpty()) {
 					// Show alert dialog(prompt user for deleting number)
 					buildAndShowDeleteSecondaryNumberDialog();
 				} else {
@@ -244,7 +247,8 @@ public class SmsAlarm extends Activity {
 			public void onClick(View v) {
 				// Logging
 				logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":onCreate().addPrimaryFreeTextButton.OnClickListener().onClick()", "Add PRIMARY free text Button pressed");
-				Toast.makeText(getApplicationContext(), "Add PRIMARY free text Button pressed, not yet implemented!", Toast.LENGTH_SHORT).show();
+				// Build up and show input dialog of type secondary number
+				buildAndShowInputDialog(DialogTypes.FREE_TEXT_PRIMARY);
 			}
 		});
 		
@@ -786,8 +790,10 @@ public class SmsAlarm extends Activity {
 
 		try {
 			// Set preferences used by class Sms Alarm
-			prefHandler.setPrefs(PrefKeys.SHARED_PREF, PrefKeys.PRIMARY_LISTEN_NUMBER_KEY, this.primaryListenNumber, this);
-			prefHandler.setPrefs(PrefKeys.SHARED_PREF, PrefKeys.SECONDARY_LISTEN_NUMBERS_KEY, this.secondaryListenNumbers, this);
+			prefHandler.setPrefs(PrefKeys.SHARED_PREF, PrefKeys.PRIMARY_LISTEN_NUMBER_KEY, this.primaryListenSmsNumber, this);
+			prefHandler.setPrefs(PrefKeys.SHARED_PREF, PrefKeys.SECONDARY_LISTEN_NUMBERS_KEY, this.secondaryListenSmsNumbers, this);
+			prefHandler.setPrefs(PrefKeys.SHARED_PREF, PrefKeys.PRIMARY_LISTEN_FREE_TEXTS_KEY, this.primaryListenFreeTexts, this);
+			prefHandler.setPrefs(PrefKeys.SHARED_PREF, PrefKeys.SECONDARY_LISTEN_FREE_TEXTS_KEY, this.secondaryListenFreeTexts, this);
 			prefHandler.setPrefs(PrefKeys.SHARED_PREF, PrefKeys.PRIMARY_MESSAGE_TONE_KEY, this.primaryMessageToneId, this);
 			prefHandler.setPrefs(PrefKeys.SHARED_PREF, PrefKeys.SECONDARY_MESSAGE_TONE_KEY, this.secondaryMessageToneId, this);
 			prefHandler.setPrefs(PrefKeys.SHARED_PREF, PrefKeys.USE_OS_SOUND_SETTINGS_KEY, this.useOsSoundSettings, this);
@@ -825,8 +831,10 @@ public class SmsAlarm extends Activity {
 
 		try {
 			// Get shared preferences needed by class Sms Alarm
-			this.primaryListenNumber = (String) prefHandler.getPrefs(PrefKeys.SHARED_PREF, PrefKeys.PRIMARY_LISTEN_NUMBER_KEY, DataTypes.STRING, this);
-			this.secondaryListenNumbers = (List<String>) prefHandler.getPrefs(PrefKeys.SHARED_PREF, PrefKeys.SECONDARY_LISTEN_NUMBERS_KEY, DataTypes.LIST, this);
+			this.primaryListenSmsNumber = (String) prefHandler.getPrefs(PrefKeys.SHARED_PREF, PrefKeys.PRIMARY_LISTEN_NUMBER_KEY, DataTypes.STRING, this);
+			this.secondaryListenSmsNumbers = (List<String>) prefHandler.getPrefs(PrefKeys.SHARED_PREF, PrefKeys.SECONDARY_LISTEN_NUMBERS_KEY, DataTypes.LIST, this);
+			this.primaryListenFreeTexts = (List<String>) prefHandler.getPrefs(PrefKeys.SHARED_PREF, PrefKeys.PRIMARY_LISTEN_FREE_TEXTS_KEY, DataTypes.LIST, this);
+			this.secondaryListenFreeTexts = (List<String>) prefHandler.getPrefs(PrefKeys.SHARED_PREF, PrefKeys.SECONDARY_LISTEN_FREE_TEXTS_KEY, DataTypes.LIST, this);
 			this.primaryMessageToneId = (Integer) prefHandler.getPrefs(PrefKeys.SHARED_PREF, PrefKeys.PRIMARY_MESSAGE_TONE_KEY, DataTypes.INTEGER, this);
 			this.secondaryMessageToneId = (Integer) prefHandler.getPrefs(PrefKeys.SHARED_PREF, PrefKeys.SECONDARY_MESSAGE_TONE_KEY, DataTypes.INTEGER, this, 1);
 			this.useOsSoundSettings = (Boolean) prefHandler.getPrefs(PrefKeys.SHARED_PREF, PrefKeys.USE_OS_SOUND_SETTINGS_KEY, DataTypes.BOOLEAN, this);
@@ -848,7 +856,7 @@ public class SmsAlarm extends Activity {
 	 * @see #buildAndShowAboutDialog()
 	 * @see #buildAndShowInputDialog(DialogTypes)
 	 * @see #buildAndShowToneDialog()
-	 * @see #updateSecondaryListenNumberSpinner()
+	 * @see #updateSecondaryListenSmsNumberSpinner()
 	 * @see ax.ha.it.smsalarm.LogHandler#logCat(LogPriorities, String, String)
 	 *      logCat(LogPriorities, String, String)
 	 * @see ax.ha.it.smsalarm.LogHandler#logCatTxt(LogPriorities, String,
@@ -865,7 +873,7 @@ public class SmsAlarm extends Activity {
 		final int position = secondarySmsNumberSpinner.getSelectedItemPosition();
 
 		// String to store complete prompt message in
-		String promptMessage = getString(R.string.DELETE_SECONDARY_NUMBER_PROMPT_MESSAGE) + " " + secondaryListenNumbers.get(position) + "?";
+		String promptMessage = getString(R.string.DELETE_SECONDARY_NUMBER_PROMPT_MESSAGE) + " " + secondaryListenSmsNumbers.get(position) + "?";
 
 		// Build up the alert dialog
 		AlertDialog.Builder dialog = new AlertDialog.Builder(this);
@@ -887,17 +895,17 @@ public class SmsAlarm extends Activity {
 			public void onClick(DialogInterface dialog, int whichButton) {
 				// Log information
 				logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":buildAndShowDeleteSecondaryNumberDialog().PosButton.OnClickListener().onClick()", "Positive Button pressed");
-				logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":buildAndShowDeleteSecondaryNumberDialog().PosButton.OnClickListener().onClick()", "SECONDARY listen number: \"" + secondaryListenNumbers.get(position) + "\" is about to be removed from list of SECONDARY listen numbers");
+				logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":buildAndShowDeleteSecondaryNumberDialog().PosButton.OnClickListener().onClick()", "SECONDARY listen number: \"" + secondaryListenSmsNumbers.get(position) + "\" is about to be removed from list of SECONDARY listen numbers");
 				// Delete number from list
-				secondaryListenNumbers.remove(position);
+				secondaryListenSmsNumbers.remove(position);
 				try {
 					// Store to shared preferences
-					prefHandler.setPrefs(PrefKeys.SHARED_PREF, PrefKeys.SECONDARY_LISTEN_NUMBERS_KEY, secondaryListenNumbers, SmsAlarm.this);
+					prefHandler.setPrefs(PrefKeys.SHARED_PREF, PrefKeys.SECONDARY_LISTEN_NUMBERS_KEY, secondaryListenSmsNumbers, SmsAlarm.this);
 				} catch (IllegalArgumentException e) {
 					logger.logCatTxt(LogPriorities.ERROR, LOG_TAG + ":buildAndShowDeleteSecondaryNumberDialog().PosButton.OnClickListener().onClick()", "An Object of unsupported instance was given as argument to PreferencesHandler.setPrefs()", e);
 				}
 				// Update affected UI widgets
-				updateSecondaryListenNumberSpinner();
+				updateSecondaryListenSmsNumberSpinner();
 			}
 		});
 
@@ -931,8 +939,8 @@ public class SmsAlarm extends Activity {
 	 * @see #buildAndShowAboutDialog()
 	 * @see #buildAndShowToneDialog()
 	 * @see #buildAndShowDeleteSecondaryNumberDialog()
-	 * @see #updatePrimaryListenNumberEditText()
-	 * @see #updateSecondaryListenNumberSpinner()
+	 * @see #updatePrimaryListenSmsNumberEditText()
+	 * @see #updateSecondaryListenSmsNumberSpinner()
 	 * @see #updateAcknowledgeNumberEditText()
 	 * @see #updateRescueServiceEditText()
 	 * @see ax.ha.it.smsalarm.LogHandler#logCat(LogPriorities, String, String)
@@ -964,7 +972,7 @@ public class SmsAlarm extends Activity {
 		 * dialog DUMMY is built up.
 		 */
 		switch (type) {
-		case PRIMARY:
+		case SMS_PRIMARY:
 			// Set title
 			dialog.setTitle(R.string.NUMBER_PROMPT_TITLE);
 			// Set message
@@ -978,17 +986,35 @@ public class SmsAlarm extends Activity {
 			// Bind dialog to input
 			dialog.setView(input);
 			// Logging
-			this.logger.logCat(LogPriorities.DEBUG, this.LOG_TAG + ":buildAndShowInputDialog()", "Dialog attributes is set for dialog type PRIMARY");
+			this.logger.logCat(LogPriorities.DEBUG, this.LOG_TAG + ":buildAndShowInputDialog()", "Dialog attributes is set for dialog type SMS_PRIMARY");
 			break;
-		case SECONDARY:
+		case SMS_SECONDARY:
 			dialog.setTitle(R.string.NUMBER_PROMPT_TITLE);
 			dialog.setMessage(R.string.SECONDARY_NUMBER_PROMPT_MESSAGE);
 			input.setHint(R.string.NUMBER_PROMPT_HINT);
 			input.setInputType(InputType.TYPE_CLASS_NUMBER);
 			dialog.setCancelable(false);
 			dialog.setView(input);
-			this.logger.logCat(LogPriorities.DEBUG, this.LOG_TAG + ":buildAndShowInputDialog()", "Dialog attributes is set for dialog type SECONDARY");
+			this.logger.logCat(LogPriorities.DEBUG, this.LOG_TAG + ":buildAndShowInputDialog()", "Dialog attributes is set for dialog type SMS_SECONDARY");
 			break;
+		case FREE_TEXT_PRIMARY:
+			dialog.setTitle(R.string.FREE_TEXT_PROMPT_TITLE);
+			dialog.setMessage(R.string.PRIMARY_FREE_TEXT_PROMPT_MESSAGE);
+			input.setHint(R.string.FREE_TEXT_PROMPT_HINT);
+			input.setInputType(InputType.TYPE_CLASS_TEXT);
+			dialog.setCancelable(false);
+			dialog.setView(input);
+			this.logger.logCat(LogPriorities.DEBUG, this.LOG_TAG + ":buildAndShowInputDialog()", "Dialog attributes is set for dialog type FREE_TEXT_PRIMARY");
+			break;
+		case FREE_TEXT_SECONDARY:
+			dialog.setTitle(R.string.FREE_TEXT_PROMPT_TITLE);
+			dialog.setMessage(R.string.SECONDARY_FREE_TEXT_PROMPT_MESSAGE);
+			input.setHint(R.string.FREE_TEXT_PROMPT_HINT);
+			input.setInputType(InputType.TYPE_CLASS_TEXT);
+			dialog.setCancelable(false);
+			dialog.setView(input);
+			this.logger.logCat(LogPriorities.DEBUG, this.LOG_TAG + ":buildAndShowInputDialog()", "Dialog attributes is set for dialog type FREE_TEXT_SECONDARY");
+			break;			
 		case ACKNOWLEDGE:
 			dialog.setTitle(R.string.NUMBER_PROMPT_TITLE);
 			dialog.setMessage(R.string.ACK_NUMBER_PROMPT_MESSAGE);
@@ -1021,8 +1047,9 @@ public class SmsAlarm extends Activity {
 				// Log information
 				logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":buildAndShowInputDialog().PositiveButton.OnClickListener().onClick()", "Positive Button pressed");
 
-				// Boolean indicating if there are duplicates of primary and secondary alarm numbers
+				// Boolean indicating if there are duplicates of primary and secondary alarm numbers and also of the primary and secondary free texts
 				boolean duplicatedNumbers = false;
+				boolean duplicatedFreeTexts = false;
 
 				/*
 				 * Switch through the different dialog types and set proper
@@ -1030,13 +1057,13 @@ public class SmsAlarm extends Activity {
 				 * supported no input is taken.
 				 */
 				switch (type) {
-				case PRIMARY:
+				case SMS_PRIMARY:
 					// If list is not empty there are numbers to equalize with each other, else just store the input
-					if (!secondaryListenNumbers.isEmpty()) {
+					if (!secondaryListenSmsNumbers.isEmpty()) {
 						// Iterate through all strings in the list
-						for (int i = 0; i < secondaryListenNumbers.size(); i++) {
+						for (int i = 0; i < secondaryListenSmsNumbers.size(); i++) {
 							// If a string in the list is equal with the input then it's a duplicated
-							if (secondaryListenNumbers.get(i).equals(input.getText().toString()) && !input.getText().toString().equals("")) {
+							if (secondaryListenSmsNumbers.get(i).equals(input.getText().toString()) && !input.getText().toString().equals("")) {
 								duplicatedNumbers = true;
 							}
 						}
@@ -1044,40 +1071,40 @@ public class SmsAlarm extends Activity {
 						// Store input if no duplication of numbers exists, else prompt user for number again
 						if (!duplicatedNumbers) {
 							// Store input to class variable
-							primaryListenNumber = input.getText().toString();
+							primaryListenSmsNumber = input.getText().toString();
 							try {
 								// Store to shared preferences
-								prefHandler.setPrefs(PrefKeys.SHARED_PREF, PrefKeys.PRIMARY_LISTEN_NUMBER_KEY, primaryListenNumber, SmsAlarm.this);
+								prefHandler.setPrefs(PrefKeys.SHARED_PREF, PrefKeys.PRIMARY_LISTEN_NUMBER_KEY, primaryListenSmsNumber, SmsAlarm.this);
 							} catch (IllegalArgumentException e) {
 								logger.logCatTxt(LogPriorities.ERROR, LOG_TAG + ":buildAndShowInputDialog().PositiveButton.OnClickListener().onClick()", "An Object of unsupported instance was given as argument to PreferencesHandler.setPrefs()", e);
 							}
 							// Update affected UI widgets
-							updatePrimaryListenNumberEditText();
+							updatePrimaryListenSmsNumberEditText();
 							// Log
-							logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":buildAndShowInputDialog().PositiveButton.OnClickListener().onClick()", "New PRIMARY phone number has been stored from user input. New PRIMARY phone number is: \"" + primaryListenNumber + "\"");
+							logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":buildAndShowInputDialog().PositiveButton.OnClickListener().onClick()", "New SMS_PRIMARY phone number has been stored from user input. New SMS_PRIMARY phone number is: \"" + primaryListenSmsNumber + "\"");
 						} else {
 							Toast.makeText(SmsAlarm.this, R.string.DUPLICATED_NUMBERS, Toast.LENGTH_LONG).show();
-							logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":buildAndShowInputDialog().PositiveButton.OnClickListener().onClick()", "Given PRIMARY phone number(" + input.getText().toString() + ") exists in the list of SECONDARY phone numbers and therefore cannot be stored. Showing dialog of type PRIMARY again");
+							logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":buildAndShowInputDialog().PositiveButton.OnClickListener().onClick()", "Given SMS_PRIMARY phone number(" + input.getText().toString() + ") exists in the list of SMS_SECONDARY phone numbers and therefore cannot be stored. Showing dialog of type SMS_PRIMARY again");
 							buildAndShowInputDialog(type);
 						}
 					} else {
-						primaryListenNumber = input.getText().toString();
+						primaryListenSmsNumber = input.getText().toString();
 						try {
-							prefHandler.setPrefs(PrefKeys.SHARED_PREF, PrefKeys.PRIMARY_LISTEN_NUMBER_KEY, primaryListenNumber, SmsAlarm.this);
+							prefHandler.setPrefs(PrefKeys.SHARED_PREF, PrefKeys.PRIMARY_LISTEN_NUMBER_KEY, primaryListenSmsNumber, SmsAlarm.this);
 						} catch (IllegalArgumentException e) {
 							logger.logCatTxt(LogPriorities.ERROR, LOG_TAG + ":buildAndShowInputDialog().PositiveButton.OnClickListener().onClick()", "An Object of unsupported instance was given as argument to PreferencesHandler.setPrefs()", e);
 						}
-						updatePrimaryListenNumberEditText();
-						logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":buildAndShowInputDialog().PositiveButton.OnClickListener().onClick()", "New PRIMARY phone number has been stored from user input. New PRIMARY phone number is: \"" + primaryListenNumber + "\"");
+						updatePrimaryListenSmsNumberEditText();
+						logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":buildAndShowInputDialog().PositiveButton.OnClickListener().onClick()", "New SMS_PRIMARY phone number has been stored from user input. New SMS_PRIMARY phone number is: \"" + primaryListenSmsNumber + "\"");
 					}
 					break;
-				case SECONDARY:
+				case SMS_SECONDARY:
 					// If input isn't equal with the primaryListenNumber and input isn't empty
-					if (!primaryListenNumber.equals(input.getText().toString()) && !input.getText().toString().equals("")) {
+					if (!primaryListenSmsNumber.equals(input.getText().toString()) && !input.getText().toString().equals("")) {
 						// Iterate through all strings in the list to check if number already exists in list
-						for (int i = 0; i < secondaryListenNumbers.size(); i++) {
+						for (int i = 0; i < secondaryListenSmsNumbers.size(); i++) {
 							// If a string in the list is equal with the input then it's a duplicated
-							if (secondaryListenNumbers.get(i).equals(input.getText().toString()) && !input.getText().toString().equals("")) {
+							if (secondaryListenSmsNumbers.get(i).equals(input.getText().toString()) && !input.getText().toString().equals("")) {
 								duplicatedNumbers = true;
 							}
 						}
@@ -1085,30 +1112,72 @@ public class SmsAlarm extends Activity {
 						// Store input if duplicated numbers is false
 						if (!duplicatedNumbers) {
 							// Add given input to list
-							secondaryListenNumbers.add(input.getText().toString());
+							secondaryListenSmsNumbers.add(input.getText().toString());
 							try {
 								// Store to shared preferences
-								prefHandler.setPrefs(PrefKeys.SHARED_PREF, PrefKeys.SECONDARY_LISTEN_NUMBERS_KEY, secondaryListenNumbers, SmsAlarm.this);
+								prefHandler.setPrefs(PrefKeys.SHARED_PREF, PrefKeys.SECONDARY_LISTEN_NUMBERS_KEY, secondaryListenSmsNumbers, SmsAlarm.this);
 							} catch (IllegalArgumentException e) {
 								logger.logCatTxt(LogPriorities.ERROR, LOG_TAG + ":buildAndShowInputDialog().PositiveButton.OnClickListener().onClick()", "An Object of unsupported instance was given as argument to PreferencesHandler.setPrefs()", e);
 							}
 							// Update affected UI widgets
-							updateSecondaryListenNumberSpinner();
+							updateSecondaryListenSmsNumberSpinner();
 							// Log
-							logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":buildAndShowInputDialog().PositiveButton.OnClickListener().onClick()", "New SECONDARY phone number has been stored from user input to the list of SECONDARY phone numbers . New SECONDARY phone number is: \"" + input.getText().toString() + "\"");
+							logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":buildAndShowInputDialog().PositiveButton.OnClickListener().onClick()", "New SMS_SECONDARY phone number has been stored from user input to the list of SMS_SECONDARY phone numbers. New SMS_SECONDARY phone number is: \"" + input.getText().toString() + "\"");
 						} else {
 							Toast.makeText(SmsAlarm.this, R.string.NUMBER_ALREADY_IN_LIST, Toast.LENGTH_LONG).show();
-							logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":buildAndShowInputDialog().PositiveButton.OnClickListener().onClick()", "Given SECONDARY phone number(" + input.getText().toString() + ") already exists in the list of SECONDARY phone numbers and therefore cannot be stored. Showing dialog of type SECONDARY again");
+							logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":buildAndShowInputDialog().PositiveButton.OnClickListener().onClick()", "Given SMS_SECONDARY phone number(" + input.getText().toString() + ") already exists in the list of SMS_SECONDARY phone numbers and therefore cannot be stored. Showing dialog of type SMS_SECONDARY again");
 							buildAndShowInputDialog(type);
 						}
 					} else {
 						// Empty secondary number was given
 						if (input.getText().toString().equals("")) {
 							Toast.makeText(SmsAlarm.this, R.string.EMPTY_SECONDARY_NUMBER, Toast.LENGTH_LONG).show();
-							logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":buildAndShowInputDialog().PositiveButton.OnClickListener().onClick()", "Given SECONDARY phone number is empty and therefore cannot be stored. Showing dialog of type SECONDARY again");
+							logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":buildAndShowInputDialog().PositiveButton.OnClickListener().onClick()", "Given SMS_SECONDARY phone number is empty and therefore cannot be stored. Showing dialog of type SMS_SECONDARY again");
 						} else { // Given secondary number is the same as primary number
 							Toast.makeText(SmsAlarm.this, R.string.DUPLICATED_NUMBERS, Toast.LENGTH_LONG).show();
-							logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":buildAndShowInputDialog().PositiveButton.OnClickListener().onClick()", "Given SECONDARY phone number(" + input.getText().toString() + ") is the same as the PRIMARY phone number and therefore cannot be stored. Showing dialog of type SECONDARY again");
+							logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":buildAndShowInputDialog().PositiveButton.OnClickListener().onClick()", "Given SMS_SECONDARY phone number(" + input.getText().toString() + ") is the same as the SMS_PRIMARY phone number and therefore cannot be stored. Showing dialog of type SMS_SECONDARY again");
+						}
+						buildAndShowInputDialog(type);
+					}
+					break;
+				case FREE_TEXT_PRIMARY:
+					// If input doesn't exist in the list of secondaryListenFreeTexts and input isn't empty
+					if (!existsIn(input.getText().toString(), secondaryListenFreeTexts) && !input.getText().toString().equals("")) {
+						// Iterate through all strings in the list of primaryListenFreeTexts to check if text already exists
+						for (String text : primaryListenFreeTexts) {
+							// If a string in the list is equal with the input then it's a duplicated
+							if (text.equalsIgnoreCase(input.getText().toString())) {
+								duplicatedFreeTexts = true;
+							}
+						}
+							
+						// Store input if duplicated free texts is false
+						if (!duplicatedFreeTexts) {
+							// Add given input to list
+							primaryListenFreeTexts.add(input.getText().toString());
+							try {
+								// Store to shared preferences
+								prefHandler.setPrefs(PrefKeys.SHARED_PREF, PrefKeys.PRIMARY_LISTEN_FREE_TEXTS_KEY, primaryListenFreeTexts, SmsAlarm.this);
+							} catch (IllegalArgumentException e) {
+								logger.logCatTxt(LogPriorities.ERROR, LOG_TAG + ":buildAndShowInputDialog().PositiveButton.OnClickListener().onClick()", "An Object of unsupported instance was given as argument to PreferencesHandler.setPrefs()", e);
+							}	
+							// Update affected UI widgets
+							updatePrimaryListenFreeTextSpinner();
+							// Log
+							logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":buildAndShowInputDialog().PositiveButton.OnClickListener().onClick()", "New FREE_TEXT_PRIMARY text has been stored from user input to the list of FREE_TEXT_PRIMARY texts. New FREE_TEXT_PRIMARY text is: \"" + input.getText().toString() + "\"");
+						} else {
+							Toast.makeText(SmsAlarm.this, R.string.FREE_TEXT_ALREADY_IN_PRIMARY_LIST, Toast.LENGTH_LONG).show();
+							logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":buildAndShowInputDialog().PositiveButton.OnClickListener().onClick()", "Given FREE_TEXT_PRIMARY text(" + input.getText().toString() + ") already exists in the list of FREE_TEXT_PRIMARY texts and therefore cannot be stored. Showing dialog of type FREE_TEXT_PRIMARY again");
+							buildAndShowInputDialog(type);							
+						}
+					} else {
+						// Empty primary free text was given
+						if (input.getText().toString().equals("")) {
+							Toast.makeText(SmsAlarm.this, R.string.EMPTY_FREE_TEXT, Toast.LENGTH_LONG).show();
+							logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":buildAndShowInputDialog().PositiveButton.OnClickListener().onClick()", "Given FREE_TEXT_PRIMARY text is empty and therefore cannot be stored. Showing dialog of type FREE_TEXT_PRIMARY again");							
+						} else { // Given primary free text exists in the list of secondary free texts
+							Toast.makeText(SmsAlarm.this, R.string.DUPLICATED_FREE_TEXTS, Toast.LENGTH_LONG).show();
+							logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":buildAndShowInputDialog().PositiveButton.OnClickListener().onClick()", "Given FREE_TEXT_PRIMARY phone number(" + input.getText().toString() + ") already exists in the list of SECONDARY_FREE_TEXTS and therefore cannot be stored. Showing dialog of type FREE_TEXT_PRIMARY again");						
 						}
 						buildAndShowInputDialog(type);
 					}
@@ -1148,7 +1217,7 @@ public class SmsAlarm extends Activity {
 		});
 
 		// Only set neutral button if dialog type is supported
-		if (type.ordinal() >= DialogTypes.PRIMARY.ordinal() && type.ordinal() <= DialogTypes.RESCUESERVICE.ordinal()) {
+		if (type.ordinal() >= DialogTypes.SMS_PRIMARY.ordinal() && type.ordinal() <= DialogTypes.RESCUESERVICE.ordinal()) {
 			// Set a neutral button, due to documentation it has same functionality as "back" button
 			dialog.setNeutralButton(R.string.CANCEL, new DialogInterface.OnClickListener() {
 				@Override
@@ -1164,6 +1233,16 @@ public class SmsAlarm extends Activity {
 
 		// Show it
 		dialog.show();
+	}
+	
+	private boolean existsIn(String string,List<String> list) {
+		List<String> caseUpperList = new ArrayList<String>();
+		
+		for (String str: list) {
+			caseUpperList.add(str.toUpperCase());
+		}
+		
+		return caseUpperList.contains(string.toUpperCase());
 	}
 
 	/**
@@ -1314,8 +1393,10 @@ public class SmsAlarm extends Activity {
 	/**
 	 * To update Sms Alarms whole User Interface.
 	 * 
-	 * @see #updatePrimaryListenNumberEditText()
-	 * @see #updateSecondaryListenNumberSpinner()
+	 * @see #updatePrimaryListenSmsNumberEditText()
+	 * @see #updateSecondaryListenSmsNumberSpinner()
+	 * @see #updatePrimaryListenFreeTextSpinner()
+	 * @see #updateSecondaryListenFreeTextSpinner()
 	 * @see #updateAcknowledgeNumberEditText()
 	 * @see #updateRescueServiceEditText()
 	 * @see #updateSelectedToneEditText()
@@ -1330,11 +1411,17 @@ public class SmsAlarm extends Activity {
 		// Logging
 		this.logger.logCat(LogPriorities.DEBUG, this.LOG_TAG + ":updateWholeUI", "Whole user interface is about to be updated");
 
-		// Update primary listen number EditText
-		this.updatePrimaryListenNumberEditText();
+		// Update primary listen sms number EditText
+		this.updatePrimaryListenSmsNumberEditText();
 
-		// Update secondary listen numbers Spinner
-		this.updateSecondaryListenNumberSpinner();
+		// Update secondary listen sms numbers Spinner
+		this.updateSecondaryListenSmsNumberSpinner();
+		
+		// Update primary listen free text Spinner
+		this.updatePrimaryListenFreeTextSpinner();
+		
+		// Update secondary listen free text spinner
+		this.updateSecondaryListenFreeTextSpinner();
 
 		// Update acknowledge number EditText
 		this.updateAcknowledgeNumberEditText();
@@ -1367,13 +1454,13 @@ public class SmsAlarm extends Activity {
 	 * @see ax.ha.it.smsalarm.LogHandler#logCat(LogPriorities, String, String)
 	 *      logCat(LogPriorities, String, String)
 	 */
-	private void updatePrimaryListenNumberEditText() {
+	private void updatePrimaryListenSmsNumberEditText() {
 		// Update primary listen number EditText with value
-		this.primarySmsNumberEditText.setText(this.primaryListenNumber);
+		this.primarySmsNumberEditText.setText(this.primaryListenSmsNumber);
 
 		// Logging
-		this.logger.logCat(LogPriorities.DEBUG, this.LOG_TAG + ":updatePrimaryListenNumberEditText()", "PRIMARY listen number EditText set to: " + this.primaryListenNumber);
-		this.logger.logCat(LogPriorities.DEBUG, this.LOG_TAG + ":updatePrimaryListenNumberEditText()", "PRIMARY listen number EditText updated");
+		this.logger.logCat(LogPriorities.DEBUG, this.LOG_TAG + ":updatePrimaryListenSmsNumberEditText()", "PRIMARY listen sms number EditText set to: " + this.primaryListenSmsNumber);
+		this.logger.logCat(LogPriorities.DEBUG, this.LOG_TAG + ":updatePrimaryListenSmsNumberEditText()", "PRIMARY listen sms number EditText updated");
 	}
 
 	/**
@@ -1383,28 +1470,90 @@ public class SmsAlarm extends Activity {
 	 * @see ax.ha.it.smsalarm.LogHandler#logCat(LogPriorities, String, String)
 	 *      logCat(LogPriorities, String, String)
 	 */
-	private void updateSecondaryListenNumberSpinner() {
+	private void updateSecondaryListenSmsNumberSpinner() {
 		// Check if there are secondary listen numbers and build up a proper spinner according to that information
-		if (!this.secondaryListenNumbers.isEmpty()) {
-			ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, this.secondaryListenNumbers);
+		if (!this.secondaryListenSmsNumbers.isEmpty()) {
+			ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, this.secondaryListenSmsNumbers);
 			adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 			this.secondarySmsNumberSpinner.setAdapter(adapter);
 			// Logging
-			this.logger.logCat(LogPriorities.DEBUG, this.LOG_TAG + ":updateSecondaryListenNumberSpinner()", "Populate SECONDARY listen number spinner with values: " + this.secondaryListenNumbers);
+			this.logger.logCat(LogPriorities.DEBUG, this.LOG_TAG + ":updateSecondaryListenSmsNumberSpinner()", "Populate SECONDARY listen sms number spinner with values: " + this.secondaryListenSmsNumbers);
 		} else {
 			// Only add item to list if it's empty
-			if (this.emptySecondaryListenNumbers.isEmpty()) {
-				this.emptySecondaryListenNumbers.add(getString(R.string.ENTER_PHONE_NUMBER_HINT));
+			if (this.emptyListenNumbers.isEmpty()) {
+				this.emptyListenNumbers.add(getString(R.string.ENTER_PHONE_NUMBER_HINT));
 			}
-			ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, this.emptySecondaryListenNumbers);
+			ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, this.emptyListenNumbers);
 			adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 			this.secondarySmsNumberSpinner.setAdapter(adapter);
 			// Logging
-			this.logger.logCat(LogPriorities.DEBUG, this.LOG_TAG + ":updateSecondaryListenNumberSpinner()", "List with SECONDARY listen numbers is empty, populating spinner with an empty list");
+			this.logger.logCat(LogPriorities.DEBUG, this.LOG_TAG + ":updateSecondaryListenSmsNumberSpinner()", "List with SECONDARY listen numbers is empty, populating spinner with an empty list");
 		}
 
 		// Logging
-		this.logger.logCat(LogPriorities.DEBUG, this.LOG_TAG + ":updateSecondaryListenNumberSpinner()", "SECONDARY listen numbers Spinner updated");
+		this.logger.logCat(LogPriorities.DEBUG, this.LOG_TAG + ":updateSecondaryListenSmsNumberSpinner()", "SECONDARY listen sms numbers Spinner updated");
+	}
+	
+	/**
+	 * To update primary free texts <code>Spinner</code> with correct
+	 * values.
+	 * 
+	 * @see ax.ha.it.smsalarm.LogHandler#logCat(LogPriorities, String, String)
+	 *      logCat(LogPriorities, String, String)
+	 */
+	private void updatePrimaryListenFreeTextSpinner() {
+		// Check if there are primary listen free test and build up a proper spinner according to that information
+		if (!this.primaryListenFreeTexts.isEmpty()) {
+			ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, this.primaryListenFreeTexts);
+			adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+			this.primaryFreeTextSpinner.setAdapter(adapter);
+			// Logging
+			this.logger.logCat(LogPriorities.DEBUG, this.LOG_TAG + ":updatePrimaryListenFreeTextSpinner()", "Populate PRIMARY listen free text spinner with values: " + this.primaryListenFreeTexts);
+		} else {
+			// Only add item to list if it's empty
+			if (this.emptyListenFreeTexts.isEmpty()) {
+				this.emptyListenFreeTexts.add(getString(R.string.ENTER_FREE_TEXT_HINT));
+			}
+			ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, this.emptyListenFreeTexts);
+			adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+			this.primaryFreeTextSpinner.setAdapter(adapter);
+			// Logging
+			this.logger.logCat(LogPriorities.DEBUG, this.LOG_TAG + ":updatePrimaryListenFreeTextSpinner()", "List with PRIMARY listen free texts is empty, populating spinner with an empty list");
+		}
+		
+		// Logging
+		this.logger.logCat(LogPriorities.DEBUG, this.LOG_TAG + ":updatePrimaryListenFreeTextSpinner()", "PRIMARY listen free text Spinner updated");
+	}
+	
+	/**
+	 * To update secondary free texts <code>Spinner</code> with correct
+	 * values.
+	 * 
+	 * @see ax.ha.it.smsalarm.LogHandler#logCat(LogPriorities, String, String)
+	 *      logCat(LogPriorities, String, String)
+	 */
+	private void updateSecondaryListenFreeTextSpinner() {
+		// Check if there are primary listen free test and build up a proper spinner according to that information
+		if (!this.secondaryListenFreeTexts.isEmpty()) {
+			ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, this.secondaryListenFreeTexts);
+			adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+			this.secondaryFreeTextSpinner.setAdapter(adapter);
+			// Logging
+			this.logger.logCat(LogPriorities.DEBUG, this.LOG_TAG + ":updateSecondaryListenFreeTextSpinner()", "Populate SECONDARY listen free text spinner with values: " + this.secondaryListenFreeTexts);
+		} else {
+			// Only add item to list if it's empty
+			if (this.emptyListenFreeTexts.isEmpty()) {
+				this.emptyListenFreeTexts.add(getString(R.string.ENTER_FREE_TEXT_HINT));
+			}
+			ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, this.emptyListenFreeTexts);
+			adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+			this.secondaryFreeTextSpinner.setAdapter(adapter);
+			// Logging
+			this.logger.logCat(LogPriorities.DEBUG, this.LOG_TAG + ":updateSecondaryListenFreeTextSpinner()", "List with SECONDARY listen free texts is empty, populating spinner with an empty list");
+		}
+		
+		// Logging
+		this.logger.logCat(LogPriorities.DEBUG, this.LOG_TAG + ":updateSecondaryListenFreeTextSpinner()", "SECONDARY listen free text Spinner updated");
 	}
 
 	/**

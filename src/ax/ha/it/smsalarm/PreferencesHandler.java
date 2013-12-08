@@ -19,7 +19,7 @@ import ax.ha.it.smsalarm.LogHandler.LogPriorities;
  * <b><i>PreferencesHandler is a singleton.</i></b>
  * 
  * @author Robert Nyholm <robert.nyholm@aland.net>
- * @version 2.1
+ * @version 2.2
  * @since 2.0
  */
 public class PreferencesHandler {
@@ -46,6 +46,8 @@ public class PreferencesHandler {
 		NOT_KEY("notificationPref"),
 		PRIMARY_LISTEN_NUMBER_KEY("primaryListenNumberKey"),
 		SECONDARY_LISTEN_NUMBERS_KEY("secondaryListenNumbersKey"),
+		PRIMARY_LISTEN_FREE_TEXTS_KEY("primaryListenFreeTextsKey"),
+		SECONDARY_LISTEN_FREE_TEXTS_KEY("secondaryListenFreeTextsKey"),
 		PRIMARY_MESSAGE_TONE_KEY("primaryMessageToneKey"),
 		SECONDARY_MESSAGE_TONE_KEY("secondaryMessageToneKey"),
 		MESSAGE_KEY("messageKey"),
