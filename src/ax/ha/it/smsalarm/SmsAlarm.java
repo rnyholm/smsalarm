@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
@@ -268,7 +269,8 @@ public class SmsAlarm extends Activity {
 			public void onClick(View v) {
 				// Logging
 				logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":onCreate().addSecondaryFreeTextButton.OnClickListener().onClick()", "Add SECONDARY free text Button pressed");
-				Toast.makeText(getApplicationContext(), "Add SECONDARY free text Button pressed, not yet implemented!", Toast.LENGTH_SHORT).show();
+				// Build up and show input dialog of type secondary number
+				buildAndShowInputDialog(DialogTypes.FREE_TEXT_SECONDARY);
 			}
 		});
 		
@@ -1145,7 +1147,7 @@ public class SmsAlarm extends Activity {
 					if (!existsIn(input.getText().toString(), secondaryListenFreeTexts) && !input.getText().toString().equals("")) {
 						// Iterate through all strings in the list of primaryListenFreeTexts to check if text already exists
 						for (String text : primaryListenFreeTexts) {
-							// If a string in the list is equal with the input then it's a duplicated
+							// If a string in the list is equal with the input then it's duplicated
 							if (text.equalsIgnoreCase(input.getText().toString())) {
 								duplicatedFreeTexts = true;
 							}
@@ -1177,7 +1179,49 @@ public class SmsAlarm extends Activity {
 							logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":buildAndShowInputDialog().PositiveButton.OnClickListener().onClick()", "Given FREE_TEXT_PRIMARY text is empty and therefore cannot be stored. Showing dialog of type FREE_TEXT_PRIMARY again");							
 						} else { // Given primary free text exists in the list of secondary free texts
 							Toast.makeText(SmsAlarm.this, R.string.DUPLICATED_FREE_TEXTS, Toast.LENGTH_LONG).show();
-							logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":buildAndShowInputDialog().PositiveButton.OnClickListener().onClick()", "Given FREE_TEXT_PRIMARY phone number(" + input.getText().toString() + ") already exists in the list of SECONDARY_FREE_TEXTS and therefore cannot be stored. Showing dialog of type FREE_TEXT_PRIMARY again");						
+							logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":buildAndShowInputDialog().PositiveButton.OnClickListener().onClick()", "Given FREE_TEXT_PRIMARY text(" + input.getText().toString() + ") already exists in the list of SECONDARY_FREE_TEXTS and therefore cannot be stored. Showing dialog of type FREE_TEXT_PRIMARY again");						
+						}
+						buildAndShowInputDialog(type);
+					}
+					break;
+				case FREE_TEXT_SECONDARY:
+					// If input doesn't exist in the list of primaryListenFreeTexts and input isn't empty
+					if (!existsIn(input.getText().toString(), primaryListenFreeTexts) && !input.getText().toString().equals("")) {
+						// Iterate through all strings in the list of primaryListenFreeTexts to check if text already exists
+						for (String text : secondaryListenFreeTexts) {
+							// If a string in the list is equal with the input then it's duplicated
+							if (text.equalsIgnoreCase(input.getText().toString())) {
+								duplicatedFreeTexts = true;
+							}
+						}
+							
+						// Store input if duplicated free texts is false
+						if (!duplicatedFreeTexts) {
+							// Add given input to list
+							secondaryListenFreeTexts.add(input.getText().toString());
+							try {
+								// Store to shared preferences
+								prefHandler.setPrefs(PrefKeys.SHARED_PREF, PrefKeys.SECONDARY_LISTEN_FREE_TEXTS_KEY, secondaryListenFreeTexts, SmsAlarm.this);
+							} catch (IllegalArgumentException e) {
+								logger.logCatTxt(LogPriorities.ERROR, LOG_TAG + ":buildAndShowInputDialog().PositiveButton.OnClickListener().onClick()", "An Object of unsupported instance was given as argument to PreferencesHandler.setPrefs()", e);
+							}	
+							// Update affected UI widgets
+							updateSecondaryListenFreeTextSpinner();
+							// Log
+							logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":buildAndShowInputDialog().PositiveButton.OnClickListener().onClick()", "New FREE_TEXT_SECONDARY text has been stored from user input to the list of FREE_TEXT_SECONDARY texts. New FREE_TEXT_SECONDARY text is: \"" + input.getText().toString() + "\"");
+						} else {
+							Toast.makeText(SmsAlarm.this, R.string.FREE_TEXT_ALREADY_IN_SECONDARY_LIST, Toast.LENGTH_LONG).show();
+							logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":buildAndShowInputDialog().PositiveButton.OnClickListener().onClick()", "Given FREE_TEXT_SECONDARY text(" + input.getText().toString() + ") already exists in the list of FREE_TEXT_SECONDARY texts and therefore cannot be stored. Showing dialog of type FREE_TEXT_SECONDARY again");
+							buildAndShowInputDialog(type);							
+						}
+					} else {
+						// Empty primary free text was given
+						if (input.getText().toString().equals("")) {
+							Toast.makeText(SmsAlarm.this, R.string.EMPTY_FREE_TEXT, Toast.LENGTH_LONG).show();
+							logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":buildAndShowInputDialog().PositiveButton.OnClickListener().onClick()", "Given FREE_TEXT_SECONDARY text is empty and therefore cannot be stored. Showing dialog of type FREE_TEXT_SECONDARY again");							
+						} else { // Given primary free text exists in the list of secondary free texts
+							Toast.makeText(SmsAlarm.this, R.string.DUPLICATED_FREE_TEXTS, Toast.LENGTH_LONG).show();
+							logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":buildAndShowInputDialog().PositiveButton.OnClickListener().onClick()", "Given FREE_TEXT_SECONDARY text(" + input.getText().toString() + ") already exists in the list of FREE_TEXT_SECONDARY and therefore cannot be stored. Showing dialog of type FREE_TEXT_SECONDARY again");						
 						}
 						buildAndShowInputDialog(type);
 					}
@@ -1235,7 +1279,16 @@ public class SmsAlarm extends Activity {
 		dialog.show();
 	}
 	
-	private boolean existsIn(String string,List<String> list) {
+	/**
+	 * To check if given <code>String</code> exists in given <code>List</code> 
+	 * of <code>Strings</code>. Method is not case sensitive.
+	 * 
+	 * @param string String to check if exists in list.
+	 * @param list List to check if string exists in.
+	 * 
+	 * @return <code>true</code> if given String exists in given List else <code>false</code>.
+	 */
+	private boolean existsIn(String string, List<String> list) {
 		List<String> caseUpperList = new ArrayList<String>();
 		
 		for (String str: list) {
