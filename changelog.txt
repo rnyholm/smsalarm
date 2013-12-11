@@ -1,6 +1,7 @@
 SmsAlarm changelog
 
 v2.2(version code 9)
+-Lade till ytterligare hantering av landskod för Tjeckien(+420)
 
 v2.1.4(version code 8)
 -Lade till hantering för ytterligare landskoder(USA, Canada, Slovenia, Österrike, Nya Zeeland och Storbrittanien)

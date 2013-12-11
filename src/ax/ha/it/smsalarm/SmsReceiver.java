@@ -336,6 +336,7 @@ public class SmsReceiver extends BroadcastReceiver {
 	 * <li><code>France - +33<code></li>
 	 * <li><code>Finland - +358<code></li>
 	 * <li><code>Slovenia - +386<code></li>
+	 * <li><code>Czech Republic - +420</code>
 	 * <li><code>Austria - +43<code></li>
 	 * <li><code>United Kingdom - +44<code></li>
 	 * <li><code>Denmark - +45<code></li>
@@ -354,7 +355,7 @@ public class SmsReceiver extends BroadcastReceiver {
 		 * If number has a country code, recognized by +NUM, remove it. 
 		 * Following countries are supported: Finland, Åland,
 		 * Sweden, Norway, Denmark, France and Germany, United Kingdom, New Zeeland,
-		 * Slovenia, Austria, Canada and USA. In each case
+		 * Slovenia, Czech Republic, Austria, Canada and USA. In each case
 		 * information is logged.
 		 */
 		if (this.msgHeader.contains("+1")) { // <--USA, Canada
@@ -369,6 +370,9 @@ public class SmsReceiver extends BroadcastReceiver {
 		} else if (this.msgHeader.contains("+386")) { // <--Slovenia
 			this.msgHeader = this.msgHeader.replace("+386", "");
 			this.logger.logCat(LogPriorities.DEBUG, this.LOG_TAG + ":removeCountryCode()", "Countrycode +386 found, removed countrycode");
+		} else if (this.msgHeader.contains("+420")) { // <--Czech Republic
+			this.msgHeader = this.msgHeader.replace("+420", "");
+			this.logger.logCat(LogPriorities.DEBUG, this.LOG_TAG + ":removeCountryCode()", "Countrycode +420 found, removed countrycode");
 		} else if (this.msgHeader.contains("+43")) { // <--Austria
 			this.msgHeader = this.msgHeader.replace("+43", "");
 			this.logger.logCat(LogPriorities.DEBUG, this.LOG_TAG + ":removeCountryCode()", "Countrycode +43 found, removed countrycode");
