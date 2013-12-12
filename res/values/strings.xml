@@ -13,6 +13,13 @@
     <string name="DUPLICATED_FREE_TEXTS">Texter för primär- och sekundär larm får inte vara lika. Ange en ny text.</string>
     <string name="FREE_TEXT_ALREADY_IN_PRIMARY_LIST">Angiven text finns redan i listan av texter för primärlarm. Ange en ny text.</string>
     <string name="FREE_TEXT_ALREADY_IN_SECONDARY_LIST">Angiven text finns redan i listan av texter för sekundärlarm. Ange en ny text.</string>
+    <string name="NO_PRIMARY_FREE_TEXT_EXISTS">Inga texter för primärlarm finns, kan ej ta bort text.</string>
+    <string name="NO_SECONDARY_FREE_TEXT_EXISTS">Inga texter för sekundärlarm finns, kan ej ta bort text.</string>
+    <string name="DELETE_NUMBER_PROMPT_TITLE">Ta bort nummer</string>
+    <string name="DELETE_FREE_TEXT_PROMPT_TITLE">Ta bort text</string>
+    <string name="DELETE_PRIMARY_FREE_TEXT_PROMPT_MESSAGE">Vill du ta bort följande text från listan över primärlarm: </string>
+    <string name="DELETE_SECONDARY_FREE_TEXT_PROMPT_MESSAGE">Vill du ta bort följande text från listan över sekundärlarm: </string>
+    <string name="DELETE_PRIMARY_NUMBER_PROMPT_MESSAGE">Vill du ta bort följande nummer från listan över primärlarm: </string>
     <!-- NEW STRINGS END -->
     <string name="ABOUT">About Sms Alarm</string>
     <string name="ABOUT_BUILD">Build: %s</string>

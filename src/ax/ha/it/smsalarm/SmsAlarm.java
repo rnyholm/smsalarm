@@ -160,7 +160,7 @@ public class SmsAlarm extends Activity {
 	 * @see #updateWholeUI()
 	 * @see #buildAndShowInputDialog(DialogTypes)
 	 * @see #getSmsAlarmPrefs()
-	 * @see #buildAndShowDeleteSecondaryNumberDialog()
+	 * @see #buildAndShowDeleteDialog()
 	 * @see #buildAndShowToneDialog()
 	 * @see #onPause()
 	 * @see #onDestroy()
@@ -234,7 +234,7 @@ public class SmsAlarm extends Activity {
 				// else show toast
 				if (!secondaryListenSmsNumbers.isEmpty()) {
 					// Show alert dialog(prompt user for deleting number)
-					buildAndShowDeleteSecondaryNumberDialog();
+					buildAndShowDeleteDialog(DialogTypes.SMS_SECONDARY);
 				} else {
 					Toast.makeText(SmsAlarm.this, R.string.NO_SECONDARY_NUMBER_EXISTS, Toast.LENGTH_LONG).show();
 					logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":onCreate().removeSecondaryNumberButton.OnClickListener().onClick()", "Cannot build and show dialog because the list of SECONDARY listen numbers is empty so there is nothing to remove");
@@ -259,7 +259,15 @@ public class SmsAlarm extends Activity {
 			public void onClick(View v) {
 				// Logging
 				logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":onCreate().removePrimaryFreeTextButton.OnClickListener().onClick()", "Remove PRIMARY free text Button pressed");
-				Toast.makeText(getApplicationContext(), "Remove PRIMARY free text Button pressed, not yet implemented!", Toast.LENGTH_SHORT).show();
+				
+				// Only show delete dialog if primary listen free texts exists
+				if (!primaryListenFreeTexts.isEmpty()) {
+					// Show alert dialog(prompt user for deleting text)
+					buildAndShowDeleteDialog(DialogTypes.FREE_TEXT_PRIMARY);
+				} else {
+					Toast.makeText(SmsAlarm.this, R.string.NO_PRIMARY_FREE_TEXT_EXISTS, Toast.LENGTH_LONG).show();
+					logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":onCreate().removePrimaryFreeTextButton.OnClickListener().onClick()", "Cannot build and show dialog because the list of SMS_PRIMARY listen free texts is empty so there is nothing to remove");
+				}
 			}
 		});
 		
@@ -280,7 +288,14 @@ public class SmsAlarm extends Activity {
 			public void onClick(View v) {
 				// Logging
 				logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":onCreate().removeSecondaryFreeTextButton.OnClickListener().onClick()", "Remove SECONDARY free text Button pressed");
-				Toast.makeText(getApplicationContext(), "Remove SECONDARY free text Button pressed, not yet implemented!", Toast.LENGTH_SHORT).show();
+				// Only show delete dialog if primary listen free texts exists
+				if (!secondaryListenFreeTexts.isEmpty()) {
+					// Show alert dialog(prompt user for deleting text)
+					buildAndShowDeleteDialog(DialogTypes.FREE_TEXT_SECONDARY);
+				} else {
+					Toast.makeText(SmsAlarm.this, R.string.NO_SECONDARY_FREE_TEXT_EXISTS, Toast.LENGTH_LONG).show();
+					logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":onCreate().removePrimaryFreeTextButton.OnClickListener().onClick()", "Cannot build and show dialog because the list of SMS_PRIMARY listen free texts is empty so there is nothing to remove");
+				}
 			}
 		});
 
@@ -852,9 +867,15 @@ public class SmsAlarm extends Activity {
 	}
 
 	/**
-	 * To build up a dialog prompting user if it's okay to delete the selected
-	 * secondary listen number.
+	 * Universal method to build of four different types of delete dialogs. The
+	 * supported types are: <b><i>SMS_PRIMARY</b></i>, <b><i>SMS_SECONDARY</b></i>,
+	 * <b><i>FREE_TEXT_PRIMARY</b></i> and <b><i>FREE_TEXT_SECONDARY</b></i>. If a dialog
+	 * type are given as parameter thats not supported a dummy dialog will be
+	 * built and shown.
 	 * 
+	 * @param type
+	 *            Type of delete dialog to build up and shown
+	 *            
 	 * @see #buildAndShowAboutDialog()
 	 * @see #buildAndShowInputDialog(DialogTypes)
 	 * @see #buildAndShowToneDialog()
@@ -867,62 +888,132 @@ public class SmsAlarm extends Activity {
 	 * @see ax.ha.it.smsalarm.PreferencesHandler#setPrefs(PrefKeys, PrefKeys,
 	 *      Object, Context) setPrefs(PrefKeys, PrefKeys, Object, Context)
 	 */
-	private void buildAndShowDeleteSecondaryNumberDialog() {
+	private void buildAndShowDeleteDialog(final DialogTypes type) {
 		// Logging
-		this.logger.logCat(LogPriorities.DEBUG, this.LOG_TAG + ":buildAndShowDeleteSecondaryNumberDialog()", "Start building delete SECONDARY number dialog");
+		this.logger.logCat(LogPriorities.DEBUG, this.LOG_TAG + ":buildAndShowDeleteDialog()", "Start building delete dialog");
 
-		// Store secondaryListenNumberSpinner position
-		final int position = secondarySmsNumberSpinner.getSelectedItemPosition();
-
-		// String to store complete prompt message in
-		String promptMessage = getString(R.string.DELETE_SECONDARY_NUMBER_PROMPT_MESSAGE) + " " + secondaryListenSmsNumbers.get(position) + "?";
-
+		// To store spinner position
+		final int position = 0;//secondarySmsNumberSpinner.getSelectedItemPosition();
+		
 		// Build up the alert dialog
 		AlertDialog.Builder dialog = new AlertDialog.Builder(this);
-
+		
 		// Set some attributes, title and message containing actual number
 		dialog.setIcon(android.R.drawable.ic_dialog_alert);
-		dialog.setTitle(R.string.DELETE_SECONDARY_NUMBER_PROMPT_TITLE);
-		dialog.setMessage(promptMessage);
-
-		// Set dialog to non cancelable
-		dialog.setCancelable(false);
-
-		// Logging
-		this.logger.logCat(LogPriorities.DEBUG, this.LOG_TAG + ":buildAndShowDeleteSecondaryNumberDialog()", "Dialog attributes set");
+		
+		/*
+		 * Switch through the different dialog types and set correct strings and
+		 * edittext to the dialog. If dialog type is non supported a default
+		 * dialog DUMMY is built up.
+		 */
+		switch (type) {
+		case SMS_PRIMARY:
+			// TODO: Implement this when it's possible to add more than 1 numbers for primary alarm
+			break;
+		case SMS_SECONDARY:
+			// Set title
+			dialog.setTitle(R.string.DELETE_NUMBER_PROMPT_TITLE);
+			// Build and set message
+			dialog.setMessage(getString(R.string.DELETE_SECONDARY_NUMBER_PROMPT_MESSAGE) + " " + secondaryListenSmsNumbers.get(secondarySmsNumberSpinner.getSelectedItemPosition()) + "?");
+			// Set dialog to non cancelable
+			dialog.setCancelable(false);
+			// Logging
+			this.logger.logCat(LogPriorities.DEBUG, this.LOG_TAG + ":buildAndShowDeleteDialog()", "Dialog attributes is set for dialog type SMS_SECONDARY");
+			break;
+		case FREE_TEXT_PRIMARY:
+			dialog.setTitle(R.string.DELETE_FREE_TEXT_PROMPT_TITLE);
+			dialog.setMessage(getString(R.string.DELETE_PRIMARY_FREE_TEXT_PROMPT_MESSAGE) + " " + primaryListenFreeTexts.get(primaryFreeTextSpinner.getSelectedItemPosition()) + "?");
+			dialog.setCancelable(false);
+			this.logger.logCat(LogPriorities.DEBUG, this.LOG_TAG + ":buildAndShowDeleteDialog()", "Dialog attributes is set for dialog type FREE_TEXT_PRIMARY");
+			break;
+		case FREE_TEXT_SECONDARY:
+			dialog.setTitle(R.string.DELETE_FREE_TEXT_PROMPT_TITLE);
+			dialog.setMessage(getString(R.string.DELETE_SECONDARY_FREE_TEXT_PROMPT_MESSAGE) + " " + secondaryListenFreeTexts.get(secondaryFreeTextSpinner.getSelectedItemPosition()) + "?");
+			dialog.setCancelable(false);
+			this.logger.logCat(LogPriorities.DEBUG, this.LOG_TAG + ":buildAndShowDeleteDialog()", "Dialog attributes is set for dialog type FREE_TEXT_SECONDARY");
+			break;
+		default: // <--Unsupported dialog type. Displaying a dummy dialog!
+			dialog.setTitle("Congratulations!");
+			dialog.setMessage("Somehow you got this dialog to show up! I bet a monkey must have been messing around with the code;-)");
+			dialog.setCancelable(false);
+			this.logger.logCatTxt(LogPriorities.ERROR, this.LOG_TAG + ":buildAndShowDeleteDialog()", "A UNSUPPORTED dialog type has been given as parameter, a DUMMY dialog will be built and shown");
+		}		
 
 		// Set a positive button and listen on it
 		dialog.setPositiveButton(R.string.YES, new DialogInterface.OnClickListener() {
 			@Override
 			public void onClick(DialogInterface dialog, int whichButton) {
 				// Log information
-				logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":buildAndShowDeleteSecondaryNumberDialog().PosButton.OnClickListener().onClick()", "Positive Button pressed");
-				logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":buildAndShowDeleteSecondaryNumberDialog().PosButton.OnClickListener().onClick()", "SECONDARY listen number: \"" + secondaryListenSmsNumbers.get(position) + "\" is about to be removed from list of SECONDARY listen numbers");
-				// Delete number from list
-				secondaryListenSmsNumbers.remove(position);
-				try {
-					// Store to shared preferences
-					prefHandler.setPrefs(PrefKeys.SHARED_PREF, PrefKeys.SECONDARY_LISTEN_NUMBERS_KEY, secondaryListenSmsNumbers, SmsAlarm.this);
-				} catch (IllegalArgumentException e) {
-					logger.logCatTxt(LogPriorities.ERROR, LOG_TAG + ":buildAndShowDeleteSecondaryNumberDialog().PosButton.OnClickListener().onClick()", "An Object of unsupported instance was given as argument to PreferencesHandler.setPrefs()", e);
+				logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":buildAndShowDeleteDialog().PosButton.OnClickListener().onClick()", "Positive Button pressed");
+				
+				/*
+				 * Switch through the different dialog types and set proper
+				 * input handling to each of them. If dialog type is non
+				 * supported no input is taken.
+				 */
+				switch (type) {
+				case SMS_PRIMARY:
+					// TODO: Implement this when it's possible to add more than 1 numbers for primary alarm
+					break;
+				case SMS_SECONDARY:
+					logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":buildAndShowDeleteDialog().PosButton.OnClickListener().onClick()", "SMS_SECONDARY listen number: \"" + secondaryListenSmsNumbers.get(secondarySmsNumberSpinner.getSelectedItemPosition()) + "\" is about to be removed from list of SMS_SECONDARY listen numbers");
+					// Delete number from list
+					secondaryListenSmsNumbers.remove(secondarySmsNumberSpinner.getSelectedItemPosition());
+					try {
+						// Store to shared preferences
+						prefHandler.setPrefs(PrefKeys.SHARED_PREF, PrefKeys.SECONDARY_LISTEN_NUMBERS_KEY, secondaryListenSmsNumbers, SmsAlarm.this);
+					} catch (IllegalArgumentException e) {
+						logger.logCatTxt(LogPriorities.ERROR, LOG_TAG + ":buildAndShowDeleteDialog().PosButton.OnClickListener().onClick()", "An Object of unsupported instance was given as argument to PreferencesHandler.setPrefs()", e);
+					}
+					// Update affected UI widgets
+					updateSecondaryListenSmsNumberSpinner();
+					break;
+				case FREE_TEXT_PRIMARY:
+					logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":buildAndShowDeleteDialog().PosButton.OnClickListener().onClick()", "FREE_TEXT_PRIMARY listen text: \"" + primaryListenFreeTexts.get(primaryFreeTextSpinner.getSelectedItemPosition()) + "\" is about to be removed from list of FREE_TEXT_PRIMARY listen texts");
+					// Delete free text from list
+					primaryListenFreeTexts.remove(primaryFreeTextSpinner.getSelectedItemPosition());
+					try {
+						// Store to shared preferences
+						prefHandler.setPrefs(PrefKeys.SHARED_PREF, PrefKeys.PRIMARY_LISTEN_FREE_TEXTS_KEY, primaryListenFreeTexts, SmsAlarm.this);
+					} catch (IllegalArgumentException e) {
+						logger.logCatTxt(LogPriorities.ERROR, LOG_TAG + ":buildAndShowDeleteDialog().PosButton.OnClickListener().onClick()", "An Object of unsupported instance was given as argument to PreferencesHandler.setPrefs()", e);
+					}
+					// Update affected UI widgets
+					updatePrimaryListenFreeTextSpinner();
+					break;
+				case FREE_TEXT_SECONDARY:
+					logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":buildAndShowDeleteDialog().PosButton.OnClickListener().onClick()", "FREE_TEXT_SECONDARY listen text: \"" + secondaryListenFreeTexts.get(secondaryFreeTextSpinner.getSelectedItemPosition()) + "\" is about to be removed from list of FREE_TEXT_SECONDARY listen texts");
+					// Delete free text from list
+					secondaryListenFreeTexts.remove(secondaryFreeTextSpinner.getSelectedItemPosition());
+					try {
+						// Store to shared preferences
+						prefHandler.setPrefs(PrefKeys.SHARED_PREF, PrefKeys.SECONDARY_LISTEN_FREE_TEXTS_KEY, secondaryListenFreeTexts, SmsAlarm.this);
+					} catch (IllegalArgumentException e) {
+						logger.logCatTxt(LogPriorities.ERROR, LOG_TAG + ":buildAndShowDeleteDialog().PosButton.OnClickListener().onClick()", "An Object of unsupported instance was given as argument to PreferencesHandler.setPrefs()", e);
+					}
+					// Update affected UI widgets
+					updateSecondaryListenFreeTextSpinner();
+					break;
+				default: // <--Unsupported dialog type
+					logger.logCatTxt(LogPriorities.ERROR, LOG_TAG + ":buildAndShowDeleteDialog().PositiveButton.OnClickListener().onClick()", "Nothing is stored beacause given dialog type is UNSUPPORTED, given dialog is of type number: \"" + type.name() + "\"");
 				}
-				// Update affected UI widgets
-				updateSecondaryListenSmsNumberSpinner();
 			}
 		});
-
-		// Set a neutral button, due to documentation it has same functionality
-		// as "back" button
-		dialog.setNeutralButton(R.string.NO, new DialogInterface.OnClickListener() {
-			@Override
-			public void onClick(DialogInterface dialog, int whichButton) {
-				// DO NOTHING, except logging
-				logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":buildAndShowDeleteSecondaryNumberDialog().NeutralButton.OnClickListener().onClick()", "Neutral Button pressed in dialog, nothing done");
-			}
-		});
+		
+		// Only set neutral button if dialog type is supported
+		if (type.ordinal() >= DialogTypes.SMS_PRIMARY.ordinal() && type.ordinal() <= DialogTypes.FREE_TEXT_SECONDARY.ordinal()) {
+			// Set a neutral button, due to documentation it has same functionality as "back" button
+			dialog.setNeutralButton(R.string.NO, new DialogInterface.OnClickListener() {
+				@Override
+				public void onClick(DialogInterface dialog, int whichButton) {
+					// DO NOTHING, except logging
+					logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":buildAndShowDeleteDialog().NeutralButton.OnClickListener().onClick()", "Neutral Button pressed in dialog, nothing done");
+				}
+			});
+		}
 
 		// Logging
-		this.logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":buildAndShowDeleteSecondaryNumberDialog()", "Showing dialog");
+		this.logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":buildAndShowDeleteDialog()", "Showing dialog");
 
 		// Show it
 		dialog.show();
@@ -930,7 +1021,7 @@ public class SmsAlarm extends Activity {
 
 	/**
 	 * Universal method to build of four different types of input dialogs. The
-	 * supported types are: <b><i>PRIMARY</b></i>, <b><i>SECONDARY</b></i>,
+	 * supported types are: <b><i>SMS_PRIMARY</b></i>, <b><i>SMS_SECONDARY</b></i>,
 	 * <b><i>ACKNOWLEDGE</b></i> and <b><i>RESCUESERVICE</b></i>. If a dialog
 	 * type are given as parameter thats not supported a dummy dialog will be
 	 * built and shown.
@@ -940,7 +1031,7 @@ public class SmsAlarm extends Activity {
 	 * 
 	 * @see #buildAndShowAboutDialog()
 	 * @see #buildAndShowToneDialog()
-	 * @see #buildAndShowDeleteSecondaryNumberDialog()
+	 * @see #buildAndShowDeleteDialog()
 	 * @see #updatePrimaryListenSmsNumberEditText()
 	 * @see #updateSecondaryListenSmsNumberSpinner()
 	 * @see #updateAcknowledgeNumberEditText()
@@ -1286,16 +1377,21 @@ public class SmsAlarm extends Activity {
 	 * @param string String to check if exists in list.
 	 * @param list List to check if string exists in.
 	 * 
-	 * @return <code>true</code> if given String exists in given List else <code>false</code>.
+	 * @return <code>true</code> if given String exists in given List else <code>false</code>.<br>
+	 * 		   <code>false</code> is also returned if either given argument is <code>null</code>.
 	 */
 	private boolean existsIn(String string, List<String> list) {
-		List<String> caseUpperList = new ArrayList<String>();
-		
-		for (String str: list) {
-			caseUpperList.add(str.toUpperCase());
+		if (string != null && list != null) {
+			List<String> caseUpperList = new ArrayList<String>();
+			
+			for (String str: list) {
+				caseUpperList.add(str.toUpperCase());
+			}
+			
+			return caseUpperList.contains(string.toUpperCase());
+		} else {
+			return false;
 		}
-		
-		return caseUpperList.contains(string.toUpperCase());
 	}
 
 	/**
@@ -1385,7 +1481,7 @@ public class SmsAlarm extends Activity {
 	/**
 	 * To build up and show an about dialog.
 	 * 
-	 * @see #buildAndShowDeleteSecondaryNumberDialog()
+	 * @see #buildAndShowDeleteDialog()
 	 * @see #buildAndShowInputDialog(DialogTypes)
 	 * @see #buildAndShowToneDialog()
 	 * @see ax.ha.it.smsalarm.LogHandler#logCat(LogPriorities, String, String)
