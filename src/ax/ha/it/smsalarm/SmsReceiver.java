@@ -41,7 +41,11 @@ public class SmsReceiver extends BroadcastReceiver {
 	private String primaryListenNumber = "";
 
 	// List of Strings containing secondaryListenNumbers
-	private List<String> secondaryListenNumbers = new ArrayList<String>();
+	private List<String> secondaryListenSmsNumbers = new ArrayList<String>();
+	
+	// List of Strings containing free texts triggiering an alarm
+	private List<String> primaryListenFreeTexts = new ArrayList<String>();
+	private List<String> secondaryListenFreeTexts = new ArrayList<String>();
 
 	// Variables needed to handle an incoming alarm properly
 	private int primaryMessageToneId = 0;
@@ -58,6 +62,9 @@ public class SmsReceiver extends BroadcastReceiver {
 	// To store incoming SMS phone number and body(message)
 	private String msgHeader = "";
 	private String msgBody = "";
+	
+	// Text which triggered an alarm if freetext triggering is used
+	private String triggerText = "";
 
 	/**
 	 * Overridden method to receive <code>intent</code>, reacts on incoming SMS.
@@ -135,6 +142,8 @@ public class SmsReceiver extends BroadcastReceiver {
 		}
 	}
 
+	
+	
 	/**
 	 * Method to handle incoming SMS. Aborts the systems broadcast and stores
 	 * the SMS in the device inbox. This method is also responsible for playing
@@ -291,10 +300,10 @@ public class SmsReceiver extends BroadcastReceiver {
 			
 			// Set correct AlarmType
 			alarmType = AlarmTypes.PRIMARY;
-		} else if (!this.secondaryListenNumbers.isEmpty()) { // If list with secondary listen numbers is not empty check if we got a SMS from one of the secondaryListenNumbers
+		} else if (!this.secondaryListenSmsNumbers.isEmpty()) { // If list with secondary listen numbers is not empty check if we got a SMS from one of the secondaryListenNumbers
 			try {
 				// Loop through each element in list
-				for (String secondaryListenNumber : this.secondaryListenNumbers) {
+				for (String secondaryListenNumber : this.secondaryListenSmsNumbers) {
 					/*
 					 * If msg header equals a element in list application has 
 					 * received a SMS from a secondary listen number, concatenate with 0 to compensate for any removed country code
@@ -328,6 +337,10 @@ public class SmsReceiver extends BroadcastReceiver {
 		this.logger.logCat(LogPriorities.DEBUG, this.LOG_TAG + ":isAlarm()", "SMS didn't fulfill any criteria for either primary or secondary alarm. SMS received from: \"" + this.msgHeader + "\" with message: \"" + this.msgBody + "\"");
 	}
 	
+	private void isFreeTextAlarm(Context context) {
+		// Log message for debugging/information purpose
+		this.logger.logCat(LogPriorities.DEBUG, this.LOG_TAG + ":isFreeTextAlarm()", "Checking if income SMS is holding any text triggering a free text alarm");
+	}
 
 	/**
 	 * To remove any country code from the SMS senders phone number.<br>
@@ -420,7 +433,7 @@ public class SmsReceiver extends BroadcastReceiver {
 		try {
 			// Get shared preferences needed by SmsReceiver
 			this.primaryListenNumber = (String) this.prefHandler.getPrefs(PrefKeys.SHARED_PREF, PrefKeys.PRIMARY_LISTEN_NUMBER_KEY, DataTypes.STRING, context);
-			this.secondaryListenNumbers = (List<String>) this.prefHandler.getPrefs(PrefKeys.SHARED_PREF, PrefKeys.SECONDARY_LISTEN_NUMBERS_KEY, DataTypes.LIST, context);
+			this.secondaryListenSmsNumbers = (List<String>) this.prefHandler.getPrefs(PrefKeys.SHARED_PREF, PrefKeys.SECONDARY_LISTEN_NUMBERS_KEY, DataTypes.LIST, context);
 			this.primaryMessageToneId = (Integer) this.prefHandler.getPrefs(PrefKeys.SHARED_PREF, PrefKeys.PRIMARY_MESSAGE_TONE_KEY, DataTypes.INTEGER, context);
 			this.secondaryMessageToneId = (Integer) this.prefHandler.getPrefs(PrefKeys.SHARED_PREF, PrefKeys.SECONDARY_MESSAGE_TONE_KEY, DataTypes.INTEGER, context, 1);
 			this.useOsSoundSettings = (Boolean) this.prefHandler.getPrefs(PrefKeys.SHARED_PREF, PrefKeys.USE_OS_SOUND_SETTINGS_KEY, DataTypes.BOOLEAN, context);

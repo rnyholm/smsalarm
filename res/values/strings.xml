@@ -2,23 +2,23 @@
 <resources>
     <!-- NEW STRINGS IN V2.2 BEGIN, SORT THESE LATER -->
     <string name="TITLE_FREE_TEXT_TRIGGER_SETTINGS">Fritext inställningar</string>
-    <string name="INFO_FREE_TEXT_TRIGGER_SETTINGS">Ställ in vilka ord eller teckensekvenser som Sms Alarm ska larma på om de finns i inkommande sms. Notera att denna funktion inte är skiftlägeskänslig.</string>
-    <string name="ENTER_FREE_TEXT_HINT">Ange text..</string>
-    <string name="FREE_TEXT_PROMPT_TITLE">Ange text</string>
-    <string name="PRIMARY_FREE_TEXT_PROMPT_MESSAGE">Ange en text som Sms Alarm ska larma primärlarm på om det finns i mottaget sms.</string>
-    <string name="SECONDARY_FREE_TEXT_PROMPT_MESSAGE">Ange en text som Sms Alarm ska larma sekundärlarm på om det finns i mottaget sms.</string>
-    <string name="FREE_TEXT_PROMPT_HINT">Text..</string>
+    <string name="INFO_FREE_TEXT_TRIGGER_SETTINGS">Ställ in vilka ord som Sms Alarm ska larma på om de finns i inkommande sms. Notera att denna funktion inte är skiftlägeskänslig.</string>
+    <string name="ENTER_FREE_TEXT_HINT">Ange ord..</string>
+    <string name="FREE_TEXT_PROMPT_TITLE">Ange ord</string>
+    <string name="PRIMARY_FREE_TEXT_PROMPT_MESSAGE">Ange ett ord som Sms Alarm ska larma primärlarm på om det finns i mottaget sms.</string>
+    <string name="SECONDARY_FREE_TEXT_PROMPT_MESSAGE">Ange ett ord som Sms Alarm ska larma sekundärlarm på om det finns i mottaget sms.</string>
+    <string name="FREE_TEXT_PROMPT_HINT">Ord..</string>
     <string name="SECONDARY_NUMBER_PROMPT_MESSAGE">Ange ett telefonnummer som Sms Alarm larmar sekundärlarm på.</string>
-    <string name="EMPTY_FREE_TEXT">Det går inte att ange en tom text för fritext alarmering. Ange en ny text.</string>
-    <string name="DUPLICATED_FREE_TEXTS">Texter för primär- och sekundär larm får inte vara lika. Ange en ny text.</string>
-    <string name="FREE_TEXT_ALREADY_IN_PRIMARY_LIST">Angiven text finns redan i listan av texter för primärlarm. Ange en ny text.</string>
-    <string name="FREE_TEXT_ALREADY_IN_SECONDARY_LIST">Angiven text finns redan i listan av texter för sekundärlarm. Ange en ny text.</string>
-    <string name="NO_PRIMARY_FREE_TEXT_EXISTS">Inga texter för primärlarm finns, kan ej ta bort text.</string>
-    <string name="NO_SECONDARY_FREE_TEXT_EXISTS">Inga texter för sekundärlarm finns, kan ej ta bort text.</string>
+    <string name="EMPTY_FREE_TEXT">Det går inte att ange ett tomt ord för fritext alarmering. Ange ett nytt ord.</string>
+    <string name="DUPLICATED_FREE_TEXTS">Ord för primär- och sekundär larm får inte vara lika. Ange ett nytt ord.</string>
+    <string name="FREE_TEXT_ALREADY_IN_PRIMARY_LIST">Angivet ord finns redan i listan av ord för primärlarm. Ange ett nytt ord.</string>
+    <string name="FREE_TEXT_ALREADY_IN_SECONDARY_LIST">Angivet ord finns redan i listan av ord för sekundärlarm. Ange ett nytt ord.</string>
+    <string name="NO_PRIMARY_FREE_TEXT_EXISTS">Inga ord för primärlarm finns, kan ej ta bort ord.</string>
+    <string name="NO_SECONDARY_FREE_TEXT_EXISTS">Inga ord för sekundärlarm finns, kan ej ta bort ord.</string>
     <string name="DELETE_NUMBER_PROMPT_TITLE">Ta bort nummer</string>
-    <string name="DELETE_FREE_TEXT_PROMPT_TITLE">Ta bort text</string>
-    <string name="DELETE_PRIMARY_FREE_TEXT_PROMPT_MESSAGE">Vill du ta bort följande text från listan över primärlarm: </string>
-    <string name="DELETE_SECONDARY_FREE_TEXT_PROMPT_MESSAGE">Vill du ta bort följande text från listan över sekundärlarm: </string>
+    <string name="DELETE_FREE_TEXT_PROMPT_TITLE">Ta bort ord</string>
+    <string name="DELETE_PRIMARY_FREE_TEXT_PROMPT_MESSAGE">Vill du ta bort följande ord från listan över primärlarm: </string>
+    <string name="DELETE_SECONDARY_FREE_TEXT_PROMPT_MESSAGE">Vill du ta bort följande ord från listan över sekundärlarm: </string>
     <string name="DELETE_PRIMARY_NUMBER_PROMPT_MESSAGE">Vill du ta bort följande nummer från listan över primärlarm: </string>
     <!-- NEW STRINGS END -->
     <string name="ABOUT">About Sms Alarm</string>
