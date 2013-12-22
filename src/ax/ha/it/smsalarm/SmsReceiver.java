@@ -504,6 +504,7 @@ public class SmsReceiver extends BroadcastReceiver {
 	 * <li><code>Sweden - +46<code></li>
 	 * <li><code>Norway - +47<code></li>
 	 * <li><code>Germany - +49<code></li>
+	 * <li><code>Australia - +61</code></li>
 	 * <li><code>New Zeeland - +64<code></li>
 	 * 
 	 * @see ax.ha.it.smsalarm.LogHandler#logCat(LogPriorities, String, String) logCat(LogPriorities, String, String)
@@ -516,7 +517,7 @@ public class SmsReceiver extends BroadcastReceiver {
 		 * If number has a country code, recognized by +NUM, remove it. 
 		 * Following countries are supported: Finland, Åland,
 		 * Sweden, Norway, Denmark, France and Germany, United Kingdom, New Zeeland,
-		 * Slovenia, Czech Republic, Austria, Canada and USA. In each case
+		 * Australia, Slovenia, Czech Republic, Austria, Canada and USA. In each case
 		 * information is logged.
 		 */
 		if (this.msgHeader.contains("+1")) { // <--USA, Canada
@@ -552,6 +553,9 @@ public class SmsReceiver extends BroadcastReceiver {
 		} else if (this.msgHeader.contains("+49")) { // <--Germany
 			this.msgHeader = this.msgHeader.replace("+49", "");
 			this.logger.logCat(LogPriorities.DEBUG, this.LOG_TAG + ":removeCountryCode()", "Countrycode +49 found, removed countrycode");
+		} else if (this.msgHeader.contains("+61")) { // <--Australia
+			this.msgHeader = this.msgHeader.replace("+61", "");
+			this.logger.logCat(LogPriorities.DEBUG, this.LOG_TAG + ":removeCountryCode()", "Countrycode +61 found, removed countrycode");
 		} else if (this.msgHeader.contains("+64")) { // <--New Zeeland
 			this.msgHeader = this.msgHeader.replace("+64", "");
 			this.logger.logCat(LogPriorities.DEBUG, this.LOG_TAG + ":removeCountryCode()", "Countrycode +64 found, removed countrycode");
