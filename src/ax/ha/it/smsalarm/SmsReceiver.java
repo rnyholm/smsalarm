@@ -43,7 +43,7 @@ public class SmsReceiver extends BroadcastReceiver {
 	// List of Strings containing secondaryListenNumbers
 	private List<String> secondaryListenSmsNumbers = new ArrayList<String>();
 	
-	// List of Strings containing free texts triggiering an alarm
+	// List of Strings containing free texts triggering an alarm
 	private List<String> primaryListenFreeTexts = new ArrayList<String>();
 	private List<String> secondaryListenFreeTexts = new ArrayList<String>();
 
@@ -78,7 +78,7 @@ public class SmsReceiver extends BroadcastReceiver {
 	 * 
 	 * @see #smsHandler(Context)
 	 * @see #removeCountryCode()
-	 * @see #checkAndGetAlarm(Context)
+	 * @see #checkAlarm(Context)
 	 * @see #getSmsReceivePrefs(Context)
 	 * @see ax.ha.it.smsalarm.LogHandler#logCat(LogPriorities, String, String) logCat(LogPriorities, String, String)
 	 * @see ax.ha.it.smsalarm.LogHandler#logCatTxt(LogPriorities, String, String, Throwable) logCatTxt(LogPriorities, String, String, Throwable)
@@ -113,10 +113,10 @@ public class SmsReceiver extends BroadcastReceiver {
 				}
 				
 				// Remove any country codes, if there are any
-				removeCountryCode();
+				this.removeCountryCode();
 
 				// Check if income SMS was an alarm
-				isAlarm(context);
+				this.checkAlarm(context);
 
 				// Check if the income SMS was any alarm
 				if (this.alarmType.equals(AlarmTypes.PRIMARY)) {
@@ -261,6 +261,62 @@ public class SmsReceiver extends BroadcastReceiver {
 	}
 	
 	/**
+	 * Method used to get all shared preferences needed by class SmsReceiver
+	 * 
+	 * @param context
+	 *            Context
+	 * 
+	 * @see #onReceive(Context, Intent)
+	 * @see #smsHandler(Context)
+	 * @see ax.ha.it.smsalarm.LogHandler#logCat(LogPriorities, String, String) logCat(LogPriorities, String, String)
+	 * @see ax.ha.it.smsalarm.LogHandler#logCatTxt(LogPriorities, String, String, Throwable) logCatTxt(LogPriorities, String, String, Throwable)
+	 * @see ax.ha.it.smsalarm.PreferencesHandler#getPrefs(PrefKeys, PrefKeys, DataTypes, Context) getPrefs(PrefKeys, PrefKeys, DataTypes, Context)
+	 */
+	@SuppressWarnings("unchecked")
+	private void getSmsReceivePrefs(Context context) {
+		// Some logging
+		this.logger.logCat(LogPriorities.DEBUG, this.LOG_TAG + ":getSmsReceivePrefs()", "Start retrieving shared preferences needed by class SmsReceiver");
+		
+		try {
+			// Get shared preferences needed by SmsReceiver
+			this.primaryListenNumber = (String) this.prefHandler.getPrefs(PrefKeys.SHARED_PREF, PrefKeys.PRIMARY_LISTEN_NUMBER_KEY, DataTypes.STRING, context);
+			this.secondaryListenSmsNumbers = (List<String>) this.prefHandler.getPrefs(PrefKeys.SHARED_PREF, PrefKeys.SECONDARY_LISTEN_NUMBERS_KEY, DataTypes.LIST, context);
+			this.primaryListenFreeTexts = (List<String>) this.prefHandler.getPrefs(PrefKeys.SHARED_PREF, PrefKeys.PRIMARY_LISTEN_FREE_TEXTS_KEY, DataTypes.LIST, context);
+			this.secondaryListenFreeTexts = (List<String>) this.prefHandler.getPrefs(PrefKeys.SHARED_PREF, PrefKeys.SECONDARY_LISTEN_FREE_TEXTS_KEY, DataTypes.LIST, context);
+			this.primaryMessageToneId = (Integer) this.prefHandler.getPrefs(PrefKeys.SHARED_PREF, PrefKeys.PRIMARY_MESSAGE_TONE_KEY, DataTypes.INTEGER, context);
+			this.secondaryMessageToneId = (Integer) this.prefHandler.getPrefs(PrefKeys.SHARED_PREF, PrefKeys.SECONDARY_MESSAGE_TONE_KEY, DataTypes.INTEGER, context, 1);
+			this.useOsSoundSettings = (Boolean) this.prefHandler.getPrefs(PrefKeys.SHARED_PREF, PrefKeys.USE_OS_SOUND_SETTINGS_KEY, DataTypes.BOOLEAN, context);
+			this.enableAlarmAck = (Boolean) this.prefHandler.getPrefs(PrefKeys.SHARED_PREF, PrefKeys.ENABLE_ACK_KEY, DataTypes.BOOLEAN, context);
+			this.playToneTwice = (Boolean) this.prefHandler.getPrefs(PrefKeys.SHARED_PREF, PrefKeys.PLAY_TONE_TWICE_KEY, DataTypes.BOOLEAN, context);
+			this.enableSmsAlarm = (Boolean) this.prefHandler.getPrefs(PrefKeys.SHARED_PREF, PrefKeys.ENABLE_SMS_ALARM_KEY, DataTypes.BOOLEAN, context, true);
+		} catch(IllegalArgumentException e) {
+			logger.logCatTxt(LogPriorities.ERROR, this.LOG_TAG + ":getSmsReceivePrefs()", "An unsupported datatype was given as argument to PreferencesHandler.getPrefs()", e);
+		} 
+
+		this.logger.logCat(LogPriorities.DEBUG, this.LOG_TAG + ":getSmsReceivePrefs()", "Shared preferences retrieved");
+	}
+	
+	/**
+	 * To check if income SMS fulfill criteria for either a <b><i>PRIMARY</i></b>
+	 * or <b><i>SECONDARY</i></b> alarm.
+	 * 
+	 * @param context
+	 *            Context
+	 * 
+	 * @see #checkSmsNumberAlarm(Context)
+	 * @see #checkFreeTextAlarm(Context)
+	 * @see ax.ha.it.smsalarm.LogHandler#logCat(LogPriorities, String, String) logCat(LogPriorities, String, String)
+	 */
+	private void checkAlarm(Context context) {
+		// Log message for debugging/information purpose
+		this.logger.logCat(LogPriorities.DEBUG, this.LOG_TAG + ":checkAlarm()", "Checking if income SMS is an alarm");
+		
+		// Figure out if we got an alarm
+		this.checkSmsNumberAlarm(context);
+		this.checkFreeTextAlarm(context);
+	}
+	
+	/**
 	 * To check if received SMS is any alarm.
 	 * The check is done by a equality control of the senders phone number
 	 * and the phone numbers read from <code>SharedPreferences</code>. 
@@ -270,76 +326,168 @@ public class SmsReceiver extends BroadcastReceiver {
 	 * 
 	 * @param context
 	 *            Context
-	 * @return <code>AlarmType</code> of income SMS, if no <code>AlarmType</code> could be resolved
-	 * 		   <code>AlarmTypes.UNDEFINED</code> is returned.
 	 * 
+	 * @see #setAlarmType(AlarmTypes, Context)
 	 * @see ax.ha.it.smsalarm.LogHandler#logCat(LogPriorities, String, String) logCat(LogPriorities, String, String)
 	 * @see ax.ha.it.smsalarm.LogHandler#logCatTxt(LogPriorities, String, String, Throwable) logCatTxt(LogPriorities, String, String, Throwable)
 	 * @see ax.ha.it.smsalarm.PreferencesHandler#setPrefs(PrefKeys, PrefKeys, Object, Context) setPrefs(PrefKeys, PrefKeys, Object, Context)
 	 */
-	private void isAlarm(Context context) {
+	private void checkSmsNumberAlarm(Context context) {
 		// Log message for debugging/information purpose
-		this.logger.logCat(LogPriorities.DEBUG, this.LOG_TAG + ":isAlarm()", "Checking if income SMS is an alarm");
+		this.logger.logCat(LogPriorities.DEBUG, this.LOG_TAG + ":checkSmsNumberAlarm()", "Checking if sender of income SMS should trigger an alarm");
 		
 		// If we got a SMS from the same primary number as the application listens on, concatenate with 0 to compensate for any removed country code
 		if (this.msgHeader.equals(this.primaryListenNumber) || (("0" + this.msgHeader).equals(this.primaryListenNumber) && this.countryCodeRemoved)) {
 			// Need to concatenate a 0 to the primary phone number if this is true in order to get the correct number
 			if (("0" + this.msgHeader).equals(this.primaryListenNumber)) {
-				this.msgHeader = "0" + this.msgHeader; 
+				this.msgHeader = "0" + this.msgHeader;
 			}
 			
 			// Log information
-			this.logger.logCat(LogPriorities.DEBUG, this.LOG_TAG + ":isAlarm()", "SMS fulfilled the criteria for a PRIMARY alarm. SMS received from: \"" + this.msgHeader + "\" with message: \"" + this.msgBody + "\"");
+			this.logger.logCat(LogPriorities.DEBUG, this.LOG_TAG + ":checkSmsNumberAlarm()", "SMS fulfilled the criteria for a PRIMARY alarm. SMS received from: \"" + this.msgHeader + "\" with message: \"" + this.msgBody + "\", triggered on number: " + this.primaryListenNumber);
 			
 			try {
 				// Put alarm type to shared preferences
 				this.prefHandler.setPrefs(PrefKeys.SHARED_PREF, PrefKeys.LARM_TYPE_KEY, AlarmTypes.PRIMARY.ordinal(), context);
 			} catch(IllegalArgumentException e) {
-				logger.logCatTxt(LogPriorities.ERROR, LOG_TAG + ":isAlarm()", "An Object of unsupported instance was given as argument to PreferencesHandler.setPrefs()", e);
+				logger.logCatTxt(LogPriorities.ERROR, LOG_TAG + ":checkSmsNumberAlarm()", "An Object of unsupported instance was given as argument to PreferencesHandler.setPrefs()", e);
 			}
 			
 			// Set correct AlarmType
-			alarmType = AlarmTypes.PRIMARY;
-		} else if (!this.secondaryListenSmsNumbers.isEmpty()) { // If list with secondary listen numbers is not empty check if we got a SMS from one of the secondaryListenNumbers
-			try {
-				// Loop through each element in list
-				for (String secondaryListenNumber : this.secondaryListenSmsNumbers) {
-					/*
-					 * If msg header equals a element in list application has 
-					 * received a SMS from a secondary listen number, concatenate with 0 to compensate for any removed country code
-					 */
-					if (this.msgHeader.equals(secondaryListenNumber) || (("0" + this.msgHeader).equals(secondaryListenNumber) && this.countryCodeRemoved)) {
-						// Need to concatenate a 0 to the secondary phone number if this is true in order to get the correct number
-						if (("0" + this.msgHeader).equals(secondaryListenNumber)) {
-							this.msgHeader = "0" + msgHeader;
-						}
-						
-						// Log information
-						this.logger.logCat(LogPriorities.DEBUG, this.LOG_TAG + ":isAlarm()", "SMS fulfilled the criteria for a SECONDARY alarm. SMS received from: \"" + this.msgHeader + "\" with message: \"" + this.msgBody + "\"");
-						
-						try {
-							// Put alarm type to shared preferences
-							this.prefHandler.setPrefs(PrefKeys.SHARED_PREF, PrefKeys.LARM_TYPE_KEY, AlarmTypes.SECONDARY.ordinal(), context);
-						} catch(IllegalArgumentException e) {
-							logger.logCatTxt(LogPriorities.ERROR, LOG_TAG + ":isAlarm()", "An Object of unsupported instance was given as argument to PreferencesHandler.setPrefs()", e);
-						}
-
-						// Set correct AlarmType
-						alarmType = AlarmTypes.SECONDARY;
+			this.setAlarmType(AlarmTypes.PRIMARY, context);
+		} else { 
+			// Loop through each element in list
+			for (String secondaryListenNumber : this.secondaryListenSmsNumbers) {
+				/*
+				 * If msg header equals a element in list application has 
+				 * received a SMS from a secondary listen number, concatenate with 0 to compensate for any removed country code
+				 */
+				if (this.msgHeader.equals(secondaryListenNumber) || (("0" + this.msgHeader).equals(secondaryListenNumber) && this.countryCodeRemoved)) {
+					// Need to concatenate a 0 to the secondary phone number if this is true in order to get the correct number
+					if (("0" + this.msgHeader).equals(secondaryListenNumber)) {
+						this.msgHeader = "0" + msgHeader;
 					}
+					
+					// Log information
+					this.logger.logCat(LogPriorities.DEBUG, this.LOG_TAG + ":checkSmsNumberAlarm()", "SMS fulfilled the criteria for a SECONDARY alarm. SMS received from: \"" + this.msgHeader + "\" with message: \"" + this.msgBody + "\", triggered on number: " + secondaryListenNumber);
+					
+					try {
+						// Put alarm type to shared preferences
+						this.prefHandler.setPrefs(PrefKeys.SHARED_PREF, PrefKeys.LARM_TYPE_KEY, AlarmTypes.SECONDARY.ordinal(), context);
+					} catch(IllegalArgumentException e) {
+						logger.logCatTxt(LogPriorities.ERROR, LOG_TAG + ":checkSmsNumberAlarm()", "An Object of unsupported instance was given as argument to PreferencesHandler.setPrefs()", e);
+					}
+
+					// Set correct AlarmType
+					this.setAlarmType(AlarmTypes.SECONDARY, context);
 				}
-			} catch (Exception e) {
-				// Log exception
-				this.logger.logCatTxt(LogPriorities.ERROR, this.LOG_TAG + ":isAlarm()", "Failed to iterate through list of secondary alarms, operation endend with exception", e);
 			}
-		} 		
-		// Log information
-		this.logger.logCat(LogPriorities.DEBUG, this.LOG_TAG + ":isAlarm()", "SMS didn't fulfill any criteria for either primary or secondary alarm. SMS received from: \"" + this.msgHeader + "\" with message: \"" + this.msgBody + "\"");
+		}
 	}
 	
-	private void isFreeTextAlarm(Context context) {
+	/**
+	 * To check if received SMS is any alarm.
+	 * The check is done by a controlling if any of the free texts(words) is found 
+	 * in received SMS.
+	 * 
+	 * @param context
+	 *            Context
+	 * 
+	 * @see #setTriggerText(String)
+	 * @see #setAlarmType(AlarmTypes, Context)
+	 * @see ax.ha.it.smsalarm.LogHandler#logCat(LogPriorities, String, String) logCat(LogPriorities, String, String)
+	 * @see ax.ha.it.smsalarm.LogHandler#logCatTxt(LogPriorities, String, String, Throwable) logCatTxt(LogPriorities, String, String, Throwable)
+	 * @see ax.ha.it.smsalarm.PreferencesHandler#setPrefs(PrefKeys, PrefKeys, Object, Context) setPrefs(PrefKeys, PrefKeys, Object, Context)
+	 */
+	private void checkFreeTextAlarm(Context context) {
 		// Log message for debugging/information purpose
-		this.logger.logCat(LogPriorities.DEBUG, this.LOG_TAG + ":isFreeTextAlarm()", "Checking if income SMS is holding any text triggering a free text alarm");
+		this.logger.logCat(LogPriorities.DEBUG, this.LOG_TAG + ":checkFreeTextAlarm()", "Checking if income SMS is holding any text triggering a free text alarm");
+		
+		// Helper variable to avoid setting variable in each iteration
+		boolean isAlarm = false;
+		
+		for (String primaryFreeText : this.primaryListenFreeTexts) {
+			if (Utils.findWordEqualsIgnore(primaryFreeText, this.msgBody)) {
+				// Log information
+				this.logger.logCat(LogPriorities.DEBUG, this.LOG_TAG + ":checkFreeTextAlarm()", "SMS fulfilled the criteria for a PRIMARY alarm. SMS received from: \"" + this.msgHeader + "\" with message: \"" + this.msgBody + "\", triggered on freetext: " + primaryFreeText);
+				
+				// Set correct trigger text
+				this.setTriggerText(primaryFreeText);
+				
+				// Set helper variable
+				isAlarm = true;
+			}	
+		}
+		
+		// Only set alarm type if we are sure that income SMS trigerred on free text
+		if (isAlarm) {
+			// Set correct AlarmType
+			this.setAlarmType(AlarmTypes.PRIMARY, context);			
+		}
+		
+		// Only check if income SMS hasn't already been checked as PRIMARY alarm
+		if (!AlarmTypes.PRIMARY.equals(this.alarmType)) {
+			for (String secondaryFreeText : this.secondaryListenFreeTexts) {
+				if (Utils.findWordEqualsIgnore(secondaryFreeText, this.msgBody)) {
+					this.logger.logCat(LogPriorities.DEBUG, this.LOG_TAG + ":checkFreeTextAlarm()", "SMS fulfilled the criteria for a SECONDARY alarm. SMS received from: \"" + this.msgHeader + "\" with message: \"" + this.msgBody + "\", triggered on freetext: " + secondaryFreeText);					
+					this.setTriggerText(secondaryFreeText);
+					isAlarm = true;
+				}
+			}
+			
+			if (isAlarm) {
+				this.setAlarmType(AlarmTypes.SECONDARY, context);		
+			}
+		}
+	}
+	
+	/**
+	 * Convenience method to set this objects <code>AlarmTypes</code>.
+	 * 
+	 * @param alarmType 
+	 * 				Alarm type to be set.
+	 * @param context 
+	 * 				context
+	 * 
+	 * @see ax.ha.it.smsalarm.LogHandler#logCat(LogPriorities, String, String) logCat(LogPriorities, String, String)
+	 * @see ax.ha.it.smsalarm.LogHandler#logCatTxt(LogPriorities, String, String, Throwable) logCatTxt(LogPriorities, String, String, Throwable)
+	 * @see ax.ha.it.smsalarm.PreferencesHandler#setPrefs(PrefKeys, PrefKeys, Object, Context) setPrefs(PrefKeys, PrefKeys, Object, Context)
+	 */
+	private void setAlarmType(AlarmTypes alarmType, Context context) {
+		// Log message for debugging/information purpose
+		this.logger.logCat(LogPriorities.DEBUG, this.LOG_TAG + ":setAlarmType()", "Setting alarm type to:\"" + alarmType.name() + "\"");
+		
+		// Set the given alarm type
+		this.alarmType = alarmType;		
+		
+		try {
+			// Put alarm type to shared preferences
+			this.prefHandler.setPrefs(PrefKeys.SHARED_PREF, PrefKeys.LARM_TYPE_KEY, alarmType.ordinal(), context);
+		} catch(IllegalArgumentException e) {
+			logger.logCatTxt(LogPriorities.ERROR, LOG_TAG + ":setAlarmType()", "An Object of unsupported instance was given as argument to PreferencesHandler.setPrefs()", e);
+		}				
+	}
+	
+	/**
+	 * Convenience method to set this objects trigger text.
+	 *  
+	 * @param triggerText Text to be set as trigger text.
+	 * 
+	 * @see ax.ha.it.smsalarm.LogHandler#logCat(LogPriorities, String, String) logCat(LogPriorities, String, String)
+	 */
+	private void setTriggerText(String triggerText) {
+		// Log information
+		this.logger.logCat(LogPriorities.DEBUG, this.LOG_TAG + ":setTriggerText()", "Setting trigger text:\"" + triggerText + "\"");
+		
+		// If empty just add trigger text else concatenate and add trigger text
+		if (this.triggerText.isEmpty()) {
+			this.triggerText = triggerText;
+		} else {
+			this.triggerText = this.triggerText + ", " + triggerText;
+		}		
+		
+		// Log information
+		this.logger.logCat(LogPriorities.DEBUG, this.LOG_TAG + ":setTriggerText()", "Trigger text set to:\"" + this.triggerText + "\"");
 	}
 
 	/**
@@ -411,39 +559,5 @@ public class SmsReceiver extends BroadcastReceiver {
 			this.countryCodeRemoved = false;
 			this.logger.logCat(LogPriorities.DEBUG, this.LOG_TAG + ":removeCountryCode()", "No or an unsupported countrycode was found, nothing removed");
 		}		
-	}
-
-	/**
-	 * Method used to get all shared preferences needed by class SmsReceiver
-	 * 
-	 * @param context
-	 *            Context
-	 * 
-	 * @see #onReceive(Context, Intent)
-	 * @see #smsHandler(Context)
-	 * @see ax.ha.it.smsalarm.LogHandler#logCat(LogPriorities, String, String) logCat(LogPriorities, String, String)
-	 * @see ax.ha.it.smsalarm.LogHandler#logCatTxt(LogPriorities, String, String, Throwable) logCatTxt(LogPriorities, String, String, Throwable)
-	 * @see ax.ha.it.smsalarm.PreferencesHandler#getPrefs(PrefKeys, PrefKeys, DataTypes, Context) getPrefs(PrefKeys, PrefKeys, DataTypes, Context)
-	 */
-	@SuppressWarnings("unchecked")
-	private void getSmsReceivePrefs(Context context) {
-		// Some logging
-		this.logger.logCat(LogPriorities.DEBUG, this.LOG_TAG + ":getSmsReceivePrefs()", "Start retrieving shared preferences needed by class SmsReceiver");
-		
-		try {
-			// Get shared preferences needed by SmsReceiver
-			this.primaryListenNumber = (String) this.prefHandler.getPrefs(PrefKeys.SHARED_PREF, PrefKeys.PRIMARY_LISTEN_NUMBER_KEY, DataTypes.STRING, context);
-			this.secondaryListenSmsNumbers = (List<String>) this.prefHandler.getPrefs(PrefKeys.SHARED_PREF, PrefKeys.SECONDARY_LISTEN_NUMBERS_KEY, DataTypes.LIST, context);
-			this.primaryMessageToneId = (Integer) this.prefHandler.getPrefs(PrefKeys.SHARED_PREF, PrefKeys.PRIMARY_MESSAGE_TONE_KEY, DataTypes.INTEGER, context);
-			this.secondaryMessageToneId = (Integer) this.prefHandler.getPrefs(PrefKeys.SHARED_PREF, PrefKeys.SECONDARY_MESSAGE_TONE_KEY, DataTypes.INTEGER, context, 1);
-			this.useOsSoundSettings = (Boolean) this.prefHandler.getPrefs(PrefKeys.SHARED_PREF, PrefKeys.USE_OS_SOUND_SETTINGS_KEY, DataTypes.BOOLEAN, context);
-			this.enableAlarmAck = (Boolean) this.prefHandler.getPrefs(PrefKeys.SHARED_PREF, PrefKeys.ENABLE_ACK_KEY, DataTypes.BOOLEAN, context);
-			this.playToneTwice = (Boolean) this.prefHandler.getPrefs(PrefKeys.SHARED_PREF, PrefKeys.PLAY_TONE_TWICE_KEY, DataTypes.BOOLEAN, context);
-			this.enableSmsAlarm = (Boolean) this.prefHandler.getPrefs(PrefKeys.SHARED_PREF, PrefKeys.ENABLE_SMS_ALARM_KEY, DataTypes.BOOLEAN, context, true);
-		} catch(IllegalArgumentException e) {
-			logger.logCatTxt(LogPriorities.ERROR, this.LOG_TAG + ":getSmsReceivePrefs()", "An unsupported datatype was given as argument to PreferencesHandler.getPrefs()", e);
-		} 
-
-		this.logger.logCat(LogPriorities.DEBUG, this.LOG_TAG + ":getSmsReceivePrefs()", "Shared preferences retrieved");
 	}
 }
