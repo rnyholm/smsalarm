@@ -54,7 +54,6 @@ public class SmsReceiver extends BroadcastReceiver {
 	private boolean enableAlarmAck = false;
 	private boolean playToneTwice = false;
 	private boolean enableSmsAlarm = false;
-	private boolean countryCodeRemoved = true;
 
 	// Variable to store type of alarm as string
 	private AlarmTypes alarmType = AlarmTypes.UNDEFINED;
@@ -111,9 +110,6 @@ public class SmsReceiver extends BroadcastReceiver {
 					this.msgHeader = msgs[i].getOriginatingAddress();
 					this.msgBody += msgs[i].getMessageBody().toString();
 				}
-				
-				// Remove any country codes, if there are any
-				this.removeCountryCode();
 
 				// Check if income SMS was an alarm
 				this.checkAlarm(context);
@@ -177,9 +173,9 @@ public class SmsReceiver extends BroadcastReceiver {
 		
 		// Declare and initialize database handler object and store alarm to database
 		DatabaseHandler db = new DatabaseHandler(context);
-		db.addAlarm(new Alarm(this.msgHeader, this.msgBody, this.alarmType));
+		db.addAlarm(new Alarm(this.msgHeader, this.msgBody, this.triggerText, this.alarmType));
 		// Get all alarms from database and log them to to html file
-		logger.logAlarm(db.getAllAlarm(), context);
+		this.logger.logAlarm(db.getAllAlarm(), context);
 		
 		// Update all widgets associated with this application
 		WidgetProvider.updateWidgets(context);
@@ -336,13 +332,8 @@ public class SmsReceiver extends BroadcastReceiver {
 		// Log message for debugging/information purpose
 		this.logger.logCat(LogPriorities.DEBUG, this.LOG_TAG + ":checkSmsNumberAlarm()", "Checking if sender of income SMS should trigger an alarm");
 		
-		// If we got a SMS from the same primary number as the application listens on, concatenate with 0 to compensate for any removed country code
-		if (this.msgHeader.equals(this.primaryListenNumber) || (("0" + this.msgHeader).equals(this.primaryListenNumber) && this.countryCodeRemoved)) {
-			// Need to concatenate a 0 to the primary phone number if this is true in order to get the correct number
-			if (("0" + this.msgHeader).equals(this.primaryListenNumber)) {
-				this.msgHeader = "0" + this.msgHeader;
-			}
-			
+		// If we got a SMS from the same primary number as the application listens on
+		if (this.msgHeader.equals(this.primaryListenNumber)) {
 			// Log information
 			this.logger.logCat(LogPriorities.DEBUG, this.LOG_TAG + ":checkSmsNumberAlarm()", "SMS fulfilled the criteria for a PRIMARY alarm. SMS received from: \"" + this.msgHeader + "\" with message: \"" + this.msgBody + "\", triggered on number: " + this.primaryListenNumber);
 			
@@ -358,16 +349,8 @@ public class SmsReceiver extends BroadcastReceiver {
 		} else { 
 			// Loop through each element in list
 			for (String secondaryListenNumber : this.secondaryListenSmsNumbers) {
-				/*
-				 * If msg header equals a element in list application has 
-				 * received a SMS from a secondary listen number, concatenate with 0 to compensate for any removed country code
-				 */
-				if (this.msgHeader.equals(secondaryListenNumber) || (("0" + this.msgHeader).equals(secondaryListenNumber) && this.countryCodeRemoved)) {
-					// Need to concatenate a 0 to the secondary phone number if this is true in order to get the correct number
-					if (("0" + this.msgHeader).equals(secondaryListenNumber)) {
-						this.msgHeader = "0" + msgHeader;
-					}
-					
+				// If msg header equals a element in list application has received a SMS from a secondary listen number
+				if (this.msgHeader.equals(secondaryListenNumber)) {
 					// Log information
 					this.logger.logCat(LogPriorities.DEBUG, this.LOG_TAG + ":checkSmsNumberAlarm()", "SMS fulfilled the criteria for a SECONDARY alarm. SMS received from: \"" + this.msgHeader + "\" with message: \"" + this.msgBody + "\", triggered on number: " + secondaryListenNumber);
 					
@@ -419,7 +402,7 @@ public class SmsReceiver extends BroadcastReceiver {
 			}	
 		}
 		
-		// Only set alarm type if we are sure that income SMS trigerred on free text
+		// Only set alarm type if we are sure that income SMS triggered on free text
 		if (isAlarm) {
 			// Set correct AlarmType
 			this.setAlarmType(AlarmTypes.PRIMARY, context);			
@@ -488,80 +471,5 @@ public class SmsReceiver extends BroadcastReceiver {
 		
 		// Log information
 		this.logger.logCat(LogPriorities.DEBUG, this.LOG_TAG + ":setTriggerText()", "Trigger text set to:\"" + this.triggerText + "\"");
-	}
-
-	/**
-	 * To remove any country code from the SMS senders phone number.<br>
-	 * Following county codes are supported:<br>
-	 * <li><code>USA, Canada - +1<code></li>
-	 * <li><code>France - +33<code></li>
-	 * <li><code>Finland - +358<code></li>
-	 * <li><code>Slovenia - +386<code></li>
-	 * <li><code>Czech Republic - +420</code>
-	 * <li><code>Austria - +43<code></li>
-	 * <li><code>United Kingdom - +44<code></li>
-	 * <li><code>Denmark - +45<code></li>
-	 * <li><code>Sweden - +46<code></li>
-	 * <li><code>Norway - +47<code></li>
-	 * <li><code>Germany - +49<code></li>
-	 * <li><code>Australia - +61</code></li>
-	 * <li><code>New Zeeland - +64<code></li>
-	 * 
-	 * @see ax.ha.it.smsalarm.LogHandler#logCat(LogPriorities, String, String) logCat(LogPriorities, String, String)
-	 */
-	private void removeCountryCode() {
-		// Log message for debugging/information purpose
-		this.logger.logCat(LogPriorities.DEBUG, this.LOG_TAG + ":removeCountryCode()", "Checking if any country code exist");
-		
-		/*
-		 * If number has a country code, recognized by +NUM, remove it. 
-		 * Following countries are supported: Finland, Åland,
-		 * Sweden, Norway, Denmark, France and Germany, United Kingdom, New Zeeland,
-		 * Australia, Slovenia, Czech Republic, Austria, Canada and USA. In each case
-		 * information is logged.
-		 */
-		if (this.msgHeader.contains("+1")) { // <--USA, Canada
-			this.msgHeader = this.msgHeader.replace("+1", "");
-			this.logger.logCat(LogPriorities.DEBUG, this.LOG_TAG + ":removeCountryCode()", "Countrycode +1 found, removed countrycode");
-		} else if (this.msgHeader.contains("+33")) { // <--France
-			this.msgHeader = this.msgHeader.replace("+33", "");
-			this.logger.logCat(LogPriorities.DEBUG, this.LOG_TAG + ":removeCountryCode()", "Countrycode +33 found, removed countrycode");
-		} else if (this.msgHeader.contains("+358")) { // <--Finland
-			this.msgHeader = this.msgHeader.replace("+358", "");
-			this.logger.logCat(LogPriorities.DEBUG, this.LOG_TAG + ":removeCountryCode()", "Countrycode +358 found, removed countrycode");
-		} else if (this.msgHeader.contains("+386")) { // <--Slovenia
-			this.msgHeader = this.msgHeader.replace("+386", "");
-			this.logger.logCat(LogPriorities.DEBUG, this.LOG_TAG + ":removeCountryCode()", "Countrycode +386 found, removed countrycode");
-		} else if (this.msgHeader.contains("+420")) { // <--Czech Republic
-			this.msgHeader = this.msgHeader.replace("+420", "");
-			this.logger.logCat(LogPriorities.DEBUG, this.LOG_TAG + ":removeCountryCode()", "Countrycode +420 found, removed countrycode");
-		} else if (this.msgHeader.contains("+43")) { // <--Austria
-			this.msgHeader = this.msgHeader.replace("+43", "");
-			this.logger.logCat(LogPriorities.DEBUG, this.LOG_TAG + ":removeCountryCode()", "Countrycode +43 found, removed countrycode");
-		} else if (this.msgHeader.contains("+44")) { // <--UK
-			this.msgHeader = this.msgHeader.replace("+44", "");
-			this.logger.logCat(LogPriorities.DEBUG, this.LOG_TAG + ":removeCountryCode()", "Countrycode +44 found, removed countrycode");
-		} else if (this.msgHeader.contains("+45")) { // <--Denmark
-			this.msgHeader = this.msgHeader.replace("+45", "");
-			this.logger.logCat(LogPriorities.DEBUG, this.LOG_TAG + ":removeCountryCode()", "Countrycode +45 found, removed countrycode");
-		} else if (this.msgHeader.contains("+46")) { // <--Sweden
-			this.msgHeader = this.msgHeader.replace("+46", "");
-			this.logger.logCat(LogPriorities.DEBUG, this.LOG_TAG + ":removeCountryCode()", "Countrycode +46 found, removed countrycode");
-		} else if (this.msgHeader.contains("+47")) { // <--Norway
-			this.msgHeader = this.msgHeader.replace("+47", "");
-			this.logger.logCat(LogPriorities.DEBUG, this.LOG_TAG + ":removeCountryCode()", "Countrycode +47 found, removed countrycode");
-		} else if (this.msgHeader.contains("+49")) { // <--Germany
-			this.msgHeader = this.msgHeader.replace("+49", "");
-			this.logger.logCat(LogPriorities.DEBUG, this.LOG_TAG + ":removeCountryCode()", "Countrycode +49 found, removed countrycode");
-		} else if (this.msgHeader.contains("+61")) { // <--Australia
-			this.msgHeader = this.msgHeader.replace("+61", "");
-			this.logger.logCat(LogPriorities.DEBUG, this.LOG_TAG + ":removeCountryCode()", "Countrycode +61 found, removed countrycode");
-		} else if (this.msgHeader.contains("+64")) { // <--New Zeeland
-			this.msgHeader = this.msgHeader.replace("+64", "");
-			this.logger.logCat(LogPriorities.DEBUG, this.LOG_TAG + ":removeCountryCode()", "Countrycode +64 found, removed countrycode");
-		} else {
-			this.countryCodeRemoved = false;
-			this.logger.logCat(LogPriorities.DEBUG, this.LOG_TAG + ":removeCountryCode()", "No or an unsupported countrycode was found, nothing removed");
-		}		
 	}
 }

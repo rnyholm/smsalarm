@@ -18,7 +18,7 @@ import ax.ha.it.smsalarm.LogHandler.LogPriorities;
  * <code>Database</code> access and handling are done via the <code>SQLiteOpenHelper</code> class.
  * 
  * @author Robert Nyholm <robert.nyholm@aland.net>
- * @version 2.1
+ * @version 2.2
  * @since 2.1beta
  */
 public class DatabaseHandler extends SQLiteOpenHelper {
@@ -42,6 +42,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 	private static final String KEY_RECEIVED = "received";
 	private static final String KEY_SENDER = "sender";
 	private static final String KEY_MESSAGE = "message";
+	private static final String KEY_TRIGGER_TEXT = "triggerText";
 	private static final String KEY_ACKNOWLEDGED = "acknowledged";
 	private static final String KEY_ALARM_TYPE = "alarmType";
 	
@@ -69,7 +70,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 	public void onCreate(SQLiteDatabase db) {
 		// Build up the query for creating the table
         String CREATE_ALARMS_TABLE = "CREATE TABLE " + TABLE_ALARMS + "("+ KEY_ID + " INTEGER PRIMARY KEY," + KEY_RECEIVED + " TEXT,"
-            							+ KEY_SENDER + " TEXT," + KEY_MESSAGE + " TEXT," + KEY_ACKNOWLEDGED + " TEXT," + KEY_ALARM_TYPE + " INTEGER)";
+            							+ KEY_SENDER + " TEXT," + KEY_MESSAGE + " TEXT," + KEY_TRIGGER_TEXT + "TEXT," + KEY_ACKNOWLEDGED + " TEXT," + KEY_ALARM_TYPE + " INTEGER)";
         // Run query
         db.execSQL(CREATE_ALARMS_TABLE);
 		// Log in debug purpose
@@ -83,14 +84,13 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 	 */
 	@Override
 	public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-        // Drop older table if existed
-        db.execSQL("DROP TABLE IF EXISTS " + TABLE_ALARMS);
-
-		// Log in debug purpose
-		logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":onUpgrade()", "Table has been dropped if it existed");     
- 
-        // Create tables again
-        onCreate(db);
+        // If there is a new version of the database, alter it by adding column for text triggering free text alarm
+        if (newVersion > oldVersion) {
+        	db.execSQL("ALTER TABLE " + TABLE_ALARMS + " ADD COLUMN " + KEY_TRIGGER_TEXT + " TEXT");
+        	
+    		// Log in debug purpose
+    		logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":onUpgrade()", "Existing table:\"" + TABLE_ALARMS + "\" has been altered by adding column:\"" + KEY_TRIGGER_TEXT + "\"");  
+        }
 	}
 
 	/**
@@ -143,7 +143,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 	    SQLiteDatabase db = this.getReadableDatabase();
 	    
 	    // Create query and execute it, store result in cursor
-	    Cursor cursor = db.query(TABLE_ALARMS, new String[] { KEY_ID, KEY_RECEIVED, KEY_SENDER, KEY_MESSAGE, KEY_ACKNOWLEDGED, KEY_ALARM_TYPE }, 
+	    Cursor cursor = db.query(TABLE_ALARMS, new String[] { KEY_ID, KEY_RECEIVED, KEY_SENDER, KEY_MESSAGE, KEY_TRIGGER_TEXT, KEY_ACKNOWLEDGED, KEY_ALARM_TYPE }, 
 	    						 KEY_ID + "=?", new String[] { String.valueOf(id) }, null, null, null, null);
 	    
 	    // CHeck if we got any results from the query
@@ -154,8 +154,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 	    	cursor.moveToFirst();    	
 	    }
 	    // Create a new alarm object with data resolved from cursor
-	    Alarm alarm = new Alarm(Integer.parseInt(cursor.getString(0)), cursor.getString(1), cursor.getString(2), cursor.getString(3), cursor.getString(4), AlarmTypes.of(Integer.parseInt(cursor.getString(5))));
-	    
+	    Alarm alarm = new Alarm(Integer.parseInt(cursor.getString(0)), cursor.getString(1), cursor.getString(2), cursor.getString(3), cursor.getString(4), cursor.getString(5), AlarmTypes.of(Integer.parseInt(cursor.getString(6))));
         // Close cursor and database
         cursor.close();
         db.close();
@@ -192,7 +191,8 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 		if (cursor.moveToFirst()) {
 			do {
 				// Create a new alarm object and fill it with data from cursor and add it to the list
-				alarmList.add(new Alarm(Integer.parseInt(cursor.getString(0)), cursor.getString(1), cursor.getString(2), cursor.getString(3), cursor.getString(4), AlarmTypes.of(Integer.parseInt(cursor.getString(5)))));
+				// TODO: Double check that cursor position is correct both when a new database is created and when an existing is updated
+				alarmList.add(new Alarm(Integer.parseInt(cursor.getString(0)), cursor.getString(1), cursor.getString(2), cursor.getString(3), cursor.getString(4), cursor.getString(5), AlarmTypes.of(Integer.parseInt(cursor.getString(6)))));
 			} while (cursor.moveToNext());
 		}
 		
@@ -291,6 +291,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 	    values.put(KEY_RECEIVED, alarm.getReceived());				// Date and time when alarm was received
 	    values.put(KEY_SENDER, alarm.getSender());					// Sender of the alarm
 	    values.put(KEY_MESSAGE, alarm.getMessage());				// Alarm message
+	    values.put(KEY_TRIGGER_TEXT, alarm.getTriggerText());		// Triggering text of a free text alarm
 	    values.put(KEY_ACKNOWLEDGED, alarm.getAcknowledged());		// Date and time the alarm was acknowledged
 	    values.put(KEY_ALARM_TYPE, alarm.getAlarmType().ordinal());	// Type of alarm
 	    

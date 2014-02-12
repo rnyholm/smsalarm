@@ -14,7 +14,7 @@ import ax.ha.it.smsalarm.LogHandler.LogPriorities;
  * some help methods for setting and getting data.
  * 
  * @author Robert Nyholm <robert.nyholm@aland.net>
- * @version 2.1
+ * @version 2.2
  * @since 2.1beta
  */
 public class Alarm {
@@ -29,6 +29,7 @@ public class Alarm {
 	private String received;		// Localized datetime when the alarm was received
 	private String sender;			// Sender of alarm(e-mail or phone number)
 	private String message;			// Alarm message
+	private String triggerText;		// Text found in message triggering an alarm
 	private String acknowledged;	// Localized datetime when the alarm was acknowledged
 	private AlarmTypes alarmType = AlarmTypes.UNDEFINED; // Indicating which kind of alarm this object is
 	
@@ -43,39 +44,25 @@ public class Alarm {
 	}
 	
 	/**
-	 * To indicate whether this Alarm object is empty or not. An Alarm object is defined empty if all member variables are empty.
-	 * 
-	 * @return <code>true</code> if this object is empty, else <code>false</code>
-	 * 
-	 * @see ax.ha.it.smsalarm.LogHandler#logCat(LogPriorities, String, String) logCat(LogPriorities, String, String)
-	 */
-	public boolean isEmpty() {
-		// Check to see if the member variables are empty
-		if(this.getId() == 0 && this.received.isEmpty() && this.sender.isEmpty() && this.message.isEmpty() && this.acknowledged.isEmpty() && this.alarmType.equals(AlarmTypes.UNDEFINED)) {
-			// Log in debug purpose
-			this.logger.logCat(LogPriorities.DEBUG, this.LOG_TAG + ":isEmpty()", "This Alarm object is empty, returning true");
-			return true;
-		} else {
-			// Log in debug purpose
-			this.logger.logCat(LogPriorities.DEBUG, this.LOG_TAG + ":isEmpty()", "This Alarm object is not empty, returning false");
-			return false;
-		}
-	}
-	
-	/**
 	 * To create a new Alarm object.
 	 * 
 	 * @param sender Alarm sender as <code>String</code>
 	 * @param message Alarm message as <code>String</code>
+	 * @param triggerText Alarm triggerText as <code>String</code>
 	 * @param alarmType Alarm type as <code>AlarmTypes</code>
 	 * 
 	 * @see ax.ha.it.smsalarm.LogHandler#logCat(LogPriorities, String, String) logCat(LogPriorities, String, String)
 	 */
-	public Alarm(String sender, String message, AlarmTypes alarmType) {
+	public Alarm(String sender, String message, String triggerText, AlarmTypes alarmType) {
 		// Create and store a localized timestamp, this depends on users locale and/or settings
 		this.received = DateFormat.getDateTimeInstance().format(Calendar.getInstance().getTime());
 		this.sender = sender;
 		this.message = message;
+		if (!triggerText.isEmpty()) {
+			this.triggerText = triggerText;
+		} else {
+			this.triggerText = "-";
+		}
 		this.acknowledged  = "-";
 		this.alarmType = alarmType;
 		// Log in debug purpose
@@ -89,21 +76,43 @@ public class Alarm {
 	 * @param received Alarm received date and time as <code>String</code>
 	 * @param sender Alarm sender as <code>String</code>
 	 * @param message Alarm message as <code>String</code>
+	 * @param triggerText Alarm triggerText as <code>String</code>
 	 * @param acknowledged Alarm acknowledge date and time as <code>String</code>
 	 * @param alarmType Alarm type as <code>AlarmTypes</code>
 	 * 
 	 * @see ax.ha.it.smsalarm.LogHandler#logCat(LogPriorities, String, String) logCat(LogPriorities, String, String)
 	 */
-	public Alarm(int id, String received, String sender, String message, String acknowledged, AlarmTypes alarmType) {
+	public Alarm(int id, String received, String sender, String message, String triggerText, String acknowledged, AlarmTypes alarmType) {
 		this.id = id;
 		this.received = received;
 		this.sender = sender;
 		this.message = message;
+		this.triggerText = triggerText;
 		this.acknowledged  = acknowledged;
 		this.alarmType = alarmType;
 		// Log in debug purpose
 		this.logger.logCat(LogPriorities.DEBUG, this.LOG_TAG + ":Alarm()", "A new Alarm object was created with following data: [" + this.toString() + "]");
-	}	
+	}
+	
+	/**
+	 * To indicate whether this Alarm object is empty or not. An Alarm object is defined empty if all member variables are empty.
+	 * 
+	 * @return <code>true</code> if this object is empty, else <code>false</code>
+	 * 
+	 * @see ax.ha.it.smsalarm.LogHandler#logCat(LogPriorities, String, String) logCat(LogPriorities, String, String)
+	 */
+	public boolean isEmpty() {
+		// Check to see if the member variables are empty
+		if(this.getId() == 0 && this.received.isEmpty() && this.sender.isEmpty() && this.message.isEmpty() && this.triggerText.isEmpty() && this.acknowledged.isEmpty() && this.alarmType.equals(AlarmTypes.UNDEFINED)) {
+			// Log in debug purpose
+			this.logger.logCat(LogPriorities.DEBUG, this.LOG_TAG + ":isEmpty()", "This Alarm object is empty, returning true");
+			return true;
+		} else {
+			// Log in debug purpose
+			this.logger.logCat(LogPriorities.DEBUG, this.LOG_TAG + ":isEmpty()", "This Alarm object is not empty, returning false");
+			return false;
+		}
+	}
 	
 	/**
 	 * To get Alarm's id.
@@ -225,7 +234,33 @@ public class Alarm {
 	public void setMessage(String message) {
 		this.message = message;
 		// Log in debug purpose
-		this.logger.logCat(LogPriorities.DEBUG, this.LOG_TAG + ":getId()", "Alarm message has been set to:\"" + this.message + "\"");
+		this.logger.logCat(LogPriorities.DEBUG, this.LOG_TAG + ":setMessage()", "Alarm message has been set to:\"" + this.message + "\"");
+	}
+
+	/**
+	 * To get Alarm's trigger text.
+	 * 
+	 * @return Alarm trigger text as <code>String</code>
+	 * 
+	 * @see ax.ha.it.smsalarm.LogHandler#logCat(LogPriorities, String, String) logCat(LogPriorities, String, String)
+	 */
+	public String getTriggerText() {
+		// Log in debug purpose
+		this.logger.logCat(LogPriorities.DEBUG, this.LOG_TAG + ":getTriggerText()", "Returning alarm trigger text:\"" + this.triggerText + "\"");
+		return triggerText;
+	}
+
+	/**
+	 * To set Alarm's trigger text.
+	 * 
+	 * @param message Alarm trigger text as <code>String</code>
+	 * 
+	 * @see ax.ha.it.smsalarm.LogHandler#logCat(LogPriorities, String, String) logCat(LogPriorities, String, String)
+	 */
+	public void setTriggerText(String triggerText) {
+		this.triggerText = triggerText;
+		// Log in debug purpose
+		this.logger.logCat(LogPriorities.DEBUG, this.LOG_TAG + ":setTriggerText()", "Alarm trigger text has been set to:\"" + this.triggerText + "\"");
 	}
 
 	/**
@@ -335,6 +370,6 @@ public class Alarm {
 	 */
 	@Override
 	public String toString() {
-		return "id:\"" + Integer.toString(this.id) + "\", received:\"" + this.received + "\", sender:\"" + this.sender + "\", message:\"" + this.message + "\", acknowledged:\"" + this.acknowledged + "\" and alarmType:\"" + this.alarmType.toString() + "\"";
+		return "id:\"" + Integer.toString(this.id) + "\", received:\"" + this.received + "\", sender:\"" + this.sender + "\", message:\"" + this.message + "\", trigger text:\"" + this.triggerText + "\", acknowledged:\"" + this.acknowledged + "\" and alarmType:\"" + this.alarmType.toString() + "\"";
 	}
 }
