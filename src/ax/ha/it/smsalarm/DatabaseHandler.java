@@ -29,13 +29,16 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 	private static final LogHandler logger = LogHandler.getInstance();
 	
 	// Database Version
-	private static final int DB_VERSION = 1;
+	private static final int DB_VERSION = 2;
 	
 	// Database Name
 	private static final String DB_NAME = "alarmsManager";
 	
 	// Alarms Table name
 	private static final String TABLE_ALARMS = "alarms";
+	
+	// Temporary tag used for data migration script
+	private static final String TMP = "tmp_";
 	
 	// Alarms Table Column names
 	private static final String KEY_ID = "id";
@@ -70,11 +73,13 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 	public void onCreate(SQLiteDatabase db) {
 		// Build up the query for creating the table
         String CREATE_ALARMS_TABLE = "CREATE TABLE " + TABLE_ALARMS + "("+ KEY_ID + " INTEGER PRIMARY KEY," + KEY_RECEIVED + " TEXT,"
-            							+ KEY_SENDER + " TEXT," + KEY_MESSAGE + " TEXT," + KEY_TRIGGER_TEXT + "TEXT," + KEY_ACKNOWLEDGED + " TEXT," + KEY_ALARM_TYPE + " INTEGER)";
+            							+ KEY_SENDER + " TEXT," + KEY_MESSAGE + " TEXT," + KEY_TRIGGER_TEXT + " TEXT," + KEY_ACKNOWLEDGED + " TEXT," + KEY_ALARM_TYPE + " INTEGER)";
         // Run query
         db.execSQL(CREATE_ALARMS_TABLE);
-		// Log in debug purpose
-		logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":onCreate()", "Table has been created from following query:\"" + CREATE_ALARMS_TABLE + "\"");        
+        
+        // Log in debug purpose
+        logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":onCreate()", "Executed SQL query:\"" + CREATE_ALARMS_TABLE + "\""); 
+		logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":onCreate()", "Table has been created");        
 	}
 
 	/**
@@ -84,12 +89,41 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 	 */
 	@Override
 	public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-        // If there is a new version of the database, alter it by adding column for text triggering free text alarm
-        if (newVersion > oldVersion) {
-        	db.execSQL("ALTER TABLE " + TABLE_ALARMS + " ADD COLUMN " + KEY_TRIGGER_TEXT + " TEXT");
+		// Log in debug purpose
+		logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":onUpgrade()", oldVersion + " -- " + newVersion); 
+		
+        // If there is a new version of the database, reconstruct existing database and handle data migration
+        if (newVersion > oldVersion && newVersion == DB_VERSION) {
+     		// Log in debug purpose
+    		logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":onUpgrade()", "Table:\"" + TABLE_ALARMS + "\" already exists, begin upgrade of table structure and data migration");  
+    		
+    		// The queries needed for the upgrade and data migration
+    		String ALTER_QUERY = "ALTER TABLE " + TABLE_ALARMS + " RENAME TO " + TMP + TABLE_ALARMS;
+        	String DROP_QUERY = "DROP TABLE " + TMP + TABLE_ALARMS;
+        	String INSERT_QUERY = "INSERT INTO " + TABLE_ALARMS + " (" + KEY_ID + "," + KEY_RECEIVED + "," + KEY_SENDER + "," + KEY_MESSAGE + "," + KEY_ACKNOWLEDGED + "," + KEY_ALARM_TYPE + ")" +
+        						  "SELECT " + KEY_ID + "," + KEY_RECEIVED + "," + KEY_SENDER + "," + KEY_MESSAGE + "," + KEY_ACKNOWLEDGED + "," + KEY_ALARM_TYPE +  " FROM " + TMP + TABLE_ALARMS;
+    		
+        	// Begin data migration and reconstruction of existing database, beginning with renaming existing table
+        	db.execSQL(ALTER_QUERY);
+        	logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":onUpgrade()", "Executed SQL query:\"" + ALTER_QUERY + "\""); 
         	
-    		// Log in debug purpose
-    		logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":onUpgrade()", "Existing table:\"" + TABLE_ALARMS + "\" has been altered by adding column:\"" + KEY_TRIGGER_TEXT + "\"");  
+        	// Create the new and correct table
+        	onCreate(db);
+        	
+        	// Populate new table with existing data from old table(now seen as a temporary table)
+        	db.execSQL(INSERT_QUERY);
+        	logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":onUpgrade()", "Executed SQL query:\"" + INSERT_QUERY + "\""); 
+
+        	// Now drop the temporary table
+        	db.execSQL(DROP_QUERY);
+        	logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":onUpgrade()", "Executed SQL query:\"" + DROP_QUERY + "\""); 
+    		logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":onUpgrade()", "Existing table:\"" + TABLE_ALARMS + "\" has been altered by adding column:\"" + KEY_TRIGGER_TEXT + "\" and populating it with existing data");  
+        } else {
+     		// Log in debug purpose
+    		logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":onUpgrade()", "Table:\"" + TABLE_ALARMS + "\" doesn't exist, create a new one");
+    		
+    		// Just create the new table
+    		onCreate(db);
         }
 	}
 
@@ -115,6 +149,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 	    values.put(KEY_RECEIVED, alarm.getReceived());				// Date and time when alarm was received
 	    values.put(KEY_SENDER, alarm.getSender());					// Sender of the alarm
 	    values.put(KEY_MESSAGE, alarm.getMessage());				// Alarm message
+	    values.put(KEY_TRIGGER_TEXT, alarm.getTriggerText());		// Triggering text of a free text alarm	    
 	    values.put(KEY_ACKNOWLEDGED, alarm.getAcknowledged());		// Date and time the alarm was acknowledged
 	    values.put(KEY_ALARM_TYPE, alarm.getAlarmType().ordinal());	// Type of alarm
 	    
@@ -191,7 +226,6 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 		if (cursor.moveToFirst()) {
 			do {
 				// Create a new alarm object and fill it with data from cursor and add it to the list
-				// TODO: Double check that cursor position is correct both when a new database is created and when an existing is updated
 				alarmList.add(new Alarm(Integer.parseInt(cursor.getString(0)), cursor.getString(1), cursor.getString(2), cursor.getString(3), cursor.getString(4), cursor.getString(5), AlarmTypes.of(Integer.parseInt(cursor.getString(6)))));
 			} while (cursor.moveToNext());
 		}
