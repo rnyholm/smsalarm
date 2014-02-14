@@ -22,7 +22,7 @@ import android.util.Log;
  * <b><i>LogHandler is a singleton.</i></b>
  * 
  * @author Robert Nyholm <robert.nyholm@aland.net>
- * @version 2.1.3
+ * @version 2.2
  * @since 2.0
  */
 public class LogHandler {
@@ -517,6 +517,7 @@ public class LogHandler {
 				bW.write("\t\t\t<tr>" + this.EOL);
 				bW.write("\t\t\t\t<th>" + context.getString(R.string.HTML_WIDGET_RECEIVED) + "</th>" + this.EOL);
 				bW.write("\t\t\t\t<th>" + context.getString(R.string.HTML_WIDGET_SENDER) + "</th>" + this.EOL);
+				bW.write("\t\t\t\t<th>" + context.getString(R.string.HTML_WIDGET_TRIGGER_TEXT) + "</th>" + this.EOL);
 				bW.write("\t\t\t\t<th>" + context.getString(R.string.HTML_WIDGET_LARM) + "</th>" + this.EOL);
 				bW.write("\t\t\t\t<th>" + context.getString(R.string.HTML_WIDGET_ACK) + "</th>" + this.EOL);
 				bW.write("\t\t\t</tr>" + this.EOL);
@@ -533,6 +534,7 @@ public class LogHandler {
 					// Write the rest html for the table row
 					bW.write("\t\t\t\t<td>" + alarm.getReceived() + "</td>" + this.EOL);
 					bW.write("\t\t\t\t<td>" + alarm.getSender() + "</td>" + this.EOL);
+					bW.write("\t\t\t\t<td>" + alarm.getTriggerText() + "</td>" + this.EOL);
 					bW.write("\t\t\t\t<td>" + alarm.getMessage() + "</td>" + this.EOL);
 					bW.write("\t\t\t\t<td>" + alarm.getAcknowledged() + "</td>" + this.EOL);
 					bW.write("\t\t\t</tr>" + this.EOL);

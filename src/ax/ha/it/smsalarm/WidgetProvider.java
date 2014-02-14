@@ -320,6 +320,11 @@ public class WidgetProvider extends AppWidgetProvider {
 				alarmInfo.append(alarm.getSender());
 				alarmInfo.append(context.getString(R.string.NEW_LINE));
 				
+				alarmInfo.append(context.getString(R.string.HTML_WIDGET_TRIGGER_TEXT));
+				alarmInfo.append(context.getString(R.string.COLON));
+				alarmInfo.append(alarm.getTriggerText());
+				alarmInfo.append(context.getString(R.string.NEW_LINE));
+				
 				// Build up the alarm message in separate stringbuilder so we can shorten it if we need
 				alarmMessage.append(context.getString(R.string.HTML_WIDGET_LARM));
 				alarmMessage.append(context.getString(R.string.COLON));

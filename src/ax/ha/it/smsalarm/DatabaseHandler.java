@@ -72,8 +72,8 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 	@Override
 	public void onCreate(SQLiteDatabase db) {
 		// Build up the query for creating the table
-        String CREATE_ALARMS_TABLE = "CREATE TABLE " + TABLE_ALARMS + "("+ KEY_ID + " INTEGER PRIMARY KEY," + KEY_RECEIVED + " TEXT,"
-            							+ KEY_SENDER + " TEXT," + KEY_MESSAGE + " TEXT," + KEY_TRIGGER_TEXT + " TEXT," + KEY_ACKNOWLEDGED + " TEXT," + KEY_ALARM_TYPE + " INTEGER)";
+        String CREATE_ALARMS_TABLE = "CREATE TABLE " + TABLE_ALARMS + "("+ KEY_ID + " INTEGER PRIMARY KEY," + KEY_RECEIVED + " TEXT DEFAULT '',"
+            							+ KEY_SENDER + " TEXT DEFAULT ''," + KEY_MESSAGE + " TEXT DEFAULT ''," + KEY_TRIGGER_TEXT + " TEXT DEFAULT ''," + KEY_ACKNOWLEDGED + " TEXT DEFAULT ''," + KEY_ALARM_TYPE + " INTEGER)";
         // Run query
         db.execSQL(CREATE_ALARMS_TABLE);
         

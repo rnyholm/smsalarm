@@ -20,6 +20,7 @@
     <string name="DELETE_PRIMARY_FREE_TEXT_PROMPT_MESSAGE">Vill du ta bort följande ord från listan över primärlarm: </string>
     <string name="DELETE_SECONDARY_FREE_TEXT_PROMPT_MESSAGE">Vill du ta bort följande ord från listan över sekundärlarm: </string>
     <string name="DELETE_PRIMARY_NUMBER_PROMPT_MESSAGE">Vill du ta bort följande nummer från listan över primärlarm: </string>
+    <string name="HTML_WIDGET_TRIGGER_TEXT">Triggande text</string>
     <!-- NEW STRINGS END -->
     <string name="ABOUT">About Sms Alarm</string>
     <string name="ABOUT_BUILD">Build: %s</string>
