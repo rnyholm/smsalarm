@@ -12,6 +12,7 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.os.Environment;
 import android.util.Log;
@@ -25,6 +26,7 @@ import android.util.Log;
  * @version 2.2
  * @since 2.0
  */
+@SuppressLint("SimpleDateFormat")
 public class LogHandler {
 	/**
 	 * Enumeration for different LogPriorities needed to decide which kind of
@@ -64,12 +66,8 @@ public class LogHandler {
 	private Date today = Calendar.getInstance().getTime();
 	private SimpleDateFormat formatter = new SimpleDateFormat("yy-MM-dd HH:mm:ss.SSS");
 
-	// Variables to store external storage availability, both readable and
-	// writeable
-	private boolean mExternalStorageAvailable = false; // Practically
-														// unnecessary for this
-														// application, we just
-														// need to write
+	// Variables to store external storage availability, both readable and writeable
+	private boolean mExternalStorageAvailable = false; // Practically unnecessary for this application, we just need to write
 	private boolean mExternalStorageWriteable = false;
 
 	/**

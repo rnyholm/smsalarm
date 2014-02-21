@@ -24,6 +24,9 @@ import ax.ha.it.smsalarm.LogHandler.LogPriorities;
 public class DatabaseHandler extends SQLiteOpenHelper {
 	// Log tag string
 	private final String LOG_TAG = this.getClass().getSimpleName();
+	
+	// We need to have context in order to set some time stamps
+	private Context context;
 
 	// Object for logging
 	private static final LogHandler logger = LogHandler.getInstance();
@@ -59,6 +62,10 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 	 */
 	public DatabaseHandler(Context context) {
 		super(context, DB_NAME, null, DB_VERSION);
+		
+		// Store the context
+		this.context = context;
+		
 		// Log in debug purpose
 		logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":DatabaseHandler()", "DatabaseHandler object has been created with following data:[DB_NAME:\"" + DB_NAME + "\", DB_VERSION:\"" +  DB_VERSION + "\" and context:\"" + context.toString() + "\"]");
 	}
@@ -358,7 +365,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 			// Get latest entry(alarm) in database
 			Alarm alarm = this.getAlarm(alarmsCount);
 			// Update alarms acknowledge time
-			alarm.updateAcknowledged();
+			alarm.updateAcknowledged(this.context);
 			
 			// Update alarm entry
 			this.updateAlarm(alarm);
@@ -398,7 +405,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 				// If alarm type is primary we want to update it's acknowledge time
 				if (alarm.getAlarmType().equals(AlarmTypes.PRIMARY)) {
 					// Update alarms acknowledge time
-					alarm.updateAcknowledged();	
+					alarm.updateAcknowledged(this.context);	
 					// Update alarm entry
 					this.updateAlarm(alarm);
 					

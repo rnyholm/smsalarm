@@ -788,44 +788,7 @@ public class SmsAlarm extends Activity {
 		// Logging
 		this.logger.logCat(LogPriorities.DEBUG, this.LOG_TAG + ":findViews()", "All Views found");
 	}
-
-	/**
-	 * To set all <code>Shared Preferences</code> used by class
-	 * <code>SmsAlarm</code>.
-	 * 
-	 * @see #getSmsAlarmPrefs()
-	 * @see ax.ha.it.smsalarm.PreferencesHandler#setPrefs(PrefKeys, PrefKeys,
-	 *      Object, Context) setPrefs(PrefKeys, PrefKeys, Object, Context)
-	 * @see ax.ha.it.smsalarm.LogHandler#logCat(LogPriorities, String, String)
-	 *      logCat(LogPriorities, String, String)
-	 * @see ax.ha.it.smsalarm.LogHandler#logCatTxt(LogPriorities, String,
-	 *      String, Throwable) logCatTxt(LogPriorities, String, String,
-	 *      Throwable)
-	 */
-	private void setSmsAlarmPrefs() {
-		// Some logging
-		this.logger.logCat(LogPriorities.DEBUG, this.LOG_TAG + ":setSmsAlarmPrefs()", "Start setting shared preferences used by class SmsAlarm");
-
-		try {
-			// Set preferences used by class Sms Alarm
-			prefHandler.setPrefs(PrefKeys.SHARED_PREF, PrefKeys.PRIMARY_LISTEN_NUMBER_KEY, this.primaryListenSmsNumber, this);
-			prefHandler.setPrefs(PrefKeys.SHARED_PREF, PrefKeys.SECONDARY_LISTEN_NUMBERS_KEY, this.secondaryListenSmsNumbers, this);
-			prefHandler.setPrefs(PrefKeys.SHARED_PREF, PrefKeys.PRIMARY_LISTEN_FREE_TEXTS_KEY, this.primaryListenFreeTexts, this);
-			prefHandler.setPrefs(PrefKeys.SHARED_PREF, PrefKeys.SECONDARY_LISTEN_FREE_TEXTS_KEY, this.secondaryListenFreeTexts, this);
-			prefHandler.setPrefs(PrefKeys.SHARED_PREF, PrefKeys.PRIMARY_MESSAGE_TONE_KEY, this.primaryMessageToneId, this);
-			prefHandler.setPrefs(PrefKeys.SHARED_PREF, PrefKeys.SECONDARY_MESSAGE_TONE_KEY, this.secondaryMessageToneId, this);
-			prefHandler.setPrefs(PrefKeys.SHARED_PREF, PrefKeys.USE_OS_SOUND_SETTINGS_KEY, this.useOsSoundSettings, this);
-			prefHandler.setPrefs(PrefKeys.SHARED_PREF, PrefKeys.ENABLE_ACK_KEY, this.useAlarmAcknowledge, this);
-			prefHandler.setPrefs(PrefKeys.SHARED_PREF, PrefKeys.ACK_NUMBER_KEY, this.acknowledgeNumber, this);
-			prefHandler.setPrefs(PrefKeys.SHARED_PREF, PrefKeys.PLAY_TONE_TWICE_KEY, this.playToneTwice, this);
-			prefHandler.setPrefs(PrefKeys.SHARED_PREF, PrefKeys.ENABLE_SMS_ALARM_KEY, this.enableSmsAlarm, this);
-			prefHandler.setPrefs(PrefKeys.SHARED_PREF, PrefKeys.RESCUE_SERVICE_KEY, this.rescueService, this);
-		} catch (IllegalArgumentException e) {
-			this.logger.logCatTxt(LogPriorities.ERROR, this.LOG_TAG + ":setSmsAlarmPrefs()", "An Object of unsupported instance was given as argument to PreferencesHandler.setPrefs()", e);
-		}
-		this.logger.logCat(LogPriorities.DEBUG, this.LOG_TAG + ":setSmsAlarmPrefs()", "Shared preferences set");
-	}
-
+	
 	/**
 	 * To get <code>Shared Preferences</code> used by class
 	 * <code>SmsAlarm</code>.
@@ -892,9 +855,6 @@ public class SmsAlarm extends Activity {
 	private void buildAndShowDeleteDialog(final DialogTypes type) {
 		// Logging
 		this.logger.logCat(LogPriorities.DEBUG, this.LOG_TAG + ":buildAndShowDeleteDialog()", "Start building delete dialog");
-
-		// To store spinner position
-		final int position = 0;//secondarySmsNumberSpinner.getSelectedItemPosition();
 		
 		// Build up the alert dialog
 		AlertDialog.Builder dialog = new AlertDialog.Builder(this);

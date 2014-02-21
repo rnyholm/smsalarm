@@ -4,9 +4,12 @@
 package ax.ha.it.smsalarm;
 
 import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 
+import android.annotation.SuppressLint;
+import android.content.Context;
 import ax.ha.it.smsalarm.LogHandler.LogPriorities;
 
 /**
@@ -279,15 +282,16 @@ public class Alarm {
 	/**
 	 * To set date and time when an Alarm was acknowledged.
 	 * 
+	 * @param context Context
 	 * @param date Date when Alarm was acknowledged as <code>Date</code>
 	 * 
 	 * @see #updateAcknowledged()
 	 * @see #setAcknowledged(String)
 	 * @see ax.ha.it.smsalarm.LogHandler#logCat(LogPriorities, String, String) logCat(LogPriorities, String, String)
 	 */
-	public void setAcknowledged(Date date) {
+	public void setAcknowledged(Context context, Date date) {
 		// Create and store a localized timestamp, this depends on users locale and/or settings
-		this.acknowledged = DateFormat.getDateTimeInstance().format(date);
+		this.acknowledged = getLocalizedHHMMStamp(context, date);
 		// Log in debug purpose
 		this.logger.logCat(LogPriorities.DEBUG, this.LOG_TAG + ":setAcknowledged()", "Alarm acknowledge date and time has been set to:\"" + this.acknowledged + "\"");
 	}
@@ -354,15 +358,67 @@ public class Alarm {
 	 * To update/set date and time when an Alarm was acknowledged. 
 	 * Date and time will be set to now.
 	 * 
+	 * @param context Context
+	 * 
 	 * @see #setAcknowledged(Date)
 	 * @see #setAcknowledged(String)
 	 * @see ax.ha.it.smsalarm.LogHandler#logCat(LogPriorities, String, String) logCat(LogPriorities, String, String)
 	 */	
-	public void updateAcknowledged() {
+	public void updateAcknowledged(Context context) {
 		// Create and store a localized timestamp, this depends on users locale and/or settings
-		this.acknowledged = DateFormat.getDateTimeInstance().format(Calendar.getInstance().getTime());	
+		this.acknowledged = getLocilizedHHMMStamp(context);	
 		// Log in debug purpose
 		this.logger.logCat(LogPriorities.DEBUG, this.LOG_TAG + ":updateAcknowledged()", "Alarm acknowledge date and time has been updated to:\"" + this.acknowledged + "\"");
+	}
+	
+	/**
+	 * To figure out if <b><i>24h</i></b> or <b><i>12h</i></b> clock is beeing used on device.
+	 * A timestamp in format:<br>
+	 * <b><i>hh:mm</i></b><br>
+	 * will be created and returned according to <b><i>current Date</i></b> and clock format
+	 * beeing used on device.
+	 * 
+	 * @param context Context is needed to figure out clock format.
+	 * 
+	 * @return Timestamp in one of following format; <b><i>hh:mm</i></b> or <b><i>hh:mm am/pm</i></b>.
+	 * 
+	 * @see #getLocalizedHHMMStamp(Context, Date)
+	 */
+	private String getLocilizedHHMMStamp(Context context) {
+		return getLocalizedHHMMStamp(context, Calendar.getInstance().getTime());
+	}
+	
+	/**
+	 * To figure out if <b><i>24h</i></b> or <b><i>12h</i></b> clock is being used on device.
+	 * A timestamp in format:<br>
+	 * <b><i>hh:mm</i></b><br>
+	 * will be created and returned according to <b><i>given Date</i></b> and clock format
+	 * being used on device.
+	 * 
+	 * @param context Context is needed to figure out clock format.
+	 * @param now <code>Date</code> to pick create timestamp from.
+	 * 
+	 * @return Timestamp in one of following format; <b><i>hh:mm</i></b> or <b><i>hh:mm am/pm</i></b>.
+	 *
+	 * @see #getLocilizedHHMMStamp(Context)
+	 * @see ax.ha.it.smsalarm.LogHandler#logCat(LogPriorities, String, String) logCat(LogPriorities, String, String)
+	 */
+	@SuppressLint("SimpleDateFormat")
+	private String getLocalizedHHMMStamp(Context context, Date now) {
+		this.logger.logCat(LogPriorities.DEBUG, this.LOG_TAG + ":getLocalizedHHMMStamp()", "Resolving clock format beeing used on device and getting timestamp(hh:mm) in correct format");
+		
+		// Different formatters for 12 and 24 hour timestamps
+		SimpleDateFormat formatter24 = new SimpleDateFormat("HH:mm");
+		SimpleDateFormat formatter12 = new SimpleDateFormat("K:mm a");
+				
+		// According to users preferences the OS clock is displayed in 24 hour format
+		if (android.text.format.DateFormat.is24HourFormat(context)) {
+			this.logger.logCat(LogPriorities.DEBUG, this.LOG_TAG + ":getLocalizedHHMMStamp()", "24 hour clock is used on device, formatting timestamp according to that");
+			return formatter24.format(now);
+		} else {
+			this.logger.logCat(LogPriorities.DEBUG, this.LOG_TAG + ":getLocalizedHHMMStamp()", "12 hour clock is used on device, formatting timestamp according to that");
+			return formatter12.format(now);
+		}
 	}
 
 	/**

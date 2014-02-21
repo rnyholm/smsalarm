@@ -26,7 +26,7 @@ import ax.ha.it.smsalarm.PreferencesHandler.PrefKeys;
  * the Sms Alarm widget.
  * 
  * @author Robert Nyholm <robert.nyholm@aland.net>
- * @version 2.1
+ * @version 2.2
  * @since 2.1
  */
 public class WidgetProvider extends AppWidgetProvider {

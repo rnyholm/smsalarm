@@ -5,7 +5,6 @@ package ax.ha.it.smsalarm;
 
 import java.util.Calendar;
 import java.util.Date;
-import java.util.GregorianCalendar;
 import java.util.List;
 
 import android.annotation.SuppressLint;
@@ -91,6 +90,7 @@ public class AcknowledgeHandler extends Activity {
 	private Date startCall = new Date(1319576400000L);
 
 	// To countdown a new call
+	@SuppressWarnings("unused")
 	private CountDownTimer redialCountDown;
 
 	// Integers to keep track of the different phone states

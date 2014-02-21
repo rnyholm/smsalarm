@@ -25,7 +25,7 @@ import ax.ha.it.smsalarm.PreferencesHandler.PrefKeys;
  * accordingly to application settings and SMS senders phone number.
  * 
  * @author Robert Nyholm <robert.nyholm@aland.net>
- * @version 2.1.4
+ * @version 2.2
  * @since 0.9beta
  */
 public class SmsReceiver extends BroadcastReceiver {
@@ -316,9 +316,6 @@ public class SmsReceiver extends BroadcastReceiver {
 	 * To check if received SMS is any alarm.
 	 * The check is done by a equality control of the senders phone number
 	 * and the phone numbers read from <code>SharedPreferences</code>. 
-	 * An additional "0" is added to the senders phone number and a equality
-	 * control is done by that number also, this behavior is needed because
-	 * a country code could have been removed and this compensates for that.
 	 * 
 	 * @param context
 	 *            Context
