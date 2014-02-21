@@ -1019,7 +1019,7 @@ public class SmsAlarm extends Activity {
 
 		// Set an EditText view to get user input
 		final EditText inputEditText = new EditText(this);
-		final EditText freeTextInputEditText = new EditText(this);
+		final EditText noBlanksInputEditText = new EditText(this);
 		
 		// Filter that trim away any blank space character, in practice this means that only a single word is allowed to be written
 		InputFilter filter = new InputFilter() {			
@@ -1030,7 +1030,7 @@ public class SmsAlarm extends Activity {
 		};
 
 		// Set filter to free text input
-		freeTextInputEditText.setFilters(new InputFilter[]{ filter });
+		noBlanksInputEditText.setFilters(new InputFilter[]{ filter });
 		
 		/*
 		 * Switch through the different dialog types and set correct strings and
@@ -1044,50 +1044,50 @@ public class SmsAlarm extends Activity {
 			// Set message
 			dialog.setMessage(R.string.PRIMARY_NUMBER_PROMPT_MESSAGE);
 			// Set hint to edittext
-			inputEditText.setHint(R.string.NUMBER_PROMPT_HINT);
+			noBlanksInputEditText.setHint(R.string.NUMBER_PROMPT_HINT);
 			// Set Input type to edittext
-			inputEditText.setInputType(InputType.TYPE_CLASS_NUMBER);
+			noBlanksInputEditText.setInputType(InputType.TYPE_CLASS_PHONE);
 			// Set dialog to non cancelable
 			dialog.setCancelable(false);
 			// Bind dialog to input
-			dialog.setView(inputEditText);
+			dialog.setView(noBlanksInputEditText);
 			// Logging
 			this.logger.logCat(LogPriorities.DEBUG, this.LOG_TAG + ":buildAndShowInputDialog()", "Dialog attributes is set for dialog type SMS_PRIMARY");
 			break;
 		case SMS_SECONDARY:
 			dialog.setTitle(R.string.NUMBER_PROMPT_TITLE);
 			dialog.setMessage(R.string.SECONDARY_NUMBER_PROMPT_MESSAGE);
-			inputEditText.setHint(R.string.NUMBER_PROMPT_HINT);
-			inputEditText.setInputType(InputType.TYPE_CLASS_NUMBER);
+			noBlanksInputEditText.setHint(R.string.NUMBER_PROMPT_HINT);
+			noBlanksInputEditText.setInputType(InputType.TYPE_CLASS_PHONE);
 			dialog.setCancelable(false);
-			dialog.setView(inputEditText);
+			dialog.setView(noBlanksInputEditText);
 			this.logger.logCat(LogPriorities.DEBUG, this.LOG_TAG + ":buildAndShowInputDialog()", "Dialog attributes is set for dialog type SMS_SECONDARY");
 			break;
 		case FREE_TEXT_PRIMARY:
 			dialog.setTitle(R.string.FREE_TEXT_PROMPT_TITLE);
 			dialog.setMessage(R.string.PRIMARY_FREE_TEXT_PROMPT_MESSAGE);
-			freeTextInputEditText.setHint(R.string.FREE_TEXT_PROMPT_HINT);
-			freeTextInputEditText.setInputType(InputType.TYPE_CLASS_TEXT);
+			noBlanksInputEditText.setHint(R.string.FREE_TEXT_PROMPT_HINT);
+			noBlanksInputEditText.setInputType(InputType.TYPE_CLASS_TEXT);
 			dialog.setCancelable(false);
-			dialog.setView(freeTextInputEditText);
+			dialog.setView(noBlanksInputEditText);
 			this.logger.logCat(LogPriorities.DEBUG, this.LOG_TAG + ":buildAndShowInputDialog()", "Dialog attributes is set for dialog type FREE_TEXT_PRIMARY");
 			break;
 		case FREE_TEXT_SECONDARY:
 			dialog.setTitle(R.string.FREE_TEXT_PROMPT_TITLE);
 			dialog.setMessage(R.string.SECONDARY_FREE_TEXT_PROMPT_MESSAGE);
-			freeTextInputEditText.setHint(R.string.FREE_TEXT_PROMPT_HINT);
-			freeTextInputEditText.setInputType(InputType.TYPE_CLASS_TEXT);
+			noBlanksInputEditText.setHint(R.string.FREE_TEXT_PROMPT_HINT);
+			noBlanksInputEditText.setInputType(InputType.TYPE_CLASS_TEXT);
 			dialog.setCancelable(false);
-			dialog.setView(freeTextInputEditText);
+			dialog.setView(noBlanksInputEditText);
 			this.logger.logCat(LogPriorities.DEBUG, this.LOG_TAG + ":buildAndShowInputDialog()", "Dialog attributes is set for dialog type FREE_TEXT_SECONDARY");
 			break;			
 		case ACKNOWLEDGE:
 			dialog.setTitle(R.string.NUMBER_PROMPT_TITLE);
 			dialog.setMessage(R.string.ACK_NUMBER_PROMPT_MESSAGE);
-			inputEditText.setHint(R.string.NUMBER_PROMPT_HINT);
-			inputEditText.setInputType(InputType.TYPE_CLASS_NUMBER);
+			noBlanksInputEditText.setHint(R.string.NUMBER_PROMPT_HINT);
+			noBlanksInputEditText.setInputType(InputType.TYPE_CLASS_PHONE);
 			dialog.setCancelable(false);
-			dialog.setView(inputEditText);
+			dialog.setView(noBlanksInputEditText);
 			this.logger.logCat(LogPriorities.DEBUG, this.LOG_TAG + ":buildAndShowInputDialog()", "Dialog attributes is set for dialog type ACKNOWLEDGE");
 			break;
 		case RESCUESERVICE:
@@ -1128,7 +1128,7 @@ public class SmsAlarm extends Activity {
 				switch (type) {
 				case SMS_PRIMARY:					
 					//Store input
-					input = inputEditText.getText().toString();					
+					input = noBlanksInputEditText.getText().toString();					
 					// If list is not empty there are numbers to equalize with each other, else just store the input
 					if (!secondaryListenSmsNumbers.isEmpty()) {
 						// Iterate through all strings in the list
@@ -1171,7 +1171,7 @@ public class SmsAlarm extends Activity {
 					break;
 				case SMS_SECONDARY:
 					//Store input
-					input = inputEditText.getText().toString();
+					input = noBlanksInputEditText.getText().toString();
 					// If input isn't equal with the primaryListenNumber and input isn't empty
 					if (!primaryListenSmsNumber.equals(input) && !input.equals("")) {
 						// Iterate through all strings in the list to check if number already exists in list
@@ -1215,7 +1215,7 @@ public class SmsAlarm extends Activity {
 					break;
 				case FREE_TEXT_PRIMARY:
 					//Store input
-					input = freeTextInputEditText.getText().toString();
+					input = noBlanksInputEditText.getText().toString();
 					// If input doesn't exist in the list of secondaryListenFreeTexts and input isn't empty
 					if (!Utils.existsIn(input, secondaryListenFreeTexts) && !input.equals("")) {
 						// Iterate through all strings in the list of primaryListenFreeTexts to check if text already exists
@@ -1259,7 +1259,7 @@ public class SmsAlarm extends Activity {
 					break;
 				case FREE_TEXT_SECONDARY:
 					//Store input
-					input = freeTextInputEditText.getText().toString();
+					input = noBlanksInputEditText.getText().toString();
 					// If input doesn't exist in the list of primaryListenFreeTexts and input isn't empty
 					if (!Utils.existsIn(input, primaryListenFreeTexts) && !input.equals("")) {
 						// Iterate through all strings in the list of primaryListenFreeTexts to check if text already exists
@@ -1303,7 +1303,7 @@ public class SmsAlarm extends Activity {
 					break;
 				case ACKNOWLEDGE:
 					// Store input to class variable
-					acknowledgeNumber = inputEditText.getText().toString();
+					acknowledgeNumber = noBlanksInputEditText.getText().toString();
 					try {
 						// Store to shared preferences
 						prefHandler.setPrefs(PrefKeys.SHARED_PREF, PrefKeys.ACK_NUMBER_KEY, acknowledgeNumber, SmsAlarm.this);
