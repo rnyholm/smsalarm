@@ -38,13 +38,14 @@ public class PreferencesHandler {
 	 * Enumeration for the shared preferences keys.
 	 * 
 	 * @author Robert Nyholm <robert.nyholm@aland.net>
-	 * @version 2.1
+	 * @version 2.2
 	 * @since 2.1
 	 */
 	public enum PrefKeys {
 		SHARED_PREF("smsAlarmPrefs"),
 		NOT_KEY("notificationPref"),
 		PRIMARY_LISTEN_NUMBER_KEY("primaryListenNumberKey"),
+		PRIMARY_LISTEN_NUMBERS_KEY("primaryListenNumbersKey"),
 		SECONDARY_LISTEN_NUMBERS_KEY("secondaryListenNumbersKey"),
 		PRIMARY_LISTEN_FREE_TEXTS_KEY("primaryListenFreeTextsKey"),
 		SECONDARY_LISTEN_FREE_TEXTS_KEY("secondaryListenFreeTextsKey"),

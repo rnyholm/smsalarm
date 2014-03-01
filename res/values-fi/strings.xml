@@ -21,7 +21,6 @@
     <string name="CANCEL">Peruuta</string>
     <string name="DELETE">Poista</string>
     <string name="DELETE_SECONDARY_NUMBER_PROMPT_MESSAGE">Haluatko poistaa seuraavat numerot toissijaisesta hälytyksestä: </string>
-    <string name="DELETE_SECONDARY_NUMBER_PROMPT_TITLE">Poista numerot</string> 
     <string name="DIVIDER_DESCR">Jakaja</string>
     <string name="DUPLICATED_NUMBERS">Puhelinnumero ensisijaiseen ja toissijaiseen hälytykseen ei voi olla sama. Anna uusi puhelinnumero.</string>
     <string name="EDIT_ALARM_SIGNAL">Vaihda signaali</string>
@@ -44,13 +43,12 @@
     <string name="INFO_ENABLE_SMS_ALARM">Jos valittu hälyttää Sms Alarm tietyillä puh.nr:illa, muuten sovellus ei sitä tee.</string>
     <string name="INFO_MISC_SETTINGS">Aseta pelastuspalvelun nimi ja jos Sms Alarm aktivoidaan.</string>
     <string name="INFO_PLAY_TONE_TWICE_SETTING">Jos valittu soittaa Sms Alarm hälytysäänen sekä ensi-ja toissijaisenhälytykseen kahdesti, hälytyksen yhteydessä.</string>
-    <string name="INFO_SMS_SETTINGS">Aseta ne numerot joista Sms Alarm hälyttää. On mahdollista perustaa useita numeroita toissijaiseen hälytykseen: Lisää tai Poista valinoilla. Numerot jotka ovat asetettu toissijaiseen hälytykseen voidaan nähdä alla olevasta luettelosta.</string>
     <string name="INFO_SOUND_SETTINGS">Asetta hälytyksiä ensi- ja toissijaisiin hälytyksiin ja jos Sms Alarm seuraa puhelimen ääniasetuksia ja jos hälytysääni soitetaan kahdesti.</string>
     <string name="INFO_USE_OS_SOUND_SETTINGS">Jos valittu, ottaa Sms Alarm huomioon puhelimen äänen voim ja äänettömyyden.</string>
     <string name="LISTEN_ALARM_SIGNAL">Kuuntele signaali</string>    
     <string name="NO">Ei</string>
     <string name="NO_RECEIVED_ALARMS_EXISTS">Hälytystä ei ole saatu vielä.</string>  
-    <string name="NUMBER_ALREADY_IN_LIST">Annettu puh.nro. on jo toissijaishälytyslistalla. Anna uusi puhelinnumero.</string>
+    <string name="NUMBER_ALREADY_IN_SECONDARY_LIST">Annettu puh.nro. on jo toissijaishälytyslistalla. Anna uusi puhelinnumero.</string>
     <string name="NUMBER_PROMPT_HINT">Puhelinnumerot..</string>
     <string name="NUMBER_PROMPT_TITLE">Anna puhelinnumero</string>
     <string name="PRIMARY_ALARM">ENSISIJAINEN HÄLYTYS!</string>

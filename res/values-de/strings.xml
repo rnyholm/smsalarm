@@ -21,7 +21,6 @@
     <string name="CANCEL">Abbrechen</string>
     <string name="DELETE">Entfernen</string>
     <string name="DELETE_SECONDARY_NUMBER_PROMPT_MESSAGE">MÖCHTEN Sie die folgende Nummer aus der Liste für Sekundäralarme entfernen:</string>
-    <string name="DELETE_SECONDARY_NUMBER_PROMPT_TITLE">Nummer entfernen</string> 
     <string name="DIVIDER_DESCR">Teiler</string>
     <string name="DUPLICATED_NUMBERS">Telefonnummer für Primär- und Sekundäralarm können nicht gleich sein. Eine neue Telefonnummer eingeben.</string>
     <string name="EDIT_ALARM_SIGNAL">Signal bearbeiten</string>
@@ -44,14 +43,13 @@
     <string name="INFO_ENABLE_SMS_ALARM">Falls gewählt, kontaktiert Sms Alarm die eingegebene Telefonnummer.</string>
     <string name="INFO_MISC_SETTINGS">Den Namen Ihres Rettungsdienstes einstellen und ob Sms Alarm aktiviert werden soll.</string>
     <string name="INFO_PLAY_TONE_TWICE_SETTING">Falls gewählt, spielt Sms Alarm zwei Mal ein Alarmsignal für Primär- und Sekundäralarm ab.</string>
-    <string name="INFO_SMS_SETTINGS">Einstellen, von welcher Telefonnummer Sms Alarm die Benachrichtigungs-Sms versenden soll. Für den Sekundäralarm können unter Verwendung von Hinzufügen und Entfernen mehrere Telefonnummern eingestellt werden. Die Telefonnummer, die als Sekundäralarm gesetzt ist, ist aus der Liste unten zu ersehen.</string>
     <string name="INFO_SOUND_SETTINGS">Alarmsignale für Primär- und Sekundäralarm einstellen, ob Sms Alarm sich nach den Klangeinstellungen des Geräts richten und ob das Alarmsignal zwei Mal abgespielt werden soll.</string>
     <string name="INFO_USE_OS_SOUND_SETTINGS">Falls gewählt, berücksichtigt Sms Alarm die Klingeltonlautstärke und den Lautlos-Modus des Geräts.</string>
     <string name="LISTEN_ALARM_SIGNAL">Signal anhören</string>    
     <string name="NO">Nein</string>
     <string name="NO_RECEIVED_ALARMS_EXISTS">Keine Benachrichtigungen wurden bisher empfangen.</string>  
     <string name="NO_SECONDARY_NUMBER_EXISTS">Keine Telefonnummer für Sekundäralarm vorhanden, kann Telefonnummer nicht entfernen.</string>
-    <string name="NUMBER_ALREADY_IN_LIST">Die eingegebene Nummer befindet sich bereits in der Liste für den Sekundäralarm. Eine neue Telefonnummer eingeben.</string>
+    <string name="NUMBER_ALREADY_IN_SECONDARY_LIST">Die eingegebene Nummer befindet sich bereits in der Liste für den Sekundäralarm. Eine neue Telefonnummer eingeben.</string>
     <string name="NUMBER_PROMPT_HINT">Telefonnummer..</string>
     <string name="NUMBER_PROMPT_TITLE">Eine Telefonnummer eingeben</string>
     <string name="PRIMARY_ALARM">PRIMÄRALARM!</string>

@@ -1,7 +1,11 @@
 SmsAlarm changelog
 
 v2.2(version code 9)
--Lade till ytterligare hantering av landskod för Tjeckien(+420)
+-Möjligt att lägga till fler än ett telefonnummer för primärlarm
+-Möjligt att ange alfanumeriska tecken för telefonnummer
+-Möjligt att ställa in fritexttriggning både för primär- och sekundärlarm
+-Widgeten har fått ett till fält där den triggande texten syns, widgetenhar dessutom fått en annan formatering av kvitteringstiden
+-Alarmloggen har utökats för att även visa det triggande ordet
 
 v2.1.4(version code 8)
 -Lade till hantering för ytterligare landskoder(USA, Canada, Slovenia, Österrike, Nya Zeeland och Storbrittanien)

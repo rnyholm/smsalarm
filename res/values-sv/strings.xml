@@ -21,7 +21,6 @@
     <string name="CANCEL">Avbryt</string>
     <string name="DELETE">Ta bort</string>
     <string name="DELETE_SECONDARY_NUMBER_PROMPT_MESSAGE">Vill du ta bort följande nummer från listan över sekundärlarm: </string>
-    <string name="DELETE_SECONDARY_NUMBER_PROMPT_TITLE">Ta bort nummer</string> 
     <string name="DIVIDER_DESCR">Delare</string>
     <string name="DUPLICATED_NUMBERS">Telefonnummer för primär- och sekundärlarm får inte vara lika. Ange ett nytt telefonnummer.</string>
     <string name="EDIT_ALARM_SIGNAL">Ändra signal</string>
@@ -44,14 +43,13 @@
     <string name="INFO_ENABLE_SMS_ALARM">Om vald larmar Sms Alarm på angivna telefonnummer, annars gör applikationen inte det.</string>
     <string name="INFO_MISC_SETTINGS">Ställ in din räddningstjänsts namn och om Sms Alarm ska vara aktiverat.</string>
     <string name="INFO_PLAY_TONE_TWICE_SETTING">Om vald spelar Sms Alarm upp larmsignalen för både primär- och sekundärlarm två gånger vid larm.</string>
-    <string name="INFO_SMS_SETTINGS">Ställ in vilka nummer som Sms Alarm ska larma på sms ifrån. Det är möjligt att ställa in flera nummer för sekundärlarm genom knapparna Lägg till och Ta bort. Vilka nummer som är inställda som sekundärlarm kan ses i listan nedan.</string>
     <string name="INFO_SOUND_SETTINGS">Ställ in larmsignaler för primär- och sekundär larm, om Sms Alarm ska följa telefonens ljudinställningar samt om larmsignalen ska spelas upp två gånger.</string>
     <string name="INFO_USE_OS_SOUND_SETTINGS">Om vald tar Sms Alarm hänsyn till telefonens ringvolym och ljudlöst läge.</string>
     <string name="LISTEN_ALARM_SIGNAL">Lyssna på signal</string>    
     <string name="NO">Nej</string>
     <string name="NO_RECEIVED_ALARMS_EXISTS">Inga larm har tagits emot ännu.</string>  
     <string name="NO_SECONDARY_NUMBER_EXISTS">Inga nummer för sekundärlarm finns, kan ej ta bort nummer.</string>
-    <string name="NUMBER_ALREADY_IN_LIST">Angivet telefonnummer finns redan i listan över sekundärlarm. Ange ett nytt telefonnummer.</string>
+    <string name="NUMBER_ALREADY_IN_SECONDARY_LIST">Angivet telefonnummer finns redan i listan över sekundärlarm. Ange ett nytt telefonnummer.</string>
     <string name="NUMBER_PROMPT_HINT">Telefonnummer..</string>
     <string name="NUMBER_PROMPT_TITLE">Ange ett telefonnummer</string>
     <string name="PRIMARY_ALARM">PRIMÄR LARM!</string>

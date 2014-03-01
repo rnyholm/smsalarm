@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <resources>
     <!-- NEW STRINGS IN V2.2 BEGIN, SORT THESE LATER -->
-    <string name="TITLE_FREE_TEXT_TRIGGER_SETTINGS">Fritext inställningar</string>
+    <string name="TITLE_FREE_TEXT_TRIGGER_SETTINGS">Ord inställningar</string>
+    <string name="INFO_SMS_SETTINGS">Ställ in vilka telefonnummer som Sms Alarm ska larma på sms ifrån.</string>
     <string name="INFO_FREE_TEXT_TRIGGER_SETTINGS">Ställ in vilka ord som Sms Alarm ska larma på om de finns i inkommande sms. Notera att denna funktion inte är skiftlägeskänslig.</string>
     <string name="ENTER_FREE_TEXT_HINT">Ange ord..</string>
     <string name="FREE_TEXT_PROMPT_TITLE">Ange ord</string>
@@ -9,18 +10,21 @@
     <string name="SECONDARY_FREE_TEXT_PROMPT_MESSAGE">Ange ett ord som Sms Alarm ska larma sekundärlarm på om det finns i mottaget sms.</string>
     <string name="FREE_TEXT_PROMPT_HINT">Ord..</string>
     <string name="SECONDARY_NUMBER_PROMPT_MESSAGE">Ange ett telefonnummer som Sms Alarm larmar sekundärlarm på.</string>
-    <string name="EMPTY_FREE_TEXT">Det går inte att ange ett tomt ord för fritext alarmering. Ange ett nytt ord.</string>
+    <string name="TEXT_IS_NEEDED">En text måste anges för att kunna spara.</string>
+    <string name="NUMBER_IS_NEEDED">Ett telefonnummer måste anges för att kunna spara.</string>
     <string name="DUPLICATED_FREE_TEXTS">Ord för primär- och sekundär larm får inte vara lika. Ange ett nytt ord.</string>
     <string name="FREE_TEXT_ALREADY_IN_PRIMARY_LIST">Angivet ord finns redan i listan av ord för primärlarm. Ange ett nytt ord.</string>
     <string name="FREE_TEXT_ALREADY_IN_SECONDARY_LIST">Angivet ord finns redan i listan av ord för sekundärlarm. Ange ett nytt ord.</string>
+    <string name="NUMBER_ALREADY_IN_PRIMARY_LIST">Angivet telefonnummer finns redan i listan över primärlarm. Ange ett nytt telefonnummer.</string>
+    <string name="NO_PRIMARY_NUMBER_EXISTS">Inga telefonnummer för primärlarm finns, kan ej ta bort nummer.</string>
     <string name="NO_PRIMARY_FREE_TEXT_EXISTS">Inga ord för primärlarm finns, kan ej ta bort ord.</string>
     <string name="NO_SECONDARY_FREE_TEXT_EXISTS">Inga ord för sekundärlarm finns, kan ej ta bort ord.</string>
-    <string name="DELETE_NUMBER_PROMPT_TITLE">Ta bort nummer</string>
+    <string name="DELETE_NUMBER_PROMPT_TITLE">Ta bort telefonnummer</string>
     <string name="DELETE_FREE_TEXT_PROMPT_TITLE">Ta bort ord</string>
     <string name="DELETE_PRIMARY_FREE_TEXT_PROMPT_MESSAGE">Vill du ta bort följande ord från listan över primärlarm: </string>
     <string name="DELETE_SECONDARY_FREE_TEXT_PROMPT_MESSAGE">Vill du ta bort följande ord från listan över sekundärlarm: </string>
     <string name="DELETE_PRIMARY_NUMBER_PROMPT_MESSAGE">Vill du ta bort följande nummer från listan över primärlarm: </string>
-    <string name="HTML_WIDGET_TRIGGER_TEXT">Triggande text</string>
+    <string name="HTML_WIDGET_TRIGGER_TEXT">Triggande ord</string>
     <!-- NEW STRINGS END -->
     <string name="ABOUT">About Sms Alarm</string>
     <string name="ABOUT_BUILD">Build: %s</string>
@@ -74,7 +78,6 @@
     <string name="INFO_ENABLE_SMS_ALARM">If selected Sms Alarm will contact given telephone number, otherwise the application will not.</string>
     <string name="INFO_MISC_SETTINGS">Set your rescue service name and if Sms Alarm should be enabled.</string>
     <string name="INFO_PLAY_TONE_TWICE_SETTING">If selected Sms Alarm will play alarm signal to both primary and secondary alarms twice.</string>
-    <string name="INFO_SMS_SETTINGS">Set which telephone number that Sms Alarm should alert on sms from. It is possible to set several telephone numbers for the secondary alarm by the buttons Add and Remove. The telephone number that is set as secondary alarm can be seen in the list below.</string>
     <string name="INFO_SOUND_SETTINGS">Set alarm signals for primary and secondary alarms, if Sms Alarm should follow the device sound settings and if the alarm signal shoul be played twice.</string>
     <string name="INFO_USE_OS_SOUND_SETTINGS">If selected Sms Alarm will take into account the device ring volume and silent mode.</string>
     <string name="LISTEN_ALARM_SIGNAL">Listen to the signal</string> 
@@ -82,7 +85,7 @@
     <string name="NO">No</string>
     <string name="NO_RECEIVED_ALARMS_EXISTS">No alarm has yet been received.</string>  
     <string name="NO_SECONDARY_NUMBER_EXISTS">No telephone number for secondary alarm exists, can not remove telephone number.</string>
-    <string name="NUMBER_ALREADY_IN_LIST">Given number is already in the list for secondary alarm. Enter a new telephone number.</string>
+    <string name="NUMBER_ALREADY_IN_SECONDARY_LIST">Given number is already in the list for secondary alarm. Enter a new telephone number.</string>
     <string name="NUMBER_PROMPT_HINT">Telephone number..</string>
     <string name="NUMBER_PROMPT_TITLE">Enter a telephone number</string>
     <string name="OK">OK</string>

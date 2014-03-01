@@ -36,34 +36,38 @@
             android:text="@string/TITLE_PRIMARY_ALARM"
             android:textAppearance="?android:attr/textAppearanceMedium" />
 
-        <EditText
-            android:id="@+id/primarySmsNumber_et"
+        <Spinner
+            android:id="@+id/primarySmsNumberSpinner_sp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignLeft="@id/smsPrimaryAlarmTitle_tv"
             android:layout_below="@id/smsPrimaryAlarmTitle_tv"
-            android:hint="@string/ENTER_PHONE_NUMBER_HINT"
-            android:inputType="numberSigned|phone" >
-
-        </EditText>
+            android:layout_marginRight="5dp" />
 
         <Button
-            android:id="@+id/editPrimarySmsNumber_btn"
+            android:id="@+id/addPrimarySmsNumber_btn"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignBaseline="@id/primarySmsNumber_et"
-            android:layout_alignParentRight="true"
+            android:layout_alignLeft="@id/primarySmsNumberSpinner_sp"
+            android:layout_below="@id/primarySmsNumberSpinner_sp"
+            android:layout_marginTop="-3dp"
+            android:text="@string/ADD" />
+
+        <Button
+            android:id="@+id/deletePrimarySmsNumber_btn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignBaseline="@id/addPrimarySmsNumber_btn"
             android:layout_marginRight="5dp"
-            android:layout_toRightOf="@id/primarySmsNumber_et"
-            android:text="@string/EDIT_NUMBER"
-            android:width="50dp" />
+            android:layout_toRightOf="@id/addPrimarySmsNumber_btn"
+            android:text="@string/DELETE" />
 
         <TextView
             android:id="@+id/smsSecondaryAlarmTitle_tv"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignLeft="@+id/primarySmsNumber_et"
-            android:layout_below="@+id/primarySmsNumber_et"
+            android:layout_alignLeft="@id/primarySmsNumberSpinner_sp"
+            android:layout_below="@id/addPrimarySmsNumber_btn"
             android:text="@string/TITLE_SECONDARY_ALARM"
             android:textAppearance="?android:attr/textAppearanceMedium" />
 
@@ -491,9 +495,9 @@
             android:id="@+id/addPrimaryFreeText_btn"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_alignLeft="@id/primaryFreeTextSpinner_sp"
             android:layout_below="@+id/primaryFreeTextSpinner_sp"
             android:layout_marginTop="-3dp"
-            android:layout_toLeftOf="@+id/deleteSecondarySmsNumber_btn"
             android:text="@string/ADD" />
 
     </RelativeLayout>

@@ -21,7 +21,6 @@
     <string name="CANCEL">Cancel</string>
     <string name="DELETE">Remove</string>
     <string name="DELETE_SECONDARY_NUMBER_PROMPT_MESSAGE">Do you want to remove following number from the list of secondary alarms:</string>
-    <string name="DELETE_SECONDARY_NUMBER_PROMPT_TITLE">Remove number</string> 
     <string name="DIVIDER_DESCR">Divider</string>
     <string name="DUPLICATED_NUMBERS">Telephone number for primary and secondary alarms may not be the same. Enter a new telephone number.</string>
     <string name="EDIT_ALARM_SIGNAL">Edit signal</string>
@@ -44,14 +43,13 @@
     <string name="INFO_ENABLE_SMS_ALARM">If selected Sms Alarm will contact given telephone number, otherwise the application will not.</string>
     <string name="INFO_MISC_SETTINGS">Set your rescue service name and if Sms Alarm should be enabled.</string>
     <string name="INFO_PLAY_TONE_TWICE_SETTING">If selected Sms Alarm will play alarm signal to both primary and secondary alarms twice.</string>
-    <string name="INFO_SMS_SETTINGS">Set which telephone number that Sms Alarm should alert on sms from. It is possible to set several telephone numbers for the secondary alarm by the buttons Add and Remove. The telephone number that is set as secondary alarm can be seen in the list below.</string>
     <string name="INFO_SOUND_SETTINGS">Set alarm signals for primary and secondary alarms, if Sms Alarm should follow the device sound settings and if the alarm signal shoul be played twice.</string>
     <string name="INFO_USE_OS_SOUND_SETTINGS">If selected Sms Alarm will take into account the device ring volume and silent mode.</string>
     <string name="LISTEN_ALARM_SIGNAL">Listen to the signal</string> 
     <string name="NO">No</string>
     <string name="NO_RECEIVED_ALARMS_EXISTS">No alarm has yet been received.</string>  
     <string name="NO_SECONDARY_NUMBER_EXISTS">No telephone number for secondary alarm exists, can not remove telephone number.</string>
-    <string name="NUMBER_ALREADY_IN_LIST">Given number is already in the list for secondary alarm. Enter a new telephone number.</string>
+    <string name="NUMBER_ALREADY_IN_SECONDARY_LIST">Given number is already in the list for secondary alarm. Enter a new telephone number.</string>
     <string name="NUMBER_PROMPT_HINT">Telephone number..</string>
     <string name="NUMBER_PROMPT_TITLE">Enter a telephone number</string>
     <string name="PRIMARY_ALARM">PRIMARY ALARM!</string>
