@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
@@ -1155,7 +1156,7 @@ public class SmsAlarm extends Activity {
 					//Store input
 					input = noBlanksInputEditText.getText().toString();
 					// If input doesn't exist in the list of secondaryListenSmsNumbers and input isn't empty
-					if (!Utils.existsIn(input, secondaryListenSmsNumbers) && !input.equals("")) {
+					if (existsIn(input, secondaryListenSmsNumbers) && !input.equals("")) {
 						// Iterate through all strings in the list of primaryListenSmsNumbers to check if number already exists
 						for (String number : primaryListenSmsNumbers) {
 							// If a string in the list is equal with the input then it's duplicated
@@ -1199,7 +1200,7 @@ public class SmsAlarm extends Activity {
 					//Store input
 					input = noBlanksInputEditText.getText().toString();
 					// If input doesn't exist in the list of primaryListenSmsNumbers and input isn't empty
-					if (!Utils.existsIn(input, primaryListenSmsNumbers) && !input.equals("")) {
+					if (existsIn(input, primaryListenSmsNumbers) && !input.equals("")) {
 						// Iterate through all strings in the list of secondaryListenSmsNumbers to check if number already exists
 						for (String number : secondaryListenSmsNumbers) {
 							// If a string in the list is equal with the input then it's duplicated
@@ -1243,7 +1244,7 @@ public class SmsAlarm extends Activity {
 					//Store input
 					input = noBlanksInputEditText.getText().toString();
 					// If input doesn't exist in the list of secondaryListenFreeTexts and input isn't empty
-					if (!Utils.existsIn(input, secondaryListenFreeTexts) && !input.equals("")) {
+					if (existsIn(input, secondaryListenFreeTexts) && !input.equals("")) {
 						// Iterate through all strings in the list of primaryListenFreeTexts to check if text already exists
 						for (String text : primaryListenFreeTexts) {
 							// If a string in the list is equal with the input then it's duplicated
@@ -1287,7 +1288,7 @@ public class SmsAlarm extends Activity {
 					//Store input
 					input = noBlanksInputEditText.getText().toString();
 					// If input doesn't exist in the list of primaryListenFreeTexts and input isn't empty
-					if (!Utils.existsIn(input, primaryListenFreeTexts) && !input.equals("")) {
+					if (existsIn(input, primaryListenFreeTexts) && !input.equals("")) {
 						// Iterate through all strings in the list of primaryListenFreeTexts to check if text already exists
 						for (String text : secondaryListenFreeTexts) {
 							// If a string in the list is equal with the input then it's duplicated
@@ -1523,6 +1524,31 @@ public class SmsAlarm extends Activity {
 
 		// Show dialog
 		dialog.show();
+	}
+	
+	/**
+	 * To check if given <code>String</code> exists in given <code>List</code> 
+	 * of <code>Strings</code>. Method is not case sensitive.
+	 * 
+	 * @param string String to check if exists in list.
+	 * @param list List to check if string exists in.
+	 * 
+	 * @return <code>true</code> if given String exists in given List else <code>false</code>.<br>
+	 * 		   <code>false</code> is also returned if either given argument is <code>null</code>.
+	 */
+	@SuppressLint("DefaultLocale")
+	public static boolean existsIn(String string, List<String> list) {
+		if (string != null && list != null) {
+			List<String> caseUpperList = new ArrayList<String>();
+			
+			for (String str: list) {
+				caseUpperList.add(str.toUpperCase());
+			}
+			
+			return caseUpperList.contains(string.toUpperCase());
+		} else {
+			return false;
+		}
 	}
 
 	/**

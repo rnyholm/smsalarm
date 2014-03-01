@@ -4,6 +4,7 @@
 package ax.ha.it.smsalarm;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -387,7 +388,7 @@ public class SmsReceiver extends BroadcastReceiver {
 		boolean isAlarm = false;
 		
 		for (String primaryFreeText : this.primaryListenFreeTexts) {
-			if (Utils.findWordEqualsIgnore(primaryFreeText, this.msgBody)) {
+			if (findWordEqualsIgnore(primaryFreeText, this.msgBody)) {
 				// Log information
 				this.logger.logCat(LogPriorities.DEBUG, this.LOG_TAG + ":checkFreeTextAlarm()", "SMS fulfilled the criteria for a PRIMARY alarm. SMS received from: \"" + this.msgHeader + "\" with message: \"" + this.msgBody + "\", triggered on freetext: " + primaryFreeText);
 				
@@ -408,7 +409,7 @@ public class SmsReceiver extends BroadcastReceiver {
 		// Only check if income SMS hasn't already been checked as PRIMARY alarm
 		if (!AlarmTypes.PRIMARY.equals(this.alarmType)) {
 			for (String secondaryFreeText : this.secondaryListenFreeTexts) {
-				if (Utils.findWordEqualsIgnore(secondaryFreeText, this.msgBody)) {
+				if (findWordEqualsIgnore(secondaryFreeText, this.msgBody)) {
 					this.logger.logCat(LogPriorities.DEBUG, this.LOG_TAG + ":checkFreeTextAlarm()", "SMS fulfilled the criteria for a SECONDARY alarm. SMS received from: \"" + this.msgHeader + "\" with message: \"" + this.msgBody + "\", triggered on freetext: " + secondaryFreeText);					
 					this.setTriggerText(secondaryFreeText);
 					isAlarm = true;
@@ -468,5 +469,46 @@ public class SmsReceiver extends BroadcastReceiver {
 		
 		// Log information
 		this.logger.logCat(LogPriorities.DEBUG, this.LOG_TAG + ":setTriggerText()", "Trigger text set to:\"" + this.triggerText + "\"");
+	}
+	
+	/**
+	 * To check if <code>String</code>(textToParse) passed in as argument
+	 * contains another <code>String</code>(wordToFind) passed in as argument.
+	 * This method only checks whole words and not a <code>CharSequence</code>.
+	 * Method is not case sensitive.
+	 * 
+	 * @param wordToFind
+	 *            Word to find.
+	 * @param textToParse
+	 *            Text to look for word in.
+	 * 
+	 * @return <code>true</code> if word is found else <code>false</code>.
+	 * 
+	 * @throws NullPointerException
+	 *             if either or both params <code>wordToFind</code> and
+	 *             <code>textToParse</code> is null.
+	 * @throws IllegalArgumentException
+	 *             if either or both params <code>wordToFind</code> and
+	 *             <code>textToParse</code> is empty.
+	 */
+	private boolean findWordEqualsIgnore(String wordToFind, String textToParse) {
+		if (wordToFind != null && textToParse != null) {
+			if (!wordToFind.isEmpty() && !textToParse.isEmpty()) {
+				List<String> words = new ArrayList<String>();
+				words = Arrays.asList(textToParse.split(" "));
+
+				for (String word : words) {
+					if (wordToFind.equalsIgnoreCase(word)) {
+						return true;
+					}
+				}
+
+				return false;
+			} else {
+				throw new IllegalArgumentException("One or both of given arguments are empty. Arguments --> wordToFind = " + wordToFind + ", textToParse = " + textToParse);
+			}
+		} else {
+			throw new NullPointerException("One or both of given arguments are null. Arguments --> wordToFind = " + wordToFind + ", textToParse = " + textToParse);
+		}
 	}
 }
