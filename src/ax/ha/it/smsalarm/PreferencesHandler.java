@@ -61,7 +61,8 @@ public class PreferencesHandler {
 		ENABLE_SMS_ALARM_KEY("enableSmsAlarm"),
 		RESCUE_SERVICE_KEY("rescueService"),
 		HAS_CALLED_KEY("hasCalled"),
-		END_USER_LICENSE_AGREED("userLicenseAgreed");
+		END_USER_LICENSE_AGREED("userLicenseAgreed"),
+		VERSION_CODE("versionCode");
 		
 		// Value in which enumerations values are stored
 		private final String key;

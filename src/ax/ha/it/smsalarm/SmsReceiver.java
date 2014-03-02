@@ -339,7 +339,7 @@ public class SmsReceiver extends BroadcastReceiver {
 				// Put alarm type to shared preferences
 				this.prefHandler.setPrefs(PrefKeys.SHARED_PREF, PrefKeys.LARM_TYPE_KEY, AlarmTypes.PRIMARY.ordinal(), context);
 			} catch(IllegalArgumentException e) {
-				logger.logCatTxt(LogPriorities.ERROR, LOG_TAG + ":checkSmsNumberAlarm()", "An Object of unsupported instance was given as argument to PreferencesHandler.setPrefs()", e);
+				this.logger.logCatTxt(LogPriorities.ERROR, LOG_TAG + ":checkSmsNumberAlarm()", "An Object of unsupported instance was given as argument to PreferencesHandler.setPrefs()", e);
 			}
 			
 			// Set correct AlarmType
@@ -356,7 +356,7 @@ public class SmsReceiver extends BroadcastReceiver {
 						// Put alarm type to shared preferences
 						this.prefHandler.setPrefs(PrefKeys.SHARED_PREF, PrefKeys.LARM_TYPE_KEY, AlarmTypes.SECONDARY.ordinal(), context);
 					} catch(IllegalArgumentException e) {
-						logger.logCatTxt(LogPriorities.ERROR, LOG_TAG + ":checkSmsNumberAlarm()", "An Object of unsupported instance was given as argument to PreferencesHandler.setPrefs()", e);
+						this.logger.logCatTxt(LogPriorities.ERROR, LOG_TAG + ":checkSmsNumberAlarm()", "An Object of unsupported instance was given as argument to PreferencesHandler.setPrefs()", e);
 					}
 
 					// Set correct AlarmType

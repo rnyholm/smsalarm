@@ -838,7 +838,7 @@ public class SmsAlarm extends Activity {
 			this.enableSmsAlarm = (Boolean) prefHandler.getPrefs(PrefKeys.SHARED_PREF, PrefKeys.ENABLE_SMS_ALARM_KEY, DataTypes.BOOLEAN, this, true);
 			this.rescueService = (String) prefHandler.getPrefs(PrefKeys.SHARED_PREF, PrefKeys.RESCUE_SERVICE_KEY, DataTypes.STRING, this);
 		} catch (IllegalArgumentException e) {
-			logger.logCatTxt(LogPriorities.ERROR, this.LOG_TAG + ":getSmsAlarmPrefs()", "An unsupported datatype was given as argument to PreferencesHandler.getPrefs()", e);
+			this.logger.logCatTxt(LogPriorities.ERROR, this.LOG_TAG + ":getSmsAlarmPrefs()", "An unsupported datatype was given as argument to PreferencesHandler.getPrefs()", e);
 		}
 		this.logger.logCat(LogPriorities.DEBUG, this.LOG_TAG + ":getSmsAlarmPrefs()", "Shared preferences retrieved");
 	}
