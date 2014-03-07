@@ -23,14 +23,14 @@ import ax.ha.it.smsalarm.PreferencesHandler.PrefKeys;
  * on screen activity switch to SmsAlarm.
  * 
  * @author Robert Nyholm <robert.nyholm@aland.net>
- * @version 2.1.4
+ * @version 2.2
  * @since 2.1
  * 
  * @see #onCreate(Bundle)
  */
 public class Splash extends Activity {
 	// Log tag string
-	private String LOG_TAG = this.getClass().getSimpleName();
+	private String LOG_TAG = getClass().getSimpleName();
 
 	// Objects needed for logging, shared preferences and noise handling
 	private LogHandler logger = LogHandler.getInstance();
@@ -77,23 +77,23 @@ public class Splash extends Activity {
 		versionTextView.setText(String.format(getString(R.string.SPLASH_VERSION), getString(R.string.APP_VERSION)));
 
 		// Some logging for information and debugging
-		this.logger.logCat(LogPriorities.DEBUG, this.LOG_TAG + ":onCreate()", "Layout has been set with correct settings");
+		logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":onCreate()", "Layout has been set with correct settings");
 
 		/*
 		 * Retrieve value from shared preferences, this is to decide if user has
 		 * agreed user the user license before or not
 		 */
 		try {
-			this.endUserLicenseAgreed = (Boolean) this.prefHandler.getPrefs(PrefKeys.SHARED_PREF, PrefKeys.END_USER_LICENSE_AGREED, DataTypes.BOOLEAN, this, false);
+			endUserLicenseAgreed = (Boolean) prefHandler.getPrefs(PrefKeys.SHARED_PREF, PrefKeys.END_USER_LICENSE_AGREED, DataTypes.BOOLEAN, this, false);
 		} catch(IllegalArgumentException e) {
-			logger.logCatTxt(LogPriorities.ERROR, this.LOG_TAG + ":onCreate()", "An unsupported datatype was given as argument to PreferencesHandler.getPrefs()", e);
+			logger.logCatTxt(LogPriorities.ERROR, LOG_TAG + ":onCreate()", "An unsupported datatype was given as argument to PreferencesHandler.getPrefs()", e);
 		} 
 
 		/*
 		 * Only set up onClickListener and start Runnable if user has agreed the
 		 * end user license agreement
 		 */
-		if (this.endUserLicenseAgreed) {
+		if (endUserLicenseAgreed) {
 			// Get a handle to the layout by finding it's id
 			RelativeLayout splashRelativeLayout = (RelativeLayout) findViewById(R.id.splash_rl);
 			// Create object that acts as listener to the sbStartView
@@ -107,8 +107,8 @@ public class Splash extends Activity {
 			});
 
 			// Initialize a handler object, used to put a thread to sleep
-			this.handler = new Handler();
-			this.handler.postDelayed(new Runnable() {
+			handler = new Handler();
+			handler.postDelayed(new Runnable() {
 				public void run() {
 					// Some logging for information and debugging
 					logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":onCreate().Handler.run()", "Time has elapsed");
@@ -118,10 +118,10 @@ public class Splash extends Activity {
 				}
 			}, delay);
 		} else { // Else show dialog requesting for user to agree the license
-			this.buildAndShowEULADialog();
+			buildAndShowEULADialog();
 		}
 
-		this.logger.logCat(LogPriorities.DEBUG, this.LOG_TAG + ":onCreate()", "Listener and Handler have been set");
+		logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":onCreate()", "Listener and Handler have been set");
 	}
 
 	/**
@@ -133,7 +133,7 @@ public class Splash extends Activity {
 	@Override
 	public void onPause() {
 		super.onPause();
-		this.removeMessagesFromHandler();
+		removeMessagesFromHandler();
 	}
 
 	/**
@@ -147,7 +147,7 @@ public class Splash extends Activity {
 	 */
 	private void buildAndShowEULADialog() {
 		// Logging
-		this.logger.logCat(LogPriorities.DEBUG, this.LOG_TAG + ":buildAndShowEULADialog()", "Start building EULA dialog");
+		logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":buildAndShowEULADialog()", "Start building EULA dialog");
 
 		// Build up the alert dialog
 		AlertDialog.Builder dialog = new AlertDialog.Builder(this);
@@ -159,7 +159,7 @@ public class Splash extends Activity {
 		dialog.setCancelable(false);
 
 		// Logging
-		this.logger.logCat(LogPriorities.DEBUG, this.LOG_TAG + ":buildAndShowEULADialog()", "Dialog attributes set");
+		logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":buildAndShowEULADialog()", "Dialog attributes set");
 
 		// Set a positive button
 		dialog.setPositiveButton(R.string.EULA_AGREE, new DialogInterface.OnClickListener() {
@@ -191,7 +191,7 @@ public class Splash extends Activity {
 		});
 
 		// Logging
-		this.logger.logCat(LogPriorities.DEBUG, this.LOG_TAG + ":buildAndShowEULADialog()", "Showing dialog");
+		logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":buildAndShowEULADialog()", "Showing dialog");
 
 		// Show dialog
 		dialog.show();
@@ -210,7 +210,7 @@ public class Splash extends Activity {
 		Intent saIntent = new Intent(this, SmsAlarm.class);
 
 		// Some logging for information and debugging
-		this.logger.logCat(LogPriorities.DEBUG, this.LOG_TAG + ":switchActivity()", "Intent has been set and application is about to switch activity to SmsAlarm");
+		logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":switchActivity()", "Intent has been set and application is about to switch activity to SmsAlarm");
 
 		startActivity(saIntent);
 	}
@@ -225,9 +225,9 @@ public class Splash extends Activity {
 	private void removeMessagesFromHandler() {
 		// Null check in case user didn't agree the EULA
 		if (handler != null) {
-			this.handler.removeMessages(0);
+			handler.removeMessages(0);
 			// Some logging for information and debugging
-			this.logger.logCat(LogPriorities.DEBUG, this.LOG_TAG + ":removeMessagesFromHandler", "Messages have been removed from Handler");
+			logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":removeMessagesFromHandler", "Messages have been removed from Handler");
 		}
 	}
 }

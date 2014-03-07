@@ -66,7 +66,7 @@ public class SmsAlarm extends Activity {
 	}
 
 	// Log tag string
-	private final String LOG_TAG = this.getClass().getSimpleName();
+	private final String LOG_TAG = getClass().getSimpleName();
 
 	// Objects needed for logging, shared preferences and noise handling
 	private LogHandler logger = LogHandler.getInstance();
@@ -186,26 +186,26 @@ public class SmsAlarm extends Activity {
 		setContentView(R.layout.main);
 
 		// Log in debugging and information purpose
-		this.logger.logCat(LogPriorities.DEBUG, this.LOG_TAG + ":onCreate()", "Creation of Sms Alarm started");
+		logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":onCreate()", "Creation of Sms Alarm started");
 
 		// Get sharedPreferences
-		this.getSmsAlarmPrefs();
+		getSmsAlarmPrefs();
 
 		// FindViews
-		this.findViews();
+		findViews();
 
 		// Initialize database handler object from context
-		this.db = new DatabaseHandler(this);
+		db = new DatabaseHandler(this);
 
 		// Fill tone spinner with values
 		ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this, R.array.alarms, android.R.layout.simple_spinner_item);
 		adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 
 		// Set adapter to tone spinner
-		this.toneSpinner.setAdapter(adapter);
+		toneSpinner.setAdapter(adapter);
 		
 		// Set listener to addPrimarySmsNumberButton
-		this.addPrimarySmsNumberButton.setOnClickListener(new OnClickListener() {
+		addPrimarySmsNumberButton.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
 				// Logging
@@ -216,7 +216,7 @@ public class SmsAlarm extends Activity {
 		});
 		
 		// Set listener to removePrimarySmsNumberButton
-		this.removePrimarySmsNumberButton.setOnClickListener(new OnClickListener() {
+		removePrimarySmsNumberButton.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
 				// Logging
@@ -234,7 +234,7 @@ public class SmsAlarm extends Activity {
 		});
 
 		// Set listener to addSecondarySmsNumberButton
-		this.addSecondarySmsNumberButton.setOnClickListener(new OnClickListener() {
+		addSecondarySmsNumberButton.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
 				// Logging
@@ -245,7 +245,7 @@ public class SmsAlarm extends Activity {
 		});
 
 		// Set listener to removeSecondarySmsNumberButton
-		this.removeSecondarySmsNumberButton.setOnClickListener(new OnClickListener() {
+		removeSecondarySmsNumberButton.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
 				// Logging
@@ -263,7 +263,7 @@ public class SmsAlarm extends Activity {
 		});
 		
 		// Set listener to addPrimaryFreeTextButton
-		this.addPrimaryFreeTextButton.setOnClickListener(new OnClickListener() {
+		addPrimaryFreeTextButton.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
 				// Logging
@@ -274,7 +274,7 @@ public class SmsAlarm extends Activity {
 		});
 		
 		// Set listener to removePrimaryFreeTextButton
-		this.removePrimaryFreeTextButton.setOnClickListener(new OnClickListener() {
+		removePrimaryFreeTextButton.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
 				// Logging
@@ -292,7 +292,7 @@ public class SmsAlarm extends Activity {
 		});
 		
 		// Set listener to addSecondaryFreeTextButton
-		this.addSecondaryFreeTextButton.setOnClickListener(new OnClickListener() {
+		addSecondaryFreeTextButton.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
 				// Logging
@@ -303,7 +303,7 @@ public class SmsAlarm extends Activity {
 		});
 		
 		// Set listener to removeSecondaryFreeTextButton
-		this.removeSecondaryFreeTextButton.setOnClickListener(new OnClickListener() {
+		removeSecondaryFreeTextButton.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
 				// Logging
@@ -320,7 +320,7 @@ public class SmsAlarm extends Activity {
 		});
 
 		// Set listener to ackNumberButton
-		this.ackNumberButton.setOnClickListener(new OnClickListener() {
+		ackNumberButton.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
 				// Logging
@@ -331,7 +331,7 @@ public class SmsAlarm extends Activity {
 		});
 
 		// Set listener to editRescueServiceButton
-		this.editRescueServiceButton.setOnClickListener(new OnClickListener() {
+		editRescueServiceButton.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
 				// Logging
@@ -342,7 +342,7 @@ public class SmsAlarm extends Activity {
 		});
 
 		// Set listener to editMsgToneButton
-		this.editMsgToneButton.setOnClickListener(new OnClickListener() {
+		editMsgToneButton.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
 				// Logging
@@ -353,7 +353,7 @@ public class SmsAlarm extends Activity {
 		});
 
 		// Set listener to listenMsgToneButton
-		this.listenMsgToneButton.setOnClickListener(new OnClickListener() {
+		listenMsgToneButton.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
 				// Play the correct tone and vibrate, depending on spinner value
@@ -373,7 +373,7 @@ public class SmsAlarm extends Activity {
 		});
 
 		// Set listener to soundSettingCheckBox
-		this.soundSettingCheckBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+		soundSettingCheckBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
 			@Override
 			public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
 				// Log that CheckBox been pressed
@@ -401,7 +401,7 @@ public class SmsAlarm extends Activity {
 		});
 
 		// Set listener to enableAckCheckBox
-		this.enableAckCheckBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+		enableAckCheckBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
 			@Override
 			public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
 				// Log that CheckBox been pressed
@@ -428,7 +428,7 @@ public class SmsAlarm extends Activity {
 		});
 
 		// Set listener to playToneTwiceSettingCheckBox
-		this.playToneTwiceSettingCheckBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+		playToneTwiceSettingCheckBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
 			@Override
 			public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
 				// Log that CheckBox been pressed
@@ -456,7 +456,7 @@ public class SmsAlarm extends Activity {
 		});
 
 		// Set listener to enableSmsAlarmCheckBox
-		this.enableSmsAlarmCheckBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+		enableSmsAlarmCheckBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
 			@Override
 			public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
 				// Log that CheckBox been pressed
@@ -485,7 +485,7 @@ public class SmsAlarm extends Activity {
 		});
 
 		// Set listener to tone spinner
-		this.toneSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+		toneSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
 			@Override
 			public void onItemSelected(AdapterView<?> parent, View view, int pos, long id) {
 				// Store tone spinners position to class variable
@@ -502,10 +502,10 @@ public class SmsAlarm extends Activity {
 		});
 
 		// Update all UI widgets
-		this.updateWholeUI();
+		updateWholeUI();
 
 		// Log in debugging and information purpose
-		this.logger.logCat(LogPriorities.DEBUG, this.LOG_TAG + ":onCreate()", "Creation of Sms Alarm completed");
+		logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":onCreate()", "Creation of Sms Alarm completed");
 	}
 
 	/**
@@ -540,9 +540,9 @@ public class SmsAlarm extends Activity {
 	public void onDestroy() {
 		super.onDestroy();
 		// Log in debug purpose
-		this.logger.logCat(LogPriorities.DEBUG, this.LOG_TAG + ":onDestroy()", this.LOG_TAG + " is about to be destroyed");
+		logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":onDestroy()", LOG_TAG + " is about to be destroyed");
 		// Get all alarms from database and log them to to html file
-		this.logger.logAlarm(this.db.getAllAlarm(), this);
+		logger.logAlarm(db.getAllAlarm(), this);
 		// Update alla widgets associated to this application
 		WidgetProvider.updateWidgets(this);
 	}
@@ -558,7 +558,7 @@ public class SmsAlarm extends Activity {
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		// Logging
-		this.logger.logCat(LogPriorities.DEBUG, this.LOG_TAG + ":onCreateOptionsMenu()", "Menu created");
+		logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":onCreateOptionsMenu()", "Menu created");
 		MenuInflater inflater = getMenuInflater();
 		inflater.inflate(R.menu.menu, menu);
 		return true;
@@ -581,9 +581,9 @@ public class SmsAlarm extends Activity {
 		switch (item.getItemId()) {
 		case R.id.ABOUT:
 			// Logging
-			this.logger.logCat(LogPriorities.DEBUG, this.LOG_TAG + ":onOptionsItemSelected()", "Menu item 1 selected");
+			logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":onOptionsItemSelected()", "Menu item 1 selected");
 			// Build up and show the about dialog
-			this.buildAndShowAboutDialog();
+			buildAndShowAboutDialog();
 			return true;
 // >>>>DEBUG CASE (DELETE OR COMMENT FOR PROD)
 			// case R.id.TEST_SHOW_ACK:
@@ -595,7 +595,7 @@ public class SmsAlarm extends Activity {
 			// "02.02.2012 23:55:40 2.5 Litet larm - Automatlarm vikingline lager(1682) Länsmanshägnan 7 jomala",
 			// this);
 			// } catch(IllegalArgumentException e) {
-			// logger.logCatTxt(LogPriorities.ERROR, this.LOG_TAG +
+			// logger.logCatTxt(LogPriorities.ERROR, LOG_TAG +
 			// ":onOptionsItemSelected()",
 			// "An Object of unsupported instance was given as argument to PreferencesHandler.setPrefs()",
 			// e);
@@ -619,45 +619,45 @@ public class SmsAlarm extends Activity {
 	 */
 	private void findViews() {
 		// Logging
-		this.logger.logCat(LogPriorities.DEBUG, this.LOG_TAG + ":findViews()", "Start finding Views by their ID");
+		logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":findViews()", "Start finding Views by their ID");
 
 		// Declare and initialize variables of type EditText
-		this.selectedToneEditText = (EditText) findViewById(R.id.msgTone_et);
-		this.ackNumberEditText = (EditText) findViewById(R.id.ackNumber_et);
-		this.rescueServiceEditText = (EditText) findViewById(R.id.rescueServiceName_et);
+		selectedToneEditText = (EditText) findViewById(R.id.msgTone_et);
+		ackNumberEditText = (EditText) findViewById(R.id.ackNumber_et);
+		rescueServiceEditText = (EditText) findViewById(R.id.rescueServiceName_et);
 
 		// Declare and initialize variables of type button
-		this.addPrimarySmsNumberButton = (Button) findViewById(R.id.addPrimarySmsNumber_btn);
-		this.removePrimarySmsNumberButton = (Button) findViewById(R.id.deletePrimarySmsNumber_btn);
-		this.addSecondarySmsNumberButton = (Button) findViewById(R.id.addSecondarySmsNumber_btn);
-		this.addPrimaryFreeTextButton = (Button) findViewById(R.id.addPrimaryFreeText_btn);
-		this.removePrimaryFreeTextButton = (Button) findViewById(R.id.deletePrimaryFreeText_btn);
-		this.addSecondaryFreeTextButton = (Button) findViewById(R.id.addSecondaryFreeText_btn);
-		this.removeSecondaryFreeTextButton = (Button) findViewById(R.id.deleteSecondaryFreeText_btn);
-		this.removeSecondarySmsNumberButton = (Button) findViewById(R.id.deleteSecondarySmsNumber_btn);
-		this.editMsgToneButton = (Button) findViewById(R.id.editMsgTone_btn);
-		this.listenMsgToneButton = (Button) findViewById(R.id.listenMsgTone_btn);
-		this.ackNumberButton = (Button) findViewById(R.id.editAckNumber_btn);
-		this.editRescueServiceButton = (Button) findViewById(R.id.editRescueServiceName_btn);
+		addPrimarySmsNumberButton = (Button) findViewById(R.id.addPrimarySmsNumber_btn);
+		removePrimarySmsNumberButton = (Button) findViewById(R.id.deletePrimarySmsNumber_btn);
+		addSecondarySmsNumberButton = (Button) findViewById(R.id.addSecondarySmsNumber_btn);
+		addPrimaryFreeTextButton = (Button) findViewById(R.id.addPrimaryFreeText_btn);
+		removePrimaryFreeTextButton = (Button) findViewById(R.id.deletePrimaryFreeText_btn);
+		addSecondaryFreeTextButton = (Button) findViewById(R.id.addSecondaryFreeText_btn);
+		removeSecondaryFreeTextButton = (Button) findViewById(R.id.deleteSecondaryFreeText_btn);
+		removeSecondarySmsNumberButton = (Button) findViewById(R.id.deleteSecondarySmsNumber_btn);
+		editMsgToneButton = (Button) findViewById(R.id.editMsgTone_btn);
+		listenMsgToneButton = (Button) findViewById(R.id.listenMsgTone_btn);
+		ackNumberButton = (Button) findViewById(R.id.editAckNumber_btn);
+		editRescueServiceButton = (Button) findViewById(R.id.editRescueServiceName_btn);
 
 		// Declare and initialize variables of type CheckBox
-		this.soundSettingCheckBox = (CheckBox) findViewById(R.id.useSysSoundSettings_chk);
-		this.enableAckCheckBox = (CheckBox) findViewById(R.id.enableAcknowledge_chk);
-		this.playToneTwiceSettingCheckBox = (CheckBox) findViewById(R.id.playToneTwiceSetting_chk);
-		this.enableSmsAlarmCheckBox = (CheckBox) findViewById(R.id.enableSmsAlarm_chk);
+		soundSettingCheckBox = (CheckBox) findViewById(R.id.useSysSoundSettings_chk);
+		enableAckCheckBox = (CheckBox) findViewById(R.id.enableAcknowledge_chk);
+		playToneTwiceSettingCheckBox = (CheckBox) findViewById(R.id.playToneTwiceSetting_chk);
+		enableSmsAlarmCheckBox = (CheckBox) findViewById(R.id.enableSmsAlarm_chk);
 
 		// Declare and initialize variables of type Spinner
-		this.toneSpinner = (Spinner) findViewById(R.id.toneSpinner_sp);
-		this.primarySmsNumberSpinner = (Spinner) findViewById(R.id.primarySmsNumberSpinner_sp);
-		this.secondarySmsNumberSpinner = (Spinner) findViewById(R.id.secondarySmsNumberSpinner_sp);
-		this.primaryFreeTextSpinner = (Spinner) findViewById(R.id.primaryFreeTextSpinner_sp);
-		this.secondaryFreeTextSpinner = (Spinner) findViewById(R.id.secondaryFreeTextSpinner_sp);
+		toneSpinner = (Spinner) findViewById(R.id.toneSpinner_sp);
+		primarySmsNumberSpinner = (Spinner) findViewById(R.id.primarySmsNumberSpinner_sp);
+		secondarySmsNumberSpinner = (Spinner) findViewById(R.id.secondarySmsNumberSpinner_sp);
+		primaryFreeTextSpinner = (Spinner) findViewById(R.id.primaryFreeTextSpinner_sp);
+		secondaryFreeTextSpinner = (Spinner) findViewById(R.id.secondaryFreeTextSpinner_sp);
 
 		// Declare and initialize variables of type TextView
-		this.soundSettingInfoTextView = (TextView) findViewById(R.id.useSysSoundSettingsHint_tv);
-		this.playToneTwiceInfoTextView = (TextView) findViewById(R.id.playToneTwiceSettingHint_tv);
-		this.enableSmsAlarmInfoTextView = (TextView) findViewById(R.id.enableSmsAlarmHint_tv);
-		this.enableAckInfoTextView = (TextView) findViewById(R.id.enableAcknowledgeHint_tv);
+		soundSettingInfoTextView = (TextView) findViewById(R.id.useSysSoundSettingsHint_tv);
+		playToneTwiceInfoTextView = (TextView) findViewById(R.id.playToneTwiceSettingHint_tv);
+		enableSmsAlarmInfoTextView = (TextView) findViewById(R.id.enableSmsAlarmHint_tv);
+		enableAckInfoTextView = (TextView) findViewById(R.id.enableAcknowledgeHint_tv);
 
 		// If Android API level is greater than 16 we need to adjust some margins
 		if (Build.VERSION.SDK_INT > 16) {
@@ -670,7 +670,7 @@ public class SmsAlarm extends Activity {
 			// If the locale on device is german(de) set pixelstop to -6dp else -9dp
 			if ("de".equals(Locale.getDefault().getLanguage())) {
 				// Logging
-				this.logger.logCat(LogPriorities.DEBUG, this.LOG_TAG + ":findViews()", "The device has german(de) locale, set different margin-top on information TextViews for the checkboxes than other locales");
+				logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":findViews()", "The device has german(de) locale, set different margin-top on information TextViews for the checkboxes than other locales");
 				pixelsTop = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, -6, resources.getDisplayMetrics()); // -6dp calculated to pixels
 			} else {
 				pixelsTop = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, -9, resources.getDisplayMetrics()); // -9dp calculated to pixels
@@ -679,36 +679,36 @@ public class SmsAlarm extends Activity {
 			// Set layout parameters for the sound settings info textview
 			RelativeLayout.LayoutParams paramsSoundSettingInfoTextView = new RelativeLayout.LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT); // Wrap content, both on height and width
 			paramsSoundSettingInfoTextView.setMargins(pixelsLeft, pixelsTop, pixelsRight, 0); // Margins left, top, right, bottom
-			paramsSoundSettingInfoTextView.addRule(RelativeLayout.BELOW, this.soundSettingCheckBox.getId()); // Add rule, below UI widget
-			paramsSoundSettingInfoTextView.addRule(RelativeLayout.ALIGN_LEFT, this.soundSettingCheckBox.getId()); // Add rule, align left of UI widget
+			paramsSoundSettingInfoTextView.addRule(RelativeLayout.BELOW, soundSettingCheckBox.getId()); // Add rule, below UI widget
+			paramsSoundSettingInfoTextView.addRule(RelativeLayout.ALIGN_LEFT, soundSettingCheckBox.getId()); // Add rule, align left of UI widget
 
 			// Set layout parameters for the play tone twice textview
 			RelativeLayout.LayoutParams paramsPlayToneTwiceInfoTextView = new RelativeLayout.LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
 			paramsPlayToneTwiceInfoTextView.setMargins(pixelsLeft, pixelsTop, pixelsRight, 0);
-			paramsPlayToneTwiceInfoTextView.addRule(RelativeLayout.BELOW, this.playToneTwiceSettingCheckBox.getId());
-			paramsPlayToneTwiceInfoTextView.addRule(RelativeLayout.ALIGN_LEFT, this.playToneTwiceSettingCheckBox.getId());
+			paramsPlayToneTwiceInfoTextView.addRule(RelativeLayout.BELOW, playToneTwiceSettingCheckBox.getId());
+			paramsPlayToneTwiceInfoTextView.addRule(RelativeLayout.ALIGN_LEFT, playToneTwiceSettingCheckBox.getId());
 
 			// Set layout parameters for the enable ack info textview
 			RelativeLayout.LayoutParams paramsEnableAckInfoTextView = new RelativeLayout.LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
 			paramsEnableAckInfoTextView.setMargins(pixelsLeft, pixelsTop, pixelsRight, 0);
-			paramsEnableAckInfoTextView.addRule(RelativeLayout.BELOW, this.enableAckCheckBox.getId());
-			paramsEnableAckInfoTextView.addRule(RelativeLayout.ALIGN_LEFT, this.enableAckCheckBox.getId());
+			paramsEnableAckInfoTextView.addRule(RelativeLayout.BELOW, enableAckCheckBox.getId());
+			paramsEnableAckInfoTextView.addRule(RelativeLayout.ALIGN_LEFT, enableAckCheckBox.getId());
 
 			// Set layout parameters for the enable sms alarm info textview
 			RelativeLayout.LayoutParams paramsEnableSmsAlarmInfoTextView = new RelativeLayout.LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
 			paramsEnableSmsAlarmInfoTextView.setMargins(pixelsLeft, pixelsTop, pixelsRight, 0);
-			paramsEnableSmsAlarmInfoTextView.addRule(RelativeLayout.BELOW, this.enableSmsAlarmCheckBox.getId());
-			paramsEnableSmsAlarmInfoTextView.addRule(RelativeLayout.ALIGN_LEFT, this.enableSmsAlarmCheckBox.getId());
+			paramsEnableSmsAlarmInfoTextView.addRule(RelativeLayout.BELOW, enableSmsAlarmCheckBox.getId());
+			paramsEnableSmsAlarmInfoTextView.addRule(RelativeLayout.ALIGN_LEFT, enableSmsAlarmCheckBox.getId());
 
 			// Apply the previously configured layout parameters to the correct
 			// textviews
-			this.soundSettingInfoTextView.setLayoutParams(paramsSoundSettingInfoTextView);
-			this.playToneTwiceInfoTextView.setLayoutParams(paramsPlayToneTwiceInfoTextView);
-			this.enableAckInfoTextView.setLayoutParams(paramsEnableAckInfoTextView);
-			this.enableSmsAlarmInfoTextView.setLayoutParams(paramsEnableSmsAlarmInfoTextView);
+			soundSettingInfoTextView.setLayoutParams(paramsSoundSettingInfoTextView);
+			playToneTwiceInfoTextView.setLayoutParams(paramsPlayToneTwiceInfoTextView);
+			enableAckInfoTextView.setLayoutParams(paramsEnableAckInfoTextView);
+			enableSmsAlarmInfoTextView.setLayoutParams(paramsEnableSmsAlarmInfoTextView);
 
 			// Logging
-			this.logger.logCat(LogPriorities.DEBUG, this.LOG_TAG + ":findViews()", "API level > 16, edit margins on information TextViews for the checkboxes");
+			logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":findViews()", "API level > 16, edit margins on information TextViews for the checkboxes");
 		} else { // The device has API level < 17, we just need to check if the locale is german
 			// If the locale on device is german(de) we need to adjust the margin top for the information textviews for the checkboxes to -6dp
 			if ("de".equals(Locale.getDefault().getLanguage())) {
@@ -723,83 +723,83 @@ public class SmsAlarm extends Activity {
 				// Set layout parameters for the sound settings info textview
 				RelativeLayout.LayoutParams paramsSoundSettingInfoTextView = new RelativeLayout.LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT); // Wrap content, both on height and width
 				paramsSoundSettingInfoTextView.setMargins(pixelsLeft, pixelsTop, pixelsRight, 0); // Margins left, top, right, bottom
-				paramsSoundSettingInfoTextView.addRule(RelativeLayout.BELOW, this.soundSettingCheckBox.getId()); // Add rule, below UI widget
-				paramsSoundSettingInfoTextView.addRule(RelativeLayout.ALIGN_LEFT, this.soundSettingCheckBox.getId()); // Add rule, align left of UI widget
+				paramsSoundSettingInfoTextView.addRule(RelativeLayout.BELOW, soundSettingCheckBox.getId()); // Add rule, below UI widget
+				paramsSoundSettingInfoTextView.addRule(RelativeLayout.ALIGN_LEFT, soundSettingCheckBox.getId()); // Add rule, align left of UI widget
 
 				// Set layout parameters for the play tone twice textview
 				RelativeLayout.LayoutParams paramsPlayToneTwiceInfoTextView = new RelativeLayout.LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
 				paramsPlayToneTwiceInfoTextView.setMargins(pixelsLeft, pixelsTop, pixelsRight, 0);
-				paramsPlayToneTwiceInfoTextView.addRule(RelativeLayout.BELOW, this.playToneTwiceSettingCheckBox.getId());
-				paramsPlayToneTwiceInfoTextView.addRule(RelativeLayout.ALIGN_LEFT, this.playToneTwiceSettingCheckBox.getId());
+				paramsPlayToneTwiceInfoTextView.addRule(RelativeLayout.BELOW, playToneTwiceSettingCheckBox.getId());
+				paramsPlayToneTwiceInfoTextView.addRule(RelativeLayout.ALIGN_LEFT, playToneTwiceSettingCheckBox.getId());
 
 				// Set layout parameters for the enable ack info textview
 				RelativeLayout.LayoutParams paramsEnableAckInfoTextView = new RelativeLayout.LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
 				paramsEnableAckInfoTextView.setMargins(pixelsLeft, pixelsTop, pixelsRight, 0);
-				paramsEnableAckInfoTextView.addRule(RelativeLayout.BELOW, this.enableAckCheckBox.getId());
-				paramsEnableAckInfoTextView.addRule(RelativeLayout.ALIGN_LEFT, this.enableAckCheckBox.getId());
+				paramsEnableAckInfoTextView.addRule(RelativeLayout.BELOW, enableAckCheckBox.getId());
+				paramsEnableAckInfoTextView.addRule(RelativeLayout.ALIGN_LEFT, enableAckCheckBox.getId());
 
 				// Set layout parameters for the enable sms alarm info textview
 				RelativeLayout.LayoutParams paramsEnableSmsAlarmInfoTextView = new RelativeLayout.LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
 				paramsEnableSmsAlarmInfoTextView.setMargins(pixelsLeft, pixelsTop, pixelsRight, 0);
-				paramsEnableSmsAlarmInfoTextView.addRule(RelativeLayout.BELOW, this.enableSmsAlarmCheckBox.getId());
-				paramsEnableSmsAlarmInfoTextView.addRule(RelativeLayout.ALIGN_LEFT, this.enableSmsAlarmCheckBox.getId());
+				paramsEnableSmsAlarmInfoTextView.addRule(RelativeLayout.BELOW, enableSmsAlarmCheckBox.getId());
+				paramsEnableSmsAlarmInfoTextView.addRule(RelativeLayout.ALIGN_LEFT, enableSmsAlarmCheckBox.getId());
 
 				// Apply the previously configured layout parameters to the correct
 				// textviews
-				this.soundSettingInfoTextView.setLayoutParams(paramsSoundSettingInfoTextView);
-				this.playToneTwiceInfoTextView.setLayoutParams(paramsPlayToneTwiceInfoTextView);
-				this.enableAckInfoTextView.setLayoutParams(paramsEnableAckInfoTextView);
-				this.enableSmsAlarmInfoTextView.setLayoutParams(paramsEnableSmsAlarmInfoTextView);
+				soundSettingInfoTextView.setLayoutParams(paramsSoundSettingInfoTextView);
+				playToneTwiceInfoTextView.setLayoutParams(paramsPlayToneTwiceInfoTextView);
+				enableAckInfoTextView.setLayoutParams(paramsEnableAckInfoTextView);
+				enableSmsAlarmInfoTextView.setLayoutParams(paramsEnableSmsAlarmInfoTextView);
 
 				// Logging
-				this.logger.logCat(LogPriorities.DEBUG, this.LOG_TAG + ":findViews()", "API level < 17 but the device has german(de) locale, set different margin-top on information TextViews for the checkboxes to fit the language");	
+				logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":findViews()", "API level < 17 but the device has german(de) locale, set different margin-top on information TextViews for the checkboxes to fit the language");	
 			} 		
 		}
 
 		// Declare and initialize variables of type ImageView
-		this.divider1ImageView = (ImageView) findViewById(R.id.mainDivider1_iv);
-		this.divider2ImageView = (ImageView) findViewById(R.id.mainDivider2_iv);
-		this.divider3ImageView = (ImageView) findViewById(R.id.mainDivider3_iv);
-		this.divider4ImageView = (ImageView) findViewById(R.id.mainDivider4_iv);
+		divider1ImageView = (ImageView) findViewById(R.id.mainDivider1_iv);
+		divider2ImageView = (ImageView) findViewById(R.id.mainDivider2_iv);
+		divider3ImageView = (ImageView) findViewById(R.id.mainDivider3_iv);
+		divider4ImageView = (ImageView) findViewById(R.id.mainDivider4_iv);
 
 		// If Android API level less then 11 set bright gradient else set dark gradient
 		if (Build.VERSION.SDK_INT < 11) {
-			this.divider1ImageView.setImageResource(R.drawable.gradient_divider_10_and_down);
-			this.divider2ImageView.setImageResource(R.drawable.gradient_divider_10_and_down);
-			this.divider3ImageView.setImageResource(R.drawable.gradient_divider_10_and_down);
-			this.divider4ImageView.setImageResource(R.drawable.gradient_divider_10_and_down);
+			divider1ImageView.setImageResource(R.drawable.gradient_divider_10_and_down);
+			divider2ImageView.setImageResource(R.drawable.gradient_divider_10_and_down);
+			divider3ImageView.setImageResource(R.drawable.gradient_divider_10_and_down);
+			divider4ImageView.setImageResource(R.drawable.gradient_divider_10_and_down);
 			// Logging
-			this.logger.logCat(LogPriorities.DEBUG, this.LOG_TAG + ":findViews()", "API level < 11, set bright gradients");
+			logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":findViews()", "API level < 11, set bright gradients");
 		} else {
-			this.divider1ImageView.setImageResource(R.drawable.gradient_divider_11_and_up);
-			this.divider2ImageView.setImageResource(R.drawable.gradient_divider_11_and_up);
-			this.divider3ImageView.setImageResource(R.drawable.gradient_divider_11_and_up);
-			this.divider4ImageView.setImageResource(R.drawable.gradient_divider_11_and_up);
-			this.logger.logCat(LogPriorities.DEBUG, this.LOG_TAG + ":findViews()", "API level > 10, set dark gradients");
+			divider1ImageView.setImageResource(R.drawable.gradient_divider_11_and_up);
+			divider2ImageView.setImageResource(R.drawable.gradient_divider_11_and_up);
+			divider3ImageView.setImageResource(R.drawable.gradient_divider_11_and_up);
+			divider4ImageView.setImageResource(R.drawable.gradient_divider_11_and_up);
+			logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":findViews()", "API level > 10, set dark gradients");
 		}
 
 		// Set some attributes to the ackNumberEditText
-		this.ackNumberEditText.setEnabled(false);
-		this.ackNumberEditText.setClickable(false);
-		this.ackNumberEditText.setFocusable(false);
-		this.ackNumberEditText.setBackgroundColor(Color.WHITE);
+		ackNumberEditText.setEnabled(false);
+		ackNumberEditText.setClickable(false);
+		ackNumberEditText.setFocusable(false);
+		ackNumberEditText.setBackgroundColor(Color.WHITE);
 
 		// Set some attributes to the fireDepartmentEditText
-		this.rescueServiceEditText.setEnabled(false);
-		this.rescueServiceEditText.setClickable(false);
-		this.rescueServiceEditText.setFocusable(false);
-		this.rescueServiceEditText.setBackgroundColor(Color.WHITE);
-		this.rescueServiceEditText.setTextColor(Color.BLACK);
+		rescueServiceEditText.setEnabled(false);
+		rescueServiceEditText.setClickable(false);
+		rescueServiceEditText.setFocusable(false);
+		rescueServiceEditText.setBackgroundColor(Color.WHITE);
+		rescueServiceEditText.setTextColor(Color.BLACK);
 
 		// Set some attributes to the selectedToneEditText
-		this.selectedToneEditText.setEnabled(false);
-		this.selectedToneEditText.setClickable(false);
-		this.selectedToneEditText.setFocusable(false);
-		this.selectedToneEditText.setBackgroundColor(Color.WHITE);
-		this.selectedToneEditText.setTextColor(Color.BLACK);
+		selectedToneEditText.setEnabled(false);
+		selectedToneEditText.setClickable(false);
+		selectedToneEditText.setFocusable(false);
+		selectedToneEditText.setBackgroundColor(Color.WHITE);
+		selectedToneEditText.setTextColor(Color.BLACK);
 
 		// Logging
-		this.logger.logCat(LogPriorities.DEBUG, this.LOG_TAG + ":findViews()", "All Views found");
+		logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":findViews()", "All Views found");
 	}
 	
 	/**
@@ -821,26 +821,26 @@ public class SmsAlarm extends Activity {
 	@SuppressWarnings("unchecked")
 	private void getSmsAlarmPrefs() {
 		// Some logging
-		this.logger.logCat(LogPriorities.DEBUG, this.LOG_TAG + ":getSmsAlarmPrefs()", "Start retrieving shared preferences needed by class SmsAlarm");
+		logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":getSmsAlarmPrefs()", "Start retrieving shared preferences needed by class SmsAlarm");
 
 		try {
 			// Get shared preferences needed by class Sms Alarm
-			this.primaryListenSmsNumbers = (List<String>) prefHandler.getPrefs(PrefKeys.SHARED_PREF, PrefKeys.PRIMARY_LISTEN_NUMBERS_KEY, DataTypes.LIST, this);
-			this.secondaryListenSmsNumbers = (List<String>) prefHandler.getPrefs(PrefKeys.SHARED_PREF, PrefKeys.SECONDARY_LISTEN_NUMBERS_KEY, DataTypes.LIST, this);
-			this.primaryListenFreeTexts = (List<String>) prefHandler.getPrefs(PrefKeys.SHARED_PREF, PrefKeys.PRIMARY_LISTEN_FREE_TEXTS_KEY, DataTypes.LIST, this);
-			this.secondaryListenFreeTexts = (List<String>) prefHandler.getPrefs(PrefKeys.SHARED_PREF, PrefKeys.SECONDARY_LISTEN_FREE_TEXTS_KEY, DataTypes.LIST, this);
-			this.primaryMessageToneId = (Integer) prefHandler.getPrefs(PrefKeys.SHARED_PREF, PrefKeys.PRIMARY_MESSAGE_TONE_KEY, DataTypes.INTEGER, this);
-			this.secondaryMessageToneId = (Integer) prefHandler.getPrefs(PrefKeys.SHARED_PREF, PrefKeys.SECONDARY_MESSAGE_TONE_KEY, DataTypes.INTEGER, this, 1);
-			this.useOsSoundSettings = (Boolean) prefHandler.getPrefs(PrefKeys.SHARED_PREF, PrefKeys.USE_OS_SOUND_SETTINGS_KEY, DataTypes.BOOLEAN, this);
-			this.useAlarmAcknowledge = (Boolean) prefHandler.getPrefs(PrefKeys.SHARED_PREF, PrefKeys.ENABLE_ACK_KEY, DataTypes.BOOLEAN, this);
-			this.acknowledgeNumber = (String) prefHandler.getPrefs(PrefKeys.SHARED_PREF, PrefKeys.ACK_NUMBER_KEY, DataTypes.STRING, this);
-			this.playToneTwice = (Boolean) prefHandler.getPrefs(PrefKeys.SHARED_PREF, PrefKeys.PLAY_TONE_TWICE_KEY, DataTypes.BOOLEAN, this);
-			this.enableSmsAlarm = (Boolean) prefHandler.getPrefs(PrefKeys.SHARED_PREF, PrefKeys.ENABLE_SMS_ALARM_KEY, DataTypes.BOOLEAN, this, true);
-			this.rescueService = (String) prefHandler.getPrefs(PrefKeys.SHARED_PREF, PrefKeys.RESCUE_SERVICE_KEY, DataTypes.STRING, this);
+			primaryListenSmsNumbers = (List<String>) prefHandler.getPrefs(PrefKeys.SHARED_PREF, PrefKeys.PRIMARY_LISTEN_NUMBERS_KEY, DataTypes.LIST, this);
+			secondaryListenSmsNumbers = (List<String>) prefHandler.getPrefs(PrefKeys.SHARED_PREF, PrefKeys.SECONDARY_LISTEN_NUMBERS_KEY, DataTypes.LIST, this);
+			primaryListenFreeTexts = (List<String>) prefHandler.getPrefs(PrefKeys.SHARED_PREF, PrefKeys.PRIMARY_LISTEN_FREE_TEXTS_KEY, DataTypes.LIST, this);
+			secondaryListenFreeTexts = (List<String>) prefHandler.getPrefs(PrefKeys.SHARED_PREF, PrefKeys.SECONDARY_LISTEN_FREE_TEXTS_KEY, DataTypes.LIST, this);
+			primaryMessageToneId = (Integer) prefHandler.getPrefs(PrefKeys.SHARED_PREF, PrefKeys.PRIMARY_MESSAGE_TONE_KEY, DataTypes.INTEGER, this);
+			secondaryMessageToneId = (Integer) prefHandler.getPrefs(PrefKeys.SHARED_PREF, PrefKeys.SECONDARY_MESSAGE_TONE_KEY, DataTypes.INTEGER, this, 1);
+			useOsSoundSettings = (Boolean) prefHandler.getPrefs(PrefKeys.SHARED_PREF, PrefKeys.USE_OS_SOUND_SETTINGS_KEY, DataTypes.BOOLEAN, this);
+			useAlarmAcknowledge = (Boolean) prefHandler.getPrefs(PrefKeys.SHARED_PREF, PrefKeys.ENABLE_ACK_KEY, DataTypes.BOOLEAN, this);
+			acknowledgeNumber = (String) prefHandler.getPrefs(PrefKeys.SHARED_PREF, PrefKeys.ACK_NUMBER_KEY, DataTypes.STRING, this);
+			playToneTwice = (Boolean) prefHandler.getPrefs(PrefKeys.SHARED_PREF, PrefKeys.PLAY_TONE_TWICE_KEY, DataTypes.BOOLEAN, this);
+			enableSmsAlarm = (Boolean) prefHandler.getPrefs(PrefKeys.SHARED_PREF, PrefKeys.ENABLE_SMS_ALARM_KEY, DataTypes.BOOLEAN, this, true);
+			rescueService = (String) prefHandler.getPrefs(PrefKeys.SHARED_PREF, PrefKeys.RESCUE_SERVICE_KEY, DataTypes.STRING, this);
 		} catch (IllegalArgumentException e) {
-			this.logger.logCatTxt(LogPriorities.ERROR, this.LOG_TAG + ":getSmsAlarmPrefs()", "An unsupported datatype was given as argument to PreferencesHandler.getPrefs()", e);
+			logger.logCatTxt(LogPriorities.ERROR, LOG_TAG + ":getSmsAlarmPrefs()", "An unsupported datatype was given as argument to PreferencesHandler.getPrefs()", e);
 		}
-		this.logger.logCat(LogPriorities.DEBUG, this.LOG_TAG + ":getSmsAlarmPrefs()", "Shared preferences retrieved");
+		logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":getSmsAlarmPrefs()", "Shared preferences retrieved");
 	}
 
 	/**
@@ -867,7 +867,7 @@ public class SmsAlarm extends Activity {
 	 */
 	private void buildAndShowDeleteDialog(final DialogTypes type) {
 		// Logging
-		this.logger.logCat(LogPriorities.DEBUG, this.LOG_TAG + ":buildAndShowDeleteDialog()", "Start building delete dialog");
+		logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":buildAndShowDeleteDialog()", "Start building delete dialog");
 		
 		// Build up the alert dialog
 		AlertDialog.Builder dialog = new AlertDialog.Builder(this);
@@ -889,31 +889,31 @@ public class SmsAlarm extends Activity {
 			// Set dialog to non cancelable
 			dialog.setCancelable(false);
 			// Logging
-			this.logger.logCat(LogPriorities.DEBUG, this.LOG_TAG + ":buildAndShowDeleteDialog()", "Dialog attributes is set for dialog type SMS_PRIMARY");
+			logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":buildAndShowDeleteDialog()", "Dialog attributes is set for dialog type SMS_PRIMARY");
 			break;
 		case SMS_SECONDARY:		
 			dialog.setTitle(R.string.DELETE_NUMBER_PROMPT_TITLE);
 			dialog.setMessage(getString(R.string.DELETE_SECONDARY_NUMBER_PROMPT_MESSAGE) + " " + secondaryListenSmsNumbers.get(secondarySmsNumberSpinner.getSelectedItemPosition()) + "?");
 			dialog.setCancelable(false);
-			this.logger.logCat(LogPriorities.DEBUG, this.LOG_TAG + ":buildAndShowDeleteDialog()", "Dialog attributes is set for dialog type SMS_SECONDARY");
+			logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":buildAndShowDeleteDialog()", "Dialog attributes is set for dialog type SMS_SECONDARY");
 			break;
 		case FREE_TEXT_PRIMARY:
 			dialog.setTitle(R.string.DELETE_FREE_TEXT_PROMPT_TITLE);
 			dialog.setMessage(getString(R.string.DELETE_PRIMARY_FREE_TEXT_PROMPT_MESSAGE) + " " + primaryListenFreeTexts.get(primaryFreeTextSpinner.getSelectedItemPosition()) + "?");
 			dialog.setCancelable(false);
-			this.logger.logCat(LogPriorities.DEBUG, this.LOG_TAG + ":buildAndShowDeleteDialog()", "Dialog attributes is set for dialog type FREE_TEXT_PRIMARY");
+			logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":buildAndShowDeleteDialog()", "Dialog attributes is set for dialog type FREE_TEXT_PRIMARY");
 			break;
 		case FREE_TEXT_SECONDARY:
 			dialog.setTitle(R.string.DELETE_FREE_TEXT_PROMPT_TITLE);
 			dialog.setMessage(getString(R.string.DELETE_SECONDARY_FREE_TEXT_PROMPT_MESSAGE) + " " + secondaryListenFreeTexts.get(secondaryFreeTextSpinner.getSelectedItemPosition()) + "?");
 			dialog.setCancelable(false);
-			this.logger.logCat(LogPriorities.DEBUG, this.LOG_TAG + ":buildAndShowDeleteDialog()", "Dialog attributes is set for dialog type FREE_TEXT_SECONDARY");
+			logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":buildAndShowDeleteDialog()", "Dialog attributes is set for dialog type FREE_TEXT_SECONDARY");
 			break;
 		default: // <--Unsupported dialog type. Displaying a dummy dialog!
 			dialog.setTitle("Congratulations!");
 			dialog.setMessage("Somehow you got this dialog to show up! I bet a monkey must have been messing around with the code;-)");
 			dialog.setCancelable(false);
-			this.logger.logCatTxt(LogPriorities.ERROR, this.LOG_TAG + ":buildAndShowDeleteDialog()", "A UNSUPPORTED dialog type has been given as parameter, a DUMMY dialog will be built and shown");
+			logger.logCatTxt(LogPriorities.ERROR, LOG_TAG + ":buildAndShowDeleteDialog()", "A UNSUPPORTED dialog type has been given as parameter, a DUMMY dialog will be built and shown");
 		}		
 
 		// Set a positive button and listen on it
@@ -1000,7 +1000,7 @@ public class SmsAlarm extends Activity {
 		}
 
 		// Logging
-		this.logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":buildAndShowDeleteDialog()", "Showing dialog");
+		logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":buildAndShowDeleteDialog()", "Showing dialog");
 
 		// Show it
 		dialog.show();
@@ -1035,7 +1035,7 @@ public class SmsAlarm extends Activity {
 	 */
 	private void buildAndShowInputDialog(final DialogTypes type) {
 		// Logging
-		this.logger.logCat(LogPriorities.DEBUG, this.LOG_TAG + ":buildAndShowInputDialog()", "Start building dialog");
+		logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":buildAndShowInputDialog()", "Start building dialog");
 		
 		// Build up the alert dialog
 		AlertDialog.Builder dialog = new AlertDialog.Builder(this);
@@ -1078,7 +1078,7 @@ public class SmsAlarm extends Activity {
 			// Bind dialog to input
 			dialog.setView(noBlanksInputEditText);
 			// Logging
-			this.logger.logCat(LogPriorities.DEBUG, this.LOG_TAG + ":buildAndShowInputDialog()", "Dialog attributes is set for dialog type SMS_PRIMARY");
+			logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":buildAndShowInputDialog()", "Dialog attributes is set for dialog type SMS_PRIMARY");
 			break;
 		case SMS_SECONDARY:
 			dialog.setTitle(R.string.NUMBER_PROMPT_TITLE);
@@ -1087,7 +1087,7 @@ public class SmsAlarm extends Activity {
 			noBlanksInputEditText.setInputType(InputType.TYPE_CLASS_PHONE);
 			dialog.setCancelable(false);
 			dialog.setView(noBlanksInputEditText);
-			this.logger.logCat(LogPriorities.DEBUG, this.LOG_TAG + ":buildAndShowInputDialog()", "Dialog attributes is set for dialog type SMS_SECONDARY");
+			logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":buildAndShowInputDialog()", "Dialog attributes is set for dialog type SMS_SECONDARY");
 			break;
 		case FREE_TEXT_PRIMARY:
 			dialog.setTitle(R.string.FREE_TEXT_PROMPT_TITLE);
@@ -1096,7 +1096,7 @@ public class SmsAlarm extends Activity {
 			noBlanksInputEditText.setInputType(InputType.TYPE_CLASS_TEXT);
 			dialog.setCancelable(false);
 			dialog.setView(noBlanksInputEditText);
-			this.logger.logCat(LogPriorities.DEBUG, this.LOG_TAG + ":buildAndShowInputDialog()", "Dialog attributes is set for dialog type FREE_TEXT_PRIMARY");
+			logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":buildAndShowInputDialog()", "Dialog attributes is set for dialog type FREE_TEXT_PRIMARY");
 			break;
 		case FREE_TEXT_SECONDARY:
 			dialog.setTitle(R.string.FREE_TEXT_PROMPT_TITLE);
@@ -1105,7 +1105,7 @@ public class SmsAlarm extends Activity {
 			noBlanksInputEditText.setInputType(InputType.TYPE_CLASS_TEXT);
 			dialog.setCancelable(false);
 			dialog.setView(noBlanksInputEditText);
-			this.logger.logCat(LogPriorities.DEBUG, this.LOG_TAG + ":buildAndShowInputDialog()", "Dialog attributes is set for dialog type FREE_TEXT_SECONDARY");
+			logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":buildAndShowInputDialog()", "Dialog attributes is set for dialog type FREE_TEXT_SECONDARY");
 			break;			
 		case ACKNOWLEDGE:
 			dialog.setTitle(R.string.NUMBER_PROMPT_TITLE);
@@ -1114,7 +1114,7 @@ public class SmsAlarm extends Activity {
 			noBlanksInputEditText.setInputType(InputType.TYPE_CLASS_PHONE);
 			dialog.setCancelable(false);
 			dialog.setView(noBlanksInputEditText);
-			this.logger.logCat(LogPriorities.DEBUG, this.LOG_TAG + ":buildAndShowInputDialog()", "Dialog attributes is set for dialog type ACKNOWLEDGE");
+			logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":buildAndShowInputDialog()", "Dialog attributes is set for dialog type ACKNOWLEDGE");
 			break;
 		case RESCUESERVICE:
 			dialog.setTitle(R.string.RESCUE_SERVICE_PROMPT_TITLE);
@@ -1123,13 +1123,13 @@ public class SmsAlarm extends Activity {
 			inputEditText.setInputType(InputType.TYPE_CLASS_TEXT);
 			dialog.setCancelable(false);
 			dialog.setView(inputEditText);
-			this.logger.logCat(LogPriorities.DEBUG, this.LOG_TAG + ":buildAndShowInputDialog()", "Dialog attributes is set for dialog type RESCUESERVICE");
+			logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":buildAndShowInputDialog()", "Dialog attributes is set for dialog type RESCUESERVICE");
 			break;
 		default: // <--Unsupported dialog type. Displaying a dummy dialog!
 			dialog.setTitle("Congratulations!");
 			dialog.setMessage("Somehow you got this dialog to show up! I bet a monkey must have been messing around with the code;-)");
 			dialog.setCancelable(false);
-			this.logger.logCatTxt(LogPriorities.ERROR, this.LOG_TAG + ":buildAndShowInputDialog()", "A UNSUPPORTED dialog type has been given as parameter, a DUMMY dialog will be built and shown");
+			logger.logCatTxt(LogPriorities.ERROR, LOG_TAG + ":buildAndShowInputDialog()", "A UNSUPPORTED dialog type has been given as parameter, a DUMMY dialog will be built and shown");
 		}
 
 		// Set a positive button and listen on it
@@ -1375,7 +1375,7 @@ public class SmsAlarm extends Activity {
 		}
 
 		// Logging
-		this.logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":buildAndShowInputDialog()", "Showing dialog");
+		logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":buildAndShowInputDialog()", "Showing dialog");
 
 		// Show it
 		dialog.show();
@@ -1400,7 +1400,7 @@ public class SmsAlarm extends Activity {
 	 */
 	private void buildAndShowToneDialog() {
 		// Logging
-		this.logger.logCat(LogPriorities.DEBUG, this.LOG_TAG + ":buildAndShowToneDialog()", "Start building tone dialog");
+		logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":buildAndShowToneDialog()", "Start building tone dialog");
 
 		// Build up the alert dialog
 		AlertDialog.Builder dialog = new AlertDialog.Builder(this);
@@ -1411,7 +1411,7 @@ public class SmsAlarm extends Activity {
 		dialog.setCancelable(false);
 
 		// Logging
-		this.logger.logCat(LogPriorities.DEBUG, this.LOG_TAG + ":buildAndShowToneDialog()", "Dialog attributes set");
+		logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":buildAndShowToneDialog()", "Dialog attributes set");
 
 		// Set items to list view from resource array tones
 		dialog.setItems(R.array.tones, new DialogInterface.OnClickListener() {
@@ -1459,7 +1459,7 @@ public class SmsAlarm extends Activity {
 		});
 
 		// Logging
-		this.logger.logCat(LogPriorities.DEBUG, this.LOG_TAG + ":buildAndShowToneDialog()", "Showing dialog");
+		logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":buildAndShowToneDialog()", "Showing dialog");
 
 		// Show dialog
 		dialog.show();
@@ -1476,7 +1476,7 @@ public class SmsAlarm extends Activity {
 	 */
 	private void buildAndShowAboutDialog() {
 		// Logging
-		this.logger.logCat(LogPriorities.DEBUG, this.LOG_TAG + ":buildAndShowAboutDialog()", "Start building about dialog");
+		logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":buildAndShowAboutDialog()", "Start building about dialog");
 
 		// Build up the alert dialog
 		AlertDialog.Builder dialog = new AlertDialog.Builder(this);
@@ -1496,10 +1496,10 @@ public class SmsAlarm extends Activity {
 		// Set correct icon depending on api level
 		if (Build.VERSION.SDK_INT < 11) {
 			dialog.setIcon(R.drawable.ic_launcher_trans_10_and_down);
-			this.logger.logCat(LogPriorities.DEBUG, this.LOG_TAG + ":buildAndShowAboutDialog()", "API level < 11, set icon adapted to black background color");
+			logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":buildAndShowAboutDialog()", "API level < 11, set icon adapted to black background color");
 		} else {
 			dialog.setIcon(R.drawable.ic_launcher_trans);
-			this.logger.logCat(LogPriorities.DEBUG, this.LOG_TAG + ":buildAndShowAboutDialog()", "API level > 10, set icon adapted to white background color");
+			logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":buildAndShowAboutDialog()", "API level > 10, set icon adapted to white background color");
 		}
 		
 		// Set rest of the attributes
@@ -1508,7 +1508,7 @@ public class SmsAlarm extends Activity {
 		dialog.setCancelable(false);
 
 		// Logging
-		this.logger.logCat(LogPriorities.DEBUG, this.LOG_TAG + ":buildAndShowAboutDialog()", "Dialog attributes set");
+		logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":buildAndShowAboutDialog()", "Dialog attributes set");
 
 		// Set a neutral button
 		dialog.setNeutralButton(R.string.OK, new DialogInterface.OnClickListener() {
@@ -1520,7 +1520,7 @@ public class SmsAlarm extends Activity {
 		});
 
 		// Logging
-		this.logger.logCat(LogPriorities.DEBUG, this.LOG_TAG + ":buildAndShowAboutDialog()", "Showing dialog");
+		logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":buildAndShowAboutDialog()", "Showing dialog");
 
 		// Show dialog
 		dialog.show();
@@ -1570,40 +1570,40 @@ public class SmsAlarm extends Activity {
 	 */
 	private void updateWholeUI() {
 		// Logging
-		this.logger.logCat(LogPriorities.DEBUG, this.LOG_TAG + ":updateWholeUI", "Whole user interface is about to be updated");
+		logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":updateWholeUI", "Whole user interface is about to be updated");
 
 		// Update secondary listen sms numbers Spinner
-		this.updateSecondaryListenSmsNumberSpinner();
+		updateSecondaryListenSmsNumberSpinner();
 		
 		// Update primary listen free text Spinner
-		this.updatePrimaryListenFreeTextSpinner();
+		updatePrimaryListenFreeTextSpinner();
 		
 		// Update secondary listen free text spinner
-		this.updateSecondaryListenFreeTextSpinner();
+		updateSecondaryListenFreeTextSpinner();
 
 		// Update acknowledge number EditText
-		this.updateAcknowledgeNumberEditText();
+		updateAcknowledgeNumberEditText();
 
 		// Update rescue service EditText
-		this.updateRescueServiceEditText();
+		updateRescueServiceEditText();
 
 		// Update selected EditText widget
-		this.updateSelectedToneEditText();
+		updateSelectedToneEditText();
 
 		// Update use OS sound settings CheckBox widget
-		this.updateUseOsSoundSettingsCheckbox();
+		updateUseOsSoundSettingsCheckbox();
 
 		// Update play tone twice CheckBox widget
-		this.updatePlayToneTwiceCheckBox();
+		updatePlayToneTwiceCheckBox();
 
 		// Update enable Sms Alarm CheckBox widget
-		this.updateEnableSmsAlarmCheckBox();
+		updateEnableSmsAlarmCheckBox();
 
 		// Update widgets in relation to alarm acknowledgment
-		this.updateAcknowledgeWidgets();
+		updateAcknowledgeWidgets();
 
 		// Logging
-		this.logger.logCat(LogPriorities.DEBUG, this.LOG_TAG + ":updateWholeUI", "User interface updated");
+		logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":updateWholeUI", "User interface updated");
 	}
 	
 	/**
@@ -1615,26 +1615,26 @@ public class SmsAlarm extends Activity {
 	 */
 	private void updatePrimaryListenSmsNumberSpinner() {
 		// Check if there are primary listen numbers and build up a proper spinner according to that information
-		if (!this.primaryListenSmsNumbers.isEmpty()) {
-			ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, this.primaryListenSmsNumbers);
+		if (!primaryListenSmsNumbers.isEmpty()) {
+			ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, primaryListenSmsNumbers);
 			adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-			this.primarySmsNumberSpinner.setAdapter(adapter);
+			primarySmsNumberSpinner.setAdapter(adapter);
 			// Logging
-			this.logger.logCat(LogPriorities.DEBUG, this.LOG_TAG + ":updatePrimaryListenSmsNumberSpinner()", "Populate PRIMARY listen sms number spinner with values: " + this.primaryListenSmsNumbers);
+			logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":updatePrimaryListenSmsNumberSpinner()", "Populate PRIMARY listen sms number spinner with values: " + primaryListenSmsNumbers);
 		} else {
 			// Only add item to list if it's empty
-			if (this.emptyListenNumbers.isEmpty()) {
-				this.emptyListenNumbers.add(getString(R.string.ENTER_PHONE_NUMBER_HINT));
+			if (emptyListenNumbers.isEmpty()) {
+				emptyListenNumbers.add(getString(R.string.ENTER_PHONE_NUMBER_HINT));
 			}
-			ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, this.emptyListenNumbers);
+			ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, emptyListenNumbers);
 			adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-			this.primarySmsNumberSpinner.setAdapter(adapter);
+			primarySmsNumberSpinner.setAdapter(adapter);
 			// Logging
-			this.logger.logCat(LogPriorities.DEBUG, this.LOG_TAG + ":updatePrimaryListenSmsNumberSpinner()", "List with PRIMARY listen numbers is empty, populating spinner with an empty list");
+			logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":updatePrimaryListenSmsNumberSpinner()", "List with PRIMARY listen numbers is empty, populating spinner with an empty list");
 		}
 
 		// Logging
-		this.logger.logCat(LogPriorities.DEBUG, this.LOG_TAG + ":updatePrimaryListenSmsNumberSpinner()", "PRIMARY listen sms numbers Spinner updated");
+		logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":updatePrimaryListenSmsNumberSpinner()", "PRIMARY listen sms numbers Spinner updated");
 	}
 
 	/**
@@ -1646,26 +1646,26 @@ public class SmsAlarm extends Activity {
 	 */
 	private void updateSecondaryListenSmsNumberSpinner() {
 		// Check if there are secondary listen numbers and build up a proper spinner according to that information
-		if (!this.secondaryListenSmsNumbers.isEmpty()) {
-			ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, this.secondaryListenSmsNumbers);
+		if (!secondaryListenSmsNumbers.isEmpty()) {
+			ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, secondaryListenSmsNumbers);
 			adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-			this.secondarySmsNumberSpinner.setAdapter(adapter);
+			secondarySmsNumberSpinner.setAdapter(adapter);
 			// Logging
-			this.logger.logCat(LogPriorities.DEBUG, this.LOG_TAG + ":updateSecondaryListenSmsNumberSpinner()", "Populate SECONDARY listen sms number spinner with values: " + this.secondaryListenSmsNumbers);
+			logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":updateSecondaryListenSmsNumberSpinner()", "Populate SECONDARY listen sms number spinner with values: " + secondaryListenSmsNumbers);
 		} else {
 			// Only add item to list if it's empty
-			if (this.emptyListenNumbers.isEmpty()) {
-				this.emptyListenNumbers.add(getString(R.string.ENTER_PHONE_NUMBER_HINT));
+			if (emptyListenNumbers.isEmpty()) {
+				emptyListenNumbers.add(getString(R.string.ENTER_PHONE_NUMBER_HINT));
 			}
-			ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, this.emptyListenNumbers);
+			ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, emptyListenNumbers);
 			adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-			this.secondarySmsNumberSpinner.setAdapter(adapter);
+			secondarySmsNumberSpinner.setAdapter(adapter);
 			// Logging
-			this.logger.logCat(LogPriorities.DEBUG, this.LOG_TAG + ":updateSecondaryListenSmsNumberSpinner()", "List with SECONDARY listen numbers is empty, populating spinner with an empty list");
+			logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":updateSecondaryListenSmsNumberSpinner()", "List with SECONDARY listen numbers is empty, populating spinner with an empty list");
 		}
 
 		// Logging
-		this.logger.logCat(LogPriorities.DEBUG, this.LOG_TAG + ":updateSecondaryListenSmsNumberSpinner()", "SECONDARY listen sms numbers Spinner updated");
+		logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":updateSecondaryListenSmsNumberSpinner()", "SECONDARY listen sms numbers Spinner updated");
 	}
 	
 	/**
@@ -1677,26 +1677,26 @@ public class SmsAlarm extends Activity {
 	 */
 	private void updatePrimaryListenFreeTextSpinner() {
 		// Check if there are primary listen free test and build up a proper spinner according to that information
-		if (!this.primaryListenFreeTexts.isEmpty()) {
-			ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, this.primaryListenFreeTexts);
+		if (!primaryListenFreeTexts.isEmpty()) {
+			ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, primaryListenFreeTexts);
 			adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-			this.primaryFreeTextSpinner.setAdapter(adapter);
+			primaryFreeTextSpinner.setAdapter(adapter);
 			// Logging
-			this.logger.logCat(LogPriorities.DEBUG, this.LOG_TAG + ":updatePrimaryListenFreeTextSpinner()", "Populate PRIMARY listen free text spinner with values: " + this.primaryListenFreeTexts);
+			logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":updatePrimaryListenFreeTextSpinner()", "Populate PRIMARY listen free text spinner with values: " + primaryListenFreeTexts);
 		} else {
 			// Only add item to list if it's empty
-			if (this.emptyListenFreeTexts.isEmpty()) {
-				this.emptyListenFreeTexts.add(getString(R.string.ENTER_FREE_TEXT_HINT));
+			if (emptyListenFreeTexts.isEmpty()) {
+				emptyListenFreeTexts.add(getString(R.string.ENTER_FREE_TEXT_HINT));
 			}
-			ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, this.emptyListenFreeTexts);
+			ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, emptyListenFreeTexts);
 			adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-			this.primaryFreeTextSpinner.setAdapter(adapter);
+			primaryFreeTextSpinner.setAdapter(adapter);
 			// Logging
-			this.logger.logCat(LogPriorities.DEBUG, this.LOG_TAG + ":updatePrimaryListenFreeTextSpinner()", "List with PRIMARY listen free texts is empty, populating spinner with an empty list");
+			logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":updatePrimaryListenFreeTextSpinner()", "List with PRIMARY listen free texts is empty, populating spinner with an empty list");
 		}
 		
 		// Logging
-		this.logger.logCat(LogPriorities.DEBUG, this.LOG_TAG + ":updatePrimaryListenFreeTextSpinner()", "PRIMARY listen free text Spinner updated");
+		logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":updatePrimaryListenFreeTextSpinner()", "PRIMARY listen free text Spinner updated");
 	}
 	
 	/**
@@ -1708,26 +1708,26 @@ public class SmsAlarm extends Activity {
 	 */
 	private void updateSecondaryListenFreeTextSpinner() {
 		// Check if there are primary listen free test and build up a proper spinner according to that information
-		if (!this.secondaryListenFreeTexts.isEmpty()) {
-			ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, this.secondaryListenFreeTexts);
+		if (!secondaryListenFreeTexts.isEmpty()) {
+			ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, secondaryListenFreeTexts);
 			adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-			this.secondaryFreeTextSpinner.setAdapter(adapter);
+			secondaryFreeTextSpinner.setAdapter(adapter);
 			// Logging
-			this.logger.logCat(LogPriorities.DEBUG, this.LOG_TAG + ":updateSecondaryListenFreeTextSpinner()", "Populate SECONDARY listen free text spinner with values: " + this.secondaryListenFreeTexts);
+			logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":updateSecondaryListenFreeTextSpinner()", "Populate SECONDARY listen free text spinner with values: " + secondaryListenFreeTexts);
 		} else {
 			// Only add item to list if it's empty
-			if (this.emptyListenFreeTexts.isEmpty()) {
-				this.emptyListenFreeTexts.add(getString(R.string.ENTER_FREE_TEXT_HINT));
+			if (emptyListenFreeTexts.isEmpty()) {
+				emptyListenFreeTexts.add(getString(R.string.ENTER_FREE_TEXT_HINT));
 			}
-			ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, this.emptyListenFreeTexts);
+			ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, emptyListenFreeTexts);
 			adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-			this.secondaryFreeTextSpinner.setAdapter(adapter);
+			secondaryFreeTextSpinner.setAdapter(adapter);
 			// Logging
-			this.logger.logCat(LogPriorities.DEBUG, this.LOG_TAG + ":updateSecondaryListenFreeTextSpinner()", "List with SECONDARY listen free texts is empty, populating spinner with an empty list");
+			logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":updateSecondaryListenFreeTextSpinner()", "List with SECONDARY listen free texts is empty, populating spinner with an empty list");
 		}
 		
 		// Logging
-		this.logger.logCat(LogPriorities.DEBUG, this.LOG_TAG + ":updateSecondaryListenFreeTextSpinner()", "SECONDARY listen free text Spinner updated");
+		logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":updateSecondaryListenFreeTextSpinner()", "SECONDARY listen free text Spinner updated");
 	}
 
 	/**
@@ -1738,11 +1738,11 @@ public class SmsAlarm extends Activity {
 	 */
 	private void updateAcknowledgeNumberEditText() {
 		// Update acknowledge number EditText with value
-		this.ackNumberEditText.setText(this.acknowledgeNumber);
+		ackNumberEditText.setText(acknowledgeNumber);
 
 		// Logging
-		this.logger.logCat(LogPriorities.DEBUG, this.LOG_TAG + ":updateAcknowledgeNumberEditText()", "Acknowledge number EditText set to: " + this.acknowledgeNumber);
-		this.logger.logCat(LogPriorities.DEBUG, this.LOG_TAG + ":updateAcknowledgeNumberEditText()", "Acknowledge number EditText updated");
+		logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":updateAcknowledgeNumberEditText()", "Acknowledge number EditText set to: " + acknowledgeNumber);
+		logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":updateAcknowledgeNumberEditText()", "Acknowledge number EditText updated");
 	}
 
 	/**
@@ -1756,18 +1756,18 @@ public class SmsAlarm extends Activity {
 	 */
 	private void updateSelectedToneEditText() {
 		// Log tone spinner position
-		this.logger.logCat(LogPriorities.DEBUG, this.LOG_TAG + ":updateSelectedToneEditText()", "Tone Spinner position is: " + Integer.toString(this.toneSpinnerPos));
+		logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":updateSelectedToneEditText()", "Tone Spinner position is: " + Integer.toString(toneSpinnerPos));
 
 		// Set message tone to the selectedToneEditText, depending on which value spinner has. Also log this event
-		if (this.toneSpinnerPos == 0) {
-			this.selectedToneEditText.setText(this.noiseHandler.msgToneLookup(this, this.primaryMessageToneId));
-			this.logger.logCat(LogPriorities.DEBUG, this.LOG_TAG + ":updateSelectedToneEditText()", "Selected tone EditText updated");
-		} else if (this.toneSpinnerPos == 1) {
-			this.selectedToneEditText.setText(this.noiseHandler.msgToneLookup(this, this.secondaryMessageToneId));
-			this.logger.logCat(LogPriorities.DEBUG, this.LOG_TAG + ":updateSelectedToneEditText()", "Selected tone EditText updated");
+		if (toneSpinnerPos == 0) {
+			selectedToneEditText.setText(noiseHandler.msgToneLookup(this, primaryMessageToneId));
+			logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":updateSelectedToneEditText()", "Selected tone EditText updated");
+		} else if (toneSpinnerPos == 1) {
+			selectedToneEditText.setText(noiseHandler.msgToneLookup(this, secondaryMessageToneId));
+			logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":updateSelectedToneEditText()", "Selected tone EditText updated");
 		} else {
 			// DO NOTHING EXCEPT LOG ERROR MESSAGE
-			this.logger.logCatTxt(LogPriorities.ERROR, this.LOG_TAG + ":updateSelectedToneEditText()", "Invalid spinner position occurred. Current tone Spinner position is: \"" + Integer.toString(this.toneSpinnerPos) + "\"");
+			logger.logCatTxt(LogPriorities.ERROR, LOG_TAG + ":updateSelectedToneEditText()", "Invalid spinner position occurred. Current tone Spinner position is: \"" + Integer.toString(toneSpinnerPos) + "\"");
 		}
 	}
 
@@ -1778,11 +1778,11 @@ public class SmsAlarm extends Activity {
 	 */
 	private void updateRescueServiceEditText() {
 		// Update rescue service EditText
-		this.rescueServiceEditText.setText(this.rescueService);
+		rescueServiceEditText.setText(rescueService);
 
 		// Logging
-		this.logger.logCat(LogPriorities.DEBUG, this.LOG_TAG + ":updateRescueServiceEditText()", "Rescue service EditText set to: " + this.rescueService);
-		this.logger.logCat(LogPriorities.DEBUG, this.LOG_TAG + ":updateRescueServiceEditText()", "Rescue service EditText updated");
+		logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":updateRescueServiceEditText()", "Rescue service EditText set to: " + rescueService);
+		logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":updateRescueServiceEditText()", "Rescue service EditText updated");
 	}
 
 	/**
@@ -1793,15 +1793,15 @@ public class SmsAlarm extends Activity {
 	 */
 	private void updateUseOsSoundSettingsCheckbox() {
 		// Update use OS sound settings CheckBox
-		if (this.useOsSoundSettings) {
-			this.soundSettingCheckBox.setChecked(true);
-			this.logger.logCat(LogPriorities.DEBUG, this.LOG_TAG + ":updateUseOsSoundSettingsCheckbox()", "Use OS sound settings CheckBox \"Checked\"(" + this.useOsSoundSettings + ")");
+		if (useOsSoundSettings) {
+			soundSettingCheckBox.setChecked(true);
+			logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":updateUseOsSoundSettingsCheckbox()", "Use OS sound settings CheckBox \"Checked\"(" + useOsSoundSettings + ")");
 		} else {
-			this.logger.logCat(LogPriorities.DEBUG, this.LOG_TAG + ":updateUseOsSoundSettingsCheckbox()", "Use OS sound settings CheckBox \"Unchecked\"(" + this.useOsSoundSettings + ")");
+			logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":updateUseOsSoundSettingsCheckbox()", "Use OS sound settings CheckBox \"Unchecked\"(" + useOsSoundSettings + ")");
 		}
 
 		// Logging
-		this.logger.logCat(LogPriorities.DEBUG, this.LOG_TAG + ":updateUseOsSoundSettingsCheckbox()", "Use OS sound settings CheckBox updated");
+		logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":updateUseOsSoundSettingsCheckbox()", "Use OS sound settings CheckBox updated");
 	}
 
 	/**
@@ -1812,15 +1812,15 @@ public class SmsAlarm extends Activity {
 	 */
 	private void updatePlayToneTwiceCheckBox() {
 		// Update play tone twice CheckBox
-		if (this.playToneTwice) {
-			this.playToneTwiceSettingCheckBox.setChecked(true);
-			this.logger.logCat(LogPriorities.DEBUG, this.LOG_TAG + ":updatePlayToneTwiceCheckBox()", "Play tone twice CheckBox \"Checked\"(" + this.playToneTwice + ")");
+		if (playToneTwice) {
+			playToneTwiceSettingCheckBox.setChecked(true);
+			logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":updatePlayToneTwiceCheckBox()", "Play tone twice CheckBox \"Checked\"(" + playToneTwice + ")");
 		} else {
-			this.logger.logCat(LogPriorities.DEBUG, this.LOG_TAG + ":updatePlayToneTwiceCheckBox()", "Play tone twice CheckBox \"Unchecked\"(" + this.playToneTwice + ")");
+			logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":updatePlayToneTwiceCheckBox()", "Play tone twice CheckBox \"Unchecked\"(" + playToneTwice + ")");
 		}
 
 		// Logging
-		this.logger.logCat(LogPriorities.DEBUG, this.LOG_TAG + ":updatePlayToneTwiceCheckBox()", "Play tone twice CheckBox updated");
+		logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":updatePlayToneTwiceCheckBox()", "Play tone twice CheckBox updated");
 	}
 
 	/**
@@ -1831,15 +1831,15 @@ public class SmsAlarm extends Activity {
 	 */
 	private void updateEnableSmsAlarmCheckBox() {
 		// Update enable Sms Alarm CheckBox(default checked=true)
-		if (!this.enableSmsAlarm) {
-			this.enableSmsAlarmCheckBox.setChecked(false);
-			this.logger.logCat(LogPriorities.DEBUG, this.LOG_TAG + ":updateEnableSmsAlarmCheckBox()", "Enable SmsAlarm CheckBox \"Unchecked\"(" + this.enableSmsAlarm + ")");
+		if (!enableSmsAlarm) {
+			enableSmsAlarmCheckBox.setChecked(false);
+			logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":updateEnableSmsAlarmCheckBox()", "Enable SmsAlarm CheckBox \"Unchecked\"(" + enableSmsAlarm + ")");
 		} else {
-			this.logger.logCat(LogPriorities.DEBUG, this.LOG_TAG + ":updateEnableSmsAlarmCheckBox()", "Enable SmsAlarm CheckBox \"Checked\"(" + this.enableSmsAlarm + ")");
+			logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":updateEnableSmsAlarmCheckBox()", "Enable SmsAlarm CheckBox \"Checked\"(" + enableSmsAlarm + ")");
 		}
 
 		// Logging
-		this.logger.logCat(LogPriorities.DEBUG, this.LOG_TAG + ":updateEnableSmsAlarmCheckBox()", "Enable SmsAlarm CheckBox updated");
+		logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":updateEnableSmsAlarmCheckBox()", "Enable SmsAlarm CheckBox updated");
 	}
 
 	/**
@@ -1856,18 +1856,18 @@ public class SmsAlarm extends Activity {
 		 * Set checkbox for the enableAckCheckBox to true or false, also set
 		 * some attributes to the ackNumberButton and the ackNumberField
 		 */
-		if (this.useAlarmAcknowledge) {
-			this.enableAckCheckBox.setChecked(true);
-			this.ackNumberButton.setEnabled(true);
-			this.ackNumberEditText.setTextColor(Color.BLACK);
-			this.logger.logCat(LogPriorities.DEBUG, this.LOG_TAG + ":updateAcknowledgeWidgets()", "Enable acknowledge CheckBox \"Checked\"(" + this.useAlarmAcknowledge + "), acknowledge number Button is \"Enabled\" and acknowledge number EditText is \"Enabled\"");
+		if (useAlarmAcknowledge) {
+			enableAckCheckBox.setChecked(true);
+			ackNumberButton.setEnabled(true);
+			ackNumberEditText.setTextColor(Color.BLACK);
+			logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":updateAcknowledgeWidgets()", "Enable acknowledge CheckBox \"Checked\"(" + useAlarmAcknowledge + "), acknowledge number Button is \"Enabled\" and acknowledge number EditText is \"Enabled\"");
 		} else {
-			this.ackNumberButton.setEnabled(false);
-			this.ackNumberEditText.setTextColor(Color.GRAY);
-			this.logger.logCat(LogPriorities.DEBUG, this.LOG_TAG + ":updateAcknowledgeWidgets()", "Enable acknowledge CheckBox \"Unchecked\"(" + this.useAlarmAcknowledge + "), acknowledge number Button is \"Disabled\" and acknowledge number EditText is \"Disabled\"");
+			ackNumberButton.setEnabled(false);
+			ackNumberEditText.setTextColor(Color.GRAY);
+			logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":updateAcknowledgeWidgets()", "Enable acknowledge CheckBox \"Unchecked\"(" + useAlarmAcknowledge + "), acknowledge number Button is \"Disabled\" and acknowledge number EditText is \"Disabled\"");
 		}
 
 		// Logging
-		this.logger.logCat(LogPriorities.DEBUG, this.LOG_TAG + ":updateAcknowledgeWidgets()", "Acknowledge alarm UI widgets updated");
+		logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":updateAcknowledgeWidgets()", "Acknowledge alarm UI widgets updated");
 	}
 }

@@ -21,13 +21,13 @@ import ax.ha.it.smsalarm.PreferencesHandler.PrefKeys;
  * versions below 11.
  * 
  * @author Robert Nyholm <robert.nyholm@aland.net>
- * @version 2.0
+ * @version 2.2
  * @since 0.9beta
  */
 public class NotificationHelper extends IntentService {
 
 	// Log tag string
-	private final String LOG_TAG = this.getClass().getSimpleName();
+	private final String LOG_TAG = getClass().getSimpleName();
 
 	// Objects needed for logging and shared preferences handling
 	private LogHandler logger = LogHandler.getInstance();
@@ -51,7 +51,7 @@ public class NotificationHelper extends IntentService {
 		super("NotificationHelper");
 
 		// Log message for debugging/information purpose
-		this.logger.logCat(LogPriorities.DEBUG, this.LOG_TAG + ":NotificationHelper()", "NotificationHelper constructor called");
+		logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":NotificationHelper()", "NotificationHelper constructor called");
 	}
 
 	/**
@@ -74,7 +74,7 @@ public class NotificationHelper extends IntentService {
 	@Override
 	protected void onHandleIntent(Intent i) {
 		// Log information
-		this.logger.logCat(LogPriorities.DEBUG, this.LOG_TAG + ":onHandleIntent()", "Start retrieving shared preferences needed by class NotificationHelper");
+		logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":onHandleIntent()", "Start retrieving shared preferences needed by class NotificationHelper");
 		
 		// To store alarm type, message and rescue service in
 		String message = "";
@@ -83,14 +83,14 @@ public class NotificationHelper extends IntentService {
 		
 		try {
 			// Get some values from the sharedprefs
-			message = (String) this.prefHandler.getPrefs(PrefKeys.SHARED_PREF, PrefKeys.MESSAGE_KEY, DataTypes.STRING, this);
-			alarmType = AlarmTypes.of((Integer) this.prefHandler.getPrefs(PrefKeys.SHARED_PREF, PrefKeys.LARM_TYPE_KEY, DataTypes.INTEGER, this));
-			rescueService = (String) this.prefHandler.getPrefs(PrefKeys.SHARED_PREF, PrefKeys.RESCUE_SERVICE_KEY, DataTypes.STRING, this);
+			message = (String) prefHandler.getPrefs(PrefKeys.SHARED_PREF, PrefKeys.MESSAGE_KEY, DataTypes.STRING, this);
+			alarmType = AlarmTypes.of((Integer) prefHandler.getPrefs(PrefKeys.SHARED_PREF, PrefKeys.LARM_TYPE_KEY, DataTypes.INTEGER, this));
+			rescueService = (String) prefHandler.getPrefs(PrefKeys.SHARED_PREF, PrefKeys.RESCUE_SERVICE_KEY, DataTypes.STRING, this);
 		} catch(IllegalArgumentException e) {
-			this.logger.logCatTxt(LogPriorities.ERROR, this.LOG_TAG + ":onHandleIntent()", "An unsupported datatype was given as argument to PreferencesHandler.getPrefs()", e);
+			logger.logCatTxt(LogPriorities.ERROR, LOG_TAG + ":onHandleIntent()", "An unsupported datatype was given as argument to PreferencesHandler.getPrefs()", e);
 		} 			
 
-		this.logger.logCat(LogPriorities.DEBUG, this.LOG_TAG + ":onHandleIntent()", "Shared preferences retrieved");
+		logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":onHandleIntent()", "Shared preferences retrieved");
 
 		/*
 		 * This string and intent opens the messaging directory on phone,
@@ -105,7 +105,7 @@ public class NotificationHelper extends IntentService {
 		Intent notificationIntent = new Intent(Intent.ACTION_MAIN); // Don't want to start any activity!
 		notificationIntent.setType(SMS_MIME_TYPE);
 
-		this.logger.logCat(LogPriorities.DEBUG, this.LOG_TAG + ":onHandleIntent()", "Intent has been set");
+		logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":onHandleIntent()", "Intent has been set");
 
 		// Setup a notification, directly from android development site
 		NotificationManager mNotificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
@@ -117,29 +117,29 @@ public class NotificationHelper extends IntentService {
 		// Configure notification depending on type
 		if (alarmType.equals(AlarmTypes.PRIMARY)) {
 			// Set proper texts and icon to notification
-			this.setNotificationTexts(android.R.drawable.ic_delete, this.getString(R.string.PRIMARY_ALARM), 
-									  rescueService.toUpperCase(), this.getString(R.string.PRIMARY_ALARM), message);		
+			setNotificationTexts(android.R.drawable.ic_delete, getString(R.string.PRIMARY_ALARM), 
+									  rescueService.toUpperCase(), getString(R.string.PRIMARY_ALARM), message);		
 			// Log
-			this.logger.logCat(LogPriorities.DEBUG, this.LOG_TAG + ":onHandleIntent()", "Notification has been set for a primary alarm");
+			logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":onHandleIntent()", "Notification has been set for a primary alarm");
 		} else if (alarmType.equals(AlarmTypes.SECONDARY)) {			
 			// Set proper texts and icon to notification
-			this.setNotificationTexts(android.R.drawable.ic_menu_close_clear_cancel, this.getString(R.string.SECONDARY_ALARM), 
-									  rescueService.toUpperCase(), this.getString(R.string.SECONDARY_ALARM), message);	
+			setNotificationTexts(android.R.drawable.ic_menu_close_clear_cancel, getString(R.string.SECONDARY_ALARM), 
+									  rescueService.toUpperCase(), getString(R.string.SECONDARY_ALARM), message);	
 			// Log
-			this.logger.logCat(LogPriorities.DEBUG, this.LOG_TAG + ":onHandleIntent()", "Notification has been set for a secondary alarm");
+			logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":onHandleIntent()", "Notification has been set for a secondary alarm");
 		} else { // <--If this happens, something really weird is going on
-			this.logger.logCatTxt(LogPriorities.ERROR, this.LOG_TAG + ":onHandleIntent()", "Alarm type couldn't be find when configuring notification");
+			logger.logCatTxt(LogPriorities.ERROR, LOG_TAG + ":onHandleIntent()", "Alarm type couldn't be find when configuring notification");
 		}
 
 		// Create notification
-		Notification notification = new Notification(this.icon, this.tickerText, when);
+		Notification notification = new Notification(icon, tickerText, when);
 
 		// Get application context
 		Context context = getApplicationContext();
 
 		// Setup message and pending intent
 		PendingIntent contentIntent = PendingIntent.getActivity(this, 0, notificationIntent, 0);
-		notification.setLatestEventInfo(context, this.contentTitle, this.contentText, contentIntent);
+		notification.setLatestEventInfo(context, contentTitle, contentText, contentIntent);
 
 		// This flag auto cancels the notification when clicked and indicating that devices LED should light up
 		notification.flags = Notification.FLAG_SHOW_LIGHTS | Notification.FLAG_AUTO_CANCEL;
@@ -148,7 +148,7 @@ public class NotificationHelper extends IntentService {
 		notification.ledOnMS = 100; 		// On time
 		notification.ledOffMS = 100;		// Off time
 
-		this.logger.logCat(LogPriorities.DEBUG, this.LOG_TAG + ":onHandleIntent()", "Notification and it's intent has been configured and are ready to be shown");
+		logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":onHandleIntent()", "Notification and it's intent has been configured and are ready to be shown");
 
 		// Show the notification
 		mNotificationManager.notify((int) REFRESH_ID, notification);
@@ -166,7 +166,7 @@ public class NotificationHelper extends IntentService {
 	 */
 	private void setNotificationTexts(int icon, String tickerText, String rescueService, String contentTitle, String contentText) {
 		// Log
-		this.logger.logCat(LogPriorities.DEBUG, this.LOG_TAG + ":setNotificationTexts()", "Setting texts and icon to notification");
+		logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":setNotificationTexts()", "Setting texts and icon to notification");
 		// Set icon for notification
 		this.icon = icon;
 		// Set ticker text, with rescue service name if it exists

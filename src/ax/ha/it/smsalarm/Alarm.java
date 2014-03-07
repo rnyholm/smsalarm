@@ -22,7 +22,7 @@ import ax.ha.it.smsalarm.LogHandler.LogPriorities;
  */
 public class Alarm {
 	// Log tag string
-	private final String LOG_TAG = this.getClass().getSimpleName();
+	private final String LOG_TAG = getClass().getSimpleName();
 
 	// Object for logging
 	private LogHandler logger = LogHandler.getInstance();
@@ -43,7 +43,7 @@ public class Alarm {
 	 */
 	public Alarm() {
 		// Log in debug purpose
-		this.logger.logCat(LogPriorities.DEBUG, this.LOG_TAG + ":Alarm()", "A new empty Alarm object was created");
+		logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":Alarm()", "A new empty Alarm object was created");
 	}
 	
 	/**
@@ -58,7 +58,7 @@ public class Alarm {
 	 */
 	public Alarm(String sender, String message, String triggerText, AlarmTypes alarmType) {
 		// Create and store a localized timestamp, this depends on users locale and/or settings
-		this.received = DateFormat.getDateTimeInstance().format(Calendar.getInstance().getTime());
+		received = DateFormat.getDateTimeInstance().format(Calendar.getInstance().getTime());
 		this.sender = sender;
 		this.message = message;
 		if (!triggerText.isEmpty()) {
@@ -66,10 +66,10 @@ public class Alarm {
 		} else {
 			this.triggerText = "-";
 		}
-		this.acknowledged  = "-";
+		acknowledged  = "-";
 		this.alarmType = alarmType;
 		// Log in debug purpose
-		this.logger.logCat(LogPriorities.DEBUG, this.LOG_TAG + ":Alarm()", "A new Alarm object was created with following data: [" + this.toString() + "]");
+		logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":Alarm()", "A new Alarm object was created with following data: [" + toString() + "]");
 	}
 	
 	/**
@@ -94,7 +94,7 @@ public class Alarm {
 		this.acknowledged  = acknowledged;
 		this.alarmType = alarmType;
 		// Log in debug purpose
-		this.logger.logCat(LogPriorities.DEBUG, this.LOG_TAG + ":Alarm()", "A new Alarm object was created with following data: [" + this.toString() + "]");
+		logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":Alarm()", "A new Alarm object was created with following data: [" + toString() + "]");
 	}
 	
 	/**
@@ -106,13 +106,13 @@ public class Alarm {
 	 */
 	public boolean isEmpty() {
 		// Check to see if the member variables are empty
-		if(this.getId() == 0 && this.received.isEmpty() && this.sender.isEmpty() && this.message.isEmpty() && this.triggerText.isEmpty() && this.acknowledged.isEmpty() && this.alarmType.equals(AlarmTypes.UNDEFINED)) {
+		if(getId() == 0 && received.isEmpty() && sender.isEmpty() && message.isEmpty() && triggerText.isEmpty() && acknowledged.isEmpty() && alarmType.equals(AlarmTypes.UNDEFINED)) {
 			// Log in debug purpose
-			this.logger.logCat(LogPriorities.DEBUG, this.LOG_TAG + ":isEmpty()", "This Alarm object is empty, returning true");
+			logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":isEmpty()", "This Alarm object is empty, returning true");
 			return true;
 		} else {
 			// Log in debug purpose
-			this.logger.logCat(LogPriorities.DEBUG, this.LOG_TAG + ":isEmpty()", "This Alarm object is not empty, returning false");
+			logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":isEmpty()", "This Alarm object is not empty, returning false");
 			return false;
 		}
 	}
@@ -126,8 +126,8 @@ public class Alarm {
 	 */
 	public int getId() {
 		// Log in debug purpose
-		this.logger.logCat(LogPriorities.DEBUG, this.LOG_TAG + ":getId()", "Returning alarm id:\"" + this.id + "\"");
-		return this.id;
+		logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":getId()", "Returning alarm id:\"" + id + "\"");
+		return id;
 	}
 
 	/**
@@ -140,7 +140,7 @@ public class Alarm {
 	public void setId(int id) {
 		this.id = id;
 		// Log in debug purpose
-		this.logger.logCat(LogPriorities.DEBUG, this.LOG_TAG + ":setId()", "Alarm id has been set, id is:\"" + this.id + "\"");
+		logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":setId()", "Alarm id has been set, id is:\"" + id + "\"");
 	}
 
 	/**
@@ -152,8 +152,8 @@ public class Alarm {
 	 */
 	public String getReceived() {
 		// Log in debug purpose
-		this.logger.logCat(LogPriorities.DEBUG, this.LOG_TAG + ":getReceived()", "Returning alarm received date and time:\"" + this.received + "\"");
-		return this.received;
+		logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":getReceived()", "Returning alarm received date and time:\"" + received + "\"");
+		return received;
 	}
 
 	/**
@@ -167,9 +167,9 @@ public class Alarm {
 	 */
 	public void setReceived(Date date) {
 		// Create and store a localized timestamp, this depends on users locale and/or settings
-		this.received = DateFormat.getDateTimeInstance().format(date);
+		received = DateFormat.getDateTimeInstance().format(date);
 		// Log in debug purpose
-		this.logger.logCat(LogPriorities.DEBUG, this.LOG_TAG + ":setReceived()", "Alarm received date and time has been set to:\"" + this.received + "\"");
+		logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":setReceived()", "Alarm received date and time has been set to:\"" + received + "\"");
 	}
 	
 	/**
@@ -185,7 +185,7 @@ public class Alarm {
 		// Create and store a localized timestamp, this depends on users locale and/or settings
 		this.received = received;
 		// Log in debug purpose
-		this.logger.logCat(LogPriorities.DEBUG, this.LOG_TAG + ":setReceived()", "Alarm received date and time has been set to:\"" + this.received + "\"");
+		logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":setReceived()", "Alarm received date and time has been set to:\"" + received + "\"");
 	}
 
 	/**
@@ -197,8 +197,8 @@ public class Alarm {
 	 */
 	public String getSender() {
 		// Log in debug purpose
-		this.logger.logCat(LogPriorities.DEBUG, this.LOG_TAG + ":getSender()", "Returning alarm sender:\"" + this.sender + "\"");
-		return this.sender;
+		logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":getSender()", "Returning alarm sender:\"" + sender + "\"");
+		return sender;
 	}
 
 	/**
@@ -211,7 +211,7 @@ public class Alarm {
 	public void setSender(String sender) {
 		this.sender = sender;
 		// Log in debug purpose
-		this.logger.logCat(LogPriorities.DEBUG, this.LOG_TAG + ":setSender()", "Alarm sender has been set to:\"" + this.sender + "\"");
+		logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":setSender()", "Alarm sender has been set to:\"" + sender + "\"");
 	}
 
 	/**
@@ -223,8 +223,8 @@ public class Alarm {
 	 */
 	public String getMessage() {
 		// Log in debug purpose
-		this.logger.logCat(LogPriorities.DEBUG, this.LOG_TAG + ":getMessage()", "Returning alarm message:\"" + this.message + "\"");
-		return this.message;
+		this.logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":getMessage()", "Returning alarm message:\"" + message + "\"");
+		return message;
 	}
 
 	/**
@@ -237,7 +237,7 @@ public class Alarm {
 	public void setMessage(String message) {
 		this.message = message;
 		// Log in debug purpose
-		this.logger.logCat(LogPriorities.DEBUG, this.LOG_TAG + ":setMessage()", "Alarm message has been set to:\"" + this.message + "\"");
+		logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":setMessage()", "Alarm message has been set to:\"" + message + "\"");
 	}
 
 	/**
@@ -249,7 +249,7 @@ public class Alarm {
 	 */
 	public String getTriggerText() {
 		// Log in debug purpose
-		this.logger.logCat(LogPriorities.DEBUG, this.LOG_TAG + ":getTriggerText()", "Returning alarm trigger text:\"" + this.triggerText + "\"");
+		logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":getTriggerText()", "Returning alarm trigger text:\"" + triggerText + "\"");
 		return triggerText;
 	}
 
@@ -263,7 +263,7 @@ public class Alarm {
 	public void setTriggerText(String triggerText) {
 		this.triggerText = triggerText;
 		// Log in debug purpose
-		this.logger.logCat(LogPriorities.DEBUG, this.LOG_TAG + ":setTriggerText()", "Alarm trigger text has been set to:\"" + this.triggerText + "\"");
+		logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":setTriggerText()", "Alarm trigger text has been set to:\"" + triggerText + "\"");
 	}
 
 	/**
@@ -275,8 +275,8 @@ public class Alarm {
 	 */
 	public String getAcknowledged() {
 		// Log in debug purpose
-		this.logger.logCat(LogPriorities.DEBUG, this.LOG_TAG + ":getAcknowledged()", "Returning alarm acknowledge date and time:\"" + this.acknowledged + "\"");
-		return this.acknowledged;
+		logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":getAcknowledged()", "Returning alarm acknowledge date and time:\"" + acknowledged + "\"");
+		return acknowledged;
 	}
 	
 	/**
@@ -291,9 +291,9 @@ public class Alarm {
 	 */
 	public void setAcknowledged(Context context, Date date) {
 		// Create and store a localized timestamp, this depends on users locale and/or settings
-		this.acknowledged = getLocalizedHHMMStamp(context, date);
+		acknowledged = getLocalizedHHMMStamp(context, date);
 		// Log in debug purpose
-		this.logger.logCat(LogPriorities.DEBUG, this.LOG_TAG + ":setAcknowledged()", "Alarm acknowledge date and time has been set to:\"" + this.acknowledged + "\"");
+		logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":setAcknowledged()", "Alarm acknowledge date and time has been set to:\"" + acknowledged + "\"");
 	}
 	
 	/**
@@ -309,7 +309,7 @@ public class Alarm {
 		// Create and store a localized timestamp, this depends on users locale and/or settings
 		this.acknowledged = acknowledged;
 		// Log in debug purpose
-		this.logger.logCat(LogPriorities.DEBUG, this.LOG_TAG + ":setAcknowledged()", "Alarm acknowledge date and time has been set to:\"" + this.acknowledged + "\"");
+		logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":setAcknowledged()", "Alarm acknowledge date and time has been set to:\"" + acknowledged + "\"");
 	}
 	
 	/**
@@ -322,9 +322,9 @@ public class Alarm {
 	 */
 	public void updateReceived() {
 		// Create and store a localized timestamp, this depends on users locale and/or settings
-		this.received = DateFormat.getDateTimeInstance().format(Calendar.getInstance().getTime());	
+		received = DateFormat.getDateTimeInstance().format(Calendar.getInstance().getTime());	
 		// Log in debug purpose
-		this.logger.logCat(LogPriorities.DEBUG, this.LOG_TAG + ":updateReceived()", "Alarm received date and time has been updated to:\"" + this.received + "\"");
+		logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":updateReceived()", "Alarm received date and time has been updated to:\"" + received + "\"");
 	}
 
 	/**
@@ -336,7 +336,7 @@ public class Alarm {
 	 */
 	public AlarmTypes getAlarmType() {
 		// Log in debug purpose
-		this.logger.logCat(LogPriorities.DEBUG, this.LOG_TAG + ":getAlarmType()", "Returning alarmType:\"" + this.alarmType.toString() + "\"");
+		logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":getAlarmType()", "Returning alarmType:\"" + alarmType.toString() + "\"");
 		return alarmType;
 	}
 
@@ -351,7 +351,7 @@ public class Alarm {
 		// Set alarm type
 		this.alarmType = alarmType;
 		// Log in debug purpose
-		this.logger.logCat(LogPriorities.DEBUG, this.LOG_TAG + ":getId()", "Alarm type has been set to:\"" + this.alarmType.toString() + "\"");
+		logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":getId()", "Alarm type has been set to:\"" + alarmType.toString() + "\"");
 	}
 
 	/**
@@ -366,9 +366,9 @@ public class Alarm {
 	 */	
 	public void updateAcknowledged(Context context) {
 		// Create and store a localized timestamp, this depends on users locale and/or settings
-		this.acknowledged = getLocilizedHHMMStamp(context);	
+		acknowledged = getLocilizedHHMMStamp(context);	
 		// Log in debug purpose
-		this.logger.logCat(LogPriorities.DEBUG, this.LOG_TAG + ":updateAcknowledged()", "Alarm acknowledge date and time has been updated to:\"" + this.acknowledged + "\"");
+		logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":updateAcknowledged()", "Alarm acknowledge date and time has been updated to:\"" + acknowledged + "\"");
 	}
 	
 	/**
@@ -405,7 +405,7 @@ public class Alarm {
 	 */
 	@SuppressLint("SimpleDateFormat")
 	private String getLocalizedHHMMStamp(Context context, Date now) {
-		this.logger.logCat(LogPriorities.DEBUG, this.LOG_TAG + ":getLocalizedHHMMStamp()", "Resolving clock format beeing used on device and getting timestamp(hh:mm) in correct format");
+		logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":getLocalizedHHMMStamp()", "Resolving clock format beeing used on device and getting timestamp(hh:mm) in correct format");
 		
 		// Different formatters for 12 and 24 hour timestamps
 		SimpleDateFormat formatter24 = new SimpleDateFormat("HH:mm");
@@ -413,10 +413,10 @@ public class Alarm {
 				
 		// According to users preferences the OS clock is displayed in 24 hour format
 		if (android.text.format.DateFormat.is24HourFormat(context)) {
-			this.logger.logCat(LogPriorities.DEBUG, this.LOG_TAG + ":getLocalizedHHMMStamp()", "24 hour clock is used on device, formatting timestamp according to that");
+			logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":getLocalizedHHMMStamp()", "24 hour clock is used on device, formatting timestamp according to that");
 			return formatter24.format(now);
 		} else {
-			this.logger.logCat(LogPriorities.DEBUG, this.LOG_TAG + ":getLocalizedHHMMStamp()", "12 hour clock is used on device, formatting timestamp according to that");
+			logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":getLocalizedHHMMStamp()", "12 hour clock is used on device, formatting timestamp according to that");
 			return formatter12.format(now);
 		}
 	}
@@ -426,6 +426,6 @@ public class Alarm {
 	 */
 	@Override
 	public String toString() {
-		return "id:\"" + Integer.toString(this.id) + "\", received:\"" + this.received + "\", sender:\"" + this.sender + "\", message:\"" + this.message + "\", trigger text:\"" + this.triggerText + "\", acknowledged:\"" + this.acknowledged + "\" and alarmType:\"" + this.alarmType.toString() + "\"";
+		return "id:\"" + Integer.toString(id) + "\", received:\"" + received + "\", sender:\"" + sender + "\", message:\"" + message + "\", trigger text:\"" + triggerText + "\", acknowledged:\"" + acknowledged + "\" and alarmType:\"" + alarmType.toString() + "\"";
 	}
 }

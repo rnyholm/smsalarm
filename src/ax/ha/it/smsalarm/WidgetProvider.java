@@ -31,7 +31,7 @@ import ax.ha.it.smsalarm.PreferencesHandler.PrefKeys;
  */
 public class WidgetProvider extends AppWidgetProvider {
 	// Log tag string
-	private String LOG_TAG = this.getClass().getSimpleName();
+	private String LOG_TAG = getClass().getSimpleName();
 
 	// Objects needed for logging and shared preferences
 	private LogHandler logger = LogHandler.getInstance();
@@ -84,40 +84,40 @@ public class WidgetProvider extends AppWidgetProvider {
 		AppWidgetManager manager = AppWidgetManager.getInstance(context);
 
 		// Get Shared preferences needed by widget
-		this.getWidgetPrefs(context);
+		getWidgetPrefs(context);
 
 		// If statements to "catch" intent we looking for
 		if (intent.getAction().equals(TOGGLE_ENABLE_SMS_ALARM)) {
 			// Some logging for information and debugging
-			this.logger.logCat(LogPriorities.DEBUG, this.LOG_TAG + ":onReceive()", "Received intent:\"" + TOGGLE_ENABLE_SMS_ALARM + "\"");
+			logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":onReceive()", "Received intent:\"" + TOGGLE_ENABLE_SMS_ALARM + "\"");
 
 			// Set shared preferences depending on current preferences
-			if (this.enableSmsAlarm) {
-				this.setEnableSmsAlarmPref(context, false);
+			if (enableSmsAlarm) {
+				setEnableSmsAlarmPref(context, false);
 			} else {
-				this.setEnableSmsAlarmPref(context, true);
+				setEnableSmsAlarmPref(context, true);
 			}
 
 			// Update widget
 			WidgetProvider.updateWidgets(context);
 		} else if (intent.getAction().equals(TOGGLE_USE_OS_SOUND_SETTINGS)) {
 			// Some logging for information and debugging
-			this.logger.logCat(LogPriorities.DEBUG, this.LOG_TAG + ":onReceive()", "Received intent:\"" + TOGGLE_USE_OS_SOUND_SETTINGS + "\"");
+			logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":onReceive()", "Received intent:\"" + TOGGLE_USE_OS_SOUND_SETTINGS + "\"");
 
-			if (this.useOsSoundSettings) {
-				this.setUseOsSoundSettingsPref(context, false);
+			if (useOsSoundSettings) {
+				setUseOsSoundSettingsPref(context, false);
 			} else {
-				this.setUseOsSoundSettingsPref(context, true);
+				setUseOsSoundSettingsPref(context, true);
 			}
 
 			WidgetProvider.updateWidgets(context);
 		} else if (intent.getAction().equals(SHOW_RECEIVED_ALARMS)) {
 			// Some logging for information and debugging
-			this.logger.logCat(LogPriorities.DEBUG, this.LOG_TAG + ":onReceive()", "Received intent:\"" + SHOW_RECEIVED_ALARMS + "\"");
+			logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":onReceive()", "Received intent:\"" + SHOW_RECEIVED_ALARMS + "\"");
 
 			try {
 				// Get full file path to alarm log file
-				String alarmLogFilePath = this.logger.getAlarmLogPath();
+				String alarmLogFilePath = logger.getAlarmLogPath();
 
 				// Create an intent for opening the alarm log file
 				Intent showReceivedAlarmsIntent = new Intent();
@@ -139,17 +139,17 @@ public class WidgetProvider extends AppWidgetProvider {
 				context.startActivity(showReceivedAlarmsIntent);
 				
 				// Some logging for information and debugging
-				this.logger.logCat(LogPriorities.DEBUG, this.LOG_TAG + ":onReceive()", "Successfully started activity to view alarm log file");
+				logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":onReceive()", "Successfully started activity to view alarm log file");
 			} catch (IOException e) {
 				// Log error
-				this.logger.logCatTxt(LogPriorities.WARN, this.LOG_TAG + ":onReceive()", "An IOException occurred while retrieving path to alarm log file", e);
+				logger.logCatTxt(LogPriorities.WARN, LOG_TAG + ":onReceive()", "An IOException occurred while retrieving path to alarm log file", e);
 			}
 		} else if (intent.getAction().equals(UPDATE_WIDGETS)) {
 			// Some logging for information and debugging
-			this.logger.logCat(LogPriorities.DEBUG, this.LOG_TAG + ":onReceive()", "Received intent:\"" + UPDATE_WIDGETS + "\"");
+			logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":onReceive()", "Received intent:\"" + UPDATE_WIDGETS + "\"");
 			
 			// Call onUpdate to update the widget instances
-			this.onUpdate(context, manager, AppWidgetManager.getInstance(context).getAppWidgetIds(new ComponentName(context.getPackageName(), getClass().getName())));
+			onUpdate(context, manager, AppWidgetManager.getInstance(context).getAppWidgetIds(new ComponentName(context.getPackageName(), getClass().getName())));
 		}
 
 		// Needs to call superclass's onReceive
@@ -169,12 +169,12 @@ public class WidgetProvider extends AppWidgetProvider {
 	@Override
 	public void onUpdate(Context context, AppWidgetManager appWidgetManager, int[] appWidgetIds) {
 		// Some logging for information and debugging
-		this.logger.logCat(LogPriorities.DEBUG, this.LOG_TAG + ":onUpdate()", "Start updating widget");
+		logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":onUpdate()", "Start updating widget");
 
 		// Get Shared preferences needed by widget
-		this.getWidgetPrefs(context);
+		getWidgetPrefs(context);
 		// Initialize database handler object from context
-		this.db = new DatabaseHandler(context);
+		db = new DatabaseHandler(context);
 		// RemoteViews object needed to configure layout of widget
 		RemoteViews rv = new RemoteViews(context.getPackageName(), R.layout.widget);
 
@@ -201,13 +201,13 @@ public class WidgetProvider extends AppWidgetProvider {
 			PendingIntent showReceivedAlarmsPendingIntent = PendingIntent.getBroadcast(context, 0, showReceivedAlarmsIntent, PendingIntent.FLAG_UPDATE_CURRENT);
 
 			// Set widget texts
-			this.setWidgetTextViews(rv, context);
+			setWidgetTextViews(rv, context);
 
 			// Set onclick pending intent to start Sms Alarm, this is always set
 			rv.setOnClickPendingIntent(R.id.widget_logo_iv, smsAlarmPendingIntent);
 
 			// If user has agreed the end user license, set the rest of the on click pending intents also
-			if (this.endUserLicenseAgreed) {
+			if (endUserLicenseAgreed) {
 				rv.setOnClickPendingIntent(R.id.widget_smsalarm_status_tv, enableSmsAlarmPendingIntent);
 				rv.setOnClickPendingIntent(R.id.widget_soundsettings_status_tv, useOsSoundSettingsPendingIntent);
 				rv.setOnClickPendingIntent(R.id.widget_latest_received_alarm_tv, showReceivedAlarmsPendingIntent);
@@ -221,7 +221,7 @@ public class WidgetProvider extends AppWidgetProvider {
 		super.onUpdate(context, appWidgetManager, appWidgetIds);
 
 		// Some logging for information and debugging
-		this.logger.logCat(LogPriorities.DEBUG, this.LOG_TAG + ":onUpdate()", "Widget has been updated");
+		logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":onUpdate()", "Widget has been updated");
 	}
 
 	/**
@@ -242,26 +242,26 @@ public class WidgetProvider extends AppWidgetProvider {
 	 */
 	private void setWidgetTextViews(RemoteViews rv, Context context) {
 		// Some logging
-		this.logger.logCat(LogPriorities.DEBUG, this.LOG_TAG + ":setWidgetTextViews()", "TextViews of widget are about to be set");
+		logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":setWidgetTextViews()", "TextViews of widget are about to be set");
 
 		// If user has agreed end user license, we fill in the textviews with "real" data
-		if (this.endUserLicenseAgreed) {
+		if (endUserLicenseAgreed) {
 			// Check if Sms Alarm is enabled or not and set textview depending on that
-			if (this.enableSmsAlarm) {
+			if (enableSmsAlarm) {
 				rv.setTextViewText(R.id.widget_smsalarm_status_tv, context.getString(R.string.SMS_ALARM_STATUS_ENABLED));
 			} else {
 				rv.setTextViewText(R.id.widget_smsalarm_status_tv, context.getString(R.string.SMS_ALARM_STATUS_DISABLED));
 			}
 
 			// Check if use devices sound settings is enabled or not and set textview depending on that
-			if (this.useOsSoundSettings) {
+			if (useOsSoundSettings) {
 				rv.setTextViewText(R.id.widget_soundsettings_status_tv, context.getString(R.string.SOUND_SETTINGS_STATUS_ENABLED));
 			} else {
 				rv.setTextViewText(R.id.widget_soundsettings_status_tv, context.getString(R.string.SOUND_SETTINGS_STATUS_DISABLED));
 			}
 
 			// Set the (shortened) alarm to textview
-			rv.setTextViewText(R.id.widget_latest_received_alarm_tv, this.getLatestAlarm(context));
+			rv.setTextViewText(R.id.widget_latest_received_alarm_tv, getLatestAlarm(context));
 
 			// Set correct dividers to widget
 			rv.setImageViewResource(R.id.widget_divider2_iv, R.drawable.gradient_divider_widget);
@@ -292,12 +292,12 @@ public class WidgetProvider extends AppWidgetProvider {
 	 */
 	private String getLatestAlarm(Context context) {
 		// Some logging
-		this.logger.logCat(LogPriorities.DEBUG, this.LOG_TAG + ":getLatestAlarm()", "Getting latest alarm from database");
+		logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":getLatestAlarm()", "Getting latest alarm from database");
 
 		// Check if there exists alarms in database
-		if (this.db.getAlarmsCount() > 0) {
+		if (db.getAlarmsCount() > 0) {
 			// Some logging
-			this.logger.logCat(LogPriorities.DEBUG, this.LOG_TAG + ":getLatestAlarm()", "Database is not empty, continue retrieving alarm");
+			logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":getLatestAlarm()", "Database is not empty, continue retrieving alarm");
 			// To store latest alarm into
 			Alarm alarm = db.getLatestAlarm();
 			// To build up string into
@@ -307,7 +307,7 @@ public class WidgetProvider extends AppWidgetProvider {
 			// Sanity check to see whether alarm object is empty or not
 			if (!alarm.isEmpty()) {
 				// Some logging
-				this.logger.logCat(LogPriorities.DEBUG, this.LOG_TAG + ":getLatestAlarm()", "Retrieved alarm object wasn't empty, start build up alarm string");
+				logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":getLatestAlarm()", "Retrieved alarm object wasn't empty, start build up alarm string");
 
 				// Build up the string representing the latest alarm from alarm object
 				alarmInfo.append(context.getString(R.string.HTML_WIDGET_RECEIVED));
@@ -333,7 +333,7 @@ public class WidgetProvider extends AppWidgetProvider {
 				// Check if alarm message is longer than the limits for the textview
 				if (alarmMessage.length() > ALARM_TEXT_MAX_LENGTH) {
 					// Some logging
-					this.logger.logCat(LogPriorities.DEBUG, this.LOG_TAG + ":getLatestAlarm()", "Lates Alarm message is longer than " + Integer.toString(ALARM_TEXT_MAX_LENGTH) + " characters, message is shortened");
+					logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":getLatestAlarm()", "Lates Alarm message is longer than " + Integer.toString(ALARM_TEXT_MAX_LENGTH) + " characters, message is shortened");
 					
 					// If longer than textview limit shorten it of and add dots to it
 					alarmMessage.substring(0, (ALARM_TEXT_MAX_LENGTH - 3));
@@ -351,14 +351,14 @@ public class WidgetProvider extends AppWidgetProvider {
 				return alarmInfo.toString();
 			} else {
 				// Some logging
-				this.logger.logCat(LogPriorities.DEBUG, this.LOG_TAG + ":getLatestAlarm()", "Retrieved alarm object was empty");
+				logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":getLatestAlarm()", "Retrieved alarm object was empty");
 				// An error occurred while retrieving alarm from database,
 				// return error message
 				return context.getString(R.string.ERROR_RETRIEVING_FROM_DB);
 			}
 		} else {
 			// Some logging
-			this.logger.logCat(LogPriorities.DEBUG, this.LOG_TAG + ":getLatestAlarm()", "No alarms exists in database");
+			logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":getLatestAlarm()", "No alarms exists in database");
 			// No alarms exists in database, return appropriate string
 			return context.getString(R.string.NO_RECEIVED_ALARMS_EXISTS);
 		}
@@ -383,18 +383,18 @@ public class WidgetProvider extends AppWidgetProvider {
 	 */
 	private void getWidgetPrefs(Context context) {
 		// Some logging
-		this.logger.logCat(LogPriorities.DEBUG, this.LOG_TAG + ":getWidgetPrefs()", "Start retrieving shared preferences needed by class " + this.getClass().getSimpleName());
+		logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":getWidgetPrefs()", "Start retrieving shared preferences needed by class " + getClass().getSimpleName());
 
 		try {
 			// Get shared preferences needed by WidgetProvider
-			this.enableSmsAlarm = (Boolean) this.prefHandler.getPrefs(PrefKeys.SHARED_PREF, PrefKeys.ENABLE_SMS_ALARM_KEY, DataTypes.BOOLEAN, context, true);
-			this.useOsSoundSettings = (Boolean) this.prefHandler.getPrefs(PrefKeys.SHARED_PREF, PrefKeys.USE_OS_SOUND_SETTINGS_KEY, DataTypes.BOOLEAN, context);
-			this.endUserLicenseAgreed = (Boolean) this.prefHandler.getPrefs(PrefKeys.SHARED_PREF, PrefKeys.END_USER_LICENSE_AGREED, DataTypes.BOOLEAN, context, false);
+			enableSmsAlarm = (Boolean) prefHandler.getPrefs(PrefKeys.SHARED_PREF, PrefKeys.ENABLE_SMS_ALARM_KEY, DataTypes.BOOLEAN, context, true);
+			useOsSoundSettings = (Boolean) prefHandler.getPrefs(PrefKeys.SHARED_PREF, PrefKeys.USE_OS_SOUND_SETTINGS_KEY, DataTypes.BOOLEAN, context);
+			endUserLicenseAgreed = (Boolean) prefHandler.getPrefs(PrefKeys.SHARED_PREF, PrefKeys.END_USER_LICENSE_AGREED, DataTypes.BOOLEAN, context, false);
 		} catch (IllegalArgumentException e) {
-			logger.logCatTxt(LogPriorities.ERROR, this.LOG_TAG + ":getWidgetPrefs()", "An unsupported datatype was given as argument to PreferencesHandler.getPrefs()", e);
+			logger.logCatTxt(LogPriorities.ERROR, LOG_TAG + ":getWidgetPrefs()", "An unsupported datatype was given as argument to PreferencesHandler.getPrefs()", e);
 		}
 
-		this.logger.logCat(LogPriorities.DEBUG, this.LOG_TAG + ":getWidgetPrefs()", "Shared preferences retrieved");
+		logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":getWidgetPrefs()", "Shared preferences retrieved");
 	}
 
 	/**
@@ -414,9 +414,9 @@ public class WidgetProvider extends AppWidgetProvider {
 		logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":setEnableSmsAlarmPref()", "Setting enable SmsAlarm to:\"" + enabled + "\"");
 
 		try {
-			this.prefHandler.setPrefs(PrefKeys.SHARED_PREF, PrefKeys.ENABLE_SMS_ALARM_KEY, enabled, context);
+			prefHandler.setPrefs(PrefKeys.SHARED_PREF, PrefKeys.ENABLE_SMS_ALARM_KEY, enabled, context);
 		} catch (IllegalArgumentException e) {
-			this.logger.logCatTxt(LogPriorities.ERROR, this.LOG_TAG + ":setEnableSmsAlarmPref()", "An Object of unsupported instance was given as argument to PreferencesHandler.setPrefs()", e);
+			logger.logCatTxt(LogPriorities.ERROR, LOG_TAG + ":setEnableSmsAlarmPref()", "An Object of unsupported instance was given as argument to PreferencesHandler.setPrefs()", e);
 		}
 	}
 	
@@ -438,9 +438,9 @@ public class WidgetProvider extends AppWidgetProvider {
 		logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":setUseOsSoundSettingsPref()", "Setting use OS sound settings to:\"" + enabled + "\"");
 
 		try {
-			this.prefHandler.setPrefs(PrefKeys.SHARED_PREF, PrefKeys.USE_OS_SOUND_SETTINGS_KEY, enabled, context);
+			prefHandler.setPrefs(PrefKeys.SHARED_PREF, PrefKeys.USE_OS_SOUND_SETTINGS_KEY, enabled, context);
 		} catch (IllegalArgumentException e) {
-			this.logger.logCatTxt(LogPriorities.ERROR, this.LOG_TAG + ":setUseOsSoundSettingsPref()", "An Object of unsupported instance was given as argument to PreferencesHandler.setPrefs()", e);
+			logger.logCatTxt(LogPriorities.ERROR, LOG_TAG + ":setUseOsSoundSettingsPref()", "An Object of unsupported instance was given as argument to PreferencesHandler.setPrefs()", e);
 		}
 	}
 

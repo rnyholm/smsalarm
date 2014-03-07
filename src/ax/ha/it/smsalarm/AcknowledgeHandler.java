@@ -36,12 +36,12 @@ import ax.ha.it.smsalarm.PreferencesHandler.PrefKeys;
  * Also holds the acknowledge UI.
  * 
  * @author Robert Nyholm <robert.nyholm@aland.net>
- * @version 2.1
+ * @version 2.2
  * @since 1.1-SE
  */
 public class AcknowledgeHandler extends Activity {
 	// Log tag string
-	private final String LOG_TAG = this.getClass().getSimpleName();
+	private final String LOG_TAG = getClass().getSimpleName();
 
 	// Objects needed for logging and shared preferences handling
 	private LogHandler logger = LogHandler.getInstance();
@@ -129,10 +129,10 @@ public class AcknowledgeHandler extends Activity {
 		setContentView(R.layout.ack);
 
 		// Log in debugging and information purpose
-		this.logger.logCat(LogPriorities.DEBUG, this.LOG_TAG + ":onCreate()", "Creation of the Acknowledge Handler started");
+		logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":onCreate()", "Creation of the Acknowledge Handler started");
 		
 		// Initialize database handler object from context
-		this.db = new DatabaseHandler(this);
+		db = new DatabaseHandler(this);
 
 		// Declare a telephonymanager with propersystemservice and attach
 		// listener to it
@@ -140,16 +140,16 @@ public class AcknowledgeHandler extends Activity {
 		listener = new ListenToPhoneState();
 		tManager.listen(listener, PhoneStateListener.LISTEN_CALL_STATE);
 
-		this.logger.logCat(LogPriorities.DEBUG, this.LOG_TAG + ":onCreate()", "Got TELEPHONY_SERVICE and attached PhoneStateListener to it");
+		logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":onCreate()", "Got TELEPHONY_SERVICE and attached PhoneStateListener to it");
 
 		// FindViews
-		this.findViews();
+		findViews();
 
 		// Get Shared Preferences
-		this.getAckHandlerPrefs();
+		getAckHandlerPrefs();
 
 		// Set TextViews
-		this.setTextViews();
+		setTextViews();
 
 		// Create objects that acts as listeners to the buttons
 		abortButton.setOnClickListener(new OnClickListener() {
@@ -183,7 +183,7 @@ public class AcknowledgeHandler extends Activity {
 			}
 		});
 		// Log in debugging and information purpose
-		this.logger.logCat(LogPriorities.DEBUG, this.LOG_TAG + ":onCreate()", "Creation of the Acknowledge Handler completed");
+		logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":onCreate()", "Creation of the Acknowledge Handler completed");
 	}
 
 	/**
@@ -197,15 +197,15 @@ public class AcknowledgeHandler extends Activity {
 	public void onResume() {
 		super.onResume();
 		// Log in debugging and information purpose
-		this.logger.logCat(LogPriorities.DEBUG, this.LOG_TAG + ":onResume()", "Activity resumed");
+		logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":onResume()", "Activity resumed");
 		// If we already have placed a call
-		if (this.hasCalled) {
+		if (hasCalled) {
 			// Logging
-			this.logger.logCat(LogPriorities.DEBUG, this.LOG_TAG + ":onResume()", "An acknowledge call has already been placed, building up progressbar and countdown for a new acknowledge call");
+			logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":onResume()", "An acknowledge call has already been placed, building up progressbar and countdown for a new acknowledge call");
 			// Initialize progress bar and textviews needed for countdown
-			this.redialProgressBar.setProgress(0);
-			this.countDownTextView.setText(Integer.toString(REDIAL_COUNTDOWN_TIME / 1000));
-			this.redialCountDown = new CountDownTimer(REDIAL_COUNTDOWN_TIME, REDIAL_COUNTDOWN_INTERVAL) {
+			redialProgressBar.setProgress(0);
+			countDownTextView.setText(Integer.toString(REDIAL_COUNTDOWN_TIME / 1000));
+			redialCountDown = new CountDownTimer(REDIAL_COUNTDOWN_TIME, REDIAL_COUNTDOWN_INTERVAL) {
 				@Override
 				public void onTick(long millisUntilFinished) {
 					// Logging
@@ -282,48 +282,48 @@ public class AcknowledgeHandler extends Activity {
 	 */
 	private void findViews() {
 		// Logging
-		this.logger.logCat(LogPriorities.DEBUG, this.LOG_TAG + ":findViews()", "Start finding Views by their ID");
+		logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":findViews()", "Start finding Views by their ID");
 
 		// Declare and initialize variables of type TextView
-		this.titleTextView = (TextView) findViewById(R.id.ackTitle_tv);
-		this.fullMessageTextView = (TextView) findViewById(R.id.ackFullAlarm_tv);
-		this.lineBusyTextView = (TextView) findViewById(R.id.ackLineBusy_tv);
-		this.countDownTextView = (TextView) findViewById(R.id.ackCountdown_tv);
-		this.secondsTextView = (TextView) findViewById(R.id.ackSeconds_tv);
+		titleTextView = (TextView) findViewById(R.id.ackTitle_tv);
+		fullMessageTextView = (TextView) findViewById(R.id.ackFullAlarm_tv);
+		lineBusyTextView = (TextView) findViewById(R.id.ackLineBusy_tv);
+		countDownTextView = (TextView) findViewById(R.id.ackCountdown_tv);
+		secondsTextView = (TextView) findViewById(R.id.ackSeconds_tv);
 
 		// Declare and initialize variables of type Button
-		this.acknowledgeButton = (Button) findViewById(R.id.ackAcknowledgeAlarm_btn);
-		this.abortButton = (Button) findViewById(R.id.ackAbortAlarm_btn);
+		acknowledgeButton = (Button) findViewById(R.id.ackAcknowledgeAlarm_btn);
+		abortButton = (Button) findViewById(R.id.ackAbortAlarm_btn);
 
 		// Declare and initialize variable of type ProgressBar
-		this.redialProgressBar = (ProgressBar) findViewById(R.id.ackRedial_pb);
+		redialProgressBar = (ProgressBar) findViewById(R.id.ackRedial_pb);
 
 		// Declare and initialize variables of type ImageView
-		this.divider1ImageView = (ImageView) findViewById(R.id.ackDivider1_iv);
-		this.divider2ImageView = (ImageView) findViewById(R.id.ackDivider2_iv);
+		divider1ImageView = (ImageView) findViewById(R.id.ackDivider1_iv);
+		divider2ImageView = (ImageView) findViewById(R.id.ackDivider2_iv);
 
 		// If Android API level less then 11 set bright gradient else set dark
 		// gradient
 		if (Build.VERSION.SDK_INT < 11) {
-			this.divider1ImageView.setImageResource(R.drawable.gradient_divider_10_and_down);
-			this.divider2ImageView.setImageResource(R.drawable.gradient_divider_10_and_down);
+			divider1ImageView.setImageResource(R.drawable.gradient_divider_10_and_down);
+			divider2ImageView.setImageResource(R.drawable.gradient_divider_10_and_down);
 			// Logging
-			this.logger.logCat(LogPriorities.DEBUG, this.LOG_TAG + ":findViews()", "API level < 11, set bright gradients");
+			logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":findViews()", "API level < 11, set bright gradients");
 		} else {
-			this.divider1ImageView.setImageResource(R.drawable.gradient_divider_11_and_up);
-			this.divider2ImageView.setImageResource(R.drawable.gradient_divider_11_and_up);
-			this.logger.logCat(LogPriorities.DEBUG, this.LOG_TAG + ":findViews()", "API level > 10, set dark gradients");
+			divider1ImageView.setImageResource(R.drawable.gradient_divider_11_and_up);
+			divider2ImageView.setImageResource(R.drawable.gradient_divider_11_and_up);
+			logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":findViews()", "API level > 10, set dark gradients");
 		}
 
 		// Log and hide UI widgets that user don't need to see right now
-		this.logger.logCat(LogPriorities.DEBUG, this.LOG_TAG + ":findViews()", "Hiding elements not needed to show right now");
-		this.lineBusyTextView.setVisibility(View.GONE);
-		this.countDownTextView.setVisibility(View.GONE);
-		this.secondsTextView.setVisibility(View.GONE);
-		this.redialProgressBar.setVisibility(View.GONE);
+		logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":findViews()", "Hiding elements not needed to show right now");
+		lineBusyTextView.setVisibility(View.GONE);
+		countDownTextView.setVisibility(View.GONE);
+		secondsTextView.setVisibility(View.GONE);
+		redialProgressBar.setVisibility(View.GONE);
 
 		// Logging
-		this.logger.logCat(LogPriorities.DEBUG, this.LOG_TAG + ":findViews()", "All Views found");
+		logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":findViews()", "All Views found");
 	}
 
 	/**
@@ -336,19 +336,19 @@ public class AcknowledgeHandler extends Activity {
 	 */
 	private void getAckHandlerPrefs() {
 		// Some logging
-		this.logger.logCat(LogPriorities.DEBUG, this.LOG_TAG + ":getAckHandlerPrefs()", "Start retrieving shared preferences needed by class AcknowledgeHandler");
+		logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":getAckHandlerPrefs()", "Start retrieving shared preferences needed by class AcknowledgeHandler");
 
 		try {
 			// Get shared preferences needed by class Acknowledge Handler
-			this.rescueService = (String) this.prefHandler.getPrefs(PrefKeys.SHARED_PREF, PrefKeys.RESCUE_SERVICE_KEY, DataTypes.STRING, this);
-			this.fullMessage = (String) this.prefHandler.getPrefs(PrefKeys.SHARED_PREF, PrefKeys.FULL_MESSAGE_KEY, DataTypes.STRING, this);
-			this.acknowledgeNumber = (String) this.prefHandler.getPrefs(PrefKeys.SHARED_PREF, PrefKeys.ACK_NUMBER_KEY, DataTypes.STRING, this);
-			this.hasCalled = (Boolean) this.prefHandler.getPrefs(PrefKeys.SHARED_PREF, PrefKeys.HAS_CALLED_KEY, DataTypes.BOOLEAN, this);
+			rescueService = (String) prefHandler.getPrefs(PrefKeys.SHARED_PREF, PrefKeys.RESCUE_SERVICE_KEY, DataTypes.STRING, this);
+			fullMessage = (String) prefHandler.getPrefs(PrefKeys.SHARED_PREF, PrefKeys.FULL_MESSAGE_KEY, DataTypes.STRING, this);
+			acknowledgeNumber = (String) prefHandler.getPrefs(PrefKeys.SHARED_PREF, PrefKeys.ACK_NUMBER_KEY, DataTypes.STRING, this);
+			hasCalled = (Boolean) prefHandler.getPrefs(PrefKeys.SHARED_PREF, PrefKeys.HAS_CALLED_KEY, DataTypes.BOOLEAN, this);
 		} catch(IllegalArgumentException e) {
-			logger.logCatTxt(LogPriorities.ERROR, this.LOG_TAG + ":getAckHandlerPrefs()", "An unsupported datatype was given as argument to PreferencesHandler.getPrefs()", e);
+			logger.logCatTxt(LogPriorities.ERROR, LOG_TAG + ":getAckHandlerPrefs()", "An unsupported datatype was given as argument to PreferencesHandler.getPrefs()", e);
 		} 
 
-		this.logger.logCat(LogPriorities.DEBUG, this.LOG_TAG + ":getAckHandlerPrefs()", "Shared preferences retrieved");
+		logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":getAckHandlerPrefs()", "Shared preferences retrieved");
 	}
 
 	/**
@@ -360,21 +360,21 @@ public class AcknowledgeHandler extends Activity {
 	@SuppressLint("DefaultLocale")
 	private void setTextViews() {
 		// Some logging
-		this.logger.logCat(LogPriorities.DEBUG, this.LOG_TAG + ":setTextViews()", "Setting TextViews with proper data");
+		logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":setTextViews()", "Setting TextViews with proper data");
 		// Set TextViews from variables and resources
-		if (!"".equals(this.rescueService)) {
-			this.titleTextView.setText(this.rescueService.toUpperCase() + " " + getResources().getString(R.string.ALARM));
+		if (!"".equals(rescueService)) {
+			titleTextView.setText(rescueService.toUpperCase() + " " + getResources().getString(R.string.ALARM));
 		} else {
-			this.titleTextView.setText(getString(R.string.ALARM));
+			titleTextView.setText(getString(R.string.ALARM));
 		}
-		this.fullMessageTextView.setText(this.fullMessage);
+		fullMessageTextView.setText(fullMessage);
 		// Check if the activity already has placed a call, in that case show TextViews for redial
-		if (this.hasCalled) {
-			this.logger.logCat(LogPriorities.DEBUG, this.LOG_TAG + ":setTextViews()", "We have already placed a call, showing redial widgets");
-			this.lineBusyTextView.setVisibility(View.VISIBLE);
-			this.countDownTextView.setVisibility(View.VISIBLE);
-			this.secondsTextView.setVisibility(View.VISIBLE);
-			this.redialProgressBar.setVisibility(View.VISIBLE);
+		if (hasCalled) {
+			logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":setTextViews()", "We have already placed a call, showing redial widgets");
+			lineBusyTextView.setVisibility(View.VISIBLE);
+			countDownTextView.setVisibility(View.VISIBLE);
+			secondsTextView.setVisibility(View.VISIBLE);
+			redialProgressBar.setVisibility(View.VISIBLE);
 		}
 	}
 
@@ -384,7 +384,7 @@ public class AcknowledgeHandler extends Activity {
 	 * parent class <code>AcknowledgeHandler</code>.
 	 * 
 	 * @author Robert Nyholm <robert.nyholm@aland.net>
-	 * @version 2.1
+	 * @version 2.2
 	 * @since 2.1
 	 */
 	private class ListenToPhoneState extends PhoneStateListener {

@@ -23,7 +23,7 @@ import ax.ha.it.smsalarm.LogHandler.LogPriorities;
  */
 public class DatabaseHandler extends SQLiteOpenHelper {
 	// Log tag string
-	private final String LOG_TAG = this.getClass().getSimpleName();
+	private final String LOG_TAG = getClass().getSimpleName();
 	
 	// We need to have context in order to set some time stamps
 	private Context context;
@@ -149,7 +149,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 	 */
 	public void addAlarm(Alarm alarm) {
 		// Get a writable database handle
-		SQLiteDatabase db = this.getWritableDatabase();
+		SQLiteDatabase db = getWritableDatabase();
 		
 		// Fetch values from alarm and put the into a ContentValues variable
 	    ContentValues values = new ContentValues();    
@@ -182,7 +182,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 	 */
 	public Alarm getAlarm(int id) throws android.database.CursorIndexOutOfBoundsException {
 		// Get a readable database handle
-	    SQLiteDatabase db = this.getReadableDatabase();
+	    SQLiteDatabase db = getReadableDatabase();
 	    
 	    // Create query and execute it, store result in cursor
 	    Cursor cursor = db.query(TABLE_ALARMS, new String[] { KEY_ID, KEY_RECEIVED, KEY_SENDER, KEY_MESSAGE, KEY_TRIGGER_TEXT, KEY_ACKNOWLEDGED, KEY_ALARM_TYPE }, 
@@ -222,7 +222,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 		String selectQuery = "SELECT  * FROM " + TABLE_ALARMS;
 
 		// Get a writable database handle
-		SQLiteDatabase db = this.getWritableDatabase();
+		SQLiteDatabase db = getWritableDatabase();
 		
 		// Execute query, store result in cursor
 		Cursor cursor = db.rawQuery(selectQuery, null);
@@ -262,7 +262,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         int alarmsCount = 0;
         
         // Get a readable database handle
-        SQLiteDatabase db = this.getReadableDatabase();
+        SQLiteDatabase db = getReadableDatabase();
         // Execute query, store result in cursor
         Cursor cursor = db.rawQuery(countQuery, null);
         
@@ -295,7 +295,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 		
 		try {
 			// Returning latest alarm in database
-			return this.getAlarm(this.getAlarmsCount());
+			return getAlarm(getAlarmsCount());
 		} catch (android.database.CursorIndexOutOfBoundsException e) {
 			// Log error
 			logger.logCatTxt(LogPriorities.ERROR, LOG_TAG + ":getLatestAlarm()", "android.database.CursorIndexOutOfBoundsException occurred while getting alarm from database", e);
@@ -325,7 +325,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 	 */
 	public int updateAlarm(Alarm alarm) {
 		// Get a writable database handle
-	    SQLiteDatabase db = this.getWritableDatabase();
+	    SQLiteDatabase db = getWritableDatabase();
 	    
 		// Fetch values from alarm and put the into a ContentValues variable
 	    ContentValues values = new ContentValues();    
@@ -360,15 +360,15 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 			logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":updateLatestAlarmAcknowledged()", "Trying to update latest alarms acknowledge time in database");
 			
 			// Get and store number of entries(alarms) in database
-			int alarmsCount = this.getAlarmsCount();
+			int alarmsCount = getAlarmsCount();
 			
 			// Get latest entry(alarm) in database
-			Alarm alarm = this.getAlarm(alarmsCount);
+			Alarm alarm = getAlarm(alarmsCount);
 			// Update alarms acknowledge time
-			alarm.updateAcknowledged(this.context);
+			alarm.updateAcknowledged(context);
 			
 			// Update alarm entry
-			this.updateAlarm(alarm);
+			updateAlarm(alarm);
 			
 			// Log in debug purpose
 			logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":updateLatestAlarmAcknowledged()", "Latest alarms acknowledge time has been updated");			
@@ -398,16 +398,16 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 			logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":updateLatestPrimaryAlarmAcknowledged()", "Trying to update latest primary alarms acknowledge time in database");
 			
 			// Iterate through all alarms in database from the last one and down
-			for (int i = this.getAlarmsCount(); i > 0; i--) {
+			for (int i = getAlarmsCount(); i > 0; i--) {
 				// Get entry(alarm) in database
-				Alarm alarm = this.getAlarm(i);
+				Alarm alarm = getAlarm(i);
 				
 				// If alarm type is primary we want to update it's acknowledge time
 				if (alarm.getAlarmType().equals(AlarmTypes.PRIMARY)) {
 					// Update alarms acknowledge time
-					alarm.updateAcknowledged(this.context);	
+					alarm.updateAcknowledged(context);	
 					// Update alarm entry
-					this.updateAlarm(alarm);
+					updateAlarm(alarm);
 					
 					// Log in debug purpose
 					logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":updateLatestPrimaryAlarmAcknowledged()", "Latest primary alarms acknowledge time has been updated");	
@@ -433,7 +433,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 	 */
 	public void deleteAlarm(Alarm alarm) {
 		// Get a writable database handle
-		SQLiteDatabase db = this.getWritableDatabase();
+		SQLiteDatabase db = getWritableDatabase();
     	db.delete(TABLE_ALARMS, KEY_ID + " = ?", new String[] { String.valueOf(alarm.getId()) });
 	    db.close();	
 	    
