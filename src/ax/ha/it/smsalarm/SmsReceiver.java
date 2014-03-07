@@ -38,10 +38,8 @@ public class SmsReceiver extends BroadcastReceiver {
 	private PreferencesHandler prefHandler = PreferencesHandler.getInstance();
 	private NoiseHandler noiseHandler = NoiseHandler.getInstance();
 
-	// String containing the primary listen number
-	private String primaryListenNumber = "";
-
-	// List of Strings containing secondaryListenNumbers
+	// Lists of Strings containing primary and secondaryListenNumbers
+	private List<String> primaryListenSmsNumbers = new ArrayList<String>();
 	private List<String> secondaryListenSmsNumbers = new ArrayList<String>();
 	
 	// List of Strings containing free texts triggering an alarm
@@ -134,7 +132,7 @@ public class SmsReceiver extends BroadcastReceiver {
 				}
 			}
 		} else { // <--Sms Alarm isn't enabled
-			// Log that Sms Alarm is enabled
+			// Log that Sms Alarm is not enabled
 			logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":onReceive()", "Sms Alarm is not enabled, do nothing");
 		}
 	}
@@ -276,7 +274,7 @@ public class SmsReceiver extends BroadcastReceiver {
 		
 		try {
 			// Get shared preferences needed by SmsReceiver
-			primaryListenNumber = (String) prefHandler.getPrefs(PrefKeys.SHARED_PREF, PrefKeys.PRIMARY_LISTEN_NUMBER_KEY, DataTypes.STRING, context);
+			primaryListenSmsNumbers = (List<String>) prefHandler.getPrefs(PrefKeys.SHARED_PREF, PrefKeys.PRIMARY_LISTEN_NUMBERS_KEY, DataTypes.LIST, context);
 			secondaryListenSmsNumbers = (List<String>) prefHandler.getPrefs(PrefKeys.SHARED_PREF, PrefKeys.SECONDARY_LISTEN_NUMBERS_KEY, DataTypes.LIST, context);
 			primaryListenFreeTexts = (List<String>) prefHandler.getPrefs(PrefKeys.SHARED_PREF, PrefKeys.PRIMARY_LISTEN_FREE_TEXTS_KEY, DataTypes.LIST, context);
 			secondaryListenFreeTexts = (List<String>) prefHandler.getPrefs(PrefKeys.SHARED_PREF, PrefKeys.SECONDARY_LISTEN_FREE_TEXTS_KEY, DataTypes.LIST, context);
@@ -330,38 +328,36 @@ public class SmsReceiver extends BroadcastReceiver {
 		// Log message for debugging/information purpose
 		logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":checkSmsNumberAlarm()", "Checking if sender of income SMS should trigger an alarm");
 		
-		// If we got a SMS from the same primary number as the application listens on
-		if (msgHeader.equals(primaryListenNumber)) {
-			// Log information
-			logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":checkSmsNumberAlarm()", "SMS fulfilled the criteria for a PRIMARY alarm. SMS received from: \"" + msgHeader + "\" with message: \"" + msgBody + "\", triggered on number: " + primaryListenNumber);
-			
-			try {
-				// Put alarm type to shared preferences
-				prefHandler.setPrefs(PrefKeys.SHARED_PREF, PrefKeys.LARM_TYPE_KEY, AlarmTypes.PRIMARY.ordinal(), context);
-			} catch(IllegalArgumentException e) {
-				logger.logCatTxt(LogPriorities.ERROR, LOG_TAG + ":checkSmsNumberAlarm()", "An Object of unsupported instance was given as argument to PreferencesHandler.setPrefs()", e);
+		boolean isAlarm = false;
+		
+		for (String primaryListenSmsNumber : primaryListenSmsNumbers) {
+			if (msgHeader.equals(primaryListenSmsNumber)) {
+				// Log information
+				logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":checkSmsNumberAlarm()", "SMS fulfilled the criteria for a PRIMARY alarm. SMS received from: \"" + msgHeader + "\" with message: \"" + msgBody + "\", triggered on number: " + primaryListenSmsNumber);
+				// Set helper variable
+				isAlarm = true;
+			}
+		}
+		
+		// Only set alarm type if we are sure that income SMS triggered on any primary listen sms number
+		if (isAlarm) {
+			// Set correct AlarmType
+			setAlarmType(AlarmTypes.PRIMARY, context);			
+		}
+		
+		// Only check if income SMS hasn't already been checked as PRIMARY alarm
+		if (!AlarmTypes.PRIMARY.equals(alarmType)) {			
+			for (String secondaryListenSmsNumber : secondaryListenSmsNumbers) {
+				// If msg header equals a element in list application has received a SMS from a secondary listen number
+				if (msgHeader.equals(secondaryListenSmsNumber)) {
+					// Log information
+					logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":checkSmsNumberAlarm()", "SMS fulfilled the criteria for a SECONDARY alarm. SMS received from: \"" + msgHeader + "\" with message: \"" + msgBody + "\", triggered on number: " + secondaryListenSmsNumber);
+					isAlarm = true;
+				}
 			}
 			
-			// Set correct AlarmType
-			setAlarmType(AlarmTypes.PRIMARY, context);
-		} else { 
-			// Loop through each element in list
-			for (String secondaryListenNumber : secondaryListenSmsNumbers) {
-				// If msg header equals a element in list application has received a SMS from a secondary listen number
-				if (msgHeader.equals(secondaryListenNumber)) {
-					// Log information
-					logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":checkSmsNumberAlarm()", "SMS fulfilled the criteria for a SECONDARY alarm. SMS received from: \"" + msgHeader + "\" with message: \"" + msgBody + "\", triggered on number: " + secondaryListenNumber);
-					
-					try {
-						// Put alarm type to shared preferences
-						prefHandler.setPrefs(PrefKeys.SHARED_PREF, PrefKeys.LARM_TYPE_KEY, AlarmTypes.SECONDARY.ordinal(), context);
-					} catch(IllegalArgumentException e) {
-						logger.logCatTxt(LogPriorities.ERROR, LOG_TAG + ":checkSmsNumberAlarm()", "An Object of unsupported instance was given as argument to PreferencesHandler.setPrefs()", e);
-					}
-
-					// Set correct AlarmType
-					setAlarmType(AlarmTypes.SECONDARY, context);
-				}
+			if (isAlarm) {
+				setAlarmType(AlarmTypes.SECONDARY, context);		
 			}
 		}
 	}

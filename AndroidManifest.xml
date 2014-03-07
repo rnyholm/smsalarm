@@ -20,7 +20,7 @@
     
     <application android:label="@string/APP_NAME"
         android:icon="@drawable/ic_launcher"
-        android:theme="@style/AppTheme" android:allowBackup="false">
+        android:theme="@style/AppTheme" android:allowBackup="false" android:name="UpdateHandler">
         <activity android:name=".Splash" android:label="@string/APP_NAME" android:noHistory="true" android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

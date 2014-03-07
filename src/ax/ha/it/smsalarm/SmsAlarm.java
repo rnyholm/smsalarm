@@ -1572,6 +1572,9 @@ public class SmsAlarm extends Activity {
 		// Logging
 		logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":updateWholeUI", "Whole user interface is about to be updated");
 
+		// Update primary listen sms numbers Spinner
+		updatePrimaryListenSmsNumberSpinner();
+		
 		// Update secondary listen sms numbers Spinner
 		updateSecondaryListenSmsNumberSpinner();
 		

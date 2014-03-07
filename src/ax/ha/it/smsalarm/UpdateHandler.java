@@ -44,6 +44,7 @@ public class UpdateHandler extends Application {
 	@SuppressWarnings("unchecked")
 	@Override
 	public void onCreate() {
+		// Very, very important to call onCreate()
 		super.onCreate();
 		
 		try {
@@ -53,7 +54,7 @@ public class UpdateHandler extends Application {
 			oldVersionCode = (Integer) prefHandler.getPrefs(PrefKeys.SHARED_PREF, PrefKeys.VERSION_CODE, DataTypes.INTEGER, this, currentVersionCode);
 			
 			// Only if old version number is less than 9, in version 9 a 
-			// list of primary listen numers is used instead of a string
+			// list of primary listen numbers is used instead of a string
 			if (oldVersionCode < 9) {
 				// Some logging
 				logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":onCreate()", "Old version code is lower than 9, need to move existing Primary Listen Number to the new List of Primary Listen Numbers. Old version code is: \"" + oldVersionCode + "\"");
