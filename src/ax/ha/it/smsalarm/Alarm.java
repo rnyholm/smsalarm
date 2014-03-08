@@ -391,7 +391,7 @@ public class Alarm {
 	/**
 	 * To figure out if <b><i>24h</i></b> or <b><i>12h</i></b> clock is being used on device.
 	 * A timestamp in format:<br>
-	 * <b><i>hh:mm</i></b><br>
+	 * <b><i>hh:mm:ss</i></b><br>
 	 * will be created and returned according to <b><i>given Date</i></b> and clock format
 	 * being used on device.
 	 * 
@@ -408,8 +408,8 @@ public class Alarm {
 		logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":getLocalizedHHMMStamp()", "Resolving clock format beeing used on device and getting timestamp(hh:mm) in correct format");
 		
 		// Different formatters for 12 and 24 hour timestamps
-		SimpleDateFormat formatter24 = new SimpleDateFormat("HH:mm");
-		SimpleDateFormat formatter12 = new SimpleDateFormat("K:mm a");
+		SimpleDateFormat formatter24 = new SimpleDateFormat("HH:mm:ss");
+		SimpleDateFormat formatter12 = new SimpleDateFormat("K:mm:ss a");
 				
 		// According to users preferences the OS clock is displayed in 24 hour format
 		if (android.text.format.DateFormat.is24HourFormat(context)) {

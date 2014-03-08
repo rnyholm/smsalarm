@@ -41,7 +41,7 @@ public class WidgetProvider extends AppWidgetProvider {
 	private DatabaseHandler db;
 
 	// Max length of the latest alarm length in widget
-	private static final int ALARM_TEXT_MAX_LENGTH = 125;
+	private static final int ALARM_TEXT_MAX_LENGTH = 40;
 
 	// Strings representing different intents used to run different methods from intent
 	public static final String TOGGLE_ENABLE_SMS_ALARM = "ax.ha.it.smsalarm.TOGGLE_SMS_ALARM_ENABLE";
@@ -336,7 +336,7 @@ public class WidgetProvider extends AppWidgetProvider {
 					logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":getLatestAlarm()", "Lates Alarm message is longer than " + Integer.toString(ALARM_TEXT_MAX_LENGTH) + " characters, message is shortened");
 					
 					// If longer than textview limit shorten it of and add dots to it
-					alarmMessage.substring(0, (ALARM_TEXT_MAX_LENGTH - 3));
+					alarmMessage = new StringBuilder(alarmMessage.substring(0, (ALARM_TEXT_MAX_LENGTH - 3)));
 					alarmMessage.append("...");
 				}
 				

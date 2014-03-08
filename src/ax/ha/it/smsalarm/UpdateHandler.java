@@ -46,12 +46,12 @@ public class UpdateHandler extends Application {
 	public void onCreate() {
 		// Very, very important to call onCreate()
 		super.onCreate();
-		
+
 		try {
 			// Get both the current and the old version codes, if it's a new installation(no old version code exists) 
 			// the default value to be fetched from the shared preferences is set to the current version code
 			currentVersionCode = getPackageManager().getPackageInfo(getPackageName(), 0).versionCode;
-			oldVersionCode = (Integer) prefHandler.getPrefs(PrefKeys.SHARED_PREF, PrefKeys.VERSION_CODE, DataTypes.INTEGER, this, currentVersionCode);
+			oldVersionCode = (Integer) prefHandler.getPrefs(PrefKeys.SHARED_PREF, PrefKeys.VERSION_CODE, DataTypes.INTEGER, this, -1);
 			
 			// Only if old version number is less than 9, in version 9 a 
 			// list of primary listen numbers is used instead of a string
