@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <resources>
-    <!-- NEW STRINGS IN V2.2 BEGIN, SORT THESE LATER -->
+    <!-- NEW STRINGS IN V2.2.1 BEGIN, SORT THESE LATER -->
     <string name="TITLE_FREE_TEXT_TRIGGER_SETTINGS">Ord inställningar</string>
     <string name="INFO_SMS_SETTINGS">Ställ in vilka telefonnummer som Sms Alarm ska larma på sms ifrån.</string>
     <string name="INFO_FREE_TEXT_TRIGGER_SETTINGS">Ställ in vilka ord som Sms Alarm ska larma på om de finns i inkommande sms. Notera att denna funktion inte är skiftlägeskänslig.</string>
@@ -46,8 +46,8 @@
     <!-- Application info begin -->
     <string name="APP_NAME">Sms Alarm</string>
     <string name="APP_DESCR">The Alarm application for Android&#8482;</string>
-	<string name="APP_VERSION">2.2 Beta preview</string>   
-	<string name="APP_BUILD">20140222</string>
+	<string name="APP_VERSION">2.2.1</string>   
+	<string name="APP_BUILD">20140312</string>
 	<!-- Application info end -->
     <string name="CANCEL">Cancel</string>
 	<string name="COLON">:</string>

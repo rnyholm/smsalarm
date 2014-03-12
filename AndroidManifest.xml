@@ -1,9 +1,9 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="ax.ha.it.smsalarm"
     android:versionCode="9"
-    android:versionName="2.2">
+    android:versionName="2.2.1">
 
-    <uses-sdk android:minSdkVersion="8" android:targetSdkVersion="18" />
+    <uses-sdk android:minSdkVersion="8" android:targetSdkVersion="19" />
     <uses-feature android:name="android.hardware.telephony" android:required="true"/>
     <uses-feature android:name="android.software.app_widgets" android:required="false"/>
     
