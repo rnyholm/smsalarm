@@ -298,7 +298,7 @@ public class SmsReceiver extends BroadcastReceiver {
 	 * @param context
 	 *            Context
 	 * 
-	 * @see #checkSmsNumberAlarm(Context)
+	 * @see #checkSmsAlarm(Context)
 	 * @see #checkFreeTextAlarm(Context)
 	 * @see ax.ha.it.smsalarm.LogHandler#logCat(LogPriorities, String, String) logCat(LogPriorities, String, String)
 	 */
@@ -307,7 +307,7 @@ public class SmsReceiver extends BroadcastReceiver {
 		logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":checkAlarm()", "Checking if income sms is an alarm");
 		
 		// Figure out if we got an alarm
-		checkSmsNumberAlarm(context);
+		checkSmsAlarm(context);
 		checkFreeTextAlarm(context);
 	}
 	
@@ -324,7 +324,7 @@ public class SmsReceiver extends BroadcastReceiver {
 	 * @see ax.ha.it.smsalarm.LogHandler#logCatTxt(LogPriorities, String, String, Throwable) logCatTxt(LogPriorities, String, String, Throwable)
 	 * @see ax.ha.it.smsalarm.PreferencesHandler#setPrefs(PrefKeys, PrefKeys, Object, Context) setPrefs(PrefKeys, PrefKeys, Object, Context)
 	 */
-	private void checkSmsNumberAlarm(Context context) {
+	private void checkSmsAlarm(Context context) {
 		// Log message for debugging/information purpose
 		logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":checkSmsNumberAlarm()", "Checking if sender of income sms should trigger an alarm");
 		

@@ -69,9 +69,9 @@ public class SmsAlarm extends Activity {
 	private final String LOG_TAG = getClass().getSimpleName();
 
 	// Objects needed for logging, shared preferences and noise handling
-	private LogHandler logger = LogHandler.getInstance();
+	private final LogHandler logger = LogHandler.getInstance();
 	private static final PreferencesHandler prefHandler = PreferencesHandler.getInstance();
-	private NoiseHandler noiseHandler = NoiseHandler.getInstance();
+	private final NoiseHandler noiseHandler = NoiseHandler.getInstance();
 
 	// Object to handle database access and methods
 	private DatabaseHandler db;
@@ -129,8 +129,8 @@ public class SmsAlarm extends Activity {
 	private List<String> secondarySmsNumbers = new ArrayList<String>();
 	private List<String> primaryFreeTexts = new ArrayList<String>();
 	private List<String> secondaryFreeTexts = new ArrayList<String>();
-	private List<String> emptySmsNumbers = new ArrayList<String>(); // <-- A "dummy" list just containing one element, one string
-	private List<String> emptyFreeTexts = new ArrayList<String>(); // <-- A "dummy" list just containing one element, on string
+	private final List<String> emptySmsNumbers = new ArrayList<String>(); // <-- A "dummy" list just containing one element, one string
+	private final List<String> emptyFreeTexts = new ArrayList<String>(); // <-- A "dummy" list just containing one element, on string
 
 	// String to store firedepartments name in
 	private String rescueService = "";
@@ -495,6 +495,7 @@ public class SmsAlarm extends Activity {
 				updateSelectedToneEditText();
 			}
 
+			@Override
 			public void onNothingSelected(AdapterView<?> arg0) {
 				// DO NOTHING!
 			}
@@ -1388,6 +1389,7 @@ public class SmsAlarm extends Activity {
 
 		// Set items to list view from resource array tones
 		dialog.setItems(R.array.tones, new DialogInterface.OnClickListener() {
+			@Override
 			public void onClick(DialogInterface arg0, int listPosition) {
 				// Log information
 				logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":buildAndShowToneDialog().Item.OnClickListener().onClick()", "Item in message tones list pressed");
@@ -1510,7 +1512,7 @@ public class SmsAlarm extends Activity {
 	 * 		   <code>false</code> is also returned if either given argument is <code>null</code>.
 	 */
 	@SuppressLint("DefaultLocale")
-	public boolean existsIn(String string, List<String> list) {
+	private boolean existsIn(String string, List<String> list) {
 		// Logging
 		logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":existsIn()", "String=\"" + string + "\" is about to be checked if exists in list=\"" + list + "\"");
 		
