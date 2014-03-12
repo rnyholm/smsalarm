@@ -44,11 +44,11 @@ public class AcknowledgeHandler extends Activity {
 	private final String LOG_TAG = getClass().getSimpleName();
 
 	// Objects needed for logging and shared preferences handling
-	private LogHandler logger = LogHandler.getInstance();
-	private PreferencesHandler prefHandler = PreferencesHandler.getInstance();
+	private final LogHandler logger = LogHandler.getInstance();
+	private final PreferencesHandler prefHandler = PreferencesHandler.getInstance();
 
 	// Object needed to listen for phones different states
-	private ListenToPhoneState listener;
+	private ListenToPhoneState customPhoneStateListener;
 	
 	// Objact to handle database access and methods
 	private DatabaseHandler db;
@@ -98,9 +98,9 @@ public class AcknowledgeHandler extends Activity {
 	private int phoneState = -1;
 
 	// Constants for the redial parameters
-	private int MIN_CALL_TIME = 7000; // Minimum call time(in milliseconds), if below this the application redials
-	private int REDIAL_COUNTDOWN_TIME = 6000; // Count down time(in milliseconds) before redial should occur
-	private int REDIAL_COUNTDOWN_INTERVAL = 100;
+	private final int MIN_CALL_TIME = 7000; // Minimum call time(in milliseconds), if below this the application redials
+	private final int REDIAL_COUNTDOWN_TIME = 6000; // Count down time(in milliseconds) before redial should occur
+	private final int REDIAL_COUNTDOWN_INTERVAL = 100;
 
 	/**
 	 * When activity starts, this method is the entry point. The User Interface
@@ -137,10 +137,10 @@ public class AcknowledgeHandler extends Activity {
 		// Declare a telephonymanager with propersystemservice and attach
 		// listener to it
 		TelephonyManager tManager = (TelephonyManager) getSystemService(Context.TELEPHONY_SERVICE);
-		listener = new ListenToPhoneState();
-		tManager.listen(listener, PhoneStateListener.LISTEN_CALL_STATE);
+		customPhoneStateListener = new ListenToPhoneState();
+		tManager.listen(customPhoneStateListener, PhoneStateListener.LISTEN_CALL_STATE);
 
-		logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":onCreate()", "Got TELEPHONY_SERVICE and attached PhoneStateListener to it");
+		logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":onCreate()", "Got TELEPHONY_SERVICE and attached phone state listener to it");
 
 		// FindViews
 		findViews();
@@ -153,6 +153,7 @@ public class AcknowledgeHandler extends Activity {
 
 		// Create objects that acts as listeners to the buttons
 		abortButton.setOnClickListener(new OnClickListener() {
+			@Override
 			public void onClick(View v) {
 				// Logging
 				logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":onCreate().abortButton.OnClickListener().onClick()", "Abort button has been pressed, finishing activity");
@@ -162,6 +163,7 @@ public class AcknowledgeHandler extends Activity {
 
 		// Create objects that acts as listeners to the buttons
 		acknowledgeButton.setOnClickListener(new OnClickListener() {
+			@Override
 			public void onClick(View v) {
 				// Check to see if we have any phone number to acknowledge to
 				if (!acknowledgeNumber.equals("")) {
@@ -187,7 +189,7 @@ public class AcknowledgeHandler extends Activity {
 	}
 
 	/**
-	 * To handler events to trigger when activity resumes.
+	 * To trigger event when activity resumes.
 	 * 
 	 * @see #onCreate(Bundle)
 	 * @see #onPause()
@@ -241,7 +243,7 @@ public class AcknowledgeHandler extends Activity {
 	}
 
 	/**
-	 * To place a acknowledge call to a preconfigured phone number.
+	 * To place a acknowledge call to a pre0configured phone number.
 	 * 
 	 * @see #onCreate(Bundle)
 	 * @see #onResume()
@@ -282,7 +284,7 @@ public class AcknowledgeHandler extends Activity {
 	 */
 	private void findViews() {
 		// Logging
-		logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":findViews()", "Start finding Views by their ID");
+		logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":findViews()", "Start finding views by their ID");
 
 		// Declare and initialize variables of type TextView
 		titleTextView = (TextView) findViewById(R.id.ackTitle_tv);
@@ -323,7 +325,7 @@ public class AcknowledgeHandler extends Activity {
 		redialProgressBar.setVisibility(View.GONE);
 
 		// Logging
-		logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":findViews()", "All Views found");
+		logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":findViews()", "All views found");
 	}
 
 	/**
@@ -360,7 +362,7 @@ public class AcknowledgeHandler extends Activity {
 	@SuppressLint("DefaultLocale")
 	private void setTextViews() {
 		// Some logging
-		logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":setTextViews()", "Setting TextViews with proper data");
+		logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":setTextViews()", "Setting textviews with proper data");
 		// Set TextViews from variables and resources
 		if (!"".equals(rescueService)) {
 			titleTextView.setText(rescueService.toUpperCase() + " " + getResources().getString(R.string.ALARM));

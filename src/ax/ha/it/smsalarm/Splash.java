@@ -30,14 +30,14 @@ import ax.ha.it.smsalarm.PreferencesHandler.PrefKeys;
  */
 public class Splash extends Activity {
 	// Log tag string
-	private String LOG_TAG = getClass().getSimpleName();
+	private final String LOG_TAG = getClass().getSimpleName();
 
 	// Objects needed for logging, shared preferences and noise handling
-	private LogHandler logger = LogHandler.getInstance();
-	private PreferencesHandler prefHandler = PreferencesHandler.getInstance();
+	private final LogHandler logger = LogHandler.getInstance();
+	private final PreferencesHandler prefHandler = PreferencesHandler.getInstance();
 
 	// Time before the activities switch
-	private int delay = 5000;
+	private final int delay = 5000;
 
 	// Handler for delayed thread
 	private Handler handler;
@@ -98,6 +98,7 @@ public class Splash extends Activity {
 			RelativeLayout splashRelativeLayout = (RelativeLayout) findViewById(R.id.splash_rl);
 			// Create object that acts as listener to the sbStartView
 			splashRelativeLayout.setOnClickListener(new OnClickListener() {
+				@Override
 				public void onClick(View v) {
 					// Some logging for information and debugging
 					logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":onCreate().onClickListener.onClick()", "User has tapped screen");
@@ -109,6 +110,7 @@ public class Splash extends Activity {
 			// Initialize a handler object, used to put a thread to sleep
 			handler = new Handler();
 			handler.postDelayed(new Runnable() {
+				@Override
 				public void run() {
 					// Some logging for information and debugging
 					logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":onCreate().Handler.run()", "Time has elapsed");
@@ -166,7 +168,7 @@ public class Splash extends Activity {
 			@Override
 			public void onClick(DialogInterface dialog, int which) {
 				// Debug logging
-				logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":buildAndShowEULADialog().PositiveButton.OnClickListener().onClick()", "Positive Button pressed in dialog, store shared preferences and switch activity");
+				logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":buildAndShowEULADialog().PositiveButton.OnClickListener().onClick()", "Positive button pressed in dialog, store shared preferences and switch activity");
 				// Put end user license agreed in shared preferences so we don't
 				// show this dialog again
 				try {

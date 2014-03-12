@@ -31,8 +31,8 @@ public class UpdateHandler extends Application {
 	private final String LOG_TAG = getClass().getSimpleName();
 
 	// Objects needed for logging, shared preferences and noise handling
-	private LogHandler logger = LogHandler.getInstance();
-	private PreferencesHandler prefHandler = PreferencesHandler.getInstance();
+	private final LogHandler logger = LogHandler.getInstance();
+	private final PreferencesHandler prefHandler = PreferencesHandler.getInstance();
 	
 	// To store both the current and old version code in
 	private int currentVersionCode;
@@ -57,23 +57,23 @@ public class UpdateHandler extends Application {
 			// list of primary listen numbers is used instead of a string
 			if (oldVersionCode < 9) {
 				// Some logging
-				logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":onCreate()", "Old version code is lower than 9, need to move existing Primary Listen Number to the new List of Primary Listen Numbers. Old version code is: \"" + oldVersionCode + "\"");
+				logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":onCreate()", "Old version code is lower than 9, need to move existing PRIMARY sms number to the new list of PRIMARY sms numbers. Old version code is: \"" + oldVersionCode + "\"");
 				
-				// Get the primary listen number from the shared preferences, also get the new list of primary listen numbers from the shared preferences
-				String primaryListenNumber = (String) prefHandler.getPrefs(PrefKeys.SHARED_PREF, PrefKeys.PRIMARY_LISTEN_NUMBER_KEY, DataTypes.STRING, this);
-				List<String> primaryListenNumbers = (List<String>) prefHandler.getPrefs(PrefKeys.SHARED_PREF, PrefKeys.PRIMARY_LISTEN_NUMBERS_KEY, DataTypes.LIST, this);
+				// Get the primary sms number from the shared preferences, also get the new list of primary sms numbers from the shared preferences
+				String primarySmsNumber = (String) prefHandler.getPrefs(PrefKeys.SHARED_PREF, PrefKeys.PRIMARY_LISTEN_NUMBER_KEY, DataTypes.STRING, this);
+				List<String> primarySmsNumbers = (List<String>) prefHandler.getPrefs(PrefKeys.SHARED_PREF, PrefKeys.PRIMARY_LISTEN_NUMBERS_KEY, DataTypes.LIST, this);
 				
-				// If there is an existing number, add it to the list of primary listen numbers 
-				// and set an empty string to the primary listen number as it's not used any more
-				if (!primaryListenNumber.isEmpty()) {
-					logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":onCreate()", "The existing Primary Listen Number: \"" + primaryListenNumber + "\" is about to be moved to the new list of Primary Listen Numbers");
-					primaryListenNumbers.add(primaryListenNumber);
-					primaryListenNumber = "";
+				// If there is an existing number, add it to the list of primary sms numbers 
+				// and set an empty string to the primary sms number as it's not used any more
+				if (!primarySmsNumber.isEmpty()) {
+					logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":onCreate()", "The existing PRIMARY sms number: \"" + primarySmsNumber + "\" is about to be moved to the new list of PRIMARY sms numbers");
+					primarySmsNumbers.add(primarySmsNumber);
+					primarySmsNumber = "";
 				}
 				
-				// Store both the list of primary listen numbers and the empty string of primary listen number not in use anymore
-				prefHandler.setPrefs(PrefKeys.SHARED_PREF, PrefKeys.PRIMARY_LISTEN_NUMBER_KEY, primaryListenNumber, this);
-				prefHandler.setPrefs(PrefKeys.SHARED_PREF, PrefKeys.PRIMARY_LISTEN_NUMBERS_KEY, primaryListenNumbers, this);
+				// Store both the list of primary sms numbers and the empty string of primary sms number not in use anymore
+				prefHandler.setPrefs(PrefKeys.SHARED_PREF, PrefKeys.PRIMARY_LISTEN_NUMBER_KEY, primarySmsNumber, this);
+				prefHandler.setPrefs(PrefKeys.SHARED_PREF, PrefKeys.PRIMARY_LISTEN_NUMBERS_KEY, primarySmsNumbers, this);
 				
 				// At last flag the boolean to true to indicate that update actions has been successfully made
 				updateActionMade = true;

@@ -26,7 +26,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 	private final String LOG_TAG = getClass().getSimpleName();
 	
 	// We need to have context in order to set some time stamps
-	private Context context;
+	private final Context context;
 
 	// Object for logging
 	private static final LogHandler logger = LogHandler.getInstance();
@@ -242,7 +242,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         db.close();
  
 		// Log in debug purpose
-		logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":getAllAlarm()", "Returning following list of Alarms:\"" + alarmList.toString() + "\"");		
+		logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":getAllAlarm()", "Returning following list of alarms:\"" + alarmList.toString() + "\"");		
 		// return contact list
 		return alarmList;
 	}
@@ -302,7 +302,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 		}
 		
 		// Log in debug purpose
-		logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":getLatestAlarm()", "Returning an empty Alarm object");		
+		logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":getLatestAlarm()", "Returning an empty alarm object");		
 		// If an exception occurred return a new Alarm object
 		return new Alarm();
 	}
@@ -337,7 +337,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 	    values.put(KEY_ALARM_TYPE, alarm.getAlarmType().ordinal());	// Type of alarm
 	    
 		// Log in debug purpose
-		logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":updateAlarm()", "Values have been retrieved from Alarm object and database entry is going to be updated");
+		logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":updateAlarm()", "Values have been retrieved from alarm object and database entry is going to be updated");
 	 
 	    // Updating row
 	    return db.update(TABLE_ALARMS, values, KEY_ID + " = ?", new String[] { String.valueOf(alarm.getId()) });		

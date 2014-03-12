@@ -30,8 +30,8 @@ public class NotificationHelper extends IntentService {
 	private final String LOG_TAG = getClass().getSimpleName();
 
 	// Objects needed for logging and shared preferences handling
-	private LogHandler logger = LogHandler.getInstance();
-	private PreferencesHandler prefHandler = PreferencesHandler.getInstance();
+	private final LogHandler logger = LogHandler.getInstance();
+	private final PreferencesHandler prefHandler = PreferencesHandler.getInstance();
 	
 	// Variables for notifications text and icon
 	private String tickerText = "";
@@ -70,6 +70,7 @@ public class NotificationHelper extends IntentService {
 	 * 
 	 * @deprecated 
 	 */
+	@Deprecated
 	@SuppressLint("DefaultLocale")
 	@Override
 	protected void onHandleIntent(Intent i) {
@@ -92,19 +93,8 @@ public class NotificationHelper extends IntentService {
 
 		logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":onHandleIntent()", "Shared preferences retrieved");
 
-		/*
-		 * This string and intent opens the messaging directory on phone,
-		 * however due to this page;
-		 * http://stackoverflow.com/questions/3708737/go-to-inbox-in-android
-		 * fetched 21.10-11, this way of achieve the "go to messaging dir" is
-		 * highly unrecommended.Thats because this method uses undocumented API
-		 * and is not part of the Android core.This may or may not work on some
-		 * devices and versions!
-		 */
-		String SMS_MIME_TYPE = "vnd.android-dir/mms-sms";
+		// Set intent 
 		Intent notificationIntent = new Intent(Intent.ACTION_MAIN); // Don't want to start any activity!
-		notificationIntent.setType(SMS_MIME_TYPE);
-
 		logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":onHandleIntent()", "Intent has been set");
 
 		// Setup a notification, directly from android development site
@@ -120,13 +110,13 @@ public class NotificationHelper extends IntentService {
 			setNotificationTexts(android.R.drawable.ic_delete, getString(R.string.PRIMARY_ALARM), 
 									  rescueService.toUpperCase(), getString(R.string.PRIMARY_ALARM), message);		
 			// Log
-			logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":onHandleIntent()", "Notification has been set for a primary alarm");
+			logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":onHandleIntent()", "Notification has been set for a PRIMARY alarm");
 		} else if (alarmType.equals(AlarmTypes.SECONDARY)) {			
 			// Set proper texts and icon to notification
 			setNotificationTexts(android.R.drawable.ic_menu_close_clear_cancel, getString(R.string.SECONDARY_ALARM), 
 									  rescueService.toUpperCase(), getString(R.string.SECONDARY_ALARM), message);	
 			// Log
-			logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":onHandleIntent()", "Notification has been set for a secondary alarm");
+			logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":onHandleIntent()", "Notification has been set for a SECONDARY alarm");
 		} else { // <--If this happens, something really weird is going on
 			logger.logCatTxt(LogPriorities.ERROR, LOG_TAG + ":onHandleIntent()", "Alarm type couldn't be find when configuring notification");
 		}

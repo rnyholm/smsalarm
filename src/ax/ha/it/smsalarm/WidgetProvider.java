@@ -20,7 +20,7 @@ import ax.ha.it.smsalarm.PreferencesHandler.DataTypes;
 import ax.ha.it.smsalarm.PreferencesHandler.PrefKeys;
 
 /**
- * Provider class for the app widgets. This class is responsible for all
+ * Provider class for the application widgets. This class is responsible for all
  * updates, data population, data presentation and so on for a widget. 
  * This implementation should be safe with more than one instances of
  * the Sms Alarm widget.
@@ -31,11 +31,11 @@ import ax.ha.it.smsalarm.PreferencesHandler.PrefKeys;
  */
 public class WidgetProvider extends AppWidgetProvider {
 	// Log tag string
-	private String LOG_TAG = getClass().getSimpleName();
+	private final String LOG_TAG = getClass().getSimpleName();
 
 	// Objects needed for logging and shared preferences
-	private LogHandler logger = LogHandler.getInstance();
-	private PreferencesHandler prefHandler = PreferencesHandler.getInstance();
+	private final LogHandler logger = LogHandler.getInstance();
+	private final PreferencesHandler prefHandler = PreferencesHandler.getInstance();
 
 	// Object to handle database access and methods
 	private DatabaseHandler db;
@@ -242,7 +242,7 @@ public class WidgetProvider extends AppWidgetProvider {
 	 */
 	private void setWidgetTextViews(RemoteViews rv, Context context) {
 		// Some logging
-		logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":setWidgetTextViews()", "TextViews of widget are about to be set");
+		logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":setWidgetTextViews()", "Textviews of widget are about to be set");
 
 		// If user has agreed end user license, we fill in the textviews with "real" data
 		if (endUserLicenseAgreed) {
@@ -333,7 +333,7 @@ public class WidgetProvider extends AppWidgetProvider {
 				// Check if alarm message is longer than the limits for the textview
 				if (alarmMessage.length() > ALARM_TEXT_MAX_LENGTH) {
 					// Some logging
-					logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":getLatestAlarm()", "Lates Alarm message is longer than " + Integer.toString(ALARM_TEXT_MAX_LENGTH) + " characters, message is shortened");
+					logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":getLatestAlarm()", "Latest alarm message is longer than " + Integer.toString(ALARM_TEXT_MAX_LENGTH) + " characters, message is shortened");
 					
 					// If longer than textview limit shorten it of and add dots to it
 					alarmMessage = new StringBuilder(alarmMessage.substring(0, (ALARM_TEXT_MAX_LENGTH - 3)));

@@ -22,8 +22,8 @@ import ax.ha.it.smsalarm.PreferencesHandler.DataTypes;
 import ax.ha.it.smsalarm.PreferencesHandler.PrefKeys;
 
 /**
- * Class extending <code>BroadcastReceiver</code>, receives SMS and handles them
- * accordingly to application settings and SMS senders phone number.
+ * Class extending <code>BroadcastReceiver</code>, receives sms and handles them
+ * accordingly to application settings and sms senders phone number.
  * 
  * @author Robert Nyholm <robert.nyholm@aland.net>
  * @version 2.2
@@ -34,17 +34,17 @@ public class SmsReceiver extends BroadcastReceiver {
 	private final String LOG_TAG = getClass().getSimpleName();
 
 	// Objects needed for logging, shared preferences and noise handling
-	private LogHandler logger = LogHandler.getInstance();
-	private PreferencesHandler prefHandler = PreferencesHandler.getInstance();
-	private NoiseHandler noiseHandler = NoiseHandler.getInstance();
+	private final LogHandler logger = LogHandler.getInstance();
+	private final PreferencesHandler prefHandler = PreferencesHandler.getInstance();
+	private final NoiseHandler noiseHandler = NoiseHandler.getInstance();
 
-	// Lists of Strings containing primary and secondaryListenNumbers
-	private List<String> primaryListenSmsNumbers = new ArrayList<String>();
-	private List<String> secondaryListenSmsNumbers = new ArrayList<String>();
+	// Lists of Strings containing primary- and secondary sms numbers
+	private List<String> primarySmsNumbers = new ArrayList<String>();
+	private List<String> secondarySmsNumbers = new ArrayList<String>();
 	
 	// List of Strings containing free texts triggering an alarm
-	private List<String> primaryListenFreeTexts = new ArrayList<String>();
-	private List<String> secondaryListenFreeTexts = new ArrayList<String>();
+	private List<String> primaryFreeTexts = new ArrayList<String>();
+	private List<String> secondaryFreeTexts = new ArrayList<String>();
 
 	// Variables needed to handle an incoming alarm properly
 	private int primaryMessageToneId = 0;
@@ -65,9 +65,9 @@ public class SmsReceiver extends BroadcastReceiver {
 	private String triggerText = "";
 
 	/**
-	 * Overridden method to receive <code>intent</code>, reacts on incoming SMS.
+	 * Overridden method to receive <code>intent</code>, reacts on incoming sms.
 	 * This receiver take proper actions depending on application settings and
-	 * SMS senders phone number.
+	 * sms senders phone number.
 	 * 
 	 * @param context
 	 *            Context
@@ -85,7 +85,7 @@ public class SmsReceiver extends BroadcastReceiver {
 	@Override
 	public void onReceive(Context context, Intent intent) {
 		// Log message for debugging/information purpose
-		logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":onReceive()", "SMS received");
+		logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":onReceive()", "Sms received");
 
 		// Retrieve shared preferences
 		getSmsReceivePrefs(context);
@@ -93,7 +93,7 @@ public class SmsReceiver extends BroadcastReceiver {
 		// Only if Sms Alarm is enabled
 		if (enableSmsAlarm) {
 			// Log that Sms Alarm is enabled
-			logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":onReceive()", "Sms Alarm is enabled, continue handle SMS");
+			logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":onReceive()", "Sms Alarm is enabled, continue handle Sms");
 
 			// Catch the SMS passed in
 			Bundle bundle = intent.getExtras();
@@ -116,13 +116,13 @@ public class SmsReceiver extends BroadcastReceiver {
 				// Check if the income SMS was any alarm
 				if (alarmType.equals(AlarmTypes.PRIMARY)) {
 					// Log information
-					logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":onReceive()", "SMS fulfilled the criteria for a PRIMARY alarm, handle SMS further");
+					logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":onReceive()", "SMS fulfilled the criteria for a PRIMARY alarm, handle Sms further");
 
 					// Continue handling of received SMS
 					smsHandler(context);
 				} else if (alarmType.equals(AlarmTypes.SECONDARY)) {
 					// Log information
-					logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":onReceive()", "SMS fulfilled the criteria for a SECONDARY alarm, handle SMS further");
+					logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":onReceive()", "SMS fulfilled the criteria for a SECONDARY alarm, handle Sms further");
 
 					// Continue handling of received SMS
 					smsHandler(context);
@@ -140,8 +140,8 @@ public class SmsReceiver extends BroadcastReceiver {
 	
 	
 	/**
-	 * Method to handle incoming SMS. Aborts the systems broadcast and stores
-	 * the SMS in the device inbox. This method is also responsible for playing
+	 * Method to handle incoming sms. Aborts the systems broadcast and stores
+	 * the sms in the device inbox. This method is also responsible for playing
 	 * ringtone via <code>{@link ax.ha.it.smsalarm.NoiseHandler#makeNoise(Context, int, boolean, boolean)}</code>
 	 * , vibrate and start <code>intent</code>.
 	 * 
@@ -192,13 +192,13 @@ public class SmsReceiver extends BroadcastReceiver {
 		Pattern p = Pattern.compile("(\\d{2}).(\\d{2}).(\\d{4})(\\s)(\\d{2}):(\\d{2}):(\\d{2})(\\s)(\\d{1}).(\\d{1})");
 		Matcher m = p.matcher(msgBody);
 
-		// Due to previous abort we have to store the SMS manually in phones inbox
+		// Due to previous abort we have to store the sms manually in phones inbox
 		ContentValues values = new ContentValues();
 		values.put("address", msgHeader);
 		values.put("body", msgBody);
 		context.getContentResolver().insert(Uri.parse("content://sms/inbox"), values);
 		// Debug logging
-		logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":smsHandler()", "SMS stored in devices inbox");
+		logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":smsHandler()", "Sms stored in devices inbox");
 
 		// Play message tone and vibrate, different method calls depending on alarm type
 		if (alarmType.equals(AlarmTypes.PRIMARY)) {
@@ -213,7 +213,7 @@ public class SmsReceiver extends BroadcastReceiver {
 		// If Alarm acknowledge is enabled and alarm type equals primary, store full alarm message
 		if (enableAlarmAck && alarmType.equals(AlarmTypes.PRIMARY)) {
 			// Debug logging
-			logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":smsHandler()", "Alarm acknowledgement is enabled and alarm is of type primary, store full SMS to shared preferences");
+			logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":smsHandler()", "Alarm acknowledgement is enabled and alarm is of type PRIMARY, store full sms to shared preferences");
 
 			try {
 				// Enable acknowledge is enabled and alarm is of type primary
@@ -228,11 +228,11 @@ public class SmsReceiver extends BroadcastReceiver {
 			msgBody = msgBody.replace(m.group(1).toString() + "." + m.group(2).toString() + "." + m.group(3).toString() + m.group(4).toString() + m.group(5).toString() + ":" + m.group(6).toString() + ":" + m.group(7).toString() + m.group(8).toString() + m.group(9).toString() + "."
 					+ m.group(10).toString(), "");
 			// Debug logging
-			logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":smsHandler()", "SMS cleaned from unnecessary information");
+			logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":smsHandler()", "Sms cleaned from unnecessary information");
 		}
 		
 		// Debug logging
-		logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":smsHandler()", "Store SMS to shared preferences for show in notification bar");
+		logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":smsHandler()", "Store sms to shared preferences for show in notification bar");
 		
 		// Store message's body in shared prefs so it can be shown in notification
 		try {
@@ -256,7 +256,7 @@ public class SmsReceiver extends BroadcastReceiver {
 	}
 	
 	/**
-	 * Method used to get all shared preferences needed by class SmsReceiver
+	 * Method used to get all shared preferences needed by class SmsReceiver.
 	 * 
 	 * @param context
 	 *            Context
@@ -274,10 +274,10 @@ public class SmsReceiver extends BroadcastReceiver {
 		
 		try {
 			// Get shared preferences needed by SmsReceiver
-			primaryListenSmsNumbers = (List<String>) prefHandler.getPrefs(PrefKeys.SHARED_PREF, PrefKeys.PRIMARY_LISTEN_NUMBERS_KEY, DataTypes.LIST, context);
-			secondaryListenSmsNumbers = (List<String>) prefHandler.getPrefs(PrefKeys.SHARED_PREF, PrefKeys.SECONDARY_LISTEN_NUMBERS_KEY, DataTypes.LIST, context);
-			primaryListenFreeTexts = (List<String>) prefHandler.getPrefs(PrefKeys.SHARED_PREF, PrefKeys.PRIMARY_LISTEN_FREE_TEXTS_KEY, DataTypes.LIST, context);
-			secondaryListenFreeTexts = (List<String>) prefHandler.getPrefs(PrefKeys.SHARED_PREF, PrefKeys.SECONDARY_LISTEN_FREE_TEXTS_KEY, DataTypes.LIST, context);
+			primarySmsNumbers = (List<String>) prefHandler.getPrefs(PrefKeys.SHARED_PREF, PrefKeys.PRIMARY_LISTEN_NUMBERS_KEY, DataTypes.LIST, context);
+			secondarySmsNumbers = (List<String>) prefHandler.getPrefs(PrefKeys.SHARED_PREF, PrefKeys.SECONDARY_LISTEN_NUMBERS_KEY, DataTypes.LIST, context);
+			primaryFreeTexts = (List<String>) prefHandler.getPrefs(PrefKeys.SHARED_PREF, PrefKeys.PRIMARY_LISTEN_FREE_TEXTS_KEY, DataTypes.LIST, context);
+			secondaryFreeTexts = (List<String>) prefHandler.getPrefs(PrefKeys.SHARED_PREF, PrefKeys.SECONDARY_LISTEN_FREE_TEXTS_KEY, DataTypes.LIST, context);
 			primaryMessageToneId = (Integer) prefHandler.getPrefs(PrefKeys.SHARED_PREF, PrefKeys.PRIMARY_MESSAGE_TONE_KEY, DataTypes.INTEGER, context);
 			secondaryMessageToneId = (Integer) prefHandler.getPrefs(PrefKeys.SHARED_PREF, PrefKeys.SECONDARY_MESSAGE_TONE_KEY, DataTypes.INTEGER, context, 1);
 			useOsSoundSettings = (Boolean) prefHandler.getPrefs(PrefKeys.SHARED_PREF, PrefKeys.USE_OS_SOUND_SETTINGS_KEY, DataTypes.BOOLEAN, context);
@@ -292,7 +292,7 @@ public class SmsReceiver extends BroadcastReceiver {
 	}
 	
 	/**
-	 * To check if income SMS fulfill criteria for either a <b><i>PRIMARY</i></b>
+	 * To check if income sms fulfill criteria for either a <b><i>PRIMARY</i></b>
 	 * or <b><i>SECONDARY</i></b> alarm.
 	 * 
 	 * @param context
@@ -304,7 +304,7 @@ public class SmsReceiver extends BroadcastReceiver {
 	 */
 	private void checkAlarm(Context context) {
 		// Log message for debugging/information purpose
-		logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":checkAlarm()", "Checking if income SMS is an alarm");
+		logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":checkAlarm()", "Checking if income sms is an alarm");
 		
 		// Figure out if we got an alarm
 		checkSmsNumberAlarm(context);
@@ -312,7 +312,7 @@ public class SmsReceiver extends BroadcastReceiver {
 	}
 	
 	/**
-	 * To check if received SMS is any alarm.
+	 * To check if received sms is any alarm.
 	 * The check is done by a equality control of the senders phone number
 	 * and the phone numbers read from <code>SharedPreferences</code>. 
 	 * 
@@ -326,32 +326,33 @@ public class SmsReceiver extends BroadcastReceiver {
 	 */
 	private void checkSmsNumberAlarm(Context context) {
 		// Log message for debugging/information purpose
-		logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":checkSmsNumberAlarm()", "Checking if sender of income SMS should trigger an alarm");
+		logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":checkSmsNumberAlarm()", "Checking if sender of income sms should trigger an alarm");
 		
+		// Helper variable to avoid setting variable in each iteration
 		boolean isAlarm = false;
 		
-		for (String primaryListenSmsNumber : primaryListenSmsNumbers) {
-			if (msgHeader.equals(primaryListenSmsNumber)) {
+		for (String primarySmsNumber : primarySmsNumbers) {
+			if (msgHeader.equals(primarySmsNumber)) {
 				// Log information
-				logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":checkSmsNumberAlarm()", "SMS fulfilled the criteria for a PRIMARY alarm. SMS received from: \"" + msgHeader + "\" with message: \"" + msgBody + "\", triggered on number: " + primaryListenSmsNumber);
+				logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":checkSmsNumberAlarm()", "Sms fulfilled the criteria for a PRIMARY alarm. Sms received from: \"" + msgHeader + "\" with message: \"" + msgBody + "\", triggered on number: " + primarySmsNumber);
 				// Set helper variable
 				isAlarm = true;
 			}
 		}
 		
-		// Only set alarm type if we are sure that income SMS triggered on any primary listen sms number
+		// Only set alarm type if we are sure that income sms triggered on any primary sms number
 		if (isAlarm) {
 			// Set correct AlarmType
 			setAlarmType(AlarmTypes.PRIMARY, context);			
 		}
 		
-		// Only check if income SMS hasn't already been checked as PRIMARY alarm
+		// Only check if income sms hasn't already been checked as PRIMARY alarm
 		if (!AlarmTypes.PRIMARY.equals(alarmType)) {			
-			for (String secondaryListenSmsNumber : secondaryListenSmsNumbers) {
-				// If msg header equals a element in list application has received a SMS from a secondary listen number
-				if (msgHeader.equals(secondaryListenSmsNumber)) {
+			for (String secondarySmsNumber : secondarySmsNumbers) {
+				// If msg header equals a element in list application has received a SMS from a secondary number
+				if (msgHeader.equals(secondarySmsNumber)) {
 					// Log information
-					logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":checkSmsNumberAlarm()", "SMS fulfilled the criteria for a SECONDARY alarm. SMS received from: \"" + msgHeader + "\" with message: \"" + msgBody + "\", triggered on number: " + secondaryListenSmsNumber);
+					logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":checkSmsNumberAlarm()", "Sms fulfilled the criteria for a SECONDARY alarm. Sms received from: \"" + msgHeader + "\" with message: \"" + msgBody + "\", triggered on number: " + secondarySmsNumber);
 					isAlarm = true;
 				}
 			}
@@ -363,9 +364,9 @@ public class SmsReceiver extends BroadcastReceiver {
 	}
 	
 	/**
-	 * To check if received SMS is any alarm.
+	 * To check if received Sms is any alarm.
 	 * The check is done by a controlling if any of the free texts(words) is found 
-	 * in received SMS.
+	 * in received Sms.
 	 * 
 	 * @param context
 	 *            Context
@@ -378,15 +379,15 @@ public class SmsReceiver extends BroadcastReceiver {
 	 */
 	private void checkFreeTextAlarm(Context context) {
 		// Log message for debugging/information purpose
-		logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":checkFreeTextAlarm()", "Checking if income SMS is holding any text triggering a free text alarm");
+		logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":checkFreeTextAlarm()", "Checking if income sms is holding any text triggering a free text alarm");
 		
 		// Helper variable to avoid setting variable in each iteration
 		boolean isAlarm = false;
 		
-		for (String primaryFreeText : primaryListenFreeTexts) {
+		for (String primaryFreeText : primaryFreeTexts) {
 			if (findWordEqualsIgnore(primaryFreeText, msgBody)) {
 				// Log information
-				logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":checkFreeTextAlarm()", "SMS fulfilled the criteria for a PRIMARY alarm. SMS received from: \"" + msgHeader + "\" with message: \"" + msgBody + "\", triggered on freetext: " + primaryFreeText);
+				logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":checkFreeTextAlarm()", "Sms fulfilled the criteria for a PRIMARY alarm. Sms received from: \"" + msgHeader + "\" with message: \"" + msgBody + "\", triggered on freetext: " + primaryFreeText);
 				
 				// Set correct trigger text
 				setTriggerText(primaryFreeText);
@@ -404,9 +405,9 @@ public class SmsReceiver extends BroadcastReceiver {
 		
 		// Only check if income SMS hasn't already been checked as PRIMARY alarm
 		if (!AlarmTypes.PRIMARY.equals(alarmType)) {
-			for (String secondaryFreeText : secondaryListenFreeTexts) {
+			for (String secondaryFreeText : secondaryFreeTexts) {
 				if (findWordEqualsIgnore(secondaryFreeText, msgBody)) {
-					logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":checkFreeTextAlarm()", "SMS fulfilled the criteria for a SECONDARY alarm. SMS received from: \"" + msgHeader + "\" with message: \"" + msgBody + "\", triggered on freetext: " + secondaryFreeText);					
+					logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":checkFreeTextAlarm()", "Sms fulfilled the criteria for a SECONDARY alarm. Sms received from: \"" + msgHeader + "\" with message: \"" + msgBody + "\", triggered on freetext: " + secondaryFreeText);					
 					setTriggerText(secondaryFreeText);
 					isAlarm = true;
 				}
@@ -495,16 +496,20 @@ public class SmsReceiver extends BroadcastReceiver {
 
 				for (String word : words) {
 					if (wordToFind.equalsIgnoreCase(word)) {
+						logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":findWordEqualsIgnore()", "Word \"" + wordToFind + "\" was found in text=\"" + textToParse + "\", returning true");
 						return true;
 					}
 				}
-
+				
+				logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":findWordEqualsIgnore()", "Word \"" + wordToFind + "\" was not found in text=\"" + textToParse + "\", returning false");
 				return false;
 			} else {
-				throw new IllegalArgumentException("One or both of given arguments are empty. Arguments --> wordToFind = " + wordToFind + ", textToParse = " + textToParse);
+				logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":findWordEqualsIgnore()", "WordToFind and/or textToPArse are empty, wordToFind=\"" + wordToFind + "\", textToParse=\"" + textToParse + "\"");
+				return false;
 			}
 		} else {
-			throw new NullPointerException("One or both of given arguments are null. Arguments --> wordToFind = " + wordToFind + ", textToParse = " + textToParse);
+			logger.logCatTxt(LogPriorities.ERROR, LOG_TAG + ":findWordEqualsIgnore()", "WordToFind and/or textToPArse is null, wordToFind=\"" + wordToFind + "\", textToParse=\"" + textToParse + "\"");
+			return false;
 		}
 	}
 }

@@ -30,8 +30,8 @@ public class AcknowledgeNotificationHelper extends IntentService {
 	private final String LOG_TAG = getClass().getSimpleName();
 
 	// Objects needed for logging and shared preferences handling
-	private LogHandler logger = LogHandler.getInstance();
-	private PreferencesHandler prefHandler = PreferencesHandler.getInstance();
+	private final LogHandler logger = LogHandler.getInstance();
+	private final PreferencesHandler prefHandler = PreferencesHandler.getInstance();
 	
 	// Variables for notifications text and icon
 	private String tickerText = "";
@@ -68,6 +68,7 @@ public class AcknowledgeNotificationHelper extends IntentService {
 	 * 
 	 * @deprecated
 	 */
+	@Deprecated
 	@SuppressLint("DefaultLocale")
 	@Override
 	protected void onHandleIntent(Intent i) {
@@ -100,11 +101,10 @@ public class AcknowledgeNotificationHelper extends IntentService {
 		long when = System.currentTimeMillis();
 		
 		// Set proper texts and icon to notification
-		setNotificationTexts(android.R.drawable.ic_delete, getString(R.string.PRIMARY_ALARM), 
-				 				  rescueService.toUpperCase(), getString(R.string.PRIMARY_ALARM), message);
+		setNotificationTexts(android.R.drawable.ic_delete, getString(R.string.PRIMARY_ALARM), rescueService.toUpperCase(), getString(R.string.PRIMARY_ALARM), message);
 		
 		// Log
-		logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":onHandleIntent()", "Notification has been set for a primary alarm with acknowledgement");
+		logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":onHandleIntent()", "Notification has been set for a PRIMARY alarm with acknowledgement");
 
 		// Create notification
 		Notification notification = new Notification(icon, tickerText, when);

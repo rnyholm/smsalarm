@@ -63,8 +63,8 @@ public class LogHandler {
 
 	// Date and SimpleDateFormatter, to get current time in a certain
 	// format(LogCat like)
-	private Date today = Calendar.getInstance().getTime();
-	private SimpleDateFormat formatter = new SimpleDateFormat("yy-MM-dd HH:mm:ss.SSS");
+	private Date now = Calendar.getInstance().getTime();
+	private final SimpleDateFormat formatter = new SimpleDateFormat("yy-MM-dd HH:mm:ss.SSS");
 
 	// Variables to store external storage availability, both readable and writeable
 	private boolean mExternalStorageAvailable = false; // Practically unnecessary for this application, we just need to write
@@ -180,8 +180,7 @@ public class LogHandler {
 			Log.w(logTag, message, thr);
 			break;
 		default:
-			// Invalid log priority detected log another log message with this
-			// error and the origin log message
+			// Invalid log priority detected log another log message with this error and the origin log message
 			logCat(LogPriorities.ERROR, LOG_TAG + ":logCat()", "Log priority wasn't found, check that correct priority enumeration is used." + " Original logmessage came from: \"" + logTag + "\", with message: \"" + message + "\" and throwable: \"" + thr + "\"");
 		}
 	}
@@ -193,7 +192,7 @@ public class LogHandler {
 	 * Throws different exceptions depending on error.
 	 * 
 	 * @param priority
-	 *            Logpriority as LogPriorities
+	 *            Log priority as LogPriorities
 	 * @param logTag
 	 *            Log tag as string
 	 * @param message
@@ -208,13 +207,12 @@ public class LogHandler {
 	 */
 	public void logTxt(LogPriorities priority, String logTag, String message) {
 		// Get current time
-		today = Calendar.getInstance().getTime();
+		now = Calendar.getInstance().getTime();
 
 		// Check external storage status
 		checkExternalStorageState();
 
-		// Only if external storage is fully available can directory and file
-		// creating continue
+		// Only if external storage is fully available can directory and file creating continue
 		if (mExternalStorageAvailable == true && mExternalStorageWriteable == true) {
 
 			// Variable for file
@@ -238,30 +236,28 @@ public class LogHandler {
 			file = new File(saDir, TXT_LOG_FILE);
 
 			try {
-				// Create BufferedWriter with FileWriter of file, used to write
-				// to file
+				// Create BufferedWriter with FileWriter of file, used to write to file
 				BufferedWriter bW = new BufferedWriter(new FileWriter(file, true));
 
-				// Switch through the different log priorities and log the
-				// correct priority and message
+				// Switch through the different log priorities and log the correct priority and message
 				switch (priority) {
 				case ASSERT:
 					// HAS NO Log METHOD
 					break;
 				case DEBUG:
-					bW.write("DEBUG\t" + formatter.format(today) + "\t" + logTag + " - " + message + EOL);
+					bW.write("DEBUG\t" + formatter.format(now) + "\t" + logTag + " - " + message + EOL);
 					break;
 				case ERROR:
-					bW.write("ERROR\t" + formatter.format(today) + "\t" + logTag + " - " + message + EOL);
+					bW.write("ERROR\t" + formatter.format(now) + "\t" + logTag + " - " + message + EOL);
 					break;
 				case INFO:
-					bW.write("INFO\t" + formatter.format(today) + "\t" + logTag + " - " + message + EOL);
+					bW.write("INFO\t" + formatter.format(now) + "\t" + logTag + " - " + message + EOL);
 					break;
 				case VERBOSE:
-					bW.write("VERBOSE\t" + formatter.format(today) + "\t" + logTag + " - " + message + EOL);
+					bW.write("VERBOSE\t" + formatter.format(now) + "\t" + logTag + " - " + message + EOL);
 					break;
 				case WARN:
-					bW.write("WARN\t" + formatter.format(today) + "\t" + logTag + " - " + message + EOL);
+					bW.write("WARN\t" + formatter.format(now) + "\t" + logTag + " - " + message + EOL);
 					break;
 				default:
 					// Invalid log priority detected log another log message
@@ -305,7 +301,7 @@ public class LogHandler {
 	 */
 	public void logTxt(LogPriorities priority, String logTag, String message, Throwable thr) {
 		// Get current time
-		today = Calendar.getInstance().getTime();
+		now = Calendar.getInstance().getTime();
 
 		// Check external storage status
 		checkExternalStorageState();
@@ -346,19 +342,19 @@ public class LogHandler {
 					// HAS NO Log METHOD
 					break;
 				case DEBUG:
-					bW.write("DEBUG\t" + formatter.format(today) + "\t" + logTag + " - " + message + " - " + thr + EOL);
+					bW.write("DEBUG\t" + formatter.format(now) + "\t" + logTag + " - " + message + " - " + thr + EOL);
 					break;
 				case ERROR:
-					bW.write("ERROR\t" + formatter.format(today) + "\t" + logTag + " - " + message + " - " + thr + EOL);
+					bW.write("ERROR\t" + formatter.format(now) + "\t" + logTag + " - " + message + " - " + thr + EOL);
 					break;
 				case INFO:
-					bW.write("INFO\t" + formatter.format(today) + "\t" + logTag + " - " + message + " - " + thr + EOL);
+					bW.write("INFO\t" + formatter.format(now) + "\t" + logTag + " - " + message + " - " + thr + EOL);
 					break;
 				case VERBOSE:
-					bW.write("VERBOSE\t" + formatter.format(today) + "\t" + logTag + " - " + message + " - " + thr + EOL);
+					bW.write("VERBOSE\t" + formatter.format(now) + "\t" + logTag + " - " + message + " - " + thr + EOL);
 					break;
 				case WARN:
-					bW.write("WARN\t" + formatter.format(today) + "\t" + logTag + " - " + message + " - " + thr + EOL);
+					bW.write("WARN\t" + formatter.format(now) + "\t" + logTag + " - " + message + " - " + thr + EOL);
 					break;
 				default:
 					// Invalid log priority detected log another log message

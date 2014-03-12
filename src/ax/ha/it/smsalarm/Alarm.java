@@ -25,7 +25,7 @@ public class Alarm {
 	private final String LOG_TAG = getClass().getSimpleName();
 
 	// Object for logging
-	private LogHandler logger = LogHandler.getInstance();
+	private final LogHandler logger = LogHandler.getInstance();
 	
 	// Variables holding data for an alarm
 	private int id;					// Unique id for this alarm
@@ -69,7 +69,7 @@ public class Alarm {
 		acknowledged  = "-";
 		this.alarmType = alarmType;
 		// Log in debug purpose
-		logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":Alarm()", "A new Alarm object was created with following data: [" + toString() + "]");
+		logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":Alarm()", "A new alarm object was created with following data: [" + toString() + "]");
 	}
 	
 	/**
@@ -94,7 +94,7 @@ public class Alarm {
 		this.acknowledged  = acknowledged;
 		this.alarmType = alarmType;
 		// Log in debug purpose
-		logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":Alarm()", "A new Alarm object was created with following data: [" + toString() + "]");
+		logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":Alarm()", "A new nlarm object was created with following data: [" + toString() + "]");
 	}
 	
 	/**
@@ -108,11 +108,11 @@ public class Alarm {
 		// Check to see if the member variables are empty
 		if(getId() == 0 && received.isEmpty() && sender.isEmpty() && message.isEmpty() && triggerText.isEmpty() && acknowledged.isEmpty() && alarmType.equals(AlarmTypes.UNDEFINED)) {
 			// Log in debug purpose
-			logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":isEmpty()", "This Alarm object is empty, returning true");
+			logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":isEmpty()", "This alarm object is empty, returning true");
 			return true;
 		} else {
 			// Log in debug purpose
-			logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":isEmpty()", "This Alarm object is not empty, returning false");
+			logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":isEmpty()", "This alarm object is not empty, returning false");
 			return false;
 		}
 	}
@@ -336,7 +336,7 @@ public class Alarm {
 	 */
 	public AlarmTypes getAlarmType() {
 		// Log in debug purpose
-		logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":getAlarmType()", "Returning alarmType:\"" + alarmType.toString() + "\"");
+		logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":getAlarmType()", "Returning alarmtype:\"" + alarmType.toString() + "\"");
 		return alarmType;
 	}
 

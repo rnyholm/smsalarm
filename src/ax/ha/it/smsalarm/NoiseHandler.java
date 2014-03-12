@@ -28,13 +28,13 @@ public class NoiseHandler {
 	private static NoiseHandler INSTANCE;
 
 	// Log tag
-	private String LOG_TAG = getClass().getSimpleName();
+	private final String LOG_TAG = getClass().getSimpleName();
 
 	// Variable used to log messages
-	private LogHandler logger;
+	private final LogHandler logger;
 
 	// Initialize a MediaPlayer object
-	private MediaPlayer mPlayer = new MediaPlayer();
+	private final MediaPlayer mPlayer = new MediaPlayer();
 	
 	// Vibrator variable
 	private Vibrator vibrator;
@@ -103,7 +103,7 @@ public class NoiseHandler {
 		
 		// Check if mediaplayer isn't playing already, in case it's playing we don't need to set up the player
 		if(!mPlayer.isPlaying()) {
-			/* Declarations of different objects needed by makeNoise */
+			// Declarations of different objects needed by makeNoise
 			// AudioManager used to get and set different volume levels
 			final AudioManager am = (AudioManager) context.getSystemService(Context.AUDIO_SERVICE); 
 			// AssetFileDescriptor to get mp3 file
