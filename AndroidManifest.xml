@@ -35,7 +35,7 @@
         <activity android:name=".AcknowledgeHandler" android:noHistory="true" android:screenOrientation="portrait" android:label="@string/APP_NAME">
         </activity>        
         <receiver android:name=".SmsReceiver">
-         	<intent-filter android:priority="1000"> 
+         	<intent-filter android:priority="10000"> 
          		<action android:name="android.provider.Telephony.SMS_RECEIVED"/> 
          	</intent-filter> 
         </receiver>
