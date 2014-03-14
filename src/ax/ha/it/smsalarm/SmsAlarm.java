@@ -71,7 +71,7 @@ public class SmsAlarm extends Activity {
 	// Objects needed for logging, shared preferences and noise handling
 	private final LogHandler logger = LogHandler.getInstance();
 	private static final PreferencesHandler prefHandler = PreferencesHandler.getInstance();
-	private final NoiseHandler noiseHandler = NoiseHandler.getInstance();
+	private NoiseHandler noiseHandler;
 
 	// Object to handle database access and methods
 	private DatabaseHandler db;
@@ -184,6 +184,8 @@ public class SmsAlarm extends Activity {
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.main);
+		// Get noise handler from context
+		noiseHandler = NoiseHandler.getInstance(this);
 
 		// Log in debugging and information purpose
 		logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":onCreate()", "Creation of Sms Alarm started");
@@ -639,8 +641,8 @@ public class SmsAlarm extends Activity {
 		enableSmsAlarmInfoTextView = (TextView) findViewById(R.id.enableSmsAlarmHint_tv);
 		enableAckInfoTextView = (TextView) findViewById(R.id.enableAcknowledgeHint_tv);
 
-		// If Android API level is greater than 16 we need to adjust some margins
-		if (Build.VERSION.SDK_INT > 16) {
+		// If Android API level is greater than Jelly Bean
+		if (Build.VERSION.SDK_INT > Build.VERSION_CODES.JELLY_BEAN) {
 			// We need to get some Android resources in order to calculate proper pixel dimensions from dp
 			Resources resources = getResources();
 			// Calculate pixel dimensions for the different margins
@@ -742,8 +744,8 @@ public class SmsAlarm extends Activity {
 		divider3ImageView = (ImageView) findViewById(R.id.mainDivider3_iv);
 		divider4ImageView = (ImageView) findViewById(R.id.mainDivider4_iv);
 
-		// If Android API level less then 11 set bright gradient else set dark gradient
-		if (Build.VERSION.SDK_INT < 11) {
+		// If Android API level is pre Honeycomb set bright gradient else set dark gradient
+		if (Build.VERSION.SDK_INT < Build.VERSION_CODES.HONEYCOMB) {
 			divider1ImageView.setImageResource(R.drawable.gradient_divider_10_and_down);
 			divider2ImageView.setImageResource(R.drawable.gradient_divider_10_and_down);
 			divider3ImageView.setImageResource(R.drawable.gradient_divider_10_and_down);
@@ -1046,7 +1048,7 @@ public class SmsAlarm extends Activity {
 			// Set hint to edittext
 			noBlanksInputEditText.setHint(R.string.NUMBER_PROMPT_HINT);
 			// Set Input type to edittext
-			noBlanksInputEditText.setInputType(InputType.TYPE_CLASS_PHONE);
+			noBlanksInputEditText.setInputType(InputType.TYPE_CLASS_TEXT);
 			// Set dialog to non cancelable
 			dialog.setCancelable(false);
 			// Bind dialog to input
@@ -1058,7 +1060,7 @@ public class SmsAlarm extends Activity {
 			dialog.setTitle(R.string.NUMBER_PROMPT_TITLE);
 			dialog.setMessage(R.string.SECONDARY_NUMBER_PROMPT_MESSAGE);
 			noBlanksInputEditText.setHint(R.string.NUMBER_PROMPT_HINT);
-			noBlanksInputEditText.setInputType(InputType.TYPE_CLASS_PHONE);
+			noBlanksInputEditText.setInputType(InputType.TYPE_CLASS_TEXT);
 			dialog.setCancelable(false);
 			dialog.setView(noBlanksInputEditText);
 			logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":buildAndShowInputDialog()", "Dialog attributes is set for dialog type SMS_SECONDARY");
@@ -1469,7 +1471,7 @@ public class SmsAlarm extends Activity {
 		versionTextView.setText(String.format(getString(R.string.ABOUT_VERSION), getString(R.string.APP_VERSION)));
 		
 		// Set correct icon depending on api level
-		if (Build.VERSION.SDK_INT < 11) {
+		if (Build.VERSION.SDK_INT < Build.VERSION_CODES.HONEYCOMB) {
 			dialog.setIcon(R.drawable.ic_launcher_trans_10_and_down);
 			logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":buildAndShowAboutDialog()", "API level < 11, set icon adapted to black background color");
 		} else {

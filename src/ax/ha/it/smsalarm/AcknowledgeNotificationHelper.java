@@ -3,7 +3,6 @@
  */
 package ax.ha.it.smsalarm;
 
-import android.annotation.SuppressLint;
 import android.app.IntentService;
 import android.app.Notification;
 import android.app.NotificationManager;
@@ -69,7 +68,6 @@ public class AcknowledgeNotificationHelper extends IntentService {
 	 * @deprecated
 	 */
 	@Deprecated
-	@SuppressLint("DefaultLocale")
 	@Override
 	protected void onHandleIntent(Intent i) {
 		// Log information

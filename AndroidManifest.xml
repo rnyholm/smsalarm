@@ -3,7 +3,7 @@
     android:versionCode="9"
     android:versionName="2.2.1">
 
-    <uses-sdk android:minSdkVersion="8" android:targetSdkVersion="19" />
+    <uses-sdk android:minSdkVersion="8" android:targetSdkVersion="18" />
     <uses-feature android:name="android.hardware.telephony" android:required="true"/>
     <uses-feature android:name="android.software.app_widgets" android:required="false"/>
     
@@ -35,7 +35,7 @@
         <activity android:name=".AcknowledgeHandler" android:noHistory="true" android:screenOrientation="portrait" android:label="@string/APP_NAME">
         </activity>        
         <receiver android:name=".SmsReceiver">
-         	<intent-filter android:priority="10000"> 
+         	<intent-filter android:priority="999"> 
          		<action android:name="android.provider.Telephony.SMS_RECEIVED"/> 
          	</intent-filter> 
         </receiver>

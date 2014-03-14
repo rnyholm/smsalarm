@@ -3,7 +3,6 @@
  */
 package ax.ha.it.smsalarm;
 
-import android.annotation.SuppressLint;
 import android.app.IntentService;
 import android.app.Notification;
 import android.app.NotificationManager;
@@ -71,7 +70,6 @@ public class NotificationHelper extends IntentService {
 	 * @deprecated 
 	 */
 	@Deprecated
-	@SuppressLint("DefaultLocale")
 	@Override
 	protected void onHandleIntent(Intent i) {
 		// Log information
@@ -93,8 +91,18 @@ public class NotificationHelper extends IntentService {
 
 		logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":onHandleIntent()", "Shared preferences retrieved");
 
-		// Set intent 
+		/*
+		 * This string and intent opens the messaging directory on phone,
+		 * however due to this page;
+		 * http://stackoverflow.com/questions/3708737/go-to-inbox-in-android
+		 * fetched 21.10-11, this way of achieve the "go to messaging dir" is
+		 * highly unrecommended.Thats because this method uses undocumented API
+		 * and is not part of the Android core.This may or may not work on some
+		 * devices and versions!
+		 */
+		String SMS_MIME_TYPE = "vnd.android-dir/mms-sms";
 		Intent notificationIntent = new Intent(Intent.ACTION_MAIN); // Don't want to start any activity!
+		notificationIntent.setType(SMS_MIME_TYPE);
 		logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":onHandleIntent()", "Intent has been set");
 
 		// Setup a notification, directly from android development site

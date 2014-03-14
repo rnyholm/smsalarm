@@ -13,7 +13,9 @@ import android.content.BroadcastReceiver;
 import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
+import android.media.AudioManager;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.PowerManager;
 import android.telephony.SmsMessage;
@@ -36,7 +38,7 @@ public class SmsReceiver extends BroadcastReceiver {
 	// Objects needed for logging, shared preferences and noise handling
 	private final LogHandler logger = LogHandler.getInstance();
 	private final PreferencesHandler prefHandler = PreferencesHandler.getInstance();
-	private final NoiseHandler noiseHandler = NoiseHandler.getInstance();
+	private NoiseHandler noiseHandler;
 
 	// Lists of Strings containing primary- and secondary sms numbers
 	private List<String> primarySmsNumbers = new ArrayList<String>();
@@ -78,15 +80,25 @@ public class SmsReceiver extends BroadcastReceiver {
 	 * @see #removeCountryCode()
 	 * @see #checkAlarm(Context)
 	 * @see #getSmsReceivePrefs(Context)
+	 * @see NoiseHandler#getRingerModeHandler()
 	 * @see ax.ha.it.smsalarm.LogHandler#logCat(LogPriorities, String, String) logCat(LogPriorities, String, String)
 	 * @see ax.ha.it.smsalarm.LogHandler#logCatTxt(LogPriorities, String, String, Throwable) logCatTxt(LogPriorities, String, String, Throwable)
 	 * @see ax.ha.it.smsalarm.PreferencesHandler#setPrefs(PrefKeys, PrefKeys, Object, Context) setPrefs(PrefKeys, PrefKeys, Object, Context)
 	 */
 	@Override
 	public void onReceive(Context context, Intent intent) {
+		noiseHandler = NoiseHandler.getInstance(context);
+		
 		// Log message for debugging/information purpose
 		logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":onReceive()", "Sms received");
 
+		// If Android API level is greater or equals to KitKat
+		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+			// Log message for debugging/information purpose
+			logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":onReceive()", "Android version \"KitKat\" or higher detected, some special treatment needed");
+			noiseHandler.getRingerModeHandler().setRingerModeWithDelay(AudioManager.RINGER_MODE_SILENT);
+		}
+		
 		// Retrieve shared preferences
 		getSmsReceivePrefs(context);
 
@@ -458,7 +470,7 @@ public class SmsReceiver extends BroadcastReceiver {
 		logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":setTriggerText()", "Setting trigger text:\"" + triggerText + "\"");
 		
 		// If empty just add trigger text else concatenate and add trigger text
-		if (this.triggerText.isEmpty()) {
+		if (this.triggerText.length() == 0) {
 			this.triggerText = triggerText;
 		} else {
 			this.triggerText = this.triggerText + ", " + triggerText;
@@ -490,7 +502,7 @@ public class SmsReceiver extends BroadcastReceiver {
 	 */
 	private boolean findWordEqualsIgnore(String wordToFind, String textToParse) {
 		if (wordToFind != null && textToParse != null) {
-			if (!wordToFind.isEmpty() && !textToParse.isEmpty()) {
+			if ((wordToFind.length() != 0) && (textToParse.length() != 0)) {
 				List<String> words = new ArrayList<String>();
 				words = Arrays.asList(textToParse.split(" "));
 

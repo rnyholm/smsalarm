@@ -10,9 +10,9 @@
     <string name="SECONDARY_FREE_TEXT_PROMPT_MESSAGE">Ange ett ord som Sms Alarm ska larma sekundärlarm på om det finns i mottaget sms.</string>
     <string name="FREE_TEXT_PROMPT_HINT">Ord..</string>
     <string name="SECONDARY_NUMBER_PROMPT_MESSAGE">Ange ett telefonnummer som Sms Alarm larmar sekundärlarm på.</string>
-    <string name="TEXT_IS_NEEDED">En text måste anges för att kunna spara.</string>
+    <string name="TEXT_IS_NEEDED">Ett ord måste anges för att kunna spara.</string>
     <string name="NUMBER_IS_NEEDED">Ett telefonnummer måste anges för att kunna spara.</string>
-    <string name="DUPLICATED_FREE_TEXTS">Ord för primär- och sekundär larm får inte vara lika. Ange ett nytt ord.</string>
+    <string name="DUPLICATED_FREE_TEXTS">Ord för primär- och sekundärlarm får inte vara lika. Ange ett nytt ord.</string>
     <string name="FREE_TEXT_ALREADY_IN_PRIMARY_LIST">Angivet ord finns redan i listan av ord för primärlarm. Ange ett nytt ord.</string>
     <string name="FREE_TEXT_ALREADY_IN_SECONDARY_LIST">Angivet ord finns redan i listan av ord för sekundärlarm. Ange ett nytt ord.</string>
     <string name="NUMBER_ALREADY_IN_PRIMARY_LIST">Angivet telefonnummer finns redan i listan över primärlarm. Ange ett nytt telefonnummer.</string>

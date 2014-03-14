@@ -38,6 +38,8 @@ import ax.ha.it.smsalarm.PreferencesHandler.PrefKeys;
  * @author Robert Nyholm <robert.nyholm@aland.net>
  * @version 2.2
  * @since 1.1-SE
+ * 
+ * @see ListenToPhoneState
  */
 public class AcknowledgeHandler extends Activity {
 	// Log tag string
