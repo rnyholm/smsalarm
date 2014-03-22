@@ -6,8 +6,9 @@ v2.2.1(version code 9)
 -Möjligt att ställa in fritexttriggning både för primär- och sekundärlarm
 -Widgeten har fått ett till fält där den triggande texten syns, widgetenhar dessutom fått en annan formatering av kvitteringstiden
 -Alarmloggen har utökats för att även visa det triggande ordet
--Ökade prioritet för SmsReceivern till 10000
+-Ökade prioritet för SmsReceivern till 999
 -Target Android API level flyttades till 19(KitKat)
+-Lade till hantering för sms mottagning och KitKat(beta)
 
 v2.1.4(version code 8)
 -Lade till hantering för ytterligare landskoder(USA, Canada, Slovenia, Österrike, Nya Zeeland och Storbrittanien)

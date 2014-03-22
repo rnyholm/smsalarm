@@ -19,11 +19,11 @@ import ax.ha.it.smsalarm.PreferencesHandler.DataTypes;
 import ax.ha.it.smsalarm.PreferencesHandler.PrefKeys;
 
 /**
- * Splash activity, just shows splash screen and after a certain time or a tap
- * on screen activity switch to SmsAlarm.
+ * Splash activity, just shows splash screen and after a certain time or a tap on screen activity
+ * switch to SmsAlarm.
  * 
  * @author Robert Nyholm <robert.nyholm@aland.net>
- * @version 2.2
+ * @version 2.2.1
  * @since 2.1
  * 
  * @see #onCreate(Bundle)
@@ -44,13 +44,13 @@ public class Splash extends Activity {
 
 	// Variable indicating whether user license is agreed or not
 	private boolean endUserLicenseAgreed = false;
-	
-	// For the textview displaying version, needed in order to edit it 
+
+	// For the textview displaying version, needed in order to edit it
 	private TextView versionTextView;
 
 	/**
-	 * When activity starts, this method is the entry point. The splash screen
-	 * is built up within this method.
+	 * When activity starts, this method is the entry point. The splash screen is built up within
+	 * this method.
 	 * 
 	 * @param savedInstanceState
 	 *            Bundle
@@ -58,12 +58,11 @@ public class Splash extends Activity {
 	 * @see #buildAndShowEULADialog()
 	 * @see #switchActivity()
 	 * @see #onPause()
-	 * @see ax.ha.it.smsalarm.LogHandler#logCat(LogPriorities, String, String)
-	 *      logCat(LogPriorities, String, String)
-	 * @see ax.ha.it.smsalarm.PreferencesHandler#getPrefs(PrefKeys,
-	 *      PrefKeys,DataTypes, android.content.Context, Object)
-	 *      getPrefs(PrefKeys, PrefKeys,DataTypes, android.content.Context,
-	 *      Object)
+	 * @see ax.ha.it.smsalarm.LogHandler#logCat(LogPriorities, String, String) logCat(LogPriorities,
+	 *      String, String)
+	 * @see ax.ha.it.smsalarm.PreferencesHandler#getPrefs(PrefKeys, PrefKeys,DataTypes,
+	 *      android.content.Context, Object) getPrefs(PrefKeys, PrefKeys,DataTypes,
+	 *      android.content.Context, Object)
 	 */
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -71,7 +70,7 @@ public class Splash extends Activity {
 		// Remove title on activity
 		requestWindowFeature(Window.FEATURE_NO_TITLE);
 		setContentView(R.layout.splash);
-		
+
 		// Text with correct version number
 		versionTextView = (TextView) findViewById(R.id.splashVersion_tv);
 		versionTextView.setText(String.format(getString(R.string.SPLASH_VERSION), getString(R.string.APP_VERSION)));
@@ -80,18 +79,18 @@ public class Splash extends Activity {
 		logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":onCreate()", "Layout has been set with correct settings");
 
 		/*
-		 * Retrieve value from shared preferences, this is to decide if user has
-		 * agreed user the user license before or not
+		 * Retrieve value from shared preferences, this is to decide if user has agreed user the
+		 * user license before or not
 		 */
 		try {
 			endUserLicenseAgreed = (Boolean) prefHandler.getPrefs(PrefKeys.SHARED_PREF, PrefKeys.END_USER_LICENSE_AGREED, DataTypes.BOOLEAN, this, false);
-		} catch(IllegalArgumentException e) {
+		} catch (IllegalArgumentException e) {
 			logger.logCatTxt(LogPriorities.ERROR, LOG_TAG + ":onCreate()", "An unsupported datatype was given as argument to PreferencesHandler.getPrefs()", e);
-		} 
+		}
 
 		/*
-		 * Only set up onClickListener and start Runnable if user has agreed the
-		 * end user license agreement
+		 * Only set up onClickListener and start Runnable if user has agreed the end user license
+		 * agreement
 		 */
 		if (endUserLicenseAgreed) {
 			// Get a handle to the layout by finding it's id
@@ -127,8 +126,7 @@ public class Splash extends Activity {
 	}
 
 	/**
-	 * Removes messages from handler when application pauses. Also calls it's
-	 * superclass.
+	 * Removes messages from handler when application pauses. Also calls it's superclass.
 	 * 
 	 * @see #removeMessagesFromHandler()
 	 */
@@ -141,11 +139,10 @@ public class Splash extends Activity {
 	/**
 	 * To build up and show an EULA dialog.
 	 * 
-	 * @see ax.ha.it.smsalarm.LogHandler#logCat(LogPriorities, String, String)
-	 *      logCat(LogPriorities, String, String)
-	 * @see ax.ha.it.smsalarm.PreferencesHandler#setPrefs(PrefKeys, PrefKeys,
-	 *      Object, android.content.Context) setPrefs(PrefKeys, PrefKeys,
-	 *      Object, android.content.Context)
+	 * @see ax.ha.it.smsalarm.LogHandler#logCat(LogPriorities, String, String) logCat(LogPriorities,
+	 *      String, String)
+	 * @see ax.ha.it.smsalarm.PreferencesHandler#setPrefs(PrefKeys, PrefKeys, Object,
+	 *      android.content.Context) setPrefs(PrefKeys, PrefKeys, Object, android.content.Context)
 	 */
 	private void buildAndShowEULADialog() {
 		// Logging
@@ -173,9 +170,9 @@ public class Splash extends Activity {
 				// show this dialog again
 				try {
 					prefHandler.setPrefs(PrefKeys.SHARED_PREF, PrefKeys.END_USER_LICENSE_AGREED, true, Splash.this);
-				} catch(IllegalArgumentException e) {
+				} catch (IllegalArgumentException e) {
 					logger.logCatTxt(LogPriorities.ERROR, LOG_TAG + ":buildAndShowEULADialog().PositiveButton.OnClickListener().onClick()", "An Object of unsupported instance was given as argument to PreferencesHandler.setPrefs()", e);
-				} 
+				}
 				// Switch activity
 				switchActivity();
 			}
@@ -200,12 +197,11 @@ public class Splash extends Activity {
 	}
 
 	/**
-	 * Method to switch activity. Called either when user tap screen or delay
-	 * has passed.
+	 * Method to switch activity. Called either when user tap screen or delay has passed.
 	 * 
 	 * @see #onCreate(Bundle)
-	 * @see ax.ha.it.smsalarm.LogHandler#logCat(LogPriorities, String, String)
-	 *      logCat(LogPriorities, String, String)
+	 * @see ax.ha.it.smsalarm.LogHandler#logCat(LogPriorities, String, String) logCat(LogPriorities,
+	 *      String, String)
 	 */
 	private void switchActivity() {
 		// Create intent and start next activity from it
@@ -221,8 +217,8 @@ public class Splash extends Activity {
 	 * Method to remove messages from handler.
 	 * 
 	 * @see #onPause()
-	 * @see ax.ha.it.smsalarm.LogHandler#logCat(LogPriorities, String, String)
-	 *      logCat(LogPriorities, String, String)
+	 * @see ax.ha.it.smsalarm.LogHandler#logCat(LogPriorities, String, String) logCat(LogPriorities,
+	 *      String, String)
 	 */
 	private void removeMessagesFromHandler() {
 		// Null check in case user didn't agree the EULA

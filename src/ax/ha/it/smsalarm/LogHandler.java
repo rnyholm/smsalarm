@@ -18,27 +18,26 @@ import android.os.Environment;
 import android.util.Log;
 
 /**
- * This class is responsible for all logging. This means logging to LogCat,
- * errlog.txt and alarms.html.<br>
+ * This class is responsible for all logging. This means logging to LogCat, errlog.txt and
+ * alarms.html.<br>
  * <b><i>LogHandler is a singleton.</i></b>
  * 
  * @author Robert Nyholm <robert.nyholm@aland.net>
- * @version 2.2
+ * @version 2.2.1
  * @since 2.0
  */
 @SuppressLint("SimpleDateFormat")
 public class LogHandler {
 	/**
-	 * Enumeration for different LogPriorities needed to decide which kind of
-	 * logging we're suppose to do.
+	 * Enumeration for different LogPriorities needed to decide which kind of logging we're suppose
+	 * to do.
 	 * 
 	 * @author Robert Nyholm <robert.nyholm@aland.net>
 	 * @version 2.1.4
 	 * @since 2.1
 	 * 
-	 * @see <a
-	 *      href="http://developer.android.com/reference/android/util/Log.html">Log
-	 *      reference at Android Developers</a>
+	 * @see <a href="http://developer.android.com/reference/android/util/Log.html">Log reference at
+	 *      Android Developers</a>
 	 */
 	public enum LogPriorities {
 		ASSERT, DEBUG, ERROR, INFO, VERBOSE, WARN;
@@ -67,7 +66,8 @@ public class LogHandler {
 	private final SimpleDateFormat formatter = new SimpleDateFormat("yy-MM-dd HH:mm:ss.SSS");
 
 	// Variables to store external storage availability, both readable and writeable
-	private boolean mExternalStorageAvailable = false; // Practically unnecessary for this application, we just need to write
+	private boolean mExternalStorageAvailable = false; // Practically unnecessary for this
+														// application, we just need to write
 	private boolean mExternalStorageWriteable = false;
 
 	/**
@@ -93,9 +93,8 @@ public class LogHandler {
 	}
 
 	/**
-	 * Method to create a LogCat log message. If no valid priority value are
-	 * given it will log a message with <b><i>ERROR</i></b> priority with the
-	 * origin log message and current error.
+	 * Method to create a LogCat log message. If no valid priority value are given it will log a
+	 * message with <b><i>ERROR</i></b> priority with the origin log message and current error.
 	 * 
 	 * @param priority
 	 *            Logpriority as LogPriorities
@@ -113,35 +112,35 @@ public class LogHandler {
 		// Switch through the different log priorities and log the correct
 		// priority and message
 		switch (priority) {
-		case ASSERT:
-			// HAS NO Log METHOD
-			break;
-		case DEBUG:
-			Log.d(logTag, message);
-			break;
-		case ERROR:
-			Log.e(logTag, message);
-			break;
-		case INFO:
-			Log.i(logTag, message);
-			break;
-		case VERBOSE:
-			Log.v(logTag, message);
-			break;
-		case WARN:
-			Log.w(logTag, message);
-			break;
-		default:
-			// Invalid log priority detected log another log message with this
-			// error and the origin log message
-			logCat(LogPriorities.ERROR, LOG_TAG + ":logCat()", "Log priority wasn't found, check that correct priority enumeration is used." + " Original logmessage came from: \"" + logTag + "\", with message: \"" + message + "\"");
+			case ASSERT:
+				// HAS NO Log METHOD
+				break;
+			case DEBUG:
+				Log.d(logTag, message);
+				break;
+			case ERROR:
+				Log.e(logTag, message);
+				break;
+			case INFO:
+				Log.i(logTag, message);
+				break;
+			case VERBOSE:
+				Log.v(logTag, message);
+				break;
+			case WARN:
+				Log.w(logTag, message);
+				break;
+			default:
+				// Invalid log priority detected log another log message with this
+				// error and the origin log message
+				logCat(LogPriorities.ERROR, LOG_TAG + ":logCat()", "Log priority wasn't found, check that correct priority enumeration is used." + " Original logmessage came from: \"" + logTag + "\", with message: \"" + message + "\"");
 		}
 	}
 
 	/**
-	 * Method to create a LogCat log message with throwable object If no valid
-	 * priority value are given it will log a message with <b><i>ERROR</i></b>
-	 * priority with the origin log message and current error.
+	 * Method to create a LogCat log message with throwable object If no valid priority value are
+	 * given it will log a message with <b><i>ERROR</i></b> priority with the origin log message and
+	 * current error.
 	 * 
 	 * @param priority
 	 *            Logriority as LogPriorities
@@ -161,34 +160,34 @@ public class LogHandler {
 		// Switch through the different log priorities and log the correct
 		// priority, message and throwable
 		switch (priority) {
-		case ASSERT:
-			// HAS NO Log METHOD
-			break;
-		case DEBUG:
-			Log.d(logTag, message, thr);
-			break;
-		case ERROR:
-			Log.e(logTag, message, thr);
-			break;
-		case INFO:
-			Log.i(logTag, message, thr);
-			break;
-		case VERBOSE:
-			Log.v(logTag, message, thr);
-			break;
-		case WARN:
-			Log.w(logTag, message, thr);
-			break;
-		default:
-			// Invalid log priority detected log another log message with this error and the origin log message
-			logCat(LogPriorities.ERROR, LOG_TAG + ":logCat()", "Log priority wasn't found, check that correct priority enumeration is used." + " Original logmessage came from: \"" + logTag + "\", with message: \"" + message + "\" and throwable: \"" + thr + "\"");
+			case ASSERT:
+				// HAS NO Log METHOD
+				break;
+			case DEBUG:
+				Log.d(logTag, message, thr);
+				break;
+			case ERROR:
+				Log.e(logTag, message, thr);
+				break;
+			case INFO:
+				Log.i(logTag, message, thr);
+				break;
+			case VERBOSE:
+				Log.v(logTag, message, thr);
+				break;
+			case WARN:
+				Log.w(logTag, message, thr);
+				break;
+			default:
+				// Invalid log priority detected log another log message with this error and the
+				// origin log message
+				logCat(LogPriorities.ERROR, LOG_TAG + ":logCat()", "Log priority wasn't found, check that correct priority enumeration is used." + " Original logmessage came from: \"" + logTag + "\", with message: \"" + message + "\" and throwable: \"" + thr + "\"");
 		}
 	}
 
 	/**
-	 * Method to store a log message to file. If no valid priority value are
-	 * given it will log a message with <b><i>ERROR</i></b> priority with the
-	 * origin log message and current error.<br>
+	 * Method to store a log message to file. If no valid priority value are given it will log a
+	 * message with <b><i>ERROR</i></b> priority with the origin log message and current error.<br>
 	 * Throws different exceptions depending on error.
 	 * 
 	 * @param priority
@@ -222,9 +221,8 @@ public class LogHandler {
 			String root = Environment.getExternalStorageDirectory().toString();
 
 			/*
-			 * Create file objects, one representing the folder and one the
-			 * actual log file These are used to check if they already exists or
-			 * not
+			 * Create file objects, one representing the folder and one the actual log file These
+			 * are used to check if they already exists or not
 			 */
 			File saDir = new File(root + "/" + DIRECTORY);
 			File saFile = new File(root + "/" + DIRECTORY + "/" + TXT_LOG_FILE);
@@ -239,30 +237,31 @@ public class LogHandler {
 				// Create BufferedWriter with FileWriter of file, used to write to file
 				BufferedWriter bW = new BufferedWriter(new FileWriter(file, true));
 
-				// Switch through the different log priorities and log the correct priority and message
+				// Switch through the different log priorities and log the correct priority and
+				// message
 				switch (priority) {
-				case ASSERT:
-					// HAS NO Log METHOD
-					break;
-				case DEBUG:
-					bW.write("DEBUG\t" + formatter.format(now) + "\t" + logTag + " - " + message + EOL);
-					break;
-				case ERROR:
-					bW.write("ERROR\t" + formatter.format(now) + "\t" + logTag + " - " + message + EOL);
-					break;
-				case INFO:
-					bW.write("INFO\t" + formatter.format(now) + "\t" + logTag + " - " + message + EOL);
-					break;
-				case VERBOSE:
-					bW.write("VERBOSE\t" + formatter.format(now) + "\t" + logTag + " - " + message + EOL);
-					break;
-				case WARN:
-					bW.write("WARN\t" + formatter.format(now) + "\t" + logTag + " - " + message + EOL);
-					break;
-				default:
-					// Invalid log priority detected log another log message
-					// with this error and the origin log message
-					logTxt(LogPriorities.ERROR, LOG_TAG + ":logTxt()", "Can't write to file because log priority wasn't found, check that correct priority enumeration is used");
+					case ASSERT:
+						// HAS NO Log METHOD
+						break;
+					case DEBUG:
+						bW.write("DEBUG\t" + formatter.format(now) + "\t" + logTag + " - " + message + EOL);
+						break;
+					case ERROR:
+						bW.write("ERROR\t" + formatter.format(now) + "\t" + logTag + " - " + message + EOL);
+						break;
+					case INFO:
+						bW.write("INFO\t" + formatter.format(now) + "\t" + logTag + " - " + message + EOL);
+						break;
+					case VERBOSE:
+						bW.write("VERBOSE\t" + formatter.format(now) + "\t" + logTag + " - " + message + EOL);
+						break;
+					case WARN:
+						bW.write("WARN\t" + formatter.format(now) + "\t" + logTag + " - " + message + EOL);
+						break;
+					default:
+						// Invalid log priority detected log another log message
+						// with this error and the origin log message
+						logTxt(LogPriorities.ERROR, LOG_TAG + ":logTxt()", "Can't write to file because log priority wasn't found, check that correct priority enumeration is used");
 				}
 
 				// Ensure that everything has been written to the file and close
@@ -278,9 +277,9 @@ public class LogHandler {
 	}
 
 	/**
-	 * Method to store a log message and throwable to file. If no valid priority
-	 * value are given it will log a message with <b><i>ERROR</i></b> priority
-	 * with the origin log message and current error.<br>
+	 * Method to store a log message and throwable to file. If no valid priority value are given it
+	 * will log a message with <b><i>ERROR</i></b> priority with the origin log message and current
+	 * error.<br>
 	 * Throws different exceptions depending on error.
 	 * 
 	 * @param priority
@@ -317,9 +316,8 @@ public class LogHandler {
 			String root = Environment.getExternalStorageDirectory().toString();
 
 			/*
-			 * Create file objects, one representing the folder and one the
-			 * actual log file These are used to check if they already exists or
-			 * not
+			 * Create file objects, one representing the folder and one the actual log file These
+			 * are used to check if they already exists or not
 			 */
 			File saDir = new File(root + "/" + DIRECTORY);
 			File saFile = new File(root + "/" + DIRECTORY + "/" + TXT_LOG_FILE);
@@ -338,28 +336,28 @@ public class LogHandler {
 				// Switch through the different log priorities and log the
 				// correct priority and message
 				switch (priority) {
-				case ASSERT:
-					// HAS NO Log METHOD
-					break;
-				case DEBUG:
-					bW.write("DEBUG\t" + formatter.format(now) + "\t" + logTag + " - " + message + " - " + thr + EOL);
-					break;
-				case ERROR:
-					bW.write("ERROR\t" + formatter.format(now) + "\t" + logTag + " - " + message + " - " + thr + EOL);
-					break;
-				case INFO:
-					bW.write("INFO\t" + formatter.format(now) + "\t" + logTag + " - " + message + " - " + thr + EOL);
-					break;
-				case VERBOSE:
-					bW.write("VERBOSE\t" + formatter.format(now) + "\t" + logTag + " - " + message + " - " + thr + EOL);
-					break;
-				case WARN:
-					bW.write("WARN\t" + formatter.format(now) + "\t" + logTag + " - " + message + " - " + thr + EOL);
-					break;
-				default:
-					// Invalid log priority detected log another log message
-					// with this error and the origin log message
-					logTxt(LogPriorities.ERROR, LOG_TAG + ":logTxt()", "Can't write to file because log priority wasn't found, check that correct priority enumeration is used");
+					case ASSERT:
+						// HAS NO Log METHOD
+						break;
+					case DEBUG:
+						bW.write("DEBUG\t" + formatter.format(now) + "\t" + logTag + " - " + message + " - " + thr + EOL);
+						break;
+					case ERROR:
+						bW.write("ERROR\t" + formatter.format(now) + "\t" + logTag + " - " + message + " - " + thr + EOL);
+						break;
+					case INFO:
+						bW.write("INFO\t" + formatter.format(now) + "\t" + logTag + " - " + message + " - " + thr + EOL);
+						break;
+					case VERBOSE:
+						bW.write("VERBOSE\t" + formatter.format(now) + "\t" + logTag + " - " + message + " - " + thr + EOL);
+						break;
+					case WARN:
+						bW.write("WARN\t" + formatter.format(now) + "\t" + logTag + " - " + message + " - " + thr + EOL);
+						break;
+					default:
+						// Invalid log priority detected log another log message
+						// with this error and the origin log message
+						logTxt(LogPriorities.ERROR, LOG_TAG + ":logTxt()", "Can't write to file because log priority wasn't found, check that correct priority enumeration is used");
 				}
 
 				// Ensure that everything has been written to the file and close
@@ -373,27 +371,29 @@ public class LogHandler {
 			logCat(LogPriorities.WARN, LOG_TAG + ":logTxt()", "Cannot log to file because external storage isn't available, check earlier logs fore more details");
 		}
 	}
-	
+
 	/**
-	 * To return complete path to the alarm log file. Throws exception if alarm log file doesn't exist or
-	 * if external storage isn't available for reading.
+	 * To return complete path to the alarm log file. Throws exception if alarm log file doesn't
+	 * exist or if external storage isn't available for reading.
 	 * 
 	 * @return Full path to alarm log file as string
 	 * 
-	 * @throws IOException If alarm log file doesn't exist or if external storage isn't available for reading
+	 * @throws IOException
+	 *             If alarm log file doesn't exist or if external storage isn't available for
+	 *             reading
 	 */
 	public String getAlarmLogPath() throws IOException {
 		// Check external storage status
-		checkExternalStorageState();	
-		
+		checkExternalStorageState();
+
 		// Check if external storage is available for reading
 		if (mExternalStorageAvailable) {
 			// Get path to root
-			String root = Environment.getExternalStorageDirectory().toString();		
-			
-			// New file object from root, sms alarm directory and alarm log file name 
+			String root = Environment.getExternalStorageDirectory().toString();
+
+			// New file object from root, sms alarm directory and alarm log file name
 			File file = new File(root + "/" + DIRECTORY + "/" + HTML_ALARM_FILE);
-			
+
 			// Check if alarm log file exists
 			if (file.exists()) {
 				// Return path of alarm log file
@@ -401,7 +401,7 @@ public class LogHandler {
 			} else {
 				// Alarm log file doesn't exist
 				logCat(LogPriorities.WARN, LOG_TAG + ":getAlarmLogPath()", "Cannot return path to alarm log file because it doesn't exist");
-				
+
 				// Throw new exception
 				throw new IOException("Alarm log file:\"" + file.getPath() + "\" doesn't exist");
 			}
@@ -445,9 +445,8 @@ public class LogHandler {
 			String root = Environment.getExternalStorageDirectory().toString();
 
 			/*
-			 * Create file objects, one representing the folder and one the
-			 * actual html file These are used to check if they already exists
-			 * or not
+			 * Create file objects, one representing the folder and one the actual html file These
+			 * are used to check if they already exists or not
 			 */
 			File saDir = new File(root + "/" + DIRECTORY);
 			File saFile = new File(root + "/" + DIRECTORY + "/" + HTML_ALARM_FILE);
@@ -556,8 +555,7 @@ public class LogHandler {
 	}
 
 	/**
-	 * Method to check if needed directory or file for application exist, if not
-	 * theyr'e created.
+	 * Method to check if needed directory or file for application exist, if not theyr'e created.
 	 * 
 	 * @param saDir
 	 *            Path and name of directory as File
@@ -613,8 +611,7 @@ public class LogHandler {
 	}
 
 	/**
-	 * Method to create a LogCat message, it also stores the same information to
-	 * file.
+	 * Method to create a LogCat message, it also stores the same information to file.
 	 * 
 	 * @param priority
 	 *            Logpriority as LogPriorities
@@ -634,8 +631,8 @@ public class LogHandler {
 	}
 
 	/**
-	 * Method to create a LogCat message with throwable, it also stores the same
-	 * information to file.
+	 * Method to create a LogCat message with throwable, it also stores the same information to
+	 * file.
 	 * 
 	 * @param priority
 	 *            Logpriority as LogPriorities
@@ -657,9 +654,8 @@ public class LogHandler {
 	}
 
 	/**
-	 * This method checks the state of external storage media and decides
-	 * whether its available for reading and writing, only reading, only writing
-	 * or not available at all.
+	 * This method checks the state of external storage media and decides whether its available for
+	 * reading and writing, only reading, only writing or not available at all.
 	 * 
 	 * @see #logCatTxt(LogPriorities, String, String)
 	 * @see #logCatTxt(LogPriorities, String, String, Throwable)
@@ -678,8 +674,8 @@ public class LogHandler {
 			logCat(LogPriorities.WARN, LOG_TAG + ":checkExternalStorageState()", "Cannot write log, cause: External storage is not available for writing");
 		} else {
 			/*
-			 * Something else is wrong. It may be one of many other states, but
-			 * all we need to know is we can neither read nor write
+			 * Something else is wrong. It may be one of many other states, but all we need to know
+			 * is we can neither read nor write
 			 */
 			mExternalStorageAvailable = mExternalStorageWriteable = false;
 			logCat(LogPriorities.ERROR, LOG_TAG + ":checkExternalStorageState()", "Cannot write log, cause: External storage is not available for writing or reading");

@@ -27,17 +27,21 @@ import ax.ha.it.smsalarm.PreferencesHandler.PrefKeys;
  * application settings and sms senders phone number.
  * 
  * @author Robert Nyholm <robert.nyholm@aland.net>
- * @version 2.2
+ * @version 2.2.1
  * @since 0.9beta
  */
 public class SmsReceiver extends BroadcastReceiver {
 	// Log tag string
 	private final String LOG_TAG = getClass().getSimpleName();
 
+	// How long we should acquire wakelock
+	private final int WAKE_LOCKER_ACQUIRE_TIME = 20000;
+
 	// Objects needed for logging, shared preferences and noise handling
 	private final LogHandler logger = LogHandler.getInstance();
 	private final PreferencesHandler prefHandler = PreferencesHandler.getInstance();
-	private NoiseHandler noiseHandler;
+	private final NoiseHandler noiseHandler = NoiseHandler.getInstance();
+	private final KitKatHandler kitKatHandler = KitKatHandler.getInstance();
 
 	// Lists of Strings containing primary- and secondary sms numbers
 	private List<String> primarySmsNumbers = new ArrayList<String>();
@@ -88,18 +92,8 @@ public class SmsReceiver extends BroadcastReceiver {
 	 */
 	@Override
 	public void onReceive(Context context, Intent intent) {
-		noiseHandler = NoiseHandler.getInstance(context);
-
 		// Log message for debugging/information purpose
 		logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":onReceive()", "Sms received");
-
-		// If Android API level is greater or equals to KitKat
-		// Necessary that we do check this as soon as possible
-		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
-			// Log message for debugging/information purpose
-			logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":onReceive()", "Android version \"KitKat\" or higher detected, some special treatment needed");
-			noiseHandler.getKitKatHandler().handleKitKat();
-		}
 
 		// Retrieve shared preferences
 		getSmsReceivePrefs(context);
@@ -125,7 +119,15 @@ public class SmsReceiver extends BroadcastReceiver {
 				}
 
 				// Check if income SMS was an alarm
-				checkAlarm(context);
+				if (checkAlarm(context)) {
+					// If Android API level is greater or equals to KitKat
+					// Necessary that we do check this as soon as possible
+					if (isKitKatOrHigher()) {
+						// Log message for debugging/information purpose
+						logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":onReceive()", "Android version \"KitKat\" or higher detected, some special treatment needed");
+						kitKatHandler.handleKitKat(context);
+					}
+				}
 
 				// Check if the income SMS was any alarm
 				if (alarmType.equals(AlarmTypes.PRIMARY)) {
@@ -202,8 +204,14 @@ public class SmsReceiver extends BroadcastReceiver {
 		if (!pm.isScreenOn()) {
 			// Log message for debugging/information purpose
 			logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":smsHandler()", "Screen is:\"OFF\", need to acquire WakeLock");
-			// Wake up device by acquire a wakelock and then release it after given time
-			WakeLocker.acquireAndRelease(context, 20000);
+
+			// Wake up device by acquire a wakelock and then release it after given time, the time
+			// depends on if device runs on KitKat(or higher) or not
+			if (isKitKatOrHigher()) {
+				WakeLocker.acquireAndRelease(context, (WAKE_LOCKER_ACQUIRE_TIME + kitKatHandler.getRingerModeDelay()));
+			} else {
+				WakeLocker.acquireAndRelease(context, WAKE_LOCKER_ACQUIRE_TIME);
+			}
 		}
 
 		// Pattern for regular expression like this; dd.dd.dddd dd:dd:dd: d.d, alarm from
@@ -322,18 +330,22 @@ public class SmsReceiver extends BroadcastReceiver {
 	 * @param context
 	 *            Context
 	 * 
+	 * @return <code>true</code> if income sms was an alarm else <code>false</code>.
+	 * 
 	 * @see #checkSmsAlarm(Context)
 	 * @see #checkFreeTextAlarm(Context)
 	 * @see ax.ha.it.smsalarm.LogHandler#logCat(LogPriorities, String, String) logCat(LogPriorities,
 	 *      String, String)
 	 */
-	private void checkAlarm(Context context) {
+	private boolean checkAlarm(Context context) {
 		// Log message for debugging/information purpose
 		logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":checkAlarm()", "Checking if income sms is an alarm");
 
-		// Figure out if we got an alarm
-		checkSmsAlarm(context);
-		checkFreeTextAlarm(context);
+		// Figure out if we got an alarm and return appropriate value
+		boolean isSmsAlarm = checkSmsAlarm(context);
+		boolean isFreeTextAlarm = checkFreeTextAlarm(context);
+
+		return isSmsAlarm || isFreeTextAlarm;
 	}
 
 	/**
@@ -343,6 +355,8 @@ public class SmsReceiver extends BroadcastReceiver {
 	 * @param context
 	 *            Context
 	 * 
+	 * @return <code>true</code> if income sms was an alarm else <code>false</code>.
+	 * 
 	 * @see #setAlarmType(AlarmTypes, Context)
 	 * @see ax.ha.it.smsalarm.LogHandler#logCat(LogPriorities, String, String) logCat(LogPriorities,
 	 *      String, String)
@@ -351,7 +365,7 @@ public class SmsReceiver extends BroadcastReceiver {
 	 * @see ax.ha.it.smsalarm.PreferencesHandler#setPrefs(PrefKeys, PrefKeys, Object, Context)
 	 *      setPrefs(PrefKeys, PrefKeys, Object, Context)
 	 */
-	private void checkSmsAlarm(Context context) {
+	private boolean checkSmsAlarm(Context context) {
 		// Log message for debugging/information purpose
 		logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":checkSmsNumberAlarm()", "Checking if sender of income sms should trigger an alarm");
 
@@ -389,6 +403,8 @@ public class SmsReceiver extends BroadcastReceiver {
 				setAlarmType(AlarmTypes.SECONDARY, context);
 			}
 		}
+
+		return isAlarm;
 	}
 
 	/**
@@ -397,6 +413,8 @@ public class SmsReceiver extends BroadcastReceiver {
 	 * 
 	 * @param context
 	 *            Context
+	 * 
+	 * @return <code>true</code> if income sms was an alarm else <code>false</code>.
 	 * 
 	 * @see #setTriggerText(String)
 	 * @see #setAlarmType(AlarmTypes, Context)
@@ -407,7 +425,7 @@ public class SmsReceiver extends BroadcastReceiver {
 	 * @see ax.ha.it.smsalarm.PreferencesHandler#setPrefs(PrefKeys, PrefKeys, Object, Context)
 	 *      setPrefs(PrefKeys, PrefKeys, Object, Context)
 	 */
-	private void checkFreeTextAlarm(Context context) {
+	private boolean checkFreeTextAlarm(Context context) {
 		// Log message for debugging/information purpose
 		logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":checkFreeTextAlarm()", "Checking if income sms is holding any text triggering a free text alarm");
 
@@ -447,6 +465,8 @@ public class SmsReceiver extends BroadcastReceiver {
 				setAlarmType(AlarmTypes.SECONDARY, context);
 			}
 		}
+
+		return isAlarm;
 	}
 
 	/**
@@ -545,5 +565,25 @@ public class SmsReceiver extends BroadcastReceiver {
 			logger.logCatTxt(LogPriorities.ERROR, LOG_TAG + ":findWordEqualsIgnore()", "WordToFind and/or textToPArse is null, wordToFind=\"" + wordToFind + "\", textToParse=\"" + textToParse + "\"");
 			return false;
 		}
+	}
+
+	/**
+	 * Convenience method to figure out if <code>Build.VERSION.SDK_INT</code> equals to
+	 * <code>Build.VERSION_CODES.KITKAT</code> or higher.
+	 * 
+	 * @return <code>true</code> if <code>Build.VERSION.SDK_INT</code> equals to
+	 *         <code>Build.VERSION_CODES.KITKAT</code> else <code>false</code>.
+	 * 
+	 * @see LogHandler#logCat(LogPriorities, String, String)
+	 */
+	private boolean isKitKatOrHigher() {
+		// Android API level is greater or equals to KitKat
+		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+			logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":isKitKatOrHigher()", "Android version \"KitKat\" or higher detected, return true");
+			return true;
+		}
+
+		logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":isKitKatOrHigher()", "Android version lower than \"KitKat\" detected, return false");
+		return false;
 	}
 }

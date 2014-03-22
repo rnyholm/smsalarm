@@ -19,7 +19,7 @@ import ax.ha.it.smsalarm.LogHandler.LogPriorities;
  * <b><i>NoiseHandler is a singleton.</i></b>
  * 
  * @author Robert Nyholm <robert.nyholm@aland.net>
- * @version 2.2
+ * @version 2.2.1
  * @since 2.0
  * 
  * @see RingerModeHandler
@@ -30,6 +30,10 @@ public class NoiseHandler {
 
 	// Log tag
 	private final String LOG_TAG = getClass().getSimpleName();
+
+	// A limit time for how long we can wait for the kit kat handler to be idle, this works as a
+	// security to be sure that noise always going to be made
+	private final long NOISE_DELAY_LIMIT = 10000;
 
 	// Variable used to log messages
 	private final LogHandler logger;
@@ -49,11 +53,11 @@ public class NoiseHandler {
 	 * @see ax.ha.it.smsalarm.LogHandler#logCat(LogPriorities, String, String) logCat(LogPriorities,
 	 *      String, String)
 	 */
-	private NoiseHandler(Context context) {
+	private NoiseHandler() {
 		// Get instance of logger
 		logger = LogHandler.getInstance();
-
-		kitKatHandler = new KitKatHandler(context);
+		// Get instance of kitkathandler
+		kitKatHandler = KitKatHandler.getInstance();
 
 		// Log information
 		logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":NoiseHandler()", "New instance of NoiseHandler created");
@@ -64,24 +68,13 @@ public class NoiseHandler {
 	 * 
 	 * @return Singleton instance of NoiseHandler
 	 */
-	public static NoiseHandler getInstance(Context context) {
+	public static NoiseHandler getInstance() {
 		// If instance of this object is null create a new one
 		if (INSTANCE == null) {
-			INSTANCE = new NoiseHandler(context);
+			INSTANCE = new NoiseHandler();
 		}
 
 		return INSTANCE;
-	}
-
-	/**
-	 * To return this objects <code>KitKatHandler</code>.
-	 * 
-	 * @return This objects kitkat handler.
-	 * 
-	 * @see KitKatHandler
-	 */
-	public KitKatHandler getKitKatHandler() {
-		return kitKatHandler;
 	}
 
 	/**
@@ -117,10 +110,12 @@ public class NoiseHandler {
 		// Log information
 		logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":makeNoise()", "Preparing to play message tone and vibrate");
 
+		// Need to know when called this method
+		long startTimeMillis = System.currentTimeMillis();
+
 		// Need to wait until kitkat handler is in idle mode
-		while (!kitKatHandler.isIdle()) {
-			// logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":makeNoise()",
-			// "KitKatHandler running, waiting....");
+		while (!kitKatHandler.isIdle() && (System.currentTimeMillis() < (startTimeMillis + NOISE_DELAY_LIMIT))) {
+			logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":makeNoise()", "KitKatHandler running, waiting....");
 		}
 
 		// Check if mediaplayer isn't playing already, in case it's playing we don't need to set up

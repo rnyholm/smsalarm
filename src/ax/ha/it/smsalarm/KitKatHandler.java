@@ -11,11 +11,16 @@ import ax.ha.it.smsalarm.LogHandler.LogPriorities;
 
 /**
  * This class is responsible for any special handling that needs to be done according to
- * <b><i>KitKat</i></b>'s (and higher) retarded behavior when receiving an sms.
+ * <b><i>KitKat</i></b>'s (and higher) retarded behavior when receiving an sms.<br>
+ * <b><i>LogHandler is a singleton.</i></b>
+ * <p>
+ * 
+ * <b><i>Note!<br>
+ * This class and it's functionality is still in BETA state.</i></b>
  * 
  * @author Robert Nyholm <robert.nyholm@aland.net>
- * @version 2.2
- * @since 2.2
+ * @version 2.2.1
+ * @since 2.2.1
  */
 public class KitKatHandler {
 
@@ -23,28 +28,31 @@ public class KitKatHandler {
 	 * Valid notifications bar actions.
 	 * 
 	 * @author Robert Nyholm <robert.nyholm@aland.net>
-	 * @version 2.2
-	 * @since 2.2
+	 * @version 2.2.1
+	 * @since 2.2.1
 	 */
 	private enum NotificationsBarActions {
 		EXPAND, COLLAPSE;
 	}
 
+	// Singleton instance of this class
+	private static KitKatHandler INSTANCE;
+
 	// Log tag
 	private final String LOG_TAG = getClass().getSimpleName();
 
 	// Wished delay for a ringer mode switch and a notifications bar expand/collapse
-	private final static int RINGER_MODE_DELAY = 10000;
+	private final static int RINGER_MODE_DELAY = 7000;
 	private final static int NOTIFICATIONS_BAR_EXPAND_COLLAPSE_DELAY = 1000;
 
 	// Variable used to log messages
 	private final LogHandler logger = LogHandler.getInstance();
 
 	// Ringer mode handling
-	private final AudioManager am;
+	private AudioManager am;
 
 	// Context is needed
-	private final Context context;
+	private Context context;
 
 	// Devices original ringer mode are stored in this variable during ringer mode change
 	private int RINGER_MODE = -1;
@@ -53,19 +61,27 @@ public class KitKatHandler {
 	private boolean ringerModeSwitchInProgress = false;
 
 	/**
-	 * Construct a new <code>KitKatHandler</code> object with correct <code>Context</code>.
-	 * 
-	 * @param context
-	 *            Context from which KitKatHandler get
-	 *            <code>systemService(Context.AUDIO_SERVICE)</code> and
-	 *            <code>systemService("statusbar")</code> from.
+	 * Construct a new <code>KitKatHandler</code>. Private constructor, is private due to it's
+	 * singleton pattern.
 	 * 
 	 * @see LogHandler#logCat(LogPriorities, String, String)
 	 */
-	public KitKatHandler(Context context) {
-		this.context = context;
-		am = (AudioManager) context.getSystemService(Context.AUDIO_SERVICE);
-		logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":KitKatHandler()", "New instance of RingerModeHandler created");
+	private KitKatHandler() {
+		logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":KitKatHandler()", "New instance of KitKatHandler created");
+	}
+
+	/**
+	 * Method to get the singleton instance of this class.
+	 * 
+	 * @return Singleton instance of LogHandler
+	 */
+	public static KitKatHandler getInstance() {
+		// If instance of this object is null create a new one
+		if (INSTANCE == null) {
+			INSTANCE = new KitKatHandler();
+		}
+
+		return INSTANCE;
 	}
 
 	/**
@@ -76,9 +92,21 @@ public class KitKatHandler {
 	 * The notifications bar is expanded and after a certain amount of time collapsed, this is to
 	 * pop away the default sms applications LED notification from the queue so out LED notification
 	 * goes through.
+	 * 
+	 * @param context
+	 *            Context from which to get system services.
+	 * 
+	 * @see #setSilent()
+	 * @see #expandCollapseNotificationsBarWithDelay()
+	 * @see LogHandler#logCat(LogPriorities, String, String)
 	 */
-	public void handleKitKat() {
+	public void handleKitKat(Context context) {
+		// Set context, we need it later, also get audiomanager from context
+		this.context = context;
+		am = (AudioManager) context.getSystemService(Context.AUDIO_SERVICE);
+
 		logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":handleKitKat()", "Special handling for KitKat and higher is about to be done");
+
 		setSilentModeWithDelay();
 		expandCollapseNotificationsBarWithDelay();
 	}
@@ -244,6 +272,15 @@ public class KitKatHandler {
 		// audiomanager is null
 		logger.logCatTxt(LogPriorities.ERROR, LOG_TAG + ":setSilent()", "Failed to put device into RINGER_MODE_SILENT");
 		return false;
+	}
+
+	/**
+	 * To get this objects ringer mode delay in ms.
+	 * 
+	 * @return This objects <code>RINGER_MODE_DELAY</code>.
+	 */
+	public int getRingerModeDelay() {
+		return RINGER_MODE_DELAY;
 	}
 
 	/**

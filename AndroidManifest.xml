@@ -20,6 +20,7 @@
     <supports-screens android:largeScreens="true" android:xlargeScreens="true" />
     
     <application android:label="@string/APP_NAME"
+        android:enabled="true"
         android:icon="@drawable/ic_launcher"
         android:theme="@style/AppTheme" android:allowBackup="false" android:name="UpdateHandler">
         <activity android:name=".Splash" android:label="@string/APP_NAME" android:noHistory="true" android:screenOrientation="portrait">
@@ -35,7 +36,7 @@
         </activity>       
         <activity android:name=".AcknowledgeHandler" android:noHistory="true" android:screenOrientation="portrait" android:label="@string/APP_NAME">
         </activity>        
-        <receiver android:name=".SmsReceiver">
+        <receiver android:name=".SmsReceiver" android:enabled="true" android:exported="true">
          	<intent-filter android:priority="999"> 
          		<action android:name="android.provider.Telephony.SMS_RECEIVED"/> 
          	</intent-filter> 
