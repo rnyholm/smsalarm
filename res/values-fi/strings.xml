@@ -66,8 +66,8 @@
     <string name="NO_RECEIVED_ALARMS_EXISTS">Hälytystä ei ole saatu vielä.</string>
     <string name="NO_SECONDARY_FREE_TEXT_EXISTS">Ei ole toissijaishälytyssanaa, ei voi poistaa sanaa.</string>
     <string name="NO_SECONDARY_NUMBER_EXISTS">Ei ole toissijaishälytysnumeroa, ei voi poistaa numeroa.</string>
-    <string name="NUMBER_ALREADY_IN_PRIMARY_LIST">Annettu puh.nro. on jo ensisijaishälytyslistalla. Anna uusi puhelinnumero.</string>  
-    <string name="NUMBER_ALREADY_IN_SECONDARY_LIST">Annettu puh.nro. on jo toissijaishälytyslistalla. Anna uusi puhelinnumero.</string>
+    <string name="NUMBER_ALREADY_IN_PRIMARY_LIST">Annettu puhelinnumero on jo ensisijaishälytyslistalla. Anna uusi puhelinnumero.</string>  
+    <string name="NUMBER_ALREADY_IN_SECONDARY_LIST">Annettu puhelinnumero on jo toissijaishälytyslistalla. Anna uusi puhelinnumero.</string>
     <string name="NUMBER_IS_NEEDED">Textin säästämiseksi on annettava puh.nro.</string>
     <string name="NUMBER_PROMPT_HINT">Puhelinnumerot..</string>
     <string name="NUMBER_PROMPT_TITLE">Anna puhelinnumero</string>

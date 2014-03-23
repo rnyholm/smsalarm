@@ -21,7 +21,7 @@
     <string name="APP_NAME">Sms Alarm</string>
     <string name="APP_DESCR">The Alarm application for Android&#8482;</string>
 	<string name="APP_VERSION">2.2.1</string>   
-	<string name="APP_BUILD">20140312</string>
+	<string name="APP_BUILD">20140323</string>
 	<!-- Application info end -->
     <string name="CANCEL">Cancel</string>
 	<string name="COLON">:</string>
@@ -58,6 +58,7 @@
     <string name="HTML_WIDGET_RECEIVED_ALARMS">Received Alarm</string>
     <string name="HTML_WIDGET_RECEIVED">Received</string>
     <string name="HTML_WIDGET_SENDER">Sender</string>
+    <string name="HTML_WIDGET_TRIGGER_TEXT">Trigger word</string>
     <string name="INFO_ACK_SETTINGS">Set if alarm acknowlegment should be used and in such case which telephone number the acknowledgment should use.</string>
     <string name="INFO_ENABLE_ACKNOWLEDGE">If selected primary alarm can be acknowledged.</string>
     <string name="INFO_ENABLE_SMS_ALARM">If selected Sms Alarm will contact given telephone number, otherwise the application will not.</string>
