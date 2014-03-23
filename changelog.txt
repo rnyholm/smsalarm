@@ -1,5 +1,8 @@
 SmsAlarm changelog
 
+v2.2.2(version code 10)
+-Fixade textinmatningsbugg
+
 v2.2.1(version code 9)
 -Möjligt att lägga till fler än ett telefonnummer för primärlarm
 -Möjligt att ange alfanumeriska tecken för telefonnummer

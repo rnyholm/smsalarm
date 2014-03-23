@@ -1100,7 +1100,7 @@ public class SmsAlarm extends Activity {
 				// Set hint to edittext
 				noBlanksInputEditText.setHint(R.string.NUMBER_PROMPT_HINT);
 				// Set Input type to edittext
-				noBlanksInputEditText.setInputType(InputType.TYPE_CLASS_TEXT);
+				noBlanksInputEditText.setInputType(InputType.TYPE_TEXT_FLAG_AUTO_COMPLETE);
 				// Set dialog to non cancelable
 				dialog.setCancelable(false);
 				// Bind dialog to input
@@ -1112,7 +1112,7 @@ public class SmsAlarm extends Activity {
 				dialog.setTitle(R.string.NUMBER_PROMPT_TITLE);
 				dialog.setMessage(R.string.SECONDARY_NUMBER_PROMPT_MESSAGE);
 				noBlanksInputEditText.setHint(R.string.NUMBER_PROMPT_HINT);
-				noBlanksInputEditText.setInputType(InputType.TYPE_CLASS_TEXT);
+				noBlanksInputEditText.setInputType(InputType.TYPE_TEXT_FLAG_AUTO_COMPLETE);
 				dialog.setCancelable(false);
 				dialog.setView(noBlanksInputEditText);
 				logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":buildAndShowInputDialog()", "Dialog attributes is set for dialog type SMS_SECONDARY");
@@ -1121,7 +1121,7 @@ public class SmsAlarm extends Activity {
 				dialog.setTitle(R.string.FREE_TEXT_PROMPT_TITLE);
 				dialog.setMessage(R.string.PRIMARY_FREE_TEXT_PROMPT_MESSAGE);
 				noBlanksInputEditText.setHint(R.string.FREE_TEXT_PROMPT_HINT);
-				noBlanksInputEditText.setInputType(InputType.TYPE_CLASS_TEXT);
+				noBlanksInputEditText.setInputType(InputType.TYPE_TEXT_FLAG_AUTO_COMPLETE);
 				dialog.setCancelable(false);
 				dialog.setView(noBlanksInputEditText);
 				logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":buildAndShowInputDialog()", "Dialog attributes is set for dialog type FREE_TEXT_PRIMARY");
@@ -1130,7 +1130,7 @@ public class SmsAlarm extends Activity {
 				dialog.setTitle(R.string.FREE_TEXT_PROMPT_TITLE);
 				dialog.setMessage(R.string.SECONDARY_FREE_TEXT_PROMPT_MESSAGE);
 				noBlanksInputEditText.setHint(R.string.FREE_TEXT_PROMPT_HINT);
-				noBlanksInputEditText.setInputType(InputType.TYPE_CLASS_TEXT);
+				noBlanksInputEditText.setInputType(InputType.TYPE_TEXT_FLAG_AUTO_COMPLETE);
 				dialog.setCancelable(false);
 				dialog.setView(noBlanksInputEditText);
 				logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":buildAndShowInputDialog()", "Dialog attributes is set for dialog type FREE_TEXT_SECONDARY");
