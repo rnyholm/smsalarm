@@ -16,9 +16,9 @@ import android.content.res.Resources;
 import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
-import android.text.InputFilter;
+import android.text.Editable;
 import android.text.InputType;
-import android.text.Spanned;
+import android.text.TextWatcher;
 import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -643,56 +643,33 @@ public class SmsAlarm extends Activity {
 			// We need to get some Android resources in order to calculate proper pixel dimensions
 			// from dp
 			Resources resources = getResources();
+
 			// Calculate pixel dimensions for the different margins
-			int pixelsLeft = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 32, resources.getDisplayMetrics()); // 32dp
-																																// calculated
-																																// to
-																																// pixels
-			int pixelsRight = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 5, resources.getDisplayMetrics()); // 5dp
-																																// calculated
-																																// to
-																																// pixels
+			// 32dp calculated to pixels
+			int pixelsLeft = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 32, resources.getDisplayMetrics());
+			// 5dp calculated to pixels
+			int pixelsRight = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 5, resources.getDisplayMetrics());
 			int pixelsTop = 0;
 			// If the locale on device is german(de) set pixelstop to -6dp else -9dp
 			if ("de".equals(Locale.getDefault().getLanguage())) {
 				// Logging
 				logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":findViews()", "The device has german(de) locale, set different margin-top on information TextViews for the checkboxes than other locales");
-				pixelsTop = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, -6, resources.getDisplayMetrics()); // -6dp
-																																// calculated
-																																// to
-																																// pixels
+				// -6dp calculated to pixels
+				pixelsTop = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, -6, resources.getDisplayMetrics());
 			} else {
-				pixelsTop = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, -9, resources.getDisplayMetrics()); // -9dp
-																																// calculated
-																																// to
-																																// pixels
+				// -9dp calculated to pixels
+				pixelsTop = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, -9, resources.getDisplayMetrics());
 			}
 
 			// Set layout parameters for the sound settings info textview
-			RelativeLayout.LayoutParams paramsSoundSettingInfoTextView = new RelativeLayout.LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT); // Wrap
-																																								// content,
-																																								// both
-																																								// on
-																																								// height
-																																								// and
-																																								// width
-			paramsSoundSettingInfoTextView.setMargins(pixelsLeft, pixelsTop, pixelsRight, 0); // Margins
-																								// left,
-																								// top,
-																								// right,
-																								// bottom
-			paramsSoundSettingInfoTextView.addRule(RelativeLayout.BELOW, soundSettingCheckBox.getId()); // Add
-																										// rule,
-																										// below
-																										// UI
-																										// widget
-			paramsSoundSettingInfoTextView.addRule(RelativeLayout.ALIGN_LEFT, soundSettingCheckBox.getId()); // Add
-																												// rule,
-																												// align
-																												// left
-																												// of
-																												// UI
-																												// widget
+			// Wrap content, both on height and width
+			RelativeLayout.LayoutParams paramsSoundSettingInfoTextView = new RelativeLayout.LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
+			// Margins left, top, right, bottom
+			paramsSoundSettingInfoTextView.setMargins(pixelsLeft, pixelsTop, pixelsRight, 0);
+			// Add rule, below UI widget
+			paramsSoundSettingInfoTextView.addRule(RelativeLayout.BELOW, soundSettingCheckBox.getId());
+			// Add rule, align left of UI widget
+			paramsSoundSettingInfoTextView.addRule(RelativeLayout.ALIGN_LEFT, soundSettingCheckBox.getId());
 
 			// Set layout parameters for the play tone twice textview
 			RelativeLayout.LayoutParams paramsPlayToneTwiceInfoTextView = new RelativeLayout.LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
@@ -730,44 +707,22 @@ public class SmsAlarm extends Activity {
 				Resources resources = getResources();
 
 				// Calculate pixel dimensions for the different margins
-				int pixelsLeft = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 38, resources.getDisplayMetrics()); // 38dp
-																																	// calculated
-																																	// to
-																																	// pixels
-				int pixelsRight = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 5, resources.getDisplayMetrics()); // 5dp
-																																	// calculated
-																																	// to
-																																	// pixels
-				int pixelsTop = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, -6, resources.getDisplayMetrics()); // -6dp
-																																	// calculated
-																																	// to
-																																	// pixels
+				// 38dp calculated to pixels
+				int pixelsLeft = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 38, resources.getDisplayMetrics());
+				// 5dp calculated to pixels
+				int pixelsRight = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 5, resources.getDisplayMetrics());
+				// -6dp calculated to pixels
+				int pixelsTop = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, -6, resources.getDisplayMetrics());
 
 				// Set layout parameters for the sound settings info textview
-				RelativeLayout.LayoutParams paramsSoundSettingInfoTextView = new RelativeLayout.LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT); // Wrap
-																																									// content,
-																																									// both
-																																									// on
-																																									// height
-																																									// and
-																																									// width
-				paramsSoundSettingInfoTextView.setMargins(pixelsLeft, pixelsTop, pixelsRight, 0); // Margins
-																									// left,
-																									// top,
-																									// right,
-																									// bottom
-				paramsSoundSettingInfoTextView.addRule(RelativeLayout.BELOW, soundSettingCheckBox.getId()); // Add
-																											// rule,
-																											// below
-																											// UI
-																											// widget
-				paramsSoundSettingInfoTextView.addRule(RelativeLayout.ALIGN_LEFT, soundSettingCheckBox.getId()); // Add
-																													// rule,
-																													// align
-																													// left
-																													// of
-																													// UI
-																													// widget
+				// Wrap content, both on height and width
+				RelativeLayout.LayoutParams paramsSoundSettingInfoTextView = new RelativeLayout.LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
+				// Margins left, top, right, bottom
+				paramsSoundSettingInfoTextView.setMargins(pixelsLeft, pixelsTop, pixelsRight, 0);
+				// Add rule, below UI widget
+				paramsSoundSettingInfoTextView.addRule(RelativeLayout.BELOW, soundSettingCheckBox.getId());
+				// Add rule, align left of UI widget
+				paramsSoundSettingInfoTextView.addRule(RelativeLayout.ALIGN_LEFT, soundSettingCheckBox.getId());
 
 				// Set layout parameters for the play tone twice textview
 				RelativeLayout.LayoutParams paramsPlayToneTwiceInfoTextView = new RelativeLayout.LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
@@ -1075,17 +1030,31 @@ public class SmsAlarm extends Activity {
 		final EditText inputEditText = new EditText(this);
 		final EditText noBlanksInputEditText = new EditText(this);
 
-		// Filter that trim away any blank space character, in practice this means that only a
-		// single word is allowed to be written
-		InputFilter filter = new InputFilter() {
+		// Set a textwatcher to the edittext removing any whitespace characters
+		noBlanksInputEditText.addTextChangedListener(new TextWatcher() {
 			@Override
-			public CharSequence filter(CharSequence source, int start, int end, Spanned dest, int dstart, int dend) {
-				return source.toString().trim();
+			public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+				// Do nothing here!
 			}
-		};
 
-		// Set filter to free text input
-		noBlanksInputEditText.setFilters(new InputFilter[] { filter });
+			@Override
+			public void onTextChanged(CharSequence s, int start, int before, int count) {
+				// Do nothing here!
+			}
+
+			@Override
+			public void afterTextChanged(Editable editable) {
+				// Store input from edittext as a string stripped from whitespace
+				String result = editable.toString().replaceAll(" ", "");
+
+				// If input from edittext and result don't have the same length whitespace has been
+				// stripped, we need to set text to edittext and move cursor to correct position
+				if (!editable.toString().equals(result)) {
+					noBlanksInputEditText.setText(result);
+					noBlanksInputEditText.setSelection(result.length());
+				}
+			}
+		});
 
 		/*
 		 * Switch through the different dialog types and set correct strings and edittext to the
@@ -1100,7 +1069,7 @@ public class SmsAlarm extends Activity {
 				// Set hint to edittext
 				noBlanksInputEditText.setHint(R.string.NUMBER_PROMPT_HINT);
 				// Set Input type to edittext
-				noBlanksInputEditText.setInputType(InputType.TYPE_TEXT_FLAG_AUTO_COMPLETE);
+				noBlanksInputEditText.setInputType(InputType.TYPE_CLASS_TEXT);
 				// Set dialog to non cancelable
 				dialog.setCancelable(false);
 				// Bind dialog to input
@@ -1112,7 +1081,7 @@ public class SmsAlarm extends Activity {
 				dialog.setTitle(R.string.NUMBER_PROMPT_TITLE);
 				dialog.setMessage(R.string.SECONDARY_NUMBER_PROMPT_MESSAGE);
 				noBlanksInputEditText.setHint(R.string.NUMBER_PROMPT_HINT);
-				noBlanksInputEditText.setInputType(InputType.TYPE_TEXT_FLAG_AUTO_COMPLETE);
+				noBlanksInputEditText.setInputType(InputType.TYPE_CLASS_TEXT);
 				dialog.setCancelable(false);
 				dialog.setView(noBlanksInputEditText);
 				logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":buildAndShowInputDialog()", "Dialog attributes is set for dialog type SMS_SECONDARY");
@@ -1121,7 +1090,7 @@ public class SmsAlarm extends Activity {
 				dialog.setTitle(R.string.FREE_TEXT_PROMPT_TITLE);
 				dialog.setMessage(R.string.PRIMARY_FREE_TEXT_PROMPT_MESSAGE);
 				noBlanksInputEditText.setHint(R.string.FREE_TEXT_PROMPT_HINT);
-				noBlanksInputEditText.setInputType(InputType.TYPE_TEXT_FLAG_AUTO_COMPLETE);
+				noBlanksInputEditText.setInputType(InputType.TYPE_CLASS_TEXT);
 				dialog.setCancelable(false);
 				dialog.setView(noBlanksInputEditText);
 				logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":buildAndShowInputDialog()", "Dialog attributes is set for dialog type FREE_TEXT_PRIMARY");
@@ -1130,7 +1099,7 @@ public class SmsAlarm extends Activity {
 				dialog.setTitle(R.string.FREE_TEXT_PROMPT_TITLE);
 				dialog.setMessage(R.string.SECONDARY_FREE_TEXT_PROMPT_MESSAGE);
 				noBlanksInputEditText.setHint(R.string.FREE_TEXT_PROMPT_HINT);
-				noBlanksInputEditText.setInputType(InputType.TYPE_TEXT_FLAG_AUTO_COMPLETE);
+				noBlanksInputEditText.setInputType(InputType.TYPE_CLASS_TEXT);
 				dialog.setCancelable(false);
 				dialog.setView(noBlanksInputEditText);
 				logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":buildAndShowInputDialog()", "Dialog attributes is set for dialog type FREE_TEXT_SECONDARY");

@@ -12,7 +12,7 @@ import ax.ha.it.smsalarm.LogHandler.LogPriorities;
 /**
  * This class is responsible for any special handling that needs to be done according to
  * <b><i>KitKat</i></b>'s (and higher) retarded behavior when receiving an sms.<br>
- * <b><i>LogHandler is a singleton.</i></b>
+ * <b><i>KitKatHandler is a singleton.</i></b>
  * <p>
  * 
  * <b><i>Note!<br>
