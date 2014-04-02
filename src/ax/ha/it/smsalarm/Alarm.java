@@ -15,7 +15,7 @@ import ax.ha.it.smsalarm.LogHandler.LogPriorities;
  * setting and getting data.
  * 
  * @author Robert Nyholm <robert.nyholm@aland.net>
- * @version 2.2.1
+ * @version 2.2.4
  * @since 2.1beta
  */
 public class Alarm {
@@ -66,7 +66,7 @@ public class Alarm {
 		received = DateFormat.getDateTimeInstance().format(Calendar.getInstance().getTime());
 		this.sender = sender;
 		this.message = message;
-		if (!triggerText.isEmpty()) {
+		if (triggerText.length() != 0) {
 			this.triggerText = triggerText;
 		} else {
 			this.triggerText = "-";
@@ -121,7 +121,7 @@ public class Alarm {
 	 */
 	public boolean isEmpty() {
 		// Check to see if the member variables are empty
-		if (getId() == 0 && received.isEmpty() && sender.isEmpty() && message.isEmpty() && triggerText.isEmpty() && acknowledged.isEmpty() && alarmType.equals(AlarmTypes.UNDEFINED)) {
+		if (getId() == 0 && (received.length() == 0) && (sender.length() == 0) && (message.length() == 0) && (triggerText.length() == 0) && (acknowledged.length() == 0) && (alarmType == AlarmTypes.UNDEFINED)) {
 			// Log in debug purpose
 			logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":isEmpty()", "This alarm object is empty, returning true");
 			return true;

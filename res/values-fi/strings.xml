@@ -94,9 +94,9 @@
     <string name="TITLE_FREE_TEXT_TRIGGER_SETTINGS">Sana-asennuksia</string>
     <string name="TITLE_MISC_SETTINGS">Muut asetukset</string>
     <string name="TITLE_PLAY_TONE_TWICE_SETTING">Soita hälytysääni kahdesti</string>
-    <string name="TITLE_PRIMARY_ALARM">Ensisijainen Hälytys</string>
+    <string name="TITLE_PRIMARY_ALARM">Ensisijainen hälytys</string>
     <string name="TITLE_RESCUE_SERVICE_NAME">Sinun pelastuspalvelu</string>   
-    <string name="TITLE_SECONDARY_ALARM">Toissijainen Hälytys</string>
+    <string name="TITLE_SECONDARY_ALARM">Toissijainen hälytys</string>
     <string name="TITLE_SMS_SETTINGS">Tekstiasetukset</string>
     <string name="TITLE_SOUND_SETTINGS">Ääniasetukset</string>
     <string name="TITLE_TONE_SPINNER">Hälytysääni hätätilanteessa</string>

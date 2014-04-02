@@ -1,5 +1,11 @@
 SmsAlarm changelog
 
+v2.2.4(version code 12)
+-Fixade NoSuchMethodError som resulterade i att appen krashade
+
+v2.2.3(version code 11)
+-Fixade textinmatningsbugg
+
 v2.2.2(version code 10)
 -Fixade textinmatningsbugg
 
