@@ -26,5 +26,6 @@ ole vastuussa mahdollisista vahingoista jotka voivat syntyä Sms Alarmin käyttöön
 
 ET
 ==
-Sms Alarm ei asenda piiparit või mõnda muud sellesäärast süteemi. Sms Alarm arendaja ei võta vastutust mis tahes kahjule. 
-Rakenduse kasutamine on omal vastutusel.
+Sms Alarm ei ole mõeldud asendama piiparit või muud päästetöötajate teavitamiseks mõeldud süsteemi. Sms Alarmi arendaja ei vastuta kahjude
+eest, mis on tekkinud elule, varale või keskkonnale Sms Alarmi kasutamisest johtuvalt. Ka ei vastuta Sms Alarmi arendaja kahjude eest, mis 
+on tekkinud seadmetele seoses Sms Alarmi kasutamisega.
