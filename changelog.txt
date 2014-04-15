@@ -1,5 +1,8 @@
 SmsAlarm changelog
 
+v2.2.5(version code 13)
+-Översättning till estiska lades till
+
 v2.2.4(version code 12)
 -Fixade NoSuchMethodError som resulterade i att appen krashade
 
@@ -34,7 +37,7 @@ v2.1.1(version code 5)
 
 v2.1(version code 4) 
 -Möjligt att kvittera ett inkommande primärlarm till ett telefonnummer
--Kvitteringen återuppringer om upptaget vid kvittering, beta stadie ännu
+-Kvitteringen återuppringer o code 13m upptaget vid kvittering, beta stadie ännu
 -Fel loggas till fil
 -Förbättrat hanteringen av datalagring och hämtning av data
 -Förbättrat gränssnitt, mera anpassat för Android version 4.0 och uppåt

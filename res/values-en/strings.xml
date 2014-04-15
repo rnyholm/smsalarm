@@ -57,7 +57,7 @@
     <string name="INFO_MISC_SETTINGS">Set your rescue service name and if Sms Alarm should be enabled.</string>
     <string name="INFO_PLAY_TONE_TWICE_SETTING">If selected Sms Alarm will play alarm signal to both primary and secondary alarms twice.</string>
     <string name="INFO_SMS_SETTINGS">Enter the telephone numbers that Sms Alarm should send alerts for incoming sms.</string>
-    <string name="INFO_SOUND_SETTINGS">Set alarm signals for primary and secondary alarms, if Sms Alarm should follow the device sound settings and if the alarm signal shoul be played twice.</string>
+    <string name="INFO_SOUND_SETTINGS">Set alarm signals for primary and secondary alarms, if Sms Alarm should follow the device sound settings and if the alarm signal should be played twice.</string>
     <string name="INFO_USE_OS_SOUND_SETTINGS">If selected Sms Alarm will take into account the device ring volume and silent mode.</string>
     <string name="LISTEN_ALARM_SIGNAL">Listen to the signal</string> 
     <string name="NO">No</string>
