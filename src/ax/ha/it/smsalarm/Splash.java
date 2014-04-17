@@ -205,12 +205,20 @@ public class Splash extends Activity {
 	 */
 	private void switchActivity() {
 		// Create intent and start next activity from it
-		Intent saIntent = new Intent(this, SmsAlarm.class);
+		// Intent saIntent = new Intent(this, SmsAlarm.class);
+		//
+		// // Some logging for information and debugging
+		// logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":switchActivity()",
+		// "Intent has been set and application is about to switch activity to SmsAlarm");
+		//
+		// startActivity(saIntent);
+
+		Intent intent = new Intent(this, SmsSettingsActivity.class);
 
 		// Some logging for information and debugging
-		logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":switchActivity()", "Intent has been set and application is about to switch activity to SmsAlarm");
+		logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":switchActivity()", "Intent has been set and application is about to switch activity to SmsSettingsActivity");
 
-		startActivity(saIntent);
+		startActivity(intent);
 	}
 
 	/**

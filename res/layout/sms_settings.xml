@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="fill_parent" android:layout_height="wrap_content">
+
+<RelativeLayout android:layout_width="match_parent"
+    			android:layout_height="wrap_content" >
+
+        <TextView
+            android:id="@+id/smsSettings_tv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="5dp"
+            android:layout_marginRight="5dp"
+            android:layout_marginTop="5dp"
+            android:text="@string/TITLE_SMS_SETTINGS"
+            android:textAppearance="?android:attr/textAppearanceMedium" />
+        
+        <TextView
+            android:id="@+id/smsSettingsInfo_tv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignLeft="@id/smsSettings_tv"
+            android:layout_below="@id/smsSettings_tv"
+            android:layout_marginRight="5dp"
+            android:text="@string/INFO_SMS_SETTINGS"
+            android:textAppearance="?android:attr/textAppearanceSmall" />
+
+        <TextView
+            android:id="@+id/smsPrimaryAlarmTitle_tv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignLeft="@id/smsSettingsInfo_tv"
+            android:layout_below="@id/smsSettingsInfo_tv"
+            android:layout_marginTop="5dp"
+            android:text="@string/TITLE_PRIMARY_ALARM"
+            android:textAppearance="?android:attr/textAppearanceMedium" />
+
+        <Spinner
+            android:id="@+id/primarySmsNumberSpinner_sp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignLeft="@id/smsPrimaryAlarmTitle_tv"
+            android:layout_below="@id/smsPrimaryAlarmTitle_tv"
+            android:layout_marginRight="5dp" />
+
+        <Button
+            android:id="@+id/addPrimarySmsNumber_btn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignLeft="@id/primarySmsNumberSpinner_sp"
+            android:layout_below="@id/primarySmsNumberSpinner_sp"
+            android:layout_marginTop="-3dp"
+            android:text="@string/ADD" />
+
+        <Button
+            android:id="@+id/deletePrimarySmsNumber_btn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignBaseline="@id/addPrimarySmsNumber_btn"
+            android:layout_marginRight="5dp"
+            android:layout_toRightOf="@id/addPrimarySmsNumber_btn"
+            android:text="@string/DELETE" />
+
+        <TextView
+            android:id="@+id/smsSecondaryAlarmTitle_tv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignLeft="@id/primarySmsNumberSpinner_sp"
+            android:layout_below="@id/addPrimarySmsNumber_btn"
+            android:text="@string/TITLE_SECONDARY_ALARM"
+            android:textAppearance="?android:attr/textAppearanceMedium" />
+
+        <Spinner
+            android:id="@+id/secondarySmsNumberSpinner_sp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignLeft="@id/smsSecondaryAlarmTitle_tv"
+            android:layout_below="@id/smsSecondaryAlarmTitle_tv"
+            android:layout_marginRight="5dp" />
+
+        <Button
+            android:id="@+id/addSecondarySmsNumber_btn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignLeft="@id/secondarySmsNumberSpinner_sp"
+            android:layout_below="@id/secondarySmsNumberSpinner_sp"
+            android:layout_marginTop="-3dp"
+            android:text="@string/ADD" />
+
+        <Button
+            android:id="@+id/deleteSecondarySmsNumber_btn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignBaseline="@id/addSecondarySmsNumber_btn"
+            android:layout_marginRight="5dp"
+            android:layout_toRightOf="@id/addSecondarySmsNumber_btn"
+            android:text="@string/DELETE" />
+        </RelativeLayout>
+</ScrollView>
