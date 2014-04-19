@@ -22,14 +22,14 @@
     <application android:label="@string/APP_NAME"
         android:enabled="true"
         android:icon="@drawable/ic_launcher"
-        android:theme="@style/AppTheme" android:allowBackup="false" android:name="UpdateHandler">
+        android:theme="@style/Theme.Sherlock.Light.DarkActionBar" android:allowBackup="false" android:name="UpdateHandler">
         <activity android:name=".Splash" android:label="@string/APP_NAME" android:noHistory="true" android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />            
         	</intent-filter>       	
        	</activity>
-       	<activity android:name=".SmsSettingsActivity" android:noHistory="true" android:label="@string/TITLE_SMS_SETTINGS" />
+       	<activity android:name=".MainActivity" android:noHistory="true" android:label="@string/APP_NAME" />
         <activity android:name=".SmsAlarm" android:noHistory="true" android:label="@string/APP_NAME">
             <intent-filter>
  				<!-- Future intents and services for this activity goes here -->

@@ -25,7 +25,6 @@ import ax.ha.it.smsalarm.PreferencesHandler.PrefKeys;
  * @author Robert Nyholm <robert.nyholm@aland.net>
  * @version 2.2.1
  * @since 2.1
- * 
  * @see #onCreate(Bundle)
  */
 public class Splash extends Activity {
@@ -54,7 +53,6 @@ public class Splash extends Activity {
 	 * 
 	 * @param savedInstanceState
 	 *            Bundle
-	 * 
 	 * @see #buildAndShowEULADialog()
 	 * @see #switchActivity()
 	 * @see #onPause()
@@ -213,10 +211,10 @@ public class Splash extends Activity {
 		//
 		// startActivity(saIntent);
 
-		Intent intent = new Intent(this, SmsSettingsActivity.class);
+		Intent intent = new Intent(this, MainActivity.class);
 
 		// Some logging for information and debugging
-		logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":switchActivity()", "Intent has been set and application is about to switch activity to SmsSettingsActivity");
+		logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":switchActivity()", "Intent has been set and application is about to switch activity to MainActivity");
 
 		startActivity(intent);
 	}
