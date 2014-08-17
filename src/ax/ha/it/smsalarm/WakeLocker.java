@@ -9,7 +9,8 @@ import java.util.TimerTask;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.os.PowerManager;
-import ax.ha.it.smsalarm.LogHandler.LogPriorities;
+import ax.ha.it.smsalarm.handler.LogHandler;
+import ax.ha.it.smsalarm.handler.LogHandler.LogPriorities;
 
 /**
  * Class containing static methods to declare and acquire a <code>WakeLock</code> and for releasing
@@ -35,7 +36,7 @@ public abstract class WakeLocker {
 	 * @param context
 	 *            Context to acquire <code>SystemService</code> from
 	 * 
-	 * @see ax.ha.it.smsalarm.LogHandler#logCat(LogPriorities, String, String) logCat(LogPriorities,
+	 * @see ax.ha.it.smsalarm.handler.LogHandler#logCat(LogPriorities, String, String) logCat(LogPriorities,
 	 *      String, String)
 	 */
 	@SuppressWarnings("deprecation")
@@ -67,7 +68,7 @@ public abstract class WakeLocker {
 	 * Static method to release WakeLock.<br/>
 	 * <b><i>Should be null safe</i></b>.
 	 * 
-	 * @see ax.ha.it.smsalarm.LogHandler#logCat(LogPriorities, String, String) logCat(LogPriorities,
+	 * @see ax.ha.it.smsalarm.handler.LogHandler#logCat(LogPriorities, String, String) logCat(LogPriorities,
 	 *      String, String)
 	 */
 	public static void release() {

@@ -8,7 +8,6 @@ import java.util.List;
 import java.util.Locale;
 
 import android.annotation.SuppressLint;
-import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -16,14 +15,15 @@ import android.content.res.Resources;
 import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentTransaction;
+import android.support.v4.app.ListFragment;
 import android.text.Editable;
 import android.text.InputType;
 import android.text.TextWatcher;
 import android.util.TypedValue;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.AdapterView;
@@ -38,9 +38,21 @@ import android.widget.RelativeLayout.LayoutParams;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
-import ax.ha.it.smsalarm.LogHandler.LogPriorities;
-import ax.ha.it.smsalarm.PreferencesHandler.DataTypes;
-import ax.ha.it.smsalarm.PreferencesHandler.PrefKeys;
+import ax.ha.it.smsalarm.enumeration.DialogTypes;
+import ax.ha.it.smsalarm.fragment.SlidingMenuFragment;
+import ax.ha.it.smsalarm.fragment.SmsSettingsFragment;
+import ax.ha.it.smsalarm.handler.DatabaseHandler;
+import ax.ha.it.smsalarm.handler.LogHandler;
+import ax.ha.it.smsalarm.handler.LogHandler.LogPriorities;
+import ax.ha.it.smsalarm.handler.NoiseHandler;
+import ax.ha.it.smsalarm.handler.PreferencesHandler;
+import ax.ha.it.smsalarm.handler.PreferencesHandler.DataTypes;
+import ax.ha.it.smsalarm.handler.PreferencesHandler.PrefKeys;
+
+import com.actionbarsherlock.view.Menu;
+import com.actionbarsherlock.view.MenuItem;
+import com.jeremyfeinstein.slidingmenu.lib.SlidingMenu;
+import com.jeremyfeinstein.slidingmenu.lib.app.SlidingFragmentActivity;
 
 /**
  * Main activity to configure application. Also holds the main User Interface.
@@ -48,22 +60,11 @@ import ax.ha.it.smsalarm.PreferencesHandler.PrefKeys;
  * @author Robert Nyholm <robert.nyholm@aland.net>
  * @version 2.2.1
  * @since 0.9beta
- * 
  * @see #onCreate(Bundle)
  * @see #onPause()
  * @see #onDestroy()
  */
-public class SmsAlarm extends Activity {
-	/**
-	 * Enumeration for different types of input dialogs.
-	 * 
-	 * @author Robert Nyholm <robert.nyholm@aland.net>
-	 * @version 2.2
-	 * @since 2.1
-	 */
-	private enum DialogTypes {
-		SMS_PRIMARY, SMS_SECONDARY, FREE_TEXT_PRIMARY, FREE_TEXT_SECONDARY, ACKNOWLEDGE, RESCUESERVICE;
-	}
+public class SmsAlarm extends SlidingFragmentActivity {
 
 	// Log tag string
 	private final String LOG_TAG = getClass().getSimpleName();
@@ -76,6 +77,10 @@ public class SmsAlarm extends Activity {
 	// Object to handle database access and methods
 	private DatabaseHandler db;
 
+	// Content and fragment for the slidingmenu
+	private Fragment content;
+	private ListFragment fragment;
+
 	// Variables of different UI elements and types
 	// The EdittextObjects
 	private EditText selectedToneEditText;
@@ -83,10 +88,6 @@ public class SmsAlarm extends Activity {
 	private EditText rescueServiceEditText;
 
 	// The Button objects
-	private Button addPrimarySmsNumberButton;
-	private Button removePrimarySmsNumberButton;
-	private Button addSecondarySmsNumberButton;
-	private Button removeSecondarySmsNumberButton;
 	private Button addPrimaryFreeTextButton;
 	private Button removePrimaryFreeTextButton;
 	private Button addSecondaryFreeTextButton;
@@ -110,8 +111,6 @@ public class SmsAlarm extends Activity {
 
 	// The Spinner objects
 	private Spinner toneSpinner;
-	private Spinner primarySmsNumberSpinner;
-	private Spinner secondarySmsNumberSpinner;
 	private Spinner primaryFreeTextSpinner;
 	private Spinner secondaryFreeTextSpinner;
 
@@ -126,13 +125,10 @@ public class SmsAlarm extends Activity {
 
 	// List of strings containing primary- and secondary sms numbers, also primary- and secondary
 	// free texts
-	private List<String> primarySmsNumbers = new ArrayList<String>();
-	private List<String> secondarySmsNumbers = new ArrayList<String>();
+
 	private List<String> primaryFreeTexts = new ArrayList<String>();
 	private List<String> secondaryFreeTexts = new ArrayList<String>();
-	private final List<String> emptySmsNumbers = new ArrayList<String>(); // <-- A "dummy" list just
-																			// containing one
-																			// element, one string
+
 	private final List<String> emptyFreeTexts = new ArrayList<String>(); // <-- A "dummy" list just
 																			// containing one
 																			// element, on string
@@ -155,12 +151,11 @@ public class SmsAlarm extends Activity {
 	private int toneSpinnerPos = 0;
 
 	/**
-	 * When activity starts, this method is the entry point. The User Interface is built up and
-	 * different <code>Listeners</code> are set within this method.
+	 * When activity starts, this method is the entry point. The User Interface is built up and different <code>Listeners</code> are set within this
+	 * method.
 	 * 
 	 * @param savedInstanceState
 	 *            Default Bundle
-	 * 
 	 * @see #findViews()
 	 * @see #updateSelectedToneEditText()
 	 * @see #updateAcknowledgeWidgets()
@@ -172,25 +167,37 @@ public class SmsAlarm extends Activity {
 	 * @see #buildAndShowToneDialog()
 	 * @see #onPause()
 	 * @see #onDestroy()
-	 * @see ax.ha.it.smsalarm.LogHandler#logCat(LogPriorities, String, String) logCat(LogPriorities,
-	 *      String, String)
-	 * @see ax.ha.it.smsalarm.LogHandler#logCatTxt(LogPriorities, String, String)
-	 *      logCatTxt(LogPriorities, String, String)
-	 * @see ax.ha.it.smsalarm.LogHandler#logCatTxt(LogPriorities, String, String, Throwable)
-	 *      logCatTxt(LogPriorities, String, String, Throwable)
-	 * @see ax.ha.it.smsalarm.NoiseHandler#makeNoise(Context, int, boolean, boolean)
-	 *      makeNoise(Context, int, boolean, boolean)
-	 * @see ax.ha.it.smsalarm.PreferencesHandler#setPrefs(PrefKeys, PrefKeys, Object, Context)
-	 *      setPrefs(PrefKeys, PrefKeys, Object, Context)
-	 * @see ax.ha.it.smsalarm.DatabaseHandler ax.ha.it.smsalarm.DatabaseHandler
+	 * @see ax.ha.it.smsalarm.handler.LogHandler#logCat(LogPriorities, String, String) logCat(LogPriorities, String, String)
+	 * @see ax.ha.it.smsalarm.handler.LogHandler#logCatTxt(LogPriorities, String, String) logCatTxt(LogPriorities, String, String)
+	 * @see ax.ha.it.smsalarm.handler.LogHandler#logCatTxt(LogPriorities, String, String, Throwable) logCatTxt(LogPriorities, String, String,
+	 *      Throwable)
+	 * @see ax.ha.it.smsalarm.handler.NoiseHandler#makeNoise(Context, int, boolean, boolean) makeNoise(Context, int, boolean, boolean)
+	 * @see ax.ha.it.smsalarm.handler.PreferencesHandler#setPrefs(PrefKeys, PrefKeys, Object, Context) setPrefs(PrefKeys, PrefKeys, Object, Context)
+	 * @see ax.ha.it.smsalarm.handler.DatabaseHandler ax.ha.it.smsalarm.DatabaseHandler
 	 */
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.main);
 
 		// Log in debugging and information purpose
 		logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":onCreate()", "Creation of Sms Alarm started");
+
+		// Set behind and content view
+		setBehindContentView(R.layout.menu_frame);
+		setContentView(R.layout.content_frame);
+
+		// Set correct fragment to menu and correct content to this object
+		setFragmentToMenu(savedInstanceState);
+		setContentFragment(savedInstanceState);
+
+		// Set correct content to content frame
+		getSupportFragmentManager().beginTransaction().replace(R.id.contentFrame_fl, content).commit();
+
+		// Configurate the sliding menu
+		configureSlidingMenu();
+
+		// Configure action bar
+		configureActionBar();
 
 		// Get sharedPreferences
 		getSmsAlarmPrefs();
@@ -525,13 +532,11 @@ public class SmsAlarm extends Activity {
 	}
 
 	/**
-	 * To handle events to trigger when activity destroys. Writes all alarms in database into a
-	 * <code>.html</code> log file.
+	 * To handle events to trigger when activity destroys. Writes all alarms in database into a <code>.html</code> log file.
 	 * 
-	 * @see ax.ha.it.smsalarm.LogHandler#logAlarm(List, Context) logAlarm(List, Context)
-	 * @see ax.ha.it.smsalarm.LogHandler#logCat(LogPriorities, String, String) logCat(LogPriorities,
-	 *      String, String)
-	 * @see ax.ha.it.smsalarm.DatabaseHandler#getAllAlarm() getAllAlarm()
+	 * @see ax.ha.it.smsalarm.handler.LogHandler#logAlarm(List, Context) logAlarm(List, Context)
+	 * @see ax.ha.it.smsalarm.handler.LogHandler#logCat(LogPriorities, String, String) logCat(LogPriorities, String, String)
+	 * @see ax.ha.it.smsalarm.handler.DatabaseHandler#getAllAlarm() getAllAlarm()
 	 * @see ax.ha.it.smsalarm.Alarm ax.ha.it.smsalarm.Alarm
 	 * @see ax.ha.it.smsalarm.WidgetProvider#updateWidgets(Context)
 	 * @see #onCreate(Bundle)
@@ -548,53 +553,132 @@ public class SmsAlarm extends Activity {
 		WidgetProvider.updateWidgets(this);
 	}
 
-	/**
-	 * To build up the menu, called one time only and that's the first time the menu is inflated.
-	 * 
-	 * @see #onOptionsItemSelected(MenuItem)
-	 * @see ax.ha.it.smsalarm.LogHandler#logCat(LogPriorities, String, String) logCat(LogPriorities,
-	 *      String, String)
-	 */
 	@Override
-	public boolean onCreateOptionsMenu(Menu menu) {
-		// Logging
-		logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":onCreateOptionsMenu()", "Menu created");
-		MenuInflater inflater = getMenuInflater();
-		inflater.inflate(R.menu.menu, menu);
-		return true;
+	public void onSaveInstanceState(Bundle outState) {
+		super.onSaveInstanceState(outState);
+		getSupportFragmentManager().putFragment(outState, "content", content);
 	}
 
-	/**
-	 * Method to inflate menu with it's items.
-	 * 
-	 * @see #buildAndShowAboutDialog()
-	 * @see ax.ha.it.smsalarm.LogHandler#logCat(LogPriorities, String, String) logCat(LogPriorities,
-	 *      String, String)
-	 * @see ax.ha.it.smsalarm.LogHandler#logCatTxt(LogPriorities, String, String, Throwable)
-	 *      logCatTxt(LogPriorities, String, String, Throwable)
-	 * @see ax.ha.it.smsalarm.PreferencesHandler#setPrefs(PrefKeys, PrefKeys, Object, Context)
-	 *      setPrefs(PrefKeys, PrefKeys, Object, Context)
-	 */
+	@Override
+	public void onBackPressed() {
+		if (getSlidingMenu().isMenuShowing()) {
+			toggle();
+		} else {
+			super.onBackPressed();
+		}
+	}
+
+	@Override
+	public boolean onKeyDown(int keyCode, KeyEvent event) {
+		if (keyCode == KeyEvent.KEYCODE_MENU) {
+			toggle();
+			return true;
+		}
+		return super.onKeyDown(keyCode, event);
+	}
+
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
 		switch (item.getItemId()) {
-			case R.id.ABOUT:
-				// Logging
-				logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":onOptionsItemSelected()", "Menu item ABOUT selected");
-				// Build up and show the about dialog
-				buildAndShowAboutDialog();
+			case android.R.id.home:
+				toggle();
 				return true;
 			default:
 				return super.onOptionsItemSelected(item);
 		}
 	}
 
+	@Override
+	public boolean onCreateOptionsMenu(Menu menu) {
+		getSupportMenuInflater().inflate(R.menu.activity_main, menu);
+		return true;
+	}
+
+	private void configureActionBar() {
+		getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+		getSupportActionBar().setIcon(R.drawable.ic_launcher);
+		setSlidingActionBarEnabled(true);
+	}
+
+	private void configureSlidingMenu() {
+		// configure the SlidingMenu
+		SlidingMenu sm = getSlidingMenu();
+		sm.setMode(SlidingMenu.LEFT);
+		sm.setTouchModeAbove(SlidingMenu.TOUCHMODE_FULLSCREEN);
+		sm.setShadowWidthRes(R.dimen.shadow_width);
+		sm.setShadowDrawable(R.drawable.shadow);
+		sm.setBehindOffsetRes(R.dimen.slidingmenu_offset);
+		sm.setFadeDegree(0.35f);
+	}
+
+	private void setFragmentToMenu(Bundle savedInstanceState) {
+		if (savedInstanceState == null) {
+			FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+			fragment = new SlidingMenuFragment();// new RandomList();
+			ft.replace(R.id.menuFrame_fl, fragment);
+			ft.commit();
+		} else {
+			fragment = (ListFragment) getSupportFragmentManager().findFragmentById(R.id.menuFrame_fl);
+		}
+	}
+
+	private void setContentFragment(Bundle savedInstanceState) {
+		if (savedInstanceState != null) {
+			content = getSupportFragmentManager().getFragment(savedInstanceState, "content");
+		}
+		if (content == null) {
+			content = new SmsSettingsFragment(this);
+		}
+	}
+
+	public void switchContent(Fragment fragment) {
+		content = fragment;
+		getSupportFragmentManager().beginTransaction().replace(R.id.contentFrame_fl, fragment).commit();
+		getSlidingMenu().showContent();
+	}
+
+	/**
+	 * To build up the menu, called one time only and that's the first time the menu is inflated.
+	 * 
+	 * @see #onOptionsItemSelected(MenuItem)
+	 * @see ax.ha.it.smsalarm.LogHandler#logCat(LogPriorities, String, String) logCat(LogPriorities, String, String)
+	 */
+//	@Override
+//	public boolean onCreateOptionsMenu(Menu menu) {
+//		// Logging
+//		logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":onCreateOptionsMenu()", "Menu created");
+//		MenuInflater inflater = getMenuInflater();
+//		inflater.inflate(R.menu.menu, menu);
+//		return true;
+//	}
+
+	/**
+	 * Method to inflate menu with it's items.
+	 * 
+	 * @see #buildAndShowAboutDialog()
+	 * @see ax.ha.it.smsalarm.LogHandler#logCat(LogPriorities, String, String) logCat(LogPriorities, String, String)
+	 * @see ax.ha.it.smsalarm.LogHandler#logCatTxt(LogPriorities, String, String, Throwable) logCatTxt(LogPriorities, String, String, Throwable)
+	 * @see ax.ha.it.smsalarm.PreferencesHandler#setPrefs(PrefKeys, PrefKeys, Object, Context) setPrefs(PrefKeys, PrefKeys, Object, Context)
+	 */
+//	@Override
+//	public boolean onOptionsItemSelected(MenuItem item) {
+//		switch (item.getItemId()) {
+//			case R.id.ABOUT:
+//				// Logging
+//				logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":onOptionsItemSelected()", "Menu item ABOUT selected");
+//				// Build up and show the about dialog
+//				buildAndShowAboutDialog();
+//				return true;
+//			default:
+//				return super.onOptionsItemSelected(item);
+//		}
+//	}
+
 	/**
 	 * To find UI widgets and get their reference by ID stored in class variables.
 	 * 
 	 * @see #onCreate(Bundle)
-	 * @see ax.ha.it.smsalarm.LogHandler#logCat(LogPriorities, String, String) logCat(LogPriorities,
-	 *      String, String)
+	 * @see ax.ha.it.smsalarm.handler.LogHandler#logCat(LogPriorities, String, String) logCat(LogPriorities, String, String)
 	 */
 	private void findViews() {
 		// Logging
@@ -606,14 +690,10 @@ public class SmsAlarm extends Activity {
 		rescueServiceEditText = (EditText) findViewById(R.id.rescueServiceName_et);
 
 		// Declare and initialize variables of type button
-		addPrimarySmsNumberButton = (Button) findViewById(R.id.addPrimarySmsNumber_btn);
-		removePrimarySmsNumberButton = (Button) findViewById(R.id.deletePrimarySmsNumber_btn);
-		addSecondarySmsNumberButton = (Button) findViewById(R.id.addSecondarySmsNumber_btn);
 		addPrimaryFreeTextButton = (Button) findViewById(R.id.addPrimaryFreeText_btn);
 		removePrimaryFreeTextButton = (Button) findViewById(R.id.deletePrimaryFreeText_btn);
 		addSecondaryFreeTextButton = (Button) findViewById(R.id.addSecondaryFreeText_btn);
 		removeSecondaryFreeTextButton = (Button) findViewById(R.id.deleteSecondaryFreeText_btn);
-		removeSecondarySmsNumberButton = (Button) findViewById(R.id.deleteSecondarySmsNumber_btn);
 		editMsgToneButton = (Button) findViewById(R.id.editMsgTone_btn);
 		listenMsgToneButton = (Button) findViewById(R.id.listenMsgTone_btn);
 		ackNumberButton = (Button) findViewById(R.id.editAckNumber_btn);
@@ -627,8 +707,6 @@ public class SmsAlarm extends Activity {
 
 		// Declare and initialize variables of type Spinner
 		toneSpinner = (Spinner) findViewById(R.id.toneSpinner_sp);
-		primarySmsNumberSpinner = (Spinner) findViewById(R.id.primarySmsNumberSpinner_sp);
-		secondarySmsNumberSpinner = (Spinner) findViewById(R.id.secondarySmsNumberSpinner_sp);
 		primaryFreeTextSpinner = (Spinner) findViewById(R.id.primaryFreeTextSpinner_sp);
 		secondaryFreeTextSpinner = (Spinner) findViewById(R.id.secondaryFreeTextSpinner_sp);
 
@@ -804,14 +882,13 @@ public class SmsAlarm extends Activity {
 	 * To get <code>Shared Preferences</code> used by class <code>SmsAlarm</code>.
 	 * 
 	 * @see #setSmsAlarmPrefs()
-	 * @see ax.ha.it.smsalarm.LogHandler#logCat(LogPriorities, String, String) logCat(LogPriorities,
-	 *      String, String)
-	 * @see ax.ha.it.smsalarm.LogHandler#logCatTxt(LogPriorities, String, String, Throwable)
-	 *      logCatTxt(LogPriorities, String, String, Throwable)
-	 * @see ax.ha.it.smsalarm.PreferencesHandler#getPrefs(PrefKeys, PrefKeys, DataTypes, Context)
-	 *      getPrefs(PrefKeys, PrefKeys, DataTypes, Context)
-	 * @see ax.ha.it.smsalarm.PreferencesHandler#getPrefs(PrefKeys, PrefKeys, DataTypes, Context,
-	 *      Object) getPrefs(PrefKeys, PrefKeys, DataTypes, Context, Object)
+	 * @see ax.ha.it.smsalarm.handler.LogHandler#logCat(LogPriorities, String, String) logCat(LogPriorities, String, String)
+	 * @see ax.ha.it.smsalarm.handler.LogHandler#logCatTxt(LogPriorities, String, String, Throwable) logCatTxt(LogPriorities, String, String,
+	 *      Throwable)
+	 * @see ax.ha.it.smsalarm.handler.PreferencesHandler#getPrefs(PrefKeys, PrefKeys, DataTypes, Context) getPrefs(PrefKeys, PrefKeys, DataTypes,
+	 *      Context)
+	 * @see ax.ha.it.smsalarm.handler.PreferencesHandler#getPrefs(PrefKeys, PrefKeys, DataTypes, Context, Object) getPrefs(PrefKeys, PrefKeys,
+	 *      DataTypes, Context, Object)
 	 */
 	@SuppressWarnings("unchecked")
 	private void getSmsAlarmPrefs() {
@@ -820,8 +897,6 @@ public class SmsAlarm extends Activity {
 
 		try {
 			// Get shared preferences needed by class Sms Alarm
-			primarySmsNumbers = (List<String>) prefHandler.getPrefs(PrefKeys.SHARED_PREF, PrefKeys.PRIMARY_LISTEN_NUMBERS_KEY, DataTypes.LIST, this);
-			secondarySmsNumbers = (List<String>) prefHandler.getPrefs(PrefKeys.SHARED_PREF, PrefKeys.SECONDARY_LISTEN_NUMBERS_KEY, DataTypes.LIST, this);
 			primaryFreeTexts = (List<String>) prefHandler.getPrefs(PrefKeys.SHARED_PREF, PrefKeys.PRIMARY_LISTEN_FREE_TEXTS_KEY, DataTypes.LIST, this);
 			secondaryFreeTexts = (List<String>) prefHandler.getPrefs(PrefKeys.SHARED_PREF, PrefKeys.SECONDARY_LISTEN_FREE_TEXTS_KEY, DataTypes.LIST, this);
 			primaryMessageToneId = (Integer) prefHandler.getPrefs(PrefKeys.SHARED_PREF, PrefKeys.PRIMARY_MESSAGE_TONE_KEY, DataTypes.INTEGER, this);
@@ -839,24 +914,20 @@ public class SmsAlarm extends Activity {
 	}
 
 	/**
-	 * Universal method to build up one of four different types of delete dialogs. The supported
-	 * types are: <b><i>SMS_PRIMARY</b></i>, <b><i>SMS_SECONDARY</b></i>,
-	 * <b><i>FREE_TEXT_PRIMARY</b></i> and <b><i>FREE_TEXT_SECONDARY</b></i>. If a dialog type are
-	 * given as parameter thats not supported a dummy dialog will be built and shown.
+	 * Universal method to build up one of four different types of delete dialogs. The supported types are: <b><i>SMS_PRIMARY</b></i>,
+	 * <b><i>SMS_SECONDARY</b></i>, <b><i>FREE_TEXT_PRIMARY</b></i> and <b><i>FREE_TEXT_SECONDARY</b></i>. If a dialog type are given as parameter
+	 * thats not supported a dummy dialog will be built and shown.
 	 * 
 	 * @param type
 	 *            Type of delete dialog to build up and shown
-	 * 
 	 * @see #buildAndShowAboutDialog()
 	 * @see #buildAndShowInputDialog(DialogTypes)
 	 * @see #buildAndShowToneDialog()
 	 * @see #updateSecondarySmsNumberSpinner()
-	 * @see ax.ha.it.smsalarm.LogHandler#logCat(LogPriorities, String, String) logCat(LogPriorities,
-	 *      String, String)
-	 * @see ax.ha.it.smsalarm.LogHandler#logCatTxt(LogPriorities, String, String, Throwable)
-	 *      logCatTxt(LogPriorities, String, String, Throwable)
-	 * @see ax.ha.it.smsalarm.PreferencesHandler#setPrefs(PrefKeys, PrefKeys, Object, Context)
-	 *      setPrefs(PrefKeys, PrefKeys, Object, Context)
+	 * @see ax.ha.it.smsalarm.handler.LogHandler#logCat(LogPriorities, String, String) logCat(LogPriorities, String, String)
+	 * @see ax.ha.it.smsalarm.handler.LogHandler#logCatTxt(LogPriorities, String, String, Throwable) logCatTxt(LogPriorities, String, String,
+	 *      Throwable)
+	 * @see ax.ha.it.smsalarm.handler.PreferencesHandler#setPrefs(PrefKeys, PrefKeys, Object, Context) setPrefs(PrefKeys, PrefKeys, Object, Context)
 	 */
 	private void buildAndShowDeleteDialog(final DialogTypes type) {
 		// Logging
@@ -869,8 +940,8 @@ public class SmsAlarm extends Activity {
 		dialog.setIcon(android.R.drawable.ic_dialog_alert);
 
 		/*
-		 * Switch through the different dialog types and set correct strings and edittext to the
-		 * dialog. If dialog type is non supported a default dialog DUMMY is built up.
+		 * Switch through the different dialog types and set correct strings and edittext to the dialog. If dialog type is non supported a default
+		 * dialog DUMMY is built up.
 		 */
 		switch (type) {
 			case SMS_PRIMARY:
@@ -916,8 +987,8 @@ public class SmsAlarm extends Activity {
 				logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":buildAndShowDeleteDialog().PosButton.OnClickListener().onClick()", "Positive Button pressed");
 
 				/*
-				 * Switch through the different dialog types and set proper input handling to each
-				 * of them. If dialog type is non supported no input is taken.
+				 * Switch through the different dialog types and set proper input handling to each of them. If dialog type is non supported no input
+				 * is taken.
 				 */
 				switch (type) {
 					case SMS_PRIMARY:
@@ -992,14 +1063,12 @@ public class SmsAlarm extends Activity {
 	}
 
 	/**
-	 * Universal method to build up one of four different types of input dialogs. The supported
-	 * types are: <b><i>SMS_PRIMARY</b></i>, <b><i>SMS_SECONDARY</b></i>, <b><i>ACKNOWLEDGE</b></i>
-	 * and <b><i>RESCUESERVICE</b></i>. If a dialog type are given as parameter thats not supported
-	 * a dummy dialog will be built and shown.
+	 * Universal method to build up one of four different types of input dialogs. The supported types are: <b><i>SMS_PRIMARY</b></i>,
+	 * <b><i>SMS_SECONDARY</b></i>, <b><i>ACKNOWLEDGE</b></i> and <b><i>RESCUESERVICE</b></i>. If a dialog type are given as parameter thats not
+	 * supported a dummy dialog will be built and shown.
 	 * 
 	 * @param type
 	 *            Type of dialog to build up and show
-	 * 
 	 * @see #buildAndShowAboutDialog()
 	 * @see #buildAndShowToneDialog()
 	 * @see #buildAndShowDeleteDialog()
@@ -1007,14 +1076,11 @@ public class SmsAlarm extends Activity {
 	 * @see #updateSecondarySmsNumberSpinner()
 	 * @see #updateAcknowledgeNumberEditText()
 	 * @see #updateRescueServiceEditText()
-	 * @see ax.ha.it.smsalarm.LogHandler#logCat(LogPriorities, String, String) logCat(LogPriorities,
-	 *      String, String)
-	 * @see ax.ha.it.smsalarm.LogHandler#logCatTxt(LogPriorities, String, String)
-	 *      logCatTxt(LogPriorities, String, String)
-	 * @see ax.ha.it.smsalarm.LogHandler#logCatTxt(LogPriorities, String, String, Throwable)
-	 *      logCatTxt(LogPriorities, String, String, Throwable)
-	 * @see ax.ha.it.smsalarm.PreferencesHandler#setPrefs(PrefKeys, PrefKeys, Object, Context)
-	 *      setPrefs(PrefKeys, PrefKeys, Object, Context)
+	 * @see ax.ha.it.smsalarm.handler.LogHandler#logCat(LogPriorities, String, String) logCat(LogPriorities, String, String)
+	 * @see ax.ha.it.smsalarm.handler.LogHandler#logCatTxt(LogPriorities, String, String) logCatTxt(LogPriorities, String, String)
+	 * @see ax.ha.it.smsalarm.handler.LogHandler#logCatTxt(LogPriorities, String, String, Throwable) logCatTxt(LogPriorities, String, String,
+	 *      Throwable)
+	 * @see ax.ha.it.smsalarm.handler.PreferencesHandler#setPrefs(PrefKeys, PrefKeys, Object, Context) setPrefs(PrefKeys, PrefKeys, Object, Context)
 	 */
 	private void buildAndShowInputDialog(final DialogTypes type) {
 		// Logging
@@ -1057,8 +1123,8 @@ public class SmsAlarm extends Activity {
 		});
 
 		/*
-		 * Switch through the different dialog types and set correct strings and edittext to the
-		 * dialog. If dialog type is non supported a default dialog DUMMY is built up.
+		 * Switch through the different dialog types and set correct strings and edittext to the dialog. If dialog type is non supported a default
+		 * dialog DUMMY is built up.
 		 */
 		switch (type) {
 			case SMS_PRIMARY:
@@ -1145,8 +1211,8 @@ public class SmsAlarm extends Activity {
 				boolean duplicatedFreeTexts = false;
 
 				/*
-				 * Switch through the different dialog types and set proper input handling to each
-				 * of them. If dialog type is non supported no input is taken.
+				 * Switch through the different dialog types and set proper input handling to each of them. If dialog type is non supported no input
+				 * is taken.
 				 */
 				switch (type) {
 					case SMS_PRIMARY:
@@ -1393,20 +1459,16 @@ public class SmsAlarm extends Activity {
 	}
 
 	/**
-	 * To build up and show a dialog with a list populated with message tones. User chooses
-	 * applications message tones from that list.
+	 * To build up and show a dialog with a list populated with message tones. User chooses applications message tones from that list.
 	 * 
 	 * @see #buildAndShowInputDialog(DialogTypes)
 	 * @see #buildAndShowAboutDialog()
 	 * @see #updateSelectedToneEditText()
-	 * @see ax.ha.it.smsalarm.LogHandler#logCat(LogPriorities, String, String) logCat(LogPriorities,
-	 *      String, String)
-	 * @see ax.ha.it.smsalarm.LogHandler#logCatTxt(LogPriorities, String, String)
-	 *      logCatTxt(LogPriorities, String, String)
-	 * @see ax.ha.it.smsalarm.LogHandler#logCatTxt(LogPriorities, String, String, Throwable)
-	 *      logCatTxt(LogPriorities, String, String, Throwable)
-	 * @see ax.ha.it.smsalarm.PreferencesHandler#setPrefs(PrefKeys, PrefKeys, Object, Context)
-	 *      setPrefs(PrefKeys, PrefKeys, Object, Context)
+	 * @see ax.ha.it.smsalarm.handler.LogHandler#logCat(LogPriorities, String, String) logCat(LogPriorities, String, String)
+	 * @see ax.ha.it.smsalarm.handler.LogHandler#logCatTxt(LogPriorities, String, String) logCatTxt(LogPriorities, String, String)
+	 * @see ax.ha.it.smsalarm.handler.LogHandler#logCatTxt(LogPriorities, String, String, Throwable) logCatTxt(LogPriorities, String, String,
+	 *      Throwable)
+	 * @see ax.ha.it.smsalarm.handler.PreferencesHandler#setPrefs(PrefKeys, PrefKeys, Object, Context) setPrefs(PrefKeys, PrefKeys, Object, Context)
 	 */
 	private void buildAndShowToneDialog() {
 		// Logging
@@ -1482,8 +1544,7 @@ public class SmsAlarm extends Activity {
 	 * @see #buildAndShowDeleteDialog()
 	 * @see #buildAndShowInputDialog(DialogTypes)
 	 * @see #buildAndShowToneDialog()
-	 * @see ax.ha.it.smsalarm.LogHandler#logCat(LogPriorities, String, String) logCat(LogPriorities,
-	 *      String, String)
+	 * @see ax.ha.it.smsalarm.handler.LogHandler#logCat(LogPriorities, String, String) logCat(LogPriorities, String, String)
 	 */
 	private void buildAndShowAboutDialog() {
 		// Logging
@@ -1538,14 +1599,12 @@ public class SmsAlarm extends Activity {
 	}
 
 	/**
-	 * To check if given <code>String</code> exists in given <code>List</code> of
-	 * <code>Strings</code>. Method is not case sensitive.
+	 * To check if given <code>String</code> exists in given <code>List</code> of <code>Strings</code>. Method is not case sensitive.
 	 * 
 	 * @param string
 	 *            String to check if exists in list.
 	 * @param list
 	 *            List to check if string exists in.
-	 * 
 	 * @return <code>true</code> if given String exists in given List else <code>false</code>.<br>
 	 *         <code>false</code> is also returned if either given argument is <code>null</code>.
 	 */
@@ -1583,18 +1642,11 @@ public class SmsAlarm extends Activity {
 	 * @see #updatePlayToneTwiceCheckBox()
 	 * @see #updateEnableSmsAlarmCheckBox()
 	 * @see #updateAcknowledgeWidgets()
-	 * @see ax.ha.it.smsalarm.LogHandler#logCat(LogPriorities, String, String) logCat(LogPriorities,
-	 *      String, String)
+	 * @see ax.ha.it.smsalarm.handler.LogHandler#logCat(LogPriorities, String, String) logCat(LogPriorities, String, String)
 	 */
 	private void updateWholeUI() {
 		// Logging
 		logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":updateWholeUI()", "Whole user interface is about to be updated");
-
-		// Update primary sms numbers Spinner
-		updatePrimarySmsNumberSpinner();
-
-		// Update secondary sms numbers Spinner
-		updateSecondarySmsNumberSpinner();
 
 		// Update primary free text Spinner
 		updatePrimaryFreeTextSpinner();
@@ -1628,72 +1680,9 @@ public class SmsAlarm extends Activity {
 	}
 
 	/**
-	 * To update primary sms number <code>Spinner</code> with correct values.
-	 * 
-	 * @see ax.ha.it.smsalarm.LogHandler#logCat(LogPriorities, String, String) logCat(LogPriorities,
-	 *      String, String)
-	 */
-	private void updatePrimarySmsNumberSpinner() {
-		// Check if there are primary sms numbers and build up a proper spinner according to that
-		// information
-		if (!primarySmsNumbers.isEmpty()) {
-			ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, primarySmsNumbers);
-			adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-			primarySmsNumberSpinner.setAdapter(adapter);
-			// Logging
-			logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":updatePrimarySmsNumberSpinner()", "Populate PRIMARY sms number spinner with values: " + primarySmsNumbers);
-		} else {
-			// Only add item to list if it's empty
-			if (emptySmsNumbers.isEmpty()) {
-				emptySmsNumbers.add(getString(R.string.ENTER_PHONE_NUMBER_HINT));
-			}
-			ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, emptySmsNumbers);
-			adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-			primarySmsNumberSpinner.setAdapter(adapter);
-			// Logging
-			logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":updatePrimarySmsNumberSpinner()", "List with PRIMARY sms numbers is empty, populating spinner with an empty list");
-		}
-
-		// Logging
-		logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":updatePrimarySmsNumberSpinner()", "PRIMARY sms numbers spinner updated");
-	}
-
-	/**
-	 * To update secondary sms number <code>Spinner</code> with correct values.
-	 * 
-	 * @see ax.ha.it.smsalarm.LogHandler#logCat(LogPriorities, String, String) logCat(LogPriorities,
-	 *      String, String)
-	 */
-	private void updateSecondarySmsNumberSpinner() {
-		// Check if there are secondary sms numbers and build up a proper spinner according to that
-		// information
-		if (!secondarySmsNumbers.isEmpty()) {
-			ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, secondarySmsNumbers);
-			adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-			secondarySmsNumberSpinner.setAdapter(adapter);
-			// Logging
-			logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":updateSecondarySmsNumberSpinner()", "Populate SECONDARY sms number spinner with values: " + secondarySmsNumbers);
-		} else {
-			// Only add item to list if it's empty
-			if (emptySmsNumbers.isEmpty()) {
-				emptySmsNumbers.add(getString(R.string.ENTER_PHONE_NUMBER_HINT));
-			}
-			ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, emptySmsNumbers);
-			adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-			secondarySmsNumberSpinner.setAdapter(adapter);
-			// Logging
-			logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":updateSecondarySmsNumberSpinner()", "List with SECONDARY sms numbers is empty, populating spinner with an empty list");
-		}
-
-		// Logging
-		logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":updateSecondarySmsNumberSpinner()", "SECONDARY sms numbers spinner updated");
-	}
-
-	/**
 	 * To update primary free texts <code>Spinner</code> with correct values.
 	 * 
-	 * @see ax.ha.it.smsalarm.LogHandler#logCat(LogPriorities, String, String) logCat(LogPriorities,
-	 *      String, String)
+	 * @see ax.ha.it.smsalarm.handler.LogHandler#logCat(LogPriorities, String, String) logCat(LogPriorities, String, String)
 	 */
 	private void updatePrimaryFreeTextSpinner() {
 		// Check if there are primary free test and build up a proper spinner according to that
@@ -1723,8 +1712,7 @@ public class SmsAlarm extends Activity {
 	/**
 	 * To update secondary free texts <code>Spinner</code> with correct values.
 	 * 
-	 * @see ax.ha.it.smsalarm.LogHandler#logCat(LogPriorities, String, String) logCat(LogPriorities,
-	 *      String, String)
+	 * @see ax.ha.it.smsalarm.handler.LogHandler#logCat(LogPriorities, String, String) logCat(LogPriorities, String, String)
 	 */
 	private void updateSecondaryFreeTextSpinner() {
 		// Check if there are primary listen free test and build up a proper spinner according to
@@ -1754,8 +1742,7 @@ public class SmsAlarm extends Activity {
 	/**
 	 * To update acknowledge number <code>EditText</code> widget.
 	 * 
-	 * @see ax.ha.it.smsalarm.LogHandler#logCat(LogPriorities, String, String) logCat(LogPriorities,
-	 *      String, String)
+	 * @see ax.ha.it.smsalarm.handler.LogHandler#logCat(LogPriorities, String, String) logCat(LogPriorities, String, String)
 	 */
 	private void updateAcknowledgeNumberEditText() {
 		// Update acknowledge number EditText with value
@@ -1767,13 +1754,10 @@ public class SmsAlarm extends Activity {
 	}
 
 	/**
-	 * To update selected tone <code>EditText</code> widget with value of <code>toneSpinner</code>
-	 * position.
+	 * To update selected tone <code>EditText</code> widget with value of <code>toneSpinner</code> position.
 	 * 
-	 * @see ax.ha.it.smsalarm.LogHandler#logCat(LogPriorities, String, String) logCat(LogPriorities,
-	 *      String, String)
-	 * @see ax.ha.it.smsalarm.LogHandler#logCatTxt(LogPriorities, String, String)
-	 *      logCatTxt(LogPriorities, String, String)
+	 * @see ax.ha.it.smsalarm.handler.LogHandler#logCat(LogPriorities, String, String) logCat(LogPriorities, String, String)
+	 * @see ax.ha.it.smsalarm.handler.LogHandler#logCatTxt(LogPriorities, String, String) logCatTxt(LogPriorities, String, String)
 	 */
 	private void updateSelectedToneEditText() {
 		// Log tone spinner position
@@ -1810,8 +1794,7 @@ public class SmsAlarm extends Activity {
 	/**
 	 * To update use OS sound settings <code>CheckBox</code> widget.
 	 * 
-	 * @see ax.ha.it.smsalarm.LogHandler#logCat(LogPriorities, String, String) logCat(LogPriorities,
-	 *      String, String)
+	 * @see ax.ha.it.smsalarm.handler.LogHandler#logCat(LogPriorities, String, String) logCat(LogPriorities, String, String)
 	 */
 	private void updateUseOsSoundSettingsCheckBox() {
 		// Update use OS sound settings CheckBox
@@ -1829,8 +1812,7 @@ public class SmsAlarm extends Activity {
 	/**
 	 * To update play tone twice <code>CheckBox</code> widget.
 	 * 
-	 * @see ax.ha.it.smsalarm.LogHandler#logCat(LogPriorities, String, String) logCat(LogPriorities,
-	 *      String, String)
+	 * @see ax.ha.it.smsalarm.handler.LogHandler#logCat(LogPriorities, String, String) logCat(LogPriorities, String, String)
 	 */
 	private void updatePlayToneTwiceCheckBox() {
 		// Update play tone twice CheckBox
@@ -1848,8 +1830,7 @@ public class SmsAlarm extends Activity {
 	/**
 	 * To update enable Sms Alarm <code>CheckBox</code> widget.
 	 * 
-	 * @see ax.ha.it.smsalarm.LogHandler#logCat(LogPriorities, String, String) logCat(LogPriorities,
-	 *      String, String)
+	 * @see ax.ha.it.smsalarm.handler.LogHandler#logCat(LogPriorities, String, String) logCat(LogPriorities, String, String)
 	 */
 	private void updateEnableSmsAlarmCheckBox() {
 		// Update enable Sms Alarm CheckBox(default checked=true)
@@ -1865,17 +1846,14 @@ public class SmsAlarm extends Activity {
 	}
 
 	/**
-	 * To update widgets with relations to alarm acknowledgement. These are widgets of type
-	 * <code>CheckBox</code>, <code>Button</code> and <code>EditText</code>, they are
-	 * enableAckCheckBox, ackNumberButton and ackNumberEditText.
+	 * To update widgets with relations to alarm acknowledgement. These are widgets of type <code>CheckBox</code>, <code>Button</code> and
+	 * <code>EditText</code>, they are enableAckCheckBox, ackNumberButton and ackNumberEditText.
 	 * 
-	 * @see ax.ha.it.smsalarm.LogHandler#logCat(LogPriorities, String, String) logCat(LogPriorities,
-	 *      String, String)
+	 * @see ax.ha.it.smsalarm.handler.LogHandler#logCat(LogPriorities, String, String) logCat(LogPriorities, String, String)
 	 */
 	private void updateAcknowledgeWidgets() {
 		/*
-		 * Set checkbox for the enableAckCheckBox to true or false, also set some attributes to the
-		 * ackNumberButton and the ackNumberField
+		 * Set checkbox for the enableAckCheckBox to true or false, also set some attributes to the ackNumberButton and the ackNumberField
 		 */
 		if (useAlarmAcknowledge) {
 			enableAckCheckBox.setChecked(true);

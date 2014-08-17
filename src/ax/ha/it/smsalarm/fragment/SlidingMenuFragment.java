@@ -1,7 +1,7 @@
 /**
  * Copyright (c) 2014 Robert Nyholm. All rights reserved.
  */
-package ax.ha.it.smsalarm;
+package ax.ha.it.smsalarm.fragment;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -9,7 +9,13 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ListView;
-import ax.ha.it.smsalarm.LogHandler.LogPriorities;
+import ax.ha.it.smsalarm.R;
+import ax.ha.it.smsalarm.R.drawable;
+import ax.ha.it.smsalarm.R.layout;
+import ax.ha.it.smsalarm.handler.LogHandler;
+import ax.ha.it.smsalarm.handler.LogHandler.LogPriorities;
+import ax.ha.it.smsalarm.slidingmenu.adapter.SlidingMenuAdapter;
+import ax.ha.it.smsalarm.slidingmenu.model.SlidingMenuItem;
 
 import com.actionbarsherlock.app.SherlockListFragment;
 

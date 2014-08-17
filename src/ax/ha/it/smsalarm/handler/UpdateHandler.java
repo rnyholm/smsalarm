@@ -1,24 +1,22 @@
 /**
  * Copyright (c) 2014 Robert Nyholm. All rights reserved.
  */
-package ax.ha.it.smsalarm;
+package ax.ha.it.smsalarm.handler;
 
 import java.util.List;
 
 import android.app.Application;
 import android.content.pm.PackageManager.NameNotFoundException;
-import ax.ha.it.smsalarm.LogHandler.LogPriorities;
-import ax.ha.it.smsalarm.PreferencesHandler.DataTypes;
-import ax.ha.it.smsalarm.PreferencesHandler.PrefKeys;
+import ax.ha.it.smsalarm.handler.LogHandler.LogPriorities;
+import ax.ha.it.smsalarm.handler.PreferencesHandler.DataTypes;
+import ax.ha.it.smsalarm.handler.PreferencesHandler.PrefKeys;
 
 /**
- * Responsible for any <b><i>update actions</i></b>. In other words if some changes has been made in
- * current release of the application that needs to have some code executed(action) done after
- * update that code is managed by this class. Code that needs to be executed after update is placed
- * in {@link #onCreate()} method.<br>
- * To figure out if the application has been updated the <b><i>version code</i></b> is stored in
- * <code>SharedPreferences</code>, and at the end of the {@link #onCreate()} method the current
- * version code is <b><i>always</i></b> stored to shared preferences, this way that code within
+ * Responsible for any <b><i>update actions</i></b>. In other words if some changes has been made in current release of the application that needs to
+ * have some code executed(action) done after update that code is managed by this class. Code that needs to be executed after update is placed in
+ * {@link #onCreate()} method.<br>
+ * To figure out if the application has been updated the <b><i>version code</i></b> is stored in <code>SharedPreferences</code>, and at the end of the
+ * {@link #onCreate()} method the current version code is <b><i>always</i></b> stored to shared preferences, this way that code within
  * {@link #onCreate()} is executed more than one time.
  * 
  * @author Robert Nyholm <robert.nyholm@aland.net>

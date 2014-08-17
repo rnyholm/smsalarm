@@ -1,7 +1,7 @@
 /**
  * Copyright (c) 2013 Robert Nyholm. All rights reserved.
  */
-package ax.ha.it.smsalarm;
+package ax.ha.it.smsalarm.handler;
 
 import java.io.BufferedWriter;
 import java.io.File;
@@ -16,6 +16,9 @@ import android.annotation.SuppressLint;
 import android.content.Context;
 import android.os.Environment;
 import android.util.Log;
+import ax.ha.it.smsalarm.Alarm;
+import ax.ha.it.smsalarm.R;
+import ax.ha.it.smsalarm.R.string;
 
 /**
  * This class is responsible for all logging. This means logging to LogCat, errlog.txt and

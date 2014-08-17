@@ -35,7 +35,7 @@
  				<!-- Future intents and services for this activity goes here -->
             </intent-filter>
         </activity>       
-        <activity android:name=".AcknowledgeHandler" android:noHistory="true" android:screenOrientation="portrait" android:label="@string/APP_NAME">
+        <activity android:name="ax.ha.it.smsalarm.handler.AcknowledgeHandler" android:noHistory="true" android:screenOrientation="portrait" android:label="@string/APP_NAME">
         </activity>        
         <receiver android:name=".SmsReceiver" android:enabled="true" android:exported="true">
          	<intent-filter android:priority="999"> 

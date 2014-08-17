@@ -1,7 +1,7 @@
 /**
  * Copyright (c) 2013 Robert Nyholm. All rights reserved.
  */
-package ax.ha.it.smsalarm;
+package ax.ha.it.smsalarm.handler;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -11,11 +11,13 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
-import ax.ha.it.smsalarm.LogHandler.LogPriorities;
+import ax.ha.it.smsalarm.Alarm;
+import ax.ha.it.smsalarm.enumeration.AlarmTypes;
+import ax.ha.it.smsalarm.handler.LogHandler.LogPriorities;
 
 /**
- * Class responsible for all <code>Database</code> access and handling. <code>Database</code> access
- * and handling are done via the <code>SQLiteOpenHelper</code> class.
+ * Class responsible for all <code>Database</code> access and handling. <code>Database</code> access and handling are done via the
+ * <code>SQLiteOpenHelper</code> class.
  * 
  * @author Robert Nyholm <robert.nyholm@aland.net>
  * @version 2.2.1
@@ -50,14 +52,12 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 	private static final String KEY_ALARM_TYPE = "alarmType";
 
 	/**
-	 * Constructor for the <code>DatabaseHandler</code>, takes just context as argument. Calling
-	 * super classes constructor with <code>context, DATABASE_NAME, DATABASE_VERSION</code>.
+	 * Constructor for the <code>DatabaseHandler</code>, takes just context as argument. Calling super classes constructor with
+	 * <code>context, DATABASE_NAME, DATABASE_VERSION</code>.
 	 * 
 	 * @param context
 	 *            Context in which to create the <code>DatabaseHandler</code> object
-	 * 
-	 * @see ax.ha.it.smsalarm.LogHandler#logCat(LogPriorities, String, String) logCat(LogPriorities,
-	 *      String, String)
+	 * @see ax.ha.it.smsalarm.handler.LogHandler#logCat(LogPriorities, String, String) logCat(LogPriorities, String, String)
 	 */
 	public DatabaseHandler(Context context) {
 		super(context, DB_NAME, null, DB_VERSION);
@@ -69,8 +69,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 	/**
 	 * To create table table with columns representing an <code>Alarm</code>.
 	 * 
-	 * @see ax.ha.it.smsalarm.LogHandler#logCat(LogPriorities, String, String) logCat(LogPriorities,
-	 *      String, String)
+	 * @see ax.ha.it.smsalarm.handler.LogHandler#logCat(LogPriorities, String, String) logCat(LogPriorities, String, String)
 	 * @see ax.ha.it.smsalarm.Alarm ax.ha.it.smsalarm.Alarm
 	 */
 	@Override
@@ -88,8 +87,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 	/**
 	 * To upgrade the database.
 	 * 
-	 * @see ax.ha.it.smsalarm.LogHandler#logCat(LogPriorities, String, String) logCat(LogPriorities,
-	 *      String, String)
+	 * @see ax.ha.it.smsalarm.handler.LogHandler#logCat(LogPriorities, String, String) logCat(LogPriorities, String, String)
 	 */
 	@Override
 	public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
@@ -137,9 +135,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 	 * 
 	 * @param alarm
 	 *            Alarm to be inserted in database
-	 * 
-	 * @see ax.ha.it.smsalarm.LogHandler#logCat(LogPriorities, String, String) logCat(LogPriorities,
-	 *      String, String)
+	 * @see ax.ha.it.smsalarm.handler.LogHandler#logCat(LogPriorities, String, String) logCat(LogPriorities, String, String)
 	 * @see ax.ha.it.smsalarm.Alarm ax.ha.it.smsalarm.Alarm
 	 * @see ax.ha.it.smsalarm.Alarm#getReceived() getReceived()
 	 * @see ax.ha.it.smsalarm.Alarm#getSender() getSender()
@@ -171,20 +167,14 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 	}
 
 	/**
-	 * To get a row from the database with the given <code>id</code> as an <code>Alarm</code>
-	 * object.
+	 * To get a row from the database with the given <code>id</code> as an <code>Alarm</code> object.
 	 * 
 	 * @param id
-	 *            Find and return the <code>Alarm</code> object with this id given as
-	 *            <code>int</code>
-	 * 
+	 *            Find and return the <code>Alarm</code> object with this id given as <code>int</code>
 	 * @return <code>Alarm</code> object
-	 * 
 	 * @throws android.database.CursorIndexOutOfBoundsException
 	 *             If no row with the given id is found in the database
-	 * 
-	 * @see ax.ha.it.smsalarm.LogHandler#logCat(LogPriorities, String, String) logCat(LogPriorities,
-	 *      String, String)
+	 * @see ax.ha.it.smsalarm.handler.LogHandler#logCat(LogPriorities, String, String) logCat(LogPriorities, String, String)
 	 * @see ax.ha.it.smsalarm.Alarm ax.ha.it.smsalarm.Alarm
 	 */
 	public Alarm getAlarm(int id) throws android.database.CursorIndexOutOfBoundsException {
@@ -212,14 +202,11 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 	}
 
 	/**
-	 * To get all <code>Alarm</code> entries in database as a <code>List</code> of
-	 * <code>Alarm</code> objects. An empty list will be returned if no entries are found in
-	 * database.
+	 * To get all <code>Alarm</code> entries in database as a <code>List</code> of <code>Alarm</code> objects. An empty list will be returned if no
+	 * entries are found in database.
 	 * 
 	 * @return All entries in database as a <code>List</code> of <code>Alarm</code> objects
-	 * 
-	 * @see ax.ha.it.smsalarm.LogHandler#logCat(LogPriorities, String, String) logCat(LogPriorities,
-	 *      String, String)
+	 * @see ax.ha.it.smsalarm.handler.LogHandler#logCat(LogPriorities, String, String) logCat(LogPriorities, String, String)
 	 * @see ax.ha.it.smsalarm.Alarm ax.ha.it.smsalarm.Alarm
 	 */
 	public List<Alarm> getAllAlarm() {
@@ -260,9 +247,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 	 * To count number of <code>Alarm</code>'s (entries) in database.
 	 * 
 	 * @return Number of <code>Alarm</code>'s (entries) in database as <code>int</code>
-	 * 
-	 * @see ax.ha.it.smsalarm.LogHandler#logCat(LogPriorities, String, String) logCat(LogPriorities,
-	 *      String, String)
+	 * @see ax.ha.it.smsalarm.handler.LogHandler#logCat(LogPriorities, String, String) logCat(LogPriorities, String, String)
 	 */
 	public int getAlarmsCount() {
 		// Select all query
@@ -295,10 +280,8 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 	 * 
 	 * @see #getAlarmsCount()
 	 * @see #getAlarm(int)
-	 * @see ax.ha.it.smsalarm.LogHandler#logCat(LogPriorities, String, String) logCat(LogPriorities,
-	 *      String, String)
-	 * @see ax.ha.it.smsalarm.LogHandler#logCatTxt(LogPriorities, String, String, Throwable)
-	 *      logCat(LogPriorities, String, String, Throwable)
+	 * @see ax.ha.it.smsalarm.handler.LogHandler#logCat(LogPriorities, String, String) logCat(LogPriorities, String, String)
+	 * @see ax.ha.it.smsalarm.handler.LogHandler#logCatTxt(LogPriorities, String, String, Throwable) logCat(LogPriorities, String, String, Throwable)
 	 * @see ax.ha.it.smsalarm.Alarm ax.ha.it.smsalarm.Alarm
 	 */
 	public Alarm getLatestAlarm() {
@@ -320,16 +303,12 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 	}
 
 	/**
-	 * To update an existing <code>Alarm</code> entry in database. It finds correct entry to update
-	 * on alarms <code>id</code>.
+	 * To update an existing <code>Alarm</code> entry in database. It finds correct entry to update on alarms <code>id</code>.
 	 * 
 	 * @param alarm
 	 *            <code>Alarm</code> to be inserted in database.
-	 * 
 	 * @return <code>int</code> DON'T REALLY KNOW!?!?
-	 * 
-	 * @see ax.ha.it.smsalarm.LogHandler#logCat(LogPriorities, String, String) logCat(LogPriorities,
-	 *      String, String)
+	 * @see ax.ha.it.smsalarm.handler.LogHandler#logCat(LogPriorities, String, String) logCat(LogPriorities, String, String)
 	 * @see ax.ha.it.smsalarm.Alarm ax.ha.it.smsalarm.Alarm
 	 * @see ax.ha.it.smsalarm.Alarm#getReceived() getReceived()
 	 * @see ax.ha.it.smsalarm.Alarm#getSender() getSender()
@@ -365,10 +344,8 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 	 * @see #getAlarmsCount()
 	 * @see #getAlarm(int)
 	 * @see #updateAlarm(Alarm)
-	 * @see ax.ha.it.smsalarm.LogHandler#logCat(LogPriorities, String, String) logCat(LogPriorities,
-	 *      String, String)
-	 * @see ax.ha.it.smsalarm.LogHandler#logCatTxt(LogPriorities, String, String, Throwable)
-	 *      logCat(LogPriorities, String, String, Throwable)
+	 * @see ax.ha.it.smsalarm.handler.LogHandler#logCat(LogPriorities, String, String) logCat(LogPriorities, String, String)
+	 * @see ax.ha.it.smsalarm.handler.LogHandler#logCatTxt(LogPriorities, String, String, Throwable) logCat(LogPriorities, String, String, Throwable)
 	 * @see ax.ha.it.smsalarm.Alarm ax.ha.it.smsalarm.Alarm
 	 * @see ax.ha.it.smsalarm.Alarm#updateAcknowledged() updateAcknowledged()
 	 */
@@ -397,18 +374,14 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 	}
 
 	/**
-	 * To update latest <b><i>PRIMARY</i></b> <code>Alarm</code> entry's acknowledge time in
-	 * database.
+	 * To update latest <b><i>PRIMARY</i></b> <code>Alarm</code> entry's acknowledge time in database.
 	 * 
 	 * @parm primaryAlarmNumber Phone number of primary alarms sender as String.
-	 * 
 	 * @see #getAlarmsCount()
 	 * @see #getAlarm(int)
 	 * @see #updateAlarm(Alarm)
-	 * @see ax.ha.it.smsalarm.LogHandler#logCat(LogPriorities, String, String) logCat(LogPriorities,
-	 *      String, String)
-	 * @see ax.ha.it.smsalarm.LogHandler#logCatTxt(LogPriorities, String, String, Throwable)
-	 *      logCat(LogPriorities, String, String, Throwable)
+	 * @see ax.ha.it.smsalarm.handler.LogHandler#logCat(LogPriorities, String, String) logCat(LogPriorities, String, String)
+	 * @see ax.ha.it.smsalarm.handler.LogHandler#logCatTxt(LogPriorities, String, String, Throwable) logCat(LogPriorities, String, String, Throwable)
 	 * @see ax.ha.it.smsalarm.Alarm ax.ha.it.smsalarm.Alarm
 	 * @see ax.ha.it.smsalarm.Alarm#updateAcknowledged() updateAcknowledged()
 	 * @see ax.ha.it.smsalarm.Alarm#getAlarmType() getAlarmType()
@@ -444,14 +417,11 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 	}
 
 	/**
-	 * To delete an existing <code>Alarm</code> entry in database. It finds correct entry to delete
-	 * on alarms <code>id</code>.
+	 * To delete an existing <code>Alarm</code> entry in database. It finds correct entry to delete on alarms <code>id</code>.
 	 * 
 	 * @param alarm
 	 *            <code>Alarm</code> to be deleted from database.
-	 * 
-	 * @see ax.ha.it.smsalarm.LogHandler#logCat(LogPriorities, String, String) logCat(LogPriorities,
-	 *      String, String)
+	 * @see ax.ha.it.smsalarm.handler.LogHandler#logCat(LogPriorities, String, String) logCat(LogPriorities, String, String)
 	 * @see ax.ha.it.smsalarm.Alarm ax.ha.it.smsalarm.Alarm
 	 */
 	public void deleteAlarm(Alarm alarm) {

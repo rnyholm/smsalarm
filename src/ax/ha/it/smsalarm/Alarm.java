@@ -8,7 +8,9 @@ import java.util.Calendar;
 import java.util.Date;
 
 import android.content.Context;
-import ax.ha.it.smsalarm.LogHandler.LogPriorities;
+import ax.ha.it.smsalarm.enumeration.AlarmTypes;
+import ax.ha.it.smsalarm.handler.LogHandler;
+import ax.ha.it.smsalarm.handler.LogHandler.LogPriorities;
 
 /**
  * Class representing an Alarm. Mainly holds data for an Alarm but also some help methods for
@@ -38,7 +40,7 @@ public class Alarm {
 	/**
 	 * To create a new empty Alarm object.
 	 * 
-	 * @see ax.ha.it.smsalarm.LogHandler#logCat(LogPriorities, String, String) logCat(LogPriorities,
+	 * @see ax.ha.it.smsalarm.handler.LogHandler#logCat(LogPriorities, String, String) logCat(LogPriorities,
 	 *      String, String)
 	 */
 	public Alarm() {
@@ -58,7 +60,7 @@ public class Alarm {
 	 * @param alarmType
 	 *            Alarm type as <code>AlarmTypes</code>
 	 * 
-	 * @see ax.ha.it.smsalarm.LogHandler#logCat(LogPriorities, String, String) logCat(LogPriorities,
+	 * @see ax.ha.it.smsalarm.handler.LogHandler#logCat(LogPriorities, String, String) logCat(LogPriorities,
 	 *      String, String)
 	 */
 	public Alarm(String sender, String message, String triggerText, AlarmTypes alarmType) {
@@ -95,7 +97,7 @@ public class Alarm {
 	 * @param alarmType
 	 *            Alarm type as <code>AlarmTypes</code>
 	 * 
-	 * @see ax.ha.it.smsalarm.LogHandler#logCat(LogPriorities, String, String) logCat(LogPriorities,
+	 * @see ax.ha.it.smsalarm.handler.LogHandler#logCat(LogPriorities, String, String) logCat(LogPriorities,
 	 *      String, String)
 	 */
 	public Alarm(int id, String received, String sender, String message, String triggerText, String acknowledged, AlarmTypes alarmType) {
@@ -116,7 +118,7 @@ public class Alarm {
 	 * 
 	 * @return <code>true</code> if this object is empty, else <code>false</code>
 	 * 
-	 * @see ax.ha.it.smsalarm.LogHandler#logCat(LogPriorities, String, String) logCat(LogPriorities,
+	 * @see ax.ha.it.smsalarm.handler.LogHandler#logCat(LogPriorities, String, String) logCat(LogPriorities,
 	 *      String, String)
 	 */
 	public boolean isEmpty() {
@@ -137,7 +139,7 @@ public class Alarm {
 	 * 
 	 * @return Alarm id as <code>int</code>
 	 * 
-	 * @see ax.ha.it.smsalarm.LogHandler#logCat(LogPriorities, String, String) logCat(LogPriorities,
+	 * @see ax.ha.it.smsalarm.handler.LogHandler#logCat(LogPriorities, String, String) logCat(LogPriorities,
 	 *      String, String)
 	 */
 	public int getId() {
@@ -152,7 +154,7 @@ public class Alarm {
 	 * @param id
 	 *            Alarm id as <code>int</code>
 	 * 
-	 * @see ax.ha.it.smsalarm.LogHandler#logCat(LogPriorities, String, String) logCat(LogPriorities,
+	 * @see ax.ha.it.smsalarm.handler.LogHandler#logCat(LogPriorities, String, String) logCat(LogPriorities,
 	 *      String, String)
 	 */
 	public void setId(int id) {
@@ -166,7 +168,7 @@ public class Alarm {
 	 * 
 	 * @return Datetime when an Alarm was received as <code>String</code>
 	 * 
-	 * @see ax.ha.it.smsalarm.LogHandler#logCat(LogPriorities, String, String) logCat(LogPriorities,
+	 * @see ax.ha.it.smsalarm.handler.LogHandler#logCat(LogPriorities, String, String) logCat(LogPriorities,
 	 *      String, String)
 	 */
 	public String getReceived() {
@@ -183,7 +185,7 @@ public class Alarm {
 	 * 
 	 * @see #updateReceived()
 	 * @see #setReceived(String)
-	 * @see ax.ha.it.smsalarm.LogHandler#logCat(LogPriorities, String, String) logCat(LogPriorities,
+	 * @see ax.ha.it.smsalarm.handler.LogHandler#logCat(LogPriorities, String, String) logCat(LogPriorities,
 	 *      String, String)
 	 */
 	public void setReceived(Date date) {
@@ -201,7 +203,7 @@ public class Alarm {
 	 * 
 	 * @see #updateReceived()
 	 * @see #setReceived(Date)
-	 * @see ax.ha.it.smsalarm.LogHandler#logCat(LogPriorities, String, String) logCat(LogPriorities,
+	 * @see ax.ha.it.smsalarm.handler.LogHandler#logCat(LogPriorities, String, String) logCat(LogPriorities,
 	 *      String, String)
 	 */
 	public void setReceived(String received) {
@@ -216,7 +218,7 @@ public class Alarm {
 	 * 
 	 * @return Sender as <code>String</code>
 	 * 
-	 * @see ax.ha.it.smsalarm.LogHandler#logCat(LogPriorities, String, String) logCat(LogPriorities,
+	 * @see ax.ha.it.smsalarm.handler.LogHandler#logCat(LogPriorities, String, String) logCat(LogPriorities,
 	 *      String, String)
 	 */
 	public String getSender() {
@@ -231,7 +233,7 @@ public class Alarm {
 	 * @param sender
 	 *            Sender as <code>String</code>
 	 * 
-	 * @see ax.ha.it.smsalarm.LogHandler#logCat(LogPriorities, String, String) logCat(LogPriorities,
+	 * @see ax.ha.it.smsalarm.handler.LogHandler#logCat(LogPriorities, String, String) logCat(LogPriorities,
 	 *      String, String)
 	 */
 	public void setSender(String sender) {
@@ -245,7 +247,7 @@ public class Alarm {
 	 * 
 	 * @return Alarm message as <code>String</code>
 	 * 
-	 * @see ax.ha.it.smsalarm.LogHandler#logCat(LogPriorities, String, String) logCat(LogPriorities,
+	 * @see ax.ha.it.smsalarm.handler.LogHandler#logCat(LogPriorities, String, String) logCat(LogPriorities,
 	 *      String, String)
 	 */
 	public String getMessage() {
@@ -260,7 +262,7 @@ public class Alarm {
 	 * @param message
 	 *            Alarm message as <code>String</code>
 	 * 
-	 * @see ax.ha.it.smsalarm.LogHandler#logCat(LogPriorities, String, String) logCat(LogPriorities,
+	 * @see ax.ha.it.smsalarm.handler.LogHandler#logCat(LogPriorities, String, String) logCat(LogPriorities,
 	 *      String, String)
 	 */
 	public void setMessage(String message) {
@@ -274,7 +276,7 @@ public class Alarm {
 	 * 
 	 * @return Alarm trigger text as <code>String</code>
 	 * 
-	 * @see ax.ha.it.smsalarm.LogHandler#logCat(LogPriorities, String, String) logCat(LogPriorities,
+	 * @see ax.ha.it.smsalarm.handler.LogHandler#logCat(LogPriorities, String, String) logCat(LogPriorities,
 	 *      String, String)
 	 */
 	public String getTriggerText() {
@@ -289,7 +291,7 @@ public class Alarm {
 	 * @param message
 	 *            Alarm trigger text as <code>String</code>
 	 * 
-	 * @see ax.ha.it.smsalarm.LogHandler#logCat(LogPriorities, String, String) logCat(LogPriorities,
+	 * @see ax.ha.it.smsalarm.handler.LogHandler#logCat(LogPriorities, String, String) logCat(LogPriorities,
 	 *      String, String)
 	 */
 	public void setTriggerText(String triggerText) {
@@ -303,7 +305,7 @@ public class Alarm {
 	 * 
 	 * @return Acknowledge time as <code>String</code>
 	 * 
-	 * @see ax.ha.it.smsalarm.LogHandler#logCat(LogPriorities, String, String) logCat(LogPriorities,
+	 * @see ax.ha.it.smsalarm.handler.LogHandler#logCat(LogPriorities, String, String) logCat(LogPriorities,
 	 *      String, String)
 	 */
 	public String getAcknowledged() {
@@ -322,7 +324,7 @@ public class Alarm {
 	 * 
 	 * @see #updateAcknowledged()
 	 * @see #setAcknowledged(String)
-	 * @see ax.ha.it.smsalarm.LogHandler#logCat(LogPriorities, String, String) logCat(LogPriorities,
+	 * @see ax.ha.it.smsalarm.handler.LogHandler#logCat(LogPriorities, String, String) logCat(LogPriorities,
 	 *      String, String)
 	 */
 	public void setAcknowledged(Context context, Date date) {
@@ -340,7 +342,7 @@ public class Alarm {
 	 * 
 	 * @see #updateAcknowledged()
 	 * @see #setAcknowledged(Date)
-	 * @see ax.ha.it.smsalarm.LogHandler#logCat(LogPriorities, String, String) logCat(LogPriorities,
+	 * @see ax.ha.it.smsalarm.handler.LogHandler#logCat(LogPriorities, String, String) logCat(LogPriorities,
 	 *      String, String)
 	 */
 	public void setAcknowledged(String acknowledged) {
@@ -355,7 +357,7 @@ public class Alarm {
 	 * 
 	 * @see #setReceived(Date)
 	 * @see #setReceived(String)
-	 * @see ax.ha.it.smsalarm.LogHandler#logCat(LogPriorities, String, String) logCat(LogPriorities,
+	 * @see ax.ha.it.smsalarm.handler.LogHandler#logCat(LogPriorities, String, String) logCat(LogPriorities,
 	 *      String, String)
 	 */
 	public void updateReceived() {
@@ -370,7 +372,7 @@ public class Alarm {
 	 * 
 	 * @return Alarm type as <code>AlarmTypes</code>
 	 * 
-	 * @see ax.ha.it.smsalarm.LogHandler#logCat(LogPriorities, String, String) logCat(LogPriorities,
+	 * @see ax.ha.it.smsalarm.handler.LogHandler#logCat(LogPriorities, String, String) logCat(LogPriorities,
 	 *      String, String)
 	 */
 	public AlarmTypes getAlarmType() {
@@ -385,7 +387,7 @@ public class Alarm {
 	 * @param alarmType
 	 *            Alarm type as <code>AlarmTypes</code>
 	 * 
-	 * @see ax.ha.it.smsalarm.LogHandler#logCat(LogPriorities, String, String) logCat(LogPriorities,
+	 * @see ax.ha.it.smsalarm.handler.LogHandler#logCat(LogPriorities, String, String) logCat(LogPriorities,
 	 *      String, String)
 	 */
 	public void setAlarmType(AlarmTypes alarmType) {
@@ -400,7 +402,7 @@ public class Alarm {
 	 * 
 	 * @see #setAcknowledged(Date)
 	 * @see #setAcknowledged(String)
-	 * @see ax.ha.it.smsalarm.LogHandler#logCat(LogPriorities, String, String) logCat(LogPriorities,
+	 * @see ax.ha.it.smsalarm.handler.LogHandler#logCat(LogPriorities, String, String) logCat(LogPriorities,
 	 *      String, String)
 	 */
 	public void updateAcknowledged() {

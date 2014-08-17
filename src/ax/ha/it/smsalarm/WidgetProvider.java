@@ -15,9 +15,12 @@ import android.content.Intent;
 import android.net.Uri;
 import android.webkit.MimeTypeMap;
 import android.widget.RemoteViews;
-import ax.ha.it.smsalarm.LogHandler.LogPriorities;
-import ax.ha.it.smsalarm.PreferencesHandler.DataTypes;
-import ax.ha.it.smsalarm.PreferencesHandler.PrefKeys;
+import ax.ha.it.smsalarm.handler.DatabaseHandler;
+import ax.ha.it.smsalarm.handler.LogHandler;
+import ax.ha.it.smsalarm.handler.PreferencesHandler;
+import ax.ha.it.smsalarm.handler.LogHandler.LogPriorities;
+import ax.ha.it.smsalarm.handler.PreferencesHandler.DataTypes;
+import ax.ha.it.smsalarm.handler.PreferencesHandler.PrefKeys;
 
 /**
  * Provider class for the application widgets. This class is responsible for all updates, data
@@ -70,13 +73,13 @@ public class WidgetProvider extends AppWidgetProvider {
 	 * @see #setEnableSmsAlarmPref(Context, boolean)
 	 * @see #setUseOsSoundSettingsPref(Context, boolean)
 	 * @see #WidgetProvider()
-	 * @see ax.ha.it.smsalarm.LogHandler#getAlarmLogPath()
+	 * @see ax.ha.it.smsalarm.handler.LogHandler#getAlarmLogPath()
 	 *      ax.ha.it.smsalarm.LogHandler#getAlarmLogPath()
-	 * @see ax.ha.it.smsalarm.LogHandler#logCat(LogPriorities, String, String) logCat(LogPriorities,
+	 * @see ax.ha.it.smsalarm.handler.LogHandler#logCat(LogPriorities, String, String) logCat(LogPriorities,
 	 *      String, String)
-	 * @see ax.ha.it.smsalarm.LogHandler#logCatTxt(LogPriorities, String, String, Throwable)
+	 * @see ax.ha.it.smsalarm.handler.LogHandler#logCatTxt(LogPriorities, String, String, Throwable)
 	 *      logCatTxt(LogPriorities, String, String, Throwable)
-	 * @see ax.ha.it.smsalarm.DatabaseHandler ax.ha.it.smsalarm.DatabaseHandler
+	 * @see ax.ha.it.smsalarm.handler.DatabaseHandler ax.ha.it.smsalarm.DatabaseHandler
 	 */
 	@Override
 	public void onReceive(Context context, Intent intent) {
@@ -162,9 +165,9 @@ public class WidgetProvider extends AppWidgetProvider {
 	 * @see #onReceive(Context, Intent)
 	 * @see #getWidgetPrefs(Context)
 	 * @see #setWidgetTextViews(RemoteViews, Context)
-	 * @see ax.ha.it.smsalarm.LogHandler#logCat(LogPriorities, String, String) logCat(LogPriorities,
+	 * @see ax.ha.it.smsalarm.handler.LogHandler#logCat(LogPriorities, String, String) logCat(LogPriorities,
 	 *      String, String)
-	 * @see ax.ha.it.smsalarm.DatabaseHandler ax.ha.it.smsalarm.DatabaseHandler
+	 * @see ax.ha.it.smsalarm.handler.DatabaseHandler ax.ha.it.smsalarm.DatabaseHandler
 	 */
 	@Override
 	public void onUpdate(Context context, AppWidgetManager appWidgetManager, int[] appWidgetIds) {
@@ -237,7 +240,7 @@ public class WidgetProvider extends AppWidgetProvider {
 	 * @param context
 	 *            <code>Context</code> from which resources are retrieved
 	 * 
-	 * @see ax.ha.it.smsalarm.LogHandler#logCat(LogPriorities, String, String) logCat(LogPriorities,
+	 * @see ax.ha.it.smsalarm.handler.LogHandler#logCat(LogPriorities, String, String) logCat(LogPriorities,
 	 *      String, String)
 	 * @see #getLatestAlarm(Context)
 	 */
@@ -287,10 +290,10 @@ public class WidgetProvider extends AppWidgetProvider {
 	 *            Context from which resources are retrieved
 	 * @return String with appropriate text depending on if any alarms exists or not in database
 	 * 
-	 * @see ax.ha.it.smsalarm.LogHandler#logCat(LogPriorities, String, String) logCat(LogPriorities,
+	 * @see ax.ha.it.smsalarm.handler.LogHandler#logCat(LogPriorities, String, String) logCat(LogPriorities,
 	 *      String, String)
 	 * @see ax.ha.it.smsalarm.Alarm ax.ha.it.smsalarm.Alarm
-	 * @see ax.ha.it.smsalarm.DatabaseHandler ax.ha.it.smsalarm.DatabaseHandler
+	 * @see ax.ha.it.smsalarm.handler.DatabaseHandler ax.ha.it.smsalarm.DatabaseHandler
 	 */
 	private String getLatestAlarm(Context context) {
 		// Some logging
@@ -373,13 +376,13 @@ public class WidgetProvider extends AppWidgetProvider {
 	 * @param context
 	 *            Context
 	 * 
-	 * @see ax.ha.it.smsalarm.LogHandler#logCat(LogPriorities, String, String) logCat(LogPriorities,
+	 * @see ax.ha.it.smsalarm.handler.LogHandler#logCat(LogPriorities, String, String) logCat(LogPriorities,
 	 *      String, String)
-	 * @see ax.ha.it.smsalarm.LogHandler#logCatTxt(LogPriorities, String, String, Throwable)
+	 * @see ax.ha.it.smsalarm.handler.LogHandler#logCatTxt(LogPriorities, String, String, Throwable)
 	 *      logCatTxt(LogPriorities, String, String, Throwable)
-	 * @see ax.ha.it.smsalarm.PreferencesHandler#getPrefs(PrefKeys, PrefKeys, DataTypes, Context)
+	 * @see ax.ha.it.smsalarm.handler.PreferencesHandler#getPrefs(PrefKeys, PrefKeys, DataTypes, Context)
 	 *      getPrefs(PrefKeys, PrefKeys, DataTypes, Context)
-	 * @see ax.ha.it.smsalarm.PreferencesHandler#getPrefs(PrefKeys, PrefKeys, DataTypes, Context,
+	 * @see ax.ha.it.smsalarm.handler.PreferencesHandler#getPrefs(PrefKeys, PrefKeys, DataTypes, Context,
 	 *      Object) getPrefs(PrefKeys, PrefKeys, DataTypes, Context, Object)
 	 */
 	private void getWidgetPrefs(Context context) {
@@ -407,9 +410,9 @@ public class WidgetProvider extends AppWidgetProvider {
 	 *            Boolean indicating whether or not Sms Alarm is enabled
 	 * 
 	 * @see #setUseOsSoundSettingsPref(Context, boolean)
-	 * @see ax.ha.it.smsalarm.LogHandler#logCat(LogPriorities, String, String)
+	 * @see ax.ha.it.smsalarm.handler.LogHandler#logCat(LogPriorities, String, String)
 	 *      ax.ha.it.smsalarm.LogHandler#logCat(LogPriorities, String, String)
-	 * @see ax.ha.it.smsalarm.PreferencesHandler#setPrefs(PrefKeys, PrefKeys, Object, Context)
+	 * @see ax.ha.it.smsalarm.handler.PreferencesHandler#setPrefs(PrefKeys, PrefKeys, Object, Context)
 	 *      ax.ha.it.smsalarm.PreferencesHandler#setPrefs(PrefKeys, PrefKeys, Object, Context)
 	 */
 	private void setEnableSmsAlarmPref(Context context, boolean enabled) {
@@ -433,9 +436,9 @@ public class WidgetProvider extends AppWidgetProvider {
 	 *            settings is enabled
 	 * 
 	 * @see #setUseOsSoundSettingsPref(Context, boolean)
-	 * @see ax.ha.it.smsalarm.LogHandler#logCat(LogPriorities, String, String)
+	 * @see ax.ha.it.smsalarm.handler.LogHandler#logCat(LogPriorities, String, String)
 	 *      ax.ha.it.smsalarm.LogHandler#logCat(LogPriorities, String, String)
-	 * @see ax.ha.it.smsalarm.PreferencesHandler#setPrefs(PrefKeys, PrefKeys, Object, Context)
+	 * @see ax.ha.it.smsalarm.handler.PreferencesHandler#setPrefs(PrefKeys, PrefKeys, Object, Context)
 	 *      ax.ha.it.smsalarm.PreferencesHandler#setPrefs(PrefKeys, PrefKeys, Object, Context)
 	 */
 	private void setUseOsSoundSettingsPref(Context context, boolean enabled) {
@@ -452,7 +455,7 @@ public class WidgetProvider extends AppWidgetProvider {
 	/**
 	 * To update all <code>Widget</code>'s associated to this application.
 	 * 
-	 * @see ax.ha.it.smsalarm.LogHandler#logCat(LogPriorities, String, String) logCat(LogPriorities,
+	 * @see ax.ha.it.smsalarm.handler.LogHandler#logCat(LogPriorities, String, String) logCat(LogPriorities,
 	 *      String, String)
 	 */
 	public static void updateWidgets(Context context) {

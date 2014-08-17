@@ -1,7 +1,7 @@
 /**
  * Copyright (c) 2013 Robert Nyholm. All rights reserved.
  */
-package ax.ha.it.smsalarm;
+package ax.ha.it.smsalarm.handler;
 
 import java.io.IOException;
 
@@ -11,17 +11,17 @@ import android.media.AudioManager;
 import android.media.MediaPlayer;
 import android.media.MediaPlayer.OnCompletionListener;
 import android.os.Vibrator;
-import ax.ha.it.smsalarm.LogHandler.LogPriorities;
+import ax.ha.it.smsalarm.R;
+import ax.ha.it.smsalarm.handler.LogHandler.LogPriorities;
 
 /**
- * This class is responsible for all sound and vibration handling. This means playing tones, vibrate
- * and so on, depending on application and phone settings.<br>
+ * This class is responsible for all sound and vibration handling. This means playing tones, vibrate and so on, depending on application and phone
+ * settings.<br>
  * <b><i>NoiseHandler is a singleton.</i></b>
  * 
  * @author Robert Nyholm <robert.nyholm@aland.net>
  * @version 2.2.1
  * @since 2.0
- * 
  * @see RingerModeHandler
  */
 public class NoiseHandler {
@@ -50,8 +50,7 @@ public class NoiseHandler {
 	/**
 	 * Private constructor, is private due to it's singleton pattern.
 	 * 
-	 * @see ax.ha.it.smsalarm.LogHandler#logCat(LogPriorities, String, String) logCat(LogPriorities,
-	 *      String, String)
+	 * @see ax.ha.it.smsalarm.handler.LogHandler#logCat(LogPriorities, String, String) logCat(LogPriorities, String, String)
 	 */
 	private NoiseHandler() {
 		// Get instance of logger
@@ -78,8 +77,8 @@ public class NoiseHandler {
 	}
 
 	/**
-	 * Method to play message tone and vibrate, depending on application settings. This method also
-	 * takes in account the operating systems sound settings, this depends on a input parameter.
+	 * Method to play message tone and vibrate, depending on application settings. This method also takes in account the operating systems sound
+	 * settings, this depends on a input parameter.
 	 * 
 	 * @param context
 	 *            Context
@@ -88,23 +87,17 @@ public class NoiseHandler {
 	 * @param useSoundSettings
 	 *            If this method should take consideration to the device's sound settings as Boolean
 	 * @param playToneTwice
-	 *            Indication whether message tone should be played once or twice, this is the same
-	 *            for vibration also
-	 * 
+	 *            Indication whether message tone should be played once or twice, this is the same for vibration also
 	 * @exception IllegalArgumentException
 	 *                Can occur when setting data source for media player or preparing media player
 	 * @exception IllegalStateException
 	 *                Can occur when setting data source for media player or preparing media player
 	 * @exception IOException
-	 *                Can occur when setting data source for media player or preparing media player.
-	 *                Also when resolving message tone id
-	 * 
-	 * @see ax.ha.it.smsalarm.LogHandler#logCat(LogPriorities, String, String) logCat(LogPriorities,
-	 *      String, String)
-	 * @see ax.ha.it.smsalarm.LogHandler#logCatTxt(LogPriorities, String, String)
-	 *      logCatTxt(LogPriorities, String, String)
-	 * @see ax.ha.it.smsalarm.LogHandler#logCatTxt(LogPriorities, String, String, Throwable)
-	 *      logCatTxt(LogPriorities, String, String, Throwable)
+	 *                Can occur when setting data source for media player or preparing media player. Also when resolving message tone id
+	 * @see ax.ha.it.smsalarm.handler.LogHandler#logCat(LogPriorities, String, String) logCat(LogPriorities, String, String)
+	 * @see ax.ha.it.smsalarm.handler.LogHandler#logCatTxt(LogPriorities, String, String) logCatTxt(LogPriorities, String, String)
+	 * @see ax.ha.it.smsalarm.handler.LogHandler#logCatTxt(LogPriorities, String, String, Throwable) logCatTxt(LogPriorities, String, String,
+	 *      Throwable)
 	 */
 	public void makeNoise(Context context, int id, boolean useSoundSettings, boolean playToneTwice) {
 		// Log information
@@ -191,9 +184,8 @@ public class NoiseHandler {
 			}
 
 			/*
-			 * If application use systems sound settings, check if phone is in normal, silent or
-			 * vibration mode else don't check phones status and play tone and vibrate even if phone
-			 * is in silent or vibrate mode
+			 * If application use systems sound settings, check if phone is in normal, silent or vibration mode else don't check phones status and
+			 * play tone and vibrate even if phone is in silent or vibrate mode
 			 */
 			if (useSoundSettings) {
 				// Log information
@@ -287,9 +279,7 @@ public class NoiseHandler {
 	 * @param toneId
 	 *            ToneId as Integer
 	 * @return toneId Message tone as String
-	 * 
-	 * @see ax.ha.it.smsalarm.LogHandler#logCat(LogPriorities, String, String) logCat(LogPriorities,
-	 *      String, String)
+	 * @see ax.ha.it.smsalarm.handler.LogHandler#logCat(LogPriorities, String, String) logCat(LogPriorities, String, String)
 	 */
 	public String msgToneLookup(Context context, int toneId) {
 		// Resolve message tone from id

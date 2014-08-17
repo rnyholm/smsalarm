@@ -5,6 +5,8 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.app.ListFragment;
 import android.view.KeyEvent;
+import ax.ha.it.smsalarm.fragment.SlidingMenuFragment;
+import ax.ha.it.smsalarm.fragment.SmsSettingsFragment;
 
 import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuItem;
@@ -74,7 +76,7 @@ public class MainActivity extends SlidingFragmentActivity {
 			content = getSupportFragmentManager().getFragment(savedInstanceState, "content");
 		}
 		if (content == null) {
-			content = new SmsSettingsView();
+			content = new SmsSettingsFragment(this);
 		}
 	}
 

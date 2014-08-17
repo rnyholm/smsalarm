@@ -14,9 +14,11 @@ import android.view.View.OnClickListener;
 import android.view.Window;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-import ax.ha.it.smsalarm.LogHandler.LogPriorities;
-import ax.ha.it.smsalarm.PreferencesHandler.DataTypes;
-import ax.ha.it.smsalarm.PreferencesHandler.PrefKeys;
+import ax.ha.it.smsalarm.handler.LogHandler;
+import ax.ha.it.smsalarm.handler.PreferencesHandler;
+import ax.ha.it.smsalarm.handler.LogHandler.LogPriorities;
+import ax.ha.it.smsalarm.handler.PreferencesHandler.DataTypes;
+import ax.ha.it.smsalarm.handler.PreferencesHandler.PrefKeys;
 
 /**
  * Splash activity, just shows splash screen and after a certain time or a tap on screen activity
@@ -56,9 +58,9 @@ public class Splash extends Activity {
 	 * @see #buildAndShowEULADialog()
 	 * @see #switchActivity()
 	 * @see #onPause()
-	 * @see ax.ha.it.smsalarm.LogHandler#logCat(LogPriorities, String, String) logCat(LogPriorities,
+	 * @see ax.ha.it.smsalarm.handler.LogHandler#logCat(LogPriorities, String, String) logCat(LogPriorities,
 	 *      String, String)
-	 * @see ax.ha.it.smsalarm.PreferencesHandler#getPrefs(PrefKeys, PrefKeys,DataTypes,
+	 * @see ax.ha.it.smsalarm.handler.PreferencesHandler#getPrefs(PrefKeys, PrefKeys,DataTypes,
 	 *      android.content.Context, Object) getPrefs(PrefKeys, PrefKeys,DataTypes,
 	 *      android.content.Context, Object)
 	 */
@@ -137,9 +139,9 @@ public class Splash extends Activity {
 	/**
 	 * To build up and show an EULA dialog.
 	 * 
-	 * @see ax.ha.it.smsalarm.LogHandler#logCat(LogPriorities, String, String) logCat(LogPriorities,
+	 * @see ax.ha.it.smsalarm.handler.LogHandler#logCat(LogPriorities, String, String) logCat(LogPriorities,
 	 *      String, String)
-	 * @see ax.ha.it.smsalarm.PreferencesHandler#setPrefs(PrefKeys, PrefKeys, Object,
+	 * @see ax.ha.it.smsalarm.handler.PreferencesHandler#setPrefs(PrefKeys, PrefKeys, Object,
 	 *      android.content.Context) setPrefs(PrefKeys, PrefKeys, Object, android.content.Context)
 	 */
 	private void buildAndShowEULADialog() {
@@ -198,32 +200,30 @@ public class Splash extends Activity {
 	 * Method to switch activity. Called either when user tap screen or delay has passed.
 	 * 
 	 * @see #onCreate(Bundle)
-	 * @see ax.ha.it.smsalarm.LogHandler#logCat(LogPriorities, String, String) logCat(LogPriorities,
+	 * @see ax.ha.it.smsalarm.handler.LogHandler#logCat(LogPriorities, String, String) logCat(LogPriorities,
 	 *      String, String)
 	 */
 	private void switchActivity() {
 		// Create intent and start next activity from it
-		// Intent saIntent = new Intent(this, SmsAlarm.class);
-		//
-		// // Some logging for information and debugging
-		// logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":switchActivity()",
-		// "Intent has been set and application is about to switch activity to SmsAlarm");
-		//
-		// startActivity(saIntent);
-
-		Intent intent = new Intent(this, MainActivity.class);
+		Intent saIntent = new Intent(this, SmsAlarm.class);
 
 		// Some logging for information and debugging
-		logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":switchActivity()", "Intent has been set and application is about to switch activity to MainActivity");
+		logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":switchActivity()", "Intent has been set and application is about to switch activity to SmsAlarm");
 
-		startActivity(intent);
+		startActivity(saIntent);
+//		Intent intent = new Intent(this, MainActivity.class);
+//
+//		// Some logging for information and debugging
+//		logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":switchActivity()", "Intent has been set and application is about to switch activity to MainActivity");
+//
+//		startActivity(intent);
 	}
 
 	/**
 	 * Method to remove messages from handler.
 	 * 
 	 * @see #onPause()
-	 * @see ax.ha.it.smsalarm.LogHandler#logCat(LogPriorities, String, String) logCat(LogPriorities,
+	 * @see ax.ha.it.smsalarm.handler.LogHandler#logCat(LogPriorities, String, String) logCat(LogPriorities,
 	 *      String, String)
 	 */
 	private void removeMessagesFromHandler() {

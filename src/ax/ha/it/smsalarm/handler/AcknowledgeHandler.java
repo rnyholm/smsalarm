@@ -1,7 +1,7 @@
 /**
  * Copyright (c) 2013 Robert Nyholm. All rights reserved.
  */
-package ax.ha.it.smsalarm;
+package ax.ha.it.smsalarm.handler;
 
 import java.util.Calendar;
 import java.util.Date;
@@ -25,19 +25,20 @@ import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
-import ax.ha.it.smsalarm.LogHandler.LogPriorities;
-import ax.ha.it.smsalarm.PreferencesHandler.DataTypes;
-import ax.ha.it.smsalarm.PreferencesHandler.PrefKeys;
+import ax.ha.it.smsalarm.R;
+import ax.ha.it.smsalarm.WidgetProvider;
+import ax.ha.it.smsalarm.handler.LogHandler.LogPriorities;
+import ax.ha.it.smsalarm.handler.PreferencesHandler.DataTypes;
+import ax.ha.it.smsalarm.handler.PreferencesHandler.PrefKeys;
 
 /**
- * Responsible for the application <code>ax.ha.it.smsalarm</code> acknowledge activity. This class
- * allows users to acknowledge an received alarm by calling to specific phone number.<br>
+ * Responsible for the application <code>ax.ha.it.smsalarm</code> acknowledge activity. This class allows users to acknowledge an received alarm by
+ * calling to specific phone number.<br>
  * Also holds the acknowledge UI.
  * 
  * @author Robert Nyholm <robert.nyholm@aland.net>
  * @version 2.2.1
  * @since 1.1-SE
- * 
  * @see ListenToPhoneState
  */
 public class AcknowledgeHandler extends Activity {
@@ -106,27 +107,23 @@ public class AcknowledgeHandler extends Activity {
 	private final int REDIAL_COUNTDOWN_INTERVAL = 100;
 
 	/**
-	 * When activity starts, this method is the entry point. The User Interface is built up and
-	 * different <code>Listeners</code> are set within this method.
+	 * When activity starts, this method is the entry point. The User Interface is built up and different <code>Listeners</code> are set within this
+	 * method.
 	 * 
 	 * @param savedInstanceState
 	 *            Default Bundle
-	 * 
 	 * @see #findViews()
 	 * @see #getAckHandlerPrefs()
 	 * @see #setTextViews()
 	 * @see #onResume()
 	 * @see #onPause()
-	 * @see ax.ha.it.smsalarm.LogHandler#logCat(LogPriorities, String , String)
-	 *      logCat(LogPriorities, String , String)
-	 * @see ax.ha.it.smsalarm.LogHandler#logAlarm(List, Context) logAlarm(List, Context)
-	 * @see ax.ha.it.smsalarm.DatabaseHandler ax.ha.it.smsalarm.DatabaseHandler
-	 * @see ax.ha.it.smsalarm.DatabaseHandler#updateLatestAlarmAcknowledged()
-	 *      updateLatestAlarmAcknowledged()
-	 * @see ax.ha.it.smsalarm.DatabaseHandler#getAllAlarm() getAllAlarm()
+	 * @see ax.ha.it.smsalarm.handler.LogHandler#logCat(LogPriorities, String , String) logCat(LogPriorities, String , String)
+	 * @see ax.ha.it.smsalarm.handler.LogHandler#logAlarm(List, Context) logAlarm(List, Context)
+	 * @see ax.ha.it.smsalarm.handler.DatabaseHandler ax.ha.it.smsalarm.DatabaseHandler
+	 * @see ax.ha.it.smsalarm.handler.DatabaseHandler#updateLatestAlarmAcknowledged() updateLatestAlarmAcknowledged()
+	 * @see ax.ha.it.smsalarm.handler.DatabaseHandler#getAllAlarm() getAllAlarm()
 	 * @see ax.ha.it.smsalarm.Alarm ax.ha.it.smsalarm.Alarm
-	 * @see ax.ha.it.smsalarm.WidgetProvider#updateWidgets(Context) @see
-	 *      ax.ha.it.smsalarm.WidgetProvider#updateWidgets(Context)
+	 * @see ax.ha.it.smsalarm.WidgetProvider#updateWidgets(Context) @see ax.ha.it.smsalarm.WidgetProvider#updateWidgets(Context)
 	 */
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -198,8 +195,7 @@ public class AcknowledgeHandler extends Activity {
 	 * 
 	 * @see #onCreate(Bundle)
 	 * @see #onPause()
-	 * @see ax.ha.it.smsalarm.LogHandler#logCat(LogPriorities, String , String)
-	 *      logCat(LogPriorities, String , String)
+	 * @see ax.ha.it.smsalarm.handler.LogHandler#logCat(LogPriorities, String , String) logCat(LogPriorities, String , String)
 	 */
 	@Override
 	public void onResume() {
@@ -252,12 +248,10 @@ public class AcknowledgeHandler extends Activity {
 	 * 
 	 * @see #onCreate(Bundle)
 	 * @see #onResume()
-	 * @see ax.ha.it.smsalarm.LogHandler#logCat(LogPriorities, String , String)
-	 *      logCat(LogPriorities, String , String)
-	 * @see ax.ha.it.smsalarm.LogHandler#logCatTxt(LogPriorities, String , String, Throwable)
-	 *      logCatTxt(LogPriorities, String , String, Throwable)
-	 * @see ax.ha.it.smsalarm.PreferencesHandler#setPrefs(PrefKeys, PrefKeys, Object, Context)
-	 *      setPrefs(PrefKeys, PrefKeys, Object, Context)
+	 * @see ax.ha.it.smsalarm.handler.LogHandler#logCat(LogPriorities, String , String) logCat(LogPriorities, String , String)
+	 * @see ax.ha.it.smsalarm.handler.LogHandler#logCatTxt(LogPriorities, String , String, Throwable) logCatTxt(LogPriorities, String , String,
+	 *      Throwable)
+	 * @see ax.ha.it.smsalarm.handler.PreferencesHandler#setPrefs(PrefKeys, PrefKeys, Object, Context) setPrefs(PrefKeys, PrefKeys, Object, Context)
 	 */
 	private void placeAcknowledgeCall() {
 		try {
@@ -287,8 +281,7 @@ public class AcknowledgeHandler extends Activity {
 	 * To find UI widgets and get their reference by ID stored in class variables.
 	 * 
 	 * @see #onCreate(Bundle)
-	 * @see ax.ha.it.smsalarm.LogHandler#logCat(LogPriorities, String , String)
-	 *      logCat(LogPriorities, String , String)
+	 * @see ax.ha.it.smsalarm.handler.LogHandler#logCat(LogPriorities, String , String) logCat(LogPriorities, String , String)
 	 */
 	private void findViews() {
 		// Logging
@@ -339,12 +332,11 @@ public class AcknowledgeHandler extends Activity {
 	/**
 	 * To get <code>Shared Preferences</code> used by class <code>AcknowledgeHandler</code>.
 	 * 
-	 * @see ax.ha.it.smsalarm.LogHandler#logCat(LogPriorities, String , String)
-	 *      logCat(LogPriorities, String , String)
-	 * @see ax.ha.it.smsalarm.LogHandler#logCatTxt(LogPriorities, String, String, Throwable)
-	 *      logCatTxt(LogPriorities, String, String, Throwable)
-	 * @see ax.ha.it.smsalarm.PreferencesHandler#getPrefs(PrefKeys, PrefKeys, DataTypes, Context)
-	 *      getPrefs(PrefKeys, PrefKeys, DataTypes, Context)
+	 * @see ax.ha.it.smsalarm.handler.LogHandler#logCat(LogPriorities, String , String) logCat(LogPriorities, String , String)
+	 * @see ax.ha.it.smsalarm.handler.LogHandler#logCatTxt(LogPriorities, String, String, Throwable) logCatTxt(LogPriorities, String, String,
+	 *      Throwable)
+	 * @see ax.ha.it.smsalarm.handler.PreferencesHandler#getPrefs(PrefKeys, PrefKeys, DataTypes, Context) getPrefs(PrefKeys, PrefKeys, DataTypes,
+	 *      Context)
 	 */
 	private void getAckHandlerPrefs() {
 		// Some logging
@@ -366,8 +358,7 @@ public class AcknowledgeHandler extends Activity {
 	/**
 	 * To set <code>TextViews</code> with data for a proper presentation of the UI.
 	 * 
-	 * @see ax.ha.it.smsalarm.LogHandler#logCat(LogPriorities, String , String)
-	 *      logCat(LogPriorities, String , String)
+	 * @see ax.ha.it.smsalarm.handler.LogHandler#logCat(LogPriorities, String , String) logCat(LogPriorities, String , String)
 	 */
 	@SuppressLint("DefaultLocale")
 	private void setTextViews() {
@@ -391,8 +382,8 @@ public class AcknowledgeHandler extends Activity {
 	}
 
 	/**
-	 * Checks the different phone states while placing a call. With that information given, we can
-	 * arrange automatic redial functionality in this parent class <code>AcknowledgeHandler</code>.
+	 * Checks the different phone states while placing a call. With that information given, we can arrange automatic redial functionality in this
+	 * parent class <code>AcknowledgeHandler</code>.
 	 * 
 	 * @author Robert Nyholm <robert.nyholm@aland.net>
 	 * @version 2.2
@@ -401,17 +392,14 @@ public class AcknowledgeHandler extends Activity {
 	private class ListenToPhoneState extends PhoneStateListener {
 
 		/**
-		 * An inherited method to check when call state has changed. This implementation of that
-		 * method helps to make an automatic redial.
+		 * An inherited method to check when call state has changed. This implementation of that method helps to make an automatic redial.
 		 * 
 		 * @see #swapStates(int)
 		 * @see #stateName(int)
-		 * @see ax.ha.it.smsalarm.LogHandler#logCat(LogPriorities, String , String)
-		 *      logCat(LogPriorities, String , String)
-		 * @see ax.ha.it.smsalarm.LogHandler#logCat(LogPriorities, String, String, Throwable)
-		 *      logCat(LogPriorities, String, String, Throwable)
-		 * @see ax.ha.it.smsalarm.PreferencesHandler#setPrefs(PrefKeys, PrefKeys, Object, Context)
-		 *      setPrefs(PrefKeys, PrefKeys, Object, Context)
+		 * @see ax.ha.it.smsalarm.handler.LogHandler#logCat(LogPriorities, String , String) logCat(LogPriorities, String , String)
+		 * @see ax.ha.it.smsalarm.handler.LogHandler#logCat(LogPriorities, String, String, Throwable) logCat(LogPriorities, String, String, Throwable)
+		 * @see ax.ha.it.smsalarm.handler.PreferencesHandler#setPrefs(PrefKeys, PrefKeys, Object, Context) setPrefs(PrefKeys, PrefKeys, Object,
+		 *      Context)
 		 */
 		@Override
 		public void onCallStateChanged(int state, String incomingNumber) {
@@ -436,9 +424,8 @@ public class AcknowledgeHandler extends Activity {
 				logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":ListenToPhoneState().onCallStateChanged()", "Start time of call is:\"" + startCall.getTime() + "\", end time is:\"" + endCall.getTime() + "\" and the call time was:\"" + time + "\"");
 
 				/*
-				 * If call time is less than preconfigured value the line was busy and call did not
-				 * go through. In this case we need to start the AcknowledgeHandler activity once
-				 * more.
+				 * If call time is less than preconfigured value the line was busy and call did not go through. In this case we need to start the
+				 * AcknowledgeHandler activity once more.
 				 */
 				if (endCall.getTime() - startCall.getTime() < MIN_CALL_TIME) {
 					// Logging
@@ -469,14 +456,10 @@ public class AcknowledgeHandler extends Activity {
 		 * 
 		 * @param state
 		 *            Phone state as Integer
-		 * 
 		 * @return Phone state as String resolved from Integer
-		 * 
 		 * @see #onCallStateChanged(int, String)
-		 * @see ax.ha.it.smsalarm.LogHandler#logCat(LogPriorities, String , String)
-		 *      logCat(LogPriorities, String , String)
-		 * @see ax.ha.it.smsalarm.LogHandler#logCatTxt(LogPriorities, String , String)
-		 *      logCatTxt(LogPriorities, String , String)
+		 * @see ax.ha.it.smsalarm.handler.LogHandler#logCat(LogPriorities, String , String) logCat(LogPriorities, String , String)
+		 * @see ax.ha.it.smsalarm.handler.LogHandler#logCatTxt(LogPriorities, String , String) logCatTxt(LogPriorities, String , String)
 		 */
 		String stateName(int state) {
 			// Switch through the different phone states
@@ -497,15 +480,12 @@ public class AcknowledgeHandler extends Activity {
 		}
 
 		/**
-		 * To swap phone states in a way that we have both the previous phone state and current
-		 * phone state stored.
+		 * To swap phone states in a way that we have both the previous phone state and current phone state stored.
 		 * 
 		 * @param currentState
 		 *            Phone state to be stored as the current phone state
-		 * 
 		 * @see #onCallStateChanged(int, String)
-		 * @see ax.ha.it.smsalarm.LogHandler#logCat(LogPriorities, String , String)
-		 *      logCat(LogPriorities, String , String)
+		 * @see ax.ha.it.smsalarm.handler.LogHandler#logCat(LogPriorities, String , String) logCat(LogPriorities, String , String)
 		 */
 		void swapStates(int currentState) {
 			// Logging

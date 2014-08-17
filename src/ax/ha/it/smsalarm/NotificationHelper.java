@@ -10,9 +10,12 @@ import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
-import ax.ha.it.smsalarm.LogHandler.LogPriorities;
-import ax.ha.it.smsalarm.PreferencesHandler.DataTypes;
-import ax.ha.it.smsalarm.PreferencesHandler.PrefKeys;
+import ax.ha.it.smsalarm.enumeration.AlarmTypes;
+import ax.ha.it.smsalarm.handler.LogHandler;
+import ax.ha.it.smsalarm.handler.PreferencesHandler;
+import ax.ha.it.smsalarm.handler.LogHandler.LogPriorities;
+import ax.ha.it.smsalarm.handler.PreferencesHandler.DataTypes;
+import ax.ha.it.smsalarm.handler.PreferencesHandler.PrefKeys;
 
 /**
  * Helper class to build up and show notifications, also creates <code>pending intent</code> for the
@@ -43,7 +46,7 @@ public class NotificationHelper extends IntentService {
 	 * 
 	 * @see #onHandleIntent(Intent)
 	 * 
-	 * @see ax.ha.it.smsalarm.LogHandler#logCat(LogHandler.LogPriorities, String, String)
+	 * @see ax.ha.it.smsalarm.handler.LogHandler#logCat(LogHandler.LogPriorities, String, String)
 	 *      logCat(LogHandler.LogPriorities, String, String)
 	 */
 	public NotificationHelper() {
@@ -63,13 +66,13 @@ public class NotificationHelper extends IntentService {
 	 *            Intent for notification
 	 * 
 	 * @see #NotificationHelper()
-	 * @see ax.ha.it.smsalarm.LogHandler#logCat(LogPriorities, String, String) logCat(LogPriorities,
+	 * @see ax.ha.it.smsalarm.handler.LogHandler#logCat(LogPriorities, String, String) logCat(LogPriorities,
 	 *      String, String)
-	 * @see ax.ha.it.smsalarm.LogHandler#logCatTxt(LogPriorities, String, String)
+	 * @see ax.ha.it.smsalarm.handler.LogHandler#logCatTxt(LogPriorities, String, String)
 	 *      logCatTxt(LogPriorities, String, String)
-	 * @see ax.ha.it.smsalarm.LogHandler#logCatTxt(LogPriorities, String, String, Throwable)
+	 * @see ax.ha.it.smsalarm.handler.LogHandler#logCatTxt(LogPriorities, String, String, Throwable)
 	 *      logCatTxt(LogPriorities, String, String, Throwable)
-	 * @see ax.ha.it.smsalarm.PreferencesHandler#getPrefs(PrefKeys, PrefKeys, DataTypes, Context)
+	 * @see ax.ha.it.smsalarm.handler.PreferencesHandler#getPrefs(PrefKeys, PrefKeys, DataTypes, Context)
 	 *      getPrefs(PrefKeys, PrefKeys, DataTypes, Context)
 	 * 
 	 * @deprecated

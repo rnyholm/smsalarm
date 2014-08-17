@@ -1,9 +1,12 @@
 /**
  * Copyright (c) 2014 Robert Nyholm. All rights reserved.
  */
-package ax.ha.it.smsalarm;
+package ax.ha.it.smsalarm.slidingmenu.model;
 
-import ax.ha.it.smsalarm.LogHandler.LogPriorities;
+import ax.ha.it.smsalarm.fragment.SlidingMenuFragment;
+import ax.ha.it.smsalarm.handler.LogHandler;
+import ax.ha.it.smsalarm.handler.LogHandler.LogPriorities;
+import ax.ha.it.smsalarm.slidingmenu.adapter.SlidingMenuAdapter;
 
 import com.google.common.base.Optional;
 
