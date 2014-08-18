@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2013 Robert Nyholm. All rights reserved.
+ * Copyright (c) 2014 Robert Nyholm. All rights reserved.
  */
 package ax.ha.it.smsalarm.fragment;
 
@@ -31,4 +31,9 @@ public interface SmsAlarmFragment {
 	 * To update all UI widgets contained in this <code>Fragments View</code>.
 	 */
 	void updateFragmentView();
+
+	/**
+	 * To set different listeners to the UI widgets contained within this <code>Fragment</code>.
+	 */
+	void setListeners();
 }

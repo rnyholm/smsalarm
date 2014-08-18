@@ -22,7 +22,7 @@
     <application android:label="@string/APP_NAME"
         android:enabled="true"
         android:icon="@drawable/ic_launcher"
-        android:theme="@style/Theme.Sherlock.Light.DarkActionBar" android:allowBackup="false" android:name="UpdateHandler">
+        android:theme="@style/Theme.Sherlock.Light.DarkActionBar" android:allowBackup="false" android:name="ax.ha.it.smsalarm.handler.UpdateHandler">
         <activity android:name=".Splash" android:label="@string/APP_NAME" android:noHistory="true" android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

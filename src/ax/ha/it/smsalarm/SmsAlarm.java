@@ -25,12 +25,9 @@ import android.util.TypedValue;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.View.OnClickListener;
-import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.CheckBox;
-import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
@@ -202,318 +199,260 @@ public class SmsAlarm extends SlidingFragmentActivity {
 		// Get sharedPreferences
 		getSmsAlarmPrefs();
 
-		// FindViews
-		findViews();
-
-		// Initialize database handler object from context
-		db = new DatabaseHandler(this);
-
-		// Fill tone spinner with values
-		ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this, R.array.alarms, android.R.layout.simple_spinner_item);
-		adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-
-		// Set adapter to tone spinner
-		toneSpinner.setAdapter(adapter);
-
-		// Set listener to addPrimarySmsNumberButton
-		addPrimarySmsNumberButton.setOnClickListener(new OnClickListener() {
-			@Override
-			public void onClick(View v) {
-				// Logging
-				logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":onCreate().addPrimarySmsNumberButton.OnClickListener().onClick()", "Add PRIMARY sms number button pressed");
-				// Build up and show input dialog of type primary number
-				buildAndShowInputDialog(DialogTypes.SMS_PRIMARY);
-			}
-		});
-
-		// Set listener to removePrimarySmsNumberButton
-		removePrimarySmsNumberButton.setOnClickListener(new OnClickListener() {
-			@Override
-			public void onClick(View v) {
-				// Logging
-				logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":onCreate().removePrimarySmsNumberButton.OnClickListener().onClick()", "Remove PRIMARY sms number button pressed");
-
-				// Only show delete dialog if primary sms numbers exists, else show toast
-				if (!primarySmsNumbers.isEmpty()) {
-					// Show alert dialog(prompt user for deleting number)
-					buildAndShowDeleteDialog(DialogTypes.SMS_PRIMARY);
-				} else {
-					Toast.makeText(SmsAlarm.this, R.string.NO_PRIMARY_NUMBER_EXISTS, Toast.LENGTH_LONG).show();
-					logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":onCreate().removePrimarySmsNumberButton.OnClickListener().onClick()", "Cannot build and show dialog because the list of PRIMARY sms numbers are empty");
-				}
-			}
-		});
-
-		// Set listener to addSecondarySmsNumberButton
-		addSecondarySmsNumberButton.setOnClickListener(new OnClickListener() {
-			@Override
-			public void onClick(View v) {
-				// Logging
-				logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":onCreate().addSecondarySmsNumberButton.OnClickListener().onClick()", "Add SECONDARY sms number button pressed");
-				// Build up and show input dialog of type secondary number
-				buildAndShowInputDialog(DialogTypes.SMS_SECONDARY);
-			}
-		});
-
-		// Set listener to removeSecondarySmsNumberButton
-		removeSecondarySmsNumberButton.setOnClickListener(new OnClickListener() {
-			@Override
-			public void onClick(View v) {
-				// Logging
-				logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":onCreate().removeSecondarySmsNumberButton.OnClickListener().onClick()", "Remove SECONDARY sms number button pressed");
-
-				// Only show delete dialog if secondary sms numbers exists, else show toast
-				if (!secondarySmsNumbers.isEmpty()) {
-					// Show alert dialog(prompt user for deleting number)
-					buildAndShowDeleteDialog(DialogTypes.SMS_SECONDARY);
-				} else {
-					Toast.makeText(SmsAlarm.this, R.string.NO_SECONDARY_NUMBER_EXISTS, Toast.LENGTH_LONG).show();
-					logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":onCreate().removeSecondarySmsNumberButton.OnClickListener().onClick()", "Cannot build and show dialog because the list of SECONDARY sms numbers are");
-				}
-			}
-		});
-
-		// Set listener to addPrimaryFreeTextButton
-		addPrimaryFreeTextButton.setOnClickListener(new OnClickListener() {
-			@Override
-			public void onClick(View v) {
-				// Logging
-				logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":onCreate().addPrimaryFreeTextButton.OnClickListener().onClick()", "Add PRIMARY free text button pressed");
-				// Build up and show input dialog of type free text primary
-				buildAndShowInputDialog(DialogTypes.FREE_TEXT_PRIMARY);
-			}
-		});
-
-		// Set listener to removePrimaryFreeTextButton
-		removePrimaryFreeTextButton.setOnClickListener(new OnClickListener() {
-			@Override
-			public void onClick(View v) {
-				// Logging
-				logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":onCreate().removePrimaryFreeTextButton.OnClickListener().onClick()", "Remove PRIMARY free text button pressed");
-
-				// Only show delete dialog if primary free texts exists
-				if (!primaryFreeTexts.isEmpty()) {
-					// Show alert dialog(prompt user for deleting text)
-					buildAndShowDeleteDialog(DialogTypes.FREE_TEXT_PRIMARY);
-				} else {
-					Toast.makeText(SmsAlarm.this, R.string.NO_PRIMARY_FREE_TEXT_EXISTS, Toast.LENGTH_LONG).show();
-					logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":onCreate().removePrimaryFreeTextButton.OnClickListener().onClick()", "Cannot build and show dialog because the list of PRIMARY free texts are empty");
-				}
-			}
-		});
-
-		// Set listener to addSecondaryFreeTextButton
-		addSecondaryFreeTextButton.setOnClickListener(new OnClickListener() {
-			@Override
-			public void onClick(View v) {
-				// Logging
-				logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":onCreate().addSecondaryFreeTextButton.OnClickListener().onClick()", "Add SECONDARY free text button pressed");
-				// Build up and show input dialog of type secondary number
-				buildAndShowInputDialog(DialogTypes.FREE_TEXT_SECONDARY);
-			}
-		});
-
-		// Set listener to removeSecondaryFreeTextButton
-		removeSecondaryFreeTextButton.setOnClickListener(new OnClickListener() {
-			@Override
-			public void onClick(View v) {
-				// Logging
-				logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":onCreate().removeSecondaryFreeTextButton.OnClickListener().onClick()", "Remove SECONDARY free text button pressed");
-				// Only show delete dialog if secondary free texts exists
-				if (!secondaryFreeTexts.isEmpty()) {
-					// Show alert dialog(prompt user for deleting text)
-					buildAndShowDeleteDialog(DialogTypes.FREE_TEXT_SECONDARY);
-				} else {
-					Toast.makeText(SmsAlarm.this, R.string.NO_SECONDARY_FREE_TEXT_EXISTS, Toast.LENGTH_LONG).show();
-					logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":onCreate().removePrimaryFreeTextButton.OnClickListener().onClick()", "Cannot build and show dialog because the list of SECONDARY free texts are");
-				}
-			}
-		});
-
-		// Set listener to ackNumberButton
-		ackNumberButton.setOnClickListener(new OnClickListener() {
-			@Override
-			public void onClick(View v) {
-				// Logging
-				logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":onCreate().ackNumberButton.OnClickListener().onClick()", "Edit acknowledge number button pressed");
-				// Build up and show input dialog of type acknowledge number
-				buildAndShowInputDialog(DialogTypes.ACKNOWLEDGE);
-			}
-		});
-
-		// Set listener to editRescueServiceButton
-		editRescueServiceButton.setOnClickListener(new OnClickListener() {
-			@Override
-			public void onClick(View v) {
-				// Logging
-				logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":onCreate().editRescueServiceButton.OnClickListener().onClick()", "Edit rescue service button pressed");
-				// Build up and show input dialog of type primary number
-				buildAndShowInputDialog(DialogTypes.RESCUESERVICE);
-			}
-		});
-
-		// Set listener to editMsgToneButton
-		editMsgToneButton.setOnClickListener(new OnClickListener() {
-			@Override
-			public void onClick(View v) {
-				// Logging
-				logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":onCreate().editMsgToneButton.OnClickListener().onClick()", "Edit message tone button pressed");
-				// Build up and Show alert dialog(prompt for message tone)
-				buildAndShowToneDialog();
-			}
-		});
-
-		// Set listener to listenMsgToneButton
-		listenMsgToneButton.setOnClickListener(new OnClickListener() {
-			@Override
-			public void onClick(View v) {
-				// Play the correct tone and vibrate, depending on spinner value
-				if (toneSpinnerPos == 0) {
-					// Logging
-					logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":onCreate().listenMsgToneButton.OnClickListener().onClick()", "Listen message tone button pressed. Message tone for PRIMARY alarm will be played");
-					// Play message tone and vibrate
-					noiseHandler.makeNoise(SmsAlarm.this, primaryMessageToneId, useOsSoundSettings, false);
-				} else if (toneSpinnerPos == 1) {
-					logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":onCreate().listenMsgToneButton.OnClickListener().onClick()", "Listen message tone button pressed. Message tone for SECONDARY alarm will be played");
-					noiseHandler.makeNoise(SmsAlarm.this, secondaryMessageToneId, useOsSoundSettings, false);
-				} else {
-					// DO NOTHING EXCEPT LOG ERROR MESSAGE
-					logger.logCatTxt(LogPriorities.ERROR, LOG_TAG + ":onCreate().listenMsgToneButton.OnClickListener().onClick()", "Invalid spinner position occurred. Current tone spinner position is: \"" + Integer.toString(toneSpinnerPos) + "\"");
-				}
-			}
-		});
-
-		// Set listener to soundSettingCheckBox
-		soundSettingCheckBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-			@Override
-			public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-				// Log that CheckBox been pressed
-				logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":onCreate().soundSettingCheckBox.onCheckedChange()", "Use OS sound settings checkbox pressed(or checkbox initialized)");
-
-				// Set checkbox depending on it's checked status and store variable
-				if (soundSettingCheckBox.isChecked()) {
-					// Store value to variable
-					useOsSoundSettings = true;
-					// logging
-					logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":onCreate().soundSettingCheckBox.onCheckedChange()", "Use OS sound settings checkbox \"Checked\"(" + useOsSoundSettings + ")");
-				} else {
-					useOsSoundSettings = false;
-					logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":onCreate().soundSettingCheckBox.onCheckedChange()", "Use OS sound settings checkbox \"Unchecked\"(" + useOsSoundSettings + ")");
-				}
-
-				try {
-					// Store value to shared preferences
-					prefHandler.setPrefs(PrefKeys.SHARED_PREF, PrefKeys.USE_OS_SOUND_SETTINGS_KEY, useOsSoundSettings, SmsAlarm.this);
-				} catch (IllegalArgumentException e) {
-					logger.logCatTxt(LogPriorities.ERROR, LOG_TAG + ":onCreate().soundSettingCheckBox.onCheckedChange()", "An Object of unsupported instance was given as argument to PreferencesHandler.setPrefs()", e);
-				}
-			}
-		});
-
-		// Set listener to enableAckCheckBox
-		enableAckCheckBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-			@Override
-			public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-				// Log that CheckBox been pressed
-				logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":onCreate().enableAckCheckBox.onCheckedChange()", "Enable acknowledge checkbox pressed(or checkbox initialized)");
-
-				// Set checkbox depending on it's checked status and store variable
-				if (enableAckCheckBox.isChecked()) {
-					// Store value to variable
-					useAlarmAcknowledge = true;
-					// logging
-					logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":onCreate().enableAckCheckBox.onCheckedChange()", "Use OS sound settings checkbox \"Checked\"(" + useAlarmAcknowledge + ")");
-				} else {
-					useAlarmAcknowledge = false;
-					logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":onCreate().enableAckCheckBox.onCheckedChange()", "Use OS sound settings checkbox \"Unchecked\"(" + useAlarmAcknowledge + ")");
-				}
-
-				try {
-					// Store value to shared preferences
-					prefHandler.setPrefs(PrefKeys.SHARED_PREF, PrefKeys.ENABLE_ACK_KEY, useAlarmAcknowledge, SmsAlarm.this);
-				} catch (IllegalArgumentException e) {
-					logger.logCatTxt(LogPriorities.ERROR, LOG_TAG + ":onCreate().enableAckCheckBox.onCheckedChange()", "An Object of unsupported instance was given as argument to PreferencesHandler.setPrefs()", e);
-				}
-
-				// Update UI widgets affected by enable acknowledge
-				updateAcknowledgeWidgets();
-			}
-		});
-
-		// Set listener to playToneTwiceSettingCheckBox
-		playToneTwiceSettingCheckBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-			@Override
-			public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-				// Log that CheckBox been pressed
-				logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":onCreate().playToneTwiceSettingCheckBox.onCheckedChange()", "Play tone twice checkbox pressed(or checkbox initialized)");
-
-				// Set checkbox depending on it's checked status and store variable
-				if (playToneTwiceSettingCheckBox.isChecked()) {
-					// Store value to variable
-					playToneTwice = true;
-					// Logging
-					logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":onCreate().playToneTwiceSettingCheckBox.onCheckedChange()", "Play tone twice checkbox \"Checked\"(" + playToneTwice + ")");
-				} else {
-					playToneTwice = false;
-					logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":onCreate().playToneTwiceSettingCheckBox.onCheckedChange()", "Play tone twice checkbox \"Unhecked\"(" + playToneTwice + ")");
-				}
-
-				try {
-					// Store value to shared preferences
-					prefHandler.setPrefs(PrefKeys.SHARED_PREF, PrefKeys.PLAY_TONE_TWICE_KEY, playToneTwice, SmsAlarm.this);
-				} catch (IllegalArgumentException e) {
-					logger.logCatTxt(LogPriorities.ERROR, LOG_TAG + ":onCreate().playToneTwiceSettingCheckBox.onCheckedChange()", "An Object of unsupported instance was given as argument to PreferencesHandler.setPrefs()", e);
-				}
-			}
-		});
-
-		// Set listener to enableSmsAlarmCheckBox
-		enableSmsAlarmCheckBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-			@Override
-			public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-				// Log that CheckBox been pressed
-				logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":onCreate().enableSmsAlarmCheckBox.onCheckedChange()", "Enable Sms Alarm checkbox pressed(or checkbox initialized)");
-
-				// Set checkbox depending on it's checked status and store variable
-				if (enableSmsAlarmCheckBox.isChecked()) {
-					// Store value to variable
-					enableSmsAlarm = true;
-					// Logging
-					logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":onCreate().enableSmsAlarmCheckBox.onCheckedChange()", "Enable SmsAlarm checkbox \"Checked\"(" + enableSmsAlarm + ")");
-				} else {
-					enableSmsAlarm = false;
-					logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":onCreate().enableSmsAlarmCheckBox.onCheckedChange()", "Enable SmsAlarm checkbox \"Unchecked\"(" + enableSmsAlarm + ")");
-				}
-
-				try {
-					// Store value to shared preferences
-					prefHandler.setPrefs(PrefKeys.SHARED_PREF, PrefKeys.ENABLE_SMS_ALARM_KEY, enableSmsAlarm, SmsAlarm.this);
-				} catch (IllegalArgumentException e) {
-					logger.logCatTxt(LogPriorities.ERROR, LOG_TAG + ":onCreate().enableSmsAlarmCheckBox.onCheckedChange()", "An Object of unsupported instance was given as argument to PreferencesHandler.setPrefs()", e);
-				}
-			}
-		});
-
-		// Set listener to tone spinner
-		toneSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-			@Override
-			public void onItemSelected(AdapterView<?> parent, View view, int pos, long id) {
-				// Store tone spinners position
-				toneSpinnerPos = toneSpinner.getSelectedItemPosition();
-				// Logging
-				logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":onCreate().toneSpinner.OnItemSelectedListener().onItemSelected()", "Item in tone spinner pressed(or spinner initialized)");
-				// Update selected tone EditText widget
-				updateSelectedToneEditText();
-			}
-
-			@Override
-			public void onNothingSelected(AdapterView<?> arg0) {
-				// DO NOTHING!
-			}
-		});
-
-		// Update all UI widgets
-		updateWholeUI();
+//		// FindViews
+//		findViews();
+//
+//		// Initialize database handler object from context
+//		db = new DatabaseHandler(this);
+//
+//		// Fill tone spinner with values
+//		ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this, R.array.alarms, android.R.layout.simple_spinner_item);
+//		adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+//
+//		// Set adapter to tone spinner
+//		toneSpinner.setAdapter(adapter);
+//
+//		// Set listener to addPrimaryFreeTextButton
+//		addPrimaryFreeTextButton.setOnClickListener(new OnClickListener() {
+//			@Override
+//			public void onClick(View v) {
+//				// Logging
+//				logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":onCreate().addPrimaryFreeTextButton.OnClickListener().onClick()", "Add PRIMARY free text button pressed");
+//				// Build up and show input dialog of type free text primary
+//				buildAndShowInputDialog(DialogTypes.FREE_TEXT_PRIMARY);
+//			}
+//		});
+//
+//		// Set listener to removePrimaryFreeTextButton
+//		removePrimaryFreeTextButton.setOnClickListener(new OnClickListener() {
+//			@Override
+//			public void onClick(View v) {
+//				// Logging
+//				logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":onCreate().removePrimaryFreeTextButton.OnClickListener().onClick()", "Remove PRIMARY free text button pressed");
+//
+//				// Only show delete dialog if primary free texts exists
+//				if (!primaryFreeTexts.isEmpty()) {
+//					// Show alert dialog(prompt user for deleting text)
+//					buildAndShowDeleteDialog(DialogTypes.FREE_TEXT_PRIMARY);
+//				} else {
+//					Toast.makeText(SmsAlarm.this, R.string.NO_PRIMARY_FREE_TEXT_EXISTS, Toast.LENGTH_LONG).show();
+//					logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":onCreate().removePrimaryFreeTextButton.OnClickListener().onClick()", "Cannot build and show dialog because the list of PRIMARY free texts are empty");
+//				}
+//			}
+//		});
+//
+//		// Set listener to addSecondaryFreeTextButton
+//		addSecondaryFreeTextButton.setOnClickListener(new OnClickListener() {
+//			@Override
+//			public void onClick(View v) {
+//				// Logging
+//				logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":onCreate().addSecondaryFreeTextButton.OnClickListener().onClick()", "Add SECONDARY free text button pressed");
+//				// Build up and show input dialog of type secondary number
+//				buildAndShowInputDialog(DialogTypes.FREE_TEXT_SECONDARY);
+//			}
+//		});
+//
+//		// Set listener to removeSecondaryFreeTextButton
+//		removeSecondaryFreeTextButton.setOnClickListener(new OnClickListener() {
+//			@Override
+//			public void onClick(View v) {
+//				// Logging
+//				logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":onCreate().removeSecondaryFreeTextButton.OnClickListener().onClick()", "Remove SECONDARY free text button pressed");
+//				// Only show delete dialog if secondary free texts exists
+//				if (!secondaryFreeTexts.isEmpty()) {
+//					// Show alert dialog(prompt user for deleting text)
+//					buildAndShowDeleteDialog(DialogTypes.FREE_TEXT_SECONDARY);
+//				} else {
+//					Toast.makeText(SmsAlarm.this, R.string.NO_SECONDARY_FREE_TEXT_EXISTS, Toast.LENGTH_LONG).show();
+//					logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":onCreate().removePrimaryFreeTextButton.OnClickListener().onClick()", "Cannot build and show dialog because the list of SECONDARY free texts are");
+//				}
+//			}
+//		});
+//
+//		// Set listener to ackNumberButton
+//		ackNumberButton.setOnClickListener(new OnClickListener() {
+//			@Override
+//			public void onClick(View v) {
+//				// Logging
+//				logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":onCreate().ackNumberButton.OnClickListener().onClick()", "Edit acknowledge number button pressed");
+//				// Build up and show input dialog of type acknowledge number
+//				buildAndShowInputDialog(DialogTypes.ACKNOWLEDGE);
+//			}
+//		});
+//
+//		// Set listener to editRescueServiceButton
+//		editRescueServiceButton.setOnClickListener(new OnClickListener() {
+//			@Override
+//			public void onClick(View v) {
+//				// Logging
+//				logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":onCreate().editRescueServiceButton.OnClickListener().onClick()", "Edit rescue service button pressed");
+//				// Build up and show input dialog of type primary number
+//				buildAndShowInputDialog(DialogTypes.RESCUESERVICE);
+//			}
+//		});
+//
+//		// Set listener to editMsgToneButton
+//		editMsgToneButton.setOnClickListener(new OnClickListener() {
+//			@Override
+//			public void onClick(View v) {
+//				// Logging
+//				logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":onCreate().editMsgToneButton.OnClickListener().onClick()", "Edit message tone button pressed");
+//				// Build up and Show alert dialog(prompt for message tone)
+//				buildAndShowToneDialog();
+//			}
+//		});
+//
+//		// Set listener to listenMsgToneButton
+//		listenMsgToneButton.setOnClickListener(new OnClickListener() {
+//			@Override
+//			public void onClick(View v) {
+//				// Play the correct tone and vibrate, depending on spinner value
+//				if (toneSpinnerPos == 0) {
+//					// Logging
+//					logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":onCreate().listenMsgToneButton.OnClickListener().onClick()", "Listen message tone button pressed. Message tone for PRIMARY alarm will be played");
+//					// Play message tone and vibrate
+//					noiseHandler.makeNoise(SmsAlarm.this, primaryMessageToneId, useOsSoundSettings, false);
+//				} else if (toneSpinnerPos == 1) {
+//					logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":onCreate().listenMsgToneButton.OnClickListener().onClick()", "Listen message tone button pressed. Message tone for SECONDARY alarm will be played");
+//					noiseHandler.makeNoise(SmsAlarm.this, secondaryMessageToneId, useOsSoundSettings, false);
+//				} else {
+//					// DO NOTHING EXCEPT LOG ERROR MESSAGE
+//					logger.logCatTxt(LogPriorities.ERROR, LOG_TAG + ":onCreate().listenMsgToneButton.OnClickListener().onClick()", "Invalid spinner position occurred. Current tone spinner position is: \"" + Integer.toString(toneSpinnerPos) + "\"");
+//				}
+//			}
+//		});
+//
+//		// Set listener to soundSettingCheckBox
+//		soundSettingCheckBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+//			@Override
+//			public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+//				// Log that CheckBox been pressed
+//				logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":onCreate().soundSettingCheckBox.onCheckedChange()", "Use OS sound settings checkbox pressed(or checkbox initialized)");
+//
+//				// Set checkbox depending on it's checked status and store variable
+//				if (soundSettingCheckBox.isChecked()) {
+//					// Store value to variable
+//					useOsSoundSettings = true;
+//					// logging
+//					logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":onCreate().soundSettingCheckBox.onCheckedChange()", "Use OS sound settings checkbox \"Checked\"(" + useOsSoundSettings + ")");
+//				} else {
+//					useOsSoundSettings = false;
+//					logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":onCreate().soundSettingCheckBox.onCheckedChange()", "Use OS sound settings checkbox \"Unchecked\"(" + useOsSoundSettings + ")");
+//				}
+//
+//				try {
+//					// Store value to shared preferences
+//					prefHandler.setPrefs(PrefKeys.SHARED_PREF, PrefKeys.USE_OS_SOUND_SETTINGS_KEY, useOsSoundSettings, SmsAlarm.this);
+//				} catch (IllegalArgumentException e) {
+//					logger.logCatTxt(LogPriorities.ERROR, LOG_TAG + ":onCreate().soundSettingCheckBox.onCheckedChange()", "An Object of unsupported instance was given as argument to PreferencesHandler.setPrefs()", e);
+//				}
+//			}
+//		});
+//
+//		// Set listener to enableAckCheckBox
+//		enableAckCheckBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+//			@Override
+//			public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+//				// Log that CheckBox been pressed
+//				logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":onCreate().enableAckCheckBox.onCheckedChange()", "Enable acknowledge checkbox pressed(or checkbox initialized)");
+//
+//				// Set checkbox depending on it's checked status and store variable
+//				if (enableAckCheckBox.isChecked()) {
+//					// Store value to variable
+//					useAlarmAcknowledge = true;
+//					// logging
+//					logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":onCreate().enableAckCheckBox.onCheckedChange()", "Use OS sound settings checkbox \"Checked\"(" + useAlarmAcknowledge + ")");
+//				} else {
+//					useAlarmAcknowledge = false;
+//					logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":onCreate().enableAckCheckBox.onCheckedChange()", "Use OS sound settings checkbox \"Unchecked\"(" + useAlarmAcknowledge + ")");
+//				}
+//
+//				try {
+//					// Store value to shared preferences
+//					prefHandler.setPrefs(PrefKeys.SHARED_PREF, PrefKeys.ENABLE_ACK_KEY, useAlarmAcknowledge, SmsAlarm.this);
+//				} catch (IllegalArgumentException e) {
+//					logger.logCatTxt(LogPriorities.ERROR, LOG_TAG + ":onCreate().enableAckCheckBox.onCheckedChange()", "An Object of unsupported instance was given as argument to PreferencesHandler.setPrefs()", e);
+//				}
+//
+//				// Update UI widgets affected by enable acknowledge
+//				updateAcknowledgeWidgets();
+//			}
+//		});
+//
+//		// Set listener to playToneTwiceSettingCheckBox
+//		playToneTwiceSettingCheckBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+//			@Override
+//			public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+//				// Log that CheckBox been pressed
+//				logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":onCreate().playToneTwiceSettingCheckBox.onCheckedChange()", "Play tone twice checkbox pressed(or checkbox initialized)");
+//
+//				// Set checkbox depending on it's checked status and store variable
+//				if (playToneTwiceSettingCheckBox.isChecked()) {
+//					// Store value to variable
+//					playToneTwice = true;
+//					// Logging
+//					logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":onCreate().playToneTwiceSettingCheckBox.onCheckedChange()", "Play tone twice checkbox \"Checked\"(" + playToneTwice + ")");
+//				} else {
+//					playToneTwice = false;
+//					logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":onCreate().playToneTwiceSettingCheckBox.onCheckedChange()", "Play tone twice checkbox \"Unhecked\"(" + playToneTwice + ")");
+//				}
+//
+//				try {
+//					// Store value to shared preferences
+//					prefHandler.setPrefs(PrefKeys.SHARED_PREF, PrefKeys.PLAY_TONE_TWICE_KEY, playToneTwice, SmsAlarm.this);
+//				} catch (IllegalArgumentException e) {
+//					logger.logCatTxt(LogPriorities.ERROR, LOG_TAG + ":onCreate().playToneTwiceSettingCheckBox.onCheckedChange()", "An Object of unsupported instance was given as argument to PreferencesHandler.setPrefs()", e);
+//				}
+//			}
+//		});
+//
+//		// Set listener to enableSmsAlarmCheckBox
+//		enableSmsAlarmCheckBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+//			@Override
+//			public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+//				// Log that CheckBox been pressed
+//				logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":onCreate().enableSmsAlarmCheckBox.onCheckedChange()", "Enable Sms Alarm checkbox pressed(or checkbox initialized)");
+//
+//				// Set checkbox depending on it's checked status and store variable
+//				if (enableSmsAlarmCheckBox.isChecked()) {
+//					// Store value to variable
+//					enableSmsAlarm = true;
+//					// Logging
+//					logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":onCreate().enableSmsAlarmCheckBox.onCheckedChange()", "Enable SmsAlarm checkbox \"Checked\"(" + enableSmsAlarm + ")");
+//				} else {
+//					enableSmsAlarm = false;
+//					logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":onCreate().enableSmsAlarmCheckBox.onCheckedChange()", "Enable SmsAlarm checkbox \"Unchecked\"(" + enableSmsAlarm + ")");
+//				}
+//
+//				try {
+//					// Store value to shared preferences
+//					prefHandler.setPrefs(PrefKeys.SHARED_PREF, PrefKeys.ENABLE_SMS_ALARM_KEY, enableSmsAlarm, SmsAlarm.this);
+//				} catch (IllegalArgumentException e) {
+//					logger.logCatTxt(LogPriorities.ERROR, LOG_TAG + ":onCreate().enableSmsAlarmCheckBox.onCheckedChange()", "An Object of unsupported instance was given as argument to PreferencesHandler.setPrefs()", e);
+//				}
+//			}
+//		});
+//
+//		// Set listener to tone spinner
+//		toneSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+//			@Override
+//			public void onItemSelected(AdapterView<?> parent, View view, int pos, long id) {
+//				// Store tone spinners position
+//				toneSpinnerPos = toneSpinner.getSelectedItemPosition();
+//				// Logging
+//				logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":onCreate().toneSpinner.OnItemSelectedListener().onItemSelected()", "Item in tone spinner pressed(or spinner initialized)");
+//				// Update selected tone EditText widget
+//				updateSelectedToneEditText();
+//			}
+//
+//			@Override
+//			public void onNothingSelected(AdapterView<?> arg0) {
+//				// DO NOTHING!
+//			}
+//		});
+//
+//		// Update all UI widgets
+//		updateWholeUI();
 
 		// Log in debugging and information purpose
 		logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":onCreate()", "Creation of Sms Alarm completed");
@@ -944,22 +883,6 @@ public class SmsAlarm extends SlidingFragmentActivity {
 		 * dialog DUMMY is built up.
 		 */
 		switch (type) {
-			case SMS_PRIMARY:
-				// Set title
-				dialog.setTitle(R.string.DELETE_NUMBER_PROMPT_TITLE);
-				// Build and set message
-				dialog.setMessage(getString(R.string.DELETE_PRIMARY_NUMBER_PROMPT_MESSAGE) + " " + primarySmsNumbers.get(primarySmsNumberSpinner.getSelectedItemPosition()) + "?");
-				// Set dialog to non cancelable
-				dialog.setCancelable(false);
-				// Logging
-				logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":buildAndShowDeleteDialog()", "Dialog attributes is set for dialog type SMS_PRIMARY");
-				break;
-			case SMS_SECONDARY:
-				dialog.setTitle(R.string.DELETE_NUMBER_PROMPT_TITLE);
-				dialog.setMessage(getString(R.string.DELETE_SECONDARY_NUMBER_PROMPT_MESSAGE) + " " + secondarySmsNumbers.get(secondarySmsNumberSpinner.getSelectedItemPosition()) + "?");
-				dialog.setCancelable(false);
-				logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":buildAndShowDeleteDialog()", "Dialog attributes is set for dialog type SMS_SECONDARY");
-				break;
 			case FREE_TEXT_PRIMARY:
 				dialog.setTitle(R.string.DELETE_FREE_TEXT_PROMPT_TITLE);
 				dialog.setMessage(getString(R.string.DELETE_PRIMARY_FREE_TEXT_PROMPT_MESSAGE) + " " + primaryFreeTexts.get(primaryFreeTextSpinner.getSelectedItemPosition()) + "?");
@@ -991,29 +914,6 @@ public class SmsAlarm extends SlidingFragmentActivity {
 				 * is taken.
 				 */
 				switch (type) {
-					case SMS_PRIMARY:
-						logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":buildAndShowDeleteDialog().PosButton.OnClickListener().onClick()", "PRIMARY sms number: \"" + primarySmsNumbers.get(primarySmsNumberSpinner.getSelectedItemPosition()) + "\" is about to be removed from the list of PRIMARY sms numbers");
-						// Delete number from list
-						primarySmsNumbers.remove(primarySmsNumberSpinner.getSelectedItemPosition());
-						try {
-							// Store to shared preferences
-							prefHandler.setPrefs(PrefKeys.SHARED_PREF, PrefKeys.PRIMARY_LISTEN_NUMBERS_KEY, primarySmsNumbers, SmsAlarm.this);
-						} catch (IllegalArgumentException e) {
-							logger.logCatTxt(LogPriorities.ERROR, LOG_TAG + ":buildAndShowDeleteDialog().PosButton.OnClickListener().onClick()", "An Object of unsupported instance was given as argument to PreferencesHandler.setPrefs()", e);
-						}
-						// Update affected UI widgets
-						updatePrimarySmsNumberSpinner();
-						break;
-					case SMS_SECONDARY:
-						logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":buildAndShowDeleteDialog().PosButton.OnClickListener().onClick()", "SECONDARY sms number: \"" + secondarySmsNumbers.get(secondarySmsNumberSpinner.getSelectedItemPosition()) + "\" is about to be removed from the list of SECONDARY sms numbers");
-						secondarySmsNumbers.remove(secondarySmsNumberSpinner.getSelectedItemPosition());
-						try {
-							prefHandler.setPrefs(PrefKeys.SHARED_PREF, PrefKeys.SECONDARY_LISTEN_NUMBERS_KEY, secondarySmsNumbers, SmsAlarm.this);
-						} catch (IllegalArgumentException e) {
-							logger.logCatTxt(LogPriorities.ERROR, LOG_TAG + ":buildAndShowDeleteDialog().PosButton.OnClickListener().onClick()", "An Object of unsupported instance was given as argument to PreferencesHandler.setPrefs()", e);
-						}
-						updateSecondarySmsNumberSpinner();
-						break;
 					case FREE_TEXT_PRIMARY:
 						logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":buildAndShowDeleteDialog().PosButton.OnClickListener().onClick()", "PRIMARY free text: \"" + primaryFreeTexts.get(primaryFreeTextSpinner.getSelectedItemPosition()) + "\" is about to be removed from the list of PRIMARY free texts");
 						// Delete free text from list
@@ -1044,7 +944,7 @@ public class SmsAlarm extends SlidingFragmentActivity {
 		});
 
 		// Only set neutral button if dialog type is supported
-		if (type.ordinal() >= DialogTypes.SMS_PRIMARY.ordinal() && type.ordinal() <= DialogTypes.FREE_TEXT_SECONDARY.ordinal()) {
+		if (type.ordinal() >= DialogTypes.FREE_TEXT_PRIMARY.ordinal() && type.ordinal() <= DialogTypes.FREE_TEXT_SECONDARY.ordinal()) {
 			// Set a neutral button, due to documentation it has same functionality as "back" button
 			dialog.setNeutralButton(R.string.NO, new DialogInterface.OnClickListener() {
 				@Override
@@ -1127,31 +1027,6 @@ public class SmsAlarm extends SlidingFragmentActivity {
 		 * dialog DUMMY is built up.
 		 */
 		switch (type) {
-			case SMS_PRIMARY:
-				// Set title
-				dialog.setTitle(R.string.NUMBER_PROMPT_TITLE);
-				// Set message
-				dialog.setMessage(R.string.PRIMARY_NUMBER_PROMPT_MESSAGE);
-				// Set hint to edittext
-				noBlanksInputEditText.setHint(R.string.NUMBER_PROMPT_HINT);
-				// Set Input type to edittext
-				noBlanksInputEditText.setInputType(InputType.TYPE_CLASS_TEXT);
-				// Set dialog to non cancelable
-				dialog.setCancelable(false);
-				// Bind dialog to input
-				dialog.setView(noBlanksInputEditText);
-				// Logging
-				logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":buildAndShowInputDialog()", "Dialog attributes is set for dialog type SMS_PRIMARY");
-				break;
-			case SMS_SECONDARY:
-				dialog.setTitle(R.string.NUMBER_PROMPT_TITLE);
-				dialog.setMessage(R.string.SECONDARY_NUMBER_PROMPT_MESSAGE);
-				noBlanksInputEditText.setHint(R.string.NUMBER_PROMPT_HINT);
-				noBlanksInputEditText.setInputType(InputType.TYPE_CLASS_TEXT);
-				dialog.setCancelable(false);
-				dialog.setView(noBlanksInputEditText);
-				logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":buildAndShowInputDialog()", "Dialog attributes is set for dialog type SMS_SECONDARY");
-				break;
 			case FREE_TEXT_PRIMARY:
 				dialog.setTitle(R.string.FREE_TEXT_PROMPT_TITLE);
 				dialog.setMessage(R.string.PRIMARY_FREE_TEXT_PROMPT_MESSAGE);
@@ -1215,100 +1090,6 @@ public class SmsAlarm extends SlidingFragmentActivity {
 				 * is taken.
 				 */
 				switch (type) {
-					case SMS_PRIMARY:
-						// Store input
-						input = noBlanksInputEditText.getText().toString();
-						// If input doesn't exist in the list of secondarySmsNumbers and input isn't
-						// empty
-						if (!existsIn(input, secondarySmsNumbers) && !input.equals("")) {
-							// Iterate through all strings in the list of primarySmsNumbers to check
-							// if number already exists
-							for (String number : primarySmsNumbers) {
-								// If a string in the list is equal with the input then it's
-								// duplicated
-								if (number.equalsIgnoreCase(input)) {
-									duplicatedNumbers = true;
-								}
-							}
-
-							// Store input if duplicated numbers is false
-							if (!duplicatedNumbers) {
-								// Add given input to list
-								primarySmsNumbers.add(input);
-								try {
-									// Store to shared preferences
-									prefHandler.setPrefs(PrefKeys.SHARED_PREF, PrefKeys.PRIMARY_LISTEN_NUMBERS_KEY, primarySmsNumbers, SmsAlarm.this);
-								} catch (IllegalArgumentException e) {
-									logger.logCatTxt(LogPriorities.ERROR, LOG_TAG + ":buildAndShowInputDialog().PositiveButton.OnClickListener().onClick()", "An Object of unsupported instance was given as argument to PreferencesHandler.setPrefs()", e);
-								}
-								// Update affected UI widgets
-								updatePrimarySmsNumberSpinner();
-								// Log
-								logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":buildAndShowInputDialog().PositiveButton.OnClickListener().onClick()", "New PRIMARY sms number has been stored from user input to the list of PRIMARY sms numbers. New PRIMARY sms number is: \"" + input + "\"");
-							} else {
-								Toast.makeText(SmsAlarm.this, R.string.NUMBER_ALREADY_IN_PRIMARY_LIST, Toast.LENGTH_LONG).show();
-								logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":buildAndShowInputDialog().PositiveButton.OnClickListener().onClick()", "Given PRIMARY sms number(" + input + ") already exists in the list of PRIMARY sms numbers and therefore cannot be stored. Showing dialog of type SMS_PRIMARY again");
-								buildAndShowInputDialog(type);
-							}
-						} else {
-							// Empty input was given
-							if (input.equals("")) {
-								Toast.makeText(SmsAlarm.this, R.string.NUMBER_IS_NEEDED, Toast.LENGTH_LONG).show();
-								logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":buildAndShowInputDialog().PositiveButton.OnClickListener().onClick()", "Given PRIMARY sms number is empty and therefore cannot be stored. Showing dialog of type SMS_PRIMARY again");
-							} else { // Given primary number exists in the list of secondary numbers
-								Toast.makeText(SmsAlarm.this, R.string.DUPLICATED_NUMBERS, Toast.LENGTH_LONG).show();
-								logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":buildAndShowInputDialog().PositiveButton.OnClickListener().onClick()", "Given PRIMARY sms number(" + input + ") already exists in the list of SECONDARY sms numbers and therefore cannot be stored. Showing dialog of type SMS_PRIMARY again");
-							}
-							buildAndShowInputDialog(type);
-						}
-						break;
-					case SMS_SECONDARY:
-						// Store input
-						input = noBlanksInputEditText.getText().toString();
-						// If input doesn't exist in the list of primarySmsNumbers and input isn't
-						// empty
-						if (!existsIn(input, primarySmsNumbers) && !input.equals("")) {
-							// Iterate through all strings in the list of secondarySmsNumbers to
-							// check if number already exists
-							for (String number : secondarySmsNumbers) {
-								// If a string in the list is equal with the input then it's
-								// duplicated
-								if (number.equalsIgnoreCase(input)) {
-									duplicatedNumbers = true;
-								}
-							}
-
-							// Store input if duplicated numbers is false
-							if (!duplicatedNumbers) {
-								// Add given input to list
-								secondarySmsNumbers.add(input);
-								try {
-									// Store to shared preferences
-									prefHandler.setPrefs(PrefKeys.SHARED_PREF, PrefKeys.SECONDARY_LISTEN_NUMBERS_KEY, secondarySmsNumbers, SmsAlarm.this);
-								} catch (IllegalArgumentException e) {
-									logger.logCatTxt(LogPriorities.ERROR, LOG_TAG + ":buildAndShowInputDialog().PositiveButton.OnClickListener().onClick()", "An Object of unsupported instance was given as argument to PreferencesHandler.setPrefs()", e);
-								}
-								// Update affected UI widgets
-								updateSecondarySmsNumberSpinner();
-								// Log
-								logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":buildAndShowInputDialog().PositiveButton.OnClickListener().onClick()", "New SECONDARY sms number has been stored from user input to the list of SECONDARY sms numbers. New SECONDARY sms number is: \"" + input + "\"");
-							} else {
-								Toast.makeText(SmsAlarm.this, R.string.NUMBER_ALREADY_IN_SECONDARY_LIST, Toast.LENGTH_LONG).show();
-								logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":buildAndShowInputDialog().PositiveButton.OnClickListener().onClick()", "Given SECONDARY sms number(" + input + ") already exists in the list of SECONDARY sms numbers and therefore cannot be stored. Showing dialog of type SMS_SECONDARY again");
-								buildAndShowInputDialog(type);
-							}
-						} else {
-							// Empty input was given
-							if (input.equals("")) {
-								Toast.makeText(SmsAlarm.this, R.string.NUMBER_IS_NEEDED, Toast.LENGTH_LONG).show();
-								logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":buildAndShowInputDialog().PositiveButton.OnClickListener().onClick()", "Given SECONDARY sms number is empty and therefore cannot be stored. Showing dialog of type SMS_SECONDARY again");
-							} else { // Given primary number exists in the list of secondary numbers
-								Toast.makeText(SmsAlarm.this, R.string.DUPLICATED_NUMBERS, Toast.LENGTH_LONG).show();
-								logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":buildAndShowInputDialog().PositiveButton.OnClickListener().onClick()", "Given SECONDARY sms number(" + input + ") already exists in the list of PRIMARY sms numbers and therefore cannot be stored. Showing dialog of type SMS_SECONDARY again");
-							}
-							buildAndShowInputDialog(type);
-						}
-						break;
 					case FREE_TEXT_PRIMARY:
 						// Store input
 						input = noBlanksInputEditText.getText().toString();
@@ -1440,7 +1221,7 @@ public class SmsAlarm extends SlidingFragmentActivity {
 		});
 
 		// Only set neutral button if dialog type is supported
-		if (type.ordinal() >= DialogTypes.SMS_PRIMARY.ordinal() && type.ordinal() <= DialogTypes.RESCUESERVICE.ordinal()) {
+		if (type.ordinal() >= DialogTypes.FREE_TEXT_PRIMARY.ordinal() && type.ordinal() <= DialogTypes.RESCUESERVICE.ordinal()) {
 			// Set a neutral button, due to documentation it has same functionality as "back" button
 			dialog.setNeutralButton(R.string.CANCEL, new DialogInterface.OnClickListener() {
 				@Override
