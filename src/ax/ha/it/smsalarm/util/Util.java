@@ -1,7 +1,7 @@
 /**
  * Copyright (c) 2014 Robert Nyholm. All rights reserved.
  */
-package ax.ha.it.smsalarm;
+package ax.ha.it.smsalarm.util;
 
 import java.util.ArrayList;
 import java.util.List;

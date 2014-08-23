@@ -1,10 +1,17 @@
-package ax.ha.it.smsalarm;
+package ax.ha.it.smsalarm.activity;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.app.ListFragment;
 import android.view.KeyEvent;
+import ax.ha.it.smsalarm.R;
+import ax.ha.it.smsalarm.R.dimen;
+import ax.ha.it.smsalarm.R.drawable;
+import ax.ha.it.smsalarm.R.id;
+import ax.ha.it.smsalarm.R.layout;
+import ax.ha.it.smsalarm.R.menu;
+import ax.ha.it.smsalarm.R.string;
 import ax.ha.it.smsalarm.fragment.SlidingMenuFragment;
 import ax.ha.it.smsalarm.fragment.SmsSettingsFragment;
 

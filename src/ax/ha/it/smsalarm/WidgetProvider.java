@@ -15,6 +15,7 @@ import android.content.Intent;
 import android.net.Uri;
 import android.webkit.MimeTypeMap;
 import android.widget.RemoteViews;
+import ax.ha.it.smsalarm.activity.Splash;
 import ax.ha.it.smsalarm.handler.DatabaseHandler;
 import ax.ha.it.smsalarm.handler.LogHandler;
 import ax.ha.it.smsalarm.handler.PreferencesHandler;

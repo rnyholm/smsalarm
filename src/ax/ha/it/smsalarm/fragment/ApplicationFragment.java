@@ -12,7 +12,7 @@ import android.view.View;
  * @version 2.3.1
  * @since 2.3.1
  */
-public interface SmsAlarmFragment {
+public interface ApplicationFragment {
 
 	/**
 	 * To find UI widgets and get their reference by ID contained in view of the <code>Fragment</code>.

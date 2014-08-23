@@ -1,7 +1,7 @@
 /**
  * Copyright (c) 2013 Robert Nyholm. All rights reserved.
  */
-package ax.ha.it.smsalarm;
+package ax.ha.it.smsalarm.activity;
 
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -14,6 +14,10 @@ import android.view.View.OnClickListener;
 import android.view.Window;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import ax.ha.it.smsalarm.R;
+import ax.ha.it.smsalarm.R.id;
+import ax.ha.it.smsalarm.R.layout;
+import ax.ha.it.smsalarm.R.string;
 import ax.ha.it.smsalarm.handler.LogHandler;
 import ax.ha.it.smsalarm.handler.PreferencesHandler;
 import ax.ha.it.smsalarm.handler.LogHandler.LogPriorities;

@@ -1,7 +1,7 @@
 /**
  * Copyright (c) 2013 Robert Nyholm. All rights reserved.
  */
-package ax.ha.it.smsalarm;
+package ax.ha.it.smsalarm.activity;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -35,6 +35,16 @@ import android.widget.RelativeLayout.LayoutParams;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
+import ax.ha.it.smsalarm.Alarm;
+import ax.ha.it.smsalarm.R;
+import ax.ha.it.smsalarm.WidgetProvider;
+import ax.ha.it.smsalarm.R.array;
+import ax.ha.it.smsalarm.R.dimen;
+import ax.ha.it.smsalarm.R.drawable;
+import ax.ha.it.smsalarm.R.id;
+import ax.ha.it.smsalarm.R.layout;
+import ax.ha.it.smsalarm.R.menu;
+import ax.ha.it.smsalarm.R.string;
 import ax.ha.it.smsalarm.enumeration.DialogTypes;
 import ax.ha.it.smsalarm.fragment.SlidingMenuFragment;
 import ax.ha.it.smsalarm.fragment.SmsSettingsFragment;

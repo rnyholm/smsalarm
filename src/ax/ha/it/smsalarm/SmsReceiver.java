@@ -27,6 +27,7 @@ import ax.ha.it.smsalarm.handler.PreferencesHandler;
 import ax.ha.it.smsalarm.handler.LogHandler.LogPriorities;
 import ax.ha.it.smsalarm.handler.PreferencesHandler.DataTypes;
 import ax.ha.it.smsalarm.handler.PreferencesHandler.PrefKeys;
+import ax.ha.it.smsalarm.util.WakeLocker;
 
 /**
  * Class extending <code>BroadcastReceiver</code>, receives sms and handles them accordingly to
@@ -181,8 +182,8 @@ public class SmsReceiver extends BroadcastReceiver {
 	 * @see ax.ha.it.smsalarm.handler.LogHandler#logAlarm(List, Context) logAlarm(List, Context)
 	 * @see ax.ha.it.smsalarm.handler.PreferencesHandler#setPrefs(PrefKeys, PrefKeys, Object, Context)
 	 *      setPrefs(PrefKeys, PrefKeys, Object, Context)
-	 * @see ax.ha.it.smsalarm.WakeLocker#acquire(Context) acquire(Context)
-	 * @see ax.ha.it.smsalarm.WakeLocker#release() release()
+	 * @see ax.ha.it.smsalarm.util.WakeLocker#acquire(Context) acquire(Context)
+	 * @see ax.ha.it.smsalarm.util.WakeLocker#release() release()
 	 * @see ax.ha.it.smsalarm.handler.DatabaseHandler ax.ha.it.smsalarm.DatabaseHandler
 	 * @see ax.ha.it.smsalarm.handler.DatabaseHandler#addAlarm(Alarm) addAlarm(Alarm)
 	 * @see ax.ha.it.smsalarm.handler.DatabaseHandler#getAllAlarm() getAllAlarm()
