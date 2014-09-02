@@ -25,7 +25,6 @@ import android.util.TypedValue;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
@@ -34,17 +33,8 @@ import android.widget.RelativeLayout;
 import android.widget.RelativeLayout.LayoutParams;
 import android.widget.Spinner;
 import android.widget.TextView;
-import android.widget.Toast;
-import ax.ha.it.smsalarm.Alarm;
 import ax.ha.it.smsalarm.R;
 import ax.ha.it.smsalarm.WidgetProvider;
-import ax.ha.it.smsalarm.R.array;
-import ax.ha.it.smsalarm.R.dimen;
-import ax.ha.it.smsalarm.R.drawable;
-import ax.ha.it.smsalarm.R.id;
-import ax.ha.it.smsalarm.R.layout;
-import ax.ha.it.smsalarm.R.menu;
-import ax.ha.it.smsalarm.R.string;
 import ax.ha.it.smsalarm.enumeration.DialogTypes;
 import ax.ha.it.smsalarm.fragment.SlidingMenuFragment;
 import ax.ha.it.smsalarm.fragment.SmsSettingsFragment;
@@ -95,10 +85,6 @@ public class SmsAlarm extends SlidingFragmentActivity {
 	private EditText rescueServiceEditText;
 
 	// The Button objects
-	private Button addPrimaryFreeTextButton;
-	private Button removePrimaryFreeTextButton;
-	private Button addSecondaryFreeTextButton;
-	private Button removeSecondaryFreeTextButton;
 	private Button editMsgToneButton;
 	private Button listenMsgToneButton;
 	private Button ackNumberButton;
@@ -118,8 +104,6 @@ public class SmsAlarm extends SlidingFragmentActivity {
 
 	// The Spinner objects
 	private Spinner toneSpinner;
-	private Spinner primaryFreeTextSpinner;
-	private Spinner secondaryFreeTextSpinner;
 
 	// The textView objects
 	private TextView soundSettingInfoTextView;
@@ -129,16 +113,6 @@ public class SmsAlarm extends SlidingFragmentActivity {
 
 	// Strings to store different important numbers
 	private String acknowledgeNumber = "";
-
-	// List of strings containing primary- and secondary sms numbers, also primary- and secondary
-	// free texts
-
-	private List<String> primaryFreeTexts = new ArrayList<String>();
-	private List<String> secondaryFreeTexts = new ArrayList<String>();
-
-	private final List<String> emptyFreeTexts = new ArrayList<String>(); // <-- A "dummy" list just
-																			// containing one
-																			// element, on string
 
 	// String to store firedepartments name in
 	private String rescueService = "";
@@ -222,62 +196,6 @@ public class SmsAlarm extends SlidingFragmentActivity {
 //		// Set adapter to tone spinner
 //		toneSpinner.setAdapter(adapter);
 //
-//		// Set listener to addPrimaryFreeTextButton
-//		addPrimaryFreeTextButton.setOnClickListener(new OnClickListener() {
-//			@Override
-//			public void onClick(View v) {
-//				// Logging
-//				logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":onCreate().addPrimaryFreeTextButton.OnClickListener().onClick()", "Add PRIMARY free text button pressed");
-//				// Build up and show input dialog of type free text primary
-//				buildAndShowInputDialog(DialogTypes.FREE_TEXT_PRIMARY);
-//			}
-//		});
-//
-//		// Set listener to removePrimaryFreeTextButton
-//		removePrimaryFreeTextButton.setOnClickListener(new OnClickListener() {
-//			@Override
-//			public void onClick(View v) {
-//				// Logging
-//				logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":onCreate().removePrimaryFreeTextButton.OnClickListener().onClick()", "Remove PRIMARY free text button pressed");
-//
-//				// Only show delete dialog if primary free texts exists
-//				if (!primaryFreeTexts.isEmpty()) {
-//					// Show alert dialog(prompt user for deleting text)
-//					buildAndShowDeleteDialog(DialogTypes.FREE_TEXT_PRIMARY);
-//				} else {
-//					Toast.makeText(SmsAlarm.this, R.string.NO_PRIMARY_FREE_TEXT_EXISTS, Toast.LENGTH_LONG).show();
-//					logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":onCreate().removePrimaryFreeTextButton.OnClickListener().onClick()", "Cannot build and show dialog because the list of PRIMARY free texts are empty");
-//				}
-//			}
-//		});
-//
-//		// Set listener to addSecondaryFreeTextButton
-//		addSecondaryFreeTextButton.setOnClickListener(new OnClickListener() {
-//			@Override
-//			public void onClick(View v) {
-//				// Logging
-//				logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":onCreate().addSecondaryFreeTextButton.OnClickListener().onClick()", "Add SECONDARY free text button pressed");
-//				// Build up and show input dialog of type secondary number
-//				buildAndShowInputDialog(DialogTypes.FREE_TEXT_SECONDARY);
-//			}
-//		});
-//
-//		// Set listener to removeSecondaryFreeTextButton
-//		removeSecondaryFreeTextButton.setOnClickListener(new OnClickListener() {
-//			@Override
-//			public void onClick(View v) {
-//				// Logging
-//				logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":onCreate().removeSecondaryFreeTextButton.OnClickListener().onClick()", "Remove SECONDARY free text button pressed");
-//				// Only show delete dialog if secondary free texts exists
-//				if (!secondaryFreeTexts.isEmpty()) {
-//					// Show alert dialog(prompt user for deleting text)
-//					buildAndShowDeleteDialog(DialogTypes.FREE_TEXT_SECONDARY);
-//				} else {
-//					Toast.makeText(SmsAlarm.this, R.string.NO_SECONDARY_FREE_TEXT_EXISTS, Toast.LENGTH_LONG).show();
-//					logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":onCreate().removePrimaryFreeTextButton.OnClickListener().onClick()", "Cannot build and show dialog because the list of SECONDARY free texts are");
-//				}
-//			}
-//		});
 //
 //		// Set listener to ackNumberButton
 //		ackNumberButton.setOnClickListener(new OnClickListener() {
@@ -639,10 +557,6 @@ public class SmsAlarm extends SlidingFragmentActivity {
 		rescueServiceEditText = (EditText) findViewById(R.id.rescueServiceName_et);
 
 		// Declare and initialize variables of type button
-		addPrimaryFreeTextButton = (Button) findViewById(R.id.addPrimaryFreeText_btn);
-		removePrimaryFreeTextButton = (Button) findViewById(R.id.deletePrimaryFreeText_btn);
-		addSecondaryFreeTextButton = (Button) findViewById(R.id.addSecondaryFreeText_btn);
-		removeSecondaryFreeTextButton = (Button) findViewById(R.id.deleteSecondaryFreeText_btn);
 		editMsgToneButton = (Button) findViewById(R.id.editMsgTone_btn);
 		listenMsgToneButton = (Button) findViewById(R.id.listenMsgTone_btn);
 		ackNumberButton = (Button) findViewById(R.id.editAckNumber_btn);
@@ -656,8 +570,6 @@ public class SmsAlarm extends SlidingFragmentActivity {
 
 		// Declare and initialize variables of type Spinner
 		toneSpinner = (Spinner) findViewById(R.id.toneSpinner_sp);
-		primaryFreeTextSpinner = (Spinner) findViewById(R.id.primaryFreeTextSpinner_sp);
-		secondaryFreeTextSpinner = (Spinner) findViewById(R.id.secondaryFreeTextSpinner_sp);
 
 		// Declare and initialize variables of type TextView
 		soundSettingInfoTextView = (TextView) findViewById(R.id.useSysSoundSettingsHint_tv);
@@ -846,8 +758,6 @@ public class SmsAlarm extends SlidingFragmentActivity {
 
 		try {
 			// Get shared preferences needed by class Sms Alarm
-			primaryFreeTexts = (List<String>) prefHandler.getPrefs(PrefKeys.SHARED_PREF, PrefKeys.PRIMARY_LISTEN_FREE_TEXTS_KEY, DataTypes.LIST, this);
-			secondaryFreeTexts = (List<String>) prefHandler.getPrefs(PrefKeys.SHARED_PREF, PrefKeys.SECONDARY_LISTEN_FREE_TEXTS_KEY, DataTypes.LIST, this);
 			primaryMessageToneId = (Integer) prefHandler.getPrefs(PrefKeys.SHARED_PREF, PrefKeys.PRIMARY_MESSAGE_TONE_KEY, DataTypes.INTEGER, this);
 			secondaryMessageToneId = (Integer) prefHandler.getPrefs(PrefKeys.SHARED_PREF, PrefKeys.SECONDARY_MESSAGE_TONE_KEY, DataTypes.INTEGER, this, 1);
 			useOsSoundSettings = (Boolean) prefHandler.getPrefs(PrefKeys.SHARED_PREF, PrefKeys.USE_OS_SOUND_SETTINGS_KEY, DataTypes.BOOLEAN, this);
@@ -860,116 +770,6 @@ public class SmsAlarm extends SlidingFragmentActivity {
 			logger.logCatTxt(LogPriorities.ERROR, LOG_TAG + ":getSmsAlarmPrefs()", "An unsupported datatype was given as argument to PreferencesHandler.getPrefs()", e);
 		}
 		logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":getSmsAlarmPrefs()", "Shared preferences retrieved");
-	}
-
-	/**
-	 * Universal method to build up one of four different types of delete dialogs. The supported types are: <b><i>SMS_PRIMARY</b></i>,
-	 * <b><i>SMS_SECONDARY</b></i>, <b><i>FREE_TEXT_PRIMARY</b></i> and <b><i>FREE_TEXT_SECONDARY</b></i>. If a dialog type are given as parameter
-	 * thats not supported a dummy dialog will be built and shown.
-	 * 
-	 * @param type
-	 *            Type of delete dialog to build up and shown
-	 * @see #buildAndShowAboutDialog()
-	 * @see #buildAndShowInputDialog(DialogTypes)
-	 * @see #buildAndShowToneDialog()
-	 * @see #updateSecondarySmsNumberSpinner()
-	 * @see ax.ha.it.smsalarm.handler.LogHandler#logCat(LogPriorities, String, String) logCat(LogPriorities, String, String)
-	 * @see ax.ha.it.smsalarm.handler.LogHandler#logCatTxt(LogPriorities, String, String, Throwable) logCatTxt(LogPriorities, String, String,
-	 *      Throwable)
-	 * @see ax.ha.it.smsalarm.handler.PreferencesHandler#setPrefs(PrefKeys, PrefKeys, Object, Context) setPrefs(PrefKeys, PrefKeys, Object, Context)
-	 */
-	private void buildAndShowDeleteDialog(final DialogTypes type) {
-		// Logging
-		logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":buildAndShowDeleteDialog()", "Start building delete dialog");
-
-		// Build up the alert dialog
-		AlertDialog.Builder dialog = new AlertDialog.Builder(this);
-
-		// Set some attributes, title and message containing actual number
-		dialog.setIcon(android.R.drawable.ic_dialog_alert);
-
-		/*
-		 * Switch through the different dialog types and set correct strings and edittext to the dialog. If dialog type is non supported a default
-		 * dialog DUMMY is built up.
-		 */
-		switch (type) {
-			case FREE_TEXT_PRIMARY:
-				dialog.setTitle(R.string.DELETE_FREE_TEXT_PROMPT_TITLE);
-				dialog.setMessage(getString(R.string.DELETE_PRIMARY_FREE_TEXT_PROMPT_MESSAGE) + " " + primaryFreeTexts.get(primaryFreeTextSpinner.getSelectedItemPosition()) + "?");
-				dialog.setCancelable(false);
-				logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":buildAndShowDeleteDialog()", "Dialog attributes is set for dialog type FREE_TEXT_PRIMARY");
-				break;
-			case FREE_TEXT_SECONDARY:
-				dialog.setTitle(R.string.DELETE_FREE_TEXT_PROMPT_TITLE);
-				dialog.setMessage(getString(R.string.DELETE_SECONDARY_FREE_TEXT_PROMPT_MESSAGE) + " " + secondaryFreeTexts.get(secondaryFreeTextSpinner.getSelectedItemPosition()) + "?");
-				dialog.setCancelable(false);
-				logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":buildAndShowDeleteDialog()", "Dialog attributes is set for dialog type FREE_TEXT_SECONDARY");
-				break;
-			default: // <--Unsupported dialog type. Displaying a dummy dialog!
-				dialog.setTitle("Congratulations!");
-				dialog.setMessage("Somehow you got this dialog to show up! I bet a monkey must have been messing around with the code;-)");
-				dialog.setCancelable(false);
-				logger.logCatTxt(LogPriorities.ERROR, LOG_TAG + ":buildAndShowDeleteDialog()", "A UNSUPPORTED dialog type has been given as parameter, a DUMMY dialog will be built and shown");
-		}
-
-		// Set a positive button and listen on it
-		dialog.setPositiveButton(R.string.YES, new DialogInterface.OnClickListener() {
-			@Override
-			public void onClick(DialogInterface dialog, int whichButton) {
-				// Log information
-				logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":buildAndShowDeleteDialog().PosButton.OnClickListener().onClick()", "Positive Button pressed");
-
-				/*
-				 * Switch through the different dialog types and set proper input handling to each of them. If dialog type is non supported no input
-				 * is taken.
-				 */
-				switch (type) {
-					case FREE_TEXT_PRIMARY:
-						logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":buildAndShowDeleteDialog().PosButton.OnClickListener().onClick()", "PRIMARY free text: \"" + primaryFreeTexts.get(primaryFreeTextSpinner.getSelectedItemPosition()) + "\" is about to be removed from the list of PRIMARY free texts");
-						// Delete free text from list
-						primaryFreeTexts.remove(primaryFreeTextSpinner.getSelectedItemPosition());
-						try {
-							// Store to shared preferences
-							prefHandler.setPrefs(PrefKeys.SHARED_PREF, PrefKeys.PRIMARY_LISTEN_FREE_TEXTS_KEY, primaryFreeTexts, SmsAlarm.this);
-						} catch (IllegalArgumentException e) {
-							logger.logCatTxt(LogPriorities.ERROR, LOG_TAG + ":buildAndShowDeleteDialog().PosButton.OnClickListener().onClick()", "An Object of unsupported instance was given as argument to PreferencesHandler.setPrefs()", e);
-						}
-						// Update affected UI widgets
-						updatePrimaryFreeTextSpinner();
-						break;
-					case FREE_TEXT_SECONDARY:
-						logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":buildAndShowDeleteDialog().PosButton.OnClickListener().onClick()", "SECONDARY free text: \"" + secondaryFreeTexts.get(secondaryFreeTextSpinner.getSelectedItemPosition()) + "\" is about to be removed from the list of SECONDARY free texts");
-						secondaryFreeTexts.remove(secondaryFreeTextSpinner.getSelectedItemPosition());
-						try {
-							prefHandler.setPrefs(PrefKeys.SHARED_PREF, PrefKeys.SECONDARY_LISTEN_FREE_TEXTS_KEY, secondaryFreeTexts, SmsAlarm.this);
-						} catch (IllegalArgumentException e) {
-							logger.logCatTxt(LogPriorities.ERROR, LOG_TAG + ":buildAndShowDeleteDialog().PosButton.OnClickListener().onClick()", "An Object of unsupported instance was given as argument to PreferencesHandler.setPrefs()", e);
-						}
-						updateSecondaryFreeTextSpinner();
-						break;
-					default: // <--Unsupported dialog type
-						logger.logCatTxt(LogPriorities.ERROR, LOG_TAG + ":buildAndShowDeleteDialog().PositiveButton.OnClickListener().onClick()", "Nothing is stored beacause given dialog type is UNSUPPORTED, given dialog is of type number: \"" + type.name() + "\"");
-				}
-			}
-		});
-
-		// Only set neutral button if dialog type is supported
-		if (type.ordinal() >= DialogTypes.FREE_TEXT_PRIMARY.ordinal() && type.ordinal() <= DialogTypes.FREE_TEXT_SECONDARY.ordinal()) {
-			// Set a neutral button, due to documentation it has same functionality as "back" button
-			dialog.setNeutralButton(R.string.NO, new DialogInterface.OnClickListener() {
-				@Override
-				public void onClick(DialogInterface dialog, int whichButton) {
-					// DO NOTHING, except logging
-					logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":buildAndShowDeleteDialog().NeutralButton.OnClickListener().onClick()", "Neutral Button pressed in dialog, nothing done");
-				}
-			});
-		}
-
-		// Logging
-		logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":buildAndShowDeleteDialog()", "Showing dialog");
-
-		// Show it
-		dialog.show();
 	}
 
 	/**
@@ -1037,24 +837,6 @@ public class SmsAlarm extends SlidingFragmentActivity {
 		 * dialog DUMMY is built up.
 		 */
 		switch (type) {
-			case FREE_TEXT_PRIMARY:
-				dialog.setTitle(R.string.FREE_TEXT_PROMPT_TITLE);
-				dialog.setMessage(R.string.PRIMARY_FREE_TEXT_PROMPT_MESSAGE);
-				noBlanksInputEditText.setHint(R.string.FREE_TEXT_PROMPT_HINT);
-				noBlanksInputEditText.setInputType(InputType.TYPE_CLASS_TEXT);
-				dialog.setCancelable(false);
-				dialog.setView(noBlanksInputEditText);
-				logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":buildAndShowInputDialog()", "Dialog attributes is set for dialog type FREE_TEXT_PRIMARY");
-				break;
-			case FREE_TEXT_SECONDARY:
-				dialog.setTitle(R.string.FREE_TEXT_PROMPT_TITLE);
-				dialog.setMessage(R.string.SECONDARY_FREE_TEXT_PROMPT_MESSAGE);
-				noBlanksInputEditText.setHint(R.string.FREE_TEXT_PROMPT_HINT);
-				noBlanksInputEditText.setInputType(InputType.TYPE_CLASS_TEXT);
-				dialog.setCancelable(false);
-				dialog.setView(noBlanksInputEditText);
-				logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":buildAndShowInputDialog()", "Dialog attributes is set for dialog type FREE_TEXT_SECONDARY");
-				break;
 			case ACKNOWLEDGE:
 				dialog.setTitle(R.string.NUMBER_PROMPT_TITLE);
 				dialog.setMessage(R.string.ACK_NUMBER_PROMPT_MESSAGE);
@@ -1090,112 +872,11 @@ public class SmsAlarm extends SlidingFragmentActivity {
 				// Log information
 				logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":buildAndShowInputDialog().PositiveButton.OnClickListener().onClick()", "Positive Button pressed");
 
-				// Boolean indicating if there are duplicates of primary and secondary sms numbers
-				// and also of the primary and secondary free texts
-				boolean duplicatedNumbers = false;
-				boolean duplicatedFreeTexts = false;
-
 				/*
 				 * Switch through the different dialog types and set proper input handling to each of them. If dialog type is non supported no input
 				 * is taken.
 				 */
 				switch (type) {
-					case FREE_TEXT_PRIMARY:
-						// Store input
-						input = noBlanksInputEditText.getText().toString();
-						// If input doesn't exist in the list of secondaryFreeTexts and input isn't
-						// empty
-						if (!existsIn(input, secondaryFreeTexts) && !input.equals("")) {
-							// Iterate through all strings in the list of primaryFreeTexts to check
-							// if text already exists
-							for (String text : primaryFreeTexts) {
-								// If a string in the list is equal with the input then it's
-								// duplicated
-								if (text.equalsIgnoreCase(input)) {
-									duplicatedFreeTexts = true;
-								}
-							}
-
-							// Store input if duplicated free texts is false
-							if (!duplicatedFreeTexts) {
-								// Add given input to list
-								primaryFreeTexts.add(input);
-								try {
-									// Store to shared preferences
-									prefHandler.setPrefs(PrefKeys.SHARED_PREF, PrefKeys.PRIMARY_LISTEN_FREE_TEXTS_KEY, primaryFreeTexts, SmsAlarm.this);
-								} catch (IllegalArgumentException e) {
-									logger.logCatTxt(LogPriorities.ERROR, LOG_TAG + ":buildAndShowInputDialog().PositiveButton.OnClickListener().onClick()", "An Object of unsupported instance was given as argument to PreferencesHandler.setPrefs()", e);
-								}
-								// Update affected UI widgets
-								updatePrimaryFreeTextSpinner();
-								// Log
-								logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":buildAndShowInputDialog().PositiveButton.OnClickListener().onClick()", "New PRIMARY free text has been stored from user input to the list of PRIMARY free texts. New PRIMARY free text is: \"" + input + "\"");
-							} else {
-								Toast.makeText(SmsAlarm.this, R.string.FREE_TEXT_ALREADY_IN_PRIMARY_LIST, Toast.LENGTH_LONG).show();
-								logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":buildAndShowInputDialog().PositiveButton.OnClickListener().onClick()", "Given PRIMARY free text(" + input + ") already exists in the list of PRIMARY free texts and therefore cannot be stored. Showing dialog of type FREE_TEXT_PRIMARY again");
-								buildAndShowInputDialog(type);
-							}
-						} else {
-							// Empty primary free text was given
-							if (input.equals("")) {
-								Toast.makeText(SmsAlarm.this, R.string.TEXT_IS_NEEDED, Toast.LENGTH_LONG).show();
-								logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":buildAndShowInputDialog().PositiveButton.OnClickListener().onClick()", "Given PRIMARY free text is empty and therefore cannot be stored. Showing dialog of type FREE_TEXT_PRIMARY again");
-							} else { // Given primary free text exists in the list of secondary free
-										// texts
-								Toast.makeText(SmsAlarm.this, R.string.DUPLICATED_FREE_TEXTS, Toast.LENGTH_LONG).show();
-								logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":buildAndShowInputDialog().PositiveButton.OnClickListener().onClick()", "Given PRIMARY free text(" + input + ") already exists in the list of SECONDARY free texts and therefore cannot be stored. Showing dialog of type FREE_TEXT_PRIMARY again");
-							}
-							buildAndShowInputDialog(type);
-						}
-						break;
-					case FREE_TEXT_SECONDARY:
-						// Store input
-						input = noBlanksInputEditText.getText().toString();
-						// If input doesn't exist in the list of primaryFreeTexts and input isn't
-						// empty
-						if (!existsIn(input, primaryFreeTexts) && !input.equals("")) {
-							// Iterate through all strings in the list of secondaryFreeTexts to
-							// check if text already exists
-							for (String text : secondaryFreeTexts) {
-								// If a string in the list is equal with the input then it's
-								// duplicated
-								if (text.equalsIgnoreCase(input)) {
-									duplicatedFreeTexts = true;
-								}
-							}
-
-							// Store input if duplicated free texts is false
-							if (!duplicatedFreeTexts) {
-								// Add given input to list
-								secondaryFreeTexts.add(input);
-								try {
-									// Store to shared preferences
-									prefHandler.setPrefs(PrefKeys.SHARED_PREF, PrefKeys.SECONDARY_LISTEN_FREE_TEXTS_KEY, secondaryFreeTexts, SmsAlarm.this);
-								} catch (IllegalArgumentException e) {
-									logger.logCatTxt(LogPriorities.ERROR, LOG_TAG + ":buildAndShowInputDialog().PositiveButton.OnClickListener().onClick()", "An Object of unsupported instance was given as argument to PreferencesHandler.setPrefs()", e);
-								}
-								// Update affected UI widgets
-								updateSecondaryFreeTextSpinner();
-								// Log
-								logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":buildAndShowInputDialog().PositiveButton.OnClickListener().onClick()", "New SECONDARY free text has been stored from user input to the list of SECONDARY free texts. New SECONDARY free text is: \"" + input + "\"");
-							} else {
-								Toast.makeText(SmsAlarm.this, R.string.FREE_TEXT_ALREADY_IN_SECONDARY_LIST, Toast.LENGTH_LONG).show();
-								logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":buildAndShowInputDialog().PositiveButton.OnClickListener().onClick()", "Given SECONDARY free text(" + input + ") already exists in the list of SECONDARY free texts and therefore cannot be stored. Showing dialog of type FREE_TEXT_SECONDARY again");
-								buildAndShowInputDialog(type);
-							}
-						} else {
-							// Empty primary free text was given
-							if (input.equals("")) {
-								Toast.makeText(SmsAlarm.this, R.string.TEXT_IS_NEEDED, Toast.LENGTH_LONG).show();
-								logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":buildAndShowInputDialog().PositiveButton.OnClickListener().onClick()", "Given SECONDARY free text is empty and therefore cannot be stored. Showing dialog of type FREE_TEXT_SECONDARY again");
-							} else { // Given secondary free text exists in the list of primary free
-										// texts
-								Toast.makeText(SmsAlarm.this, R.string.DUPLICATED_FREE_TEXTS, Toast.LENGTH_LONG).show();
-								logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":buildAndShowInputDialog().PositiveButton.OnClickListener().onClick()", "Given SECONDARY free text(" + input + ") already exists in the list of PRIMARY free texts and therefore cannot be stored. Showing dialog of type FREE_TEXT_SECONDARY again");
-							}
-							buildAndShowInputDialog(type);
-						}
-						break;
 					case ACKNOWLEDGE:
 						// Store input
 						acknowledgeNumber = noBlanksInputEditText.getText().toString();
@@ -1439,12 +1120,6 @@ public class SmsAlarm extends SlidingFragmentActivity {
 		// Logging
 		logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":updateWholeUI()", "Whole user interface is about to be updated");
 
-		// Update primary free text Spinner
-		updatePrimaryFreeTextSpinner();
-
-		// Update secondary free text spinner
-		updateSecondaryFreeTextSpinner();
-
 		// Update acknowledge number EditText
 		updateAcknowledgeNumberEditText();
 
@@ -1468,66 +1143,6 @@ public class SmsAlarm extends SlidingFragmentActivity {
 
 		// Logging
 		logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":updateWholeUI()", "User interface updated");
-	}
-
-	/**
-	 * To update primary free texts <code>Spinner</code> with correct values.
-	 * 
-	 * @see ax.ha.it.smsalarm.handler.LogHandler#logCat(LogPriorities, String, String) logCat(LogPriorities, String, String)
-	 */
-	private void updatePrimaryFreeTextSpinner() {
-		// Check if there are primary free test and build up a proper spinner according to that
-		// information
-		if (!primaryFreeTexts.isEmpty()) {
-			ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, primaryFreeTexts);
-			adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-			primaryFreeTextSpinner.setAdapter(adapter);
-			// Logging
-			logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":updatePrimaryFreeTextSpinner()", "Populate PRIMARY free text spinner with values: " + primaryFreeTexts);
-		} else {
-			// Only add item to list if it's empty
-			if (emptyFreeTexts.isEmpty()) {
-				emptyFreeTexts.add(getString(R.string.ENTER_FREE_TEXT_HINT));
-			}
-			ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, emptyFreeTexts);
-			adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-			primaryFreeTextSpinner.setAdapter(adapter);
-			// Logging
-			logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":updatePrimaryFreeTextSpinner()", "List with PRIMARY free texts is empty, populating spinner with an empty list");
-		}
-
-		// Logging
-		logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":updatePrimaryFreeTextSpinner()", "PRIMARY free text spinner updated");
-	}
-
-	/**
-	 * To update secondary free texts <code>Spinner</code> with correct values.
-	 * 
-	 * @see ax.ha.it.smsalarm.handler.LogHandler#logCat(LogPriorities, String, String) logCat(LogPriorities, String, String)
-	 */
-	private void updateSecondaryFreeTextSpinner() {
-		// Check if there are primary listen free test and build up a proper spinner according to
-		// that information
-		if (!secondaryFreeTexts.isEmpty()) {
-			ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, secondaryFreeTexts);
-			adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-			secondaryFreeTextSpinner.setAdapter(adapter);
-			// Logging
-			logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":updateSecondaryFreeTextSpinner()", "Populate SECONDARY free text spinner with values: " + secondaryFreeTexts);
-		} else {
-			// Only add item to list if it's empty
-			if (emptyFreeTexts.isEmpty()) {
-				emptyFreeTexts.add(getString(R.string.ENTER_FREE_TEXT_HINT));
-			}
-			ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, emptyFreeTexts);
-			adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-			secondaryFreeTextSpinner.setAdapter(adapter);
-			// Logging
-			logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":updateSecondaryFreeTextSpinner()", "List with SECONDARY free texts is empty, populating spinner with an empty list");
-		}
-
-		// Logging
-		logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":updateSecondaryFreeTextSpinner()", "SECONDARY free text spinner updated");
 	}
 
 	/**

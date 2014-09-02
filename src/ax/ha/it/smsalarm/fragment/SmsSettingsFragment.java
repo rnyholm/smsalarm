@@ -48,7 +48,7 @@ public class SmsSettingsFragment extends SherlockFragment implements Application
 	private final PreferencesHandler prefHandler = PreferencesHandler.getInstance();
 
 	// Must have the application context
-	private Context context;
+	private final Context context;
 
 	// The Button objects
 	private Button addPrimarySmsNumberButton;
@@ -108,7 +108,6 @@ public class SmsSettingsFragment extends SherlockFragment implements Application
 		primarySmsNumberSpinner = (Spinner) view.findViewById(R.id.primarySmsNumberSpinner_sp);
 		secondarySmsNumberSpinner = (Spinner) view.findViewById(R.id.secondarySmsNumberSpinner_sp);
 
-		// Logging
 		logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":findViews()", "All Views found");
 	}
 
@@ -143,16 +142,13 @@ public class SmsSettingsFragment extends SherlockFragment implements Application
 
 	@Override
 	public void setListeners() {
-		// Logging
 		logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":setListeners()", "Setting listeners to the different user interface widgets");
 
 		// Set listener to addPrimarySmsNumberButton
 		addPrimarySmsNumberButton.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				// Logging
 				logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":setListeners().addPrimarySmsNumberButton.OnClickListener().onClick()", "Add PRIMARY sms number button pressed");
-				// Build up and show input dialog of type primary number
 				buildAndShowSmsPrimaryInputDialog();
 			}
 		});
@@ -161,12 +157,10 @@ public class SmsSettingsFragment extends SherlockFragment implements Application
 		removePrimarySmsNumberButton.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				// Logging
 				logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":setListeners().removePrimarySmsNumberButton.OnClickListener().onClick()", "Remove PRIMARY sms number button pressed");
 
 				// Only show delete dialog if primary sms numbers exists, else show toast
 				if (!primarySmsNumbers.isEmpty()) {
-					// Show alert dialog(prompt user for deleting number)
 					buildAndShowSmsPrimaryRemoveDialog();
 				} else {
 					Toast.makeText(context, R.string.NO_PRIMARY_NUMBER_EXISTS, Toast.LENGTH_LONG).show();
@@ -179,9 +173,7 @@ public class SmsSettingsFragment extends SherlockFragment implements Application
 		addSecondarySmsNumberButton.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				// Logging
 				logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":setListeners().addSecondarySmsNumberButton.OnClickListener().onClick()", "Add SECONDARY sms number button pressed");
-				// Build up and show input dialog of type secondary number
 				buildAndShowSmsSecondaryInputDialog();
 			}
 		});
@@ -190,12 +182,10 @@ public class SmsSettingsFragment extends SherlockFragment implements Application
 		removeSecondarySmsNumberButton.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				// Logging
 				logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":setListeners().removeSecondarySmsNumberButton.OnClickListener().onClick()", "Remove SECONDARY sms number button pressed");
 
 				// Only show delete dialog if secondary sms numbers exists, else show toast
 				if (!secondarySmsNumbers.isEmpty()) {
-					// Show alert dialog(prompt user for deleting number)
 					buildAndShowSmsSecondaryRemoveDialog();
 				} else {
 					Toast.makeText(context, R.string.NO_SECONDARY_NUMBER_EXISTS, Toast.LENGTH_LONG).show();
@@ -209,13 +199,13 @@ public class SmsSettingsFragment extends SherlockFragment implements Application
 	 * To build up and display a dialog which let's the user add a phone number to the list of <b><i>Primary alarm triggering phone numbers</i></b>. <br>
 	 * <b><i>Note. The input of this dialog doesn't accept blankspaces({@link Util.NoBlanksInputEditText})</i></b>.
 	 * 
+	 * @see #buildAndShowSmsPrimaryRemoveDialog()
 	 * @see #updatePrimarySmsNumberSpinner()
 	 * @see PreferencesHandler#setPrefs(PrefKeys, PrefKeys, Object, Context) setPrefs(PrefKeys, PrefKeys, Object, Context)
 	 * @see LogHandler#logCat(LogPriorities, String, String) logCat(LogPriorities, String, String)
 	 * @see LogHandler#logCatTxt(LogPriorities, String, String, Throwable) logCatTxt(LogPriorities, String, String,Throwable)
 	 */
 	private void buildAndShowSmsPrimaryInputDialog() {
-		// Logging
 		logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":buildAndShowSmsPrimaryInputDialog()", "Start building dialog for input of Sms Primary number");
 
 		// Build up the alert dialog
@@ -223,7 +213,7 @@ public class SmsSettingsFragment extends SherlockFragment implements Application
 		final EditText noBlanksInputEditText = new NoBlanksInputEditText(context);
 
 		// @formatter:off
-		// Configure dialog and edittext
+		// Configure dialog and edit text
 		dialog.setIcon(android.R.drawable.ic_dialog_info); 				// Set icon
 		dialog.setTitle(R.string.NUMBER_PROMPT_TITLE); 					// Set title
 		dialog.setMessage(R.string.PRIMARY_NUMBER_PROMPT_MESSAGE); 		// Set message
@@ -235,13 +225,12 @@ public class SmsSettingsFragment extends SherlockFragment implements Application
 
 		// Set a positive button and listen on it
 		dialog.setPositiveButton(R.string.OK, new DialogInterface.OnClickListener() {
-			// To store input from dialogs edi ttext field
+			// To store input from dialogs edit text field
 			String input = "";
 
 			@Override
 			public void onClick(DialogInterface dialog, int whichButton) {
-				// Log information
-				logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":buildAndShowInputDialog().PositiveButton.OnClickListener().onClick()", "Positive Button pressed");
+				logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":buildAndShowSmsPrimaryInputDialog().PositiveButton.OnClickListener().onClick()", "Positive Button pressed");
 
 				// Boolean indicating if there are duplicates of primary and secondary sms numbers
 				boolean duplicatedNumbers = false;
@@ -251,7 +240,7 @@ public class SmsSettingsFragment extends SherlockFragment implements Application
 
 				// If input doesn't exist in the list of secondarySmsNumbers and input isn't empty
 				if (!Util.existsIn(input, secondarySmsNumbers) && !input.equals("")) {
-					// Iterate through all strings in the list of primarySmsNumbers to checkif number already exists
+					// Iterate through all strings in the list of primarySmsNumbers to check if number already exists
 					for (String number : primarySmsNumbers) {
 						// If a string in the list is equal with the input then it'sduplicated
 						if (number.equalsIgnoreCase(input)) {
@@ -271,7 +260,6 @@ public class SmsSettingsFragment extends SherlockFragment implements Application
 						}
 						// Update affected UI widgets
 						updatePrimarySmsNumberSpinner();
-						// Log
 						logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":buildAndShowSmsPrimaryInputDialog().PositiveButton.OnClickListener().onClick()", "New PRIMARY sms number has been stored from user input to the list of PRIMARY sms numbers. New PRIMARY sms number is: \"" + input + "\"");
 					} else {
 						Toast.makeText(context, R.string.NUMBER_ALREADY_IN_PRIMARY_LIST, Toast.LENGTH_LONG).show();
@@ -302,7 +290,6 @@ public class SmsSettingsFragment extends SherlockFragment implements Application
 			}
 		});
 
-		// Logging
 		logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":buildAndShowSmsPrimaryInputDialog()", "Showing dialog");
 
 		// Show it
@@ -313,19 +300,20 @@ public class SmsSettingsFragment extends SherlockFragment implements Application
 	 * To build up and display a dialog which let's the user add a phone number to the list of <b><i>Secondary alarm triggering phone numbers</i></b>. <br>
 	 * <b><i>Note. The input of this dialog doesn't accept blankspaces({@link Util.NoBlanksInputEditText})</i></b>.
 	 * 
+	 * @see #buildAndShowSmsSecondaryRemoveDialog()
 	 * @see #updateSecondarySmsNumberSpinner()
 	 * @see PreferencesHandler#setPrefs(PrefKeys, PrefKeys, Object, Context) setPrefs(PrefKeys, PrefKeys, Object, Context)
 	 * @see LogHandler#logCat(LogPriorities, String, String) logCat(LogPriorities, String, String)
 	 * @see LogHandler#logCatTxt(LogPriorities, String, String, Throwable) logCatTxt(LogPriorities, String, String,Throwable)
 	 */
 	private void buildAndShowSmsSecondaryInputDialog() {
-		// Logging
 		logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":buildAndShowSmsSecondaryInputDialog()", "Start building dialog for input of Sms Secondary number");
 
 		// Build up the alert dialog
 		AlertDialog.Builder dialog = new AlertDialog.Builder(context);
 		final EditText noBlanksInputEditText = new NoBlanksInputEditText(context);
 
+		dialog.setIcon(android.R.drawable.ic_dialog_info);
 		dialog.setTitle(R.string.NUMBER_PROMPT_TITLE);
 		dialog.setMessage(R.string.SECONDARY_NUMBER_PROMPT_MESSAGE);
 		dialog.setCancelable(false);
@@ -338,8 +326,7 @@ public class SmsSettingsFragment extends SherlockFragment implements Application
 
 			@Override
 			public void onClick(DialogInterface dialog, int whichButton) {
-				// Log information
-				logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":buildAndShowInputDialog().PositiveButton.OnClickListener().onClick()", "Positive Button pressed");
+				logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":buildAndShowSmsSecondaryInputDialog().PositiveButton.OnClickListener().onClick()", "Positive Button pressed");
 
 				// Boolean indicating if there are duplicates of primary and secondary sms numbers
 				boolean duplicatedNumbers = false;
@@ -424,10 +411,9 @@ public class SmsSettingsFragment extends SherlockFragment implements Application
 		dialog.setPositiveButton(R.string.YES, new DialogInterface.OnClickListener() {
 			@Override
 			public void onClick(DialogInterface dialog, int whichButton) {
-				// Log information
 				logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":buildAndShowSmsPrimaryRemoveDialog().PosButton.OnClickListener().onClick()", "Positive Button pressed");
-
 				logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":buildAndShowSmsPrimaryRemoveDialog().PosButton.OnClickListener().onClick()", "PRIMARY sms number: \"" + primarySmsNumbers.get(primarySmsNumberSpinner.getSelectedItemPosition()) + "\" is about to be removed from the list of PRIMARY sms numbers");
+
 				// Delete number from list
 				primarySmsNumbers.remove(primarySmsNumberSpinner.getSelectedItemPosition());
 				try {
@@ -513,7 +499,7 @@ public class SmsSettingsFragment extends SherlockFragment implements Application
 			ArrayAdapter<String> adapter = new ArrayAdapter<String>(context, android.R.layout.simple_spinner_item, primarySmsNumbers);
 			adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 			primarySmsNumberSpinner.setAdapter(adapter);
-			// Logging
+
 			logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":updatePrimarySmsNumberSpinner()", "Populate PRIMARY sms number spinner with values: " + primarySmsNumbers);
 		} else {
 			// Only add item to list if it's empty
@@ -523,11 +509,10 @@ public class SmsSettingsFragment extends SherlockFragment implements Application
 			ArrayAdapter<String> adapter = new ArrayAdapter<String>(context, android.R.layout.simple_spinner_item, emptySmsNumbers);
 			adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 			primarySmsNumberSpinner.setAdapter(adapter);
-			// Logging
+
 			logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":updatePrimarySmsNumberSpinner()", "List with PRIMARY sms numbers is empty, populating spinner with an empty list");
 		}
 
-		// Logging
 		logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":updatePrimarySmsNumberSpinner()", "PRIMARY sms numbers spinner updated");
 	}
 
@@ -544,7 +529,7 @@ public class SmsSettingsFragment extends SherlockFragment implements Application
 			ArrayAdapter<String> adapter = new ArrayAdapter<String>(context, android.R.layout.simple_spinner_item, secondarySmsNumbers);
 			adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 			secondarySmsNumberSpinner.setAdapter(adapter);
-			// Logging
+
 			logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":updateSecondarySmsNumberSpinner()", "Populate SECONDARY sms number spinner with values: " + secondarySmsNumbers);
 		} else {
 			// Only add item to list if it's empty
@@ -554,11 +539,10 @@ public class SmsSettingsFragment extends SherlockFragment implements Application
 			ArrayAdapter<String> adapter = new ArrayAdapter<String>(context, android.R.layout.simple_spinner_item, emptySmsNumbers);
 			adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 			secondarySmsNumberSpinner.setAdapter(adapter);
-			// Logging
+
 			logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":updateSecondarySmsNumberSpinner()", "List with SECONDARY sms numbers is empty, populating spinner with an empty list");
 		}
 
-		// Logging
 		logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":updateSecondarySmsNumberSpinner()", "SECONDARY sms numbers spinner updated");
 	}
 }

@@ -10,8 +10,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ListView;
 import ax.ha.it.smsalarm.R;
-import ax.ha.it.smsalarm.R.drawable;
-import ax.ha.it.smsalarm.R.layout;
+import ax.ha.it.smsalarm.activity.SmsAlarm;
 import ax.ha.it.smsalarm.handler.LogHandler;
 import ax.ha.it.smsalarm.handler.LogHandler.LogPriorities;
 import ax.ha.it.smsalarm.slidingmenu.adapter.SlidingMenuAdapter;
@@ -20,8 +19,8 @@ import ax.ha.it.smsalarm.slidingmenu.model.SlidingMenuItem;
 import com.actionbarsherlock.app.SherlockListFragment;
 
 /**
- * Class representing a <code>SherlockListFragment</code>, or simply said, a fragmet. This fragment
- * is used in this applications <code>SlidingMenu</code>.
+ * Class representing a <code>SherlockListFragment</code>, or simply said, a fragmet. This fragment is used in this applications
+ * <code>SlidingMenu</code>.
  * 
  * @author Robert Nyholm <robert.nyholm@aland.net>
  * @version 2.3.1
@@ -35,8 +34,7 @@ public class SlidingMenuFragment extends SherlockListFragment {
 	private LogHandler logger = LogHandler.getInstance();
 
 	/**
-	 * To get the correct <code>View</code> upon creation of this fragment. The layout is inflated
-	 * using given <code>LayoutInflater</code>.
+	 * To get the correct <code>View</code> upon creation of this fragment. The layout is inflated using given <code>LayoutInflater</code>.
 	 * 
 	 * @param inflater
 	 *            Layout inflater to be used when this layout is to be inflated.
@@ -67,8 +65,8 @@ public class SlidingMenuFragment extends SherlockListFragment {
 	}
 
 	/**
-	 * To build up the <code>SlidingMenuItem</code>'s in that goes into this <code>Fragment</code>.
-	 * The menu items will be added to the given adapter for correct data representation.
+	 * To build up the <code>SlidingMenuItem</code>'s in that goes into this <code>Fragment</code>. The menu items will be added to the given adapter
+	 * for correct data representation.
 	 * 
 	 * @param adapter
 	 *            Adapter to which the created menu item's are added.
@@ -90,16 +88,17 @@ public class SlidingMenuFragment extends SherlockListFragment {
 
 	@Override
 	public void onListItemClick(ListView lv, View v, int position, long id) {
+		// TODO: Refactor this method
 		Fragment newContent = null;
 
 		SlidingMenuItem menuItem = (SlidingMenuItem) getListView().getItemAtPosition(position);
 
 		switch (menuItem.getId()) {
 			case (101):
-
+				newContent = new SmsSettingsFragment(getActivity());
 				break;
 			case (102):
-
+				newContent = new FreeTextSettingsFragment(getActivity());
 				break;
 			case (103):
 
@@ -121,7 +120,7 @@ public class SlidingMenuFragment extends SherlockListFragment {
 		}
 
 		if (newContent != null) {
-//			switchFragment(newContent);
+			switchFragment(newContent);
 		}
 
 //		switch (position) {
@@ -146,16 +145,14 @@ public class SlidingMenuFragment extends SherlockListFragment {
 	}
 
 	// the meat of switching the above fragment
-//	private void switchFragment(Fragment fragment) {
-//		if (getActivity() == null)
-//			return;
-//
-//		if (getActivity() instanceof FragmentChangeActivity) {
-//			FragmentChangeActivity fca = (FragmentChangeActivity) getActivity();
-//			fca.switchContent(fragment);
-//		} else if (getActivity() instanceof ResponsiveUIActivity) {
-//			ResponsiveUIActivity ra = (ResponsiveUIActivity) getActivity();
-//			ra.switchContent(fragment);
-//		}
-//	}
+	private void switchFragment(Fragment fragment) {
+		if (getActivity() == null) {
+			return;
+		}
+
+		if (getActivity() instanceof SmsAlarm) {
+			SmsAlarm sa = (SmsAlarm) getActivity();
+			sa.switchContent(fragment);
+		}
+	}
 }

@@ -11,8 +11,6 @@ import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 import ax.ha.it.smsalarm.R;
-import ax.ha.it.smsalarm.R.id;
-import ax.ha.it.smsalarm.R.layout;
 import ax.ha.it.smsalarm.fragment.SlidingMenuFragment;
 import ax.ha.it.smsalarm.handler.LogHandler;
 import ax.ha.it.smsalarm.handler.LogHandler.LogPriorities;
@@ -25,7 +23,7 @@ import com.google.common.base.Optional;
  * 
  * @author Robert Nyholm <robert.nyholm@aland.net>
  * @version 2.3.1
- * @since 2.2.1
+ * @since 2.3.1
  * @see SlidingMenuFragment
  * @see SlidingMenuItem
  */
@@ -46,10 +44,9 @@ public class SlidingMenuAdapter extends ArrayAdapter<SlidingMenuItem> {
 	}
 
 	/**
-	 * To get the correct <code>View</code> depending on the given argument, for this class the only
-	 * arguments taken into account is <code>position</code> and <code>convertView</code>. Convert
-	 * view is set to correct layout depending on <code>SlidingMenuItem</code> at the given
-	 * position.
+	 * To get the correct <code>View</code> depending on the given argument, for this class the only arguments taken into account is
+	 * <code>position</code> and <code>convertView</code>. Convert view is set to correct layout depending on <code>SlidingMenuItem</code> at the
+	 * given position.
 	 * 
 	 * @param position
 	 *            Actual position for which it's wanted to get view for.
@@ -102,13 +99,11 @@ public class SlidingMenuAdapter extends ArrayAdapter<SlidingMenuItem> {
 	}
 
 	/**
-	 * To figure out if menu item at given position should be enabled or not. If menu item is a
-	 * sections title it should be disabled else enabled.
+	 * To figure out if menu item at given position should be enabled or not. If menu item is a sections title it should be disabled else enabled.
 	 * 
 	 * @param position
 	 *            Position from where to get menu item to be checked.
-	 * @return <code>true</code> if if menu item at given position should be enabled else
-	 *         <code>false</code>.
+	 * @return <code>true</code> if if menu item at given position should be enabled else <code>false</code>.
 	 * @see SlidingMenuAdapter#isItemSectionTitle(int)
 	 */
 	@Override
@@ -123,15 +118,13 @@ public class SlidingMenuAdapter extends ArrayAdapter<SlidingMenuItem> {
 	}
 
 	/**
-	 * To figure out if menu item at given position is a sections title or a menu item in the
-	 * section.<b> This is decided whether or not the menu item holds a <code>icon resource</code>
-	 * or not (<code>Optional.isPresent()</code>). If an <code>absent</code> icon resource was found
-	 * then this menu item is a sections title, else not.
+	 * To figure out if menu item at given position is a sections title or a menu item in the section.<b> This is decided whether or not the menu item
+	 * holds a <code>icon resource</code> or not (<code>Optional.isPresent()</code>). If an <code>absent</code> icon resource was found then this menu
+	 * item is a sections title, else not.
 	 * 
 	 * @param position
 	 *            Position from where to get menu item to be checked.
-	 * @return <code>true</code> if menu item at given position is a sections title else return
-	 *         <code>false</code>.
+	 * @return <code>true</code> if menu item at given position is a sections title else return <code>false</code>.
 	 */
 	private boolean isItemSectionTitle(int position) {
 		Optional<Integer> optionalIconResource = getItem(position).getIconResource();

@@ -4,6 +4,8 @@
 package ax.ha.it.smsalarm.fragment;
 
 import android.view.View;
+import ax.ha.it.smsalarm.handler.LogHandler;
+import ax.ha.it.smsalarm.handler.LogHandler.LogPriorities;
 
 /**
  * Interface for all the UI fragments in application, holding method declaration all fragments must implement.
@@ -24,11 +26,16 @@ public interface ApplicationFragment {
 
 	/**
 	 * To fetch <code>Shared Preferences</code> used by member variables of this <code>Fragment</code>.
+	 * 
+	 * @see LogHandler#logCat(LogPriorities, String, String)
+	 * @see LogHandler#logCatTxt(LogPriorities, String, String, Throwable)
 	 */
 	void fetchSharedPrefs();
 
 	/**
 	 * To update all UI widgets contained in this <code>Fragments View</code>.
+	 * 
+	 * @see LogHandler#logCat(LogPriorities, String, String)
 	 */
 	void updateFragmentView();
 
