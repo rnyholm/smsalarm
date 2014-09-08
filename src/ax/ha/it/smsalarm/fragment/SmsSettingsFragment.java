@@ -73,7 +73,6 @@ public class SmsSettingsFragment extends SherlockFragment implements Application
 	 * @see LogHandler#logCat(LogPriorities, String, String)
 	 */
 	public SmsSettingsFragment(Context context) {
-		// Logging
 		logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":SmsSettingsFragment()", "Creating a new Sms settings fragment with given context:  \"" + context + "\"");
 		this.context = context;
 	}
