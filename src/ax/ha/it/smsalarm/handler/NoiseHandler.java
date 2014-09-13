@@ -15,12 +15,12 @@ import ax.ha.it.smsalarm.R;
 import ax.ha.it.smsalarm.handler.LogHandler.LogPriorities;
 
 /**
- * This class is responsible for all sound and vibration handling. This means playing tones, vibrate and so on, depending on application and phone
- * settings.<br>
+ * This class is responsible for all sound and vibration handling. This means playing alarm signal, vibrate and so on, depending on application and
+ * phone settings.<br>
  * <b><i>NoiseHandler is a singleton.</i></b>
  * 
  * @author Robert Nyholm <robert.nyholm@aland.net>
- * @version 2.2.1
+ * @version 2.3.1
  * @since 2.0
  * @see RingerModeHandler
  */
@@ -50,7 +50,7 @@ public class NoiseHandler {
 	/**
 	 * Private constructor, is private due to it's singleton pattern.
 	 * 
-	 * @see ax.ha.it.smsalarm.handler.LogHandler#logCat(LogPriorities, String, String) logCat(LogPriorities, String, String)
+	 * @see LogHandler#logCat(LogPriorities, String, String)
 	 */
 	private NoiseHandler() {
 		// Get instance of logger
@@ -77,8 +77,8 @@ public class NoiseHandler {
 	}
 
 	/**
-	 * Method to play message tone and vibrate, depending on application settings. This method also takes in account the operating systems sound
-	 * settings, this depends on a input parameter.
+	 * To play alarm signal and vibrate, depending on application settings. This method also takes in account the operating systems sound settings,
+	 * this depends on a input parameter.
 	 * 
 	 * @param context
 	 *            Context
@@ -86,22 +86,21 @@ public class NoiseHandler {
 	 *            ToneId as Integer
 	 * @param useSoundSettings
 	 *            If this method should take consideration to the device's sound settings as Boolean
-	 * @param playToneTwice
-	 *            Indication whether message tone should be played once or twice, this is the same for vibration also
+	 * @param playAlarmSignalTwice
+	 *            Indication whether alarm signal should be played once or twice, this is the same for vibration also
 	 * @exception IllegalArgumentException
 	 *                Can occur when setting data source for media player or preparing media player
 	 * @exception IllegalStateException
 	 *                Can occur when setting data source for media player or preparing media player
 	 * @exception IOException
-	 *                Can occur when setting data source for media player or preparing media player. Also when resolving message tone id
-	 * @see ax.ha.it.smsalarm.handler.LogHandler#logCat(LogPriorities, String, String) logCat(LogPriorities, String, String)
-	 * @see ax.ha.it.smsalarm.handler.LogHandler#logCatTxt(LogPriorities, String, String) logCatTxt(LogPriorities, String, String)
-	 * @see ax.ha.it.smsalarm.handler.LogHandler#logCatTxt(LogPriorities, String, String, Throwable) logCatTxt(LogPriorities, String, String,
-	 *      Throwable)
+	 *                Can occur when setting data source for media player or preparing media player. Also when resolving alarm signal id
+	 * @see LogHandler#logCat(LogPriorities, String, String)
+	 * @see LogHandler#logCatTxt(LogPriorities, String, String)
+	 * @see LogHandler#logCatTxt(LogPriorities, String, String, Throwable)
 	 */
-	public void makeNoise(Context context, int id, boolean useSoundSettings, boolean playToneTwice) {
+	public void makeNoise(Context context, int id, boolean useSoundSettings, boolean playAlarmSignalTwice) {
 		// Log information
-		logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":makeNoise()", "Preparing to play message tone and vibrate");
+		logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":makeNoise()", "Preparing to play alarm signal and vibrate");
 
 		// Need to know when called this method
 		long startTimeMillis = System.currentTimeMillis();
@@ -111,8 +110,7 @@ public class NoiseHandler {
 			logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":makeNoise()", "KitKatHandler running, waiting....");
 		}
 
-		// Check if mediaplayer isn't playing already, in case it's playing we don't need to set up
-		// the player
+		// Check if mediaplayer isn't playing already, in case it's playing we don't need to set up the player
 		if (!mPlayer.isPlaying()) {
 			// Declarations of different objects needed by makeNoise
 			// AudioManager used to get and set different volume levels
@@ -133,16 +131,14 @@ public class NoiseHandler {
 			// Custom vibration pattern
 			long[] pattern = { 0, 5000, 500, 5000, 500, 5000, 500, 5000 };
 
-			// Log information
 			logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":makeNoise()", "MediaPlayer initalized, Audio Service initalized, Vibrator initalized, AssetFileDescriptor initalized. Correct alarm volume has been calculated. Vibration pattern variables is set.");
 
 			// Resolve correct tone depending on id
 			try {
-				logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":makeNoise()", "Try to resolve message tone");
-				afd = context.getAssets().openFd("tones/alarm/" + msgToneLookup(context, id) + ".mp3");
+				logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":makeNoise()", "Try to resolve alarm signal");
+				afd = context.getAssets().openFd("tones/alarm/" + resolveAlarmSignal(context, id) + ".mp3");
 			} catch (IOException e) {
-				// Log IO Exception
-				logger.logCatTxt(LogPriorities.ERROR, LOG_TAG + ":makeNoise()", "An IOException occurred while resolving message tone from id", e);
+				logger.logCatTxt(LogPriorities.ERROR, LOG_TAG + ":makeNoise()", "An IOException occurred while resolving alarm signal from id", e);
 			}
 
 			// Set data source for mPlayer, common both for debug and ordinary mode
@@ -150,13 +146,10 @@ public class NoiseHandler {
 				mPlayer.setDataSource(afd.getFileDescriptor(), afd.getStartOffset(), afd.getLength());
 				logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":makeNoise()", "Data source has been set for Media Player");
 			} catch (IllegalArgumentException e) {
-				// Log IllegalArgumentException
 				logger.logCatTxt(LogPriorities.ERROR, LOG_TAG + ":makeNoise()", "An IllegalArgumentException occurred while setting data source for media player", e);
 			} catch (IllegalStateException e) {
-				// Log IllegalStateException
 				logger.logCatTxt(LogPriorities.ERROR, LOG_TAG + ":makeNoise()", "An IllegalStateException occurred while setting data source for media player", e);
 			} catch (IOException e) {
-				// Log IO Exception
 				logger.logCatTxt(LogPriorities.ERROR, LOG_TAG + ":makeNoise()", "An IOException occurred while setting data source for media player", e);
 			}
 
@@ -165,37 +158,31 @@ public class NoiseHandler {
 				mPlayer.prepare();
 				logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":makeNoise()", "Media Player prepared");
 			} catch (IllegalStateException e) {
-				// Log IllegalStateException
 				logger.logCatTxt(LogPriorities.ERROR, LOG_TAG + ":makeNoise()", "An IllegalStateException occurred while preparing media player", e);
 			} catch (IOException e) {
-				// Log IO Exception
 				logger.logCatTxt(LogPriorities.ERROR, LOG_TAG + ":makeNoise()", "An IOException occurred while preparing media player", e);
 			}
 
 			// If false then just play message tone once else twice
-			if (!playToneTwice) {
+			if (!playAlarmSignalTwice) {
 				toBePlayed = 1;
-				// Log information
 				logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":makeNoise()", "Message tone will be played once, if device not in RINGER_MODE_SILENT  or application is set to not consider device's sound settings");
 			} else {
 				toBePlayed = 2;
-				// Log information
 				logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":makeNoise()", "Message tone will be played twice, if device not in RINGER_MODE_SILENT or application is set to not consider device's sound settings");
 			}
 
-			/*
-			 * If application use systems sound settings, check if phone is in normal, silent or vibration mode else don't check phones status and
-			 * play tone and vibrate even if phone is in silent or vibrate mode
-			 */
+			// If application use systems sound settings, check if phone is in normal, silent or vibration mode else don't check phones status and
+			// play tone and vibrate even if phone is in silent or vibrate mode
 			if (useSoundSettings) {
-				// Log information
 				logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":makeNoise()", "Application is set to take into account device's sound settings");
 
 				// Decide if phone are in normal, vibrate or silent state and take action
 				switch (am.getRingerMode()) {
 					case AudioManager.RINGER_MODE_SILENT:
 						// Do nothing except log information
-						logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":makeNoise()", "Device is in \"RINGER_MODE_SILENT\", don't vibrate or play message tone");
+						logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":makeNoise()", "Device is in \"RINGER_MODE_SILENT\", don't vibrate or play alarm signal");
+
 						// Reset mediaplayer
 						mPlayer.reset();
 
@@ -203,45 +190,45 @@ public class NoiseHandler {
 					case AudioManager.RINGER_MODE_VIBRATE:
 						// Vibrate, -1 = no repeat
 						vibrator.vibrate(pattern, -1);
+
 						logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":makeNoise()", "Device is in \"RINGER_MODE_VIBRATE\", just vibrate");
 
 						break;
 					case AudioManager.RINGER_MODE_NORMAL:
-						// Log information
-						logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":makeNoise()", "Device is in \"RINGER_MODE_NORMAL\", vibrate and play message tone");
+						logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":makeNoise()", "Device is in \"RINGER_MODE_NORMAL\", vibrate and play alarm signal");
 						// Set correct volume to mediaplayer
 						am.setStreamVolume(AudioManager.STREAM_MUSIC, alarmVolume, 0);
-						// Log information
+
 						logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":makeNoise()", "Alarm volume has been set to: \"" + am.getStreamVolume(AudioManager.STREAM_MUSIC) + "\", MediaPlayer is about to start");
+
 						// Vibrate, -1 = no repeat
 						vibrator.vibrate(pattern, -1);
+
 						// Start play message tone
 						mPlayer.start();
 
 						break;
-					default: // <--Unsupported RINGER_MODE
-						// Do nothing except log information
+					default: // Unsupported RINGER_MODE
+						// DO NOTHING, except log information
 						logger.logCatTxt(LogPriorities.ERROR, LOG_TAG + ":makeNoise()", "Device is in a \"UNSUPPORTED\" ringer mode, can't decide what to do");
 				}
-			} else { // If not take into account OS sound setting, always ring at highest volume and
-						// vibrate
-				// Log information
-				logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":makeNoise()", "Application is set to don't take into account device's sound settings. Play message tone at max volume and vibrate");
+			} else { // If not take into account OS sound setting, always ring at highest volume and vibrate
+				logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":makeNoise()", "Application is set to don't take into account device's sound settings. Play alarm signal at max volume and vibrate");
+
 				// Set maximum volume to audiomanager
 				am.setStreamVolume(AudioManager.STREAM_MUSIC, am.getStreamMaxVolume(AudioManager.STREAM_MUSIC), 0);
-				// Log information
+
 				logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":makeNoise()", "Alarm volume has been set to: \"" + am.getStreamVolume(AudioManager.STREAM_MUSIC) + "\", MediaPlayer is about to start");
+
 				// Vibrate, -1 = no repeat
 				vibrator.vibrate(pattern, -1);
-				// Start play message tone
+				// Start play alarm signal
 				mPlayer.start();
 			}
 
-			// Listen to completion, in other words when media player has finished and reset media
-			// volume and media player
+			// Listen to completion, in other words when media player has finished and reset media volume and media player
 			mPlayer.setOnCompletionListener(new OnCompletionListener() {
-				// Counter variable to count number of times played, we have already played the
-				// message tone once
+				// Counter variable to count number of times played, we have already played the alarm signal once
 				int timesPlayed = 1;
 
 				/**
@@ -260,34 +247,32 @@ public class NoiseHandler {
 					} else {
 						am.setStreamVolume(AudioManager.STREAM_MUSIC, originalMediaVolume, 0);
 						mPlayer.reset();
-						// Log information
+
 						logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":makeNoise().MediaPlayer.onCompletion()", "Media player and all sound levels have been restored");
 					}
 				}
 			});
 		} else {
-			// Log information
 			logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":makeNoise()", "MediaPlayer is already playing, leave makeNoise()");
 		}
 	}
 
 	/**
-	 * Method to lookup proper message tone from media.
+	 * Method to lookup proper alarm signal from given is.
 	 * 
 	 * @param context
 	 *            Context
-	 * @param toneId
-	 *            ToneId as Integer
-	 * @return toneId Message tone as String
-	 * @see ax.ha.it.smsalarm.handler.LogHandler#logCat(LogPriorities, String, String) logCat(LogPriorities, String, String)
+	 * @param alarmSignalId
+	 *            Id of alarm signal as Integer
+	 * @return Resolved alarm signal
+	 * @see LogHandler#logCat(LogPriorities, String, String)
 	 */
-	public String msgToneLookup(Context context, int toneId) {
-		// Resolve message tone from id
+	public String resolveAlarmSignal(Context context, int alarmSignalId) {
+		// Resolve alarm signal from id
 		String[] tonesArr = context.getResources().getStringArray(R.array.tones);
 
-		// Some logging
-		logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":msgToneLookup()", "Message tone has been resolved from id");
+		logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":resolveAlarmSignal()", "Alarm signal has been resolved from id");
 
-		return tonesArr[toneId];
+		return tonesArr[alarmSignalId];
 	}
 }
