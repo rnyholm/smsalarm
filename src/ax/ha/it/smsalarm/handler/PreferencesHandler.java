@@ -42,8 +42,29 @@ public class PreferencesHandler {
 	 * @since 2.1
 	 */
 	public enum PrefKeys {
-		SHARED_PREF("smsAlarmPrefs"), NOT_KEY("notificationPref"), PRIMARY_LISTEN_NUMBER_KEY("primaryListenNumberKey"), PRIMARY_LISTEN_NUMBERS_KEY("primaryListenNumbersKey"), SECONDARY_LISTEN_NUMBERS_KEY("secondaryListenNumbersKey"), PRIMARY_LISTEN_FREE_TEXTS_KEY("primaryListenFreeTextsKey"), SECONDARY_LISTEN_FREE_TEXTS_KEY("secondaryListenFreeTextsKey"), PRIMARY_MESSAGE_TONE_KEY("primaryMessageToneKey"), SECONDARY_MESSAGE_TONE_KEY("secondaryMessageToneKey"), MESSAGE_KEY("messageKey"), FULL_MESSAGE_KEY(
-				"fullMessageKey"), ENABLE_ACK_KEY("enableAckKey"), ACK_NUMBER_KEY("ackNumber"), USE_OS_SOUND_SETTINGS_KEY("useOsSoundSettings"), LARM_TYPE_KEY("larmType"), PLAY_TONE_TWICE_KEY("playToneTwice"), ENABLE_SMS_ALARM_KEY("enableSmsAlarm"), RESCUE_SERVICE_KEY("rescueService"), HAS_CALLED_KEY("hasCalled"), END_USER_LICENSE_AGREED("userLicenseAgreed"), VERSION_CODE("versionCode");
+		// @formatter:off
+		SHARED_PREF("smsAlarmPrefs"), 
+		NOT_KEY("notificationPref"), 
+		PRIMARY_LISTEN_NUMBER_KEY("primaryListenNumberKey"), 
+		PRIMARY_LISTEN_NUMBERS_KEY("primaryListenNumbersKey"), 
+		SECONDARY_LISTEN_NUMBERS_KEY("secondaryListenNumbersKey"), 
+		PRIMARY_LISTEN_FREE_TEXTS_KEY("primaryListenFreeTextsKey"), 
+		SECONDARY_LISTEN_FREE_TEXTS_KEY("secondaryListenFreeTextsKey"), 
+		PRIMARY_MESSAGE_TONE_KEY("primaryMessageToneKey"), 
+		SECONDARY_MESSAGE_TONE_KEY("secondaryMessageToneKey"), 
+		MESSAGE_KEY("messageKey"), 
+		FULL_MESSAGE_KEY("fullMessageKey"), 
+		ENABLE_ACK_KEY("enableAckKey"), 
+		ACK_NUMBER_KEY("ackNumber"), 
+		USE_OS_SOUND_SETTINGS_KEY("useOsSoundSettings"), 
+		LARM_TYPE_KEY("larmType"), 
+		PLAY_TONE_TWICE_KEY("playToneTwice"), 
+		ENABLE_SMS_ALARM_KEY("enableSmsAlarm"), 
+		RESCUE_SERVICE_KEY("rescueService"), 
+		HAS_CALLED_KEY("hasCalled"), 
+		END_USER_LICENSE_AGREED("userLicenseAgreed"), 
+		VERSION_CODE("versionCode");
+		// @formatter:on
 
 		// Value in which enumerations values are stored
 		private final String key;
