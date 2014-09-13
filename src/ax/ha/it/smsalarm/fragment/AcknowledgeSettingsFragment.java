@@ -28,6 +28,7 @@ import ax.ha.it.smsalarm.handler.LogHandler.LogPriorities;
 import ax.ha.it.smsalarm.handler.PreferencesHandler;
 import ax.ha.it.smsalarm.handler.PreferencesHandler.DataTypes;
 import ax.ha.it.smsalarm.handler.PreferencesHandler.PrefKeys;
+import ax.ha.it.smsalarm.ui.NoBlanksInputEditText;
 
 import com.actionbarsherlock.app.SherlockFragment;
 
@@ -246,7 +247,6 @@ public class AcknowledgeSettingsFragment extends SherlockFragment implements App
 	 */
 	private void updateAcknowledgeNumberEditText() {
 		ackNumberEditText.setText(acknowledgeNumber);
-
 		logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":updateAcknowledgeNumberEditText()", "Acknowledge number updated. The edittext was set to: " + acknowledgeNumber);
 	}
 
@@ -286,17 +286,17 @@ public class AcknowledgeSettingsFragment extends SherlockFragment implements App
 
 		// Build up the alert dialog
 		AlertDialog.Builder dialog = new AlertDialog.Builder(context);
-		final EditText inputEditText = new EditText(context);
+		final EditText noBlanksInputEditText = new NoBlanksInputEditText(context);
 
 		// @formatter:off
-		// Configure dialog and edit text
+		// Configure dialog and EditText
 		dialog.setIcon(android.R.drawable.ic_dialog_info);				// Set icon
 		dialog.setTitle(R.string.NUMBER_PROMPT_TITLE);					// Set title
 		dialog.setMessage(R.string.ACK_NUMBER_PROMPT_MESSAGE);			// Set message
 		dialog.setCancelable(false);									// Set dialog to non cancelable
-		dialog.setView(inputEditText);							// Bind dialog to input
-		inputEditText.setHint(R.string.NUMBER_PROMPT_HINT);		// Set hint to edit text
-		inputEditText.setInputType(InputType.TYPE_CLASS_PHONE);	// Set input type to edit text
+		dialog.setView(noBlanksInputEditText);							// Bind dialog to input
+		noBlanksInputEditText.setHint(R.string.NUMBER_PROMPT_HINT);		// Set hint to EditText
+		noBlanksInputEditText.setInputType(InputType.TYPE_CLASS_PHONE);	// Set input type to EditText
 		// @formatter:on
 
 		// Set a positive button and listen on it
@@ -305,7 +305,8 @@ public class AcknowledgeSettingsFragment extends SherlockFragment implements App
 			public void onClick(DialogInterface dialog, int whichButton) {
 				logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":createAcknowledgeNumberInputDialog().PositiveButton.OnClickListener().onClick()", "Positive Button pressed");
 
-				acknowledgeNumber = inputEditText.getText().toString();
+				// Get the acknoeledge number from the EditText
+				acknowledgeNumber = noBlanksInputEditText.getText().toString();
 
 				try {
 					// Store to shared preferences

@@ -110,6 +110,7 @@ public class SlidingMenuFragment extends SherlockListFragment {
 				fragment = new AcknowledgeSettingsFragment(getActivity());
 				break;
 			case (105):
+				fragment = new OtherSettingsFragment(getActivity());
 				break;
 			case (201):
 				break;

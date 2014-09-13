@@ -67,7 +67,7 @@ public class SoundSettingsFragment extends SherlockFragment implements Applicati
 	// ...Spinners...
 	private Spinner alarmTypeSpinner;
 
-	// ... and TextViews
+	// ...and TextViews
 	private TextView soundSettingInfoTextView;
 	private TextView playAlarmSignalTwiceInfoTextView;
 
@@ -243,13 +243,12 @@ public class SoundSettingsFragment extends SherlockFragment implements Applicati
 	public void setListeners() {
 		logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":setListeners()", "Setting listeners to the different user interface widgets");
 
-		// Set listener to editMsgToneButton
+		// Set listener to editAlarmSignalButton
 		editAlarmSignalButton.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				// Logging
 				logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":setListeners().editMsgToneButton.OnClickListener().onClick()", "Edit alarm signal button pressed");
-				// Build up and Show alert dialog(prompt for message tone)
+				// Build up and Show alert dialog(prompt for alarm signal)
 				createAlarmSignalSelectionDialog();
 			}
 		});
@@ -260,16 +259,15 @@ public class SoundSettingsFragment extends SherlockFragment implements Applicati
 			public void onClick(View v) {
 				// Play the correct alarm signal and vibrate, depending on spinner value
 				if (alarmTypeSpinnerPos == 0) {
-					// Logging
-					logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":setListeners().listenMsgToneButton.OnClickListener().onClick()", "Listen on alarm signal button pressed. Alarm signal for PRIMARY alarm will be played");
+					logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":setListeners().listenAlarmSignalButton.OnClickListener().onClick()", "Listen on alarm signal button pressed. Alarm signal for PRIMARY alarm will be played");
 					// Play alarm signal and vibrate
 					noiseHandler.makeNoise(context, primaryAlarmSignalId, useOsSoundSettings, false);
 				} else if (alarmTypeSpinnerPos == 1) {
-					logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":setListeners().listenMsgToneButton.OnClickListener().onClick()", "Listen on alarm signal button pressed. Alarm signal for SECONDARY alarm will be played");
+					logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":setListeners().listenAlarmSignalButton.OnClickListener().onClick()", "Listen on alarm signal button pressed. Alarm signal for SECONDARY alarm will be played");
 					noiseHandler.makeNoise(context, secondaryAlarmSignalId, useOsSoundSettings, false);
 				} else {
-					// DO NOTHING EXCEPT LOG ERROR MESSAGE
-					logger.logCatTxt(LogPriorities.ERROR, LOG_TAG + ":setListeners().listenMsgToneButton.OnClickListener().onClick()", "Invalid spinner position occurred. Current alarm type spinner position is: \"" + Integer.toString(alarmTypeSpinnerPos) + "\"");
+					// DO NOTHING, except log message
+					logger.logCatTxt(LogPriorities.ERROR, LOG_TAG + ":setListeners().listenAlarmSignalButton.OnClickListener().onClick()", "Invalid spinner position occurred. Current alarm type spinner position is: \"" + Integer.toString(alarmTypeSpinnerPos) + "\"");
 				}
 			}
 		});
@@ -278,14 +276,12 @@ public class SoundSettingsFragment extends SherlockFragment implements Applicati
 		soundSettingCheckBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
 			@Override
 			public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-				// Log that CheckBox been pressed
 				logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":setListeners().soundSettingCheckBox.onCheckedChange()", "Use OS sound settings checkbox pressed(or checkbox initialized)");
 
-				// Set checkbox depending on it's checked status and store variable
+				// Set CheckBox depending on it's checked status and store variable
 				if (soundSettingCheckBox.isChecked()) {
 					// Store value to variable
 					useOsSoundSettings = true;
-					// logging
 					logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":setListeners().soundSettingCheckBox.onCheckedChange()", "Use OS sound settings checkbox \"Checked\"(" + useOsSoundSettings + ")");
 				} else {
 					useOsSoundSettings = false;
@@ -305,14 +301,10 @@ public class SoundSettingsFragment extends SherlockFragment implements Applicati
 		playAlarmSignalTwiceSettingCheckBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
 			@Override
 			public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-				// Log that CheckBox been pressed
 				logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":setListeners().playToneTwiceSettingCheckBox.onCheckedChange()", "Play tone twice checkbox pressed(or checkbox initialized)");
 
-				// Set checkbox depending on it's checked status and store variable
 				if (playAlarmSignalTwiceSettingCheckBox.isChecked()) {
-					// Store value to variable
 					playAlarmSignalTwice = true;
-					// Logging
 					logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":setListeners().playToneTwiceSettingCheckBox.onCheckedChange()", "Play tone twice checkbox \"Checked\"(" + playAlarmSignalTwice + ")");
 				} else {
 					playAlarmSignalTwice = false;
@@ -320,7 +312,6 @@ public class SoundSettingsFragment extends SherlockFragment implements Applicati
 				}
 
 				try {
-					// Store value to shared preferences
 					prefHandler.setPrefs(PrefKeys.SHARED_PREF, PrefKeys.PLAY_TONE_TWICE_KEY, playAlarmSignalTwice, context);
 				} catch (IllegalArgumentException e) {
 					logger.logCatTxt(LogPriorities.ERROR, LOG_TAG + ":setListeners().playToneTwiceSettingCheckBox.onCheckedChange()", "An Object of unsupported instance was given as argument to PreferencesHandler.setPrefs()", e);
@@ -328,15 +319,15 @@ public class SoundSettingsFragment extends SherlockFragment implements Applicati
 			}
 		});
 
-		// Set listener to tone spinner
+		// Set listener to alarm type Spinner
 		alarmTypeSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
 			@Override
 			public void onItemSelected(AdapterView<?> parent, View view, int pos, long id) {
-				// Store alarm type spinners position
+				logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":setListeners().alarmTypeSpinner.OnItemSelectedListener().onItemSelected()", "Item in alarm type spinner pressed(or spinner initialized)");
+
+				// Store alarm type Spinners position
 				alarmTypeSpinnerPos = alarmTypeSpinner.getSelectedItemPosition();
-				// Logging
-				logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":setListeners().toneSpinner.OnItemSelectedListener().onItemSelected()", "Item in tone spinner pressed(or spinner initialized)");
-				// Update selected tone EditText widget
+				// Update selected alarm signal EditText widget
 				updateSelectedAlarmSignalEditText();
 			}
 
