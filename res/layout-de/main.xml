@@ -224,7 +224,7 @@
             android:textAppearance="?android:attr/textAppearanceSmall" />
 
         <TextView
-            android:id="@+id/toneSpinnerTitle_tv"
+            android:id="@+id/alarmTypeSpinnerTitle_tv"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignLeft="@id/soundSettingsInfo_tv"
@@ -235,19 +235,19 @@
             android:textAppearance="?android:attr/textAppearanceMedium" />
 
         <Spinner
-            android:id="@+id/toneSpinner_sp"
+            android:id="@+id/alarmTypeSpinner_sp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignLeft="@id/toneSpinnerTitle_tv"
-            android:layout_below="@id/toneSpinnerTitle_tv"
+            android:layout_alignLeft="@id/alarmTypeSpinnerTitle_tv"
+            android:layout_below="@id/alarmTypeSpinnerTitle_tv"
             android:layout_marginRight="5dp" />
 
         <TextView
             android:id="@+id/alarmSignalTitle_tv"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignLeft="@+id/toneSpinner_sp"
-            android:layout_below="@+id/toneSpinner_sp"
+            android:layout_alignLeft="@+id/alarmTypeSpinner_sp"
+            android:layout_below="@+id/alarmTypeSpinner_sp"
             android:layout_marginRight="5dp"
             android:text="@string/TITLE_ALARM_SIGNAL"
             android:textAppearance="?android:attr/textAppearanceMedium" />

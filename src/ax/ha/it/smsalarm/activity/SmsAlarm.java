@@ -77,15 +77,13 @@ public class SmsAlarm extends SlidingFragmentActivity {
 
 	// Variables of different UI elements and types
 	// The EdittextObjects
-	private EditText ackNumberEditText;
 	private EditText rescueServiceEditText;
 
 	// The Button objects
-	private Button ackNumberButton;
+
 	private Button editRescueServiceButton;
 
 	// The CheckBox objects
-	private CheckBox enableAckCheckBox;
 	private CheckBox enableSmsAlarmCheckBox;
 
 	// The ImageView objects
@@ -96,17 +94,12 @@ public class SmsAlarm extends SlidingFragmentActivity {
 
 	// The textView objects
 	private TextView enableSmsAlarmInfoTextView;
-	private TextView enableAckInfoTextView;
-
-	// Strings to store different important numbers
-	private String acknowledgeNumber = "";
 
 	// String to store firedepartments name in
 	private String rescueService = "";
 
 	// Boolean variables to store whether to use OS soundsettings or not, and if acknowledge is
 	// enabled
-	private boolean useAlarmAcknowledge = false;
 	private boolean enableSmsAlarm = true;
 
 	/**
@@ -167,24 +160,10 @@ public class SmsAlarm extends SlidingFragmentActivity {
 //		// Initialize database handler object from context
 //		db = new DatabaseHandler(this);
 //
-//		// Fill tone spinner with values
-//		ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this, R.array.alarms, android.R.layout.simple_spinner_item);
-//		adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-//
-//		// Set adapter to tone spinner
-//		toneSpinner.setAdapter(adapter);
+
 //
 //
-//		// Set listener to ackNumberButton
-//		ackNumberButton.setOnClickListener(new OnClickListener() {
-//			@Override
-//			public void onClick(View v) {
-//				// Logging
-//				logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":onCreate().ackNumberButton.OnClickListener().onClick()", "Edit acknowledge number button pressed");
-//				// Build up and show input dialog of type acknowledge number
-//				buildAndShowInputDialog(DialogTypes.ACKNOWLEDGE);
-//			}
-//		});
+
 //
 //		// Set listener to editRescueServiceButton
 //		editRescueServiceButton.setOnClickListener(new OnClickListener() {
@@ -203,35 +182,7 @@ public class SmsAlarm extends SlidingFragmentActivity {
 //
 
 //
-//		// Set listener to enableAckCheckBox
-//		enableAckCheckBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-//			@Override
-//			public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-//				// Log that CheckBox been pressed
-//				logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":onCreate().enableAckCheckBox.onCheckedChange()", "Enable acknowledge checkbox pressed(or checkbox initialized)");
-//
-//				// Set checkbox depending on it's checked status and store variable
-//				if (enableAckCheckBox.isChecked()) {
-//					// Store value to variable
-//					useAlarmAcknowledge = true;
-//					// logging
-//					logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":onCreate().enableAckCheckBox.onCheckedChange()", "Use OS sound settings checkbox \"Checked\"(" + useAlarmAcknowledge + ")");
-//				} else {
-//					useAlarmAcknowledge = false;
-//					logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":onCreate().enableAckCheckBox.onCheckedChange()", "Use OS sound settings checkbox \"Unchecked\"(" + useAlarmAcknowledge + ")");
-//				}
-//
-//				try {
-//					// Store value to shared preferences
-//					prefHandler.setPrefs(PrefKeys.SHARED_PREF, PrefKeys.ENABLE_ACK_KEY, useAlarmAcknowledge, SmsAlarm.this);
-//				} catch (IllegalArgumentException e) {
-//					logger.logCatTxt(LogPriorities.ERROR, LOG_TAG + ":onCreate().enableAckCheckBox.onCheckedChange()", "An Object of unsupported instance was given as argument to PreferencesHandler.setPrefs()", e);
-//				}
-//
-//				// Update UI widgets affected by enable acknowledge
-//				updateAcknowledgeWidgets();
-//			}
-//		});
+
 //
 
 //
@@ -437,20 +388,16 @@ public class SmsAlarm extends SlidingFragmentActivity {
 		logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":findViews()", "Start finding Views by their ID");
 
 		// Declare and initialize variables of type EditText
-		ackNumberEditText = (EditText) findViewById(R.id.ackNumber_et);
 		rescueServiceEditText = (EditText) findViewById(R.id.rescueServiceName_et);
 
 		// Declare and initialize variables of type button
-		ackNumberButton = (Button) findViewById(R.id.editAckNumber_btn);
 		editRescueServiceButton = (Button) findViewById(R.id.editRescueServiceName_btn);
 
 		// Declare and initialize variables of type CheckBox
-		enableAckCheckBox = (CheckBox) findViewById(R.id.enableAcknowledge_chk);
 		enableSmsAlarmCheckBox = (CheckBox) findViewById(R.id.enableSmsAlarm_chk);
 
 		// Declare and initialize variables of type TextView
 		enableSmsAlarmInfoTextView = (TextView) findViewById(R.id.enableSmsAlarmHint_tv);
-		enableAckInfoTextView = (TextView) findViewById(R.id.enableAcknowledgeHint_tv);
 
 		// If Android API level is greater than Jelly Bean
 		if (Build.VERSION.SDK_INT > Build.VERSION_CODES.JELLY_BEAN) {
@@ -482,12 +429,6 @@ public class SmsAlarm extends SlidingFragmentActivity {
 			RelativeLayout.LayoutParams paramsPlayToneTwiceInfoTextView = new RelativeLayout.LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
 			paramsPlayToneTwiceInfoTextView.setMargins(pixelsLeft, pixelsTop, pixelsRight, 0);
 
-			// Set layout parameters for the enable ack info textview
-			RelativeLayout.LayoutParams paramsEnableAckInfoTextView = new RelativeLayout.LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
-			paramsEnableAckInfoTextView.setMargins(pixelsLeft, pixelsTop, pixelsRight, 0);
-			paramsEnableAckInfoTextView.addRule(RelativeLayout.BELOW, enableAckCheckBox.getId());
-			paramsEnableAckInfoTextView.addRule(RelativeLayout.ALIGN_LEFT, enableAckCheckBox.getId());
-
 			// Set layout parameters for the enable sms alarm info textview
 			RelativeLayout.LayoutParams paramsEnableSmsAlarmInfoTextView = new RelativeLayout.LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
 			paramsEnableSmsAlarmInfoTextView.setMargins(pixelsLeft, pixelsTop, pixelsRight, 0);
@@ -496,7 +437,6 @@ public class SmsAlarm extends SlidingFragmentActivity {
 
 			// Apply the previously configured layout parameters to the correct
 			// textviews
-			enableAckInfoTextView.setLayoutParams(paramsEnableAckInfoTextView);
 			enableSmsAlarmInfoTextView.setLayoutParams(paramsEnableSmsAlarmInfoTextView);
 
 			// Logging
@@ -519,12 +459,6 @@ public class SmsAlarm extends SlidingFragmentActivity {
 
 				// Set layout parameters for the sound settings info textview
 				// Wrap content, both on height and width
-				// Set layout parameters for the enable ack info textview
-				RelativeLayout.LayoutParams paramsEnableAckInfoTextView = new RelativeLayout.LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
-				paramsEnableAckInfoTextView.setMargins(pixelsLeft, pixelsTop, pixelsRight, 0);
-				paramsEnableAckInfoTextView.addRule(RelativeLayout.BELOW, enableAckCheckBox.getId());
-				paramsEnableAckInfoTextView.addRule(RelativeLayout.ALIGN_LEFT, enableAckCheckBox.getId());
-
 				// Set layout parameters for the enable sms alarm info textview
 				RelativeLayout.LayoutParams paramsEnableSmsAlarmInfoTextView = new RelativeLayout.LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
 				paramsEnableSmsAlarmInfoTextView.setMargins(pixelsLeft, pixelsTop, pixelsRight, 0);
@@ -533,7 +467,6 @@ public class SmsAlarm extends SlidingFragmentActivity {
 
 				// Apply the previously configured layout parameters to the correct
 				// textviews
-				enableAckInfoTextView.setLayoutParams(paramsEnableAckInfoTextView);
 				enableSmsAlarmInfoTextView.setLayoutParams(paramsEnableSmsAlarmInfoTextView);
 
 				// Logging
@@ -562,12 +495,6 @@ public class SmsAlarm extends SlidingFragmentActivity {
 			divider4ImageView.setImageResource(R.drawable.gradient_divider_11_and_up);
 			logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":findViews()", "API level > 10, set dark gradients");
 		}
-
-		// Set some attributes to the ackNumberEditText
-		ackNumberEditText.setEnabled(false);
-		ackNumberEditText.setClickable(false);
-		ackNumberEditText.setFocusable(false);
-		ackNumberEditText.setBackgroundColor(Color.WHITE);
 
 		// Set some attributes to the fireDepartmentEditText
 		rescueServiceEditText.setEnabled(false);
@@ -599,8 +526,6 @@ public class SmsAlarm extends SlidingFragmentActivity {
 
 		try {
 			// Get shared preferences needed by class Sms Alarm
-			useAlarmAcknowledge = (Boolean) prefHandler.getPrefs(PrefKeys.SHARED_PREF, PrefKeys.ENABLE_ACK_KEY, DataTypes.BOOLEAN, this);
-			acknowledgeNumber = (String) prefHandler.getPrefs(PrefKeys.SHARED_PREF, PrefKeys.ACK_NUMBER_KEY, DataTypes.STRING, this);
 			enableSmsAlarm = (Boolean) prefHandler.getPrefs(PrefKeys.SHARED_PREF, PrefKeys.ENABLE_SMS_ALARM_KEY, DataTypes.BOOLEAN, this, true);
 			rescueService = (String) prefHandler.getPrefs(PrefKeys.SHARED_PREF, PrefKeys.RESCUE_SERVICE_KEY, DataTypes.STRING, this);
 		} catch (IllegalArgumentException e) {
@@ -674,15 +599,6 @@ public class SmsAlarm extends SlidingFragmentActivity {
 		 * dialog DUMMY is built up.
 		 */
 		switch (type) {
-			case ACKNOWLEDGE:
-				dialog.setTitle(R.string.NUMBER_PROMPT_TITLE);
-				dialog.setMessage(R.string.ACK_NUMBER_PROMPT_MESSAGE);
-				noBlanksInputEditText.setHint(R.string.NUMBER_PROMPT_HINT);
-				noBlanksInputEditText.setInputType(InputType.TYPE_CLASS_PHONE);
-				dialog.setCancelable(false);
-				dialog.setView(noBlanksInputEditText);
-				logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":buildAndShowInputDialog()", "Dialog attributes is set for dialog type ACKNOWLEDGE");
-				break;
 			case RESCUESERVICE:
 				dialog.setTitle(R.string.RESCUE_SERVICE_PROMPT_TITLE);
 				dialog.setMessage(R.string.RESCUE_SERVICE_PROMPT_MESSAGE);
@@ -701,9 +617,6 @@ public class SmsAlarm extends SlidingFragmentActivity {
 
 		// Set a positive button and listen on it
 		dialog.setPositiveButton(R.string.OK, new DialogInterface.OnClickListener() {
-			// To store input from dialogs edittext field
-			String input = "";
-
 			@Override
 			public void onClick(DialogInterface dialog, int whichButton) {
 				// Log information
@@ -714,20 +627,6 @@ public class SmsAlarm extends SlidingFragmentActivity {
 				 * is taken.
 				 */
 				switch (type) {
-					case ACKNOWLEDGE:
-						// Store input
-						acknowledgeNumber = noBlanksInputEditText.getText().toString();
-						try {
-							// Store to shared preferences
-							prefHandler.setPrefs(PrefKeys.SHARED_PREF, PrefKeys.ACK_NUMBER_KEY, acknowledgeNumber, SmsAlarm.this);
-						} catch (IllegalArgumentException e) {
-							logger.logCatTxt(LogPriorities.ERROR, LOG_TAG + ":buildAndShowInputDialog().PositiveButton.OnClickListener().onClick()", "An Object of unsupported instance was given as argument to PreferencesHandler.setPrefs()", e);
-						}
-						// Update affected UI widgets
-						updateAcknowledgeNumberEditText();
-						// Log
-						logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":buildAndShowInputDialog().PositiveButton.OnClickListener().onClick()", "New ACKNOWLEDGE phone number has been stored from user input . New ACKNOWLEDGE phone number is: \"" + acknowledgeNumber + "\"");
-						break;
 					case RESCUESERVICE:
 						// Store input to class variable
 						rescueService = inputEditText.getText().toString();
@@ -877,34 +776,14 @@ public class SmsAlarm extends SlidingFragmentActivity {
 		// Logging
 		logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":updateWholeUI()", "Whole user interface is about to be updated");
 
-		// Update acknowledge number EditText
-		updateAcknowledgeNumberEditText();
-
 		// Update rescue service EditText
 		updateRescueServiceEditText();
 
 		// Update enable Sms Alarm CheckBox widget
 		updateEnableSmsAlarmCheckBox();
 
-		// Update widgets in relation to alarm acknowledgment
-		updateAcknowledgeWidgets();
-
 		// Logging
 		logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":updateWholeUI()", "User interface updated");
-	}
-
-	/**
-	 * To update acknowledge number <code>EditText</code> widget.
-	 * 
-	 * @see ax.ha.it.smsalarm.handler.LogHandler#logCat(LogPriorities, String, String) logCat(LogPriorities, String, String)
-	 */
-	private void updateAcknowledgeNumberEditText() {
-		// Update acknowledge number EditText with value
-		ackNumberEditText.setText(acknowledgeNumber);
-
-		// Logging
-		logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":updateAcknowledgeNumberEditText()", "Acknowledge number edittext set to: " + acknowledgeNumber);
-		logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":updateAcknowledgeNumberEditText()", "Acknowledge number edittext updated");
 	}
 
 	/**
@@ -939,28 +818,4 @@ public class SmsAlarm extends SlidingFragmentActivity {
 		logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":updateEnableSmsAlarmCheckBox()", "Enable SmsAlarm checkbox updated");
 	}
 
-	/**
-	 * To update widgets with relations to alarm acknowledgement. These are widgets of type <code>CheckBox</code>, <code>Button</code> and
-	 * <code>EditText</code>, they are enableAckCheckBox, ackNumberButton and ackNumberEditText.
-	 * 
-	 * @see ax.ha.it.smsalarm.handler.LogHandler#logCat(LogPriorities, String, String) logCat(LogPriorities, String, String)
-	 */
-	private void updateAcknowledgeWidgets() {
-		/*
-		 * Set checkbox for the enableAckCheckBox to true or false, also set some attributes to the ackNumberButton and the ackNumberField
-		 */
-		if (useAlarmAcknowledge) {
-			enableAckCheckBox.setChecked(true);
-			ackNumberButton.setEnabled(true);
-			ackNumberEditText.setTextColor(Color.BLACK);
-			logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":updateAcknowledgeWidgets()", "Enable acknowledge checkbox \"Checked\"(" + useAlarmAcknowledge + "), acknowledge number button is \"Enabled\" and acknowledge number edittext is \"Enabled\"");
-		} else {
-			ackNumberButton.setEnabled(false);
-			ackNumberEditText.setTextColor(Color.GRAY);
-			logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":updateAcknowledgeWidgets()", "Enable acknowledge checkbox \"Unchecked\"(" + useAlarmAcknowledge + "), acknowledge number button is \"Disabled\" and acknowledge number edittext is \"Disabled\"");
-		}
-
-		// Logging
-		logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":updateAcknowledgeWidgets()", "Acknowledge alarm UI widgets updated");
-	}
 }

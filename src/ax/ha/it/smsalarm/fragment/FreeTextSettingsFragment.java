@@ -40,7 +40,6 @@ import com.actionbarsherlock.app.SherlockFragment;
  * @since 2.3.1
  */
 public class FreeTextSettingsFragment extends SherlockFragment implements ApplicationFragment {
-	// Log tag string
 	private final String LOG_TAG = getClass().getSimpleName();
 
 	// Objects needed for logging and shared preferences handling
@@ -95,7 +94,7 @@ public class FreeTextSettingsFragment extends SherlockFragment implements Applic
 
 	@Override
 	public void findViews(View view) {
-		logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":findViews()", "Start finding Views by their ID");
+		logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":findViews()", "Start finding Views by their Id");
 
 		// Declare and initialize variables of type button
 		addPrimaryFreeTextButton = (Button) view.findViewById(R.id.addPrimaryFreeText_btn);

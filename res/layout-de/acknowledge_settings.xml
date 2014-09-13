@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="wrap_content" >
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" >
+
+        <TextView
+            android:id="@+id/ackSettings_tv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="5dp"
+            android:layout_marginRight="5dp"
+            android:layout_marginTop="5dp"
+            android:text="@string/TITLE_ACK_SETTINGS"
+            android:textAppearance="?android:attr/textAppearanceMedium" />
+
+        <TextView
+            android:id="@+id/ackSettingsInfo_tv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignLeft="@+id/ackSettings_tv"
+            android:layout_below="@+id/ackSettings_tv"
+            android:layout_marginRight="5dp"
+            android:text="@string/INFO_ACK_SETTINGS"
+            android:textAppearance="?android:attr/textAppearanceSmall" />
+
+        <CheckBox
+            android:id="@+id/enableAcknowledge_chk"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignLeft="@+id/ackSettingsInfo_tv"
+            android:layout_below="@+id/ackSettingsInfo_tv"
+            android:layout_marginTop="5dp"
+            android:text="@string/TITLE_ENABLE_ACKNOWLEDGE" />
+
+        <TextView
+            android:id="@+id/enableAcknowledgeHint_tv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignLeft="@+id/enableAcknowledge_chk"
+            android:layout_below="@+id/enableAcknowledge_chk"
+            android:layout_marginLeft="38dp"
+            android:layout_marginRight="5dp"
+            android:layout_marginTop="-6dp"
+            android:text="@string/INFO_ENABLE_ACKNOWLEDGE"
+            android:textAppearance="?android:attr/textAppearanceSmall" />
+
+        <TextView
+            android:id="@+id/acknowledgeNumberTitle_tv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignLeft="@+id/enableAcknowledge_chk"
+            android:layout_below="@+id/enableAcknowledgeHint_tv"
+            android:text="@string/TITLE_ACK_NUMBER"
+            android:textAppearance="?android:attr/textAppearanceMedium" />
+
+        <EditText
+            android:id="@+id/ackNumber_et"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignLeft="@id/acknowledgeNumberTitle_tv"
+            android:layout_below="@id/acknowledgeNumberTitle_tv"
+            android:layout_marginTop="2dp"
+            android:hint="@string/ENTER_PHONE_NUMBER_HINT"
+            android:inputType="number|numberSigned|phone"
+            android:singleLine="true" />
+
+        <Button
+            android:id="@+id/editAckNumber_btn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignBottom="@+id/ackNumber_et"
+            android:layout_alignParentRight="true"
+            android:layout_marginRight="5dp"
+            android:layout_toRightOf="@+id/ackNumber_et"
+            android:text="@string/EDIT_NUMBER" />
+    </RelativeLayout>
+
+</ScrollView>

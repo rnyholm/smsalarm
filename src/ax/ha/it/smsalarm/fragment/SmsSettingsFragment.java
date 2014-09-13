@@ -40,7 +40,6 @@ import com.actionbarsherlock.app.SherlockFragment;
  * @since 2.3.1
  */
 public class SmsSettingsFragment extends SherlockFragment implements ApplicationFragment {
-	// Log tag string
 	private final String LOG_TAG = getClass().getSimpleName();
 
 	// Objects needed for logging and shared preferences handling
@@ -95,7 +94,7 @@ public class SmsSettingsFragment extends SherlockFragment implements Application
 
 	@Override
 	public void findViews(View view) {
-		logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":findViews()", "Start finding Views by their ID");
+		logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":findViews()", "Start finding Views by their Id");
 
 		// Finding button views
 		addPrimarySmsNumberButton = (Button) view.findViewById(R.id.addPrimarySmsNumber_btn);
@@ -197,9 +196,9 @@ public class SmsSettingsFragment extends SherlockFragment implements Application
 	 * 
 	 * @see #createSmsPrimaryRemoveDialog()
 	 * @see #updatePrimarySmsNumberSpinner()
-	 * @see PreferencesHandler#setPrefs(PrefKeys, PrefKeys, Object, Context) setPrefs(PrefKeys, PrefKeys, Object, Context)
-	 * @see LogHandler#logCat(LogPriorities, String, String) logCat(LogPriorities, String, String)
-	 * @see LogHandler#logCatTxt(LogPriorities, String, String, Throwable) logCatTxt(LogPriorities, String, String,Throwable)
+	 * @see PreferencesHandler#setPrefs(PrefKeys, PrefKeys, Object, Context)
+	 * @see LogHandler#logCat(LogPriorities, String, String)
+	 * @see LogHandler#logCatTxt(LogPriorities, String, String, Throwable)
 	 */
 	private void createSmsPrimaryInputDialog() {
 		logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":createSmsPrimaryInputDialog()", "Start building dialog for input of Sms Primary number");
@@ -216,7 +215,7 @@ public class SmsSettingsFragment extends SherlockFragment implements Application
 		dialog.setCancelable(false); 									// Set dialog to non cancelable
 		dialog.setView(noBlanksInputEditText); 							// Bind dialog to input
 		noBlanksInputEditText.setHint(R.string.NUMBER_PROMPT_HINT); 	// Set hint to edit text
-		noBlanksInputEditText.setInputType(InputType.TYPE_CLASS_TEXT); 	// Set Input type to edit text
+		noBlanksInputEditText.setInputType(InputType.TYPE_CLASS_TEXT); 	// Set input type to edit text
 		// @formatter:on
 
 		// Set a positive button and listen on it
@@ -297,9 +296,9 @@ public class SmsSettingsFragment extends SherlockFragment implements Application
 	 * 
 	 * @see #createSmsSecondaryRemoveDialog()
 	 * @see #updateSecondarySmsNumberSpinner()
-	 * @see PreferencesHandler#setPrefs(PrefKeys, PrefKeys, Object, Context) setPrefs(PrefKeys, PrefKeys, Object, Context)
-	 * @see LogHandler#logCat(LogPriorities, String, String) logCat(LogPriorities, String, String)
-	 * @see LogHandler#logCatTxt(LogPriorities, String, String, Throwable) logCatTxt(LogPriorities, String, String,Throwable)
+	 * @see PreferencesHandler#setPrefs(PrefKeys, PrefKeys, Object, Context)
+	 * @see LogHandler#logCat(LogPriorities, String, String)
+	 * @see LogHandler#logCatTxt(LogPriorities, String, String, Throwable)
 	 */
 	private void createSmsSecondaryInputDialog() {
 		logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":createSmsSecondaryInputDialog()", "Start building dialog for input of Sms Secondary number");
@@ -379,9 +378,9 @@ public class SmsSettingsFragment extends SherlockFragment implements Application
 	 *
 	 * @see #createSmsPrimaryInputDialog()
 	 * @see #updatePrimarySmsNumberSpinner()
-	 * @see PreferencesHandler#setPrefs(PrefKeys, PrefKeys, Object, Context) setPrefs(PrefKeys, PrefKeys, Object, Context)
-	 * @see LogHandler#logCat(LogPriorities, String, String) logCat(LogPriorities, String, String)
-	 * @see LogHandler#logCatTxt(LogPriorities, String, String, Throwable) logCatTxt(LogPriorities, String, String,Throwable)
+	 * @see PreferencesHandler#setPrefs(PrefKeys, PrefKeys, Object, Context)
+	 * @see LogHandler#logCat(LogPriorities, String, String)
+	 * @see LogHandler#logCatTxt(LogPriorities, String, String, Throwable)
 	 */
 	private void createSmsPrimaryRemoveDialog() {
 		logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":createSmsPrimaryRemoveDialog()", "Start building dialog for removing a Primary Sms number");
@@ -430,9 +429,9 @@ public class SmsSettingsFragment extends SherlockFragment implements Application
 	 *
 	 * @see #createSmsSecondaryInputDialog()
 	 * @see #updateSecondarySmsNumberSpinner()
-	 * @see PreferencesHandler#setPrefs(PrefKeys, PrefKeys, Object, Context) setPrefs(PrefKeys, PrefKeys, Object, Context)
-	 * @see LogHandler#logCat(LogPriorities, String, String) logCat(LogPriorities, String, String)
-	 * @see LogHandler#logCatTxt(LogPriorities, String, String, Throwable) logCatTxt(LogPriorities, String, String,Throwable)
+	 * @see PreferencesHandler#setPrefs(PrefKeys, PrefKeys, Object, Context)
+	 * @see LogHandler#logCat(LogPriorities, String, String)
+	 * @see LogHandler#logCatTxt(LogPriorities, String, String, Throwable)
 	 */
 	private void createSmsSecondaryRemoveDialog() {
 		logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":createSmsSecondaryRemoveDialog()", "Start building dialog for removing a Secondary Sms number");

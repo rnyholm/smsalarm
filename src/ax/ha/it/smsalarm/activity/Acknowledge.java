@@ -1,7 +1,7 @@
 /**
  * Copyright (c) 2013 Robert Nyholm. All rights reserved.
  */
-package ax.ha.it.smsalarm.handler;
+package ax.ha.it.smsalarm.activity;
 
 import java.util.Calendar;
 import java.util.Date;
@@ -25,9 +25,13 @@ import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
+import ax.ha.it.smsalarm.Alarm;
 import ax.ha.it.smsalarm.R;
 import ax.ha.it.smsalarm.WidgetProvider;
+import ax.ha.it.smsalarm.handler.DatabaseHandler;
+import ax.ha.it.smsalarm.handler.LogHandler;
 import ax.ha.it.smsalarm.handler.LogHandler.LogPriorities;
+import ax.ha.it.smsalarm.handler.PreferencesHandler;
 import ax.ha.it.smsalarm.handler.PreferencesHandler.DataTypes;
 import ax.ha.it.smsalarm.handler.PreferencesHandler.PrefKeys;
 
@@ -41,7 +45,7 @@ import ax.ha.it.smsalarm.handler.PreferencesHandler.PrefKeys;
  * @since 1.1-SE
  * @see ListenToPhoneState
  */
-public class AcknowledgeHandler extends Activity {
+public class Acknowledge extends Activity {
 	// Log tag string
 	private final String LOG_TAG = getClass().getSimpleName();
 
@@ -52,25 +56,24 @@ public class AcknowledgeHandler extends Activity {
 	// Object needed to listen for phones different states
 	private ListenToPhoneState customPhoneStateListener;
 
-	// Objact to handle database access and methods
+	// Object to handle database access and methods
 	private DatabaseHandler db;
 
-	// Variables of different UI elements and types
-	// The TextView Objects
+	// The TextViews...
 	private TextView titleTextView;
 	private TextView fullMessageTextView;
 	private TextView lineBusyTextView;
 	private TextView countDownTextView;
 	private TextView secondsTextView;
 
-	// The Button objects
+	// ...Buttons...
 	private Button acknowledgeButton;
 	private Button abortButton;
 
-	// The ProgressBar Object
+	// ...ProgressBar...
 	private ProgressBar redialProgressBar;
 
-	// The ImageView Objects
+	// ...ImageViews...
 	private ImageView divider1ImageView;
 	private ImageView divider2ImageView;
 
@@ -100,10 +103,8 @@ public class AcknowledgeHandler extends Activity {
 	private int phoneState = -1;
 
 	// Constants for the redial parameters
-	private final int MIN_CALL_TIME = 7000; // Minimum call time(in milliseconds), if below this the
-											// application redials
-	private final int REDIAL_COUNTDOWN_TIME = 6000; // Count down time(in milliseconds) before
-													// redial should occur
+	private final int MIN_CALL_TIME = 7000; // Minimum call time(in milliseconds), if below this the application redials
+	private final int REDIAL_COUNTDOWN_TIME = 6000; // Count down time(in milliseconds) before redial should occur
 	private final int REDIAL_COUNTDOWN_INTERVAL = 100;
 
 	/**
@@ -117,27 +118,25 @@ public class AcknowledgeHandler extends Activity {
 	 * @see #setTextViews()
 	 * @see #onResume()
 	 * @see #onPause()
-	 * @see ax.ha.it.smsalarm.handler.LogHandler#logCat(LogPriorities, String , String) logCat(LogPriorities, String , String)
-	 * @see ax.ha.it.smsalarm.handler.LogHandler#logAlarm(List, Context) logAlarm(List, Context)
-	 * @see ax.ha.it.smsalarm.handler.DatabaseHandler ax.ha.it.smsalarm.DatabaseHandler
-	 * @see ax.ha.it.smsalarm.handler.DatabaseHandler#updateLatestAlarmAcknowledged() updateLatestAlarmAcknowledged()
-	 * @see ax.ha.it.smsalarm.handler.DatabaseHandler#getAllAlarm() getAllAlarm()
-	 * @see ax.ha.it.smsalarm.Alarm ax.ha.it.smsalarm.Alarm
-	 * @see ax.ha.it.smsalarm.WidgetProvider#updateWidgets(Context) @see ax.ha.it.smsalarm.WidgetProvider#updateWidgets(Context)
+	 * @see LogHandler#logCat(LogPriorities, String , String)
+	 * @see LogHandler#logAlarm(List, Context) logAlarm(List, Context)
+	 * @see DatabaseHandler
+	 * @see DatabaseHandler#updateLatestAlarmAcknowledged()
+	 * @see DatabaseHandler#getAllAlarm()
+	 * @see Alarm
+	 * @see WidgetProvider#updateWidgets(Context)
 	 */
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.ack);
 
-		// Log in debugging and information purpose
 		logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":onCreate()", "Creation of the Acknowledge Handler started");
 
 		// Initialize database handler object from context
 		db = new DatabaseHandler(this);
 
-		// Declare a telephonymanager with propersystemservice and attach
-		// listener to it
+		// Declare a telephonymanager with propersystemservice and attach listener to it
 		TelephonyManager tManager = (TelephonyManager) getSystemService(Context.TELEPHONY_SERVICE);
 		customPhoneStateListener = new ListenToPhoneState();
 		tManager.listen(customPhoneStateListener, PhoneStateListener.LISTEN_CALL_STATE);
@@ -146,10 +145,8 @@ public class AcknowledgeHandler extends Activity {
 
 		// FindViews
 		findViews();
-
 		// Get Shared Preferences
 		getAckHandlerPrefs();
-
 		// Set TextViews
 		setTextViews();
 
@@ -157,7 +154,6 @@ public class AcknowledgeHandler extends Activity {
 		abortButton.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				// Logging
 				logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":onCreate().abortButton.OnClickListener().onClick()", "Abort button has been pressed, finishing activity");
 				finish();
 			}
@@ -169,24 +165,26 @@ public class AcknowledgeHandler extends Activity {
 			public void onClick(View v) {
 				// Check to see if we have any phone number to acknowledge to
 				if (!acknowledgeNumber.equals("")) {
-					// Logging
 					logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":onCreate().acknowledgeButton.OnClickListener().onClick()", "Acknowledge button has been pressed and phone number to acknowledge to exist. Continue acknowledge");
+
 					// Update acknowledge time of latest received primary alarm in database
 					db.updateLatestPrimaryAlarmAcknowledged();
+
 					// Get all alarms from database and log them to to html file
-					logger.logAlarm(db.getAllAlarm(), AcknowledgeHandler.this);
+					logger.logAlarm(db.getAllAlarm(), Acknowledge.this);
+
 					// Update all widgets associated with this application
-					WidgetProvider.updateWidgets(AcknowledgeHandler.this);
+					WidgetProvider.updateWidgets(Acknowledge.this);
+
 					// Place the acknowledge call
 					placeAcknowledgeCall();
 				} else {
-					Toast.makeText(AcknowledgeHandler.this, R.string.ACK_CANNOT, Toast.LENGTH_LONG).show();
-					// Logging
+					Toast.makeText(Acknowledge.this, R.string.ACK_CANNOT, Toast.LENGTH_LONG).show();
 					logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":onCreate().acknowledgeButton.OnClickListener().onClick()", "Acknowledge button has been pressed but no phone number to acknowledge to has been given");
 				}
 			}
 		});
-		// Log in debugging and information purpose
+
 		logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":onCreate()", "Creation of the Acknowledge Handler completed");
 	}
 
@@ -195,25 +193,26 @@ public class AcknowledgeHandler extends Activity {
 	 * 
 	 * @see #onCreate(Bundle)
 	 * @see #onPause()
-	 * @see ax.ha.it.smsalarm.handler.LogHandler#logCat(LogPriorities, String , String) logCat(LogPriorities, String , String)
+	 * @see LogHandler#logCat(LogPriorities, String , String)
 	 */
 	@Override
 	public void onResume() {
 		super.onResume();
-		// Log in debugging and information purpose
 		logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":onResume()", "Activity resumed");
+
 		// If we already have placed a call
 		if (hasCalled) {
-			// Logging
 			logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":onResume()", "An acknowledge call has already been placed, building up progressbar and countdown for a new acknowledge call");
+
 			// Initialize progress bar and textviews needed for countdown
 			redialProgressBar.setProgress(0);
 			countDownTextView.setText(Integer.toString(REDIAL_COUNTDOWN_TIME / 1000));
+
 			redialCountDown = new CountDownTimer(REDIAL_COUNTDOWN_TIME, REDIAL_COUNTDOWN_INTERVAL) {
 				@Override
 				public void onTick(long millisUntilFinished) {
-					// Logging
 					logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":onResume().CountDownTimer().onTick()", "Calculate redial countdown times and update UI widgets");
+
 					// Calculate new value of ProgressBar
 					float fraction = millisUntilFinished / (float) REDIAL_COUNTDOWN_TIME;
 					// Update ProgressBar and TextView with new values
@@ -223,8 +222,8 @@ public class AcknowledgeHandler extends Activity {
 
 				@Override
 				public void onFinish() {
-					// Logging
 					logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":onResume().CountDownTimer().onFinish()", "Redial countdown finished, continue to place new acknowledge call");
+
 					// Place the acknowledge call
 					placeAcknowledgeCall();
 				}
@@ -248,29 +247,30 @@ public class AcknowledgeHandler extends Activity {
 	 * 
 	 * @see #onCreate(Bundle)
 	 * @see #onResume()
-	 * @see ax.ha.it.smsalarm.handler.LogHandler#logCat(LogPriorities, String , String) logCat(LogPriorities, String , String)
-	 * @see ax.ha.it.smsalarm.handler.LogHandler#logCatTxt(LogPriorities, String , String, Throwable) logCatTxt(LogPriorities, String , String,
-	 *      Throwable)
-	 * @see ax.ha.it.smsalarm.handler.PreferencesHandler#setPrefs(PrefKeys, PrefKeys, Object, Context) setPrefs(PrefKeys, PrefKeys, Object, Context)
+	 * @see LogHandler#logCat(LogPriorities, String , String)
+	 * @see LogHandler#logCatTxt(LogPriorities, String , String, Throwable)
+	 * @see PreferencesHandler#setPrefs(PrefKeys, PrefKeys, Object, Context)
 	 */
 	private void placeAcknowledgeCall() {
 		try {
 			// Make a call intent
 			Intent callIntent = new Intent(Intent.ACTION_CALL);
 			callIntent.setData(Uri.parse("tel:" + acknowledgeNumber));
-			// Logging
+
 			logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":placeAcknowledgeCall()", "A call intent has been initialized");
+
 			try {
 				// Store variable to shared preferences indicating that a call has been placed
-				prefHandler.setPrefs(PrefKeys.SHARED_PREF, PrefKeys.HAS_CALLED_KEY, true, AcknowledgeHandler.this);
+				prefHandler.setPrefs(PrefKeys.SHARED_PREF, PrefKeys.HAS_CALLED_KEY, true, Acknowledge.this);
 			} catch (IllegalArgumentException e) {
 				logger.logCatTxt(LogPriorities.ERROR, LOG_TAG + ":placeAcknowledgeCall()", "An Object of unsupported instance was given as argument to PreferencesHandler.setPrefs()", e);
 			}
+
 			// Set time when the call has been placed
 			startCall = Calendar.getInstance().getTime();
 			// Kick off call intent
 			startActivity(callIntent);
-			// Logging
+
 			logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":placeAcknowledgeCall()", "A acknowledge call has been placed to phone number:\"" + acknowledgeNumber + "\" at the time:\"" + startCall.getTime() + "\"");
 		} catch (ActivityNotFoundException e) {
 			logger.logCatTxt(LogPriorities.ERROR, LOG_TAG + ":placeAcknowledgeCall()", "Failed to place acknowledge call", e);
@@ -281,36 +281,33 @@ public class AcknowledgeHandler extends Activity {
 	 * To find UI widgets and get their reference by ID stored in class variables.
 	 * 
 	 * @see #onCreate(Bundle)
-	 * @see ax.ha.it.smsalarm.handler.LogHandler#logCat(LogPriorities, String , String) logCat(LogPriorities, String , String)
+	 * @see LogHandler#logCat(LogPriorities, String , String)
 	 */
 	private void findViews() {
-		// Logging
 		logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":findViews()", "Start finding views by their ID");
 
-		// Declare and initialize variables of type TextView
+		// Finding EditText views
 		titleTextView = (TextView) findViewById(R.id.ackTitle_tv);
 		fullMessageTextView = (TextView) findViewById(R.id.ackFullAlarm_tv);
 		lineBusyTextView = (TextView) findViewById(R.id.ackLineBusy_tv);
 		countDownTextView = (TextView) findViewById(R.id.ackCountdown_tv);
 		secondsTextView = (TextView) findViewById(R.id.ackSeconds_tv);
 
-		// Declare and initialize variables of type Button
+		// Finding Button views
 		acknowledgeButton = (Button) findViewById(R.id.ackAcknowledgeAlarm_btn);
 		abortButton = (Button) findViewById(R.id.ackAbortAlarm_btn);
 
-		// Declare and initialize variable of type ProgressBar
+		// Finding Progressbar views
 		redialProgressBar = (ProgressBar) findViewById(R.id.ackRedial_pb);
 
-		// Declare and initialize variables of type ImageView
+		// Finding ImageView views
 		divider1ImageView = (ImageView) findViewById(R.id.ackDivider1_iv);
 		divider2ImageView = (ImageView) findViewById(R.id.ackDivider2_iv);
 
-		// If Android API level less then 11 set bright gradient else set dark
-		// gradient
+		// If Android API level less then 11 set bright gradient else set dark gradient
 		if (Build.VERSION.SDK_INT < 11) {
 			divider1ImageView.setImageResource(R.drawable.gradient_divider_10_and_down);
 			divider2ImageView.setImageResource(R.drawable.gradient_divider_10_and_down);
-			// Logging
 			logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":findViews()", "API level < 11, set bright gradients");
 		} else {
 			divider1ImageView.setImageResource(R.drawable.gradient_divider_11_and_up);
@@ -325,21 +322,17 @@ public class AcknowledgeHandler extends Activity {
 		secondsTextView.setVisibility(View.GONE);
 		redialProgressBar.setVisibility(View.GONE);
 
-		// Logging
 		logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":findViews()", "All views found");
 	}
 
 	/**
 	 * To get <code>Shared Preferences</code> used by class <code>AcknowledgeHandler</code>.
 	 * 
-	 * @see ax.ha.it.smsalarm.handler.LogHandler#logCat(LogPriorities, String , String) logCat(LogPriorities, String , String)
-	 * @see ax.ha.it.smsalarm.handler.LogHandler#logCatTxt(LogPriorities, String, String, Throwable) logCatTxt(LogPriorities, String, String,
-	 *      Throwable)
-	 * @see ax.ha.it.smsalarm.handler.PreferencesHandler#getPrefs(PrefKeys, PrefKeys, DataTypes, Context) getPrefs(PrefKeys, PrefKeys, DataTypes,
-	 *      Context)
+	 * @see LogHandler#logCat(LogPriorities, String , String) logCat(LogPriorities, String , String)
+	 * @see LogHandler#logCatTxt(LogPriorities, String, String, Throwable)
+	 * @see PreferencesHandler#getPrefs(PrefKeys, PrefKeys, DataTypes, Context)
 	 */
 	private void getAckHandlerPrefs() {
-		// Some logging
 		logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":getAckHandlerPrefs()", "Start retrieving shared preferences needed by class AcknowledgeHandler");
 
 		try {
@@ -358,22 +351,25 @@ public class AcknowledgeHandler extends Activity {
 	/**
 	 * To set <code>TextViews</code> with data for a proper presentation of the UI.
 	 * 
-	 * @see ax.ha.it.smsalarm.handler.LogHandler#logCat(LogPriorities, String , String) logCat(LogPriorities, String , String)
+	 * @see LogHandler#logCat(LogPriorities, String , String)
 	 */
 	@SuppressLint("DefaultLocale")
 	private void setTextViews() {
-		// Some logging
 		logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":setTextViews()", "Setting textviews with proper data");
+
 		// Set TextViews from variables and resources
 		if (!"".equals(rescueService)) {
 			titleTextView.setText(rescueService.toUpperCase() + " " + getResources().getString(R.string.ALARM));
 		} else {
 			titleTextView.setText(getString(R.string.ALARM));
 		}
+
 		fullMessageTextView.setText(fullMessage);
+
 		// Check if the activity already has placed a call, in that case show TextViews for redial
 		if (hasCalled) {
 			logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":setTextViews()", "We have already placed a call, showing redial widgets");
+
 			lineBusyTextView.setVisibility(View.VISIBLE);
 			countDownTextView.setVisibility(View.VISIBLE);
 			secondsTextView.setVisibility(View.VISIBLE);
@@ -396,15 +392,14 @@ public class AcknowledgeHandler extends Activity {
 		 * 
 		 * @see #swapStates(int)
 		 * @see #stateName(int)
-		 * @see ax.ha.it.smsalarm.handler.LogHandler#logCat(LogPriorities, String , String) logCat(LogPriorities, String , String)
-		 * @see ax.ha.it.smsalarm.handler.LogHandler#logCat(LogPriorities, String, String, Throwable) logCat(LogPriorities, String, String, Throwable)
-		 * @see ax.ha.it.smsalarm.handler.PreferencesHandler#setPrefs(PrefKeys, PrefKeys, Object, Context) setPrefs(PrefKeys, PrefKeys, Object,
-		 *      Context)
+		 * @see LogHandler#logCat(LogPriorities, String , String)
+		 * @see LogHandler#logCat(LogPriorities, String, String, Throwable)
+		 * @see PreferencesHandler#setPrefs(PrefKeys, PrefKeys, Object, Context)
 		 */
 		@Override
 		public void onCallStateChanged(int state, String incomingNumber) {
-			// Logging
 			logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":ListenToPhoneState().onCallStateChanged()", "Call state has changed");
+
 			// Swap the phone states
 			swapStates(state);
 			// Log phone states name(purely in debugging purpose)
@@ -412,7 +407,6 @@ public class AcknowledgeHandler extends Activity {
 
 			// Only do this if phone call go from OFFHOOK to IDLE state
 			if (prePhoneState == 2 && phoneState == 0 && NOT_EVALUATED) {
-				// Logging
 				logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":ListenToPhoneState().onCallStateChanged()", "Call state went from \"Off hook\" to \"Idle\"");
 				// Set to false because we evaluate this right now
 				NOT_EVALUATED = false;
@@ -420,30 +414,26 @@ public class AcknowledgeHandler extends Activity {
 				Date endCall = Calendar.getInstance().getTime();
 				// Calculate the call time
 				long time = endCall.getTime() - startCall.getTime();
-				// Logging
+
 				logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":ListenToPhoneState().onCallStateChanged()", "Start time of call is:\"" + startCall.getTime() + "\", end time is:\"" + endCall.getTime() + "\" and the call time was:\"" + time + "\"");
 
-				/*
-				 * If call time is less than preconfigured value the line was busy and call did not go through. In this case we need to start the
-				 * AcknowledgeHandler activity once more.
-				 */
+				// If call time is less than preconfigured value the line was busy and call did not go through. In this case we need to start the
+				// AcknowledgeHandler activity once more.
 				if (endCall.getTime() - startCall.getTime() < MIN_CALL_TIME) {
-					// Logging
 					logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":ListenToPhoneState().onCallStateChanged()", "Call time was less than:\"" + MIN_CALL_TIME + "\", assumes the line was busy. Initializing and starting a new intent to place a new call");
-					Intent i = new Intent(AcknowledgeHandler.this, AcknowledgeHandler.class);
+					Intent i = new Intent(Acknowledge.this, Acknowledge.class);
 					i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
 					startActivity(i);
 				} else {
-					// Logging
 					logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":ListenToPhoneState().onCallStateChanged()", "Call time was more than:\"" + MIN_CALL_TIME + "\", assumes the call went through");
 					try {
-						// Store variable to shared preferences indicating that a call has been
-						// placed with success
-						prefHandler.setPrefs(PrefKeys.SHARED_PREF, PrefKeys.HAS_CALLED_KEY, false, AcknowledgeHandler.this);
+						// Store variable to shared preferences indicating that a call has been placed with success
+						prefHandler.setPrefs(PrefKeys.SHARED_PREF, PrefKeys.HAS_CALLED_KEY, false, Acknowledge.this);
 					} catch (IllegalArgumentException e) {
 						logger.logCatTxt(LogPriorities.ERROR, LOG_TAG + ":ListenToPhoneState().onCallStateChanged()", "An Object of unsupported instance was given as argument to PreferencesHandler.setPrefs()", e);
 					}
 					logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":ListenToPhoneState().onCallStateChanged()", "Finishing activity");
+
 					// Finish this activity
 					finish();
 				}
@@ -458,8 +448,8 @@ public class AcknowledgeHandler extends Activity {
 		 *            Phone state as Integer
 		 * @return Phone state as String resolved from Integer
 		 * @see #onCallStateChanged(int, String)
-		 * @see ax.ha.it.smsalarm.handler.LogHandler#logCat(LogPriorities, String , String) logCat(LogPriorities, String , String)
-		 * @see ax.ha.it.smsalarm.handler.LogHandler#logCatTxt(LogPriorities, String , String) logCatTxt(LogPriorities, String , String)
+		 * @see LogHandler#logCat(LogPriorities, String , String)
+		 * @see LogHandler#logCatTxt(LogPriorities, String , String)
 		 */
 		String stateName(int state) {
 			// Switch through the different phone states
@@ -485,11 +475,11 @@ public class AcknowledgeHandler extends Activity {
 		 * @param currentState
 		 *            Phone state to be stored as the current phone state
 		 * @see #onCallStateChanged(int, String)
-		 * @see ax.ha.it.smsalarm.handler.LogHandler#logCat(LogPriorities, String , String) logCat(LogPriorities, String , String)
+		 * @see LogHandler#logCat(LogPriorities, String , String)
 		 */
 		void swapStates(int currentState) {
-			// Logging
 			logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":ListenToPhoneState().swapStates()", "Swapping phone states");
+
 			// Swap phone states
 			prePhoneState = phoneState;
 			phoneState = currentState;

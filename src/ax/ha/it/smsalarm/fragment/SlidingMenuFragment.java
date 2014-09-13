@@ -3,6 +3,7 @@
  */
 package ax.ha.it.smsalarm.fragment;
 
+import android.annotation.SuppressLint;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
@@ -41,6 +42,7 @@ public class SlidingMenuFragment extends SherlockListFragment {
 	 * @param container
 	 * @param savedInstanceState
 	 */
+	@SuppressLint("InflateParams")
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 		logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":onCreateView()", "Layout for this fragment is about to be inflated and returned");
@@ -105,6 +107,7 @@ public class SlidingMenuFragment extends SherlockListFragment {
 				fragment = new SoundSettingsFragment(getActivity());
 				break;
 			case (104):
+				fragment = new AcknowledgeSettingsFragment(getActivity());
 				break;
 			case (105):
 				break;

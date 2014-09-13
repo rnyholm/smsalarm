@@ -10,7 +10,7 @@ import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
-import ax.ha.it.smsalarm.handler.AcknowledgeHandler;
+import ax.ha.it.smsalarm.activity.Acknowledge;
 import ax.ha.it.smsalarm.handler.LogHandler;
 import ax.ha.it.smsalarm.handler.PreferencesHandler;
 import ax.ha.it.smsalarm.handler.LogHandler.LogPriorities;
@@ -96,7 +96,7 @@ public class AcknowledgeNotificationHelper extends IntentService {
 		logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":onHandleIntent()", "Shared preferences retrieved");
 
 		// Set intent to AcknowledgeHandler
-		Intent notificationIntent = new Intent(this, AcknowledgeHandler.class);
+		Intent notificationIntent = new Intent(this, Acknowledge.class);
 		logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":onHandleIntent()", "Intent has been set");
 
 		// Setup a notification, directly from android development site
