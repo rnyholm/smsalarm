@@ -20,8 +20,8 @@ import com.google.common.base.Optional;
  * @see SlidingMenuAdapter
  */
 public class SlidingMenuItem {
-	// Logging information
 	private String LOG_TAG = getClass().getSimpleName();
+
 	private LogHandler logger = LogHandler.getInstance();
 
 	private int id = -1;
@@ -29,8 +29,8 @@ public class SlidingMenuItem {
 	private Optional<Integer> optionalIconResource;
 
 	/**
-	 * To create a new menu item with just a title, this means this menu items icon resource will be
-	 * absent. This menu item will also get a id of <b>-1</b>.
+	 * To create a new menu item with just a title, this means this menu items icon resource will be absent. This menu item will also get a id of
+	 * <b>-1</b>.
 	 * 
 	 * @param title
 	 *            Title of this menu item.
@@ -56,7 +56,7 @@ public class SlidingMenuItem {
 		this.title = title;
 		this.optionalIconResource = Optional.fromNullable(iconResource);
 
-		// Set correct logmessage
+		// Set correct log message
 		if (this.optionalIconResource.isPresent()) {
 			logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":SlidingMenuItem()", "A new menu item has been created with id: \"" + this.id + "\", title: \"" + this.title + "\" and optional icon resource: \"" + Integer.toString(this.optionalIconResource.get()) + "\"");
 		} else {
@@ -96,5 +96,10 @@ public class SlidingMenuItem {
 			logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":getIconResource()", "An absent icon resource will be returned");
 		}
 		return optionalIconResource;
+	}
+
+	@Override
+	public String toString() {
+		return "SlidingMenuItem [id=" + id + ", title=" + title + ", optionalIconResource=" + (optionalIconResource.isPresent() ? Integer.toString(optionalIconResource.get()) : "icon absent") + "]";
 	}
 }

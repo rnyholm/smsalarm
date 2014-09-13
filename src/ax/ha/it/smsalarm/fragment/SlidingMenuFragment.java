@@ -19,7 +19,7 @@ import ax.ha.it.smsalarm.slidingmenu.model.SlidingMenuItem;
 import com.actionbarsherlock.app.SherlockListFragment;
 
 /**
- * Class representing a <code>SherlockListFragment</code>, or simply said, a fragmet. This fragment is used in this applications
+ * Class representing a <code>SherlockListFragment</code>, or simply said, a fragment. This fragment is used in this applications
  * <code>SlidingMenu</code>.
  * 
  * @author Robert Nyholm <robert.nyholm@aland.net>
@@ -29,7 +29,7 @@ import com.actionbarsherlock.app.SherlockListFragment;
  * @see SlidingMenuAdapter
  */
 public class SlidingMenuFragment extends SherlockListFragment {
-	// Logging information
+	// For logging
 	private String LOG_TAG = getClass().getSimpleName();
 	private LogHandler logger = LogHandler.getInstance();
 
@@ -88,71 +88,57 @@ public class SlidingMenuFragment extends SherlockListFragment {
 
 	@Override
 	public void onListItemClick(ListView lv, View v, int position, long id) {
-		// TODO: Refactor this method
-		Fragment newContent = null;
-
+		Fragment fragment = null;
 		SlidingMenuItem menuItem = (SlidingMenuItem) getListView().getItemAtPosition(position);
 
+		logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":onListItemClick()", menuItem.toString() + " clicked");
+
+		// Resolve correct fragment by going through their unique ID's
 		switch (menuItem.getId()) {
 			case (101):
-				newContent = new SmsSettingsFragment(getActivity());
+				fragment = new SmsSettingsFragment(getActivity());
 				break;
 			case (102):
-				newContent = new FreeTextSettingsFragment(getActivity());
+				fragment = new FreeTextSettingsFragment(getActivity());
 				break;
 			case (103):
-
+				fragment = new SoundSettingsFragment(getActivity());
 				break;
 			case (104):
-
 				break;
 			case (105):
-
 				break;
 			case (201):
-
 				break;
 			case (202):
-
 				break;
 			default:
+				logger.logCatTxt(LogPriorities.WARN, LOG_TAG + ":onListItemClick()", "Unable to resolve a Fragment for given menu item id: \"" + Integer.toString(menuItem.getId()) + "\", check if implementation exist for menu item");
 				break;
 		}
 
-		if (newContent != null) {
-			switchFragment(newContent);
+		// Switch fragment, if it was possible to resolve a fragment
+		if (fragment != null) {
+			switchFragment(fragment);
 		}
-
-//		switch (position) {
-//			case 0:
-//				newContent = new ColorFragment(R.color.red);
-//				break;
-//			case 1:
-//				newContent = new ColorFragment(R.color.green);
-//				break;
-//			case 2:
-//				newContent = new ColorFragment(R.color.blue);
-//				break;
-//			case 3:
-//				newContent = new ColorFragment(android.R.color.white);
-//				break;
-//			case 4:
-//				newContent = new ColorFragment(android.R.color.black);
-//				break;
-//		}
-//		if (newContent != null)
-//			switchFragment(newContent);
 	}
 
-	// the meat of switching the above fragment
+	/**
+	 * To switch <code>Fragment</code> of <code>Activity SmsAlarm</code>.<br>
+	 * 
+	 * @param fragment
+	 *            Fragment to be placed "in front" by {@link SmsAlarm#switchContent(Fragment)}.
+	 * @see SmsAlarm#switchContent(Fragment)
+	 * @see LogHandler#logCat(LogPriorities, String, String)
+	 * @see LogHandler#logCatTxt(LogPriorities, String, String)
+	 */
 	private void switchFragment(Fragment fragment) {
-		if (getActivity() == null) {
-			return;
-		}
+		logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":switchFragment()", "Fragment is about to be switched");
 
 		if (getActivity() instanceof SmsAlarm) {
-			SmsAlarm sa = (SmsAlarm) getActivity();
-			sa.switchContent(fragment);
+			((SmsAlarm) getActivity()).switchContent(fragment);
+		} else {
+			logger.logCatTxt(LogPriorities.ERROR, LOG_TAG + ":switchFragment()", "Unable to switch fragment. Reason: \"Activity of wrong instance\". Accepted instance is: \"SmsAlarm.class\", found instance is:\"" + getActivity().getLocalClassName() + "\"");
 		}
 	}
 }

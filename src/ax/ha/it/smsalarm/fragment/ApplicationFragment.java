@@ -17,10 +17,12 @@ import ax.ha.it.smsalarm.handler.LogHandler.LogPriorities;
 public interface ApplicationFragment {
 
 	/**
-	 * To find UI widgets and get their reference by ID contained in view of the <code>Fragment</code>.
+	 * To find UI widgets and get their reference by ID contained in view of the <code>Fragment</code>.<br>
+	 * If some other attributes or special handling has to be done to some UI widgets it's also done within this method.
 	 * 
 	 * @param view
 	 *            <code>View</code> from witch UI widgets will be found.
+	 * @see LogHandler#logCat(LogPriorities, String, String)
 	 */
 	void findViews(View view);
 

@@ -55,7 +55,7 @@ public class NoiseHandler {
 	private NoiseHandler() {
 		// Get instance of logger
 		logger = LogHandler.getInstance();
-		// Get instance of kitkathandler
+		// Get instance of kitkat handler
 		kitKatHandler = KitKatHandler.getInstance();
 
 		// Log information

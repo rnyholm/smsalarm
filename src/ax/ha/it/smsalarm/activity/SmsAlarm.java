@@ -31,7 +31,6 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.RelativeLayout.LayoutParams;
-import android.widget.Spinner;
 import android.widget.TextView;
 import ax.ha.it.smsalarm.R;
 import ax.ha.it.smsalarm.WidgetProvider;
@@ -41,7 +40,6 @@ import ax.ha.it.smsalarm.fragment.SmsSettingsFragment;
 import ax.ha.it.smsalarm.handler.DatabaseHandler;
 import ax.ha.it.smsalarm.handler.LogHandler;
 import ax.ha.it.smsalarm.handler.LogHandler.LogPriorities;
-import ax.ha.it.smsalarm.handler.NoiseHandler;
 import ax.ha.it.smsalarm.handler.PreferencesHandler;
 import ax.ha.it.smsalarm.handler.PreferencesHandler.DataTypes;
 import ax.ha.it.smsalarm.handler.PreferencesHandler.PrefKeys;
@@ -69,7 +67,6 @@ public class SmsAlarm extends SlidingFragmentActivity {
 	// Objects needed for logging, shared preferences and noise handling
 	private final LogHandler logger = LogHandler.getInstance();
 	private static final PreferencesHandler prefHandler = PreferencesHandler.getInstance();
-	private final NoiseHandler noiseHandler = NoiseHandler.getInstance();
 
 	// Object to handle database access and methods
 	private DatabaseHandler db;
@@ -80,20 +77,15 @@ public class SmsAlarm extends SlidingFragmentActivity {
 
 	// Variables of different UI elements and types
 	// The EdittextObjects
-	private EditText selectedToneEditText;
 	private EditText ackNumberEditText;
 	private EditText rescueServiceEditText;
 
 	// The Button objects
-	private Button editMsgToneButton;
-	private Button listenMsgToneButton;
 	private Button ackNumberButton;
 	private Button editRescueServiceButton;
 
 	// The CheckBox objects
-	private CheckBox soundSettingCheckBox;
 	private CheckBox enableAckCheckBox;
-	private CheckBox playToneTwiceSettingCheckBox;
 	private CheckBox enableSmsAlarmCheckBox;
 
 	// The ImageView objects
@@ -102,12 +94,7 @@ public class SmsAlarm extends SlidingFragmentActivity {
 	private ImageView divider3ImageView;
 	private ImageView divider4ImageView;
 
-	// The Spinner objects
-	private Spinner toneSpinner;
-
 	// The textView objects
-	private TextView soundSettingInfoTextView;
-	private TextView playToneTwiceInfoTextView;
 	private TextView enableSmsAlarmInfoTextView;
 	private TextView enableAckInfoTextView;
 
@@ -117,19 +104,10 @@ public class SmsAlarm extends SlidingFragmentActivity {
 	// String to store firedepartments name in
 	private String rescueService = "";
 
-	// Integer to store which tone id to be used
-	private int primaryMessageToneId = 0;
-	private int secondaryMessageToneId = 1;
-
 	// Boolean variables to store whether to use OS soundsettings or not, and if acknowledge is
 	// enabled
-	private boolean useOsSoundSettings = false;
 	private boolean useAlarmAcknowledge = false;
-	private boolean playToneTwice = false;
 	private boolean enableSmsAlarm = true;
-
-	// Integer holding spinners positions
-	private int toneSpinnerPos = 0;
 
 	/**
 	 * When activity starts, this method is the entry point. The User Interface is built up and different <code>Listeners</code> are set within this
@@ -174,7 +152,7 @@ public class SmsAlarm extends SlidingFragmentActivity {
 		// Set correct content to content frame
 		getSupportFragmentManager().beginTransaction().replace(R.id.contentFrame_fl, content).commit();
 
-		// Configurate the sliding menu
+		// Configure the sliding menu
 		configureSlidingMenu();
 
 		// Configure action bar
@@ -219,63 +197,11 @@ public class SmsAlarm extends SlidingFragmentActivity {
 //			}
 //		});
 //
-//		// Set listener to editMsgToneButton
-//		editMsgToneButton.setOnClickListener(new OnClickListener() {
-//			@Override
-//			public void onClick(View v) {
-//				// Logging
-//				logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":onCreate().editMsgToneButton.OnClickListener().onClick()", "Edit message tone button pressed");
-//				// Build up and Show alert dialog(prompt for message tone)
-//				buildAndShowToneDialog();
-//			}
-//		});
+
 //
-//		// Set listener to listenMsgToneButton
-//		listenMsgToneButton.setOnClickListener(new OnClickListener() {
-//			@Override
-//			public void onClick(View v) {
-//				// Play the correct tone and vibrate, depending on spinner value
-//				if (toneSpinnerPos == 0) {
-//					// Logging
-//					logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":onCreate().listenMsgToneButton.OnClickListener().onClick()", "Listen message tone button pressed. Message tone for PRIMARY alarm will be played");
-//					// Play message tone and vibrate
-//					noiseHandler.makeNoise(SmsAlarm.this, primaryMessageToneId, useOsSoundSettings, false);
-//				} else if (toneSpinnerPos == 1) {
-//					logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":onCreate().listenMsgToneButton.OnClickListener().onClick()", "Listen message tone button pressed. Message tone for SECONDARY alarm will be played");
-//					noiseHandler.makeNoise(SmsAlarm.this, secondaryMessageToneId, useOsSoundSettings, false);
-//				} else {
-//					// DO NOTHING EXCEPT LOG ERROR MESSAGE
-//					logger.logCatTxt(LogPriorities.ERROR, LOG_TAG + ":onCreate().listenMsgToneButton.OnClickListener().onClick()", "Invalid spinner position occurred. Current tone spinner position is: \"" + Integer.toString(toneSpinnerPos) + "\"");
-//				}
-//			}
-//		});
+
 //
-//		// Set listener to soundSettingCheckBox
-//		soundSettingCheckBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-//			@Override
-//			public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-//				// Log that CheckBox been pressed
-//				logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":onCreate().soundSettingCheckBox.onCheckedChange()", "Use OS sound settings checkbox pressed(or checkbox initialized)");
-//
-//				// Set checkbox depending on it's checked status and store variable
-//				if (soundSettingCheckBox.isChecked()) {
-//					// Store value to variable
-//					useOsSoundSettings = true;
-//					// logging
-//					logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":onCreate().soundSettingCheckBox.onCheckedChange()", "Use OS sound settings checkbox \"Checked\"(" + useOsSoundSettings + ")");
-//				} else {
-//					useOsSoundSettings = false;
-//					logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":onCreate().soundSettingCheckBox.onCheckedChange()", "Use OS sound settings checkbox \"Unchecked\"(" + useOsSoundSettings + ")");
-//				}
-//
-//				try {
-//					// Store value to shared preferences
-//					prefHandler.setPrefs(PrefKeys.SHARED_PREF, PrefKeys.USE_OS_SOUND_SETTINGS_KEY, useOsSoundSettings, SmsAlarm.this);
-//				} catch (IllegalArgumentException e) {
-//					logger.logCatTxt(LogPriorities.ERROR, LOG_TAG + ":onCreate().soundSettingCheckBox.onCheckedChange()", "An Object of unsupported instance was given as argument to PreferencesHandler.setPrefs()", e);
-//				}
-//			}
-//		});
+
 //
 //		// Set listener to enableAckCheckBox
 //		enableAckCheckBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
@@ -307,32 +233,7 @@ public class SmsAlarm extends SlidingFragmentActivity {
 //			}
 //		});
 //
-//		// Set listener to playToneTwiceSettingCheckBox
-//		playToneTwiceSettingCheckBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-//			@Override
-//			public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-//				// Log that CheckBox been pressed
-//				logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":onCreate().playToneTwiceSettingCheckBox.onCheckedChange()", "Play tone twice checkbox pressed(or checkbox initialized)");
-//
-//				// Set checkbox depending on it's checked status and store variable
-//				if (playToneTwiceSettingCheckBox.isChecked()) {
-//					// Store value to variable
-//					playToneTwice = true;
-//					// Logging
-//					logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":onCreate().playToneTwiceSettingCheckBox.onCheckedChange()", "Play tone twice checkbox \"Checked\"(" + playToneTwice + ")");
-//				} else {
-//					playToneTwice = false;
-//					logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":onCreate().playToneTwiceSettingCheckBox.onCheckedChange()", "Play tone twice checkbox \"Unhecked\"(" + playToneTwice + ")");
-//				}
-//
-//				try {
-//					// Store value to shared preferences
-//					prefHandler.setPrefs(PrefKeys.SHARED_PREF, PrefKeys.PLAY_TONE_TWICE_KEY, playToneTwice, SmsAlarm.this);
-//				} catch (IllegalArgumentException e) {
-//					logger.logCatTxt(LogPriorities.ERROR, LOG_TAG + ":onCreate().playToneTwiceSettingCheckBox.onCheckedChange()", "An Object of unsupported instance was given as argument to PreferencesHandler.setPrefs()", e);
-//				}
-//			}
-//		});
+
 //
 //		// Set listener to enableSmsAlarmCheckBox
 //		enableSmsAlarmCheckBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
@@ -361,23 +262,7 @@ public class SmsAlarm extends SlidingFragmentActivity {
 //			}
 //		});
 //
-//		// Set listener to tone spinner
-//		toneSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-//			@Override
-//			public void onItemSelected(AdapterView<?> parent, View view, int pos, long id) {
-//				// Store tone spinners position
-//				toneSpinnerPos = toneSpinner.getSelectedItemPosition();
-//				// Logging
-//				logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":onCreate().toneSpinner.OnItemSelectedListener().onItemSelected()", "Item in tone spinner pressed(or spinner initialized)");
-//				// Update selected tone EditText widget
-//				updateSelectedToneEditText();
-//			}
-//
-//			@Override
-//			public void onNothingSelected(AdapterView<?> arg0) {
-//				// DO NOTHING!
-//			}
-//		});
+
 //
 //		// Update all UI widgets
 //		updateWholeUI();
@@ -552,28 +437,18 @@ public class SmsAlarm extends SlidingFragmentActivity {
 		logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":findViews()", "Start finding Views by their ID");
 
 		// Declare and initialize variables of type EditText
-		selectedToneEditText = (EditText) findViewById(R.id.msgTone_et);
 		ackNumberEditText = (EditText) findViewById(R.id.ackNumber_et);
 		rescueServiceEditText = (EditText) findViewById(R.id.rescueServiceName_et);
 
 		// Declare and initialize variables of type button
-		editMsgToneButton = (Button) findViewById(R.id.editMsgTone_btn);
-		listenMsgToneButton = (Button) findViewById(R.id.listenMsgTone_btn);
 		ackNumberButton = (Button) findViewById(R.id.editAckNumber_btn);
 		editRescueServiceButton = (Button) findViewById(R.id.editRescueServiceName_btn);
 
 		// Declare and initialize variables of type CheckBox
-		soundSettingCheckBox = (CheckBox) findViewById(R.id.useSysSoundSettings_chk);
 		enableAckCheckBox = (CheckBox) findViewById(R.id.enableAcknowledge_chk);
-		playToneTwiceSettingCheckBox = (CheckBox) findViewById(R.id.playToneTwiceSetting_chk);
 		enableSmsAlarmCheckBox = (CheckBox) findViewById(R.id.enableSmsAlarm_chk);
 
-		// Declare and initialize variables of type Spinner
-		toneSpinner = (Spinner) findViewById(R.id.toneSpinner_sp);
-
 		// Declare and initialize variables of type TextView
-		soundSettingInfoTextView = (TextView) findViewById(R.id.useSysSoundSettingsHint_tv);
-		playToneTwiceInfoTextView = (TextView) findViewById(R.id.playToneTwiceSettingHint_tv);
 		enableSmsAlarmInfoTextView = (TextView) findViewById(R.id.enableSmsAlarmHint_tv);
 		enableAckInfoTextView = (TextView) findViewById(R.id.enableAcknowledgeHint_tv);
 
@@ -602,19 +477,10 @@ public class SmsAlarm extends SlidingFragmentActivity {
 
 			// Set layout parameters for the sound settings info textview
 			// Wrap content, both on height and width
-			RelativeLayout.LayoutParams paramsSoundSettingInfoTextView = new RelativeLayout.LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
-			// Margins left, top, right, bottom
-			paramsSoundSettingInfoTextView.setMargins(pixelsLeft, pixelsTop, pixelsRight, 0);
-			// Add rule, below UI widget
-			paramsSoundSettingInfoTextView.addRule(RelativeLayout.BELOW, soundSettingCheckBox.getId());
-			// Add rule, align left of UI widget
-			paramsSoundSettingInfoTextView.addRule(RelativeLayout.ALIGN_LEFT, soundSettingCheckBox.getId());
 
 			// Set layout parameters for the play tone twice textview
 			RelativeLayout.LayoutParams paramsPlayToneTwiceInfoTextView = new RelativeLayout.LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
 			paramsPlayToneTwiceInfoTextView.setMargins(pixelsLeft, pixelsTop, pixelsRight, 0);
-			paramsPlayToneTwiceInfoTextView.addRule(RelativeLayout.BELOW, playToneTwiceSettingCheckBox.getId());
-			paramsPlayToneTwiceInfoTextView.addRule(RelativeLayout.ALIGN_LEFT, playToneTwiceSettingCheckBox.getId());
 
 			// Set layout parameters for the enable ack info textview
 			RelativeLayout.LayoutParams paramsEnableAckInfoTextView = new RelativeLayout.LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
@@ -630,8 +496,6 @@ public class SmsAlarm extends SlidingFragmentActivity {
 
 			// Apply the previously configured layout parameters to the correct
 			// textviews
-			soundSettingInfoTextView.setLayoutParams(paramsSoundSettingInfoTextView);
-			playToneTwiceInfoTextView.setLayoutParams(paramsPlayToneTwiceInfoTextView);
 			enableAckInfoTextView.setLayoutParams(paramsEnableAckInfoTextView);
 			enableSmsAlarmInfoTextView.setLayoutParams(paramsEnableSmsAlarmInfoTextView);
 
@@ -655,20 +519,6 @@ public class SmsAlarm extends SlidingFragmentActivity {
 
 				// Set layout parameters for the sound settings info textview
 				// Wrap content, both on height and width
-				RelativeLayout.LayoutParams paramsSoundSettingInfoTextView = new RelativeLayout.LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
-				// Margins left, top, right, bottom
-				paramsSoundSettingInfoTextView.setMargins(pixelsLeft, pixelsTop, pixelsRight, 0);
-				// Add rule, below UI widget
-				paramsSoundSettingInfoTextView.addRule(RelativeLayout.BELOW, soundSettingCheckBox.getId());
-				// Add rule, align left of UI widget
-				paramsSoundSettingInfoTextView.addRule(RelativeLayout.ALIGN_LEFT, soundSettingCheckBox.getId());
-
-				// Set layout parameters for the play tone twice textview
-				RelativeLayout.LayoutParams paramsPlayToneTwiceInfoTextView = new RelativeLayout.LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
-				paramsPlayToneTwiceInfoTextView.setMargins(pixelsLeft, pixelsTop, pixelsRight, 0);
-				paramsPlayToneTwiceInfoTextView.addRule(RelativeLayout.BELOW, playToneTwiceSettingCheckBox.getId());
-				paramsPlayToneTwiceInfoTextView.addRule(RelativeLayout.ALIGN_LEFT, playToneTwiceSettingCheckBox.getId());
-
 				// Set layout parameters for the enable ack info textview
 				RelativeLayout.LayoutParams paramsEnableAckInfoTextView = new RelativeLayout.LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
 				paramsEnableAckInfoTextView.setMargins(pixelsLeft, pixelsTop, pixelsRight, 0);
@@ -683,8 +533,6 @@ public class SmsAlarm extends SlidingFragmentActivity {
 
 				// Apply the previously configured layout parameters to the correct
 				// textviews
-				soundSettingInfoTextView.setLayoutParams(paramsSoundSettingInfoTextView);
-				playToneTwiceInfoTextView.setLayoutParams(paramsPlayToneTwiceInfoTextView);
 				enableAckInfoTextView.setLayoutParams(paramsEnableAckInfoTextView);
 				enableSmsAlarmInfoTextView.setLayoutParams(paramsEnableSmsAlarmInfoTextView);
 
@@ -728,13 +576,6 @@ public class SmsAlarm extends SlidingFragmentActivity {
 		rescueServiceEditText.setBackgroundColor(Color.WHITE);
 		rescueServiceEditText.setTextColor(Color.BLACK);
 
-		// Set some attributes to the selectedToneEditText
-		selectedToneEditText.setEnabled(false);
-		selectedToneEditText.setClickable(false);
-		selectedToneEditText.setFocusable(false);
-		selectedToneEditText.setBackgroundColor(Color.WHITE);
-		selectedToneEditText.setTextColor(Color.BLACK);
-
 		// Logging
 		logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":findViews()", "All Views found");
 	}
@@ -758,12 +599,8 @@ public class SmsAlarm extends SlidingFragmentActivity {
 
 		try {
 			// Get shared preferences needed by class Sms Alarm
-			primaryMessageToneId = (Integer) prefHandler.getPrefs(PrefKeys.SHARED_PREF, PrefKeys.PRIMARY_MESSAGE_TONE_KEY, DataTypes.INTEGER, this);
-			secondaryMessageToneId = (Integer) prefHandler.getPrefs(PrefKeys.SHARED_PREF, PrefKeys.SECONDARY_MESSAGE_TONE_KEY, DataTypes.INTEGER, this, 1);
-			useOsSoundSettings = (Boolean) prefHandler.getPrefs(PrefKeys.SHARED_PREF, PrefKeys.USE_OS_SOUND_SETTINGS_KEY, DataTypes.BOOLEAN, this);
 			useAlarmAcknowledge = (Boolean) prefHandler.getPrefs(PrefKeys.SHARED_PREF, PrefKeys.ENABLE_ACK_KEY, DataTypes.BOOLEAN, this);
 			acknowledgeNumber = (String) prefHandler.getPrefs(PrefKeys.SHARED_PREF, PrefKeys.ACK_NUMBER_KEY, DataTypes.STRING, this);
-			playToneTwice = (Boolean) prefHandler.getPrefs(PrefKeys.SHARED_PREF, PrefKeys.PLAY_TONE_TWICE_KEY, DataTypes.BOOLEAN, this);
 			enableSmsAlarm = (Boolean) prefHandler.getPrefs(PrefKeys.SHARED_PREF, PrefKeys.ENABLE_SMS_ALARM_KEY, DataTypes.BOOLEAN, this, true);
 			rescueService = (String) prefHandler.getPrefs(PrefKeys.SHARED_PREF, PrefKeys.RESCUE_SERVICE_KEY, DataTypes.STRING, this);
 		} catch (IllegalArgumentException e) {
@@ -931,86 +768,6 @@ public class SmsAlarm extends SlidingFragmentActivity {
 	}
 
 	/**
-	 * To build up and show a dialog with a list populated with message tones. User chooses applications message tones from that list.
-	 * 
-	 * @see #buildAndShowInputDialog(DialogTypes)
-	 * @see #buildAndShowAboutDialog()
-	 * @see #updateSelectedToneEditText()
-	 * @see ax.ha.it.smsalarm.handler.LogHandler#logCat(LogPriorities, String, String) logCat(LogPriorities, String, String)
-	 * @see ax.ha.it.smsalarm.handler.LogHandler#logCatTxt(LogPriorities, String, String) logCatTxt(LogPriorities, String, String)
-	 * @see ax.ha.it.smsalarm.handler.LogHandler#logCatTxt(LogPriorities, String, String, Throwable) logCatTxt(LogPriorities, String, String,
-	 *      Throwable)
-	 * @see ax.ha.it.smsalarm.handler.PreferencesHandler#setPrefs(PrefKeys, PrefKeys, Object, Context) setPrefs(PrefKeys, PrefKeys, Object, Context)
-	 */
-	private void buildAndShowToneDialog() {
-		// Logging
-		logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":buildAndShowToneDialog()", "Start building tone dialog");
-
-		// Build up the alert dialog
-		AlertDialog.Builder dialog = new AlertDialog.Builder(this);
-
-		// Set attributes
-		dialog.setIcon(android.R.drawable.ic_dialog_info);
-		dialog.setTitle(R.string.TONE_PROMPT_TITLE);
-		dialog.setCancelable(false);
-
-		// Logging
-		logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":buildAndShowToneDialog()", "Dialog attributes set");
-
-		// Set items to list view from resource array tones
-		dialog.setItems(R.array.tones, new DialogInterface.OnClickListener() {
-			@Override
-			public void onClick(DialogInterface arg0, int listPosition) {
-				// Log information
-				logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":buildAndShowToneDialog().Item.OnClickListener().onClick()", "Item in message tones list pressed");
-
-				// Store position(toneId) in correct variable, depending on spinner value
-				if (toneSpinnerPos == 0) { // <--PRIMARY MESSAGE TONE
-					// Store primary message tone id from position of list
-					primaryMessageToneId = listPosition;
-					// Log information
-					logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":buildAndShowToneDialog().Item.OnClickListener().onClick()", "New PRIMARY message tone selected. Tone: \"" + noiseHandler.msgToneLookup(SmsAlarm.this, primaryMessageToneId) + "\", id: \"" + primaryMessageToneId + "\" and tone spinner position: \"" + Integer.toString(toneSpinnerPos) + "\"");
-					try {
-						// Store primary message tone id to preferences to preferences
-						prefHandler.setPrefs(PrefKeys.SHARED_PREF, PrefKeys.PRIMARY_MESSAGE_TONE_KEY, primaryMessageToneId, SmsAlarm.this);
-					} catch (IllegalArgumentException e) {
-						logger.logCatTxt(LogPriorities.ERROR, LOG_TAG + ":buildAndShowToneDialog().Item.OnClickListener().onClick()", "An Object of unsupported instance was given as argument to PreferencesHandler.setPrefs()", e);
-					}
-					// Update selected tone EditText
-					updateSelectedToneEditText();
-				} else if (toneSpinnerPos == 1) { // <--SECONDARY MESSAGE TONE
-					secondaryMessageToneId = listPosition;
-					logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":buildAndShowToneDialog().Item.OnClickListener().onClick()", "New SECONDARY message tone selected. Tone: \"" + noiseHandler.msgToneLookup(SmsAlarm.this, secondaryMessageToneId) + "\", id: \"" + secondaryMessageToneId + "\" and tone Spinner position: \"" + Integer.toString(toneSpinnerPos) + "\"");
-					try {
-						prefHandler.setPrefs(PrefKeys.SHARED_PREF, PrefKeys.SECONDARY_MESSAGE_TONE_KEY, secondaryMessageToneId, SmsAlarm.this);
-					} catch (IllegalArgumentException e) {
-						logger.logCatTxt(LogPriorities.ERROR, LOG_TAG + ":buildAndShowToneDialog().Item.OnClickListener().onClick()", "An Object of unsupported instance was given as argument to PreferencesHandler.setPrefs()", e);
-					}
-					updateSelectedToneEditText();
-				} else { // <--UNSUPPORTED SPINNER POSITION
-					// DO NOTHING EXCEPT LOG ERROR MESSAGE
-					logger.logCatTxt(LogPriorities.ERROR, LOG_TAG + ":buildAndShowToneDialog().Item.OnClickListener().onClick()", "Invalid spinner position occurred. Current tone spinner position is: \"" + Integer.toString(toneSpinnerPos) + "\"");
-				}
-			}
-		});
-
-		// Set a neutral button and listener
-		dialog.setNeutralButton(R.string.CANCEL, new DialogInterface.OnClickListener() {
-			@Override
-			public void onClick(DialogInterface dialog, int whichButton) {
-				// DO NOTHING, except logging
-				logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":buildAndShowToneDialog().NeutralButton.OnClickListener().onClick()", "Neutral Button pressed in dialog, nothing done");
-			}
-		});
-
-		// Logging
-		logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":buildAndShowToneDialog()", "Showing dialog");
-
-		// Show dialog
-		dialog.show();
-	}
-
-	/**
 	 * To build up and show an about dialog.
 	 * 
 	 * @see #buildAndShowDeleteDialog()
@@ -1126,15 +883,6 @@ public class SmsAlarm extends SlidingFragmentActivity {
 		// Update rescue service EditText
 		updateRescueServiceEditText();
 
-		// Update selected EditText widget
-		updateSelectedToneEditText();
-
-		// Update use OS sound settings CheckBox widget
-		updateUseOsSoundSettingsCheckBox();
-
-		// Update play tone twice CheckBox widget
-		updatePlayToneTwiceCheckBox();
-
 		// Update enable Sms Alarm CheckBox widget
 		updateEnableSmsAlarmCheckBox();
 
@@ -1160,30 +908,6 @@ public class SmsAlarm extends SlidingFragmentActivity {
 	}
 
 	/**
-	 * To update selected tone <code>EditText</code> widget with value of <code>toneSpinner</code> position.
-	 * 
-	 * @see ax.ha.it.smsalarm.handler.LogHandler#logCat(LogPriorities, String, String) logCat(LogPriorities, String, String)
-	 * @see ax.ha.it.smsalarm.handler.LogHandler#logCatTxt(LogPriorities, String, String) logCatTxt(LogPriorities, String, String)
-	 */
-	private void updateSelectedToneEditText() {
-		// Log tone spinner position
-		logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":updateSelectedToneEditText()", "Tone spinner position is: " + Integer.toString(toneSpinnerPos));
-
-		// Set message tone to the selectedToneEditText, depending on which value spinner has. Also
-		// log this event
-		if (toneSpinnerPos == 0) {
-			selectedToneEditText.setText(noiseHandler.msgToneLookup(this, primaryMessageToneId));
-			logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":updateSelectedToneEditText()", "Selected tone edittext updated");
-		} else if (toneSpinnerPos == 1) {
-			selectedToneEditText.setText(noiseHandler.msgToneLookup(this, secondaryMessageToneId));
-			logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":updateSelectedToneEditText()", "Selected tone edittext updated");
-		} else {
-			// DO NOTHING EXCEPT LOG ERROR MESSAGE
-			logger.logCatTxt(LogPriorities.ERROR, LOG_TAG + ":updateSelectedToneEditText()", "Invalid spinner position occurred. Current tone spinner position is: \"" + Integer.toString(toneSpinnerPos) + "\"");
-		}
-	}
-
-	/**
 	 * To update rescue service <code>EditText</code> widget.
 	 * 
 	 * @see ax.ha.it.smsalarm#LogHandler.logCatTxt(int, String , String)
@@ -1195,42 +919,6 @@ public class SmsAlarm extends SlidingFragmentActivity {
 		// Logging
 		logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":updateRescueServiceEditText()", "Rescue service edittext set to: " + rescueService);
 		logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":updateRescueServiceEditText()", "Rescue service edittext updated");
-	}
-
-	/**
-	 * To update use OS sound settings <code>CheckBox</code> widget.
-	 * 
-	 * @see ax.ha.it.smsalarm.handler.LogHandler#logCat(LogPriorities, String, String) logCat(LogPriorities, String, String)
-	 */
-	private void updateUseOsSoundSettingsCheckBox() {
-		// Update use OS sound settings CheckBox
-		if (useOsSoundSettings) {
-			soundSettingCheckBox.setChecked(true);
-			logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":updateUseOsSoundSettingsCheckBox()", "Use OS sound settings checkbox \"Checked\"(" + useOsSoundSettings + ")");
-		} else {
-			logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":updateUseOsSoundSettingsCheckBox()", "Use OS sound settings checkbox \"Unchecked\"(" + useOsSoundSettings + ")");
-		}
-
-		// Logging
-		logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":updateUseOsSoundSettingsCheckBox()", "Use OS sound settings checkbox updated");
-	}
-
-	/**
-	 * To update play tone twice <code>CheckBox</code> widget.
-	 * 
-	 * @see ax.ha.it.smsalarm.handler.LogHandler#logCat(LogPriorities, String, String) logCat(LogPriorities, String, String)
-	 */
-	private void updatePlayToneTwiceCheckBox() {
-		// Update play tone twice CheckBox
-		if (playToneTwice) {
-			playToneTwiceSettingCheckBox.setChecked(true);
-			logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":updatePlayToneTwiceCheckBox()", "Play tone twice checkbox \"Checked\"(" + playToneTwice + ")");
-		} else {
-			logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":updatePlayToneTwiceCheckBox()", "Play tone twice checkbox \"Unchecked\"(" + playToneTwice + ")");
-		}
-
-		// Logging
-		logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":updatePlayToneTwiceCheckBox()", "Play tone twice checkbox updated");
 	}
 
 	/**

@@ -243,7 +243,7 @@
             android:layout_marginRight="5dp" />
 
         <TextView
-            android:id="@+id/msgToneTitle_tv"
+            android:id="@+id/alarmSignalTitle_tv"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignLeft="@+id/toneSpinner_sp"
@@ -253,41 +253,41 @@
             android:textAppearance="?android:attr/textAppearanceMedium" />
 
         <EditText
-            android:id="@+id/msgTone_et"
+            android:id="@+id/alarmSignal_et"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignLeft="@id/msgToneTitle_tv"
+            android:layout_alignLeft="@id/alarmSignalTitle_tv"
             android:layout_alignRight="@id/soundSettingsInfo_tv"
-            android:layout_below="@id/msgToneTitle_tv"
+            android:layout_below="@id/alarmSignalTitle_tv"
             android:ems="10"
             android:inputType="text"
             android:singleLine="true" />
 
         <Button
-            android:id="@+id/editMsgTone_btn"
+            android:id="@+id/editAlarmSignal_btn"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignLeft="@+id/msgTone_et"
-            android:layout_below="@+id/msgTone_et"
+            android:layout_alignLeft="@+id/alarmSignal_et"
+            android:layout_below="@+id/alarmSignal_et"
             android:layout_marginTop="2dp"
             android:text="@string/EDIT_ALARM_SIGNAL" />
 
         <Button
-            android:id="@+id/listenMsgTone_btn"
+            android:id="@+id/listenAlarmSignal_btn"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/msgTone_et"
+            android:layout_below="@+id/alarmSignal_et"
             android:layout_marginRight="3dp"
             android:layout_marginTop="2dp"
-            android:layout_toRightOf="@id/editMsgTone_btn"
+            android:layout_toRightOf="@id/editAlarmSignal_btn"
             android:text="@string/LISTEN_ALARM_SIGNAL" />
 
         <CheckBox
             android:id="@+id/useSysSoundSettings_chk"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignLeft="@id/editMsgTone_btn"
-            android:layout_below="@id/listenMsgTone_btn"
+            android:layout_alignLeft="@id/editAlarmSignal_btn"
+            android:layout_below="@id/listenAlarmSignal_btn"
             android:layout_marginRight="5dp"
             android:text="@string/TITLE_USE_OS_SOUND_SETTINGS" />
 
@@ -304,7 +304,7 @@
             android:textAppearance="?android:attr/textAppearanceSmall" />
 
         <CheckBox
-            android:id="@+id/playToneTwiceSetting_chk"
+            android:id="@+id/playAlarmSignalTwiceSetting_chk"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignLeft="@+id/useSysSoundSettings_chk"
@@ -313,11 +313,11 @@
             android:text="@string/TITLE_PLAY_TONE_TWICE_SETTING" />
 
         <TextView
-            android:id="@+id/playToneTwiceSettingHint_tv"
+            android:id="@+id/playAlarmSignalTwiceSettingHint_tv"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignLeft="@+id/playToneTwiceSetting_chk"
-            android:layout_below="@+id/playToneTwiceSetting_chk"
+            android:layout_alignLeft="@+id/playAlarmSignalTwiceSetting_chk"
+            android:layout_below="@+id/playAlarmSignalTwiceSetting_chk"
             android:layout_marginLeft="38dp"
             android:layout_marginRight="5dp"
             android:layout_marginTop="-6dp"
@@ -330,7 +330,7 @@
             android:layout_height="1dp"
             android:layout_alignLeft="@id/mainDivider1_iv"
             android:layout_alignRight="@+id/mainDivider1_iv"
-            android:layout_below="@id/playToneTwiceSettingHint_tv"
+            android:layout_below="@id/playAlarmSignalTwiceSettingHint_tv"
             android:layout_marginTop="7dp"
             android:contentDescription="@string/DIVIDER_DESCR"
             android:src="@drawable/gradient_divider_11_and_up" />
