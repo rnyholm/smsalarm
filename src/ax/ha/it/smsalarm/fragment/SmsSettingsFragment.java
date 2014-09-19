@@ -47,7 +47,7 @@ public class SmsSettingsFragment extends SherlockFragment implements Application
 	private final PreferencesHandler prefHandler = PreferencesHandler.getInstance();
 
 	// Must have the application context
-	private final Context context;
+	private Context context;
 
 	// The Buttons...
 	private Button addPrimarySmsNumberButton;
@@ -62,18 +62,26 @@ public class SmsSettingsFragment extends SherlockFragment implements Application
 	// List of strings containing primary- and secondary sms numbers
 	private List<String> primarySmsNumbers = new ArrayList<String>();
 	private List<String> secondarySmsNumbers = new ArrayList<String>();
-	private final List<String> emptySmsNumbers = new ArrayList<String>(); // <-- A "dummy" list just containing one element, one string
+	private final List<String> emptySmsNumbers = new ArrayList<String>(); // A "dummy" list just containing one element, one string
 
 	/**
-	 * To create a new <code>SmsSettingsFragment</code> with given context.
+	 * To create a new <code>SmsSettingsFragment</code>.
 	 * 
 	 * @param context
 	 *            Context
 	 * @see LogHandler#logCat(LogPriorities, String, String)
 	 */
-	public SmsSettingsFragment(Context context) {
-		logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":SmsSettingsFragment()", "Creating a new Sms settings fragment with given context:  \"" + context + "\"");
-		this.context = context;
+	public SmsSettingsFragment() {
+		logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":SmsSettingsFragment()", "Creating a new Sms settings fragment");
+	}
+
+	@Override
+	public void onCreate(Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
+		logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":onCreate()", "Setting Context to fragment");
+
+		// Set context here, it's safe because this fragment has been attached to its container, hence we have access to context
+		context = getActivity();
 	}
 
 	@Override

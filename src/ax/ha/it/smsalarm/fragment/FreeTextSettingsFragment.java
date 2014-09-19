@@ -47,7 +47,7 @@ public class FreeTextSettingsFragment extends SherlockFragment implements Applic
 	private final PreferencesHandler prefHandler = PreferencesHandler.getInstance();
 
 	// Must have the application context
-	private final Context context;
+	private Context context;
 
 	// The Buttons...
 	private Button addPrimaryFreeTextButton;
@@ -65,15 +65,23 @@ public class FreeTextSettingsFragment extends SherlockFragment implements Applic
 	private final List<String> emptyFreeTexts = new ArrayList<String>(); // <-- A "dummy" list just containing one element, on string
 
 	/**
-	 * To create a new <code>FreeTextSettingsFragment</code> with given context.
+	 * To create a new <code>FreeTextSettingsFragment</code>.
 	 * 
 	 * @param context
 	 *            Context
 	 * @see LogHandler#logCat(LogPriorities, String, String)
 	 */
-	public FreeTextSettingsFragment(Context context) {
-		logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":FreeTextSettingsFragment()", "Creating a new Free text settings fragment with given context:  \"" + context + "\"");
-		this.context = context;
+	public FreeTextSettingsFragment() {
+		logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":FreeTextSettingsFragment()", "Creating a new Free text settings fragmen");
+	}
+
+	@Override
+	public void onCreate(Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
+		logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":onCreate()", "Setting Context to fragment");
+
+		// Set context here, it's safe because this fragment has been attached to its container, hence we have access to context
+		context = getActivity();
 	}
 
 	@Override

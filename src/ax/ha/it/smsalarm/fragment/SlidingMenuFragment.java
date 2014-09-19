@@ -98,23 +98,24 @@ public class SlidingMenuFragment extends SherlockListFragment {
 		// Resolve correct fragment by going through their unique ID's
 		switch (menuItem.getId()) {
 			case (101):
-				fragment = new SmsSettingsFragment(getActivity());
+				fragment = new SmsSettingsFragment();
 				break;
 			case (102):
-				fragment = new FreeTextSettingsFragment(getActivity());
+				fragment = new FreeTextSettingsFragment();
 				break;
 			case (103):
-				fragment = new SoundSettingsFragment(getActivity());
+				fragment = new SoundSettingsFragment();
 				break;
 			case (104):
-				fragment = new AcknowledgeSettingsFragment(getActivity());
+				fragment = new AcknowledgeSettingsFragment();
 				break;
 			case (105):
-				fragment = new OtherSettingsFragment(getActivity());
+				fragment = new OtherSettingsFragment();
 				break;
 			case (201):
 				break;
 			case (202):
+				fragment = new AboutFragment();
 				break;
 			default:
 				logger.logCatTxt(LogPriorities.WARN, LOG_TAG + ":onListItemClick()", "Unable to resolve a Fragment for given menu item id: \"" + Integer.toString(menuItem.getId()) + "\", check if implementation exist for menu item");

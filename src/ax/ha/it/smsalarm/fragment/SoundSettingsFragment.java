@@ -51,7 +51,7 @@ public class SoundSettingsFragment extends SherlockFragment implements Applicati
 	private final NoiseHandler noiseHandler = NoiseHandler.getInstance();
 
 	// Must have the application context
-	private final Context context;
+	private Context context;
 
 	// The EditTexts...
 	private EditText selectedAlarmSignalEditText;
@@ -83,15 +83,23 @@ public class SoundSettingsFragment extends SherlockFragment implements Applicati
 	private int secondaryAlarmSignalId = 1;
 
 	/**
-	 * To create a new <code>SoundSettingsFragment</code> with given context.
+	 * To create a new <code>SoundSettingsFragment</code>.
 	 * 
 	 * @param context
 	 *            Context
 	 * @see LogHandler#logCat(LogPriorities, String, String)
 	 */
-	public SoundSettingsFragment(Context context) {
-		logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":SoundSettingsFragment()", "Creating a new Sound settings fragment with given context:  \"" + context + "\"");
-		this.context = context;
+	public SoundSettingsFragment() {
+		logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":SoundSettingsFragment()", "Creating a new Sound settings fragment");
+	}
+
+	@Override
+	public void onCreate(Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
+		logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":onCreate()", "Setting Context to fragment");
+
+		// Set context here, it's safe because this fragment has been attached to its container, hence we have access to context
+		context = getActivity();
 	}
 
 	@Override

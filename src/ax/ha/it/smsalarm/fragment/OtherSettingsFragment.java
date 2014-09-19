@@ -47,7 +47,7 @@ public class OtherSettingsFragment extends SherlockFragment implements Applicati
 	private final PreferencesHandler prefHandler = PreferencesHandler.getInstance();
 
 	// Must have the application context
-	private final Context context;
+	private Context context;
 
 	// The EditText...
 	private EditText rescueServiceEditText;
@@ -68,15 +68,23 @@ public class OtherSettingsFragment extends SherlockFragment implements Applicati
 	private boolean enableSmsAlarm = true;
 
 	/**
-	 * To create a new <code>OtherSettingsFragment</code> with given context.
+	 * To create a new <code>OtherSettingsFragment</code>.
 	 * 
 	 * @param context
 	 *            Context
 	 * @see LogHandler#logCat(LogPriorities, String, String)
 	 */
-	public OtherSettingsFragment(Context context) {
-		logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":OtherSettingsFragment()", "Creating a new Other settings fragment with given context:  \"" + context + "\"");
-		this.context = context;
+	public OtherSettingsFragment() {
+		logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":OtherSettingsFragment()", "Creating a new Other settings fragment");
+	}
+
+	@Override
+	public void onCreate(Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
+		logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":onCreate()", "Setting Context to fragment");
+
+		// Set context here, it's safe because this fragment has been attached to its container, hence we have access to context
+		context = getActivity();
 	}
 
 	@Override

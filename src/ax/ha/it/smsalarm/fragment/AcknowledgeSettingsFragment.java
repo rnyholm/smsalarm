@@ -49,7 +49,7 @@ public class AcknowledgeSettingsFragment extends SherlockFragment implements App
 	private final PreferencesHandler prefHandler = PreferencesHandler.getInstance();
 
 	// Must have the application context
-	private final Context context;
+	private Context context;
 
 	// The EditText...
 	private EditText ackNumberEditText;
@@ -70,15 +70,23 @@ public class AcknowledgeSettingsFragment extends SherlockFragment implements App
 	private String acknowledgeNumber = "";
 
 	/**
-	 * To create a new <code>AcknowledgeSettingsFragment</code> with given context.
+	 * To create a new <code>AcknowledgeSettingsFragment</code>.
 	 * 
 	 * @param context
 	 *            Context
 	 * @see LogHandler#logCat(LogPriorities, String, String)
 	 */
-	public AcknowledgeSettingsFragment(Context context) {
-		logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":AcknowledgeSettingsFragment()", "Creating a new Acknowledge settings fragment with given context:  \"" + context + "\"");
-		this.context = context;
+	public AcknowledgeSettingsFragment() {
+		logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":AcknowledgeSettingsFragment()", "Creating a new Acknowledge settings fragment");
+	}
+
+	@Override
+	public void onCreate(Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
+		logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":onCreate()", "Setting Context to fragment");
+
+		// Set context here, it's safe because this fragment has been attached to its container, hence we have access to context
+		context = getActivity();
 	}
 
 	@Override

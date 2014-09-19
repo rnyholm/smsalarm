@@ -5,6 +5,7 @@ package ax.ha.it.smsalarm.activity;
 
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
@@ -15,26 +16,22 @@ import android.view.Window;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import ax.ha.it.smsalarm.R;
-import ax.ha.it.smsalarm.R.id;
-import ax.ha.it.smsalarm.R.layout;
-import ax.ha.it.smsalarm.R.string;
 import ax.ha.it.smsalarm.handler.LogHandler;
-import ax.ha.it.smsalarm.handler.PreferencesHandler;
 import ax.ha.it.smsalarm.handler.LogHandler.LogPriorities;
+import ax.ha.it.smsalarm.handler.PreferencesHandler;
 import ax.ha.it.smsalarm.handler.PreferencesHandler.DataTypes;
 import ax.ha.it.smsalarm.handler.PreferencesHandler.PrefKeys;
 
 /**
- * Splash activity, just shows splash screen and after a certain time or a tap on screen activity
- * switch to SmsAlarm.
+ * Splash activity, just shows splash screen and after a certain time or a tap on screen activity switch to SmsAlarm.<br>
+ * If user hasn't agreed the EULA, a dialog showing that will be visible. If user doesn't accept it then he/she will not be able to start or enable
+ * <b><i>Sms Alarm</i></b>.
  * 
  * @author Robert Nyholm <robert.nyholm@aland.net>
- * @version 2.2.1
+ * @version 2.3.1
  * @since 2.1
- * @see #onCreate(Bundle)
  */
 public class Splash extends Activity {
-	// Log tag string
 	private final String LOG_TAG = getClass().getSimpleName();
 
 	// Objects needed for logging, shared preferences and noise handling
@@ -50,27 +47,19 @@ public class Splash extends Activity {
 	// Variable indicating whether user license is agreed or not
 	private boolean endUserLicenseAgreed = false;
 
-	// For the textview displaying version, needed in order to edit it
+	// For the TextView displaying version, needed in order to edit it
 	private TextView versionTextView;
 
 	/**
-	 * When activity starts, this method is the entry point. The splash screen is built up within
-	 * this method.
+	 * Performs initialization of user interface components and loads needed data.
 	 * 
-	 * @param savedInstanceState
-	 *            Bundle
-	 * @see #buildAndShowEULADialog()
-	 * @see #switchActivity()
-	 * @see #onPause()
-	 * @see ax.ha.it.smsalarm.handler.LogHandler#logCat(LogPriorities, String, String) logCat(LogPriorities,
-	 *      String, String)
-	 * @see ax.ha.it.smsalarm.handler.PreferencesHandler#getPrefs(PrefKeys, PrefKeys,DataTypes,
-	 *      android.content.Context, Object) getPrefs(PrefKeys, PrefKeys,DataTypes,
-	 *      android.content.Context, Object)
+	 * @see LogHandler#logCat(LogPriorities, String, String)
+	 * @see PreferencesHandler#getPrefs(PrefKeys, PrefKeys, DataTypes, Context, Object)
 	 */
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+
 		// Remove title on activity
 		requestWindowFeature(Window.FEATURE_NO_TITLE);
 		setContentView(R.layout.splash);
@@ -79,23 +68,16 @@ public class Splash extends Activity {
 		versionTextView = (TextView) findViewById(R.id.splashVersion_tv);
 		versionTextView.setText(String.format(getString(R.string.SPLASH_VERSION), getString(R.string.APP_VERSION)));
 
-		// Some logging for information and debugging
 		logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":onCreate()", "Layout has been set with correct settings");
 
-		/*
-		 * Retrieve value from shared preferences, this is to decide if user has agreed user the
-		 * user license before or not
-		 */
+		// Fetch value from shared preferences, this is to decide if user has agreed user the user license before or not
 		try {
 			endUserLicenseAgreed = (Boolean) prefHandler.getPrefs(PrefKeys.SHARED_PREF, PrefKeys.END_USER_LICENSE_AGREED, DataTypes.BOOLEAN, this, false);
 		} catch (IllegalArgumentException e) {
 			logger.logCatTxt(LogPriorities.ERROR, LOG_TAG + ":onCreate()", "An unsupported datatype was given as argument to PreferencesHandler.getPrefs()", e);
 		}
 
-		/*
-		 * Only set up onClickListener and start Runnable if user has agreed the end user license
-		 * agreement
-		 */
+		// Only set up onClickListener and start Runnable if user has agreed the end user license agreement
 		if (endUserLicenseAgreed) {
 			// Get a handle to the layout by finding it's id
 			RelativeLayout splashRelativeLayout = (RelativeLayout) findViewById(R.id.splash_rl);
@@ -103,22 +85,17 @@ public class Splash extends Activity {
 			splashRelativeLayout.setOnClickListener(new OnClickListener() {
 				@Override
 				public void onClick(View v) {
-					// Some logging for information and debugging
 					logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":onCreate().onClickListener.onClick()", "User has tapped screen");
-					// Switch activity
 					switchActivity();
 				}
 			});
 
-			// Initialize a handler object, used to put a thread to sleep
+			// Initialize a handler object, used to put a thread to sleep, activity will be switched after thread has been a sleep for a given time
 			handler = new Handler();
 			handler.postDelayed(new Runnable() {
 				@Override
 				public void run() {
-					// Some logging for information and debugging
 					logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":onCreate().Handler.run()", "Time has elapsed");
-					// Start activity after thread has been a sleep for a given
-					// delay time
 					switchActivity();
 				}
 			}, delay);
@@ -130,7 +107,7 @@ public class Splash extends Activity {
 	}
 
 	/**
-	 * Removes messages from handler when application pauses. Also calls it's superclass.
+	 * Removes messages from handler when application pauses.
 	 * 
 	 * @see #removeMessagesFromHandler()
 	 */
@@ -141,43 +118,39 @@ public class Splash extends Activity {
 	}
 
 	/**
-	 * To build up and show an EULA dialog.
+	 * To build up and show an EULA dialog. Activity will also be switched if user agrees the EULA.
 	 * 
-	 * @see ax.ha.it.smsalarm.handler.LogHandler#logCat(LogPriorities, String, String) logCat(LogPriorities,
-	 *      String, String)
-	 * @see ax.ha.it.smsalarm.handler.PreferencesHandler#setPrefs(PrefKeys, PrefKeys, Object,
-	 *      android.content.Context) setPrefs(PrefKeys, PrefKeys, Object, android.content.Context)
+	 * @see Splash#switchActivity()
 	 */
 	private void buildAndShowEULADialog() {
-		// Logging
 		logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":buildAndShowEULADialog()", "Start building EULA dialog");
 
 		// Build up the alert dialog
 		AlertDialog.Builder dialog = new AlertDialog.Builder(this);
 
-		// Set attributes
-		dialog.setIcon(android.R.drawable.ic_dialog_info);
-		dialog.setTitle(R.string.EULA_TITLE);
-		dialog.setMessage(R.string.EULA);
-		dialog.setCancelable(false);
+		// @formatter:off
+		// Configure dialog
+		dialog.setIcon(android.R.drawable.ic_dialog_info);	// Set icon
+		dialog.setTitle(R.string.EULA_TITLE);				// Set title
+		dialog.setMessage(R.string.EULA);					// Set message
+		dialog.setCancelable(false);						// Set dialog to non cancelable
+		// @formatter:on
 
-		// Logging
 		logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":buildAndShowEULADialog()", "Dialog attributes set");
 
 		// Set a positive button
 		dialog.setPositiveButton(R.string.EULA_AGREE, new DialogInterface.OnClickListener() {
 			@Override
 			public void onClick(DialogInterface dialog, int which) {
-				// Debug logging
 				logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":buildAndShowEULADialog().PositiveButton.OnClickListener().onClick()", "Positive button pressed in dialog, store shared preferences and switch activity");
-				// Put end user license agreed in shared preferences so we don't
-				// show this dialog again
+
+				// Put end user license agreed in shared preferences so we don't show this dialog again
 				try {
 					prefHandler.setPrefs(PrefKeys.SHARED_PREF, PrefKeys.END_USER_LICENSE_AGREED, true, Splash.this);
 				} catch (IllegalArgumentException e) {
 					logger.logCatTxt(LogPriorities.ERROR, LOG_TAG + ":buildAndShowEULADialog().PositiveButton.OnClickListener().onClick()", "An Object of unsupported instance was given as argument to PreferencesHandler.setPrefs()", e);
 				}
-				// Switch activity
+
 				switchActivity();
 			}
 		});
@@ -186,14 +159,13 @@ public class Splash extends Activity {
 		dialog.setNegativeButton(R.string.EULA_DECLINE, new DialogInterface.OnClickListener() {
 			@Override
 			public void onClick(DialogInterface dialog, int whichButton) {
-				// Debug logging
 				logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":buildAndShowEULADialog().NegativeButton.OnClickListener().onClick()", "Negative Button pressed in dialog, finishing activity");
+
 				// Finish activity
 				finish();
 			}
 		});
 
-		// Logging
 		logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":buildAndShowEULADialog()", "Showing dialog");
 
 		// Show dialog
@@ -202,40 +174,22 @@ public class Splash extends Activity {
 
 	/**
 	 * Method to switch activity. Called either when user tap screen or delay has passed.
-	 * 
-	 * @see #onCreate(Bundle)
-	 * @see ax.ha.it.smsalarm.handler.LogHandler#logCat(LogPriorities, String, String) logCat(LogPriorities,
-	 *      String, String)
 	 */
 	private void switchActivity() {
 		// Create intent and start next activity from it
 		Intent saIntent = new Intent(this, SmsAlarm.class);
-
-		// Some logging for information and debugging
 		logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":switchActivity()", "Intent has been set and application is about to switch activity to SmsAlarm");
-
 		startActivity(saIntent);
-//		Intent intent = new Intent(this, MainActivity.class);
-//
-//		// Some logging for information and debugging
-//		logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":switchActivity()", "Intent has been set and application is about to switch activity to MainActivity");
-//
-//		startActivity(intent);
 	}
 
 	/**
 	 * Method to remove messages from handler.
-	 * 
-	 * @see #onPause()
-	 * @see ax.ha.it.smsalarm.handler.LogHandler#logCat(LogPriorities, String, String) logCat(LogPriorities,
-	 *      String, String)
 	 */
 	private void removeMessagesFromHandler() {
 		// Null check in case user didn't agree the EULA
 		if (handler != null) {
 			handler.removeMessages(0);
-			// Some logging for information and debugging
-			logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":removeMessagesFromHandler", "Messages have been removed from Handler");
+			logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":removeMessagesFromHandler()", "Messages have been removed from Handler");
 		}
 	}
 }

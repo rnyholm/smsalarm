@@ -214,7 +214,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 		List<Alarm> alarmList = new ArrayList<Alarm>();
 
 		// Select All Query
-		String selectQuery = "SELECT  * FROM " + TABLE_ALARMS;
+		String selectQuery = "SELECT * FROM " + TABLE_ALARMS;
 
 		// Get a writable database handle
 		SQLiteDatabase db = getWritableDatabase();
