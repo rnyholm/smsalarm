@@ -16,6 +16,6 @@ Sms Alarm is available through Google Play&trade; and is installed just as a nor
 Development
 -----------
 Developer: Robert Nyholm <robert.nyholm@aland.net><br />
-Development environment: Eclipse IDE Indigo Release v3.0.0<br />
-Android SDK: 2.2<br />
+Development environment: Eclipse IDE Luna Release v4.4.0<br />
+Android SDK Tools: Rev. 23.0.2<br />
 Version control system: Git v1.8.3.1<br />
