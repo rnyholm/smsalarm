@@ -16,6 +16,8 @@ import ax.ha.it.smsalarm.handler.LogHandler.LogPriorities;
  */
 public interface ApplicationFragment {
 
+	static final int RESCUE_SERVICE_DIALOG_REQUEST_CODE = 1;
+
 	/**
 	 * To find UI widgets and get their reference by ID contained in view of the <code>Fragment</code>.<br>
 	 * If some other attributes or special handling has to be done to some UI widgets it's also done within this method.

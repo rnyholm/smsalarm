@@ -2,9 +2,11 @@ package ax.ha.it.smsalarm.fragment;
 
 import java.util.Locale;
 
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.res.Resources;
 import android.graphics.Color;
 import android.os.Build;
@@ -23,6 +25,7 @@ import android.widget.RelativeLayout;
 import android.widget.RelativeLayout.LayoutParams;
 import android.widget.TextView;
 import ax.ha.it.smsalarm.R;
+import ax.ha.it.smsalarm.fragment.dialog.RescueServiceDialog;
 import ax.ha.it.smsalarm.handler.LogHandler;
 import ax.ha.it.smsalarm.handler.LogHandler.LogPriorities;
 import ax.ha.it.smsalarm.handler.PreferencesHandler;
@@ -215,7 +218,11 @@ public class OtherSettingsFragment extends SherlockFragment implements Applicati
 			@Override
 			public void onClick(View v) {
 				logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":setListeners().editRescueServiceButton.OnClickListener().onClick()", "Edit rescue service button pressed");
-				createRescueServiceInputDialog();
+//				createRescueServiceInputDialog();
+
+				RescueServiceDialog dialog = new RescueServiceDialog();
+				dialog.setTargetFragment(OtherSettingsFragment.this, RESCUE_SERVICE_DIALOG_REQUEST_CODE);
+				dialog.show(getFragmentManager(), "rescueServiceDialog");
 			}
 		});
 
@@ -243,6 +250,31 @@ public class OtherSettingsFragment extends SherlockFragment implements Applicati
 				}
 			}
 		});
+	}
+
+	@Override
+	public void onActivityResult(int requestCode, int resultCode, Intent data) {
+		if (requestCode == RESCUE_SERVICE_DIALOG_REQUEST_CODE) {
+			switch (resultCode) {
+				case Activity.RESULT_OK:
+					rescueService = data.getStringExtra(RescueServiceDialog.RESCUE_SERVICE);
+
+					try {
+						// Store to shared preferences
+						prefHandler.setPrefs(PrefKeys.SHARED_PREF, PrefKeys.RESCUE_SERVICE_KEY, rescueService, context);
+					} catch (IllegalArgumentException e) {
+						logger.logCatTxt(LogPriorities.ERROR, LOG_TAG + ":createRescueServiceInputDialog().PositiveButton.OnClickListener().onClick()", "An Object of unsupported instance was given as argument to PreferencesHandler.setPrefs()", e);
+					}
+
+					// Update affected UI widgets
+					updateRescueServiceEditText();
+
+					break;
+				case Activity.RESULT_CANCELED:
+					break;
+				default:
+			}
+		}
 	}
 
 	private void createRescueServiceInputDialog() {
