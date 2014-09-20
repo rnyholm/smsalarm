@@ -24,7 +24,6 @@ import ax.ha.it.smsalarm.handler.PreferencesHandler.PrefKeys;
  * @since 2.2.1
  */
 public class UpdateHandler extends Application {
-	// Log tag string
 	private final String LOG_TAG = getClass().getSimpleName();
 
 	// Objects needed for logging, shared preferences and noise handling
@@ -92,7 +91,7 @@ public class UpdateHandler extends Application {
 					prefHandler.setPrefs(PrefKeys.SHARED_PREF, PrefKeys.VERSION_CODE, currentVersionCode, this);
 				}
 			} else {
-				// It's a new installation, just store the recent versioncode.
+				// It's a new installation, just store the recent version code.
 				logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":onCreate()", "No updates needed as this installation is a new one, the current version code: \"" + currentVersionCode + "\" is about to be stored to the shared preferences");
 				prefHandler.setPrefs(PrefKeys.SHARED_PREF, PrefKeys.VERSION_CODE, currentVersionCode, this);
 			}

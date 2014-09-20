@@ -5,7 +5,6 @@ package ax.ha.it.smsalarm.activity;
 
 import android.app.Activity;
 import android.app.AlertDialog;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
@@ -52,9 +51,6 @@ public class Splash extends Activity {
 
 	/**
 	 * Performs initialization of user interface components and loads needed data.
-	 * 
-	 * @see LogHandler#logCat(LogPriorities, String, String)
-	 * @see PreferencesHandler#getPrefs(PrefKeys, PrefKeys, DataTypes, Context, Object)
 	 */
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
