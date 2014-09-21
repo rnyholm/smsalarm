@@ -66,10 +66,6 @@ public class FreeTextSettingsFragment extends SherlockFragment implements Applic
 
 	/**
 	 * To create a new <code>FreeTextSettingsFragment</code>.
-	 * 
-	 * @param context
-	 *            Context
-	 * @see LogHandler#logCat(LogPriorities, String, String)
 	 */
 	public FreeTextSettingsFragment() {
 		logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":FreeTextSettingsFragment()", "Creating a new Free text settings fragmen");

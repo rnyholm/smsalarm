@@ -3,15 +3,12 @@ package ax.ha.it.smsalarm.fragment;
 import java.util.Locale;
 
 import android.app.Activity;
-import android.app.AlertDialog;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.res.Resources;
 import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
-import android.text.InputType;
 import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -35,15 +32,16 @@ import ax.ha.it.smsalarm.handler.PreferencesHandler.PrefKeys;
 import com.actionbarsherlock.app.SherlockFragment;
 
 /**
- * <code>Fragment</code> containing all the views and user interface widgets for the <b><i>Other Settings</i></b>. Fragment does also contain all
- * logic for the widgets.
+ * {@link Fragment} containing all the views and user interface widgets for the <b><i>Other Settings</i></b>. <code>Fragment</code> does also contain
+ * all logic for the widgets.
  * 
  * @author Robert Nyholm <robert.nyholm@aland.net>
  * @version 2.3.1
  * @since 2.3.1
  */
 public class OtherSettingsFragment extends SherlockFragment implements ApplicationFragment {
-	private final String LOG_TAG = getClass().getSimpleName();
+	private static final String LOG_TAG = OtherSettingsFragment.class.getSimpleName();
+	private static final String RESCUE_SERVICE_DIALOG_TAG = "rescueServiceDialog";
 
 	// Objects needed for logging, shared preferences handling and noise handling
 	private final LogHandler logger = LogHandler.getInstance();
@@ -71,11 +69,7 @@ public class OtherSettingsFragment extends SherlockFragment implements Applicati
 	private boolean enableSmsAlarm = true;
 
 	/**
-	 * To create a new <code>OtherSettingsFragment</code>.
-	 * 
-	 * @param context
-	 *            Context
-	 * @see LogHandler#logCat(LogPriorities, String, String)
+	 * To create a new instance of {@link OtherSettingsFragment}.
 	 */
 	public OtherSettingsFragment() {
 		logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":OtherSettingsFragment()", "Creating a new Other settings fragment");
@@ -86,7 +80,7 @@ public class OtherSettingsFragment extends SherlockFragment implements Applicati
 		super.onCreate(savedInstanceState);
 		logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":onCreate()", "Setting Context to fragment");
 
-		// Set context here, it's safe because this fragment has been attached to its container, hence we have access to context
+		// Set context here, it's safe because this fragment has been attached to it's container, hence we have access to context
 		context = getActivity();
 	}
 
@@ -213,20 +207,17 @@ public class OtherSettingsFragment extends SherlockFragment implements Applicati
 	public void setListeners() {
 		logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":setListeners()", "Setting listeners to the different user interface widgets");
 
-		// Set listener to editRescueServiceButton
 		editRescueServiceButton.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
 				logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":setListeners().editRescueServiceButton.OnClickListener().onClick()", "Edit rescue service button pressed");
-//				createRescueServiceInputDialog();
 
 				RescueServiceDialog dialog = new RescueServiceDialog();
 				dialog.setTargetFragment(OtherSettingsFragment.this, RESCUE_SERVICE_DIALOG_REQUEST_CODE);
-				dialog.show(getFragmentManager(), "rescueServiceDialog");
+				dialog.show(getFragmentManager(), RESCUE_SERVICE_DIALOG_TAG);
 			}
 		});
 
-		// Set listener to enableSmsAlarmCheckBox
 		enableSmsAlarmCheckBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
 			@Override
 			public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
@@ -254,88 +245,41 @@ public class OtherSettingsFragment extends SherlockFragment implements Applicati
 
 	@Override
 	public void onActivityResult(int requestCode, int resultCode, Intent data) {
+		logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":onActivityResult()", "Handling of activity result is about to begin, request code: \"" + Integer.toString(requestCode) + "\" and result code: \"" + Integer.toString(resultCode) + "\"");
+
+		// Sort out the requests and result codes to the ones this fragment is interested in
 		if (requestCode == RESCUE_SERVICE_DIALOG_REQUEST_CODE) {
+			logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":onActivityResult()", "Result with request code: \"" + requestCode + "\" is about to be handled");
+
 			switch (resultCode) {
 				case Activity.RESULT_OK:
 					rescueService = data.getStringExtra(RescueServiceDialog.RESCUE_SERVICE);
+
+					logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":onActivityResult()", "Result code: \"" + Activity.RESULT_OK + "\"(Activity.RESULT_OK), data: \"" + rescueService + "\" fetched using key: \"" + RescueServiceDialog.RESCUE_SERVICE + "\" is about to be persisted into shared preferences");
 
 					try {
 						// Store to shared preferences
 						prefHandler.setPrefs(PrefKeys.SHARED_PREF, PrefKeys.RESCUE_SERVICE_KEY, rescueService, context);
 					} catch (IllegalArgumentException e) {
-						logger.logCatTxt(LogPriorities.ERROR, LOG_TAG + ":createRescueServiceInputDialog().PositiveButton.OnClickListener().onClick()", "An Object of unsupported instance was given as argument to PreferencesHandler.setPrefs()", e);
+						logger.logCatTxt(LogPriorities.ERROR, LOG_TAG + ":onActivityResult()", "An Object of unsupported instance was given as argument to PreferencesHandler.setPrefs()", e);
 					}
 
 					// Update affected UI widgets
 					updateRescueServiceEditText();
 
+					logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":onActivityResult()", "New RESCUE SERVICE name has been stored from user input . New RESCUE SERVICE name is: \"" + rescueService + "\"");
 					break;
 				case Activity.RESULT_CANCELED:
+					logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":onActivityResult()", "Result code: \"" + Activity.RESULT_CANCELED + "\"(Activity.RESULT_CANCELED), do nothing");
 					break;
 				default:
+					logger.logCatTxt(LogPriorities.ERROR, LOG_TAG + ":onActivityResult()", "Result code: \"" + Integer.toString(resultCode) + "\" is unsupported for request code: \"" + requestCode + "\"");
 			}
 		}
 	}
 
-	private void createRescueServiceInputDialog() {
-		logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":createRescueServiceInputDialog()", "Start building dialog for input of rescue service");
-
-		// Build up the alert dialog
-		AlertDialog.Builder dialog = new AlertDialog.Builder(context);
-		final EditText inputEditText = new EditText(context);
-
-		// @formatter:off
-		// Configure dialog and EditText
-		dialog.setIcon(android.R.drawable.ic_dialog_info);			// Set icon
-		dialog.setTitle(R.string.RESCUE_SERVICE_PROMPT_TITLE);		// Set title
-		dialog.setMessage(R.string.RESCUE_SERVICE_PROMPT_MESSAGE);	// Set message
-		dialog.setCancelable(false);								// Set dialog to non cancelable
-		dialog.setView(inputEditText);								// Bind dialog to EditText
-		inputEditText.setHint(R.string.RESCUE_SERVICE_NAME_HINT);	// Set hint to EditText
-		inputEditText.setInputType(InputType.TYPE_CLASS_TEXT);		// Set input type to EditText
-		// @formatter:on
-
-		// Set a positive button and listen on it
-		dialog.setPositiveButton(R.string.OK, new DialogInterface.OnClickListener() {
-			@Override
-			public void onClick(DialogInterface dialog, int whichButton) {
-				logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":createRescueServiceInputDialog().PositiveButton.OnClickListener().onClick()", "Positive Button pressed");
-
-				// Get the rescue service from the EditText
-				rescueService = inputEditText.getText().toString();
-
-				try {
-					// Store to shared preferences
-					prefHandler.setPrefs(PrefKeys.SHARED_PREF, PrefKeys.RESCUE_SERVICE_KEY, rescueService, context);
-				} catch (IllegalArgumentException e) {
-					logger.logCatTxt(LogPriorities.ERROR, LOG_TAG + ":createRescueServiceInputDialog().PositiveButton.OnClickListener().onClick()", "An Object of unsupported instance was given as argument to PreferencesHandler.setPrefs()", e);
-				}
-
-				// Update affected UI widgets
-				updateRescueServiceEditText();
-				logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":createRescueServiceInputDialog().PositiveButton.OnClickListener().onClick()", "New RESCUESERVICE name has been stored from user input . New RESCUESERVICE name is: \"" + rescueService + "\"");
-			}
-		});
-
-		// Set a neutral button, due to documentation it has same functionality as "back" button
-		dialog.setNeutralButton(R.string.CANCEL, new DialogInterface.OnClickListener() {
-			@Override
-			public void onClick(DialogInterface dialog, int whichButton) {
-				// DO NOTHING, except logging
-				logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":createRescueServiceInputDialog().NeutralButton.OnClickListener().onClick()", "Neutral Button pressed in dialog, nothing done");
-			}
-		});
-
-		logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":createRescueServiceInputDialog()", "Showing dialog");
-
-		// Show it
-		dialog.show();
-	}
-
 	/**
 	 * To update rescue service <code>EditText</code> with correct value.
-	 * 
-	 * @see LogHandler.logCat(int, String , String)
 	 */
 	private void updateRescueServiceEditText() {
 		rescueServiceEditText.setText(rescueService);
@@ -344,8 +288,6 @@ public class OtherSettingsFragment extends SherlockFragment implements Applicati
 
 	/**
 	 * To update enable Sms Alarm <code>CheckBox</code> correctly.
-	 * 
-	 * @see LogHandler#logCat(LogPriorities, String, String)
 	 */
 	private void updateEnableSmsAlarmCheckBox() {
 		// Update enable Sms Alarm CheckBox(default checked=true)

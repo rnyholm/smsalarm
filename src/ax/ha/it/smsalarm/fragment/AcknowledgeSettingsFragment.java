@@ -2,14 +2,14 @@ package ax.ha.it.smsalarm.fragment;
 
 import java.util.Locale;
 
-import android.app.AlertDialog;
+import android.app.Activity;
 import android.content.Context;
-import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.res.Resources;
 import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
-import android.text.InputType;
+import android.support.v4.app.Fragment;
 import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -23,26 +23,26 @@ import android.widget.RelativeLayout;
 import android.widget.RelativeLayout.LayoutParams;
 import android.widget.TextView;
 import ax.ha.it.smsalarm.R;
+import ax.ha.it.smsalarm.fragment.dialog.AcknowledgeNumberDialog;
 import ax.ha.it.smsalarm.handler.LogHandler;
 import ax.ha.it.smsalarm.handler.LogHandler.LogPriorities;
 import ax.ha.it.smsalarm.handler.PreferencesHandler;
 import ax.ha.it.smsalarm.handler.PreferencesHandler.DataTypes;
 import ax.ha.it.smsalarm.handler.PreferencesHandler.PrefKeys;
-import ax.ha.it.smsalarm.ui.NoBlanksInputEditText;
 
 import com.actionbarsherlock.app.SherlockFragment;
 
 /**
- * <code>Fragment</code> containing all the views and user interface widgets for the <b><i>Acknowledge Settings</i></b>. Fragment does also contain
- * all logic for the widgets.
+ * {@link Fragment} containing all the views and user interface widgets for the <b><i>Acknowledge Settings</i></b>. <code>Fragment</code> does also
+ * contain all logic for the widgets.
  * 
  * @author Robert Nyholm <robert.nyholm@aland.net>
  * @version 2.3.1
  * @since 2.3.1
  */
 public class AcknowledgeSettingsFragment extends SherlockFragment implements ApplicationFragment {
-	// Log tag
-	private final String LOG_TAG = getClass().getSimpleName();
+	private static final String LOG_TAG = AcknowledgeSettingsFragment.class.getSimpleName();
+	private static final String ACKNOWLEDGE_NUMBER_DIALOG_TAG = "acknowledgeNumberDialog";
 
 	// Objects needed for logging and shared preferences handling
 	private final LogHandler logger = LogHandler.getInstance();
@@ -70,11 +70,7 @@ public class AcknowledgeSettingsFragment extends SherlockFragment implements App
 	private String acknowledgeNumber = "";
 
 	/**
-	 * To create a new <code>AcknowledgeSettingsFragment</code>.
-	 * 
-	 * @param context
-	 *            Context
-	 * @see LogHandler#logCat(LogPriorities, String, String)
+	 * To create a new instance of {@link AcknowledgeSettingsFragment}.
 	 */
 	public AcknowledgeSettingsFragment() {
 		logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":AcknowledgeSettingsFragment()", "Creating a new Acknowledge settings fragment");
@@ -216,7 +212,10 @@ public class AcknowledgeSettingsFragment extends SherlockFragment implements App
 			@Override
 			public void onClick(View v) {
 				logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":setListeners().ackNumberButton.OnClickListener().onClick()", "Edit acknowledge number button pressed");
-				createAcknowledgeNumberInputDialog();
+
+				AcknowledgeNumberDialog dialog = new AcknowledgeNumberDialog();
+				dialog.setTargetFragment(AcknowledgeSettingsFragment.this, ACKNOWLEDGE_NUMBER_DIALOG_REQUEST_CODE);
+				dialog.show(getFragmentManager(), ACKNOWLEDGE_NUMBER_DIALOG_TAG);
 			}
 		});
 
@@ -248,10 +247,43 @@ public class AcknowledgeSettingsFragment extends SherlockFragment implements App
 		});
 	}
 
+	@Override
+	public void onActivityResult(int requestCode, int resultCode, Intent data) {
+		logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":onActivityResult()", "Handling of activity result is about to begin, request code: \"" + Integer.toString(requestCode) + "\" and result code: \"" + Integer.toString(resultCode) + "\"");
+
+		// Sort out the requests and result codes to the ones this fragment is interested in
+		if (requestCode == ACKNOWLEDGE_NUMBER_DIALOG_REQUEST_CODE) {
+			logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":onActivityResult()", "Result with request code: \"" + requestCode + "\" is about to be handled");
+
+			switch (resultCode) {
+				case Activity.RESULT_OK:
+					acknowledgeNumber = data.getStringExtra(AcknowledgeNumberDialog.ACKNOWLEDGE_NUMBER);
+
+					logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":onActivityResult()", "Result code: \"" + Activity.RESULT_OK + "\"(Activity.RESULT_OK), data: \"" + acknowledgeNumber + "\" fetched using key: \"" + AcknowledgeNumberDialog.ACKNOWLEDGE_NUMBER + "\" is about to be persisted into shared preferences");
+
+					try {
+						// Store to shared preferences
+						prefHandler.setPrefs(PrefKeys.SHARED_PREF, PrefKeys.ACK_NUMBER_KEY, acknowledgeNumber, context);
+					} catch (IllegalArgumentException e) {
+						logger.logCatTxt(LogPriorities.ERROR, LOG_TAG + ":onActivityResult()", "An Object of unsupported instance was given as argument to PreferencesHandler.setPrefs()", e);
+					}
+
+					// Update affected UI widgets
+					updateAcknowledgeNumberEditText();
+
+					logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":onActivityResult()", "New ACKNOWLEDGE phone number has been stored from user input . New ACKNOWLEDGE phone number is: \"" + acknowledgeNumber + "\"");
+					break;
+				case Activity.RESULT_CANCELED:
+					logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":onActivityResult()", "Result code: \"" + Activity.RESULT_CANCELED + "\"(Activity.RESULT_CANCELED), do nothing");
+					break;
+				default:
+					logger.logCatTxt(LogPriorities.ERROR, LOG_TAG + ":onActivityResult()", "Result code: \"" + Integer.toString(resultCode) + "\" is unsupported for request code: \"" + requestCode + "\"");
+			}
+		}
+	}
+
 	/**
 	 * To update acknowledge number <code>EditText</code> with correct value.
-	 * 
-	 * @see LogHandler#logCat(LogPriorities, String, String)
 	 */
 	private void updateAcknowledgeNumberEditText() {
 		ackNumberEditText.setText(acknowledgeNumber);
@@ -261,12 +293,10 @@ public class AcknowledgeSettingsFragment extends SherlockFragment implements App
 	/**
 	 * To update widgets with relations to alarm acknowledgement. These are widgets of type <code>CheckBox</code>, <code>Button</code> and
 	 * <code>EditText</code>.
-	 * 
-	 * @see LogHandler#logCat(LogPriorities, String, String)
 	 */
 	private void updateAcknowledgeWidgets() {
 		// If acknowledge should be used, the button for setting acknowledge phone number should be enabled
-		// and the edittext field showing this number should also be "ungreyed"
+		// and the EditText field showing this number should also be "ungreyed"
 		if (useAlarmAcknowledge) {
 			enableAckCheckBox.setChecked(true);
 			ackNumberButton.setEnabled(true);
@@ -279,67 +309,5 @@ public class AcknowledgeSettingsFragment extends SherlockFragment implements App
 		}
 
 		logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":updateAcknowledgeWidgets()", "Acknowledge alarm UI widgets updated");
-	}
-
-	/**
-	 * To build up and display a dialog which let's the user assign an acknowledge phone number.
-	 * 
-	 * @see #updateAcknowledgeNumberEditText()
-	 * @see LogHandler#logCat(LogPriorities, String, String)
-	 * @see LogHandler#logCatTxt(LogPriorities, String, String, Throwable)
-	 * @see PreferencesHandler#setPrefs(PrefKeys, PrefKeys, Object, Context)
-	 */
-	private void createAcknowledgeNumberInputDialog() {
-		logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":createAcknowledgeNumberInputDialog()", "Start building dialog for input of acknowledge number");
-
-		// Build up the alert dialog
-		AlertDialog.Builder dialog = new AlertDialog.Builder(context);
-		final EditText noBlanksInputEditText = new NoBlanksInputEditText(context);
-
-		// @formatter:off
-		// Configure dialog and EditText
-		dialog.setIcon(android.R.drawable.ic_dialog_info);				// Set icon
-		dialog.setTitle(R.string.NUMBER_PROMPT_TITLE);					// Set title
-		dialog.setMessage(R.string.ACK_NUMBER_PROMPT_MESSAGE);			// Set message
-		dialog.setCancelable(false);									// Set dialog to non cancelable
-		dialog.setView(noBlanksInputEditText);							// Bind dialog to input
-		noBlanksInputEditText.setHint(R.string.NUMBER_PROMPT_HINT);		// Set hint to EditText
-		noBlanksInputEditText.setInputType(InputType.TYPE_CLASS_PHONE);	// Set input type to EditText
-		// @formatter:on
-
-		// Set a positive button and listen on it
-		dialog.setPositiveButton(R.string.OK, new DialogInterface.OnClickListener() {
-			@Override
-			public void onClick(DialogInterface dialog, int whichButton) {
-				logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":createAcknowledgeNumberInputDialog().PositiveButton.OnClickListener().onClick()", "Positive Button pressed");
-
-				// Get the acknoeledge number from the EditText
-				acknowledgeNumber = noBlanksInputEditText.getText().toString();
-
-				try {
-					// Store to shared preferences
-					prefHandler.setPrefs(PrefKeys.SHARED_PREF, PrefKeys.ACK_NUMBER_KEY, acknowledgeNumber, context);
-				} catch (IllegalArgumentException e) {
-					logger.logCatTxt(LogPriorities.ERROR, LOG_TAG + ":createAcknowledgeNumberInputDialog().PositiveButton.OnClickListener().onClick()", "An Object of unsupported instance was given as argument to PreferencesHandler.setPrefs()", e);
-				}
-				// Update affected UI widgets
-				updateAcknowledgeNumberEditText();
-				logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":createAcknowledgeNumberInputDialog().PositiveButton.OnClickListener().onClick()", "New ACKNOWLEDGE phone number has been stored from user input . New ACKNOWLEDGE phone number is: \"" + acknowledgeNumber + "\"");
-			}
-		});
-
-		// Set a neutral button, due to documentation it has same functionality as "back" button
-		dialog.setNeutralButton(R.string.CANCEL, new DialogInterface.OnClickListener() {
-			@Override
-			public void onClick(DialogInterface dialog, int whichButton) {
-				// DO NOTHING, except logging
-				logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":createAcknowledgeNumberInputDialog().NeutralButton.OnClickListener().onClick()", "Neutral Button pressed in dialog, nothing done");
-			}
-		});
-
-		logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":createAcknowledgeNumberInputDialog()", "Showing dialog");
-
-		// Show it
-		dialog.show();
 	}
 }
