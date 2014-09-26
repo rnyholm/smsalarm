@@ -3,18 +3,17 @@
  */
 package ax.ha.it.smsalarm.activity;
 
-import android.app.Activity;
-import android.app.AlertDialog;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
+import android.support.v4.app.FragmentActivity;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.Window;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import ax.ha.it.smsalarm.R;
+import ax.ha.it.smsalarm.fragment.dialog.EulaDialog;
 import ax.ha.it.smsalarm.handler.LogHandler;
 import ax.ha.it.smsalarm.handler.LogHandler.LogPriorities;
 import ax.ha.it.smsalarm.handler.PreferencesHandler;
@@ -30,8 +29,8 @@ import ax.ha.it.smsalarm.handler.PreferencesHandler.PrefKeys;
  * @version 2.3.1
  * @since 2.1
  */
-public class Splash extends Activity {
-	private final String LOG_TAG = getClass().getSimpleName();
+public class Splash extends FragmentActivity {
+	private final static String LOG_TAG = Splash.class.getSimpleName();
 
 	// Objects needed for logging, shared preferences and noise handling
 	private final LogHandler logger = LogHandler.getInstance();
@@ -96,10 +95,37 @@ public class Splash extends Activity {
 				}
 			}, delay);
 		} else { // Else show dialog requesting for user to agree the license
-			buildAndShowEULADialog();
+			EulaDialog dialog = new EulaDialog();
+			dialog.show(getSupportFragmentManager(), EulaDialog.EULA_DIALOG_TAG);
 		}
 
 		logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":onCreate()", "Listener and Handler have been set");
+	}
+
+	/**
+	 * To handle an <b><i>positive on click action</i></b> from the {@link EulaDialog}.
+	 * 
+	 * @see EulaDialog
+	 */
+	public void doPositiveClick() {
+		// Put end user license agreed in shared preferences so we don't show this dialog again
+		try {
+			prefHandler.setPrefs(PrefKeys.SHARED_PREF, PrefKeys.END_USER_LICENSE_AGREED, true, Splash.this);
+		} catch (IllegalArgumentException e) {
+			logger.logCatTxt(LogPriorities.ERROR, LOG_TAG + ":buildAndShowEULADialog().PositiveButton.OnClickListener().onClick()", "An Object of unsupported instance was given as argument to PreferencesHandler.setPrefs()", e);
+		}
+
+		switchActivity();
+	}
+
+	/**
+	 * To handle an <b><i>negative on click action</i></b> from the {@link EulaDialog}.
+	 * 
+	 * @see EulaDialog
+	 */
+	public void doNegativeClick() {
+		// Just finish activity
+		finish();
 	}
 
 	/**
@@ -111,61 +137,6 @@ public class Splash extends Activity {
 	public void onPause() {
 		super.onPause();
 		removeMessagesFromHandler();
-	}
-
-	/**
-	 * To build up and show an EULA dialog. Activity will also be switched if user agrees the EULA.
-	 * 
-	 * @see Splash#switchActivity()
-	 */
-	private void buildAndShowEULADialog() {
-		logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":buildAndShowEULADialog()", "Start building EULA dialog");
-
-		// Build up the alert dialog
-		AlertDialog.Builder dialog = new AlertDialog.Builder(this);
-
-		// @formatter:off
-		// Configure dialog
-		dialog.setIcon(android.R.drawable.ic_dialog_info);	// Set icon
-		dialog.setTitle(R.string.EULA_TITLE);				// Set title
-		dialog.setMessage(R.string.EULA);					// Set message
-		dialog.setCancelable(false);						// Set dialog to non cancelable
-		// @formatter:on
-
-		logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":buildAndShowEULADialog()", "Dialog attributes set");
-
-		// Set a positive button
-		dialog.setPositiveButton(R.string.EULA_AGREE, new DialogInterface.OnClickListener() {
-			@Override
-			public void onClick(DialogInterface dialog, int which) {
-				logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":buildAndShowEULADialog().PositiveButton.OnClickListener().onClick()", "Positive button pressed in dialog, store shared preferences and switch activity");
-
-				// Put end user license agreed in shared preferences so we don't show this dialog again
-				try {
-					prefHandler.setPrefs(PrefKeys.SHARED_PREF, PrefKeys.END_USER_LICENSE_AGREED, true, Splash.this);
-				} catch (IllegalArgumentException e) {
-					logger.logCatTxt(LogPriorities.ERROR, LOG_TAG + ":buildAndShowEULADialog().PositiveButton.OnClickListener().onClick()", "An Object of unsupported instance was given as argument to PreferencesHandler.setPrefs()", e);
-				}
-
-				switchActivity();
-			}
-		});
-
-		// Set a negative button
-		dialog.setNegativeButton(R.string.EULA_DECLINE, new DialogInterface.OnClickListener() {
-			@Override
-			public void onClick(DialogInterface dialog, int whichButton) {
-				logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":buildAndShowEULADialog().NegativeButton.OnClickListener().onClick()", "Negative Button pressed in dialog, finishing activity");
-
-				// Finish activity
-				finish();
-			}
-		});
-
-		logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":buildAndShowEULADialog()", "Showing dialog");
-
-		// Show dialog
-		dialog.show();
 	}
 
 	/**

@@ -12,7 +12,7 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import ax.ha.it.smsalarm.Alarm;
-import ax.ha.it.smsalarm.enumeration.AlarmTypes;
+import ax.ha.it.smsalarm.enumeration.AlarmType;
 import ax.ha.it.smsalarm.handler.LogHandler.LogPriorities;
 
 /**
@@ -192,7 +192,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 			cursor.moveToFirst();
 		}
 		// Create a new alarm object with data resolved from cursor
-		Alarm alarm = new Alarm(Integer.parseInt(cursor.getString(0)), cursor.getString(1), cursor.getString(2), cursor.getString(3), cursor.getString(4), cursor.getString(5), AlarmTypes.of(Integer.parseInt(cursor.getString(6))));
+		Alarm alarm = new Alarm(Integer.parseInt(cursor.getString(0)), cursor.getString(1), cursor.getString(2), cursor.getString(3), cursor.getString(4), cursor.getString(5), AlarmType.of(Integer.parseInt(cursor.getString(6))));
 		// Close cursor and database
 		cursor.close();
 		db.close();
@@ -229,7 +229,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 			do {
 				// Create a new alarm object and fill it with data from cursor and add it to the
 				// list
-				alarmList.add(new Alarm(Integer.parseInt(cursor.getString(0)), cursor.getString(1), cursor.getString(2), cursor.getString(3), cursor.getString(4), cursor.getString(5), AlarmTypes.of(Integer.parseInt(cursor.getString(6)))));
+				alarmList.add(new Alarm(Integer.parseInt(cursor.getString(0)), cursor.getString(1), cursor.getString(2), cursor.getString(3), cursor.getString(4), cursor.getString(5), AlarmType.of(Integer.parseInt(cursor.getString(6)))));
 			} while (cursor.moveToNext());
 		}
 
@@ -397,7 +397,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 				Alarm alarm = getAlarm(i);
 
 				// If alarm type is primary we want to update it's acknowledge time
-				if (alarm.getAlarmType().equals(AlarmTypes.PRIMARY)) {
+				if (alarm.getAlarmType().equals(AlarmType.PRIMARY)) {
 					// Update alarms acknowledge time
 					alarm.updateAcknowledged();
 					// Update alarm entry

@@ -18,7 +18,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.PowerManager;
 import android.telephony.SmsMessage;
-import ax.ha.it.smsalarm.enumeration.AlarmTypes;
+import ax.ha.it.smsalarm.enumeration.AlarmType;
 import ax.ha.it.smsalarm.handler.DatabaseHandler;
 import ax.ha.it.smsalarm.handler.KitKatHandler;
 import ax.ha.it.smsalarm.handler.LogHandler;
@@ -67,7 +67,7 @@ public class SmsReceiver extends BroadcastReceiver {
 	private boolean enableSmsAlarm = false;
 
 	// Variable to store type of alarm as string
-	private AlarmTypes alarmType = AlarmTypes.UNDEFINED;
+	private AlarmType alarmType = AlarmType.UNDEFINED;
 
 	// To store incoming SMS phone number and body(message)
 	private String msgHeader = "";
@@ -137,13 +137,13 @@ public class SmsReceiver extends BroadcastReceiver {
 				}
 
 				// Check if the income SMS was any alarm
-				if (alarmType.equals(AlarmTypes.PRIMARY)) {
+				if (alarmType.equals(AlarmType.PRIMARY)) {
 					// Log information
 					logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":onReceive()", "SMS fulfilled the criteria for a PRIMARY alarm, handle Sms further");
 
 					// Continue handling of received SMS
 					smsHandler(context);
-				} else if (alarmType.equals(AlarmTypes.SECONDARY)) {
+				} else if (alarmType.equals(AlarmType.SECONDARY)) {
 					// Log information
 					logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":onReceive()", "SMS fulfilled the criteria for a SECONDARY alarm, handle Sms further");
 
@@ -188,7 +188,7 @@ public class SmsReceiver extends BroadcastReceiver {
 	 * @see ax.ha.it.smsalarm.handler.DatabaseHandler#addAlarm(Alarm) addAlarm(Alarm)
 	 * @see ax.ha.it.smsalarm.handler.DatabaseHandler#getAllAlarm() getAllAlarm()
 	 * @see ax.ha.it.smsalarm.Alarm ax.ha.it.smsalarm.Alarm
-	 * @see ax.ha.it.smsalarm.enumeration.AlarmTypes ax.ha.it.smsalarm.AlarmTypes
+	 * @see ax.ha.it.smsalarm.enumeration.AlarmType ax.ha.it.smsalarm.AlarmTypes
 	 */
 	private void smsHandler(Context context) {
 		// To prevent the OS from ever see the incoming SMS
@@ -235,9 +235,9 @@ public class SmsReceiver extends BroadcastReceiver {
 		logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":smsHandler()", "Sms stored in devices inbox");
 
 		// Play message tone and vibrate, different method calls depending on alarm type
-		if (alarmType.equals(AlarmTypes.PRIMARY)) {
+		if (alarmType.equals(AlarmType.PRIMARY)) {
 			noiseHandler.makeNoise(context, primaryMessageToneId, useOsSoundSettings, playToneTwice);
-		} else if (alarmType.equals(AlarmTypes.SECONDARY)) {
+		} else if (alarmType.equals(AlarmType.SECONDARY)) {
 			noiseHandler.makeNoise(context, secondaryMessageToneId, useOsSoundSettings, playToneTwice);
 		} else {
 			// UNSUPPORTED LARM TYPE OCCURRED
@@ -245,7 +245,7 @@ public class SmsReceiver extends BroadcastReceiver {
 		}
 
 		// If Alarm acknowledge is enabled and alarm type equals primary, store full alarm message
-		if (enableAlarmAck && alarmType.equals(AlarmTypes.PRIMARY)) {
+		if (enableAlarmAck && alarmType.equals(AlarmType.PRIMARY)) {
 			// Debug logging
 			logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":smsHandler()", "Alarm acknowledgement is enabled and alarm is of type PRIMARY, store full sms to shared preferences");
 
@@ -277,7 +277,7 @@ public class SmsReceiver extends BroadcastReceiver {
 
 		// Acknowledge is enabled and it is a primary alarm, show acknowledge notification, else
 		// show "ordinary" notification
-		if (enableAlarmAck && alarmType.equals(AlarmTypes.PRIMARY)) {
+		if (enableAlarmAck && alarmType.equals(AlarmType.PRIMARY)) {
 			logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":smsHandler()", "Preparing intent for the AcknowledgeNotificationHelper.class");
 			// Start intent, AcknowledgeNotificationHelper - a helper to show acknowledge
 			// notification
@@ -364,7 +364,7 @@ public class SmsReceiver extends BroadcastReceiver {
 	 * 
 	 * @return <code>true</code> if income sms was an alarm else <code>false</code>.
 	 * 
-	 * @see #setAlarmType(AlarmTypes, Context)
+	 * @see #setAlarmType(AlarmType, Context)
 	 * @see ax.ha.it.smsalarm.handler.LogHandler#logCat(LogPriorities, String, String) logCat(LogPriorities,
 	 *      String, String)
 	 * @see ax.ha.it.smsalarm.handler.LogHandler#logCatTxt(LogPriorities, String, String, Throwable)
@@ -391,11 +391,11 @@ public class SmsReceiver extends BroadcastReceiver {
 		// Only set alarm type if we are sure that income sms triggered on any primary sms number
 		if (isAlarm) {
 			// Set correct AlarmType
-			setAlarmType(AlarmTypes.PRIMARY, context);
+			setAlarmType(AlarmType.PRIMARY, context);
 		}
 
 		// Only check if income sms hasn't already been checked as PRIMARY alarm
-		if (!AlarmTypes.PRIMARY.equals(alarmType)) {
+		if (!AlarmType.PRIMARY.equals(alarmType)) {
 			for (String secondarySmsNumber : secondarySmsNumbers) {
 				// If msg header equals a element in list application has received a SMS from a
 				// secondary number
@@ -407,7 +407,7 @@ public class SmsReceiver extends BroadcastReceiver {
 			}
 
 			if (isAlarm) {
-				setAlarmType(AlarmTypes.SECONDARY, context);
+				setAlarmType(AlarmType.SECONDARY, context);
 			}
 		}
 
@@ -424,7 +424,7 @@ public class SmsReceiver extends BroadcastReceiver {
 	 * @return <code>true</code> if income sms was an alarm else <code>false</code>.
 	 * 
 	 * @see #setTriggerText(String)
-	 * @see #setAlarmType(AlarmTypes, Context)
+	 * @see #setAlarmType(AlarmType, Context)
 	 * @see ax.ha.it.smsalarm.handler.LogHandler#logCat(LogPriorities, String, String) logCat(LogPriorities,
 	 *      String, String)
 	 * @see ax.ha.it.smsalarm.handler.LogHandler#logCatTxt(LogPriorities, String, String, Throwable)
@@ -455,11 +455,11 @@ public class SmsReceiver extends BroadcastReceiver {
 		// Only set alarm type if we are sure that income SMS triggered on free text
 		if (isAlarm) {
 			// Set correct AlarmType
-			setAlarmType(AlarmTypes.PRIMARY, context);
+			setAlarmType(AlarmType.PRIMARY, context);
 		}
 
 		// Only check if income SMS hasn't already been checked as PRIMARY alarm
-		if (!AlarmTypes.PRIMARY.equals(alarmType)) {
+		if (!AlarmType.PRIMARY.equals(alarmType)) {
 			for (String secondaryFreeText : secondaryFreeTexts) {
 				if (findWordEqualsIgnore(secondaryFreeText, msgBody)) {
 					logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":checkFreeTextAlarm()", "Sms fulfilled the criteria for a SECONDARY alarm. Sms received from: \"" + msgHeader + "\" with message: \"" + msgBody + "\", triggered on freetext: " + secondaryFreeText);
@@ -469,7 +469,7 @@ public class SmsReceiver extends BroadcastReceiver {
 			}
 
 			if (isAlarm) {
-				setAlarmType(AlarmTypes.SECONDARY, context);
+				setAlarmType(AlarmType.SECONDARY, context);
 			}
 		}
 
@@ -491,7 +491,7 @@ public class SmsReceiver extends BroadcastReceiver {
 	 * @see ax.ha.it.smsalarm.handler.PreferencesHandler#setPrefs(PrefKeys, PrefKeys, Object, Context)
 	 *      setPrefs(PrefKeys, PrefKeys, Object, Context)
 	 */
-	private void setAlarmType(AlarmTypes alarmType, Context context) {
+	private void setAlarmType(AlarmType alarmType, Context context) {
 		// Log message for debugging/information purpose
 		logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":setAlarmType()", "Setting alarm type to:\"" + alarmType.name() + "\"");
 

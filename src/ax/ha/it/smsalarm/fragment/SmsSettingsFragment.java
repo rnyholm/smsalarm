@@ -6,41 +6,40 @@ package ax.ha.it.smsalarm.fragment;
 import java.util.ArrayList;
 import java.util.List;
 
-import android.app.AlertDialog;
+import android.app.Activity;
 import android.content.Context;
-import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
-import android.text.InputType;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.Toast;
 import ax.ha.it.smsalarm.R;
+import ax.ha.it.smsalarm.fragment.dialog.AddSmsNumberDialog;
+import ax.ha.it.smsalarm.fragment.dialog.RemoveSmsNumberDialog;
 import ax.ha.it.smsalarm.handler.LogHandler;
 import ax.ha.it.smsalarm.handler.LogHandler.LogPriorities;
 import ax.ha.it.smsalarm.handler.PreferencesHandler;
 import ax.ha.it.smsalarm.handler.PreferencesHandler.DataTypes;
 import ax.ha.it.smsalarm.handler.PreferencesHandler.PrefKeys;
-import ax.ha.it.smsalarm.ui.NoBlanksInputEditText;
 import ax.ha.it.smsalarm.util.Util;
 
 import com.actionbarsherlock.app.SherlockFragment;
 
 /**
- * <code>Fragment</code> containing all the views and user interface widgets for the <b><i>Sms Settings</i></b>. Fragment does also contain all logic
- * for the widgets.
+ * {@link Fragment} containing all the views and user interface widgets for the <b><i>Sms Settings</i></b>. <code>Fragment</code> does also contain
+ * all logic for the widgets.
  * 
  * @author Robert Nyholm <robert.nyholm@aland.net>
  * @version 2.3.1
  * @since 2.3.1
  */
 public class SmsSettingsFragment extends SherlockFragment implements ApplicationFragment {
-	private final String LOG_TAG = getClass().getSimpleName();
+	private static final String LOG_TAG = SmsSettingsFragment.class.getSimpleName();
 
 	// Objects needed for logging and shared preferences handling
 	private final LogHandler logger = LogHandler.getInstance();
@@ -65,7 +64,7 @@ public class SmsSettingsFragment extends SherlockFragment implements Application
 	private final List<String> emptySmsNumbers = new ArrayList<String>(); // A "dummy" list just containing one element, one string
 
 	/**
-	 * To create a new <code>SmsSettingsFragment</code>.
+	 * To create a new instance of {@link SmsSettingsFragment}.
 	 */
 	public SmsSettingsFragment() {
 		logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":SmsSettingsFragment()", "Creating a new Sms settings fragment");
@@ -132,7 +131,7 @@ public class SmsSettingsFragment extends SherlockFragment implements Application
 	public void updateFragmentView() {
 		logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":updateFragmentView()", "Whole fragments user interface is about to be updated");
 
-		// Update primary sms and secondary numbers Spinner
+		// Update primary SMS and secondary numbers Spinner
 		updatePrimarySmsNumberSpinner();
 		updateSecondarySmsNumberSpinner();
 
@@ -148,7 +147,9 @@ public class SmsSettingsFragment extends SherlockFragment implements Application
 			@Override
 			public void onClick(View v) {
 				logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":setListeners().addPrimarySmsNumberButton.OnClickListener().onClick()", "Add PRIMARY sms number button pressed");
-				createSmsPrimaryInputDialog();
+
+				// Showing dialog with correct request code
+				showAddSmsNumberDialog(AddSmsNumberDialog.ADD_PRIMARY_SMS_NUMBER_DIALOG_REQUEST_CODE);
 			}
 		});
 
@@ -158,9 +159,11 @@ public class SmsSettingsFragment extends SherlockFragment implements Application
 			public void onClick(View v) {
 				logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":setListeners().removePrimarySmsNumberButton.OnClickListener().onClick()", "Remove PRIMARY sms number button pressed");
 
-				// Only show delete dialog if primary sms numbers exists, else show toast
+				// Only show delete dialog if primary SMS numbers exists, else show toast
 				if (!primarySmsNumbers.isEmpty()) {
-					createSmsPrimaryRemoveDialog();
+					// Resolve SMS number to be removed
+					String primarySmsNumberToBeRemoved = primarySmsNumbers.get(primarySmsNumberSpinner.getSelectedItemPosition());
+					showRemoveSmsNumberDialog(RemoveSmsNumberDialog.REMOVE_PRIMARY_SMS_NUMBER_DIALOG_REQUEST_CODE, primarySmsNumberToBeRemoved);
 				} else {
 					Toast.makeText(context, R.string.NO_PRIMARY_NUMBER_EXISTS, Toast.LENGTH_LONG).show();
 					logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":setListeners().removePrimarySmsNumberButton.OnClickListener().onClick()", "Cannot build and show dialog because the list of PRIMARY sms numbers are empty");
@@ -173,7 +176,7 @@ public class SmsSettingsFragment extends SherlockFragment implements Application
 			@Override
 			public void onClick(View v) {
 				logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":setListeners().addSecondarySmsNumberButton.OnClickListener().onClick()", "Add SECONDARY sms number button pressed");
-				createSmsSecondaryInputDialog();
+				showAddSmsNumberDialog(AddSmsNumberDialog.ADD_SECONDARY_SMS_NUMBER_DIALOG_REQUEST_CODE);
 			}
 		});
 
@@ -183,9 +186,10 @@ public class SmsSettingsFragment extends SherlockFragment implements Application
 			public void onClick(View v) {
 				logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":setListeners().removeSecondarySmsNumberButton.OnClickListener().onClick()", "Remove SECONDARY sms number button pressed");
 
-				// Only show delete dialog if secondary sms numbers exists, else show toast
+				// Only show delete dialog if secondary SMS numbers exists, else show toast
 				if (!secondarySmsNumbers.isEmpty()) {
-					createSmsSecondaryRemoveDialog();
+					String secondarySmsNumberToBeRemoved = secondarySmsNumbers.get(secondarySmsNumberSpinner.getSelectedItemPosition());
+					showRemoveSmsNumberDialog(RemoveSmsNumberDialog.REMOVE_SECONDARY_SMS_NUMBER_DIALOG_REQUEST_CODE, secondarySmsNumberToBeRemoved);
 				} else {
 					Toast.makeText(context, R.string.NO_SECONDARY_NUMBER_EXISTS, Toast.LENGTH_LONG).show();
 					logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":setListeners().removeSecondarySmsNumberButton.OnClickListener().onClick()", "Cannot build and show dialog because the list of SECONDARY sms numbers are");
@@ -194,290 +198,171 @@ public class SmsSettingsFragment extends SherlockFragment implements Application
 		});
 	}
 
+	@Override
+	public void onActivityResult(int requestCode, int resultCode, Intent data) {
+		logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":onActivityResult()", "Handling of activity result is about to begin, request code: \"" + Integer.toString(requestCode) + "\" and result code: \"" + Integer.toString(resultCode) + "\"");
+
+		// Only interested in OK results, don't care at all about the others
+		if (resultCode == Activity.RESULT_OK) {
+			// Boolean indicating if there are duplicates of the primary and secondary SMS listen numbers
+			boolean duplicatedNumbers = false;
+			// To store the entered SMS number for further handling
+			String newSmsNumber = "";
+
+			// Only interested in certain request codes...
+			switch (requestCode) {
+				case (AddSmsNumberDialog.ADD_PRIMARY_SMS_NUMBER_DIALOG_REQUEST_CODE):
+					newSmsNumber = data.getStringExtra(AddSmsNumberDialog.ADD_SMS_NUMBER);
+
+					// If input doesn't exist in the list of secondarySmsNumbers and input isn't empty
+					if (!Util.existsIn(newSmsNumber, secondarySmsNumbers) && !newSmsNumber.equals("")) {
+						// Iterate through all strings in the list of primarySmsNumbers to check if number already exists
+						for (String number : primarySmsNumbers) {
+							// If a string in the list is equal with the input then it'sduplicated
+							if (number.equalsIgnoreCase(newSmsNumber)) {
+								duplicatedNumbers = true;
+							}
+						}
+
+						// Store input if duplicated numbers is false
+						if (!duplicatedNumbers) {
+							// Add given input to list
+							primarySmsNumbers.add(newSmsNumber);
+
+							try {
+								// Store to shared preferences
+								prefHandler.setPrefs(PrefKeys.SHARED_PREF, PrefKeys.PRIMARY_LISTEN_NUMBERS_KEY, primarySmsNumbers, context);
+							} catch (IllegalArgumentException e) {
+								logger.logCatTxt(LogPriorities.ERROR, LOG_TAG + ":onActivityResult()", "An Object of unsupported instance was given as argument to PreferencesHandler.setPrefs()", e);
+							}
+
+							// Update affected UI widgets
+							updatePrimarySmsNumberSpinner();
+							logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":onActivityResult()", "New PRIMARY sms number has been stored from user input to the list of PRIMARY sms numbers. New PRIMARY sms number is: \"" + newSmsNumber + "\"");
+						} else {
+							Toast.makeText(context, R.string.NUMBER_ALREADY_IN_PRIMARY_LIST, Toast.LENGTH_LONG).show();
+							logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":onActivityResult()", "Given PRIMARY sms number(" + newSmsNumber + ") already exists in the list of PRIMARY sms numbers and therefore cannot be stored. Showing dialog again");
+
+							showAddSmsNumberDialog(AddSmsNumberDialog.ADD_PRIMARY_SMS_NUMBER_DIALOG_REQUEST_CODE);
+						}
+					} else {
+						// Empty input was given
+						if (newSmsNumber.equals("")) {
+							Toast.makeText(context, R.string.NUMBER_IS_NEEDED, Toast.LENGTH_LONG).show();
+							logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":onActivityResult()", "Given PRIMARY sms number is empty and therefore cannot be stored. Showing dialog again again");
+						} else { // Given primary number exists in the list of secondary numbers
+							Toast.makeText(context, R.string.DUPLICATED_NUMBERS, Toast.LENGTH_LONG).show();
+							logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":onActivityResult()", "Given PRIMARY sms number(" + newSmsNumber + ") already exists in the list of SECONDARY sms numbers and therefore cannot be stored. Showing dialog again");
+						}
+
+						showAddSmsNumberDialog(AddSmsNumberDialog.ADD_PRIMARY_SMS_NUMBER_DIALOG_REQUEST_CODE);
+					}
+					break;
+				case (AddSmsNumberDialog.ADD_SECONDARY_SMS_NUMBER_DIALOG_REQUEST_CODE):
+					newSmsNumber = data.getStringExtra(AddSmsNumberDialog.ADD_SMS_NUMBER);
+
+					if (!Util.existsIn(newSmsNumber, primarySmsNumbers) && !newSmsNumber.equals("")) {
+						for (String number : secondarySmsNumbers) {
+							if (number.equalsIgnoreCase(newSmsNumber)) {
+								duplicatedNumbers = true;
+							}
+						}
+
+						if (!duplicatedNumbers) {
+							secondarySmsNumbers.add(newSmsNumber);
+
+							try {
+								// Store to shared preferences
+								prefHandler.setPrefs(PrefKeys.SHARED_PREF, PrefKeys.SECONDARY_LISTEN_NUMBERS_KEY, secondarySmsNumbers, context);
+							} catch (IllegalArgumentException e) {
+								logger.logCatTxt(LogPriorities.ERROR, LOG_TAG + ":onActivityResult()", "An Object of unsupported instance was given as argument to PreferencesHandler.setPrefs()", e);
+							}
+
+							updateSecondarySmsNumberSpinner();
+							logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":onActivityResult()", "New SECONDARY sms number has been stored from user input to the list of SECONDARY sms numbers. New SECONDARY sms number is: \"" + newSmsNumber + "\"");
+						} else {
+							Toast.makeText(context, R.string.NUMBER_ALREADY_IN_SECONDARY_LIST, Toast.LENGTH_LONG).show();
+							logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":onActivityResult()", "Given SECONDARY sms number(" + newSmsNumber + ") already exists in the list of SECONDARY sms numbers and therefore cannot be stored. Showing dialog again");
+							showAddSmsNumberDialog(AddSmsNumberDialog.ADD_SECONDARY_SMS_NUMBER_DIALOG_REQUEST_CODE);
+						}
+					} else {
+						if (newSmsNumber.equals("")) {
+							Toast.makeText(context, R.string.NUMBER_IS_NEEDED, Toast.LENGTH_LONG).show();
+							logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":onActivityResult()", "Given SECONDARY sms number is empty and therefore cannot be stored. Showing dialog again");
+						} else {
+							Toast.makeText(context, R.string.DUPLICATED_NUMBERS, Toast.LENGTH_LONG).show();
+							logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":onActivityResult()", "Given SECONDARY sms number(" + newSmsNumber + ") already exists in the list of PRIMARY sms numbers and therefore cannot be stored. Showing dialog again");
+						}
+
+						showAddSmsNumberDialog(AddSmsNumberDialog.ADD_SECONDARY_SMS_NUMBER_DIALOG_REQUEST_CODE);
+					}
+					break;
+				case (RemoveSmsNumberDialog.REMOVE_PRIMARY_SMS_NUMBER_DIALOG_REQUEST_CODE):
+					// Remove SMS number in list that equals the SMS number got from intent data
+					primarySmsNumbers.remove(data.getStringExtra(RemoveSmsNumberDialog.REMOVE_SMS_NUMBER));
+
+					try {
+						// Store to shared preferences
+						prefHandler.setPrefs(PrefKeys.SHARED_PREF, PrefKeys.PRIMARY_LISTEN_NUMBERS_KEY, primarySmsNumbers, context);
+					} catch (IllegalArgumentException e) {
+						logger.logCatTxt(LogPriorities.ERROR, LOG_TAG + ":createSmsPrimaryRemoveDialog().PosButton.OnClickListener().onClick()", "An Object of unsupported instance was given as argument to PreferencesHandler.setPrefs()", e);
+					}
+
+					updatePrimarySmsNumberSpinner();
+					break;
+				case (RemoveSmsNumberDialog.REMOVE_SECONDARY_SMS_NUMBER_DIALOG_REQUEST_CODE):
+					secondarySmsNumbers.remove(data.getStringExtra(RemoveSmsNumberDialog.REMOVE_SMS_NUMBER));
+
+					try {
+						prefHandler.setPrefs(PrefKeys.SHARED_PREF, PrefKeys.SECONDARY_LISTEN_NUMBERS_KEY, secondarySmsNumbers, context);
+					} catch (IllegalArgumentException e) {
+						logger.logCatTxt(LogPriorities.ERROR, LOG_TAG + ":createSmsSecondaryRemoveDialog().PosButton.OnClickListener().onClick()", "An Object of unsupported instance was given as argument to PreferencesHandler.setPrefs()", e);
+					}
+
+					updateSecondarySmsNumberSpinner();
+					break;
+				default:
+					logger.logCatTxt(LogPriorities.ERROR, LOG_TAG + ":onActivityResult()", "An unsupported result occurred, result code: \"" + Integer.toString(resultCode) + "\" and request code: \"" + requestCode + "\"");
+			}
+		}
+	}
+
 	/**
-	 * To build up and display a dialog which let's the user add a phone number to the list of <b><i>Primary alarm triggering phone numbers</i></b>. <br>
-	 * <b><i>Note. The input of this dialog doesn't accept blankspaces({@link Util.NoBlanksInputEditText})</i></b>.
+	 * Convenience method to create a new instance of {@link AddSmsNumberDialog} and show it.
 	 * 
-	 * @see #createSmsPrimaryRemoveDialog()
-	 * @see #updatePrimarySmsNumberSpinner()
-	 * @see PreferencesHandler#setPrefs(PrefKeys, PrefKeys, Object, Context)
-	 * @see LogHandler#logCat(LogPriorities, String, String)
-	 * @see LogHandler#logCatTxt(LogPriorities, String, String, Throwable)
+	 * @param requestCode
+	 *            Request code for the created <code>AddSmsNumberDialog</code>.
 	 */
-	private void createSmsPrimaryInputDialog() {
-		logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":createSmsPrimaryInputDialog()", "Start building dialog for input of Sms Primary number");
-
-		// Build up the alert dialog
-		AlertDialog.Builder dialog = new AlertDialog.Builder(context);
-		final EditText noBlanksInputEditText = new NoBlanksInputEditText(context);
-
-		// @formatter:off
-		// Configure dialog and edit text
-		dialog.setIcon(android.R.drawable.ic_dialog_info); 				// Set icon
-		dialog.setTitle(R.string.NUMBER_PROMPT_TITLE); 					// Set title
-		dialog.setMessage(R.string.PRIMARY_NUMBER_PROMPT_MESSAGE); 		// Set message
-		dialog.setCancelable(false); 									// Set dialog to non cancelable
-		dialog.setView(noBlanksInputEditText); 							// Bind dialog to input
-		noBlanksInputEditText.setHint(R.string.NUMBER_PROMPT_HINT); 	// Set hint to edit text
-		noBlanksInputEditText.setInputType(InputType.TYPE_CLASS_TEXT); 	// Set input type to edit text
-		// @formatter:on
-
-		// Set a positive button and listen on it
-		dialog.setPositiveButton(R.string.OK, new DialogInterface.OnClickListener() {
-			@Override
-			public void onClick(DialogInterface dialog, int whichButton) {
-				logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":createSmsPrimaryInputDialog().PositiveButton.OnClickListener().onClick()", "Positive Button pressed");
-
-				// Boolean indicating if there are duplicates of primary and secondary sms numbers
-				boolean duplicatedNumbers = false;
-				// Store input
-				String input = noBlanksInputEditText.getText().toString();
-
-				// If input doesn't exist in the list of secondarySmsNumbers and input isn't empty
-				if (!Util.existsIn(input, secondarySmsNumbers) && !input.equals("")) {
-					// Iterate through all strings in the list of primarySmsNumbers to check if number already exists
-					for (String number : primarySmsNumbers) {
-						// If a string in the list is equal with the input then it'sduplicated
-						if (number.equalsIgnoreCase(input)) {
-							duplicatedNumbers = true;
-						}
-					}
-
-					// Store input if duplicated numbers is false
-					if (!duplicatedNumbers) {
-						// Add given input to list
-						primarySmsNumbers.add(input);
-
-						try {
-							// Store to shared preferences
-							prefHandler.setPrefs(PrefKeys.SHARED_PREF, PrefKeys.PRIMARY_LISTEN_NUMBERS_KEY, primarySmsNumbers, context);
-						} catch (IllegalArgumentException e) {
-							logger.logCatTxt(LogPriorities.ERROR, LOG_TAG + ":createSmsPrimaryInputDialog().PositiveButton.OnClickListener().onClick()", "An Object of unsupported instance was given as argument to PreferencesHandler.setPrefs()", e);
-						}
-
-						// Update affected UI widgets
-						updatePrimarySmsNumberSpinner();
-						logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":createSmsPrimaryInputDialog().PositiveButton.OnClickListener().onClick()", "New PRIMARY sms number has been stored from user input to the list of PRIMARY sms numbers. New PRIMARY sms number is: \"" + input + "\"");
-					} else {
-						Toast.makeText(context, R.string.NUMBER_ALREADY_IN_PRIMARY_LIST, Toast.LENGTH_LONG).show();
-						logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":createSmsPrimaryInputDialog().PositiveButton.OnClickListener().onClick()", "Given PRIMARY sms number(" + input + ") already exists in the list of PRIMARY sms numbers and therefore cannot be stored. Showing dialog again");
-
-						createSmsPrimaryInputDialog();
-					}
-				} else {
-					// Empty input was given
-					if (input.equals("")) {
-						Toast.makeText(context, R.string.NUMBER_IS_NEEDED, Toast.LENGTH_LONG).show();
-						logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":createSmsPrimaryInputDialog().PositiveButton.OnClickListener().onClick()", "Given PRIMARY sms number is empty and therefore cannot be stored. Showing dialog again again");
-					} else { // Given primary number exists in the list of secondary numbers
-						Toast.makeText(context, R.string.DUPLICATED_NUMBERS, Toast.LENGTH_LONG).show();
-						logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":createSmsPrimaryInputDialog().PositiveButton.OnClickListener().onClick()", "Given PRIMARY sms number(" + input + ") already exists in the list of SECONDARY sms numbers and therefore cannot be stored. Showing dialog again");
-					}
-
-					createSmsPrimaryInputDialog();
-				}
-			}
-		});
-
-		// Set a neutral button, due to documentation it has same functionality as "back" button
-		dialog.setNeutralButton(R.string.CANCEL, new DialogInterface.OnClickListener() {
-			@Override
-			public void onClick(DialogInterface dialog, int whichButton) {
-				// DO NOTHING, except logging
-				logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":createSmsPrimaryInputDialog().NeutralButton.OnClickListener().onClick()", "Neutral Button pressed in dialog, nothing done");
-			}
-		});
-
-		logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":createSmsPrimaryInputDialog()", "Showing dialog");
-
-		// Show it
-		dialog.show();
+	private void showAddSmsNumberDialog(int requestCode) {
+		AddSmsNumberDialog dialog = new AddSmsNumberDialog();
+		dialog.setTargetFragment(SmsSettingsFragment.this, requestCode);
+		dialog.show(getFragmentManager(), AddSmsNumberDialog.ADD_SMS_NUMBER_DIALOG_TAG);
 	}
 
 	/**
-	 * To build up and display a dialog which let's the user add a phone number to the list of <b><i>Secondary alarm triggering phone numbers</i></b>. <br>
-	 * <b><i>Note. The input of this dialog doesn't accept blankspaces({@link Util.NoBlanksInputEditText})</i></b>.
+	 * Convenience method to create a new instance of {@link RemoveSmsNumberDialog} and show it.
 	 * 
-	 * @see #createSmsSecondaryRemoveDialog()
-	 * @see #updateSecondarySmsNumberSpinner()
-	 * @see PreferencesHandler#setPrefs(PrefKeys, PrefKeys, Object, Context)
-	 * @see LogHandler#logCat(LogPriorities, String, String)
-	 * @see LogHandler#logCatTxt(LogPriorities, String, String, Throwable)
+	 * @param requestCode
+	 *            Request code for the created <code>RemoveSmsNumberDialog</code>.
+	 * @param smsNumber
+	 *            SMS number to be removed.
 	 */
-	private void createSmsSecondaryInputDialog() {
-		logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":createSmsSecondaryInputDialog()", "Start building dialog for input of Sms Secondary number");
+	private void showRemoveSmsNumberDialog(int requestCode, String smsNumber) {
+		// Must pass over SMS number to be removed
+		Bundle arguments = new Bundle();
+		arguments.putString(RemoveSmsNumberDialog.REMOVE_SMS_NUMBER, smsNumber);
 
-		AlertDialog.Builder dialog = new AlertDialog.Builder(context);
-		final EditText noBlanksInputEditText = new NoBlanksInputEditText(context);
-
-		dialog.setIcon(android.R.drawable.ic_dialog_info);
-		dialog.setTitle(R.string.NUMBER_PROMPT_TITLE);
-		dialog.setMessage(R.string.SECONDARY_NUMBER_PROMPT_MESSAGE);
-		dialog.setCancelable(false);
-		dialog.setView(noBlanksInputEditText);
-		noBlanksInputEditText.setHint(R.string.NUMBER_PROMPT_HINT);
-		noBlanksInputEditText.setInputType(InputType.TYPE_CLASS_TEXT);
-
-		dialog.setPositiveButton(R.string.OK, new DialogInterface.OnClickListener() {
-			@Override
-			public void onClick(DialogInterface dialog, int whichButton) {
-				logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":createSmsSecondaryInputDialog().PositiveButton.OnClickListener().onClick()", "Positive Button pressed");
-
-				boolean duplicatedNumbers = false;
-				String input = noBlanksInputEditText.getText().toString();
-
-				if (!Util.existsIn(input, primarySmsNumbers) && !input.equals("")) {
-					for (String number : secondarySmsNumbers) {
-						if (number.equalsIgnoreCase(input)) {
-							duplicatedNumbers = true;
-						}
-					}
-
-					if (!duplicatedNumbers) {
-						secondarySmsNumbers.add(input);
-
-						try {
-							// Store to shared preferences
-							prefHandler.setPrefs(PrefKeys.SHARED_PREF, PrefKeys.SECONDARY_LISTEN_NUMBERS_KEY, secondarySmsNumbers, context);
-						} catch (IllegalArgumentException e) {
-							logger.logCatTxt(LogPriorities.ERROR, LOG_TAG + ":createSmsSecondaryInputDialog().PositiveButton.OnClickListener().onClick()", "An Object of unsupported instance was given as argument to PreferencesHandler.setPrefs()", e);
-						}
-
-						updateSecondarySmsNumberSpinner();
-						logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":createSmsSecondaryInputDialog().PositiveButton.OnClickListener().onClick()", "New SECONDARY sms number has been stored from user input to the list of SECONDARY sms numbers. New SECONDARY sms number is: \"" + input + "\"");
-					} else {
-						Toast.makeText(context, R.string.NUMBER_ALREADY_IN_SECONDARY_LIST, Toast.LENGTH_LONG).show();
-						logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":createSmsSecondaryInputDialog().PositiveButton.OnClickListener().onClick()", "Given SECONDARY sms number(" + input + ") already exists in the list of SECONDARY sms numbers and therefore cannot be stored. Showing dialog again");
-						createSmsSecondaryInputDialog();
-					}
-				} else {
-					if (input.equals("")) {
-						Toast.makeText(context, R.string.NUMBER_IS_NEEDED, Toast.LENGTH_LONG).show();
-						logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":createSmsSecondaryInputDialog().PositiveButton.OnClickListener().onClick()", "Given SECONDARY sms number is empty and therefore cannot be stored. Showing dialog again");
-					} else {
-						Toast.makeText(context, R.string.DUPLICATED_NUMBERS, Toast.LENGTH_LONG).show();
-						logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":createSmsSecondaryInputDialog().PositiveButton.OnClickListener().onClick()", "Given SECONDARY sms number(" + input + ") already exists in the list of PRIMARY sms numbers and therefore cannot be stored. Showing dialog again");
-					}
-
-					createSmsSecondaryInputDialog();
-				}
-			}
-		});
-
-		dialog.setNeutralButton(R.string.CANCEL, new DialogInterface.OnClickListener() {
-			@Override
-			public void onClick(DialogInterface dialog, int whichButton) {
-				// DO NOTHING, except logging
-				logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":createSmsSecondaryInputDialog().NeutralButton.OnClickListener().onClick()", "Neutral Button pressed in dialog, nothing done");
-			}
-		});
-
-		logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":createSmsSecondaryInputDialog()", "Showing dialog");
-		dialog.show();
+		// Create Dialog as usual, but put arguments in it also
+		RemoveSmsNumberDialog dialog = new RemoveSmsNumberDialog();
+		dialog.setArguments(arguments);
+		dialog.setTargetFragment(SmsSettingsFragment.this, requestCode);
+		dialog.show(getFragmentManager(), RemoveSmsNumberDialog.REMOVE_SMS_NUMBER_DIALOG_TAG);
 	}
 
 	/**
-	 * To build up and display a dialog which let's the user remove a phone number from the list of <b><i>Primary alarm triggering phone
-	 * numbers</i></b>. <br>
-	 *
-	 * @see #createSmsPrimaryInputDialog()
-	 * @see #updatePrimarySmsNumberSpinner()
-	 * @see PreferencesHandler#setPrefs(PrefKeys, PrefKeys, Object, Context)
-	 * @see LogHandler#logCat(LogPriorities, String, String)
-	 * @see LogHandler#logCatTxt(LogPriorities, String, String, Throwable)
-	 */
-	private void createSmsPrimaryRemoveDialog() {
-		logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":createSmsPrimaryRemoveDialog()", "Start building dialog for removing a Primary Sms number");
-
-		AlertDialog.Builder dialog = new AlertDialog.Builder(context);
-		dialog.setIcon(android.R.drawable.ic_dialog_alert);
-		dialog.setTitle(R.string.DELETE_NUMBER_PROMPT_TITLE);
-		dialog.setMessage(getString(R.string.DELETE_PRIMARY_NUMBER_PROMPT_MESSAGE) + " " + primarySmsNumbers.get(primarySmsNumberSpinner.getSelectedItemPosition()) + "?");
-		dialog.setCancelable(false);
-
-		dialog.setPositiveButton(R.string.YES, new DialogInterface.OnClickListener() {
-			@Override
-			public void onClick(DialogInterface dialog, int whichButton) {
-				logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":createSmsPrimaryRemoveDialog().PosButton.OnClickListener().onClick()", "Positive Button pressed");
-				logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":createSmsPrimaryRemoveDialog().PosButton.OnClickListener().onClick()", "PRIMARY sms number: \"" + primarySmsNumbers.get(primarySmsNumberSpinner.getSelectedItemPosition()) + "\" is about to be removed from the list of PRIMARY sms numbers");
-
-				// Delete number from list
-				primarySmsNumbers.remove(primarySmsNumberSpinner.getSelectedItemPosition());
-				try {
-					// Store to shared preferences
-					prefHandler.setPrefs(PrefKeys.SHARED_PREF, PrefKeys.PRIMARY_LISTEN_NUMBERS_KEY, primarySmsNumbers, context);
-				} catch (IllegalArgumentException e) {
-					logger.logCatTxt(LogPriorities.ERROR, LOG_TAG + ":createSmsPrimaryRemoveDialog().PosButton.OnClickListener().onClick()", "An Object of unsupported instance was given as argument to PreferencesHandler.setPrefs()", e);
-				}
-
-				// Update affected UI widgets
-				updatePrimarySmsNumberSpinner();
-			}
-		});
-
-		dialog.setNeutralButton(R.string.NO, new DialogInterface.OnClickListener() {
-			@Override
-			public void onClick(DialogInterface dialog, int whichButton) {
-				// DO NOTHING, except logging
-				logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":createSmsPrimaryRemoveDialog().NeutralButton.OnClickListener().onClick()", "Neutral Button pressed in dialog, nothing done");
-			}
-		});
-
-		logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":createSmsPrimaryRemoveDialog()", "Showing dialog");
-		dialog.show();
-	}
-
-	/**
-	 * To build up and display a dialog which let's the user remove a phone number from the list of <b><i>Secondary alarm triggering phone
-	 * numbers</i></b>. <br>
-	 *
-	 * @see #createSmsSecondaryInputDialog()
-	 * @see #updateSecondarySmsNumberSpinner()
-	 * @see PreferencesHandler#setPrefs(PrefKeys, PrefKeys, Object, Context)
-	 * @see LogHandler#logCat(LogPriorities, String, String)
-	 * @see LogHandler#logCatTxt(LogPriorities, String, String, Throwable)
-	 */
-	private void createSmsSecondaryRemoveDialog() {
-		logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":createSmsSecondaryRemoveDialog()", "Start building dialog for removing a Secondary Sms number");
-
-		AlertDialog.Builder dialog = new AlertDialog.Builder(context);
-		dialog.setTitle(R.string.DELETE_NUMBER_PROMPT_TITLE);
-		dialog.setMessage(getString(R.string.DELETE_SECONDARY_NUMBER_PROMPT_MESSAGE) + " " + secondarySmsNumbers.get(secondarySmsNumberSpinner.getSelectedItemPosition()) + "?");
-		dialog.setCancelable(false);
-
-		dialog.setPositiveButton(R.string.YES, new DialogInterface.OnClickListener() {
-			@Override
-			public void onClick(DialogInterface dialog, int whichButton) {
-				logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":createSmsSecondaryRemoveDialog().PosButton.OnClickListener().onClick()", "Positive Button pressed");
-				logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":createSmsSecondaryRemoveDialog().PosButton.OnClickListener().onClick()", "SECONDARY sms number: \"" + secondarySmsNumbers.get(secondarySmsNumberSpinner.getSelectedItemPosition()) + "\" is about to be removed from the list of SECONDARY sms numbers");
-
-				secondarySmsNumbers.remove(secondarySmsNumberSpinner.getSelectedItemPosition());
-				try {
-					prefHandler.setPrefs(PrefKeys.SHARED_PREF, PrefKeys.SECONDARY_LISTEN_NUMBERS_KEY, secondarySmsNumbers, context);
-				} catch (IllegalArgumentException e) {
-					logger.logCatTxt(LogPriorities.ERROR, LOG_TAG + ":createSmsSecondaryRemoveDialog().PosButton.OnClickListener().onClick()", "An Object of unsupported instance was given as argument to PreferencesHandler.setPrefs()", e);
-				}
-				updateSecondarySmsNumberSpinner();
-			}
-		});
-
-		dialog.setNeutralButton(R.string.NO, new DialogInterface.OnClickListener() {
-			@Override
-			public void onClick(DialogInterface dialog, int whichButton) {
-				// DO NOTHING, except logging
-				logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":createSmsSecondaryRemoveDialog().NeutralButton.OnClickListener().onClick()", "Neutral Button pressed in dialog, nothing done");
-			}
-		});
-
-		logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":createSmsSecondaryRemoveDialog()", "Showing dialog");
-		dialog.show();
-	}
-
-	/**
-	 * To update primary sms number <code>Spinner</code> with correct values.
+	 * To update primary SMS number <code>Spinner</code> with correct values.
 	 * 
 	 * @see #updateSecondarySmsNumberSpinner()
-	 * @see LogHandler#logCat(LogPriorities, String, String)
 	 */
 	private void updatePrimarySmsNumberSpinner() {
 		// Check if there are primary sms numbers and build up a proper spinner according to that
@@ -504,10 +389,9 @@ public class SmsSettingsFragment extends SherlockFragment implements Application
 	}
 
 	/**
-	 * To update secondary sms number <code>Spinner</code> with correct values.
+	 * To update secondary SMS number <code>Spinner</code> with correct values.
 	 * 
 	 * @see #updatePrimarySmsNumberSpinner()
-	 * @see LogHandler#logCat(LogPriorities, String, String)
 	 */
 	private void updateSecondarySmsNumberSpinner() {
 		// Check if there are secondary sms numbers and build up a proper spinner according to that information

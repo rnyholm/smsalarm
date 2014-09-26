@@ -32,7 +32,7 @@ import com.jeremyfeinstein.slidingmenu.lib.app.SlidingFragmentActivity;
  * @since 0.9beta
  */
 public class SmsAlarm extends SlidingFragmentActivity {
-	private final String LOG_TAG = getClass().getSimpleName();
+	private static final String LOG_TAG = SmsAlarm.class.getSimpleName();
 
 	// Objects for log- and database handling
 	private final LogHandler logger = LogHandler.getInstance();

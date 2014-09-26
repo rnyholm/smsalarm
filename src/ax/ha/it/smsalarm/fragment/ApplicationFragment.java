@@ -3,50 +3,39 @@
  */
 package ax.ha.it.smsalarm.fragment;
 
+import android.content.SharedPreferences;
+import android.support.v4.app.Fragment;
 import android.view.View;
-import ax.ha.it.smsalarm.handler.LogHandler;
-import ax.ha.it.smsalarm.handler.LogHandler.LogPriorities;
 
 /**
- * Interface for all the UI fragments in application, holding method declaration all fragments must implement.
+ * Interface for all the <b><i>user interface</i></b> {@link Fragment}'s in application.
  * 
  * @author Robert Nyholm <robert.nyholm@aland.net>
  * @version 2.3.1
  * @since 2.3.1
  */
 public interface ApplicationFragment {
-
-	// Request codes for the different dialogs
-	static final int ACKNOWLEDGE_NUMBER_DIALOG_REQUEST_CODE = 5;
-	static final int RESCUE_SERVICE_DIALOG_REQUEST_CODE = 6;
-
 	/**
-	 * To find UI widgets and get their reference by ID contained in view of the <code>Fragment</code>.<br>
-	 * If some other attributes or special handling has to be done to some UI widgets it's also done within this method.
+	 * To find user interface widgets and get their reference by ID contained in view of the {@link Fragment}.<br>
+	 * If some other attributes or special handling has to be done to some user interface widgets it's also done within this method.
 	 * 
 	 * @param view
 	 *            <code>View</code> from witch UI widgets will be found.
-	 * @see LogHandler#logCat(LogPriorities, String, String)
 	 */
 	void findViews(View view);
 
 	/**
-	 * To fetch <code>Shared Preferences</code> used by member variables of this <code>Fragment</code>.
-	 * 
-	 * @see LogHandler#logCat(LogPriorities, String, String)
-	 * @see LogHandler#logCatTxt(LogPriorities, String, String, Throwable)
+	 * To fetch {@link SharedPreferences} used by member variables of this {@link Fragment}.
 	 */
 	void fetchSharedPrefs();
 
 	/**
-	 * To update all UI widgets contained in this <code>Fragments View</code>.
-	 * 
-	 * @see LogHandler#logCat(LogPriorities, String, String)
+	 * To update all user interface widgets contained in this {@link Fragment}'s <code>view</code>.
 	 */
 	void updateFragmentView();
 
 	/**
-	 * To set different listeners to the UI widgets contained within this <code>Fragment</code>.
+	 * To set different listeners to the user interface widgets contained within this {@link Fragment}.
 	 */
 	void setListeners();
 }

@@ -15,18 +15,26 @@ import ax.ha.it.smsalarm.handler.LogHandler;
 import ax.ha.it.smsalarm.handler.LogHandler.LogPriorities;
 
 /**
- * {@link DialogFragment} which lets the user add or remove the <b><i>Rescue Service Name</i></b>.
+ * {@link DialogFragment} which let's the user add or remove the <b><i>Rescue Service Name</i></b>.
  *
  * @author Robert Nyholm <robert.nyholm@aland.net>
  * @version 2.3.1
  * @since 2.3.1
+ * @see #RESCUE_SERVICE
+ * @see #RESCUE_SERVICE_DIALOG_TAG
+ * @see #RESCUE_SERVICE_DIALOG_REQUEST_CODE
  */
 public class RescueServiceDialog extends DialogFragment {
 	private static final String LOG_TAG = RescueServiceDialog.class.getSimpleName();
-	// Used as a key when putting data into bundles and intents
-	public static final String RESCUE_SERVICE = "rescueService";
 
-	// For for logging
+	// Used as a key when putting data into bundles and intents, dialog tag can come in handy for classes using this dialog
+	public static final String RESCUE_SERVICE = "rescueService";
+	public static final String RESCUE_SERVICE_DIALOG_TAG = "rescueServiceDialog";
+
+	// Request code used for this dialog
+	public static final int RESCUE_SERVICE_DIALOG_REQUEST_CODE = 12;
+
+	// For logging
 	private LogHandler logger = LogHandler.getInstance();
 
 	// Must have application context
@@ -77,7 +85,6 @@ public class RescueServiceDialog extends DialogFragment {
 				.setIcon(android.R.drawable.ic_dialog_info) 		// Set icon
 				.setTitle(R.string.RESCUE_SERVICE_PROMPT_TITLE) 	// Set title
 				.setMessage(R.string.RESCUE_SERVICE_PROMPT_MESSAGE) // Set message
-				.setCancelable(false)								// Set dialog to non cancelable
 				.setView(inputEditText) 							// Bind dialog to EditText
 				// @formatter:on
 
@@ -92,7 +99,7 @@ public class RescueServiceDialog extends DialogFragment {
 
 						logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":onCreateDialog().PositiveButton.OnClickListener().onClick()", "Intent created with extra, key: \"" + RESCUE_SERVICE + "\" and data: \"" + inputEditText.getText().toString() + "\"");
 
-						// Make a call to this dialog fragments owning fragments onAcitivittyResult with correct request code, result code and intent
+						// Make a call to this dialog fragments owning fragments onAcitivityResult with correct request code, result code and intent
 						getTargetFragment().onActivityResult(getTargetRequestCode(), Activity.RESULT_OK, intent);
 					}
 				})
@@ -100,7 +107,7 @@ public class RescueServiceDialog extends DialogFragment {
 				.setNegativeButton(R.string.CANCEL, new DialogInterface.OnClickListener() {
 					@Override
 					public void onClick(DialogInterface dialog, int whichButton) {
-						logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":onCreateDialog().NegativeButton.OnClickListener().onClick()", "Neutral Button pressed");
+						logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":onCreateDialog().NegativeButton.OnClickListener().onClick()", "Negative Button pressed");
 						getTargetFragment().onActivityResult(getTargetRequestCode(), Activity.RESULT_CANCELED, null);
 					}
 				})

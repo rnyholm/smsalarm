@@ -41,7 +41,6 @@ import com.actionbarsherlock.app.SherlockFragment;
  */
 public class OtherSettingsFragment extends SherlockFragment implements ApplicationFragment {
 	private static final String LOG_TAG = OtherSettingsFragment.class.getSimpleName();
-	private static final String RESCUE_SERVICE_DIALOG_TAG = "rescueServiceDialog";
 
 	// Objects needed for logging, shared preferences handling and noise handling
 	private final LogHandler logger = LogHandler.getInstance();
@@ -213,8 +212,8 @@ public class OtherSettingsFragment extends SherlockFragment implements Applicati
 				logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":setListeners().editRescueServiceButton.OnClickListener().onClick()", "Edit rescue service button pressed");
 
 				RescueServiceDialog dialog = new RescueServiceDialog();
-				dialog.setTargetFragment(OtherSettingsFragment.this, RESCUE_SERVICE_DIALOG_REQUEST_CODE);
-				dialog.show(getFragmentManager(), RESCUE_SERVICE_DIALOG_TAG);
+				dialog.setTargetFragment(OtherSettingsFragment.this, RescueServiceDialog.RESCUE_SERVICE_DIALOG_REQUEST_CODE);
+				dialog.show(getFragmentManager(), RescueServiceDialog.RESCUE_SERVICE_DIALOG_TAG);
 			}
 		});
 
@@ -247,12 +246,11 @@ public class OtherSettingsFragment extends SherlockFragment implements Applicati
 	public void onActivityResult(int requestCode, int resultCode, Intent data) {
 		logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":onActivityResult()", "Handling of activity result is about to begin, request code: \"" + Integer.toString(requestCode) + "\" and result code: \"" + Integer.toString(resultCode) + "\"");
 
-		// Sort out the requests and result codes to the ones this fragment is interested in
-		if (requestCode == RESCUE_SERVICE_DIALOG_REQUEST_CODE) {
-			logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":onActivityResult()", "Result with request code: \"" + requestCode + "\" is about to be handled");
-
-			switch (resultCode) {
-				case Activity.RESULT_OK:
+		// Only interested in OK results, don't care at all about the others
+		if (resultCode == Activity.RESULT_OK) {
+			// Only interested in certain request codes...
+			switch (requestCode) {
+				case (RescueServiceDialog.RESCUE_SERVICE_DIALOG_REQUEST_CODE):
 					rescueService = data.getStringExtra(RescueServiceDialog.RESCUE_SERVICE);
 
 					logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":onActivityResult()", "Result code: \"" + Activity.RESULT_OK + "\"(Activity.RESULT_OK), data: \"" + rescueService + "\" fetched using key: \"" + RescueServiceDialog.RESCUE_SERVICE + "\" is about to be persisted into shared preferences");
@@ -269,11 +267,8 @@ public class OtherSettingsFragment extends SherlockFragment implements Applicati
 
 					logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":onActivityResult()", "New RESCUE SERVICE name has been stored from user input . New RESCUE SERVICE name is: \"" + rescueService + "\"");
 					break;
-				case Activity.RESULT_CANCELED:
-					logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":onActivityResult()", "Result code: \"" + Activity.RESULT_CANCELED + "\"(Activity.RESULT_CANCELED), do nothing");
-					break;
 				default:
-					logger.logCatTxt(LogPriorities.ERROR, LOG_TAG + ":onActivityResult()", "Result code: \"" + Integer.toString(resultCode) + "\" is unsupported for request code: \"" + requestCode + "\"");
+					logger.logCatTxt(LogPriorities.ERROR, LOG_TAG + ":onActivityResult()", "An unsupported result occurred, result code: \"" + Integer.toString(resultCode) + "\" and request code: \"" + requestCode + "\"");
 			}
 		}
 	}

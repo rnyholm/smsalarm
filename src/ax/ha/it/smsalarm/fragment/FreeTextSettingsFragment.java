@@ -6,41 +6,40 @@ package ax.ha.it.smsalarm.fragment;
 import java.util.ArrayList;
 import java.util.List;
 
-import android.app.AlertDialog;
+import android.app.Activity;
 import android.content.Context;
-import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
-import android.text.InputType;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.Toast;
 import ax.ha.it.smsalarm.R;
+import ax.ha.it.smsalarm.fragment.dialog.AddFreeTextDialog;
+import ax.ha.it.smsalarm.fragment.dialog.RemoveFreeTextDialog;
 import ax.ha.it.smsalarm.handler.LogHandler;
 import ax.ha.it.smsalarm.handler.LogHandler.LogPriorities;
 import ax.ha.it.smsalarm.handler.PreferencesHandler;
 import ax.ha.it.smsalarm.handler.PreferencesHandler.DataTypes;
 import ax.ha.it.smsalarm.handler.PreferencesHandler.PrefKeys;
-import ax.ha.it.smsalarm.ui.NoBlanksInputEditText;
 import ax.ha.it.smsalarm.util.Util;
 
 import com.actionbarsherlock.app.SherlockFragment;
 
 /**
- * <code>Fragment</code> containing all the views and user interface widgets for the <b><i>Free Text Settings</i></b>. Fragment does also contain all
- * logic for the widgets.
+ * {@link Fragment} containing all the views and user interface widgets for the <b><i>Free Text Settings</i></b>. <code>Fragment</code> does also
+ * contain all logic for the widgets.
  * 
  * @author Robert Nyholm <robert.nyholm@aland.net>
  * @version 2.3.1
  * @since 2.3.1
  */
 public class FreeTextSettingsFragment extends SherlockFragment implements ApplicationFragment {
-	private final String LOG_TAG = getClass().getSimpleName();
+	private static final String LOG_TAG = FreeTextSettingsFragment.class.getSimpleName();
 
 	// Objects needed for logging and shared preferences handling
 	private final LogHandler logger = LogHandler.getInstance();
@@ -65,7 +64,7 @@ public class FreeTextSettingsFragment extends SherlockFragment implements Applic
 	private final List<String> emptyFreeTexts = new ArrayList<String>(); // <-- A "dummy" list just containing one element, on string
 
 	/**
-	 * To create a new <code>FreeTextSettingsFragment</code>.
+	 * To create a new instance of {@link FreeTextSettingsFragment}.
 	 */
 	public FreeTextSettingsFragment() {
 		logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":FreeTextSettingsFragment()", "Creating a new Free text settings fragmen");
@@ -148,7 +147,9 @@ public class FreeTextSettingsFragment extends SherlockFragment implements Applic
 			@Override
 			public void onClick(View v) {
 				logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":setListeners().addPrimaryFreeTextButton.OnClickListener().onClick()", "Add PRIMARY free text button pressed");
-				createFreeTextPrimaryInputDialog();
+
+				// Showing dialog with correct request code
+				showAddFreeTextDialog(AddFreeTextDialog.ADD_PRIMARY_FREE_TEXT_DIALOG_REQUEST_CODE);
 			}
 		});
 
@@ -160,7 +161,9 @@ public class FreeTextSettingsFragment extends SherlockFragment implements Applic
 
 				// Only show delete dialog if primary free texts exists
 				if (!primaryFreeTexts.isEmpty()) {
-					createFreeTextPrimaryRemoveDialog();
+					// Resolve free text to be removed
+					String primaryFreeTextToBeRemoved = primaryFreeTexts.get(primaryFreeTextSpinner.getSelectedItemPosition());
+					showRemoveFreeTextDialog(RemoveFreeTextDialog.REMOVE_PRIMARY_FREE_TEXT_DIALOG_REQUEST_CODE, primaryFreeTextToBeRemoved);
 				} else {
 					Toast.makeText(context, R.string.NO_PRIMARY_FREE_TEXT_EXISTS, Toast.LENGTH_LONG).show();
 					logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":setListeners().removePrimaryFreeTextButton.OnClickListener().onClick()", "Cannot build and show dialog because the list of PRIMARY free texts are empty");
@@ -173,7 +176,7 @@ public class FreeTextSettingsFragment extends SherlockFragment implements Applic
 			@Override
 			public void onClick(View v) {
 				logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":setListeners().addSecondaryFreeTextButton.OnClickListener().onClick()", "Add SECONDARY free text button pressed");
-				createFreeTextSecondaryInputDialog();
+				showAddFreeTextDialog(AddFreeTextDialog.ADD_SECONDARY_FREE_TEXT_DIALOG_REQUEST_CODE);
 			}
 		});
 
@@ -184,7 +187,8 @@ public class FreeTextSettingsFragment extends SherlockFragment implements Applic
 				logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":setListeners().removeSecondaryFreeTextButton.OnClickListener().onClick()", "Remove SECONDARY free text button pressed");
 				// Only show delete dialog if secondary free texts exists
 				if (!secondaryFreeTexts.isEmpty()) {
-					createFreeTextSecondaryRemoveDialog();
+					String secondaryFreeTextToBeRemoved = secondaryFreeTexts.get(secondaryFreeTextSpinner.getSelectedItemPosition());
+					showRemoveFreeTextDialog(RemoveFreeTextDialog.REMOVE_SECONDARY_FREE_TEXT_DIALOG_REQUEST_CODE, secondaryFreeTextToBeRemoved);
 				} else {
 					Toast.makeText(context, R.string.NO_SECONDARY_FREE_TEXT_EXISTS, Toast.LENGTH_LONG).show();
 					logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":setListeners().removePrimaryFreeTextButton.OnClickListener().onClick()", "Cannot build and show dialog because the list of SECONDARY free texts are");
@@ -193,288 +197,172 @@ public class FreeTextSettingsFragment extends SherlockFragment implements Applic
 		});
 	}
 
+	@Override
+	public void onActivityResult(int requestCode, int resultCode, Intent data) {
+		logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":onActivityResult()", "Handling of activity result is about to begin, request code: \"" + Integer.toString(requestCode) + "\" and result code: \"" + Integer.toString(resultCode) + "\"");
+
+		// Only interested in OK results, don't care at all about the others
+		if (resultCode == Activity.RESULT_OK) {
+			// Boolean indicating if there are duplicates of the primary and secondary free texts
+			boolean duplicatedFreeTexts = false;
+			// To store the entered free text for further handling
+			String newFreeText = "";
+
+			// Only interested in certain request codes...
+			switch (requestCode) {
+				case (AddFreeTextDialog.ADD_PRIMARY_FREE_TEXT_DIALOG_REQUEST_CODE):
+					newFreeText = data.getStringExtra(AddFreeTextDialog.ADD_FREE_TEXT);
+
+					// If input doesn't exist in the list of secondaryFreeTexts and input isn't empty
+					if (!Util.existsIn(newFreeText, secondaryFreeTexts) && !newFreeText.equals("")) {
+						// Iterate through all strings in the list of primaryFreeTexts to check if text already exists
+						for (String text : primaryFreeTexts) {
+							// If a string in the list is equal with the new free text then it's duplicated
+							if (text.equalsIgnoreCase(newFreeText)) {
+								duplicatedFreeTexts = true;
+							}
+						}
+
+						// Store input if duplicated free texts is false
+						if (!duplicatedFreeTexts) {
+							// Add given input to list
+							primaryFreeTexts.add(newFreeText);
+
+							try {
+								// Store to shared preferences
+								prefHandler.setPrefs(PrefKeys.SHARED_PREF, PrefKeys.PRIMARY_LISTEN_FREE_TEXTS_KEY, primaryFreeTexts, context);
+							} catch (IllegalArgumentException e) {
+								logger.logCatTxt(LogPriorities.ERROR, LOG_TAG + ":onActivityResult()", "An Object of unsupported instance was given as argument to PreferencesHandler.setPrefs()", e);
+							}
+
+							// Update affected UI widgets
+							updatePrimaryFreeTextSpinner();
+							logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":onActivityResult()", "New PRIMARY free text has been stored from user input to the list of PRIMARY free texts. New PRIMARY free text is: \"" + newFreeText + "\"");
+						} else {
+							Toast.makeText(context, R.string.FREE_TEXT_ALREADY_IN_PRIMARY_LIST, Toast.LENGTH_LONG).show();
+							logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":onActivityResult()", "Given PRIMARY free text(" + newFreeText + ") already exists in the list of PRIMARY free texts and therefore cannot be stored. Showing dialog again");
+
+							// Showing dialog again with correct request code
+							showAddFreeTextDialog(AddFreeTextDialog.ADD_PRIMARY_FREE_TEXT_DIALOG_REQUEST_CODE);
+						}
+					} else {
+						// Empty input was given
+						if (newFreeText.equals("")) {
+							Toast.makeText(context, R.string.TEXT_IS_NEEDED, Toast.LENGTH_LONG).show();
+							logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":onActivityResult()", "Given PRIMARY free text is empty and therefore cannot be stored. Showing dialog again");
+						} else { // Given primary free text exists in the list of secondary free texts
+							Toast.makeText(context, R.string.DUPLICATED_FREE_TEXTS, Toast.LENGTH_LONG).show();
+							logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":onActivityResult()", "Given PRIMARY free text(" + newFreeText + ") already exists in the list of SECONDARY free texts and therefore cannot be stored. Showing dialog again");
+						}
+
+						showAddFreeTextDialog(AddFreeTextDialog.ADD_PRIMARY_FREE_TEXT_DIALOG_REQUEST_CODE);
+					}
+					break;
+				case (AddFreeTextDialog.ADD_SECONDARY_FREE_TEXT_DIALOG_REQUEST_CODE):
+					newFreeText = data.getStringExtra(AddFreeTextDialog.ADD_FREE_TEXT);
+
+					if (!Util.existsIn(newFreeText, primaryFreeTexts) && !newFreeText.equals("")) {
+						for (String text : secondaryFreeTexts) {
+							if (text.equalsIgnoreCase(newFreeText)) {
+								duplicatedFreeTexts = true;
+							}
+						}
+
+						if (!duplicatedFreeTexts) {
+							secondaryFreeTexts.add(newFreeText);
+
+							try {
+								prefHandler.setPrefs(PrefKeys.SHARED_PREF, PrefKeys.SECONDARY_LISTEN_FREE_TEXTS_KEY, secondaryFreeTexts, context);
+							} catch (IllegalArgumentException e) {
+								logger.logCatTxt(LogPriorities.ERROR, LOG_TAG + ":onActivityResult()", "An Object of unsupported instance was given as argument to PreferencesHandler.setPrefs()", e);
+							}
+
+							updateSecondaryFreeTextSpinner();
+							logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":onActivityResult()", "New SECONDARY free text has been stored from user input to the list of SECONDARY free texts. New SECONDARY free text is: \"" + newFreeText + "\"");
+						} else {
+							Toast.makeText(context, R.string.FREE_TEXT_ALREADY_IN_SECONDARY_LIST, Toast.LENGTH_LONG).show();
+							logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":onActivityResult()", "Given SECONDARY free text(" + newFreeText + ") already exists in the list of SECONDARY free texts and therefore cannot be stored. Showing dialog again");
+
+							showAddFreeTextDialog(AddFreeTextDialog.ADD_SECONDARY_FREE_TEXT_DIALOG_REQUEST_CODE);
+						}
+					} else {
+						if (newFreeText.equals("")) {
+							Toast.makeText(context, R.string.TEXT_IS_NEEDED, Toast.LENGTH_LONG).show();
+							logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":onActivityResult()", "Given SECONDARY free text is empty and therefore cannot be stored. Showing dialog again");
+						} else {
+							Toast.makeText(context, R.string.DUPLICATED_FREE_TEXTS, Toast.LENGTH_LONG).show();
+							logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":onActivityResult()", "Given SECONDARY free text(" + newFreeText + ") already exists in the list of PRIMARY free texts and therefore cannot be stored. Showing dialog again");
+						}
+
+						showAddFreeTextDialog(AddFreeTextDialog.ADD_SECONDARY_FREE_TEXT_DIALOG_REQUEST_CODE);
+					}
+					break;
+				case (RemoveFreeTextDialog.REMOVE_PRIMARY_FREE_TEXT_DIALOG_REQUEST_CODE):
+					// Remove free text in list that equals the free text got from intent data
+					primaryFreeTexts.remove(data.getStringExtra(RemoveFreeTextDialog.REMOVE_FREE_TEXT));
+
+					try {
+						// Store to shared preferences
+						prefHandler.setPrefs(PrefKeys.SHARED_PREF, PrefKeys.PRIMARY_LISTEN_FREE_TEXTS_KEY, primaryFreeTexts, context);
+					} catch (IllegalArgumentException e) {
+						logger.logCatTxt(LogPriorities.ERROR, LOG_TAG + ":onActivityResult()", "An Object of unsupported instance was given as argument to PreferencesHandler.setPrefs()", e);
+					}
+
+					updatePrimaryFreeTextSpinner();
+					break;
+				case (RemoveFreeTextDialog.REMOVE_SECONDARY_FREE_TEXT_DIALOG_REQUEST_CODE):
+					secondaryFreeTexts.remove(data.getStringExtra(RemoveFreeTextDialog.REMOVE_FREE_TEXT));
+
+					try {
+						prefHandler.setPrefs(PrefKeys.SHARED_PREF, PrefKeys.SECONDARY_LISTEN_FREE_TEXTS_KEY, secondaryFreeTexts, context);
+					} catch (IllegalArgumentException e) {
+						logger.logCatTxt(LogPriorities.ERROR, LOG_TAG + ":onActivityResult()", "An Object of unsupported instance was given as argument to PreferencesHandler.setPrefs()", e);
+					}
+
+					updateSecondaryFreeTextSpinner();
+					break;
+				default:
+					logger.logCatTxt(LogPriorities.ERROR, LOG_TAG + ":onActivityResult()", "An unsupported result occurred, result code: \"" + Integer.toString(resultCode) + "\" and request code: \"" + requestCode + "\"");
+			}
+		}
+	}
+
 	/**
-	 * To build up and display a dialog which let's the user add a free text to the list of <b><i>Primary alarm triggering free texts</i></b>. <br>
-	 * <b><i>Note. The input of this dialog doesn't accept blankspaces({@link Util.NoBlanksInputEditText})</i></b>.
+	 * Convenience method to create a new instance of {@link AddFreeTextDialog} and show it.
 	 * 
-	 * @see #createFreeTextPrimaryRemoveDialog()
-	 * @see #updatePrimaryFreeTextSpinner()
-	 * @see PreferencesHandler#setPrefs(PrefKeys, PrefKeys, Object, Context) setPrefs(PrefKeys, PrefKeys, Object, Context)
-	 * @see LogHandler#logCat(LogPriorities, String, String) logCat(LogPriorities, String, String)
-	 * @see LogHandler#logCatTxt(LogPriorities, String, String, Throwable) logCatTxt(LogPriorities, String, String,Throwable)
+	 * @param requestCode
+	 *            Request code for the created <code>AddFreeTextDialog</code>.
 	 */
-	private void createFreeTextPrimaryInputDialog() {
-		logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":createFreeTextPrimaryInputDialog()", "Start building dialog for input of Primary Free Text");
-
-		// Build up the alert dialog
-		AlertDialog.Builder dialog = new AlertDialog.Builder(context);
-		final EditText noBlanksInputEditText = new NoBlanksInputEditText(context);
-
-		// @formatter:off
-		// Configure dialog and edit text
-		dialog.setIcon(android.R.drawable.ic_dialog_info);				// Set icon
-		dialog.setTitle(R.string.FREE_TEXT_PROMPT_TITLE);				// Set title
-		dialog.setMessage(R.string.PRIMARY_FREE_TEXT_PROMPT_MESSAGE);	// Set message
-		dialog.setCancelable(false);									// Set dialog to non cancelable
-		dialog.setView(noBlanksInputEditText);							// Bind dialog to input
-		noBlanksInputEditText.setHint(R.string.FREE_TEXT_PROMPT_HINT);	// Set hint to edit text
-		noBlanksInputEditText.setInputType(InputType.TYPE_CLASS_TEXT);	// Set input type to edit text
-		// @formatter:on
-
-		// Set a positive button and listen on it
-		dialog.setPositiveButton(R.string.OK, new DialogInterface.OnClickListener() {
-			@Override
-			public void onClick(DialogInterface dialog, int whichButton) {
-				logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":createFreeTextPrimaryInputDialog().PositiveButton.OnClickListener().onClick()", "Positive Button pressed");
-
-				// Boolean indicating if there are duplicates of the primary and secondary free texts
-				boolean duplicatedFreeTexts = false;
-				// Store input
-				String input = noBlanksInputEditText.getText().toString();
-
-				// If input doesn't exist in the list of secondaryFreeTexts and input isn't empty
-				if (!Util.existsIn(input, secondaryFreeTexts) && !input.equals("")) {
-					// Iterate through all strings in the list of primaryFreeTexts to check if text already exists
-					for (String text : primaryFreeTexts) {
-						// If a string in the list is equal with the input then it's duplicated
-						if (text.equalsIgnoreCase(input)) {
-							duplicatedFreeTexts = true;
-						}
-					}
-
-					// Store input if duplicated free texts is false
-					if (!duplicatedFreeTexts) {
-						// Add given input to list
-						primaryFreeTexts.add(input);
-
-						try {
-							// Store to shared preferences
-							prefHandler.setPrefs(PrefKeys.SHARED_PREF, PrefKeys.PRIMARY_LISTEN_FREE_TEXTS_KEY, primaryFreeTexts, context);
-						} catch (IllegalArgumentException e) {
-							logger.logCatTxt(LogPriorities.ERROR, LOG_TAG + ":createFreeTextPrimaryInputDialog().PositiveButton.OnClickListener().onClick()", "An Object of unsupported instance was given as argument to PreferencesHandler.setPrefs()", e);
-						}
-
-						// Update affected UI widgets
-						updatePrimaryFreeTextSpinner();
-						logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":createFreeTextPrimaryInputDialog().PositiveButton.OnClickListener().onClick()", "New PRIMARY free text has been stored from user input to the list of PRIMARY free texts. New PRIMARY free text is: \"" + input + "\"");
-					} else {
-						Toast.makeText(context, R.string.FREE_TEXT_ALREADY_IN_PRIMARY_LIST, Toast.LENGTH_LONG).show();
-						logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":createFreeTextPrimaryInputDialog().PositiveButton.OnClickListener().onClick()", "Given PRIMARY free text(" + input + ") already exists in the list of PRIMARY free texts and therefore cannot be stored. Showing dialog again");
-
-						createFreeTextPrimaryInputDialog();
-					}
-				} else {
-					// Empty input was given
-					if (input.equals("")) {
-						Toast.makeText(context, R.string.TEXT_IS_NEEDED, Toast.LENGTH_LONG).show();
-						logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":createFreeTextPrimaryInputDialog().PositiveButton.OnClickListener().onClick()", "Given PRIMARY free text is empty and therefore cannot be stored. Showing dialog again");
-					} else { // Given primary free text exists in the list of secondary free texts
-						Toast.makeText(context, R.string.DUPLICATED_FREE_TEXTS, Toast.LENGTH_LONG).show();
-						logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":createFreeTextPrimaryInputDialog().PositiveButton.OnClickListener().onClick()", "Given PRIMARY free text(" + input + ") already exists in the list of SECONDARY free texts and therefore cannot be stored. Showing dialog again");
-					}
-
-					createFreeTextPrimaryInputDialog();
-				}
-			}
-		});
-
-		// Set a neutral button, due to documentation it has same functionality as "back" button
-		dialog.setNeutralButton(R.string.CANCEL, new DialogInterface.OnClickListener() {
-			@Override
-			public void onClick(DialogInterface dialog, int whichButton) {
-				// DO NOTHING, except logging
-				logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":createFreeTextPrimaryInputDialog().NeutralButton.OnClickListener().onClick()", "Neutral Button pressed in dialog, nothing done");
-			}
-		});
-
-		logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":createFreeTextPrimaryInputDialog()", "Showing dialog");
-
-		// Show it
-		dialog.show();
+	private void showAddFreeTextDialog(int requestCode) {
+		AddFreeTextDialog dialog = new AddFreeTextDialog();
+		dialog.setTargetFragment(FreeTextSettingsFragment.this, requestCode);
+		dialog.show(getFragmentManager(), AddFreeTextDialog.ADD_FREE_TEXT_DIALOG_TAG);
 	}
 
 	/**
-	 * To build up and display a dialog which let's the user add a free text to the list of <b><i>Primary alarm triggering free texts</i></b>. <br>
-	 * <b><i>Note. The input of this dialog doesn't accept blankspaces({@link Util.NoBlanksInputEditText})</i></b>.
+	 * Convenience method to create a new instance of {@link RemoveFreeTextDialog} and show it.
 	 * 
-	 * @see #createFreeTextSecondaryRemoveDialog()
-	 * @see #updateSecondaryFreeTextSpinner()
-	 * @see PreferencesHandler#setPrefs(PrefKeys, PrefKeys, Object, Context) setPrefs(PrefKeys, PrefKeys, Object, Context)
-	 * @see LogHandler#logCat(LogPriorities, String, String) logCat(LogPriorities, String, String)
-	 * @see LogHandler#logCatTxt(LogPriorities, String, String, Throwable) logCatTxt(LogPriorities, String, String,Throwable)
+	 * @param requestCode
+	 *            Request code for the created <code>RemoveFreeTextDialog</code>.
+	 * @param freeTextToBeRemoved
+	 *            Free text to be removed.
 	 */
-	private void createFreeTextSecondaryInputDialog() {
-		logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":createFreeTextSecondaryInputDialog()", "Start building dialog for input of Secondary Free Text");
+	private void showRemoveFreeTextDialog(int requestCode, String freeTextToBeRemoved) {
+		// Must pass over free text to be removed
+		Bundle arguments = new Bundle();
+		arguments.putString(RemoveFreeTextDialog.REMOVE_FREE_TEXT, freeTextToBeRemoved);
 
-		AlertDialog.Builder dialog = new AlertDialog.Builder(context);
-		final EditText noBlanksInputEditText = new NoBlanksInputEditText(context);
-
-		dialog.setIcon(android.R.drawable.ic_dialog_info);
-		dialog.setTitle(R.string.FREE_TEXT_PROMPT_TITLE);
-		dialog.setMessage(R.string.SECONDARY_FREE_TEXT_PROMPT_MESSAGE);
-		dialog.setCancelable(false);
-		dialog.setView(noBlanksInputEditText);
-		noBlanksInputEditText.setHint(R.string.FREE_TEXT_PROMPT_HINT);
-		noBlanksInputEditText.setInputType(InputType.TYPE_CLASS_TEXT);
-
-		dialog.setPositiveButton(R.string.OK, new DialogInterface.OnClickListener() {
-			@Override
-			public void onClick(DialogInterface dialog, int whichButton) {
-				logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":createFreeTextSecondaryInputDialog().PositiveButton.OnClickListener().onClick()", "Positive Button pressed");
-
-				boolean duplicatedFreeTexts = false;
-				String input = noBlanksInputEditText.getText().toString();
-
-				if (!Util.existsIn(input, primaryFreeTexts) && !input.equals("")) {
-					for (String text : secondaryFreeTexts) {
-						if (text.equalsIgnoreCase(input)) {
-							duplicatedFreeTexts = true;
-						}
-					}
-
-					if (!duplicatedFreeTexts) {
-						secondaryFreeTexts.add(input);
-
-						try {
-							prefHandler.setPrefs(PrefKeys.SHARED_PREF, PrefKeys.SECONDARY_LISTEN_FREE_TEXTS_KEY, secondaryFreeTexts, context);
-						} catch (IllegalArgumentException e) {
-							logger.logCatTxt(LogPriorities.ERROR, LOG_TAG + ":createFreeTextSecondaryInputDialog().PositiveButton.OnClickListener().onClick()", "An Object of unsupported instance was given as argument to PreferencesHandler.setPrefs()", e);
-						}
-
-						updateSecondaryFreeTextSpinner();
-						logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":createFreeTextSecondaryInputDialog().PositiveButton.OnClickListener().onClick()", "New SECONDARY free text has been stored from user input to the list of SECONDARY free texts. New SECONDARY free text is: \"" + input + "\"");
-					} else {
-						Toast.makeText(context, R.string.FREE_TEXT_ALREADY_IN_SECONDARY_LIST, Toast.LENGTH_LONG).show();
-						logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":createFreeTextSecondaryInputDialog().PositiveButton.OnClickListener().onClick()", "Given SECONDARY free text(" + input + ") already exists in the list of SECONDARY free texts and therefore cannot be stored. Showing dialog again");
-
-						createFreeTextSecondaryInputDialog();
-					}
-				} else {
-					if (input.equals("")) {
-						Toast.makeText(context, R.string.TEXT_IS_NEEDED, Toast.LENGTH_LONG).show();
-						logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":createFreeTextSecondaryInputDialog().PositiveButton.OnClickListener().onClick()", "Given SECONDARY free text is empty and therefore cannot be stored. Showing dialog again");
-					} else {
-						Toast.makeText(context, R.string.DUPLICATED_FREE_TEXTS, Toast.LENGTH_LONG).show();
-						logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":createFreeTextSecondaryInputDialog().PositiveButton.OnClickListener().onClick()", "Given SECONDARY free text(" + input + ") already exists in the list of PRIMARY free texts and therefore cannot be stored. Showing dialog again");
-					}
-
-					createFreeTextSecondaryInputDialog();
-				}
-			}
-		});
-
-		dialog.setNeutralButton(R.string.CANCEL, new DialogInterface.OnClickListener() {
-			@Override
-			public void onClick(DialogInterface dialog, int whichButton) {
-				// DO NOTHING, except logging
-				logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":createFreeTextSecondaryInputDialog().NeutralButton.OnClickListener().onClick()", "Neutral Button pressed in dialog, nothing done");
-			}
-		});
-
-		logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":createFreeTextSecondaryInputDialog()", "Showing dialog");
-		dialog.show();
-	}
-
-	/**
-	 * To build up and display a dialog which let's the user remove a free text from the list of <b><i>Primary alarm triggering free texts</i></b>. <br>
-	 *
-	 * @see #createFreeTextPrimaryInputDialog()
-	 * @see #updatePrimaryFreeTextSpinner()
-	 * @see PreferencesHandler#setPrefs(PrefKeys, PrefKeys, Object, Context) setPrefs(PrefKeys, PrefKeys, Object, Context)
-	 * @see LogHandler#logCat(LogPriorities, String, String) logCat(LogPriorities, String, String)
-	 * @see LogHandler#logCatTxt(LogPriorities, String, String, Throwable) logCatTxt(LogPriorities, String, String,Throwable)
-	 */
-	private void createFreeTextPrimaryRemoveDialog() {
-		logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":createFreeTextPrimaryRemoveDialog()", "Start building dialog for removing a Primary Free Text");
-
-		AlertDialog.Builder dialog = new AlertDialog.Builder(context);
-		dialog.setIcon(android.R.drawable.ic_dialog_alert);
-		dialog.setTitle(R.string.DELETE_FREE_TEXT_PROMPT_TITLE);
-		dialog.setMessage(getString(R.string.DELETE_PRIMARY_FREE_TEXT_PROMPT_MESSAGE) + " " + primaryFreeTexts.get(primaryFreeTextSpinner.getSelectedItemPosition()) + "?");
-		dialog.setCancelable(false);
-
-		dialog.setPositiveButton(R.string.YES, new DialogInterface.OnClickListener() {
-			@Override
-			public void onClick(DialogInterface dialog, int whichButton) {
-				logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":createFreeTextPrimaryRemoveDialog().PosButton.OnClickListener().onClick()", "Positive Button pressed");
-				logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":createFreeTextPrimaryRemoveDialog().PosButton.OnClickListener().onClick()", "PRIMARY free text: \"" + primaryFreeTexts.get(primaryFreeTextSpinner.getSelectedItemPosition()) + "\" is about to be removed from the list of PRIMARY free texts");
-
-				// Delete free text from list
-				primaryFreeTexts.remove(primaryFreeTextSpinner.getSelectedItemPosition());
-				try {
-					// Store to shared preferences
-					prefHandler.setPrefs(PrefKeys.SHARED_PREF, PrefKeys.PRIMARY_LISTEN_FREE_TEXTS_KEY, primaryFreeTexts, context);
-				} catch (IllegalArgumentException e) {
-					logger.logCatTxt(LogPriorities.ERROR, LOG_TAG + ":createFreeTextPrimaryRemoveDialog().PosButton.OnClickListener().onClick()", "An Object of unsupported instance was given as argument to PreferencesHandler.setPrefs()", e);
-				}
-				// Update affected UI widgets
-				updatePrimaryFreeTextSpinner();
-			}
-		});
-
-		dialog.setNeutralButton(R.string.NO, new DialogInterface.OnClickListener() {
-			@Override
-			public void onClick(DialogInterface dialog, int whichButton) {
-				// DO NOTHING, except logging
-				logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":createFreeTextPrimaryRemoveDialog().NeutralButton.OnClickListener().onClick()", "Neutral Button pressed in dialog, nothing done");
-			}
-		});
-
-		logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":createFreeTextPrimaryRemoveDialog()", "Showing dialog");
-		dialog.show();
-	}
-
-	/**
-	 * To build up and display a dialog which let's the user remove a free text from the list of <b><i>Primary alarm triggering free texts</i></b>. <br>
-	 *
-	 * @see #createFreeTextSecondaryInputDialog()
-	 * @see #updateSecondaryFreeTextSpinner()
-	 * @see PreferencesHandler#setPrefs(PrefKeys, PrefKeys, Object, Context) setPrefs(PrefKeys, PrefKeys, Object, Context)
-	 * @see LogHandler#logCat(LogPriorities, String, String) logCat(LogPriorities, String, String)
-	 * @see LogHandler#logCatTxt(LogPriorities, String, String, Throwable) logCatTxt(LogPriorities, String, String,Throwable)
-	 */
-	private void createFreeTextSecondaryRemoveDialog() {
-		logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":createFreeTextSecondaryRemoveDialog()", "Start building dialog for removing a Secondary Free Text");
-
-		AlertDialog.Builder dialog = new AlertDialog.Builder(context);
-		dialog.setIcon(android.R.drawable.ic_dialog_alert);
-		dialog.setTitle(R.string.DELETE_FREE_TEXT_PROMPT_TITLE);
-		dialog.setMessage(getString(R.string.DELETE_SECONDARY_FREE_TEXT_PROMPT_MESSAGE) + " " + secondaryFreeTexts.get(secondaryFreeTextSpinner.getSelectedItemPosition()) + "?");
-		dialog.setCancelable(false);
-
-		dialog.setPositiveButton(R.string.YES, new DialogInterface.OnClickListener() {
-			@Override
-			public void onClick(DialogInterface dialog, int whichButton) {
-				logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":createFreeTextSecondaryRemoveDialog().PosButton.OnClickListener().onClick()", "Positive Button pressed");
-				logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":createFreeTextSecondaryRemoveDialog().PosButton.OnClickListener().onClick()", "SECONDARY free text: \"" + secondaryFreeTexts.get(secondaryFreeTextSpinner.getSelectedItemPosition()) + "\" is about to be removed from the list of SECONDARY free texts");
-
-				secondaryFreeTexts.remove(secondaryFreeTextSpinner.getSelectedItemPosition());
-				try {
-					prefHandler.setPrefs(PrefKeys.SHARED_PREF, PrefKeys.SECONDARY_LISTEN_FREE_TEXTS_KEY, secondaryFreeTexts, context);
-				} catch (IllegalArgumentException e) {
-					logger.logCatTxt(LogPriorities.ERROR, LOG_TAG + ":createFreeTextSecondaryRemoveDialog().PosButton.OnClickListener().onClick()", "An Object of unsupported instance was given as argument to PreferencesHandler.setPrefs()", e);
-				}
-				updateSecondaryFreeTextSpinner();
-			}
-		});
-
-		dialog.setNeutralButton(R.string.NO, new DialogInterface.OnClickListener() {
-			@Override
-			public void onClick(DialogInterface dialog, int whichButton) {
-				// DO NOTHING, except logging
-				logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":createFreeTextSecondaryRemoveDialog().NeutralButton.OnClickListener().onClick()", "Neutral Button pressed in dialog, nothing done");
-			}
-		});
-
-		logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":createFreeTextSecondaryRemoveDialog()", "Showing dialog");
-		dialog.show();
+		// Create Dialog as usual, but put arguments in it also
+		RemoveFreeTextDialog dialog = new RemoveFreeTextDialog();
+		dialog.setArguments(arguments);
+		dialog.setTargetFragment(FreeTextSettingsFragment.this, requestCode);
+		dialog.show(getFragmentManager(), RemoveFreeTextDialog.REMOVE_FREE_TEXT_DIALOG_TAG);
 	}
 
 	/**
 	 * To update primary free texts <code>Spinner</code> with correct values.
 	 * 
 	 * @see #updateSecondaryFreeTextSpinner()
-	 * @see LogHandler#logCat(LogPriorities, String, String)
 	 */
 	private void updatePrimaryFreeTextSpinner() {
 		// Check if there are primary free test and build up a proper spinner according to that information
@@ -503,7 +391,6 @@ public class FreeTextSettingsFragment extends SherlockFragment implements Applic
 	 * To update secondary free texts <code>Spinner</code> with correct values.
 	 * 
 	 * @see #updatePrimaryFreeTextSpinner()
-	 * @see LogHandler#logCat(LogPriorities, String, String)
 	 */
 	private void updateSecondaryFreeTextSpinner() {
 		// Check if there are primary listen free test and build up a proper spinner according to that information

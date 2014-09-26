@@ -2,9 +2,9 @@ package ax.ha.it.smsalarm.fragment;
 
 import java.util.Locale;
 
-import android.app.AlertDialog;
+import android.app.Activity;
 import android.content.Context;
-import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.res.Resources;
 import android.graphics.Color;
 import android.os.Build;
@@ -25,6 +25,8 @@ import android.widget.RelativeLayout.LayoutParams;
 import android.widget.Spinner;
 import android.widget.TextView;
 import ax.ha.it.smsalarm.R;
+import ax.ha.it.smsalarm.enumeration.AlarmType;
+import ax.ha.it.smsalarm.fragment.dialog.AlarmSignalDialog;
 import ax.ha.it.smsalarm.handler.LogHandler;
 import ax.ha.it.smsalarm.handler.LogHandler.LogPriorities;
 import ax.ha.it.smsalarm.handler.NoiseHandler;
@@ -35,15 +37,15 @@ import ax.ha.it.smsalarm.handler.PreferencesHandler.PrefKeys;
 import com.actionbarsherlock.app.SherlockFragment;
 
 /**
- * <code>Fragment</code> containing all the views and user interface widgets for the <b><i>Sound Settings</i></b>. Fragment does also contain all
- * logic for the widgets.
+ * {@link Fragment} containing all the views and user interface widgets for the <b><i>Sound Settings</i></b>. <code>Fragment</code> does also contain
+ * all logic for the widgets.
  * 
  * @author Robert Nyholm <robert.nyholm@aland.net>
  * @version 2.3.1
  * @since 2.3.1
  */
 public class SoundSettingsFragment extends SherlockFragment implements ApplicationFragment {
-	private final String LOG_TAG = getClass().getSimpleName();
+	private static final String LOG_TAG = SoundSettingsFragment.class.getSimpleName();
 
 	// Objects needed for logging, shared preferences handling and noise handling
 	private final LogHandler logger = LogHandler.getInstance();
@@ -83,11 +85,7 @@ public class SoundSettingsFragment extends SherlockFragment implements Applicati
 	private int secondaryAlarmSignalId = 1;
 
 	/**
-	 * To create a new <code>SoundSettingsFragment</code>.
-	 * 
-	 * @param context
-	 *            Context
-	 * @see LogHandler#logCat(LogPriorities, String, String)
+	 * To create a new instance of {@link SoundSettingsFragment}.
 	 */
 	public SoundSettingsFragment() {
 		logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":SoundSettingsFragment()", "Creating a new Sound settings fragment");
@@ -238,7 +236,7 @@ public class SoundSettingsFragment extends SherlockFragment implements Applicati
 	public void updateFragmentView() {
 		logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":updateFragmentView()", "Whole fragments user interface is about to be updated");
 
-		// Update edittext field, checkboxes and spinner
+		// Update EditText field, CheckBoxes and Spinner
 		updateAlarmTypesSpinner();
 		updateSelectedAlarmSignalEditText();
 		updateUseOsSoundSettingsCheckBox();
@@ -255,9 +253,22 @@ public class SoundSettingsFragment extends SherlockFragment implements Applicati
 		editAlarmSignalButton.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":setListeners().editMsgToneButton.OnClickListener().onClick()", "Edit alarm signal button pressed");
-				// Build up and Show alert dialog(prompt for alarm signal)
-				createAlarmSignalSelectionDialog();
+				logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":setListeners().editAlarmSignalButton.OnClickListener().onClick()", "Edit alarm signal button pressed");
+
+				// Get alarm type Spinner position as AlarmType and go through that
+				switch (AlarmType.of(alarmTypeSpinnerPos)) {
+					case PRIMARY:
+						logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":setListeners().editAlarmSignalButton.OnClickListener().onClick()", "Alarm type spinner position is: \"PRIMARY ALARM SPINNER POSITION\", setting targetframe with request code:\"" + Integer.toString(AlarmSignalDialog.PRIMARY_ALARM_SIGNAL_DIALOG_REQUEST_CODE) + "\"");
+						showAlarmSignalDialog(AlarmSignalDialog.PRIMARY_ALARM_SIGNAL_DIALOG_REQUEST_CODE);
+						break;
+					case SECONDARY:
+						logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":setListeners().editAlarmSignalButton.OnClickListener().onClick()", "Alarm type spinner position is: \"SECONDARY ALARM SPINNER POSITION\", setting targetframe with request code:\"" + Integer.toString(AlarmSignalDialog.SECONDARY_ALARM_SIGNAL_DIALOG_REQUEST_CODE) + "\"");
+						showAlarmSignalDialog(AlarmSignalDialog.SECONDARY_ALARM_SIGNAL_DIALOG_REQUEST_CODE);
+						break;
+					default:
+						// DO NOTHING, except log message
+						logger.logCatTxt(LogPriorities.ERROR, LOG_TAG + ":setListeners().editAlarmSignalButton.OnClickListener().onClick()", "An unsupported alarm type spinner position occurred, spinner position is: \"" + Integer.toString(alarmTypeSpinnerPos) + "\", can't show dialog");
+				}
 			}
 		});
 
@@ -265,17 +276,20 @@ public class SoundSettingsFragment extends SherlockFragment implements Applicati
 		listenAlarmSignalButton.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				// Play the correct alarm signal and vibrate, depending on spinner value
-				if (alarmTypeSpinnerPos == 0) {
-					logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":setListeners().listenAlarmSignalButton.OnClickListener().onClick()", "Listen on alarm signal button pressed. Alarm signal for PRIMARY alarm will be played");
-					// Play alarm signal and vibrate
-					noiseHandler.makeNoise(context, primaryAlarmSignalId, useOsSoundSettings, false);
-				} else if (alarmTypeSpinnerPos == 1) {
-					logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":setListeners().listenAlarmSignalButton.OnClickListener().onClick()", "Listen on alarm signal button pressed. Alarm signal for SECONDARY alarm will be played");
-					noiseHandler.makeNoise(context, secondaryAlarmSignalId, useOsSoundSettings, false);
-				} else {
-					// DO NOTHING, except log message
-					logger.logCatTxt(LogPriorities.ERROR, LOG_TAG + ":setListeners().listenAlarmSignalButton.OnClickListener().onClick()", "Invalid spinner position occurred. Current alarm type spinner position is: \"" + Integer.toString(alarmTypeSpinnerPos) + "\"");
+				switch (AlarmType.of(alarmTypeSpinnerPos)) {
+					case PRIMARY:
+						logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":setListeners().listenAlarmSignalButton.OnClickListener().onClick()", "Listen on alarm signal button pressed. Alarm signal for PRIMARY alarm will be played");
+
+						// Play alarm signal and vibrate
+						noiseHandler.makeNoise(context, primaryAlarmSignalId, useOsSoundSettings, false);
+						break;
+					case SECONDARY:
+						logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":setListeners().listenAlarmSignalButton.OnClickListener().onClick()", "Listen on alarm signal button pressed. Alarm signal for SECONDARY alarm will be played");
+						noiseHandler.makeNoise(context, secondaryAlarmSignalId, useOsSoundSettings, false);
+						break;
+					default:
+						// DO NOTHING, except log message
+						logger.logCatTxt(LogPriorities.ERROR, LOG_TAG + ":setListeners().listenAlarmSignalButton.OnClickListener().onClick()", "Invalid spinner position occurred. Spinner position is: \"" + Integer.toString(alarmTypeSpinnerPos) + "\"");
 				}
 			}
 		});
@@ -346,88 +360,62 @@ public class SoundSettingsFragment extends SherlockFragment implements Applicati
 		});
 	}
 
-	/**
-	 * To build up and display a dialog containing a list populated with alarm signals. The user chooses <b><i>Sms Alarm</i></b>'s alarm signal from
-	 * this list.
-	 * 
-	 * @see #updateSelectedAlarmSignalEditText()
-	 * @see LogHandler#logCat(LogPriorities, String, String)
-	 * @see LogHandler#logCatTxt(LogPriorities, String, String)
-	 * @see LogHandler#logCatTxt(LogPriorities, String, String, Throwable)
-	 * @see PreferencesHandler#setPrefs(PrefKeys, PrefKeys, Object, Context)
-	 */
-	private void createAlarmSignalSelectionDialog() {
-		logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":createAlarmSignalSelectionDialog()", "Start building tone dialog");
+	@Override
+	public void onActivityResult(int requestCode, int resultCode, Intent data) {
+		logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":onActivityResult()", "Handling of activity result is about to begin, request code: \"" + Integer.toString(requestCode) + "\" and result code: \"" + Integer.toString(resultCode) + "\"");
 
-		// Build up the alert dialog
-		AlertDialog.Builder dialog = new AlertDialog.Builder(context);
+		// Only interested in OK results, don't care at all about the others
+		if (resultCode == Activity.RESULT_OK) {
+			// Only interested in certain request codes...
+			switch (requestCode) {
+				case (AlarmSignalDialog.PRIMARY_ALARM_SIGNAL_DIALOG_REQUEST_CODE):
+					primaryAlarmSignalId = data.getIntExtra(AlarmSignalDialog.ALARM_SIGNAL, 0);
 
-		// @formatter:off
-		// Configure dialog
-		dialog.setIcon(android.R.drawable.ic_dialog_info);	// Set icon
-		dialog.setTitle(R.string.TONE_PROMPT_TITLE);		// Set title
-		dialog.setCancelable(false);						// Set dialog to non cancelable
-		// @formatter:on
-
-		// Set items to list view from resource array tones
-		dialog.setItems(R.array.tones, new DialogInterface.OnClickListener() {
-			@Override
-			public void onClick(DialogInterface arg0, int listPosition) {
-				logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":createAlarmSignalSelectionDialog().Item.OnClickListener().onClick()", "Item in message tones list pressed");
-
-				// Store position(toneId) in correct variable, depending on spinner value
-				if (alarmTypeSpinnerPos == 0) { // PRIMARY MESSAGE TONE
-					// Store primary message tone id from position of list
-					primaryAlarmSignalId = listPosition;
-					logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":createAlarmSignalSelectionDialog().Item.OnClickListener().onClick()", "New PRIMARY message tone selected. Tone: \"" + noiseHandler.resolveAlarmSignal(context, primaryAlarmSignalId) + "\", id: \"" + primaryAlarmSignalId + "\" and tone spinner position: \"" + Integer.toString(alarmTypeSpinnerPos) + "\"");
+					logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":onActivityResult()", "Result code: \"" + Activity.RESULT_OK + "\"(Activity.RESULT_OK), data: \"" + Integer.toString(primaryAlarmSignalId) + "\" fetched using key: \"" + AlarmSignalDialog.ALARM_SIGNAL + "\" is about to be persisted into shared preferences");
 
 					try {
-						// Store primary message tone id to preferences to preferences
+						// Store to shared preferences
 						prefHandler.setPrefs(PrefKeys.SHARED_PREF, PrefKeys.PRIMARY_MESSAGE_TONE_KEY, primaryAlarmSignalId, context);
 					} catch (IllegalArgumentException e) {
-						logger.logCatTxt(LogPriorities.ERROR, LOG_TAG + ":createAlarmSignalSelectionDialog().Item.OnClickListener().onClick()", "An Object of unsupported instance was given as argument to PreferencesHandler.setPrefs()", e);
+						logger.logCatTxt(LogPriorities.ERROR, LOG_TAG + ":onActivityResult()", "An Object of unsupported instance was given as argument to PreferencesHandler.setPrefs()", e);
 					}
 
 					// Update selected tone EditText
 					updateSelectedAlarmSignalEditText();
-				} else if (alarmTypeSpinnerPos == 1) { // SECONDARY MESSAGE TONE
-					secondaryAlarmSignalId = listPosition;
-					logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":createAlarmSignalSelectionDialog().Item.OnClickListener().onClick()", "New SECONDARY message tone selected. Tone: \"" + noiseHandler.resolveAlarmSignal(context, secondaryAlarmSignalId) + "\", id: \"" + secondaryAlarmSignalId + "\" and tone Spinner position: \"" + Integer.toString(alarmTypeSpinnerPos) + "\"");
+					break;
+				case (AlarmSignalDialog.SECONDARY_ALARM_SIGNAL_DIALOG_REQUEST_CODE):
+					secondaryAlarmSignalId = data.getIntExtra(AlarmSignalDialog.ALARM_SIGNAL, 1);
+
+					logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":onActivityResult()", "Result code: \"" + Activity.RESULT_OK + "\"(Activity.RESULT_OK), data: \"" + Integer.toString(secondaryAlarmSignalId) + "\" fetched using key: \"" + AlarmSignalDialog.ALARM_SIGNAL + "\" is about to be persisted into shared preferences");
 
 					try {
 						prefHandler.setPrefs(PrefKeys.SHARED_PREF, PrefKeys.SECONDARY_MESSAGE_TONE_KEY, secondaryAlarmSignalId, context);
 					} catch (IllegalArgumentException e) {
-						logger.logCatTxt(LogPriorities.ERROR, LOG_TAG + ":createAlarmSignalSelectionDialog().Item.OnClickListener().onClick()", "An Object of unsupported instance was given as argument to PreferencesHandler.setPrefs()", e);
+						logger.logCatTxt(LogPriorities.ERROR, LOG_TAG + ":onActivityResult()", "An Object of unsupported instance was given as argument to PreferencesHandler.setPrefs()", e);
 					}
 
 					updateSelectedAlarmSignalEditText();
-				} else { // UNSUPPORTED SPINNER POSITION
-					// DO NOTHING, except logging
-					logger.logCatTxt(LogPriorities.ERROR, LOG_TAG + ":createAlarmSignalSelectionDialog().Item.OnClickListener().onClick()", "Invalid spinner position occurred. Current tone spinner position is: \"" + Integer.toString(alarmTypeSpinnerPos) + "\"");
-				}
+					break;
+				default:
+					logger.logCatTxt(LogPriorities.ERROR, LOG_TAG + ":onActivityResult()", "An unsupported result occurred, result code: \"" + Integer.toString(resultCode) + "\" and request code: \"" + requestCode + "\"");
 			}
-		});
+		}
+	}
 
-		// Set a neutral button and listener, due to documentation it has same functionality as "back" button
-		dialog.setNeutralButton(R.string.CANCEL, new DialogInterface.OnClickListener() {
-			@Override
-			public void onClick(DialogInterface dialog, int whichButton) {
-				// DO NOTHING, except logging
-				logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":createAlarmSignalSelectionDialog().NeutralButton.OnClickListener().onClick()", "Neutral Button pressed in dialog, nothing done");
-			}
-		});
-
-		logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":createAlarmSignalSelectionDialog()", "Showing dialog");
-
-		// Show dialog
-		dialog.show();
+	/**
+	 * Convenience method to create a new instance of {@link AlarmSignalDialog} and show it.
+	 * 
+	 * @param requestCode
+	 *            Request code for the created <code>AlarmSignalDialog</code>.
+	 */
+	private void showAlarmSignalDialog(int requestCode) {
+		AlarmSignalDialog dialog = new AlarmSignalDialog();
+		dialog.setTargetFragment(SoundSettingsFragment.this, requestCode);
+		dialog.show(getFragmentManager(), AlarmSignalDialog.ALARM_SIGNAL_DIALOG_TAG);
 	}
 
 	/**
 	 * To update selected alarm signal <code>EditText</code> with correct value.
-	 * 
-	 * @see LogHandler#logCat(LogPriorities, String, String)
-	 * @see LogHandler#logCatTxt(LogPriorities, String, String)
 	 */
 	private void updateSelectedAlarmSignalEditText() {
 		logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":updateSelectedAlarmSignalEditText()", "Alarm type spinner position is: " + Integer.toString(alarmTypeSpinnerPos));
@@ -449,8 +437,6 @@ public class SoundSettingsFragment extends SherlockFragment implements Applicati
 
 	/**
 	 * To update use OS sound settings <code>CheckBox</code> with correct value.
-	 * 
-	 * @see LogHandler#logCat(LogPriorities, String, String)
 	 */
 	private void updateUseOsSoundSettingsCheckBox() {
 		// Update use OS sound settings CheckBox
@@ -466,8 +452,6 @@ public class SoundSettingsFragment extends SherlockFragment implements Applicati
 
 	/**
 	 * To update play alarm signal twice <code>CheckBox</code> with correct value.
-	 * 
-	 * @see LogHandler#logCat(LogPriorities, String, String)
 	 */
 	private void updatePlayAlarmSignalTwiceCheckBox() {
 		// Update play alarm signal twice CheckBox
@@ -482,9 +466,7 @@ public class SoundSettingsFragment extends SherlockFragment implements Applicati
 	}
 
 	/**
-	 * To update alarm type <code>Spinne</code> with values alarm type values from resources.
-	 * 
-	 * @see LogHandler#logCat(LogPriorities, String, String)
+	 * To update alarm type <code>Spinner</code> with values alarm type values from resources.
 	 */
 	private void updateAlarmTypesSpinner() {
 		// Fill alarm types spinner with values using adapter

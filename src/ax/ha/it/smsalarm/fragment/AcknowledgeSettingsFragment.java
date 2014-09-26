@@ -42,7 +42,6 @@ import com.actionbarsherlock.app.SherlockFragment;
  */
 public class AcknowledgeSettingsFragment extends SherlockFragment implements ApplicationFragment {
 	private static final String LOG_TAG = AcknowledgeSettingsFragment.class.getSimpleName();
-	private static final String ACKNOWLEDGE_NUMBER_DIALOG_TAG = "acknowledgeNumberDialog";
 
 	// Objects needed for logging and shared preferences handling
 	private final LogHandler logger = LogHandler.getInstance();
@@ -214,8 +213,8 @@ public class AcknowledgeSettingsFragment extends SherlockFragment implements App
 				logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":setListeners().ackNumberButton.OnClickListener().onClick()", "Edit acknowledge number button pressed");
 
 				AcknowledgeNumberDialog dialog = new AcknowledgeNumberDialog();
-				dialog.setTargetFragment(AcknowledgeSettingsFragment.this, ACKNOWLEDGE_NUMBER_DIALOG_REQUEST_CODE);
-				dialog.show(getFragmentManager(), ACKNOWLEDGE_NUMBER_DIALOG_TAG);
+				dialog.setTargetFragment(AcknowledgeSettingsFragment.this, AcknowledgeNumberDialog.ACKNOWLEDGE_NUMBER_DIALOG_REQUEST_CODE);
+				dialog.show(getFragmentManager(), AcknowledgeNumberDialog.ACKNOWLEDGE_NUMBER_DIALOG_TAG);
 			}
 		});
 
@@ -251,12 +250,11 @@ public class AcknowledgeSettingsFragment extends SherlockFragment implements App
 	public void onActivityResult(int requestCode, int resultCode, Intent data) {
 		logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":onActivityResult()", "Handling of activity result is about to begin, request code: \"" + Integer.toString(requestCode) + "\" and result code: \"" + Integer.toString(resultCode) + "\"");
 
-		// Sort out the requests and result codes to the ones this fragment is interested in
-		if (requestCode == ACKNOWLEDGE_NUMBER_DIALOG_REQUEST_CODE) {
-			logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":onActivityResult()", "Result with request code: \"" + requestCode + "\" is about to be handled");
-
-			switch (resultCode) {
-				case Activity.RESULT_OK:
+		// Only interested in OK results, don't care at all about the others
+		if (resultCode == Activity.RESULT_OK) {
+			// Only interested in certain request codes...
+			switch (requestCode) {
+				case (AcknowledgeNumberDialog.ACKNOWLEDGE_NUMBER_DIALOG_REQUEST_CODE):
 					acknowledgeNumber = data.getStringExtra(AcknowledgeNumberDialog.ACKNOWLEDGE_NUMBER);
 
 					logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":onActivityResult()", "Result code: \"" + Activity.RESULT_OK + "\"(Activity.RESULT_OK), data: \"" + acknowledgeNumber + "\" fetched using key: \"" + AcknowledgeNumberDialog.ACKNOWLEDGE_NUMBER + "\" is about to be persisted into shared preferences");
@@ -273,11 +271,8 @@ public class AcknowledgeSettingsFragment extends SherlockFragment implements App
 
 					logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":onActivityResult()", "New ACKNOWLEDGE phone number has been stored from user input . New ACKNOWLEDGE phone number is: \"" + acknowledgeNumber + "\"");
 					break;
-				case Activity.RESULT_CANCELED:
-					logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":onActivityResult()", "Result code: \"" + Activity.RESULT_CANCELED + "\"(Activity.RESULT_CANCELED), do nothing");
-					break;
 				default:
-					logger.logCatTxt(LogPriorities.ERROR, LOG_TAG + ":onActivityResult()", "Result code: \"" + Integer.toString(resultCode) + "\" is unsupported for request code: \"" + requestCode + "\"");
+					logger.logCatTxt(LogPriorities.ERROR, LOG_TAG + ":onActivityResult()", "An unsupported result occurred, result code: \"" + Integer.toString(resultCode) + "\" and request code: \"" + requestCode + "\"");
 			}
 		}
 	}

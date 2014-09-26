@@ -8,7 +8,7 @@ import java.util.Calendar;
 import java.util.Date;
 
 import android.content.Context;
-import ax.ha.it.smsalarm.enumeration.AlarmTypes;
+import ax.ha.it.smsalarm.enumeration.AlarmType;
 import ax.ha.it.smsalarm.handler.LogHandler;
 import ax.ha.it.smsalarm.handler.LogHandler.LogPriorities;
 
@@ -34,7 +34,7 @@ public class Alarm {
 	private String message; // Alarm message
 	private String triggerText; // Text found in message triggering an alarm
 	private String acknowledged; // Localized datetime when the alarm was acknowledged
-	private AlarmTypes alarmType = AlarmTypes.UNDEFINED; // Indicating which kind of alarm this
+	private AlarmType alarmType = AlarmType.UNDEFINED; // Indicating which kind of alarm this
 															// object is
 
 	/**
@@ -63,7 +63,7 @@ public class Alarm {
 	 * @see ax.ha.it.smsalarm.handler.LogHandler#logCat(LogPriorities, String, String) logCat(LogPriorities,
 	 *      String, String)
 	 */
-	public Alarm(String sender, String message, String triggerText, AlarmTypes alarmType) {
+	public Alarm(String sender, String message, String triggerText, AlarmType alarmType) {
 		// Create and store a localized timestamp, this depends on users locale and/or settings
 		received = DateFormat.getDateTimeInstance().format(Calendar.getInstance().getTime());
 		this.sender = sender;
@@ -100,7 +100,7 @@ public class Alarm {
 	 * @see ax.ha.it.smsalarm.handler.LogHandler#logCat(LogPriorities, String, String) logCat(LogPriorities,
 	 *      String, String)
 	 */
-	public Alarm(int id, String received, String sender, String message, String triggerText, String acknowledged, AlarmTypes alarmType) {
+	public Alarm(int id, String received, String sender, String message, String triggerText, String acknowledged, AlarmType alarmType) {
 		this.id = id;
 		this.received = received;
 		this.sender = sender;
@@ -123,7 +123,7 @@ public class Alarm {
 	 */
 	public boolean isEmpty() {
 		// Check to see if the member variables are empty
-		if (getId() == 0 && (received.length() == 0) && (sender.length() == 0) && (message.length() == 0) && (triggerText.length() == 0) && (acknowledged.length() == 0) && (alarmType == AlarmTypes.UNDEFINED)) {
+		if (getId() == 0 && (received.length() == 0) && (sender.length() == 0) && (message.length() == 0) && (triggerText.length() == 0) && (acknowledged.length() == 0) && (alarmType == AlarmType.UNDEFINED)) {
 			// Log in debug purpose
 			logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":isEmpty()", "This alarm object is empty, returning true");
 			return true;
@@ -375,7 +375,7 @@ public class Alarm {
 	 * @see ax.ha.it.smsalarm.handler.LogHandler#logCat(LogPriorities, String, String) logCat(LogPriorities,
 	 *      String, String)
 	 */
-	public AlarmTypes getAlarmType() {
+	public AlarmType getAlarmType() {
 		// Log in debug purpose
 		logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":getAlarmType()", "Returning alarmtype:\"" + alarmType.toString() + "\"");
 		return alarmType;
@@ -390,7 +390,7 @@ public class Alarm {
 	 * @see ax.ha.it.smsalarm.handler.LogHandler#logCat(LogPriorities, String, String) logCat(LogPriorities,
 	 *      String, String)
 	 */
-	public void setAlarmType(AlarmTypes alarmType) {
+	public void setAlarmType(AlarmType alarmType) {
 		// Set alarm type
 		this.alarmType = alarmType;
 		// Log in debug purpose

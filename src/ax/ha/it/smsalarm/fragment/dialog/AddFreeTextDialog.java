@@ -15,24 +15,28 @@ import ax.ha.it.smsalarm.handler.LogHandler.LogPriorities;
 import ax.ha.it.smsalarm.ui.NoBlanksInputEditText;
 
 /**
- * {@link DialogFragment} which let's the user add or remove the <b><i>Acknowledge Phone Number</i></b>.
+ * {@link DialogFragment} which let's the user add a <b><i>Free Text</i></b> to the list of <b><i>Primary or Secondary Alarm Trigger Free
+ * Texts</i></b>, this depends on which <b><i>RequestCode</i></b> this <code>AddFreeTextDialog</code> is set to.
  *
  * @author Robert Nyholm <robert.nyholm@aland.net>
  * @version 2.3.1
  * @since 2.3.1
- * @see #ACKNOWLEDGE_NUMBER
- * @see #ACKNOWLEDGE_NUMBER_DIALOG_TAG
- * @see #ACKNOWLEDGE_NUMBER_DIALOG_REQUEST_CODE
+ * @see RemoveFreeTextDialog
+ * @see #ADD_FREE_TEXT
+ * @see #ADD_FREE_TEXT_DIALOG_TAG
+ * @see #ADD_PRIMARY_FREE_TEXT_DIALOG_REQUEST_CODE
+ * @see #ADD_SECONDARY_FREE_TEXT_DIALOG_REQUEST_CODE
  */
-public class AcknowledgeNumberDialog extends DialogFragment {
-	private static final String LOG_TAG = AcknowledgeNumberDialog.class.getSimpleName();
+public class AddFreeTextDialog extends DialogFragment {
+	private static final String LOG_TAG = AddFreeTextDialog.class.getSimpleName();
 
 	// Used as a key when putting data into bundles and intents, dialog tag can come in handy for classes using this dialog
-	public static final String ACKNOWLEDGE_NUMBER = "acknowledgeNumber";
-	public static final String ACKNOWLEDGE_NUMBER_DIALOG_TAG = "acknowledgeNumberDialog";
+	public static final String ADD_FREE_TEXT = "addFreeText";
+	public static final String ADD_FREE_TEXT_DIALOG_TAG = "addFreeTextDialog";
 
-	// Request code used for this dialog
-	public static final int ACKNOWLEDGE_NUMBER_DIALOG_REQUEST_CODE = 11;
+	// Request codes used for this dialog
+	public static final int ADD_PRIMARY_FREE_TEXT_DIALOG_REQUEST_CODE = 5;
+	public static final int ADD_SECONDARY_FREE_TEXT_DIALOG_REQUEST_CODE = 6;
 
 	// For logging
 	private LogHandler logger = LogHandler.getInstance();
@@ -44,10 +48,10 @@ public class AcknowledgeNumberDialog extends DialogFragment {
 	private NoBlanksInputEditText inputEditText;
 
 	/**
-	 * To create a new instance of {@link AcknowledgeNumberDialog}.
+	 * To create a new instance of {@link AddFreeTextDialog}.
 	 */
-	public AcknowledgeNumberDialog() {
-		logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":AcknowledgeNumberDialog()", "Creating a new Acknowledge Number dialog fragment");
+	public AddFreeTextDialog() {
+		logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":AddFreeTextDialog()", "Creating a new Add Free Text dialog fragment");
 	}
 
 	@Override
@@ -66,26 +70,39 @@ public class AcknowledgeNumberDialog extends DialogFragment {
 		// Setup the EditText
 		// @formatter:off
 		inputEditText = new NoBlanksInputEditText(context);
-		inputEditText.setHint(R.string.NUMBER_PROMPT_HINT);		// Set hint to EditText
-		inputEditText.setInputType(InputType.TYPE_CLASS_PHONE);	// Set input type to EditText
+		inputEditText.setHint(R.string.FREE_TEXT_PROMPT_HINT);	// Set hint to EditText
+		inputEditText.setInputType(InputType.TYPE_CLASS_TEXT);	// Set input type to EditText
 		// @formatter:on
 
 		// If not null, the fragment is being re-created, get data from saved instance, if exist.
 		// If saved instance doesn't contain certain key or it's associated value the EditText field will be empty
 		if (savedInstanceState != null) {
 			// Check if we got any data in saved instance associated with certain key
-			if (savedInstanceState.getCharSequence(ACKNOWLEDGE_NUMBER) != null) {
-				inputEditText.setText(savedInstanceState.getCharSequence(ACKNOWLEDGE_NUMBER).toString());
+			if (savedInstanceState.getCharSequence(ADD_FREE_TEXT) != null) {
+				inputEditText.setText(savedInstanceState.getCharSequence(ADD_FREE_TEXT).toString());
 			}
+		}
+
+		// Need to resolve correct message in dialog depending on request code
+		String message = "";
+		switch (getTargetRequestCode()) {
+			case (ADD_PRIMARY_FREE_TEXT_DIALOG_REQUEST_CODE):
+				message = getString(R.string.PRIMARY_FREE_TEXT_PROMPT_MESSAGE);
+				break;
+			case (ADD_SECONDARY_FREE_TEXT_DIALOG_REQUEST_CODE):
+				message = getString(R.string.SECONDARY_FREE_TEXT_PROMPT_MESSAGE);
+				break;
+			default:
+				logger.logCatTxt(LogPriorities.ERROR, LOG_TAG + ":onCreateDialog()", "Cannot resolve dialog message due to an unsupported request code: \"" + getTargetRequestCode() + "\"");
 		}
 
 		// Setup the dialog with correct resources, listeners and values
 		// @formatter:off
 		return new AlertDialog.Builder(context)
-				.setIcon(android.R.drawable.ic_dialog_info) 	// Set icon
-				.setTitle(R.string.NUMBER_PROMPT_TITLE) 		// Set title
-				.setMessage(R.string.ACK_NUMBER_PROMPT_MESSAGE) // Set message
-				.setView(inputEditText) 						// Bind dialog to EditText
+				.setIcon(android.R.drawable.ic_dialog_info)	// Set icon
+				.setTitle(R.string.FREE_TEXT_PROMPT_TITLE)	// Set title
+				.setMessage(message)						// Set resolved message
+				.setView(inputEditText)						// Bind dialog to input
 				// @formatter:on
 
 				.setPositiveButton(R.string.OK, new DialogInterface.OnClickListener() {
@@ -95,9 +112,9 @@ public class AcknowledgeNumberDialog extends DialogFragment {
 
 						// Create an intent and put data from this dialogs EditText and associate it with a certain key
 						Intent intent = new Intent();
-						intent.putExtra(ACKNOWLEDGE_NUMBER, inputEditText.getText().toString());
+						intent.putExtra(ADD_FREE_TEXT, inputEditText.getText().toString());
 
-						logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":onCreateDialog().PositiveButton.OnClickListener().onClick()", "Intent created with extra, key: \"" + ACKNOWLEDGE_NUMBER + "\" and data: \"" + inputEditText.getText().toString() + "\"");
+						logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":onCreateDialog().PositiveButton.OnClickListener().onClick()", "Intent created with extra, key: \"" + ADD_FREE_TEXT + "\" and data: \"" + inputEditText.getText().toString() + "\"");
 
 						// Make a call to this dialog fragments owning fragments onAcitivityResult with correct request code, result code and intent
 						getTargetFragment().onActivityResult(getTargetRequestCode(), Activity.RESULT_OK, intent);
@@ -118,8 +135,8 @@ public class AcknowledgeNumberDialog extends DialogFragment {
 	@Override
 	public void onSaveInstanceState(Bundle arg0) {
 		super.onSaveInstanceState(arg0);
-		arg0.putCharSequence(ACKNOWLEDGE_NUMBER, inputEditText.getText().toString());
+		arg0.putCharSequence(ADD_FREE_TEXT, inputEditText.getText().toString());
 
-		logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":onSaveInstanceState()", "Data has been stored to bundle on key: \"" + ACKNOWLEDGE_NUMBER + "\" with data: \"" + inputEditText.getText().toString() + "\"");
+		logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":onSaveInstanceState()", "Data has been stored to bundle on key: \"" + ADD_FREE_TEXT + "\" with data: \"" + inputEditText.getText().toString() + "\"");
 	}
 }

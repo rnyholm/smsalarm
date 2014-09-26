@@ -10,7 +10,7 @@ import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
-import ax.ha.it.smsalarm.enumeration.AlarmTypes;
+import ax.ha.it.smsalarm.enumeration.AlarmType;
 import ax.ha.it.smsalarm.handler.LogHandler;
 import ax.ha.it.smsalarm.handler.PreferencesHandler;
 import ax.ha.it.smsalarm.handler.LogHandler.LogPriorities;
@@ -87,12 +87,12 @@ public class NotificationHelper extends IntentService {
 		// To store alarm type, message and rescue service in
 		String message = "";
 		String rescueService = "";
-		AlarmTypes alarmType = AlarmTypes.UNDEFINED;
+		AlarmType alarmType = AlarmType.UNDEFINED;
 
 		try {
 			// Get some values from the sharedprefs
 			message = (String) prefHandler.getPrefs(PrefKeys.SHARED_PREF, PrefKeys.MESSAGE_KEY, DataTypes.STRING, this);
-			alarmType = AlarmTypes.of((Integer) prefHandler.getPrefs(PrefKeys.SHARED_PREF, PrefKeys.LARM_TYPE_KEY, DataTypes.INTEGER, this));
+			alarmType = AlarmType.of((Integer) prefHandler.getPrefs(PrefKeys.SHARED_PREF, PrefKeys.LARM_TYPE_KEY, DataTypes.INTEGER, this));
 			rescueService = (String) prefHandler.getPrefs(PrefKeys.SHARED_PREF, PrefKeys.RESCUE_SERVICE_KEY, DataTypes.STRING, this);
 		} catch (IllegalArgumentException e) {
 			logger.logCatTxt(LogPriorities.ERROR, LOG_TAG + ":onHandleIntent()", "An unsupported datatype was given as argument to PreferencesHandler.getPrefs()", e);
@@ -121,12 +121,12 @@ public class NotificationHelper extends IntentService {
 		long when = System.currentTimeMillis();
 
 		// Configure notification depending on type
-		if (alarmType.equals(AlarmTypes.PRIMARY)) {
+		if (alarmType.equals(AlarmType.PRIMARY)) {
 			// Set proper texts and icon to notification
 			setNotificationTexts(android.R.drawable.ic_delete, getString(R.string.PRIMARY_ALARM), rescueService.toUpperCase(), getString(R.string.PRIMARY_ALARM), message);
 			// Log
 			logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":onHandleIntent()", "Notification has been set for a PRIMARY alarm");
-		} else if (alarmType.equals(AlarmTypes.SECONDARY)) {
+		} else if (alarmType.equals(AlarmType.SECONDARY)) {
 			// Set proper texts and icon to notification
 			setNotificationTexts(android.R.drawable.ic_menu_close_clear_cancel, getString(R.string.SECONDARY_ALARM), rescueService.toUpperCase(), getString(R.string.SECONDARY_ALARM), message);
 			// Log
