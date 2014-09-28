@@ -24,8 +24,8 @@ import ax.ha.it.smsalarm.fragment.dialog.RemoveSmsNumberDialog;
 import ax.ha.it.smsalarm.handler.LogHandler;
 import ax.ha.it.smsalarm.handler.LogHandler.LogPriorities;
 import ax.ha.it.smsalarm.handler.PreferencesHandler;
-import ax.ha.it.smsalarm.handler.PreferencesHandler.DataTypes;
-import ax.ha.it.smsalarm.handler.PreferencesHandler.PrefKeys;
+import ax.ha.it.smsalarm.handler.PreferencesHandler.DataType;
+import ax.ha.it.smsalarm.handler.PreferencesHandler.PrefKey;
 import ax.ha.it.smsalarm.util.Util;
 
 import com.actionbarsherlock.app.SherlockFragment;
@@ -117,12 +117,8 @@ public class SmsSettingsFragment extends SherlockFragment implements Application
 	public void fetchSharedPrefs() {
 		logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":fetchSharedPrefs()", "Start fetching shared preferences needed by this fragment");
 
-		try {
-			primarySmsNumbers = (List<String>) prefHandler.getPrefs(PrefKeys.SHARED_PREF, PrefKeys.PRIMARY_LISTEN_NUMBERS_KEY, DataTypes.LIST, context);
-			secondarySmsNumbers = (List<String>) prefHandler.getPrefs(PrefKeys.SHARED_PREF, PrefKeys.SECONDARY_LISTEN_NUMBERS_KEY, DataTypes.LIST, context);
-		} catch (IllegalArgumentException e) {
-			logger.logCatTxt(LogPriorities.ERROR, LOG_TAG + ":fetchSharedPrefs()", "An unsupported datatype was given as argument to PreferencesHandler.getPrefs()", e);
-		}
+		primarySmsNumbers = (List<String>) prefHandler.fetchPrefs(PrefKey.SHARED_PREF, PrefKey.PRIMARY_LISTEN_NUMBERS_KEY, DataType.LIST, context);
+		secondarySmsNumbers = (List<String>) prefHandler.fetchPrefs(PrefKey.SHARED_PREF, PrefKey.SECONDARY_LISTEN_NUMBERS_KEY, DataType.LIST, context);
 
 		logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":fetchSharedPrefs()", "Shared preferences fetched");
 	}
@@ -229,12 +225,8 @@ public class SmsSettingsFragment extends SherlockFragment implements Application
 							// Add given input to list
 							primarySmsNumbers.add(newSmsNumber);
 
-							try {
-								// Store to shared preferences
-								prefHandler.setPrefs(PrefKeys.SHARED_PREF, PrefKeys.PRIMARY_LISTEN_NUMBERS_KEY, primarySmsNumbers, context);
-							} catch (IllegalArgumentException e) {
-								logger.logCatTxt(LogPriorities.ERROR, LOG_TAG + ":onActivityResult()", "An Object of unsupported instance was given as argument to PreferencesHandler.setPrefs()", e);
-							}
+							// Store to shared preferences
+							prefHandler.storePrefs(PrefKey.SHARED_PREF, PrefKey.PRIMARY_LISTEN_NUMBERS_KEY, primarySmsNumbers, context);
 
 							// Update affected UI widgets
 							updatePrimarySmsNumberSpinner();
@@ -271,12 +263,8 @@ public class SmsSettingsFragment extends SherlockFragment implements Application
 						if (!duplicatedNumbers) {
 							secondarySmsNumbers.add(newSmsNumber);
 
-							try {
-								// Store to shared preferences
-								prefHandler.setPrefs(PrefKeys.SHARED_PREF, PrefKeys.SECONDARY_LISTEN_NUMBERS_KEY, secondarySmsNumbers, context);
-							} catch (IllegalArgumentException e) {
-								logger.logCatTxt(LogPriorities.ERROR, LOG_TAG + ":onActivityResult()", "An Object of unsupported instance was given as argument to PreferencesHandler.setPrefs()", e);
-							}
+							// Store to shared preferences
+							prefHandler.storePrefs(PrefKey.SHARED_PREF, PrefKey.SECONDARY_LISTEN_NUMBERS_KEY, secondarySmsNumbers, context);
 
 							updateSecondarySmsNumberSpinner();
 							logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":onActivityResult()", "New SECONDARY sms number has been stored from user input to the list of SECONDARY sms numbers. New SECONDARY sms number is: \"" + newSmsNumber + "\"");
@@ -301,23 +289,15 @@ public class SmsSettingsFragment extends SherlockFragment implements Application
 					// Remove SMS number in list that equals the SMS number got from intent data
 					primarySmsNumbers.remove(data.getStringExtra(RemoveSmsNumberDialog.REMOVE_SMS_NUMBER));
 
-					try {
-						// Store to shared preferences
-						prefHandler.setPrefs(PrefKeys.SHARED_PREF, PrefKeys.PRIMARY_LISTEN_NUMBERS_KEY, primarySmsNumbers, context);
-					} catch (IllegalArgumentException e) {
-						logger.logCatTxt(LogPriorities.ERROR, LOG_TAG + ":createSmsPrimaryRemoveDialog().PosButton.OnClickListener().onClick()", "An Object of unsupported instance was given as argument to PreferencesHandler.setPrefs()", e);
-					}
+					// Store to shared preferences
+					prefHandler.storePrefs(PrefKey.SHARED_PREF, PrefKey.PRIMARY_LISTEN_NUMBERS_KEY, primarySmsNumbers, context);
 
 					updatePrimarySmsNumberSpinner();
 					break;
 				case (RemoveSmsNumberDialog.REMOVE_SECONDARY_SMS_NUMBER_DIALOG_REQUEST_CODE):
 					secondarySmsNumbers.remove(data.getStringExtra(RemoveSmsNumberDialog.REMOVE_SMS_NUMBER));
 
-					try {
-						prefHandler.setPrefs(PrefKeys.SHARED_PREF, PrefKeys.SECONDARY_LISTEN_NUMBERS_KEY, secondarySmsNumbers, context);
-					} catch (IllegalArgumentException e) {
-						logger.logCatTxt(LogPriorities.ERROR, LOG_TAG + ":createSmsSecondaryRemoveDialog().PosButton.OnClickListener().onClick()", "An Object of unsupported instance was given as argument to PreferencesHandler.setPrefs()", e);
-					}
+					prefHandler.storePrefs(PrefKey.SHARED_PREF, PrefKey.SECONDARY_LISTEN_NUMBERS_KEY, secondarySmsNumbers, context);
 
 					updateSecondarySmsNumberSpinner();
 					break;

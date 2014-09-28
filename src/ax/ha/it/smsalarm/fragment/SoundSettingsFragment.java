@@ -31,8 +31,8 @@ import ax.ha.it.smsalarm.handler.LogHandler;
 import ax.ha.it.smsalarm.handler.LogHandler.LogPriorities;
 import ax.ha.it.smsalarm.handler.NoiseHandler;
 import ax.ha.it.smsalarm.handler.PreferencesHandler;
-import ax.ha.it.smsalarm.handler.PreferencesHandler.DataTypes;
-import ax.ha.it.smsalarm.handler.PreferencesHandler.PrefKeys;
+import ax.ha.it.smsalarm.handler.PreferencesHandler.DataType;
+import ax.ha.it.smsalarm.handler.PreferencesHandler.PrefKey;
 
 import com.actionbarsherlock.app.SherlockFragment;
 
@@ -220,14 +220,10 @@ public class SoundSettingsFragment extends SherlockFragment implements Applicati
 	public void fetchSharedPrefs() {
 		logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":fetchSharedPrefs()", "Start fetching shared preferences needed by this fragment");
 
-		try {
-			primaryAlarmSignalId = (Integer) prefHandler.getPrefs(PrefKeys.SHARED_PREF, PrefKeys.PRIMARY_MESSAGE_TONE_KEY, DataTypes.INTEGER, context);
-			secondaryAlarmSignalId = (Integer) prefHandler.getPrefs(PrefKeys.SHARED_PREF, PrefKeys.SECONDARY_MESSAGE_TONE_KEY, DataTypes.INTEGER, context, 1);
-			useOsSoundSettings = (Boolean) prefHandler.getPrefs(PrefKeys.SHARED_PREF, PrefKeys.USE_OS_SOUND_SETTINGS_KEY, DataTypes.BOOLEAN, context);
-			playAlarmSignalTwice = (Boolean) prefHandler.getPrefs(PrefKeys.SHARED_PREF, PrefKeys.PLAY_TONE_TWICE_KEY, DataTypes.BOOLEAN, context);
-		} catch (IllegalArgumentException e) {
-			logger.logCatTxt(LogPriorities.ERROR, LOG_TAG + ":fetchSharedPrefs()", "An unsupported datatype was given as argument to PreferencesHandler.getPrefs()", e);
-		}
+		primaryAlarmSignalId = (Integer) prefHandler.fetchPrefs(PrefKey.SHARED_PREF, PrefKey.PRIMARY_MESSAGE_TONE_KEY, DataType.INTEGER, context);
+		secondaryAlarmSignalId = (Integer) prefHandler.fetchPrefs(PrefKey.SHARED_PREF, PrefKey.SECONDARY_MESSAGE_TONE_KEY, DataType.INTEGER, context, 1);
+		useOsSoundSettings = (Boolean) prefHandler.fetchPrefs(PrefKey.SHARED_PREF, PrefKey.USE_OS_SOUND_SETTINGS_KEY, DataType.BOOLEAN, context);
+		playAlarmSignalTwice = (Boolean) prefHandler.fetchPrefs(PrefKey.SHARED_PREF, PrefKey.PLAY_TONE_TWICE_KEY, DataType.BOOLEAN, context);
 
 		logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":fetchSharedPrefs()", "Shared preferences fetched");
 	}
@@ -310,12 +306,8 @@ public class SoundSettingsFragment extends SherlockFragment implements Applicati
 					logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":setListeners().soundSettingCheckBox.onCheckedChange()", "Use OS sound settings checkbox \"Unchecked\"(" + useOsSoundSettings + ")");
 				}
 
-				try {
-					// Store value to shared preferences
-					prefHandler.setPrefs(PrefKeys.SHARED_PREF, PrefKeys.USE_OS_SOUND_SETTINGS_KEY, useOsSoundSettings, context);
-				} catch (IllegalArgumentException e) {
-					logger.logCatTxt(LogPriorities.ERROR, LOG_TAG + ":setListeners().soundSettingCheckBox.onCheckedChange()", "An Object of unsupported instance was given as argument to PreferencesHandler.setPrefs()", e);
-				}
+				// Store value to shared preferences
+				prefHandler.storePrefs(PrefKey.SHARED_PREF, PrefKey.USE_OS_SOUND_SETTINGS_KEY, useOsSoundSettings, context);
 			}
 		});
 
@@ -333,11 +325,7 @@ public class SoundSettingsFragment extends SherlockFragment implements Applicati
 					logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":setListeners().playToneTwiceSettingCheckBox.onCheckedChange()", "Play tone twice checkbox \"Unhecked\"(" + playAlarmSignalTwice + ")");
 				}
 
-				try {
-					prefHandler.setPrefs(PrefKeys.SHARED_PREF, PrefKeys.PLAY_TONE_TWICE_KEY, playAlarmSignalTwice, context);
-				} catch (IllegalArgumentException e) {
-					logger.logCatTxt(LogPriorities.ERROR, LOG_TAG + ":setListeners().playToneTwiceSettingCheckBox.onCheckedChange()", "An Object of unsupported instance was given as argument to PreferencesHandler.setPrefs()", e);
-				}
+				prefHandler.storePrefs(PrefKey.SHARED_PREF, PrefKey.PLAY_TONE_TWICE_KEY, playAlarmSignalTwice, context);
 			}
 		});
 
@@ -373,12 +361,8 @@ public class SoundSettingsFragment extends SherlockFragment implements Applicati
 
 					logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":onActivityResult()", "Result code: \"" + Activity.RESULT_OK + "\"(Activity.RESULT_OK), data: \"" + Integer.toString(primaryAlarmSignalId) + "\" fetched using key: \"" + AlarmSignalDialog.ALARM_SIGNAL + "\" is about to be persisted into shared preferences");
 
-					try {
-						// Store to shared preferences
-						prefHandler.setPrefs(PrefKeys.SHARED_PREF, PrefKeys.PRIMARY_MESSAGE_TONE_KEY, primaryAlarmSignalId, context);
-					} catch (IllegalArgumentException e) {
-						logger.logCatTxt(LogPriorities.ERROR, LOG_TAG + ":onActivityResult()", "An Object of unsupported instance was given as argument to PreferencesHandler.setPrefs()", e);
-					}
+					// Store to shared preferences
+					prefHandler.storePrefs(PrefKey.SHARED_PREF, PrefKey.PRIMARY_MESSAGE_TONE_KEY, primaryAlarmSignalId, context);
 
 					// Update selected tone EditText
 					updateSelectedAlarmSignalEditText();
@@ -388,11 +372,7 @@ public class SoundSettingsFragment extends SherlockFragment implements Applicati
 
 					logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":onActivityResult()", "Result code: \"" + Activity.RESULT_OK + "\"(Activity.RESULT_OK), data: \"" + Integer.toString(secondaryAlarmSignalId) + "\" fetched using key: \"" + AlarmSignalDialog.ALARM_SIGNAL + "\" is about to be persisted into shared preferences");
 
-					try {
-						prefHandler.setPrefs(PrefKeys.SHARED_PREF, PrefKeys.SECONDARY_MESSAGE_TONE_KEY, secondaryAlarmSignalId, context);
-					} catch (IllegalArgumentException e) {
-						logger.logCatTxt(LogPriorities.ERROR, LOG_TAG + ":onActivityResult()", "An Object of unsupported instance was given as argument to PreferencesHandler.setPrefs()", e);
-					}
+					prefHandler.storePrefs(PrefKey.SHARED_PREF, PrefKey.SECONDARY_MESSAGE_TONE_KEY, secondaryAlarmSignalId, context);
 
 					updateSelectedAlarmSignalEditText();
 					break;

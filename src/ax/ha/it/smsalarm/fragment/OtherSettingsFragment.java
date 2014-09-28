@@ -26,8 +26,8 @@ import ax.ha.it.smsalarm.fragment.dialog.RescueServiceDialog;
 import ax.ha.it.smsalarm.handler.LogHandler;
 import ax.ha.it.smsalarm.handler.LogHandler.LogPriorities;
 import ax.ha.it.smsalarm.handler.PreferencesHandler;
-import ax.ha.it.smsalarm.handler.PreferencesHandler.DataTypes;
-import ax.ha.it.smsalarm.handler.PreferencesHandler.PrefKeys;
+import ax.ha.it.smsalarm.handler.PreferencesHandler.DataType;
+import ax.ha.it.smsalarm.handler.PreferencesHandler.PrefKey;
 
 import com.actionbarsherlock.app.SherlockFragment;
 
@@ -182,12 +182,8 @@ public class OtherSettingsFragment extends SherlockFragment implements Applicati
 	public void fetchSharedPrefs() {
 		logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":fetchSharedPrefs()", "Start fetching shared preferences needed by this fragment");
 
-		try {
-			enableSmsAlarm = (Boolean) prefHandler.getPrefs(PrefKeys.SHARED_PREF, PrefKeys.ENABLE_SMS_ALARM_KEY, DataTypes.BOOLEAN, context, true);
-			rescueService = (String) prefHandler.getPrefs(PrefKeys.SHARED_PREF, PrefKeys.RESCUE_SERVICE_KEY, DataTypes.STRING, context);
-		} catch (IllegalArgumentException e) {
-			logger.logCatTxt(LogPriorities.ERROR, LOG_TAG + ":fetchSharedPrefs()", "An unsupported datatype was given as argument to PreferencesHandler.getPrefs()", e);
-		}
+		enableSmsAlarm = (Boolean) prefHandler.fetchPrefs(PrefKey.SHARED_PREF, PrefKey.ENABLE_SMS_ALARM_KEY, DataType.BOOLEAN, context, true);
+		rescueService = (String) prefHandler.fetchPrefs(PrefKey.SHARED_PREF, PrefKey.RESCUE_SERVICE_KEY, DataType.STRING, context);
 
 		logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":fetchSharedPrefs()", "Shared preferences fetched");
 	}
@@ -232,12 +228,8 @@ public class OtherSettingsFragment extends SherlockFragment implements Applicati
 					logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":setListeners().enableSmsAlarmCheckBox.onCheckedChange()", "Enable SmsAlarm checkbox \"Unchecked\"(" + enableSmsAlarm + ")");
 				}
 
-				try {
-					// Store value to shared preferences
-					prefHandler.setPrefs(PrefKeys.SHARED_PREF, PrefKeys.ENABLE_SMS_ALARM_KEY, enableSmsAlarm, context);
-				} catch (IllegalArgumentException e) {
-					logger.logCatTxt(LogPriorities.ERROR, LOG_TAG + ":setListeners().enableSmsAlarmCheckBox.onCheckedChange()", "An Object of unsupported instance was given as argument to PreferencesHandler.setPrefs()", e);
-				}
+				// Store value to shared preferences
+				prefHandler.storePrefs(PrefKey.SHARED_PREF, PrefKey.ENABLE_SMS_ALARM_KEY, enableSmsAlarm, context);
 			}
 		});
 	}
@@ -255,12 +247,8 @@ public class OtherSettingsFragment extends SherlockFragment implements Applicati
 
 					logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":onActivityResult()", "Result code: \"" + Activity.RESULT_OK + "\"(Activity.RESULT_OK), data: \"" + rescueService + "\" fetched using key: \"" + RescueServiceDialog.RESCUE_SERVICE + "\" is about to be persisted into shared preferences");
 
-					try {
-						// Store to shared preferences
-						prefHandler.setPrefs(PrefKeys.SHARED_PREF, PrefKeys.RESCUE_SERVICE_KEY, rescueService, context);
-					} catch (IllegalArgumentException e) {
-						logger.logCatTxt(LogPriorities.ERROR, LOG_TAG + ":onActivityResult()", "An Object of unsupported instance was given as argument to PreferencesHandler.setPrefs()", e);
-					}
+					// Store to shared preferences
+					prefHandler.storePrefs(PrefKey.SHARED_PREF, PrefKey.RESCUE_SERVICE_KEY, rescueService, context);
 
 					// Update affected UI widgets
 					updateRescueServiceEditText();

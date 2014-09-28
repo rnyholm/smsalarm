@@ -24,8 +24,8 @@ import ax.ha.it.smsalarm.fragment.dialog.RemoveFreeTextDialog;
 import ax.ha.it.smsalarm.handler.LogHandler;
 import ax.ha.it.smsalarm.handler.LogHandler.LogPriorities;
 import ax.ha.it.smsalarm.handler.PreferencesHandler;
-import ax.ha.it.smsalarm.handler.PreferencesHandler.DataTypes;
-import ax.ha.it.smsalarm.handler.PreferencesHandler.PrefKeys;
+import ax.ha.it.smsalarm.handler.PreferencesHandler.DataType;
+import ax.ha.it.smsalarm.handler.PreferencesHandler.PrefKey;
 import ax.ha.it.smsalarm.util.Util;
 
 import com.actionbarsherlock.app.SherlockFragment;
@@ -117,12 +117,8 @@ public class FreeTextSettingsFragment extends SherlockFragment implements Applic
 	public void fetchSharedPrefs() {
 		logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":fetchSharedPrefs()", "Start fetching shared preferences needed by this fragment");
 
-		try {
-			primaryFreeTexts = (List<String>) prefHandler.getPrefs(PrefKeys.SHARED_PREF, PrefKeys.PRIMARY_LISTEN_FREE_TEXTS_KEY, DataTypes.LIST, context);
-			secondaryFreeTexts = (List<String>) prefHandler.getPrefs(PrefKeys.SHARED_PREF, PrefKeys.SECONDARY_LISTEN_FREE_TEXTS_KEY, DataTypes.LIST, context);
-		} catch (IllegalArgumentException e) {
-			logger.logCatTxt(LogPriorities.ERROR, LOG_TAG + ":fetchSharedPrefs()", "An unsupported datatype was given as argument to PreferencesHandler.getPrefs()", e);
-		}
+		primaryFreeTexts = (List<String>) prefHandler.fetchPrefs(PrefKey.SHARED_PREF, PrefKey.PRIMARY_LISTEN_FREE_TEXTS_KEY, DataType.LIST, context);
+		secondaryFreeTexts = (List<String>) prefHandler.fetchPrefs(PrefKey.SHARED_PREF, PrefKey.SECONDARY_LISTEN_FREE_TEXTS_KEY, DataType.LIST, context);
 
 		logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":fetchSharedPrefs()", "Shared preferences fetched");
 	}
@@ -228,12 +224,8 @@ public class FreeTextSettingsFragment extends SherlockFragment implements Applic
 							// Add given input to list
 							primaryFreeTexts.add(newFreeText);
 
-							try {
-								// Store to shared preferences
-								prefHandler.setPrefs(PrefKeys.SHARED_PREF, PrefKeys.PRIMARY_LISTEN_FREE_TEXTS_KEY, primaryFreeTexts, context);
-							} catch (IllegalArgumentException e) {
-								logger.logCatTxt(LogPriorities.ERROR, LOG_TAG + ":onActivityResult()", "An Object of unsupported instance was given as argument to PreferencesHandler.setPrefs()", e);
-							}
+							// Store to shared preferences
+							prefHandler.storePrefs(PrefKey.SHARED_PREF, PrefKey.PRIMARY_LISTEN_FREE_TEXTS_KEY, primaryFreeTexts, context);
 
 							// Update affected UI widgets
 							updatePrimaryFreeTextSpinner();
@@ -271,11 +263,7 @@ public class FreeTextSettingsFragment extends SherlockFragment implements Applic
 						if (!duplicatedFreeTexts) {
 							secondaryFreeTexts.add(newFreeText);
 
-							try {
-								prefHandler.setPrefs(PrefKeys.SHARED_PREF, PrefKeys.SECONDARY_LISTEN_FREE_TEXTS_KEY, secondaryFreeTexts, context);
-							} catch (IllegalArgumentException e) {
-								logger.logCatTxt(LogPriorities.ERROR, LOG_TAG + ":onActivityResult()", "An Object of unsupported instance was given as argument to PreferencesHandler.setPrefs()", e);
-							}
+							prefHandler.storePrefs(PrefKey.SHARED_PREF, PrefKey.SECONDARY_LISTEN_FREE_TEXTS_KEY, secondaryFreeTexts, context);
 
 							updateSecondaryFreeTextSpinner();
 							logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":onActivityResult()", "New SECONDARY free text has been stored from user input to the list of SECONDARY free texts. New SECONDARY free text is: \"" + newFreeText + "\"");
@@ -301,23 +289,14 @@ public class FreeTextSettingsFragment extends SherlockFragment implements Applic
 					// Remove free text in list that equals the free text got from intent data
 					primaryFreeTexts.remove(data.getStringExtra(RemoveFreeTextDialog.REMOVE_FREE_TEXT));
 
-					try {
-						// Store to shared preferences
-						prefHandler.setPrefs(PrefKeys.SHARED_PREF, PrefKeys.PRIMARY_LISTEN_FREE_TEXTS_KEY, primaryFreeTexts, context);
-					} catch (IllegalArgumentException e) {
-						logger.logCatTxt(LogPriorities.ERROR, LOG_TAG + ":onActivityResult()", "An Object of unsupported instance was given as argument to PreferencesHandler.setPrefs()", e);
-					}
+					prefHandler.storePrefs(PrefKey.SHARED_PREF, PrefKey.PRIMARY_LISTEN_FREE_TEXTS_KEY, primaryFreeTexts, context);
 
 					updatePrimaryFreeTextSpinner();
 					break;
 				case (RemoveFreeTextDialog.REMOVE_SECONDARY_FREE_TEXT_DIALOG_REQUEST_CODE):
 					secondaryFreeTexts.remove(data.getStringExtra(RemoveFreeTextDialog.REMOVE_FREE_TEXT));
 
-					try {
-						prefHandler.setPrefs(PrefKeys.SHARED_PREF, PrefKeys.SECONDARY_LISTEN_FREE_TEXTS_KEY, secondaryFreeTexts, context);
-					} catch (IllegalArgumentException e) {
-						logger.logCatTxt(LogPriorities.ERROR, LOG_TAG + ":onActivityResult()", "An Object of unsupported instance was given as argument to PreferencesHandler.setPrefs()", e);
-					}
+					prefHandler.storePrefs(PrefKey.SHARED_PREF, PrefKey.SECONDARY_LISTEN_FREE_TEXTS_KEY, secondaryFreeTexts, context);
 
 					updateSecondaryFreeTextSpinner();
 					break;

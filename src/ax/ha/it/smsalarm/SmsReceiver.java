@@ -22,16 +22,15 @@ import ax.ha.it.smsalarm.enumeration.AlarmType;
 import ax.ha.it.smsalarm.handler.DatabaseHandler;
 import ax.ha.it.smsalarm.handler.KitKatHandler;
 import ax.ha.it.smsalarm.handler.LogHandler;
+import ax.ha.it.smsalarm.handler.LogHandler.LogPriorities;
 import ax.ha.it.smsalarm.handler.NoiseHandler;
 import ax.ha.it.smsalarm.handler.PreferencesHandler;
-import ax.ha.it.smsalarm.handler.LogHandler.LogPriorities;
-import ax.ha.it.smsalarm.handler.PreferencesHandler.DataTypes;
-import ax.ha.it.smsalarm.handler.PreferencesHandler.PrefKeys;
+import ax.ha.it.smsalarm.handler.PreferencesHandler.DataType;
+import ax.ha.it.smsalarm.handler.PreferencesHandler.PrefKey;
 import ax.ha.it.smsalarm.util.WakeLocker;
 
 /**
- * Class extending <code>BroadcastReceiver</code>, receives sms and handles them accordingly to
- * application settings and sms senders phone number.
+ * Class extending <code>BroadcastReceiver</code>, receives sms and handles them accordingly to application settings and sms senders phone number.
  * 
  * @author Robert Nyholm <robert.nyholm@aland.net>
  * @version 2.2.1
@@ -77,25 +76,22 @@ public class SmsReceiver extends BroadcastReceiver {
 	private String triggerText = "";
 
 	/**
-	 * Overridden method to receive <code>intent</code>, reacts on incoming sms. This receiver take
-	 * proper actions depending on application settings and sms senders phone number.
+	 * Overridden method to receive <code>intent</code>, reacts on incoming sms. This receiver take proper actions depending on application settings
+	 * and sms senders phone number.
 	 * 
 	 * @param context
 	 *            Context
 	 * @param intent
 	 *            Intent
-	 * 
 	 * @see #smsHandler(Context)
 	 * @see #removeCountryCode()
 	 * @see #checkAlarm(Context)
 	 * @see #getSmsReceivePrefs(Context)
 	 * @see NoiseHandler#getRingerModeHandler()
-	 * @see ax.ha.it.smsalarm.handler.LogHandler#logCat(LogPriorities, String, String) logCat(LogPriorities,
-	 *      String, String)
-	 * @see ax.ha.it.smsalarm.handler.LogHandler#logCatTxt(LogPriorities, String, String, Throwable)
-	 *      logCatTxt(LogPriorities, String, String, Throwable)
-	 * @see ax.ha.it.smsalarm.handler.PreferencesHandler#setPrefs(PrefKeys, PrefKeys, Object, Context)
-	 *      setPrefs(PrefKeys, PrefKeys, Object, Context)
+	 * @see ax.ha.it.smsalarm.handler.LogHandler#logCat(LogPriorities, String, String) logCat(LogPriorities, String, String)
+	 * @see ax.ha.it.smsalarm.handler.LogHandler#logCatTxt(LogPriorities, String, String, Throwable) logCatTxt(LogPriorities, String, String,
+	 *      Throwable)
+	 * @see ax.ha.it.smsalarm.handler.PreferencesHandler#storePrefs(PrefKeys, PrefKeys, Object, Context) setPrefs(PrefKeys, PrefKeys, Object, Context)
 	 */
 	@Override
 	public void onReceive(Context context, Intent intent) {
@@ -161,27 +157,21 @@ public class SmsReceiver extends BroadcastReceiver {
 	}
 
 	/**
-	 * Method to handle incoming sms. Aborts the systems broadcast and stores the sms in the device
-	 * inbox. This method is also responsible for playing ringtone via
-	 * <code>{@link ax.ha.it.smsalarm.handler.NoiseHandler#makeNoise(Context, int, boolean, boolean)}</code>
-	 * , vibrate and start <code>intent</code>.
+	 * Method to handle incoming sms. Aborts the systems broadcast and stores the sms in the device inbox. This method is also responsible for playing
+	 * ringtone via <code>{@link ax.ha.it.smsalarm.handler.NoiseHandler#makeNoise(Context, int, boolean, boolean)}</code> , vibrate and start
+	 * <code>intent</code>.
 	 * 
 	 * @param context
 	 *            Context
-	 * 
 	 * @see #onReceive(Context, Intent)
 	 * @see #getSmsReceivePrefs(Context)
-	 * @see ax.ha.it.smsalarm.handler.NoiseHandler#makeNoise(Context, int, boolean, boolean)
-	 *      makeNoise(Context, int, boolean, boolean)
-	 * @see ax.ha.it.smsalarm.handler.LogHandler#logCat(LogPriorities, String, String) logCat(LogPriorities,
-	 *      String, String)
-	 * @see ax.ha.it.smsalarm.handler.LogHandler#logCatTxt(LogPriorities, String, String)
-	 *      logCatTxt(LogPriorities, String, String)
-	 * @see ax.ha.it.smsalarm.handler.LogHandler#logCatTxt(LogPriorities, String, String, Throwable)
-	 *      logCatTxt(LogPriorities, String, String, Throwable)
+	 * @see ax.ha.it.smsalarm.handler.NoiseHandler#makeNoise(Context, int, boolean, boolean) makeNoise(Context, int, boolean, boolean)
+	 * @see ax.ha.it.smsalarm.handler.LogHandler#logCat(LogPriorities, String, String) logCat(LogPriorities, String, String)
+	 * @see ax.ha.it.smsalarm.handler.LogHandler#logCatTxt(LogPriorities, String, String) logCatTxt(LogPriorities, String, String)
+	 * @see ax.ha.it.smsalarm.handler.LogHandler#logCatTxt(LogPriorities, String, String, Throwable) logCatTxt(LogPriorities, String, String,
+	 *      Throwable)
 	 * @see ax.ha.it.smsalarm.handler.LogHandler#logAlarm(List, Context) logAlarm(List, Context)
-	 * @see ax.ha.it.smsalarm.handler.PreferencesHandler#setPrefs(PrefKeys, PrefKeys, Object, Context)
-	 *      setPrefs(PrefKeys, PrefKeys, Object, Context)
+	 * @see ax.ha.it.smsalarm.handler.PreferencesHandler#storePrefs(PrefKeys, PrefKeys, Object, Context) setPrefs(PrefKeys, PrefKeys, Object, Context)
 	 * @see ax.ha.it.smsalarm.util.WakeLocker#acquire(Context) acquire(Context)
 	 * @see ax.ha.it.smsalarm.util.WakeLocker#release() release()
 	 * @see ax.ha.it.smsalarm.handler.DatabaseHandler ax.ha.it.smsalarm.DatabaseHandler
@@ -249,12 +239,8 @@ public class SmsReceiver extends BroadcastReceiver {
 			// Debug logging
 			logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":smsHandler()", "Alarm acknowledgement is enabled and alarm is of type PRIMARY, store full sms to shared preferences");
 
-			try {
-				// Enable acknowledge is enabled and alarm is of type primary
-				prefHandler.setPrefs(PrefKeys.SHARED_PREF, PrefKeys.FULL_MESSAGE_KEY, msgBody, context);
-			} catch (IllegalArgumentException e) {
-				logger.logCatTxt(LogPriorities.ERROR, LOG_TAG + ":smsHandler()", "An Object of unsupported instance was given as argument to PreferencesHandler.setPrefs()", e);
-			}
+			// Enable acknowledge is enabled and alarm is of type primary
+			prefHandler.storePrefs(PrefKey.SHARED_PREF, PrefKey.FULL_MESSAGE_KEY, msgBody, context);
 		}
 
 		// If message contain a string with correct pattern, remove the date and time stamp in
@@ -268,12 +254,8 @@ public class SmsReceiver extends BroadcastReceiver {
 		// Debug logging
 		logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":smsHandler()", "Store sms to shared preferences for show in notification bar");
 
-		// Store message's body in shared prefs so it can be shown in notification
-		try {
-			prefHandler.setPrefs(PrefKeys.SHARED_PREF, PrefKeys.MESSAGE_KEY, msgBody, context);
-		} catch (IllegalArgumentException e) {
-			logger.logCatTxt(LogPriorities.ERROR, LOG_TAG + ":smsHandler()", "An Object of unsupported instance was given as argument to PreferencesHandler.setPrefs()", e);
-		}
+		// Store message's body in shared preferences so it can be shown in notification
+		prefHandler.storePrefs(PrefKey.SHARED_PREF, PrefKey.MESSAGE_KEY, msgBody, context);
 
 		// Acknowledge is enabled and it is a primary alarm, show acknowledge notification, else
 		// show "ordinary" notification
@@ -296,53 +278,43 @@ public class SmsReceiver extends BroadcastReceiver {
 	 * 
 	 * @param context
 	 *            Context
-	 * 
 	 * @see #onReceive(Context, Intent)
 	 * @see #smsHandler(Context)
-	 * @see ax.ha.it.smsalarm.handler.LogHandler#logCat(LogPriorities, String, String) logCat(LogPriorities,
-	 *      String, String)
-	 * @see ax.ha.it.smsalarm.handler.LogHandler#logCatTxt(LogPriorities, String, String, Throwable)
-	 *      logCatTxt(LogPriorities, String, String, Throwable)
-	 * @see ax.ha.it.smsalarm.handler.PreferencesHandler#getPrefs(PrefKeys, PrefKeys, DataTypes, Context)
-	 *      getPrefs(PrefKeys, PrefKeys, DataTypes, Context)
+	 * @see ax.ha.it.smsalarm.handler.LogHandler#logCat(LogPriorities, String, String) logCat(LogPriorities, String, String)
+	 * @see ax.ha.it.smsalarm.handler.LogHandler#logCatTxt(LogPriorities, String, String, Throwable) logCatTxt(LogPriorities, String, String,
+	 *      Throwable)
+	 * @see ax.ha.it.smsalarm.handler.PreferencesHandler#fetchPrefs(PrefKeys, PrefKeys, DataTypes, Context) getPrefs(PrefKeys, PrefKeys, DataTypes,
+	 *      Context)
 	 */
 	@SuppressWarnings("unchecked")
 	private void getSmsReceivePrefs(Context context) {
 		// Some logging
 		logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":getSmsReceivePrefs()", "Start retrieving shared preferences needed by class SmsReceiver");
 
-		try {
-			// Get shared preferences needed by SmsReceiver
-			primarySmsNumbers = (List<String>) prefHandler.getPrefs(PrefKeys.SHARED_PREF, PrefKeys.PRIMARY_LISTEN_NUMBERS_KEY, DataTypes.LIST, context);
-			secondarySmsNumbers = (List<String>) prefHandler.getPrefs(PrefKeys.SHARED_PREF, PrefKeys.SECONDARY_LISTEN_NUMBERS_KEY, DataTypes.LIST, context);
-			primaryFreeTexts = (List<String>) prefHandler.getPrefs(PrefKeys.SHARED_PREF, PrefKeys.PRIMARY_LISTEN_FREE_TEXTS_KEY, DataTypes.LIST, context);
-			secondaryFreeTexts = (List<String>) prefHandler.getPrefs(PrefKeys.SHARED_PREF, PrefKeys.SECONDARY_LISTEN_FREE_TEXTS_KEY, DataTypes.LIST, context);
-			primaryMessageToneId = (Integer) prefHandler.getPrefs(PrefKeys.SHARED_PREF, PrefKeys.PRIMARY_MESSAGE_TONE_KEY, DataTypes.INTEGER, context);
-			secondaryMessageToneId = (Integer) prefHandler.getPrefs(PrefKeys.SHARED_PREF, PrefKeys.SECONDARY_MESSAGE_TONE_KEY, DataTypes.INTEGER, context, 1);
-			useOsSoundSettings = (Boolean) prefHandler.getPrefs(PrefKeys.SHARED_PREF, PrefKeys.USE_OS_SOUND_SETTINGS_KEY, DataTypes.BOOLEAN, context);
-			enableAlarmAck = (Boolean) prefHandler.getPrefs(PrefKeys.SHARED_PREF, PrefKeys.ENABLE_ACK_KEY, DataTypes.BOOLEAN, context);
-			playToneTwice = (Boolean) prefHandler.getPrefs(PrefKeys.SHARED_PREF, PrefKeys.PLAY_TONE_TWICE_KEY, DataTypes.BOOLEAN, context);
-			enableSmsAlarm = (Boolean) prefHandler.getPrefs(PrefKeys.SHARED_PREF, PrefKeys.ENABLE_SMS_ALARM_KEY, DataTypes.BOOLEAN, context, true);
-		} catch (IllegalArgumentException e) {
-			logger.logCatTxt(LogPriorities.ERROR, LOG_TAG + ":getSmsReceivePrefs()", "An unsupported datatype was given as argument to PreferencesHandler.getPrefs()", e);
-		}
+		// Get shared preferences needed by SmsReceiver
+		primarySmsNumbers = (List<String>) prefHandler.fetchPrefs(PrefKey.SHARED_PREF, PrefKey.PRIMARY_LISTEN_NUMBERS_KEY, DataType.LIST, context);
+		secondarySmsNumbers = (List<String>) prefHandler.fetchPrefs(PrefKey.SHARED_PREF, PrefKey.SECONDARY_LISTEN_NUMBERS_KEY, DataType.LIST, context);
+		primaryFreeTexts = (List<String>) prefHandler.fetchPrefs(PrefKey.SHARED_PREF, PrefKey.PRIMARY_LISTEN_FREE_TEXTS_KEY, DataType.LIST, context);
+		secondaryFreeTexts = (List<String>) prefHandler.fetchPrefs(PrefKey.SHARED_PREF, PrefKey.SECONDARY_LISTEN_FREE_TEXTS_KEY, DataType.LIST, context);
+		primaryMessageToneId = (Integer) prefHandler.fetchPrefs(PrefKey.SHARED_PREF, PrefKey.PRIMARY_MESSAGE_TONE_KEY, DataType.INTEGER, context);
+		secondaryMessageToneId = (Integer) prefHandler.fetchPrefs(PrefKey.SHARED_PREF, PrefKey.SECONDARY_MESSAGE_TONE_KEY, DataType.INTEGER, context, 1);
+		useOsSoundSettings = (Boolean) prefHandler.fetchPrefs(PrefKey.SHARED_PREF, PrefKey.USE_OS_SOUND_SETTINGS_KEY, DataType.BOOLEAN, context);
+		enableAlarmAck = (Boolean) prefHandler.fetchPrefs(PrefKey.SHARED_PREF, PrefKey.ENABLE_ACK_KEY, DataType.BOOLEAN, context);
+		playToneTwice = (Boolean) prefHandler.fetchPrefs(PrefKey.SHARED_PREF, PrefKey.PLAY_TONE_TWICE_KEY, DataType.BOOLEAN, context);
+		enableSmsAlarm = (Boolean) prefHandler.fetchPrefs(PrefKey.SHARED_PREF, PrefKey.ENABLE_SMS_ALARM_KEY, DataType.BOOLEAN, context, true);
 
 		logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":getSmsReceivePrefs()", "Shared preferences retrieved");
 	}
 
 	/**
-	 * To check if income sms fulfill criteria for either a <b><i>PRIMARY</i></b> or
-	 * <b><i>SECONDARY</i></b> alarm.
+	 * To check if income SMS fulfill criteria for either a <b><i>PRIMARY</i></b> or <b><i>SECONDARY</i></b> alarm.
 	 * 
 	 * @param context
 	 *            Context
-	 * 
 	 * @return <code>true</code> if income sms was an alarm else <code>false</code>.
-	 * 
 	 * @see #checkSmsAlarm(Context)
 	 * @see #checkFreeTextAlarm(Context)
-	 * @see ax.ha.it.smsalarm.handler.LogHandler#logCat(LogPriorities, String, String) logCat(LogPriorities,
-	 *      String, String)
+	 * @see ax.ha.it.smsalarm.handler.LogHandler#logCat(LogPriorities, String, String) logCat(LogPriorities, String, String)
 	 */
 	private boolean checkAlarm(Context context) {
 		// Log message for debugging/information purpose
@@ -356,21 +328,17 @@ public class SmsReceiver extends BroadcastReceiver {
 	}
 
 	/**
-	 * To check if received sms is any alarm. The check is done by a equality control of the senders
-	 * phone number and the phone numbers read from <code>SharedPreferences</code>.
+	 * To check if received sms is any alarm. The check is done by a equality control of the senders phone number and the phone numbers read from
+	 * <code>SharedPreferences</code>.
 	 * 
 	 * @param context
 	 *            Context
-	 * 
 	 * @return <code>true</code> if income sms was an alarm else <code>false</code>.
-	 * 
 	 * @see #setAlarmType(AlarmType, Context)
-	 * @see ax.ha.it.smsalarm.handler.LogHandler#logCat(LogPriorities, String, String) logCat(LogPriorities,
-	 *      String, String)
-	 * @see ax.ha.it.smsalarm.handler.LogHandler#logCatTxt(LogPriorities, String, String, Throwable)
-	 *      logCatTxt(LogPriorities, String, String, Throwable)
-	 * @see ax.ha.it.smsalarm.handler.PreferencesHandler#setPrefs(PrefKeys, PrefKeys, Object, Context)
-	 *      setPrefs(PrefKeys, PrefKeys, Object, Context)
+	 * @see ax.ha.it.smsalarm.handler.LogHandler#logCat(LogPriorities, String, String) logCat(LogPriorities, String, String)
+	 * @see ax.ha.it.smsalarm.handler.LogHandler#logCatTxt(LogPriorities, String, String, Throwable) logCatTxt(LogPriorities, String, String,
+	 *      Throwable)
+	 * @see ax.ha.it.smsalarm.handler.PreferencesHandler#storePrefs(PrefKeys, PrefKeys, Object, Context) setPrefs(PrefKeys, PrefKeys, Object, Context)
 	 */
 	private boolean checkSmsAlarm(Context context) {
 		// Log message for debugging/information purpose
@@ -415,22 +383,17 @@ public class SmsReceiver extends BroadcastReceiver {
 	}
 
 	/**
-	 * To check if received Sms is any alarm. The check is done by a controlling if any of the free
-	 * texts(words) is found in received Sms.
+	 * To check if received Sms is any alarm. The check is done by a controlling if any of the free texts(words) is found in received Sms.
 	 * 
 	 * @param context
 	 *            Context
-	 * 
 	 * @return <code>true</code> if income sms was an alarm else <code>false</code>.
-	 * 
 	 * @see #setTriggerText(String)
 	 * @see #setAlarmType(AlarmType, Context)
-	 * @see ax.ha.it.smsalarm.handler.LogHandler#logCat(LogPriorities, String, String) logCat(LogPriorities,
-	 *      String, String)
-	 * @see ax.ha.it.smsalarm.handler.LogHandler#logCatTxt(LogPriorities, String, String, Throwable)
-	 *      logCatTxt(LogPriorities, String, String, Throwable)
-	 * @see ax.ha.it.smsalarm.handler.PreferencesHandler#setPrefs(PrefKeys, PrefKeys, Object, Context)
-	 *      setPrefs(PrefKeys, PrefKeys, Object, Context)
+	 * @see ax.ha.it.smsalarm.handler.LogHandler#logCat(LogPriorities, String, String) logCat(LogPriorities, String, String)
+	 * @see ax.ha.it.smsalarm.handler.LogHandler#logCatTxt(LogPriorities, String, String, Throwable) logCatTxt(LogPriorities, String, String,
+	 *      Throwable)
+	 * @see ax.ha.it.smsalarm.handler.PreferencesHandler#storePrefs(PrefKeys, PrefKeys, Object, Context) setPrefs(PrefKeys, PrefKeys, Object, Context)
 	 */
 	private boolean checkFreeTextAlarm(Context context) {
 		// Log message for debugging/information purpose
@@ -483,13 +446,10 @@ public class SmsReceiver extends BroadcastReceiver {
 	 *            Alarm type to be set.
 	 * @param context
 	 *            context
-	 * 
-	 * @see ax.ha.it.smsalarm.handler.LogHandler#logCat(LogPriorities, String, String) logCat(LogPriorities,
-	 *      String, String)
-	 * @see ax.ha.it.smsalarm.handler.LogHandler#logCatTxt(LogPriorities, String, String, Throwable)
-	 *      logCatTxt(LogPriorities, String, String, Throwable)
-	 * @see ax.ha.it.smsalarm.handler.PreferencesHandler#setPrefs(PrefKeys, PrefKeys, Object, Context)
-	 *      setPrefs(PrefKeys, PrefKeys, Object, Context)
+	 * @see ax.ha.it.smsalarm.handler.LogHandler#logCat(LogPriorities, String, String) logCat(LogPriorities, String, String)
+	 * @see ax.ha.it.smsalarm.handler.LogHandler#logCatTxt(LogPriorities, String, String, Throwable) logCatTxt(LogPriorities, String, String,
+	 *      Throwable)
+	 * @see ax.ha.it.smsalarm.handler.PreferencesHandler#storePrefs(PrefKeys, PrefKeys, Object, Context) setPrefs(PrefKeys, PrefKeys, Object, Context)
 	 */
 	private void setAlarmType(AlarmType alarmType, Context context) {
 		// Log message for debugging/information purpose
@@ -498,12 +458,8 @@ public class SmsReceiver extends BroadcastReceiver {
 		// Set the given alarm type
 		this.alarmType = alarmType;
 
-		try {
-			// Put alarm type to shared preferences
-			prefHandler.setPrefs(PrefKeys.SHARED_PREF, PrefKeys.LARM_TYPE_KEY, alarmType.ordinal(), context);
-		} catch (IllegalArgumentException e) {
-			logger.logCatTxt(LogPriorities.ERROR, LOG_TAG + ":setAlarmType()", "An Object of unsupported instance was given as argument to PreferencesHandler.setPrefs()", e);
-		}
+		// Put alarm type to shared preferences
+		prefHandler.storePrefs(PrefKey.SHARED_PREF, PrefKey.LARM_TYPE_KEY, alarmType.ordinal(), context);
 	}
 
 	/**
@@ -511,9 +467,7 @@ public class SmsReceiver extends BroadcastReceiver {
 	 * 
 	 * @param triggerText
 	 *            Text to be set as trigger text.
-	 * 
-	 * @see ax.ha.it.smsalarm.handler.LogHandler#logCat(LogPriorities, String, String) logCat(LogPriorities,
-	 *      String, String)
+	 * @see ax.ha.it.smsalarm.handler.LogHandler#logCat(LogPriorities, String, String) logCat(LogPriorities, String, String)
 	 */
 	private void setTriggerText(String triggerText) {
 		// Log information
@@ -531,23 +485,18 @@ public class SmsReceiver extends BroadcastReceiver {
 	}
 
 	/**
-	 * To check if <code>String</code>(textToParse) passed in as argument contains another
-	 * <code>String</code>(wordToFind) passed in as argument. This method only checks whole words
-	 * and not a <code>CharSequence</code>. Method is not case sensitive.
+	 * To check if <code>String</code>(textToParse) passed in as argument contains another <code>String</code>(wordToFind) passed in as argument. This
+	 * method only checks whole words and not a <code>CharSequence</code>. Method is not case sensitive.
 	 * 
 	 * @param wordToFind
 	 *            Word to find.
 	 * @param textToParse
 	 *            Text to look for word in.
-	 * 
 	 * @return <code>true</code> if word is found else <code>false</code>.
-	 * 
 	 * @throws NullPointerException
-	 *             if either or both params <code>wordToFind</code> and <code>textToParse</code> is
-	 *             null.
+	 *             if either or both params <code>wordToFind</code> and <code>textToParse</code> is null.
 	 * @throws IllegalArgumentException
-	 *             if either or both params <code>wordToFind</code> and <code>textToParse</code> is
-	 *             empty.
+	 *             if either or both params <code>wordToFind</code> and <code>textToParse</code> is empty.
 	 */
 	private boolean findWordEqualsIgnore(String wordToFind, String textToParse) {
 		if (wordToFind != null && textToParse != null) {
@@ -575,12 +524,9 @@ public class SmsReceiver extends BroadcastReceiver {
 	}
 
 	/**
-	 * Convenience method to figure out if <code>Build.VERSION.SDK_INT</code> equals to
-	 * <code>Build.VERSION_CODES.KITKAT</code> or higher.
+	 * Convenience method to figure out if <code>Build.VERSION.SDK_INT</code> equals to <code>Build.VERSION_CODES.KITKAT</code> or higher.
 	 * 
-	 * @return <code>true</code> if <code>Build.VERSION.SDK_INT</code> equals to
-	 *         <code>Build.VERSION_CODES.KITKAT</code> else <code>false</code>.
-	 * 
+	 * @return <code>true</code> if <code>Build.VERSION.SDK_INT</code> equals to <code>Build.VERSION_CODES.KITKAT</code> else <code>false</code>.
 	 * @see LogHandler#logCat(LogPriorities, String, String)
 	 */
 	private boolean isKitKatOrHigher() {

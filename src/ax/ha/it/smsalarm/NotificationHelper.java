@@ -12,15 +12,14 @@ import android.content.Context;
 import android.content.Intent;
 import ax.ha.it.smsalarm.enumeration.AlarmType;
 import ax.ha.it.smsalarm.handler.LogHandler;
-import ax.ha.it.smsalarm.handler.PreferencesHandler;
 import ax.ha.it.smsalarm.handler.LogHandler.LogPriorities;
-import ax.ha.it.smsalarm.handler.PreferencesHandler.DataTypes;
-import ax.ha.it.smsalarm.handler.PreferencesHandler.PrefKeys;
+import ax.ha.it.smsalarm.handler.PreferencesHandler;
+import ax.ha.it.smsalarm.handler.PreferencesHandler.DataType;
+import ax.ha.it.smsalarm.handler.PreferencesHandler.PrefKey;
 
 /**
- * Helper class to build up and show notifications, also creates <code>pending intent</code> for the
- * <code>notification</code>. Contains some deprecated functionality, this is to support
- * <code>Android SDK</code> versions below 11.
+ * Helper class to build up and show notifications, also creates <code>pending intent</code> for the <code>notification</code>. Contains some
+ * deprecated functionality, this is to support <code>Android SDK</code> versions below 11.
  * 
  * @author Robert Nyholm <robert.nyholm@aland.net>
  * @version 2.2.1
@@ -45,9 +44,7 @@ public class NotificationHelper extends IntentService {
 	 * Mandatory constructor calling it's <code>super class</code>.
 	 * 
 	 * @see #onHandleIntent(Intent)
-	 * 
-	 * @see ax.ha.it.smsalarm.handler.LogHandler#logCat(LogHandler.LogPriorities, String, String)
-	 *      logCat(LogHandler.LogPriorities, String, String)
+	 * @see ax.ha.it.smsalarm.handler.LogHandler#logCat(LogHandler.LogPriorities, String, String) logCat(LogHandler.LogPriorities, String, String)
 	 */
 	public NotificationHelper() {
 		// Note: MUST call the super() constructor with an (arbitrary) string
@@ -58,23 +55,18 @@ public class NotificationHelper extends IntentService {
 	}
 
 	/**
-	 * Overridden method to handle <code>intent</code>, build up and show <code>notification</code>.
-	 * Contains some deprecated functionality just to support <code>Android SDK</code> versions
-	 * below 11.
+	 * Overridden method to handle <code>intent</code>, build up and show <code>notification</code>. Contains some deprecated functionality just to
+	 * support <code>Android SDK</code> versions below 11.
 	 * 
 	 * @param i
 	 *            Intent for notification
-	 * 
 	 * @see #NotificationHelper()
-	 * @see ax.ha.it.smsalarm.handler.LogHandler#logCat(LogPriorities, String, String) logCat(LogPriorities,
-	 *      String, String)
-	 * @see ax.ha.it.smsalarm.handler.LogHandler#logCatTxt(LogPriorities, String, String)
-	 *      logCatTxt(LogPriorities, String, String)
-	 * @see ax.ha.it.smsalarm.handler.LogHandler#logCatTxt(LogPriorities, String, String, Throwable)
-	 *      logCatTxt(LogPriorities, String, String, Throwable)
-	 * @see ax.ha.it.smsalarm.handler.PreferencesHandler#getPrefs(PrefKeys, PrefKeys, DataTypes, Context)
-	 *      getPrefs(PrefKeys, PrefKeys, DataTypes, Context)
-	 * 
+	 * @see ax.ha.it.smsalarm.handler.LogHandler#logCat(LogPriorities, String, String) logCat(LogPriorities, String, String)
+	 * @see ax.ha.it.smsalarm.handler.LogHandler#logCatTxt(LogPriorities, String, String) logCatTxt(LogPriorities, String, String)
+	 * @see ax.ha.it.smsalarm.handler.LogHandler#logCatTxt(LogPriorities, String, String, Throwable) logCatTxt(LogPriorities, String, String,
+	 *      Throwable)
+	 * @see ax.ha.it.smsalarm.handler.PreferencesHandler#fetchPrefs(PrefKeys, PrefKeys, DataTypes, Context) getPrefs(PrefKeys, PrefKeys, DataTypes,
+	 *      Context)
 	 * @deprecated
 	 */
 	@SuppressLint("DefaultLocale")
@@ -89,23 +81,18 @@ public class NotificationHelper extends IntentService {
 		String rescueService = "";
 		AlarmType alarmType = AlarmType.UNDEFINED;
 
-		try {
-			// Get some values from the sharedprefs
-			message = (String) prefHandler.getPrefs(PrefKeys.SHARED_PREF, PrefKeys.MESSAGE_KEY, DataTypes.STRING, this);
-			alarmType = AlarmType.of((Integer) prefHandler.getPrefs(PrefKeys.SHARED_PREF, PrefKeys.LARM_TYPE_KEY, DataTypes.INTEGER, this));
-			rescueService = (String) prefHandler.getPrefs(PrefKeys.SHARED_PREF, PrefKeys.RESCUE_SERVICE_KEY, DataTypes.STRING, this);
-		} catch (IllegalArgumentException e) {
-			logger.logCatTxt(LogPriorities.ERROR, LOG_TAG + ":onHandleIntent()", "An unsupported datatype was given as argument to PreferencesHandler.getPrefs()", e);
-		}
+		// Get some values from the shared preferences
+		message = (String) prefHandler.fetchPrefs(PrefKey.SHARED_PREF, PrefKey.MESSAGE_KEY, DataType.STRING, this);
+		alarmType = AlarmType.of((Integer) prefHandler.fetchPrefs(PrefKey.SHARED_PREF, PrefKey.LARM_TYPE_KEY, DataType.INTEGER, this));
+		rescueService = (String) prefHandler.fetchPrefs(PrefKey.SHARED_PREF, PrefKey.RESCUE_SERVICE_KEY, DataType.STRING, this);
 
 		logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":onHandleIntent()", "Shared preferences retrieved");
 
 		/*
 		 * This string and intent opens the messaging directory on phone, however due to this page;
-		 * http://stackoverflow.com/questions/3708737/go-to-inbox-in-android fetched 21.10-11, this
-		 * way of achieve the "go to messaging dir" is highly unrecommended.Thats because this
-		 * method uses undocumented API and is not part of the Android core.This may or may not work
-		 * on some devices and versions!
+		 * http://stackoverflow.com/questions/3708737/go-to-inbox-in-android fetched 21.10-11, this way of achieve the "go to messaging dir" is highly
+		 * unrecommended.Thats because this method uses undocumented API and is not part of the Android core.This may or may not work on some devices
+		 * and versions!
 		 */
 		String SMS_MIME_TYPE = "vnd.android-dir/mms-sms";
 		Intent notificationIntent = new Intent(Intent.ACTION_MAIN); // Don't want to start any
@@ -148,7 +135,7 @@ public class NotificationHelper extends IntentService {
 		// This flag auto cancels the notification when clicked and indicating that devices LED
 		// should light up
 		notification.flags = Notification.FLAG_SHOW_LIGHTS | Notification.FLAG_AUTO_CANCEL;
-		// Configurate LED
+		// Configure LED
 		notification.ledARGB = 0xFFff0000; // Red
 		notification.ledOnMS = 100; // On time
 		notification.ledOffMS = 100; // Off time
@@ -160,8 +147,7 @@ public class NotificationHelper extends IntentService {
 	}
 
 	/**
-	 * To set texts and icon for a notification. The ticker text is built up dynamically depending
-	 * on argument <code>rescueService</code>
+	 * To set texts and icon for a notification. The ticker text is built up dynamically depending on argument <code>rescueService</code>
 	 * 
 	 * @param icon
 	 *            Icon as integer value, use <code>android.R.drawable.*</code>

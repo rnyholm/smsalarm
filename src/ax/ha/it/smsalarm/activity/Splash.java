@@ -17,8 +17,8 @@ import ax.ha.it.smsalarm.fragment.dialog.EulaDialog;
 import ax.ha.it.smsalarm.handler.LogHandler;
 import ax.ha.it.smsalarm.handler.LogHandler.LogPriorities;
 import ax.ha.it.smsalarm.handler.PreferencesHandler;
-import ax.ha.it.smsalarm.handler.PreferencesHandler.DataTypes;
-import ax.ha.it.smsalarm.handler.PreferencesHandler.PrefKeys;
+import ax.ha.it.smsalarm.handler.PreferencesHandler.DataType;
+import ax.ha.it.smsalarm.handler.PreferencesHandler.PrefKey;
 
 /**
  * Splash activity, just shows splash screen and after a certain time or a tap on screen activity switch to SmsAlarm.<br>
@@ -66,11 +66,7 @@ public class Splash extends FragmentActivity {
 		logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":onCreate()", "Layout has been set with correct settings");
 
 		// Fetch value from shared preferences, this is to decide if user has agreed user the user license before or not
-		try {
-			endUserLicenseAgreed = (Boolean) prefHandler.getPrefs(PrefKeys.SHARED_PREF, PrefKeys.END_USER_LICENSE_AGREED, DataTypes.BOOLEAN, this, false);
-		} catch (IllegalArgumentException e) {
-			logger.logCatTxt(LogPriorities.ERROR, LOG_TAG + ":onCreate()", "An unsupported datatype was given as argument to PreferencesHandler.getPrefs()", e);
-		}
+		endUserLicenseAgreed = (Boolean) prefHandler.fetchPrefs(PrefKey.SHARED_PREF, PrefKey.END_USER_LICENSE_AGREED, DataType.BOOLEAN, this, false);
 
 		// Only set up onClickListener and start Runnable if user has agreed the end user license agreement
 		if (endUserLicenseAgreed) {
@@ -109,11 +105,7 @@ public class Splash extends FragmentActivity {
 	 */
 	public void doPositiveClick() {
 		// Put end user license agreed in shared preferences so we don't show this dialog again
-		try {
-			prefHandler.setPrefs(PrefKeys.SHARED_PREF, PrefKeys.END_USER_LICENSE_AGREED, true, Splash.this);
-		} catch (IllegalArgumentException e) {
-			logger.logCatTxt(LogPriorities.ERROR, LOG_TAG + ":buildAndShowEULADialog().PositiveButton.OnClickListener().onClick()", "An Object of unsupported instance was given as argument to PreferencesHandler.setPrefs()", e);
-		}
+		prefHandler.storePrefs(PrefKey.SHARED_PREF, PrefKey.END_USER_LICENSE_AGREED, true, Splash.this);
 
 		switchActivity();
 	}

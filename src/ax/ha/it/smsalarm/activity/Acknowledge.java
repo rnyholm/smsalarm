@@ -32,8 +32,8 @@ import ax.ha.it.smsalarm.handler.DatabaseHandler;
 import ax.ha.it.smsalarm.handler.LogHandler;
 import ax.ha.it.smsalarm.handler.LogHandler.LogPriorities;
 import ax.ha.it.smsalarm.handler.PreferencesHandler;
-import ax.ha.it.smsalarm.handler.PreferencesHandler.DataTypes;
-import ax.ha.it.smsalarm.handler.PreferencesHandler.PrefKeys;
+import ax.ha.it.smsalarm.handler.PreferencesHandler.DataType;
+import ax.ha.it.smsalarm.handler.PreferencesHandler.PrefKey;
 
 /**
  * Responsible for the application <code>ax.ha.it.smsalarm</code> acknowledge activity. This class allows users to acknowledge an received alarm by
@@ -94,7 +94,7 @@ public class Acknowledge extends Activity {
 	// initialized with release date of the first Sms Alarm version (26.11-2011) in milliseconds
 	private Date startCall = new Date(1319576400000L);
 
-	// To countdown a new call
+	// To count down a new call
 	@SuppressWarnings("unused")
 	private CountDownTimer redialCountDown;
 
@@ -102,7 +102,7 @@ public class Acknowledge extends Activity {
 	private int prePhoneState = -1;
 	private int phoneState = -1;
 
-	// Constants for the redial parameters
+	// Constants for the re-dial parameters
 	private final int MIN_CALL_TIME = 7000; // Minimum call time(in milliseconds), if below this the application redials
 	private final int REDIAL_COUNTDOWN_TIME = 6000; // Count down time(in milliseconds) before redial should occur
 	private final int REDIAL_COUNTDOWN_INTERVAL = 100;
@@ -249,7 +249,7 @@ public class Acknowledge extends Activity {
 	 * @see #onResume()
 	 * @see LogHandler#logCat(LogPriorities, String , String)
 	 * @see LogHandler#logCatTxt(LogPriorities, String , String, Throwable)
-	 * @see PreferencesHandler#setPrefs(PrefKeys, PrefKeys, Object, Context)
+	 * @see PreferencesHandler#storePrefs(PrefKeys, PrefKeys, Object, Context)
 	 */
 	private void placeAcknowledgeCall() {
 		try {
@@ -259,12 +259,8 @@ public class Acknowledge extends Activity {
 
 			logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":placeAcknowledgeCall()", "A call intent has been initialized");
 
-			try {
-				// Store variable to shared preferences indicating that a call has been placed
-				prefHandler.setPrefs(PrefKeys.SHARED_PREF, PrefKeys.HAS_CALLED_KEY, true, Acknowledge.this);
-			} catch (IllegalArgumentException e) {
-				logger.logCatTxt(LogPriorities.ERROR, LOG_TAG + ":placeAcknowledgeCall()", "An Object of unsupported instance was given as argument to PreferencesHandler.setPrefs()", e);
-			}
+			// Store variable to shared preferences indicating that a call has been placed
+			prefHandler.storePrefs(PrefKey.SHARED_PREF, PrefKey.HAS_CALLED_KEY, true, Acknowledge.this);
 
 			// Set time when the call has been placed
 			startCall = Calendar.getInstance().getTime();
@@ -330,20 +326,16 @@ public class Acknowledge extends Activity {
 	 * 
 	 * @see LogHandler#logCat(LogPriorities, String , String) logCat(LogPriorities, String , String)
 	 * @see LogHandler#logCatTxt(LogPriorities, String, String, Throwable)
-	 * @see PreferencesHandler#getPrefs(PrefKeys, PrefKeys, DataTypes, Context)
+	 * @see PreferencesHandler#fetchPrefs(PrefKeys, PrefKeys, DataTypes, Context)
 	 */
 	private void getAckHandlerPrefs() {
 		logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":getAckHandlerPrefs()", "Start retrieving shared preferences needed by class AcknowledgeHandler");
 
-		try {
-			// Get shared preferences needed by class Acknowledge Handler
-			rescueService = (String) prefHandler.getPrefs(PrefKeys.SHARED_PREF, PrefKeys.RESCUE_SERVICE_KEY, DataTypes.STRING, this);
-			fullMessage = (String) prefHandler.getPrefs(PrefKeys.SHARED_PREF, PrefKeys.FULL_MESSAGE_KEY, DataTypes.STRING, this);
-			acknowledgeNumber = (String) prefHandler.getPrefs(PrefKeys.SHARED_PREF, PrefKeys.ACK_NUMBER_KEY, DataTypes.STRING, this);
-			hasCalled = (Boolean) prefHandler.getPrefs(PrefKeys.SHARED_PREF, PrefKeys.HAS_CALLED_KEY, DataTypes.BOOLEAN, this);
-		} catch (IllegalArgumentException e) {
-			logger.logCatTxt(LogPriorities.ERROR, LOG_TAG + ":getAckHandlerPrefs()", "An unsupported datatype was given as argument to PreferencesHandler.getPrefs()", e);
-		}
+		// Get shared preferences needed by class Acknowledge Handler
+		rescueService = (String) prefHandler.fetchPrefs(PrefKey.SHARED_PREF, PrefKey.RESCUE_SERVICE_KEY, DataType.STRING, this);
+		fullMessage = (String) prefHandler.fetchPrefs(PrefKey.SHARED_PREF, PrefKey.FULL_MESSAGE_KEY, DataType.STRING, this);
+		acknowledgeNumber = (String) prefHandler.fetchPrefs(PrefKey.SHARED_PREF, PrefKey.ACK_NUMBER_KEY, DataType.STRING, this);
+		hasCalled = (Boolean) prefHandler.fetchPrefs(PrefKey.SHARED_PREF, PrefKey.HAS_CALLED_KEY, DataType.BOOLEAN, this);
 
 		logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":getAckHandlerPrefs()", "Shared preferences retrieved");
 	}
@@ -394,7 +386,7 @@ public class Acknowledge extends Activity {
 		 * @see #stateName(int)
 		 * @see LogHandler#logCat(LogPriorities, String , String)
 		 * @see LogHandler#logCat(LogPriorities, String, String, Throwable)
-		 * @see PreferencesHandler#setPrefs(PrefKeys, PrefKeys, Object, Context)
+		 * @see PreferencesHandler#storePrefs(PrefKeys, PrefKeys, Object, Context)
 		 */
 		@Override
 		public void onCallStateChanged(int state, String incomingNumber) {
@@ -426,12 +418,9 @@ public class Acknowledge extends Activity {
 					startActivity(i);
 				} else {
 					logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":ListenToPhoneState().onCallStateChanged()", "Call time was more than:\"" + MIN_CALL_TIME + "\", assumes the call went through");
-					try {
-						// Store variable to shared preferences indicating that a call has been placed with success
-						prefHandler.setPrefs(PrefKeys.SHARED_PREF, PrefKeys.HAS_CALLED_KEY, false, Acknowledge.this);
-					} catch (IllegalArgumentException e) {
-						logger.logCatTxt(LogPriorities.ERROR, LOG_TAG + ":ListenToPhoneState().onCallStateChanged()", "An Object of unsupported instance was given as argument to PreferencesHandler.setPrefs()", e);
-					}
+
+					// Store variable to shared preferences indicating that a call has been placed with success
+					prefHandler.storePrefs(PrefKey.SHARED_PREF, PrefKey.HAS_CALLED_KEY, false, Acknowledge.this);
 					logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":ListenToPhoneState().onCallStateChanged()", "Finishing activity");
 
 					// Finish this activity

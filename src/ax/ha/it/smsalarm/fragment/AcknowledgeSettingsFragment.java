@@ -27,8 +27,8 @@ import ax.ha.it.smsalarm.fragment.dialog.AcknowledgeNumberDialog;
 import ax.ha.it.smsalarm.handler.LogHandler;
 import ax.ha.it.smsalarm.handler.LogHandler.LogPriorities;
 import ax.ha.it.smsalarm.handler.PreferencesHandler;
-import ax.ha.it.smsalarm.handler.PreferencesHandler.DataTypes;
-import ax.ha.it.smsalarm.handler.PreferencesHandler.PrefKeys;
+import ax.ha.it.smsalarm.handler.PreferencesHandler.DataType;
+import ax.ha.it.smsalarm.handler.PreferencesHandler.PrefKey;
 
 import com.actionbarsherlock.app.SherlockFragment;
 
@@ -181,12 +181,8 @@ public class AcknowledgeSettingsFragment extends SherlockFragment implements App
 	public void fetchSharedPrefs() {
 		logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":fetchSharedPrefs()", "Start fetching shared preferences needed by this fragment");
 
-		try {
-			useAlarmAcknowledge = (Boolean) prefHandler.getPrefs(PrefKeys.SHARED_PREF, PrefKeys.ENABLE_ACK_KEY, DataTypes.BOOLEAN, context);
-			acknowledgeNumber = (String) prefHandler.getPrefs(PrefKeys.SHARED_PREF, PrefKeys.ACK_NUMBER_KEY, DataTypes.STRING, context);
-		} catch (IllegalArgumentException e) {
-			logger.logCatTxt(LogPriorities.ERROR, LOG_TAG + ":fetchSharedPrefs()", "An unsupported datatype was given as argument to PreferencesHandler.getPrefs()", e);
-		}
+		useAlarmAcknowledge = (Boolean) prefHandler.fetchPrefs(PrefKey.SHARED_PREF, PrefKey.ENABLE_ACK_KEY, DataType.BOOLEAN, context);
+		acknowledgeNumber = (String) prefHandler.fetchPrefs(PrefKey.SHARED_PREF, PrefKey.ACK_NUMBER_KEY, DataType.STRING, context);
 
 		logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":fetchSharedPrefs()", "Shared preferences fetched");
 	}
@@ -234,13 +230,9 @@ public class AcknowledgeSettingsFragment extends SherlockFragment implements App
 					logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":setListeners().enableAckCheckBox.onCheckedChange()", "Use OS sound settings checkbox \"Unchecked\"(" + useAlarmAcknowledge + ")");
 				}
 
-				try {
-					// Store value to shared preferences
-					prefHandler.setPrefs(PrefKeys.SHARED_PREF, PrefKeys.ENABLE_ACK_KEY, useAlarmAcknowledge, context);
-				} catch (IllegalArgumentException e) {
-					logger.logCatTxt(LogPriorities.ERROR, LOG_TAG + ":setListeners().enableAckCheckBox.onCheckedChange()", "An Object of unsupported instance was given as argument to PreferencesHandler.setPrefs()", e);
-				}
+				prefHandler.storePrefs(PrefKey.SHARED_PREF, PrefKey.ENABLE_ACK_KEY, useAlarmAcknowledge, context);
 
+				// Update affected UI widgets
 				updateAcknowledgeWidgets();
 			}
 		});
@@ -259,14 +251,7 @@ public class AcknowledgeSettingsFragment extends SherlockFragment implements App
 
 					logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":onActivityResult()", "Result code: \"" + Activity.RESULT_OK + "\"(Activity.RESULT_OK), data: \"" + acknowledgeNumber + "\" fetched using key: \"" + AcknowledgeNumberDialog.ACKNOWLEDGE_NUMBER + "\" is about to be persisted into shared preferences");
 
-					try {
-						// Store to shared preferences
-						prefHandler.setPrefs(PrefKeys.SHARED_PREF, PrefKeys.ACK_NUMBER_KEY, acknowledgeNumber, context);
-					} catch (IllegalArgumentException e) {
-						logger.logCatTxt(LogPriorities.ERROR, LOG_TAG + ":onActivityResult()", "An Object of unsupported instance was given as argument to PreferencesHandler.setPrefs()", e);
-					}
-
-					// Update affected UI widgets
+					prefHandler.storePrefs(PrefKey.SHARED_PREF, PrefKey.ACK_NUMBER_KEY, acknowledgeNumber, context);
 					updateAcknowledgeNumberEditText();
 
 					logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":onActivityResult()", "New ACKNOWLEDGE phone number has been stored from user input . New ACKNOWLEDGE phone number is: \"" + acknowledgeNumber + "\"");

@@ -18,15 +18,14 @@ import android.widget.RemoteViews;
 import ax.ha.it.smsalarm.activity.Splash;
 import ax.ha.it.smsalarm.handler.DatabaseHandler;
 import ax.ha.it.smsalarm.handler.LogHandler;
-import ax.ha.it.smsalarm.handler.PreferencesHandler;
 import ax.ha.it.smsalarm.handler.LogHandler.LogPriorities;
-import ax.ha.it.smsalarm.handler.PreferencesHandler.DataTypes;
-import ax.ha.it.smsalarm.handler.PreferencesHandler.PrefKeys;
+import ax.ha.it.smsalarm.handler.PreferencesHandler;
+import ax.ha.it.smsalarm.handler.PreferencesHandler.DataType;
+import ax.ha.it.smsalarm.handler.PreferencesHandler.PrefKey;
 
 /**
- * Provider class for the application widgets. This class is responsible for all updates, data
- * population, data presentation and so on for a widget. This implementation should be safe with
- * more than one instances of the Sms Alarm widget.
+ * Provider class for the application widgets. This class is responsible for all updates, data population, data presentation and so on for a widget.
+ * This implementation should be safe with more than one instances of the Sms Alarm widget.
  * 
  * @author Robert Nyholm <robert.nyholm@aland.net>
  * @version 2.2.1
@@ -58,8 +57,8 @@ public class WidgetProvider extends AppWidgetProvider {
 	private boolean endUserLicenseAgreed = false;
 
 	/**
-	 * To receive intents broadcasted throughout the operating system. If it receives any intents
-	 * that this method listens on the method takes proper action. <br>
+	 * To receive intents broadcasted throughout the operating system. If it receives any intents that this method listens on the method takes proper
+	 * action. <br>
 	 * <br>
 	 * The method listens on following intents:
 	 * <ul>
@@ -74,12 +73,10 @@ public class WidgetProvider extends AppWidgetProvider {
 	 * @see #setEnableSmsAlarmPref(Context, boolean)
 	 * @see #setUseOsSoundSettingsPref(Context, boolean)
 	 * @see #WidgetProvider()
-	 * @see ax.ha.it.smsalarm.handler.LogHandler#getAlarmLogPath()
-	 *      ax.ha.it.smsalarm.LogHandler#getAlarmLogPath()
-	 * @see ax.ha.it.smsalarm.handler.LogHandler#logCat(LogPriorities, String, String) logCat(LogPriorities,
-	 *      String, String)
-	 * @see ax.ha.it.smsalarm.handler.LogHandler#logCatTxt(LogPriorities, String, String, Throwable)
-	 *      logCatTxt(LogPriorities, String, String, Throwable)
+	 * @see ax.ha.it.smsalarm.handler.LogHandler#getAlarmLogPath() ax.ha.it.smsalarm.LogHandler#getAlarmLogPath()
+	 * @see ax.ha.it.smsalarm.handler.LogHandler#logCat(LogPriorities, String, String) logCat(LogPriorities, String, String)
+	 * @see ax.ha.it.smsalarm.handler.LogHandler#logCatTxt(LogPriorities, String, String, Throwable) logCatTxt(LogPriorities, String, String,
+	 *      Throwable)
 	 * @see ax.ha.it.smsalarm.handler.DatabaseHandler ax.ha.it.smsalarm.DatabaseHandler
 	 */
 	@Override
@@ -166,8 +163,7 @@ public class WidgetProvider extends AppWidgetProvider {
 	 * @see #onReceive(Context, Intent)
 	 * @see #getWidgetPrefs(Context)
 	 * @see #setWidgetTextViews(RemoteViews, Context)
-	 * @see ax.ha.it.smsalarm.handler.LogHandler#logCat(LogPriorities, String, String) logCat(LogPriorities,
-	 *      String, String)
+	 * @see ax.ha.it.smsalarm.handler.LogHandler#logCat(LogPriorities, String, String) logCat(LogPriorities, String, String)
 	 * @see ax.ha.it.smsalarm.handler.DatabaseHandler ax.ha.it.smsalarm.DatabaseHandler
 	 */
 	@Override
@@ -231,18 +227,14 @@ public class WidgetProvider extends AppWidgetProvider {
 	}
 
 	/**
-	 * To set appropriate text's to the different <code>TextView</code>'s. The text's are set
-	 * depending if user has agreed the end user license, and if any <code>Alarm</code>'s has been
-	 * received, status of SmsAlarm(enabled/disabled) and status of use devices sound
-	 * settings(enabled/disabled).
+	 * To set appropriate text's to the different <code>TextView</code>'s. The text's are set depending if user has agreed the end user license, and
+	 * if any <code>Alarm</code>'s has been received, status of SmsAlarm(enabled/disabled) and status of use devices sound settings(enabled/disabled).
 	 * 
 	 * @param rv
 	 *            <code>RemoteViews</code> that texts are set to
 	 * @param context
 	 *            <code>Context</code> from which resources are retrieved
-	 * 
-	 * @see ax.ha.it.smsalarm.handler.LogHandler#logCat(LogPriorities, String, String) logCat(LogPriorities,
-	 *      String, String)
+	 * @see ax.ha.it.smsalarm.handler.LogHandler#logCat(LogPriorities, String, String) logCat(LogPriorities, String, String)
 	 * @see #getLatestAlarm(Context)
 	 */
 	private void setWidgetTextViews(RemoteViews rv, Context context) {
@@ -283,16 +275,13 @@ public class WidgetProvider extends AppWidgetProvider {
 	}
 
 	/**
-	 * To get the latest <code>Alarm</code> from database as <code>String</code> . If no
-	 * <code>Alarm</code> exist or the <code>Alarm</code> is empty an appropriate
-	 * <code>String</code> is returned instead.
+	 * To get the latest <code>Alarm</code> from database as <code>String</code> . If no <code>Alarm</code> exist or the <code>Alarm</code> is empty
+	 * an appropriate <code>String</code> is returned instead.
 	 * 
 	 * @param context
 	 *            Context from which resources are retrieved
 	 * @return String with appropriate text depending on if any alarms exists or not in database
-	 * 
-	 * @see ax.ha.it.smsalarm.handler.LogHandler#logCat(LogPriorities, String, String) logCat(LogPriorities,
-	 *      String, String)
+	 * @see ax.ha.it.smsalarm.handler.LogHandler#logCat(LogPriorities, String, String) logCat(LogPriorities, String, String)
 	 * @see ax.ha.it.smsalarm.Alarm ax.ha.it.smsalarm.Alarm
 	 * @see ax.ha.it.smsalarm.handler.DatabaseHandler ax.ha.it.smsalarm.DatabaseHandler
 	 */
@@ -376,28 +365,22 @@ public class WidgetProvider extends AppWidgetProvider {
 	 * 
 	 * @param context
 	 *            Context
-	 * 
-	 * @see ax.ha.it.smsalarm.handler.LogHandler#logCat(LogPriorities, String, String) logCat(LogPriorities,
-	 *      String, String)
-	 * @see ax.ha.it.smsalarm.handler.LogHandler#logCatTxt(LogPriorities, String, String, Throwable)
-	 *      logCatTxt(LogPriorities, String, String, Throwable)
-	 * @see ax.ha.it.smsalarm.handler.PreferencesHandler#getPrefs(PrefKeys, PrefKeys, DataTypes, Context)
-	 *      getPrefs(PrefKeys, PrefKeys, DataTypes, Context)
-	 * @see ax.ha.it.smsalarm.handler.PreferencesHandler#getPrefs(PrefKeys, PrefKeys, DataTypes, Context,
-	 *      Object) getPrefs(PrefKeys, PrefKeys, DataTypes, Context, Object)
+	 * @see ax.ha.it.smsalarm.handler.LogHandler#logCat(LogPriorities, String, String) logCat(LogPriorities, String, String)
+	 * @see ax.ha.it.smsalarm.handler.LogHandler#logCatTxt(LogPriorities, String, String, Throwable) logCatTxt(LogPriorities, String, String,
+	 *      Throwable)
+	 * @see ax.ha.it.smsalarm.handler.PreferencesHandler#fetchPrefs(PrefKeys, PrefKeys, DataTypes, Context) getPrefs(PrefKeys, PrefKeys, DataTypes,
+	 *      Context)
+	 * @see ax.ha.it.smsalarm.handler.PreferencesHandler#fetchPrefs(PrefKeys, PrefKeys, DataTypes, Context, Object) getPrefs(PrefKeys, PrefKeys,
+	 *      DataTypes, Context, Object)
 	 */
 	private void getWidgetPrefs(Context context) {
 		// Some logging
 		logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":getWidgetPrefs()", "Start retrieving shared preferences needed by class " + getClass().getSimpleName());
 
-		try {
-			// Get shared preferences needed by WidgetProvider
-			enableSmsAlarm = (Boolean) prefHandler.getPrefs(PrefKeys.SHARED_PREF, PrefKeys.ENABLE_SMS_ALARM_KEY, DataTypes.BOOLEAN, context, true);
-			useOsSoundSettings = (Boolean) prefHandler.getPrefs(PrefKeys.SHARED_PREF, PrefKeys.USE_OS_SOUND_SETTINGS_KEY, DataTypes.BOOLEAN, context);
-			endUserLicenseAgreed = (Boolean) prefHandler.getPrefs(PrefKeys.SHARED_PREF, PrefKeys.END_USER_LICENSE_AGREED, DataTypes.BOOLEAN, context, false);
-		} catch (IllegalArgumentException e) {
-			logger.logCatTxt(LogPriorities.ERROR, LOG_TAG + ":getWidgetPrefs()", "An unsupported datatype was given as argument to PreferencesHandler.getPrefs()", e);
-		}
+		// Get shared preferences needed by WidgetProvider
+		enableSmsAlarm = (Boolean) prefHandler.fetchPrefs(PrefKey.SHARED_PREF, PrefKey.ENABLE_SMS_ALARM_KEY, DataType.BOOLEAN, context, true);
+		useOsSoundSettings = (Boolean) prefHandler.fetchPrefs(PrefKey.SHARED_PREF, PrefKey.USE_OS_SOUND_SETTINGS_KEY, DataType.BOOLEAN, context);
+		endUserLicenseAgreed = (Boolean) prefHandler.fetchPrefs(PrefKey.SHARED_PREF, PrefKey.END_USER_LICENSE_AGREED, DataType.BOOLEAN, context, false);
 
 		logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":getWidgetPrefs()", "Shared preferences retrieved");
 	}
@@ -409,22 +392,15 @@ public class WidgetProvider extends AppWidgetProvider {
 	 *            Context
 	 * @param enabled
 	 *            Boolean indicating whether or not Sms Alarm is enabled
-	 * 
 	 * @see #setUseOsSoundSettingsPref(Context, boolean)
-	 * @see ax.ha.it.smsalarm.handler.LogHandler#logCat(LogPriorities, String, String)
-	 *      ax.ha.it.smsalarm.LogHandler#logCat(LogPriorities, String, String)
-	 * @see ax.ha.it.smsalarm.handler.PreferencesHandler#setPrefs(PrefKeys, PrefKeys, Object, Context)
+	 * @see ax.ha.it.smsalarm.handler.LogHandler#logCat(LogPriorities, String, String) ax.ha.it.smsalarm.LogHandler#logCat(LogPriorities, String,
+	 *      String)
+	 * @see ax.ha.it.smsalarm.handler.PreferencesHandler#storePrefs(PrefKeys, PrefKeys, Object, Context)
 	 *      ax.ha.it.smsalarm.PreferencesHandler#setPrefs(PrefKeys, PrefKeys, Object, Context)
 	 */
 	private void setEnableSmsAlarmPref(Context context, boolean enabled) {
-		// Logging
 		logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":setEnableSmsAlarmPref()", "Setting enable SmsAlarm to:\"" + enabled + "\"");
-
-		try {
-			prefHandler.setPrefs(PrefKeys.SHARED_PREF, PrefKeys.ENABLE_SMS_ALARM_KEY, enabled, context);
-		} catch (IllegalArgumentException e) {
-			logger.logCatTxt(LogPriorities.ERROR, LOG_TAG + ":setEnableSmsAlarmPref()", "An Object of unsupported instance was given as argument to PreferencesHandler.setPrefs()", e);
-		}
+		prefHandler.storePrefs(PrefKey.SHARED_PREF, PrefKey.ENABLE_SMS_ALARM_KEY, enabled, context);
 	}
 
 	/**
@@ -433,31 +409,22 @@ public class WidgetProvider extends AppWidgetProvider {
 	 * @param context
 	 *            Context
 	 * @param enabled
-	 *            Boolean indicating whether or not Sms Alarm should use the operating systems sound
-	 *            settings is enabled
-	 * 
+	 *            Boolean indicating whether or not Sms Alarm should use the operating systems sound settings is enabled
 	 * @see #setUseOsSoundSettingsPref(Context, boolean)
-	 * @see ax.ha.it.smsalarm.handler.LogHandler#logCat(LogPriorities, String, String)
-	 *      ax.ha.it.smsalarm.LogHandler#logCat(LogPriorities, String, String)
-	 * @see ax.ha.it.smsalarm.handler.PreferencesHandler#setPrefs(PrefKeys, PrefKeys, Object, Context)
+	 * @see ax.ha.it.smsalarm.handler.LogHandler#logCat(LogPriorities, String, String) ax.ha.it.smsalarm.LogHandler#logCat(LogPriorities, String,
+	 *      String)
+	 * @see ax.ha.it.smsalarm.handler.PreferencesHandler#storePrefs(PrefKeys, PrefKeys, Object, Context)
 	 *      ax.ha.it.smsalarm.PreferencesHandler#setPrefs(PrefKeys, PrefKeys, Object, Context)
 	 */
 	private void setUseOsSoundSettingsPref(Context context, boolean enabled) {
-		// Logging
 		logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":setUseOsSoundSettingsPref()", "Setting use OS sound settings to:\"" + enabled + "\"");
-
-		try {
-			prefHandler.setPrefs(PrefKeys.SHARED_PREF, PrefKeys.USE_OS_SOUND_SETTINGS_KEY, enabled, context);
-		} catch (IllegalArgumentException e) {
-			logger.logCatTxt(LogPriorities.ERROR, LOG_TAG + ":setUseOsSoundSettingsPref()", "An Object of unsupported instance was given as argument to PreferencesHandler.setPrefs()", e);
-		}
+		prefHandler.storePrefs(PrefKey.SHARED_PREF, PrefKey.USE_OS_SOUND_SETTINGS_KEY, enabled, context);
 	}
 
 	/**
 	 * To update all <code>Widget</code>'s associated to this application.
 	 * 
-	 * @see ax.ha.it.smsalarm.handler.LogHandler#logCat(LogPriorities, String, String) logCat(LogPriorities,
-	 *      String, String)
+	 * @see ax.ha.it.smsalarm.handler.LogHandler#logCat(LogPriorities, String, String) logCat(LogPriorities, String, String)
 	 */
 	public static void updateWidgets(Context context) {
 		// Object needed for logging
