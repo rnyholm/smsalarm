@@ -11,149 +11,82 @@ import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import ax.ha.it.smsalarm.activity.Acknowledge;
-import ax.ha.it.smsalarm.handler.LogHandler;
-import ax.ha.it.smsalarm.handler.LogHandler.LogPriorities;
 import ax.ha.it.smsalarm.handler.PreferencesHandler;
 import ax.ha.it.smsalarm.handler.PreferencesHandler.DataType;
 import ax.ha.it.smsalarm.handler.PreferencesHandler.PrefKey;
 
 /**
- * Helper class to build up and show notifications, also creates pending <code>intents</code> for the <code>notification</code>. Contains some
- * deprecated functionality, this is to support <code>Android SDK</code> versions below 11.
+ * Helper to build up and show {@link Notification}, also creates {@link PendingIntent}'s for the <code>notification</code>.<br>
+ * <b><i>NOTE. Contains some deprecated functionality, this is to support <code>Android SDK</code> versions below 11.</b></i>
  * 
  * @author Robert Nyholm <robert.nyholm@aland.net>
- * @version 2.2.1
+ * @version 2.3.1
  * @since 1.2.1-SE
  */
 public class AcknowledgeNotificationHelper extends IntentService {
-
-	// Log tag string
-	private final String LOG_TAG = getClass().getSimpleName();
-
-	// Objects needed for logging and shared preferences handling
-	private final LogHandler logger = LogHandler.getInstance();
 	private final PreferencesHandler prefHandler = PreferencesHandler.getInstance();
 
-	// Variables for notifications text and icon
-	private String tickerText = "";
-	private String contentTitle = "";
-	private String contentText = "";
-	private int icon = 0;
-
 	/**
-	 * Mandatory constructor calling it's <code>super class</code>.
-	 * 
-	 * @see #onHandleIntent(Intent)
-	 * @see ax.ha.it.smsalarm.handler.LogHandler#logCat(LogPriorities, String, String) logCat(LogPriorities, String, String)
+	 * To create a new instance of {@link AcknowledgeNotificationHelper}.<br>
+	 * A constructor must be implemented and call it's <code>superclass</code>, {@link IntentService}, constructor with an <b><i>arbitrary</i></b>
+	 * <code>String</code> as argument.
 	 */
 	public AcknowledgeNotificationHelper() {
-		// Note: MUST call the super() constructor with an (arbitrary) string
+		// Note: MUST call super() constructor with an arbitrary string
 		super("AcknowledgeNotificationHelper");
-
-		// Log message for debugging/information purpose
-		logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":AcknowledgeNotificationHelper()", "NotificationHelper constructor called");
 	}
 
 	/**
-	 * Overridden method to handle <code>intent</code>, build up and show <code>notification</code>. Contains some deprecated functionality just to
-	 * support <code>Android SDK</code> versions below 11.
+	 * To handle {@link Intent}, builds up and dispatches a {@link Notification}. Contains some deprecated functionality just to support
+	 * <code>Android SDK</code> versions below 11.
 	 * 
 	 * @param i
 	 *            Intent for notification
-	 * @see #AcknowledgeNotificationHelper()
-	 * @see ax.ha.it.smsalarm.handler.LogHandler#logCat(LogPriorities, String, String) logCat(LogPriorities, String, String)
-	 * @see ax.ha.it.smsalarm.handler.LogHandler#logCatTxt(LogPriorities, String, String, Throwable) logCatTxt(LogPriorities, String, String,
-	 *      Throwable)
-	 * @see ax.ha.it.smsalarm.handler.PreferencesHandler#fetchPrefs(PrefKeys, PrefKeys, DataTypes, Context) getPrefs(PrefKeys, PrefKeys, DataTypes,
-	 *      Context)
 	 * @deprecated
 	 */
 	@SuppressLint("DefaultLocale")
 	@Deprecated
 	@Override
 	protected void onHandleIntent(Intent i) {
-		// Log information
-		logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":onHandleIntent()", "Start retrieving shared preferences needed by class AcknowledgeNotificationHelper");
-
-		// To store message and rescue service in
-		String message = "";
-		String rescueService = "";
-
-		// Get some values from the shared preferences
-		message = (String) prefHandler.fetchPrefs(PrefKey.SHARED_PREF, PrefKey.MESSAGE_KEY, DataType.STRING, this);
-		rescueService = (String) prefHandler.fetchPrefs(PrefKey.SHARED_PREF, PrefKey.RESCUE_SERVICE_KEY, DataType.STRING, this);
-
-		logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":onHandleIntent()", "Shared preferences retrieved");
+		// Fetch some values from the shared preferences
+		String contentText = (String) prefHandler.fetchPrefs(PrefKey.SHARED_PREF, PrefKey.MESSAGE_KEY, DataType.STRING, this);
+		String rescueService = (String) prefHandler.fetchPrefs(PrefKey.SHARED_PREF, PrefKey.RESCUE_SERVICE_KEY, DataType.STRING, this);
 
 		// Set intent to AcknowledgeHandler
 		Intent notificationIntent = new Intent(this, Acknowledge.class);
-		logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":onHandleIntent()", "Intent has been set");
 
-		// Setup a notification, directly from android development site
-		NotificationManager mNotificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+		// Setup a notification, directly from Android developer site
+		NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
 
-		// To get a unique refresh id for the intents
+		// To get a unique refresh id for the intents, to avoid notifications from writing over each other
 		long REFRESH_ID = System.currentTimeMillis();
 		long when = System.currentTimeMillis();
 
-		// Set proper texts and icon to notification
-		setNotificationTexts(android.R.drawable.ic_delete, getString(R.string.PRIMARY_ALARM), rescueService.toUpperCase(), getString(R.string.PRIMARY_ALARM), message);
-
-		// Log
-		logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":onHandleIntent()", "Notification has been set for a PRIMARY alarm with acknowledgement");
+		// Resolve ticker text
+		String tickerText = "";
+		if (!"".equals(rescueService)) {
+			tickerText = rescueService + " " + getString(R.string.PRIMARY_ALARM);
+		} else {
+			tickerText = getString(R.string.PRIMARY_ALARM);
+		}
 
 		// Create notification
-		Notification notification = new Notification(icon, tickerText, when);
+		Notification notification = new Notification(android.R.drawable.ic_delete, tickerText, when);
 
-		// Get application context
-		Context context = getApplicationContext();
-
-		// Setup message and pendingintent
+		// Setup message and pending intent
 		PendingIntent contentIntent = PendingIntent.getActivity(this, 0, notificationIntent, 0);
-		notification.setLatestEventInfo(context, contentTitle, contentText, contentIntent);
+		notification.setLatestEventInfo(getApplicationContext(), getString(R.string.PRIMARY_ALARM), contentText, contentIntent);
 
-		// This flag auto cancels the notification when clicked and indicating that devices LED
-		// should light up
+		// This flag auto cancels the notification when clicked and indicating that devices LED should light up
 		notification.flags = Notification.FLAG_SHOW_LIGHTS | Notification.FLAG_AUTO_CANCEL;
 		// Configure LED
-		notification.ledARGB = 0xFFff0000; // Red
-		notification.ledOnMS = 100; // On time
-		notification.ledOffMS = 100; // Off time
+		// @formatter:off
+		notification.ledARGB = 0xFFff0000; 	// Red
+		notification.ledOnMS = 100; 		// On time
+		notification.ledOffMS = 100;		// Off time
+		// @formatter:on
 
-		logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":onHandleIntent()", "Notification and it's intent has been configured and are ready to be shown");
-
-		// Show the notification
-		mNotificationManager.notify((int) REFRESH_ID, notification);
-	}
-
-	/**
-	 * To set texts and icon for a notification. The ticker text is built up dynamically depending on argument <code>rescueService</code>
-	 * 
-	 * @param icon
-	 *            Icon as integer value, use <code>android.R.drawable.*</code>
-	 * @param tickerText
-	 *            Notifications ticker text
-	 * @param rescueService
-	 *            String that may or may not contain rescue service's name
-	 * @param contentTitle
-	 *            Notification contents title
-	 * @param contentText
-	 *            Notifications content
-	 */
-	private void setNotificationTexts(int icon, String tickerText, String rescueService, String contentTitle, String contentText) {
-		// Log
-		logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":setNotificationTexts()", "Setting texts and icon to notification");
-		// Set icon for notification
-		this.icon = icon;
-		// Set ticker text, with rescue service name if it exists
-		if (!"".equals(rescueService)) {
-			this.tickerText = rescueService + " " + tickerText;
-		} else {
-			this.tickerText = tickerText;
-		}
-		// Set content title
-		this.contentTitle = contentTitle;
-		// Set message to notification
-		this.contentText = contentText;
+		// Dispatch the notification
+		notificationManager.notify((int) REFRESH_ID, notification);
 	}
 }
