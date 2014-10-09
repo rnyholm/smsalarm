@@ -37,19 +37,19 @@
         </activity>       
         <activity android:name="ax.ha.it.smsalarm.activity.Acknowledge" android:noHistory="true" android:screenOrientation="portrait" android:label="@string/APP_NAME">
         </activity>        
-        <receiver android:name=".SmsReceiver" android:enabled="true" android:exported="true">
+        <receiver android:name="ax.ha.it.smsalarm.receiver.SmsReceiver" android:enabled="true" android:exported="true">
          	<intent-filter android:priority="999"> 
          		<action android:name="android.provider.Telephony.SMS_RECEIVED"/> 
          	</intent-filter> 
         </receiver>
-        <receiver android:name=".WidgetProvider" >
+        <receiver android:name="ax.ha.it.smsalarm.provider.WidgetProvider" >
             <intent-filter >
                	<action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
            	</intent-filter>
            	<meta-data android:name="android.appwidget.provider"
                	android:resource="@xml/widget_configuration" />
        	</receiver>      
-        <service android:name=".NotificationHelper"></service>   
-        <service android:name=".AcknowledgeNotificationHelper"></service>   
+        <service android:name="ax.ha.it.smsalarm.helper.NotificationHelper"></service>   
+        <service android:name="ax.ha.it.smsalarm.helper.AcknowledgeNotificationHelper"></service>   
     </application>    
 </manifest>

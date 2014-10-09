@@ -1,7 +1,7 @@
 /**
  * Copyright (c) 2013 Robert Nyholm. All rights reserved.
  */
-package ax.ha.it.smsalarm;
+package ax.ha.it.smsalarm.helper;
 
 import android.annotation.SuppressLint;
 import android.app.IntentService;
@@ -11,10 +11,14 @@ import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.util.Log;
-import ax.ha.it.smsalarm.Alarm.AlarmType;
+import ax.ha.it.smsalarm.BuildConfig;
+import ax.ha.it.smsalarm.R;
+import ax.ha.it.smsalarm.R.string;
 import ax.ha.it.smsalarm.handler.PreferencesHandler;
 import ax.ha.it.smsalarm.handler.PreferencesHandler.DataType;
 import ax.ha.it.smsalarm.handler.PreferencesHandler.PrefKey;
+import ax.ha.it.smsalarm.pojo.Alarm;
+import ax.ha.it.smsalarm.pojo.Alarm.AlarmType;
 
 /**
  * Helper to build up and show {@link Notification}, also creates {@link PendingIntent}'s for the notification.<br>

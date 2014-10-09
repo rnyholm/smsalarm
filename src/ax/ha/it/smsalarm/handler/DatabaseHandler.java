@@ -12,8 +12,8 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
-import ax.ha.it.smsalarm.Alarm;
-import ax.ha.it.smsalarm.Alarm.AlarmType;
+import ax.ha.it.smsalarm.pojo.Alarm;
+import ax.ha.it.smsalarm.pojo.Alarm.AlarmType;
 import ax.ha.it.smsalarm.BuildConfig;
 
 /**

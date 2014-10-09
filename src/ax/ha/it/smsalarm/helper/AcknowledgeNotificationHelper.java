@@ -1,7 +1,7 @@
 /**
  * Copyright (c) 2013 Robert Nyholm. All rights reserved.
  */
-package ax.ha.it.smsalarm;
+package ax.ha.it.smsalarm.helper;
 
 import android.annotation.SuppressLint;
 import android.app.IntentService;
@@ -10,6 +10,8 @@ import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
+import ax.ha.it.smsalarm.R;
+import ax.ha.it.smsalarm.R.string;
 import ax.ha.it.smsalarm.activity.Acknowledge;
 import ax.ha.it.smsalarm.handler.PreferencesHandler;
 import ax.ha.it.smsalarm.handler.PreferencesHandler.DataType;

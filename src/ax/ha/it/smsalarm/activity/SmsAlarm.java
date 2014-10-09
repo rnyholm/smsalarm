@@ -7,12 +7,12 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.view.KeyEvent;
-import ax.ha.it.smsalarm.Alarm;
 import ax.ha.it.smsalarm.R;
-import ax.ha.it.smsalarm.WidgetProvider;
 import ax.ha.it.smsalarm.fragment.SlidingMenuFragment;
 import ax.ha.it.smsalarm.fragment.SmsSettingsFragment;
 import ax.ha.it.smsalarm.handler.DatabaseHandler;
+import ax.ha.it.smsalarm.pojo.Alarm;
+import ax.ha.it.smsalarm.provider.WidgetProvider;
 import ax.ha.it.smsalarm.util.AlarmLogger;
 
 import com.actionbarsherlock.view.MenuItem;

@@ -1,7 +1,7 @@
 /**
  * Copyright (c) 2013 Robert Nyholm. All rights reserved.
  */
-package ax.ha.it.smsalarm;
+package ax.ha.it.smsalarm.receiver;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -20,13 +20,18 @@ import android.os.Bundle;
 import android.os.PowerManager;
 import android.telephony.SmsMessage;
 import android.util.Log;
-import ax.ha.it.smsalarm.Alarm.AlarmType;
+import ax.ha.it.smsalarm.BuildConfig;
 import ax.ha.it.smsalarm.handler.DatabaseHandler;
 import ax.ha.it.smsalarm.handler.KitKatHandler;
 import ax.ha.it.smsalarm.handler.NoiseHandler;
 import ax.ha.it.smsalarm.handler.PreferencesHandler;
 import ax.ha.it.smsalarm.handler.PreferencesHandler.DataType;
 import ax.ha.it.smsalarm.handler.PreferencesHandler.PrefKey;
+import ax.ha.it.smsalarm.helper.AcknowledgeNotificationHelper;
+import ax.ha.it.smsalarm.helper.NotificationHelper;
+import ax.ha.it.smsalarm.pojo.Alarm;
+import ax.ha.it.smsalarm.pojo.Alarm.AlarmType;
+import ax.ha.it.smsalarm.provider.WidgetProvider;
 import ax.ha.it.smsalarm.util.AlarmLogger;
 import ax.ha.it.smsalarm.util.WakeLocker;
 

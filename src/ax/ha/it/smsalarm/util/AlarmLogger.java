@@ -13,9 +13,9 @@ import java.util.List;
 import android.content.Context;
 import android.os.Environment;
 import android.util.Log;
-import ax.ha.it.smsalarm.Alarm;
 import ax.ha.it.smsalarm.BuildConfig;
 import ax.ha.it.smsalarm.R;
+import ax.ha.it.smsalarm.pojo.Alarm;
 
 /**
  * Utility class for logging all {@link Alarm}'s within the database to a dedicated <code>*.html</code> file.<br>

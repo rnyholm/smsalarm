@@ -25,7 +25,6 @@ import android.widget.RelativeLayout;
 import android.widget.RelativeLayout.LayoutParams;
 import android.widget.Spinner;
 import android.widget.TextView;
-import ax.ha.it.smsalarm.Alarm.AlarmType;
 import ax.ha.it.smsalarm.BuildConfig;
 import ax.ha.it.smsalarm.R;
 import ax.ha.it.smsalarm.fragment.dialog.AlarmSignalDialog;
@@ -33,6 +32,7 @@ import ax.ha.it.smsalarm.handler.NoiseHandler;
 import ax.ha.it.smsalarm.handler.PreferencesHandler;
 import ax.ha.it.smsalarm.handler.PreferencesHandler.DataType;
 import ax.ha.it.smsalarm.handler.PreferencesHandler.PrefKey;
+import ax.ha.it.smsalarm.pojo.Alarm.AlarmType;
 
 import com.actionbarsherlock.app.SherlockFragment;
 

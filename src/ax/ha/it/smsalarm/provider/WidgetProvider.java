@@ -1,7 +1,7 @@
 /**
  * Copyright (c) 2013 Robert Nyholm. All rights reserved.
  */
-package ax.ha.it.smsalarm;
+package ax.ha.it.smsalarm.provider;
 
 import java.io.File;
 
@@ -16,11 +16,17 @@ import android.net.Uri;
 import android.webkit.MimeTypeMap;
 import android.widget.RemoteViews;
 import android.widget.TextView;
+import ax.ha.it.smsalarm.R;
+import ax.ha.it.smsalarm.R.drawable;
+import ax.ha.it.smsalarm.R.id;
+import ax.ha.it.smsalarm.R.layout;
+import ax.ha.it.smsalarm.R.string;
 import ax.ha.it.smsalarm.activity.Splash;
 import ax.ha.it.smsalarm.handler.DatabaseHandler;
 import ax.ha.it.smsalarm.handler.PreferencesHandler;
 import ax.ha.it.smsalarm.handler.PreferencesHandler.DataType;
 import ax.ha.it.smsalarm.handler.PreferencesHandler.PrefKey;
+import ax.ha.it.smsalarm.pojo.Alarm;
 import ax.ha.it.smsalarm.util.AlarmLogger;
 
 /**

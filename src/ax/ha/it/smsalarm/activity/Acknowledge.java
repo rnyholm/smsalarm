@@ -25,11 +25,11 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 import ax.ha.it.smsalarm.R;
-import ax.ha.it.smsalarm.WidgetProvider;
 import ax.ha.it.smsalarm.handler.DatabaseHandler;
 import ax.ha.it.smsalarm.handler.PreferencesHandler;
 import ax.ha.it.smsalarm.handler.PreferencesHandler.DataType;
 import ax.ha.it.smsalarm.handler.PreferencesHandler.PrefKey;
+import ax.ha.it.smsalarm.provider.WidgetProvider;
 import ax.ha.it.smsalarm.util.AlarmLogger;
 
 /**
