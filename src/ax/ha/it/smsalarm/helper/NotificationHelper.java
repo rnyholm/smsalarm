@@ -13,11 +13,9 @@ import android.content.Intent;
 import android.util.Log;
 import ax.ha.it.smsalarm.BuildConfig;
 import ax.ha.it.smsalarm.R;
-import ax.ha.it.smsalarm.R.string;
 import ax.ha.it.smsalarm.handler.PreferencesHandler;
 import ax.ha.it.smsalarm.handler.PreferencesHandler.DataType;
 import ax.ha.it.smsalarm.handler.PreferencesHandler.PrefKey;
-import ax.ha.it.smsalarm.pojo.Alarm;
 import ax.ha.it.smsalarm.pojo.Alarm.AlarmType;
 
 /**

@@ -11,7 +11,6 @@ import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import ax.ha.it.smsalarm.R;
-import ax.ha.it.smsalarm.R.string;
 import ax.ha.it.smsalarm.activity.Acknowledge;
 import ax.ha.it.smsalarm.handler.PreferencesHandler;
 import ax.ha.it.smsalarm.handler.PreferencesHandler.DataType;
