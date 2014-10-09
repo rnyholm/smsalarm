@@ -16,7 +16,7 @@ import ax.ha.it.smsalarm.handler.PreferencesHandler.DataType;
 import ax.ha.it.smsalarm.handler.PreferencesHandler.PrefKey;
 
 /**
- * Helper to build up and show {@link Notification}, also creates {@link PendingIntent}'s for the <code>notification</code>.<br>
+ * Helper to build up and show {@link Notification}, also creates {@link PendingIntent}'s for the notification.<br>
  * <b><i>NOTE. Contains some deprecated functionality, this is to support <code>Android SDK</code> versions below 11.</b></i>
  * 
  * @author Robert Nyholm <robert.nyholm@aland.net>
@@ -24,10 +24,11 @@ import ax.ha.it.smsalarm.handler.PreferencesHandler.PrefKey;
  * @since 1.2.1-SE
  */
 public class AcknowledgeNotificationHelper extends IntentService {
+
 	private final PreferencesHandler prefHandler = PreferencesHandler.getInstance();
 
 	/**
-	 * To create a new instance of {@link AcknowledgeNotificationHelper}.<br>
+	 * Creates a new instance of {@link AcknowledgeNotificationHelper}.<br>
 	 * A constructor must be implemented and call it's <code>superclass</code>, {@link IntentService}, constructor with an <b><i>arbitrary</i></b>
 	 * <code>String</code> as argument.
 	 */
@@ -37,11 +38,11 @@ public class AcknowledgeNotificationHelper extends IntentService {
 	}
 
 	/**
-	 * To handle {@link Intent}, builds up and dispatches a {@link Notification}. Contains some deprecated functionality just to support
+	 * To handle {@link Intent}, builds up and dispatches a notification. Contains some deprecated functionality just to support
 	 * <code>Android SDK</code> versions below 11.
 	 * 
 	 * @param i
-	 *            Intent for notification
+	 *            Intent for notification.
 	 * @deprecated
 	 */
 	@SuppressLint("DefaultLocale")
@@ -79,8 +80,9 @@ public class AcknowledgeNotificationHelper extends IntentService {
 
 		// This flag auto cancels the notification when clicked and indicating that devices LED should light up
 		notification.flags = Notification.FLAG_SHOW_LIGHTS | Notification.FLAG_AUTO_CANCEL;
-		// Configure LED
+
 		// @formatter:off
+		// Configure LED
 		notification.ledARGB = 0xFFff0000; 	// Red
 		notification.ledOnMS = 100; 		// On time
 		notification.ledOffMS = 100;		// Off time

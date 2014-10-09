@@ -3,9 +3,6 @@
  */
 package ax.ha.it.smsalarm.activity;
 
-import java.util.List;
-
-import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
@@ -16,8 +13,7 @@ import ax.ha.it.smsalarm.WidgetProvider;
 import ax.ha.it.smsalarm.fragment.SlidingMenuFragment;
 import ax.ha.it.smsalarm.fragment.SmsSettingsFragment;
 import ax.ha.it.smsalarm.handler.DatabaseHandler;
-import ax.ha.it.smsalarm.handler.LogHandler;
-import ax.ha.it.smsalarm.handler.LogHandler.LogPriorities;
+import ax.ha.it.smsalarm.util.AlarmLogger;
 
 import com.actionbarsherlock.view.MenuItem;
 import com.jeremyfeinstein.slidingmenu.lib.SlidingMenu;
@@ -32,10 +28,7 @@ import com.jeremyfeinstein.slidingmenu.lib.app.SlidingFragmentActivity;
  * @since 0.9beta
  */
 public class SmsAlarm extends SlidingFragmentActivity {
-	private static final String LOG_TAG = SmsAlarm.class.getSimpleName();
-
-	// Objects for log- and database handling
-	private final LogHandler logger = LogHandler.getInstance();
+	// To get database access
 	private DatabaseHandler db;
 
 	/**
@@ -45,7 +38,6 @@ public class SmsAlarm extends SlidingFragmentActivity {
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":onCreate()", "Creation of Sms Alarm started");
 
 		setContentView(R.layout.content_frame);
 		setBehindContentView(R.layout.menu_frame);
@@ -58,25 +50,18 @@ public class SmsAlarm extends SlidingFragmentActivity {
 
 		// Initialize database handler object from context
 		db = new DatabaseHandler(this);
-
-		logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":onCreate()", "Creation of Sms Alarm completed");
 	}
 
 	/**
 	 * When application is destroyed all {@link Alarm}'s stored in database will be written a <code>*.html</code> file. The widget will also be
 	 * updated upon application destroy.
-	 * 
-	 * @see DatabaseHandler#getAllAlarm()
-	 * @see LogHandler#logAlarm(List, Context)
-	 * @see WidgetProvider#updateWidgets(Context)
 	 */
 	@Override
 	public void onDestroy() {
 		super.onDestroy();
-		logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":onDestroy()", LOG_TAG + " is about to be destroyed");
 
 		// Get all alarms from database and log them into a *.html file
-		logger.logAlarm(db.getAllAlarm(), this);
+		AlarmLogger.getInstance().logAlarms(db.fetchAllAlarm(), this);
 		// Update all widgets associated to this application
 		WidgetProvider.updateWidgets(this);
 	}
@@ -87,10 +72,7 @@ public class SmsAlarm extends SlidingFragmentActivity {
 	 */
 	@Override
 	public void onBackPressed() {
-		logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":onBackPressed()", "Back button pressed");
-
 		if (getSlidingMenu().isMenuShowing()) {
-			logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":onBackPressed()", "Menu is showing, closing it");
 			toggle();
 		} else {
 			super.onBackPressed();
@@ -127,8 +109,6 @@ public class SmsAlarm extends SlidingFragmentActivity {
 	 * @see #configureSlidingMenu()
 	 */
 	private void configureActionBar() {
-		logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":configureActionBar()", "Configuring the action bar");
-
 		// @formatter:off
 		getSupportActionBar().setDisplayHomeAsUpEnabled(true);	// By pressing action bar icon the menu will opens
 		getSupportActionBar().setIcon(R.drawable.ic_launcher);	// Icon in action bar
@@ -142,8 +122,6 @@ public class SmsAlarm extends SlidingFragmentActivity {
 	 * @see #configureActionBar()
 	 */
 	private void configureSlidingMenu() {
-		logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":configureSlidingMenu()", "Configuring the sliding menu");
-
 		// @formatter:off
 		SlidingMenu sm = getSlidingMenu();
 		sm.setMode(SlidingMenu.LEFT);							// Menu slide in from left
@@ -165,12 +143,8 @@ public class SmsAlarm extends SlidingFragmentActivity {
 	 *            supplied in {@link #onSaveInstanceState}. <b><i>Note: Otherwise it is null.</i></b>
 	 */
 	private void setMenuFragment(Bundle savedInstanceState) {
-		logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":setMenuFragment()", "Setting correct fragment to menu frame");
-
 		// Activity is not being re-created, set new instance of SlidingMenuFragment to menu frame
 		if (savedInstanceState == null) {
-			logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":setMenuFragment()", "No saved instance was found, setting a new \"SlidingMenuFragment\" to the menu frame");
-
 			FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
 			ft.replace(R.id.menuFrame_fl, new SlidingMenuFragment());
 			ft.commit();
@@ -187,12 +161,8 @@ public class SmsAlarm extends SlidingFragmentActivity {
 	 *            supplied in {@link #onSaveInstanceState}. <b><i>Note: Otherwise it is null.</i></b>
 	 */
 	private void setContentFragment(Bundle savedInstanceState) {
-		logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":setContentFragment()", "Setting correct fragment to content frame");
-
 		// Activity is not being re-created, set default fragment to content frame
 		if (savedInstanceState == null) {
-			logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":setContentFragment()", "No saved instance was found, setting default fragment \"SmsSettingsFragment\" to the content frame");
-
 			FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
 			ft.replace(R.id.contentFrame_fl, new SmsSettingsFragment());
 			ft.commit();
@@ -207,8 +177,6 @@ public class SmsAlarm extends SlidingFragmentActivity {
 	 *            <code>Fragment</code> to be placed in content frame.
 	 */
 	public void switchContent(Fragment fragment) {
-		logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":switchContent()", "Fragment in content frame is about to be replaced by given fragment of instance: \"" + fragment.getClass().getSimpleName() + "\"");
-
 		FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
 		ft.replace(R.id.contentFrame_fl, fragment);
 		ft.commit();

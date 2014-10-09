@@ -6,10 +6,10 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
+import android.util.Log;
+import ax.ha.it.smsalarm.BuildConfig;
 import ax.ha.it.smsalarm.R;
 import ax.ha.it.smsalarm.activity.Splash;
-import ax.ha.it.smsalarm.handler.LogHandler;
-import ax.ha.it.smsalarm.handler.LogHandler.LogPriorities;
 
 /**
  * {@link DialogFragment} that shows the <b><i>End User License Agreement</i></b> and let's the user either accept or decline it.
@@ -28,9 +28,6 @@ public class EulaDialog extends DialogFragment {
 	// Dialog tag can come in handy for classes using this dialog
 	public static final String EULA_DIALOG_TAG = "eulaDialog";
 
-	// For logging
-	private LogHandler logger = LogHandler.getInstance();
-
 	// Must have application context
 	private Context context;
 
@@ -38,13 +35,12 @@ public class EulaDialog extends DialogFragment {
 	 * To create a new instance of {@link EulaDialog}.
 	 */
 	public EulaDialog() {
-		logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":EulaDialog()", "Creating a new EULA dialog fragment");
+		// Just empty...
 	}
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":onCreate()", "Setting Context to dialog fragment");
 
 		// Set context here, it's safe because this dialog fragment has been attached to it's container, hence we have access to context
 		context = getActivity();
@@ -55,8 +51,6 @@ public class EulaDialog extends DialogFragment {
 
 	@Override
 	public Dialog onCreateDialog(Bundle savedInstanceState) {
-		logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":onCreateDialog()", "Creating and initializing dialog fragment");
-
 		// Setup the dialog with correct resources, listeners and values
 		// @formatter:off
 		return new AlertDialog.Builder(context)
@@ -68,13 +62,13 @@ public class EulaDialog extends DialogFragment {
 				.setPositiveButton(R.string.EULA_AGREE, new DialogInterface.OnClickListener() {
 					@Override
 					public void onClick(DialogInterface dialog, int which) {
-						logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":onCreateDialog()", "Positive Button pressed");
-
 						if (context instanceof Splash) {
 							// Call method in activity owning this DialogFragment to do the actual on click handling
 							((Splash) context).doPositiveClick();
 						} else {
-							logger.logCatTxt(LogPriorities.ERROR, LOG_TAG, "Can't handle positive button pressed, context (getActivity()) is of incorrect instance: \"" + context.getClass().getSimpleName() + "\" expected is: \"" + Splash.class.getSimpleName() + "\"");
+							if (BuildConfig.DEBUG) {
+								Log.e(LOG_TAG, "Can't handle positive button pressed, context (getActivity()) is of incorrect instance: \"" + context.getClass().getSimpleName() + "\" expected is: \"" + Splash.class.getSimpleName() + "\"");
+							}
 						}
 					}
 				})
@@ -82,12 +76,12 @@ public class EulaDialog extends DialogFragment {
 				.setNegativeButton(R.string.EULA_DECLINE, new DialogInterface.OnClickListener() {
 					@Override
 					public void onClick(DialogInterface dialog, int whichButton) {
-						logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":onCreateDialog()", "Negative Button pressed");
-
 						if (context instanceof Splash) {
 							((Splash) context).doNegativeClick();
 						} else {
-							logger.logCatTxt(LogPriorities.ERROR, LOG_TAG, "Can't handle negative button pressed, context (getActivity()) is of incorrect instance: \"" + context.getClass().getSimpleName() + "\" expected is: \"" + Splash.class.getSimpleName() + "\"");
+							if (BuildConfig.DEBUG) {
+								Log.e(LOG_TAG, "Can't handle negative button pressed, context (getActivity()) is of incorrect instance: \"" + context.getClass().getSimpleName() + "\" expected is: \"" + Splash.class.getSimpleName() + "\"");
+							}
 						}
 					}
 				})

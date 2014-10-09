@@ -9,6 +9,7 @@ import android.content.res.Resources;
 import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
+import android.util.Log;
 import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -21,10 +22,9 @@ import android.widget.EditText;
 import android.widget.RelativeLayout;
 import android.widget.RelativeLayout.LayoutParams;
 import android.widget.TextView;
+import ax.ha.it.smsalarm.BuildConfig;
 import ax.ha.it.smsalarm.R;
 import ax.ha.it.smsalarm.fragment.dialog.RescueServiceDialog;
-import ax.ha.it.smsalarm.handler.LogHandler;
-import ax.ha.it.smsalarm.handler.LogHandler.LogPriorities;
 import ax.ha.it.smsalarm.handler.PreferencesHandler;
 import ax.ha.it.smsalarm.handler.PreferencesHandler.DataType;
 import ax.ha.it.smsalarm.handler.PreferencesHandler.PrefKey;
@@ -42,8 +42,7 @@ import com.actionbarsherlock.app.SherlockFragment;
 public class OtherSettingsFragment extends SherlockFragment implements ApplicationFragment {
 	private static final String LOG_TAG = OtherSettingsFragment.class.getSimpleName();
 
-	// Objects needed for logging, shared preferences handling and noise handling
-	private final LogHandler logger = LogHandler.getInstance();
+	// Need to handle shared shared preferences
 	private final PreferencesHandler prefHandler = PreferencesHandler.getInstance();
 
 	// Must have the application context
@@ -71,13 +70,12 @@ public class OtherSettingsFragment extends SherlockFragment implements Applicati
 	 * To create a new instance of {@link OtherSettingsFragment}.
 	 */
 	public OtherSettingsFragment() {
-		logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":OtherSettingsFragment()", "Creating a new Other settings fragment");
+		// Just empty...
 	}
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":onCreate()", "Setting Context to fragment");
 
 		// Set context here, it's safe because this fragment has been attached to it's container, hence we have access to context
 		context = getActivity();
@@ -85,7 +83,6 @@ public class OtherSettingsFragment extends SherlockFragment implements Applicati
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-		logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":onCreateView()", "Creating and initializing view for this fragment");
 		View view = inflater.inflate(R.layout.other_settings, container, false);
 
 		// @formatter:off
@@ -101,8 +98,6 @@ public class OtherSettingsFragment extends SherlockFragment implements Applicati
 
 	@Override
 	public void findViews(View view) {
-		logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":findViews()", "Start finding Views by their Id");
-
 		// Finding EditText view
 		rescueServiceEditText = (EditText) view.findViewById(R.id.rescueServiceName_et);
 
@@ -126,10 +121,8 @@ public class OtherSettingsFragment extends SherlockFragment implements Applicati
 			// 5dp calculated to pixels
 			int pixelsRight = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 5, resources.getDisplayMetrics());
 			int pixelsTop = 0;
-			// If the locale on device is german(de) set pixelstop to -6dp else -9dp
+			// If the locale on device is German(DE) set pixels top to -6dp else -9dp
 			if ("de".equals(Locale.getDefault().getLanguage())) {
-				// Logging
-				logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":findViews()", "The device has german(de) locale, set different margin-top on information TextViews for the checkboxes than other locales");
 				// -6dp calculated to pixels
 				pixelsTop = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, -6, resources.getDisplayMetrics());
 			} else {
@@ -138,18 +131,16 @@ public class OtherSettingsFragment extends SherlockFragment implements Applicati
 			}
 
 			// Wrap content, both on height and width
-			// Set layout parameters for the enable sms alarm info textview
+			// Set layout parameters for the enable Sms Alarm info TextView
 			RelativeLayout.LayoutParams paramsEnableSmsAlarmInfoTextView = new RelativeLayout.LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
 			paramsEnableSmsAlarmInfoTextView.setMargins(pixelsLeft, pixelsTop, pixelsRight, 0);
 			paramsEnableSmsAlarmInfoTextView.addRule(RelativeLayout.BELOW, enableSmsAlarmCheckBox.getId());
 			paramsEnableSmsAlarmInfoTextView.addRule(RelativeLayout.ALIGN_LEFT, enableSmsAlarmCheckBox.getId());
 
-			// Apply the previously configured layout parameters to the correct textviews
+			// Apply the previously configured layout parameters to the correct TextViews
 			enableSmsAlarmInfoTextView.setLayoutParams(paramsEnableSmsAlarmInfoTextView);
-
-			logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":findViews()", "API level > 16, edit margins on information TextViews for the checkboxes");
-		} else { // The device has API level < 17, we just need to check if the locale is german
-			// If the locale on device is german(de) we need to adjust the margin top for the information textviews for the checkboxes to -6dp
+		} else { // The device has API level < 17, we just need to check if the locale is German
+			// If the locale on device is German(DE) we need to adjust the margin top for the information TextViews for the CheckBoxes to -6dp
 			if ("de".equals(Locale.getDefault().getLanguage())) {
 				Resources resources = getResources();
 
@@ -163,8 +154,6 @@ public class OtherSettingsFragment extends SherlockFragment implements Applicati
 				paramsEnableSmsAlarmInfoTextView.addRule(RelativeLayout.ALIGN_LEFT, enableSmsAlarmCheckBox.getId());
 
 				enableSmsAlarmInfoTextView.setLayoutParams(paramsEnableSmsAlarmInfoTextView);
-
-				logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":findViews()", "API level < 17 but the device has german(de) locale, set different margin-top on information TextViews for the checkboxes to fit the language");
 			}
 		}
 
@@ -174,58 +163,41 @@ public class OtherSettingsFragment extends SherlockFragment implements Applicati
 		rescueServiceEditText.setFocusable(false);
 		rescueServiceEditText.setBackgroundColor(Color.WHITE);
 		rescueServiceEditText.setTextColor(Color.BLACK);
-
-		logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":findViews()", "All Views found for Fragment:\"" + LOG_TAG + "\"");
 	}
 
 	@Override
 	public void fetchSharedPrefs() {
-		logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":fetchSharedPrefs()", "Start fetching shared preferences needed by this fragment");
-
 		enableSmsAlarm = (Boolean) prefHandler.fetchPrefs(PrefKey.SHARED_PREF, PrefKey.ENABLE_SMS_ALARM_KEY, DataType.BOOLEAN, context, true);
 		rescueService = (String) prefHandler.fetchPrefs(PrefKey.SHARED_PREF, PrefKey.RESCUE_SERVICE_KEY, DataType.STRING, context);
-
-		logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":fetchSharedPrefs()", "Shared preferences fetched");
 	}
 
 	@Override
 	public void updateFragmentView() {
-		logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":updateFragmentView()", "Whole fragments user interface is about to be updated");
-
 		updateRescueServiceEditText();
 		updateEnableSmsAlarmCheckBox();
-
-		logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":updateFragmentView()", "Fragment updated");
 	}
 
 	@Override
 	public void setListeners() {
-		logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":setListeners()", "Setting listeners to the different user interface widgets");
-
+		// Set listener to Edit Rescue Service Button
 		editRescueServiceButton.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":setListeners().editRescueServiceButton.OnClickListener().onClick()", "Edit rescue service button pressed");
-
 				RescueServiceDialog dialog = new RescueServiceDialog();
 				dialog.setTargetFragment(OtherSettingsFragment.this, RescueServiceDialog.RESCUE_SERVICE_DIALOG_REQUEST_CODE);
 				dialog.show(getFragmentManager(), RescueServiceDialog.RESCUE_SERVICE_DIALOG_TAG);
 			}
 		});
 
+		// Set listener to Enable Sms Alarm CheckBox
 		enableSmsAlarmCheckBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
 			@Override
 			public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-				logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":setListeners().enableSmsAlarmCheckBox.onCheckedChange()", "Enable Sms Alarm checkbox pressed(or checkbox initialized)");
-
 				// Set CheckBox depending on it's checked status and store variable
 				if (enableSmsAlarmCheckBox.isChecked()) {
-					// Store value to variable
 					enableSmsAlarm = true;
-					logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":setListeners().enableSmsAlarmCheckBox.onCheckedChange()", "Enable SmsAlarm checkbox \"Checked\"(" + enableSmsAlarm + ")");
 				} else {
 					enableSmsAlarm = false;
-					logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":setListeners().enableSmsAlarmCheckBox.onCheckedChange()", "Enable SmsAlarm checkbox \"Unchecked\"(" + enableSmsAlarm + ")");
 				}
 
 				// Store value to shared preferences
@@ -236,8 +208,6 @@ public class OtherSettingsFragment extends SherlockFragment implements Applicati
 
 	@Override
 	public void onActivityResult(int requestCode, int resultCode, Intent data) {
-		logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":onActivityResult()", "Handling of activity result is about to begin, request code: \"" + Integer.toString(requestCode) + "\" and result code: \"" + Integer.toString(resultCode) + "\"");
-
 		// Only interested in OK results, don't care at all about the others
 		if (resultCode == Activity.RESULT_OK) {
 			// Only interested in certain request codes...
@@ -245,42 +215,35 @@ public class OtherSettingsFragment extends SherlockFragment implements Applicati
 				case (RescueServiceDialog.RESCUE_SERVICE_DIALOG_REQUEST_CODE):
 					rescueService = data.getStringExtra(RescueServiceDialog.RESCUE_SERVICE);
 
-					logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":onActivityResult()", "Result code: \"" + Activity.RESULT_OK + "\"(Activity.RESULT_OK), data: \"" + rescueService + "\" fetched using key: \"" + RescueServiceDialog.RESCUE_SERVICE + "\" is about to be persisted into shared preferences");
-
 					// Store to shared preferences
 					prefHandler.storePrefs(PrefKey.SHARED_PREF, PrefKey.RESCUE_SERVICE_KEY, rescueService, context);
 
 					// Update affected UI widgets
 					updateRescueServiceEditText();
 
-					logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":onActivityResult()", "New RESCUE SERVICE name has been stored from user input . New RESCUE SERVICE name is: \"" + rescueService + "\"");
 					break;
 				default:
-					logger.logCatTxt(LogPriorities.ERROR, LOG_TAG + ":onActivityResult()", "An unsupported result occurred, result code: \"" + Integer.toString(resultCode) + "\" and request code: \"" + requestCode + "\"");
+					if (BuildConfig.DEBUG) {
+						Log.e(LOG_TAG + ":onActivityResult()", "An unsupported result occurred, result code: \"" + resultCode + "\" and request code: \"" + requestCode + "\"");
+					}
 			}
 		}
 	}
 
 	/**
-	 * To update rescue service <code>EditText</code> with correct value.
+	 * To update rescue service {@link EditText} with correct value.
 	 */
 	private void updateRescueServiceEditText() {
 		rescueServiceEditText.setText(rescueService);
-		logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":updateRescueServiceEditText()", "Rescue service was updated. The edittext was set to: " + rescueService);
 	}
 
 	/**
-	 * To update enable Sms Alarm <code>CheckBox</code> correctly.
+	 * To update enable Sms Alarm {@link CheckBox} correctly.
 	 */
 	private void updateEnableSmsAlarmCheckBox() {
 		// Update enable Sms Alarm CheckBox(default checked=true)
 		if (!enableSmsAlarm) {
 			enableSmsAlarmCheckBox.setChecked(false);
-			logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":updateEnableSmsAlarmCheckBox()", "Enable SmsAlarm checkbox \"Unchecked\"(" + enableSmsAlarm + ")");
-		} else {
-			logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":updateEnableSmsAlarmCheckBox()", "Enable SmsAlarm checkbox \"Checked\"(" + enableSmsAlarm + ")");
 		}
-
-		logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":updateEnableSmsAlarmCheckBox()", "Enable SmsAlarm checkbox updated");
 	}
 }

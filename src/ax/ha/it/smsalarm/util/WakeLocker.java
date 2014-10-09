@@ -9,42 +9,30 @@ import java.util.TimerTask;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.os.PowerManager;
-import ax.ha.it.smsalarm.handler.LogHandler;
-import ax.ha.it.smsalarm.handler.LogHandler.LogPriorities;
+import android.os.PowerManager.WakeLock;
 
 /**
- * Class containing static methods to declare and acquire a <code>WakeLock</code> and for releasing
- * it.
+ * Utility class that makes handling with {@link WakeLock} a bit easier.
  * 
  * @author Robert Nyholm <robert.nyholm@aland.net>
- * @version 2.1
+ * @version 2.3.1
  * @since 2.1
  */
 public abstract class WakeLocker {
-	// Log tag
-	private final static String LOG_TAG = "WakeLocker";
-	// Variable used to log messages
-	private static LogHandler logger = LogHandler.getInstance();
+	private static final String LOG_TAG = WakeLocker.class.getSimpleName();
 
-	// WakeLock variable used to wake up screen
+	// To handle wake lock
 	private static PowerManager.WakeLock wakeLock;
 
 	/**
-	 * Static method to acquire WakeLock with from given <code>Context</code>.<br/>
-	 * <b><i>Should be null safe</i></b>.
+	 * To acquire a {@link WakeLock}.<br/>
 	 * 
 	 * @param context
-	 *            Context to acquire <code>SystemService</code> from
-	 * 
-	 * @see ax.ha.it.smsalarm.handler.LogHandler#logCat(LogPriorities, String, String) logCat(LogPriorities,
-	 *      String, String)
+	 *            The Context from which {@link PowerManager} is fetched.
 	 */
 	@SuppressWarnings("deprecation")
 	@SuppressLint("Wakelock")
 	public static void acquire(Context context) {
-		// Debug logging
-		logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":acquire()", "Begin to acquire wakelock");
-
 		// Null check, so we don't release wakeLock if it's not necessary
 		if (wakeLock != null) {
 			wakeLock.release();
@@ -54,57 +42,39 @@ public abstract class WakeLocker {
 		PowerManager pm = (PowerManager) context.getSystemService(Context.POWER_SERVICE);
 		wakeLock = pm.newWakeLock(PowerManager.FULL_WAKE_LOCK | PowerManager.ACQUIRE_CAUSES_WAKEUP | PowerManager.ON_AFTER_RELEASE, LOG_TAG + ":acquire()");
 
-		// Debug logging
-		logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":acquire()", "WakeLock has been initialized as following:\"" + wakeLock.toString() + "\"");
-
-		// Acquire wakelock
+		// Acquire WakeLock
 		wakeLock.acquire();
-
-		// Debug logging
-		logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":acquire()", "WakeLock has been acquired");
 	}
 
 	/**
-	 * Static method to release WakeLock.<br/>
-	 * <b><i>Should be null safe</i></b>.
-	 * 
-	 * @see ax.ha.it.smsalarm.handler.LogHandler#logCat(LogPriorities, String, String) logCat(LogPriorities,
-	 *      String, String)
+	 * To release a {@link WakeLock}.<br/>
 	 */
 	public static void release() {
 		// Null check, so we don't release wakeLock if it's not necessary
 		if (wakeLock != null) {
-			// Release wakelock
 			wakeLock.release();
-			// Debug logging
-			logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":release()", "WakeLock has been released");
 		}
 		wakeLock = null;
 	}
 
 	/**
-	 * To acquire a WakeLock and release it after given time in milliseconds.
+	 * To acquire a {@link WakeLock} and release it after given time in milliseconds.
 	 * 
 	 * @param context
-	 *            Context to acquire <code>SystemService</code> from
+	 *            The Context from which {@link PowerManager} is fetched.
 	 * @param releaseTime
-	 *            Time in milliseconds until the acquired WakeLock is released
-	 * 
+	 *            Time in milliseconds until the acquired WakeLock is released.
 	 * @see #acquire(Context)
 	 * @see #release()
 	 */
 	public static void acquireAndRelease(Context context, int releaseTime) {
-		// Debug logging
-		logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":acquireAndRelease()", "WakeLock is to acquired and it will be released after:\"" + releaseTime + "\"milliseconds");
-		// To release acquired wakelock after a specific time
+		// To release acquired WakeLock after a specific time
 		Timer releaseTimer = new Timer();
-		// Acquire wakelock
+
+		// Acquire WakeLock
 		acquire(context);
 
-		/*
-		 * Setup new timertask and start it. This timertask releases acquired wakelock efter given
-		 * time in milliseconds.
-		 */
+		// Setup a TimerTask and start it, after given time in milliseconds has passed the WakeLock will be released
 		releaseTimer.schedule(new TimerTask() {
 			@Override
 			public void run() {

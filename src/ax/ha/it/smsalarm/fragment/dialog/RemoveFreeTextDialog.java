@@ -8,9 +8,9 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
+import android.util.Log;
+import ax.ha.it.smsalarm.BuildConfig;
 import ax.ha.it.smsalarm.R;
-import ax.ha.it.smsalarm.handler.LogHandler;
-import ax.ha.it.smsalarm.handler.LogHandler.LogPriorities;
 
 /**
  * {@link DialogFragment} which let's the user remove a <b><i>Free Text</i></b> from the list of <b><i>Primary or Secondary Alarm Trigger Free
@@ -36,9 +36,6 @@ public class RemoveFreeTextDialog extends DialogFragment {
 	public static final int REMOVE_PRIMARY_FREE_TEXT_DIALOG_REQUEST_CODE = 7;
 	public static final int REMOVE_SECONDARY_FREE_TEXT_DIALOG_REQUEST_CODE = 8;
 
-	// For logging
-	private LogHandler logger = LogHandler.getInstance();
-
 	// Must have application context
 	private Context context;
 
@@ -49,13 +46,12 @@ public class RemoveFreeTextDialog extends DialogFragment {
 	 * To create a new instance of {@link RemoveFreeTextDialog}.
 	 */
 	public RemoveFreeTextDialog() {
-		logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":RemoveFreeTextDialog()", "Creating a new Remove Free Text dialog fragment");
+		// Just empty...
 	}
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":onCreate()", "Setting Context to dialog fragment");
 
 		// Set context here, it's safe because this dialog fragment has been attached to it's container, hence we have access to context
 		context = getActivity();
@@ -70,8 +66,6 @@ public class RemoveFreeTextDialog extends DialogFragment {
 
 	@Override
 	public Dialog onCreateDialog(Bundle savedInstanceState) {
-		logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":onCreateDialog()", "Creating and initializing dialog fragment");
-
 		// Need to resolve correct message in dialog depending on request code
 		String message = "";
 		switch (getTargetRequestCode()) {
@@ -82,7 +76,9 @@ public class RemoveFreeTextDialog extends DialogFragment {
 				message = getString(R.string.DELETE_SECONDARY_FREE_TEXT_PROMPT_MESSAGE) + " " + freeText + "?";
 				break;
 			default:
-				logger.logCatTxt(LogPriorities.ERROR, LOG_TAG + ":onCreateDialog()", "Cannot resolve dialog message due to an unsupported request code: \"" + getTargetRequestCode() + "\"");
+				if (BuildConfig.DEBUG) {
+					Log.e(LOG_TAG + ":onCreateDialog()", "Cannot resolve dialog message due to an unsupported request code: \"" + getTargetRequestCode() + "\"");
+				}
 		}
 
 		// Setup the dialog with correct resources, listeners and values
@@ -96,13 +92,9 @@ public class RemoveFreeTextDialog extends DialogFragment {
 				.setPositiveButton(R.string.YES, new DialogInterface.OnClickListener() {
 					@Override
 					public void onClick(DialogInterface dialog, int whichButton) {
-						logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":onCreateDialog.PositiveButton.OnClickListener().onClick()", "Positive Button pressed");
-
 						// Create an intent and put data from this dialogs free text and associate it with a certain key
 						Intent intent = new Intent();
 						intent.putExtra(REMOVE_FREE_TEXT, freeText);
-
-						logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":onCreateDialog().PositiveButton.OnClickListener().onClick()", "Intent created with extra, key: \"" + REMOVE_FREE_TEXT + "\" and data: \"" + freeText + "\"");
 
 						// Make a call to this dialog fragments owning fragments onAcitivityResult with correct request code, result code and intent
 						getTargetFragment().onActivityResult(getTargetRequestCode(), Activity.RESULT_OK, intent);
@@ -112,7 +104,6 @@ public class RemoveFreeTextDialog extends DialogFragment {
 				.setNegativeButton(R.string.NO, new DialogInterface.OnClickListener() {
 					@Override
 					public void onClick(DialogInterface dialog, int whichButton) {
-						logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":onCreateDialog().NegativeButton.OnClickListener().onClick()", "Negative Button pressed");
 						getTargetFragment().onActivityResult(getTargetRequestCode(), Activity.RESULT_CANCELED, null);
 					}
 				})

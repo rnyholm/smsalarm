@@ -20,7 +20,7 @@ public interface ApplicationFragment {
 	 * If some other attributes or special handling has to be done to some user interface widgets it's also done within this method.
 	 * 
 	 * @param view
-	 *            <code>View</code> from witch UI widgets will be found.
+	 *            {@link View} from witch UI widgets will be found.
 	 */
 	void findViews(View view);
 
@@ -30,7 +30,7 @@ public interface ApplicationFragment {
 	void fetchSharedPrefs();
 
 	/**
-	 * To update all user interface widgets contained in this {@link Fragment}'s <code>view</code>.
+	 * To update all user interface widgets contained in this {@link Fragment}'s {@link View}.
 	 */
 	void updateFragmentView();
 

@@ -9,9 +9,8 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
 import android.text.InputType;
+import android.util.Log;
 import ax.ha.it.smsalarm.R;
-import ax.ha.it.smsalarm.handler.LogHandler;
-import ax.ha.it.smsalarm.handler.LogHandler.LogPriorities;
 import ax.ha.it.smsalarm.ui.NoBlanksInputEditText;
 
 /**
@@ -38,9 +37,6 @@ public class AddSmsNumberDialog extends DialogFragment {
 	public static final int ADD_PRIMARY_SMS_NUMBER_DIALOG_REQUEST_CODE = 1;
 	public static final int ADD_SECONDARY_SMS_NUMBER_DIALOG_REQUEST_CODE = 2;
 
-	// For logging
-	private LogHandler logger = LogHandler.getInstance();
-
 	// Must have application context
 	private Context context;
 
@@ -51,13 +47,12 @@ public class AddSmsNumberDialog extends DialogFragment {
 	 * To create a new instance of {@link AddSmsNumberDialog}.
 	 */
 	public AddSmsNumberDialog() {
-		logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":AddSmsNumberDialog()", "Creating a new Add Sms Number dialog fragment");
+		// Just empty...
 	}
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":onCreate()", "Setting Context to dialog fragment");
 
 		// Set context here, it's safe because this dialog fragment has been attached to it's container, hence we have access to context
 		context = getActivity();
@@ -65,8 +60,6 @@ public class AddSmsNumberDialog extends DialogFragment {
 
 	@Override
 	public Dialog onCreateDialog(Bundle savedInstanceState) {
-		logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":onCreateDialog()", "Creating and initializing dialog fragment");
-
 		// Setup the EditText
 		// @formatter:off
 		inputEditText = new NoBlanksInputEditText(context);
@@ -93,7 +86,7 @@ public class AddSmsNumberDialog extends DialogFragment {
 				message = getString(R.string.SECONDARY_NUMBER_PROMPT_MESSAGE);
 				break;
 			default:
-				logger.logCatTxt(LogPriorities.ERROR, LOG_TAG + ":onCreateDialog()", "Cannot resolve dialog message due to an unsupported request code: \"" + getTargetRequestCode() + "\"");
+				Log.e(LOG_TAG + ":onCreateDialog()", "Cannot resolve dialog message due to an unsupported request code: \"" + getTargetRequestCode() + "\"");
 		}
 
 		// Setup the dialog with correct resources, listeners and values
@@ -108,13 +101,9 @@ public class AddSmsNumberDialog extends DialogFragment {
 				.setPositiveButton(R.string.OK, new DialogInterface.OnClickListener() {
 					@Override
 					public void onClick(DialogInterface dialog, int whichButton) {
-						logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":onCreateDialog().PositiveButton.OnClickListener().onClick()", "Positive Button pressed");
-
 						// Create an intent and put data from this dialogs EditText and associate it with a certain key
 						Intent intent = new Intent();
 						intent.putExtra(ADD_SMS_NUMBER, inputEditText.getText().toString());
-
-						logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":onCreateDialog().PositiveButton.OnClickListener().onClick()", "Intent created with extra, key: \"" + ADD_SMS_NUMBER + "\" and data: \"" + inputEditText.getText().toString() + "\"");
 
 						// Make a call to this dialog fragments owning fragments onAcitivityResult with correct request code, result code and intent
 						getTargetFragment().onActivityResult(getTargetRequestCode(), Activity.RESULT_OK, intent);
@@ -124,7 +113,6 @@ public class AddSmsNumberDialog extends DialogFragment {
 				.setNegativeButton(R.string.CANCEL, new DialogInterface.OnClickListener() {
 					@Override
 					public void onClick(DialogInterface dialog, int whichButton) {
-						logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":onCreateDialog().NegativeButton.OnClickListener().onClick()", "Negative Button pressed");
 						getTargetFragment().onActivityResult(getTargetRequestCode(), Activity.RESULT_CANCELED, null);
 					}
 				})
@@ -137,7 +125,5 @@ public class AddSmsNumberDialog extends DialogFragment {
 	public void onSaveInstanceState(Bundle arg0) {
 		super.onSaveInstanceState(arg0);
 		arg0.putCharSequence(ADD_SMS_NUMBER, inputEditText.getText().toString());
-
-		logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":onSaveInstanceState()", "Data has been stored to bundle on key: \"" + ADD_SMS_NUMBER + "\" with data: \"" + inputEditText.getText().toString() + "\"");
 	}
 }

@@ -5,13 +5,12 @@ package ax.ha.it.smsalarm.activity;
 
 import java.util.Calendar;
 import java.util.Date;
-import java.util.List;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
-import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -25,38 +24,31 @@ import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
-import ax.ha.it.smsalarm.Alarm;
 import ax.ha.it.smsalarm.R;
 import ax.ha.it.smsalarm.WidgetProvider;
 import ax.ha.it.smsalarm.handler.DatabaseHandler;
-import ax.ha.it.smsalarm.handler.LogHandler;
-import ax.ha.it.smsalarm.handler.LogHandler.LogPriorities;
 import ax.ha.it.smsalarm.handler.PreferencesHandler;
 import ax.ha.it.smsalarm.handler.PreferencesHandler.DataType;
 import ax.ha.it.smsalarm.handler.PreferencesHandler.PrefKey;
+import ax.ha.it.smsalarm.util.AlarmLogger;
 
 /**
- * Responsible for the application <code>ax.ha.it.smsalarm</code> acknowledge activity. This class allows users to acknowledge an received alarm by
- * calling to specific phone number.<br>
- * Also holds the acknowledge UI.
+ * Handles and are responsible for the <b><i>Sms Alarm's Acknowledge</i></b> by call functionality.<br>
+ * Of course this class also holds the <b><i>user interface</i></b> for this functionality.
  * 
  * @author Robert Nyholm <robert.nyholm@aland.net>
- * @version 2.2.1
+ * @version 2.3.1
  * @since 1.1-SE
  * @see ListenToPhoneState
  */
 public class Acknowledge extends Activity {
-	// Log tag string
-	private final String LOG_TAG = getClass().getSimpleName();
-
-	// Objects needed for logging and shared preferences handling
-	private final LogHandler logger = LogHandler.getInstance();
+	// To handle the shared preferences
 	private final PreferencesHandler prefHandler = PreferencesHandler.getInstance();
 
-	// Object needed to listen for phones different states
+	// To listen at the phones different states
 	private ListenToPhoneState customPhoneStateListener;
 
-	// Object to handle database access and methods
+	// Database access
 	private DatabaseHandler db;
 
 	// The TextViews...
@@ -90,129 +82,88 @@ public class Acknowledge extends Activity {
 	// Boolean to keep track if we have evaluated a certain phone state
 	private boolean NOT_EVALUATED = true;
 
-	// Date variable to keep track of call times NB. Must be initialized to avoid NPE,
+	// Date variable to keep track of call times. Note - Must be initialized to avoid NPE,
 	// initialized with release date of the first Sms Alarm version (26.11-2011) in milliseconds
 	private Date startCall = new Date(1319576400000L);
 
-	// To count down a new call
-	@SuppressWarnings("unused")
-	private CountDownTimer redialCountDown;
-
-	// Integers to keep track of the different phone states
-	private int prePhoneState = -1;
-	private int phoneState = -1;
-
+	// @formatter:off
 	// Constants for the re-dial parameters
-	private final int MIN_CALL_TIME = 7000; // Minimum call time(in milliseconds), if below this the application redials
-	private final int REDIAL_COUNTDOWN_TIME = 6000; // Count down time(in milliseconds) before redial should occur
-	private final int REDIAL_COUNTDOWN_INTERVAL = 100;
+	private static final int MIN_CALL_TIME = 7000; 				// Minimum call time(in milliseconds), if below this the application redials
+	private static final int REDIAL_COUNTDOWN_TIME = 6000; 		// Count down time(in milliseconds) before redial should occur
+	private static final int REDIAL_COUNTDOWN_INTERVAL = 100;
+	// @formatter:on
 
 	/**
-	 * When activity starts, this method is the entry point. The User Interface is built up and different <code>Listeners</code> are set within this
-	 * method.
-	 * 
-	 * @param savedInstanceState
-	 *            Default Bundle
-	 * @see #findViews()
-	 * @see #getAckHandlerPrefs()
-	 * @see #setTextViews()
-	 * @see #onResume()
-	 * @see #onPause()
-	 * @see LogHandler#logCat(LogPriorities, String , String)
-	 * @see LogHandler#logAlarm(List, Context) logAlarm(List, Context)
-	 * @see DatabaseHandler
-	 * @see DatabaseHandler#updateLatestAlarmAcknowledged()
-	 * @see DatabaseHandler#getAllAlarm()
-	 * @see Alarm
-	 * @see WidgetProvider#updateWidgets(Context)
+	 * Perform initialization of <code>Layout</code>'s, fetching {@link SharedPreferences}, setting up {@link View}'s, setting different
+	 * <code>Listener</code>'s, getting database access and other things that's needed by this {@link Activity} in order for it to work.
 	 */
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.ack);
 
-		logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":onCreate()", "Creation of the Acknowledge Handler started");
-
 		// Initialize database handler object from context
 		db = new DatabaseHandler(this);
 
-		// Declare a telephonymanager with propersystemservice and attach listener to it
+		// Declare a telephony manager with proper SystemService and attach listener to it
 		TelephonyManager tManager = (TelephonyManager) getSystemService(Context.TELEPHONY_SERVICE);
 		customPhoneStateListener = new ListenToPhoneState();
 		tManager.listen(customPhoneStateListener, PhoneStateListener.LISTEN_CALL_STATE);
 
-		logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":onCreate()", "Got TELEPHONY_SERVICE and attached phone state listener to it");
-
-		// FindViews
 		findViews();
-		// Get Shared Preferences
-		getAckHandlerPrefs();
-		// Set TextViews
+		fetchSharedPrefs();
 		setTextViews();
 
-		// Create objects that acts as listeners to the buttons
+		// Set listener to the abort Button
 		abortButton.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":onCreate().abortButton.OnClickListener().onClick()", "Abort button has been pressed, finishing activity");
+				// Finish of this activity
 				finish();
 			}
 		});
 
-		// Create objects that acts as listeners to the buttons
+		// Set listener to the acknowledge Button
 		acknowledgeButton.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				// Check to see if we have any phone number to acknowledge to
-				if (!acknowledgeNumber.equals("")) {
-					logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":onCreate().acknowledgeButton.OnClickListener().onClick()", "Acknowledge button has been pressed and phone number to acknowledge to exist. Continue acknowledge");
-
+				// Check to see if any phone number to acknowledge to exists
+				if (!"".equals(acknowledgeNumber)) {
 					// Update acknowledge time of latest received primary alarm in database
 					db.updateLatestPrimaryAlarmAcknowledged();
 
-					// Get all alarms from database and log them to to html file
-					logger.logAlarm(db.getAllAlarm(), Acknowledge.this);
+					// Get all alarms from database and log them to to HTML file
+					AlarmLogger.getInstance().logAlarms(db.fetchAllAlarm(), Acknowledge.this);
 
 					// Update all widgets associated with this application
 					WidgetProvider.updateWidgets(Acknowledge.this);
 
 					// Place the acknowledge call
 					placeAcknowledgeCall();
-				} else {
+				} else { // No phonenumber to acknowledge to exists, show toast
 					Toast.makeText(Acknowledge.this, R.string.ACK_CANNOT, Toast.LENGTH_LONG).show();
-					logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":onCreate().acknowledgeButton.OnClickListener().onClick()", "Acknowledge button has been pressed but no phone number to acknowledge to has been given");
 				}
 			}
 		});
-
-		logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":onCreate()", "Creation of the Acknowledge Handler completed");
 	}
 
 	/**
-	 * To trigger event when activity resumes.
-	 * 
-	 * @see #onCreate(Bundle)
-	 * @see #onPause()
-	 * @see LogHandler#logCat(LogPriorities, String , String)
+	 * The <b><i>Redial</i></b> handling occurs within this method. If this method is entered with this object in a <b><i>Has Called</i></b> state,
+	 * it's needed to place yet another call, because it's sure that this object already has placed a call that didn't get through.
 	 */
 	@Override
 	public void onResume() {
 		super.onResume();
-		logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":onResume()", "Activity resumed");
 
-		// If we already have placed a call
+		// If, and only if, we already have placed a call
 		if (hasCalled) {
-			logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":onResume()", "An acknowledge call has already been placed, building up progressbar and countdown for a new acknowledge call");
-
-			// Initialize progress bar and textviews needed for countdown
+			// Initialize progress bar and TextViews needed for count down
 			redialProgressBar.setProgress(0);
 			countDownTextView.setText(Integer.toString(REDIAL_COUNTDOWN_TIME / 1000));
 
-			redialCountDown = new CountDownTimer(REDIAL_COUNTDOWN_TIME, REDIAL_COUNTDOWN_INTERVAL) {
+			new CountDownTimer(REDIAL_COUNTDOWN_TIME, REDIAL_COUNTDOWN_INTERVAL) {
 				@Override
 				public void onTick(long millisUntilFinished) {
-					logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":onResume().CountDownTimer().onTick()", "Calculate redial countdown times and update UI widgets");
-
 					// Calculate new value of ProgressBar
 					float fraction = millisUntilFinished / (float) REDIAL_COUNTDOWN_TIME;
 					// Update ProgressBar and TextView with new values
@@ -222,9 +173,6 @@ public class Acknowledge extends Activity {
 
 				@Override
 				public void onFinish() {
-					logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":onResume().CountDownTimer().onFinish()", "Redial countdown finished, continue to place new acknowledge call");
-
-					// Place the acknowledge call
 					placeAcknowledgeCall();
 				}
 			}.start();
@@ -232,56 +180,27 @@ public class Acknowledge extends Activity {
 	}
 
 	/**
-	 * To handle events to trigger when activity pauses. <b><i>Not yet implemented.</i></b>
-	 * 
-	 * @see #onCreate(Bundle)
-	 * @see #onResume()
-	 */
-	@Override
-	public void onPause() {
-		super.onPause();
-	}
-
-	/**
-	 * To place a acknowledge call to a pre0configured phone number.
-	 * 
-	 * @see #onCreate(Bundle)
-	 * @see #onResume()
-	 * @see LogHandler#logCat(LogPriorities, String , String)
-	 * @see LogHandler#logCatTxt(LogPriorities, String , String, Throwable)
-	 * @see PreferencesHandler#storePrefs(PrefKeys, PrefKeys, Object, Context)
+	 * To place an <b><i>Acknowledge Call</i></b> to a preconfigured phone number.
 	 */
 	private void placeAcknowledgeCall() {
-		try {
-			// Make a call intent
-			Intent callIntent = new Intent(Intent.ACTION_CALL);
-			callIntent.setData(Uri.parse("tel:" + acknowledgeNumber));
+		// Make a call intent
+		Intent callIntent = new Intent(Intent.ACTION_CALL);
+		callIntent.setData(Uri.parse("tel:" + acknowledgeNumber));
 
-			logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":placeAcknowledgeCall()", "A call intent has been initialized");
+		// Store variable to shared preferences indicating that a call has been placed
+		prefHandler.storePrefs(PrefKey.SHARED_PREF, PrefKey.HAS_CALLED_KEY, true, Acknowledge.this);
 
-			// Store variable to shared preferences indicating that a call has been placed
-			prefHandler.storePrefs(PrefKey.SHARED_PREF, PrefKey.HAS_CALLED_KEY, true, Acknowledge.this);
-
-			// Set time when the call has been placed
-			startCall = Calendar.getInstance().getTime();
-			// Kick off call intent
-			startActivity(callIntent);
-
-			logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":placeAcknowledgeCall()", "A acknowledge call has been placed to phone number:\"" + acknowledgeNumber + "\" at the time:\"" + startCall.getTime() + "\"");
-		} catch (ActivityNotFoundException e) {
-			logger.logCatTxt(LogPriorities.ERROR, LOG_TAG + ":placeAcknowledgeCall()", "Failed to place acknowledge call", e);
-		}
+		// Set time when the call has been placed
+		startCall = Calendar.getInstance().getTime();
+		// Kick off call intent
+		startActivity(callIntent);
 	}
 
 	/**
-	 * To find UI widgets and get their reference by ID stored in class variables.
-	 * 
-	 * @see #onCreate(Bundle)
-	 * @see LogHandler#logCat(LogPriorities, String , String)
+	 * To find user interface widgets and get their reference by ID.<br>
+	 * If some other attributes or special handling has to be done to some user interface widgets it's also done within this method.
 	 */
 	private void findViews() {
-		logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":findViews()", "Start finding views by their ID");
-
 		// Finding EditText views
 		titleTextView = (TextView) findViewById(R.id.ackTitle_tv);
 		fullMessageTextView = (TextView) findViewById(R.id.ackFullAlarm_tv);
@@ -293,7 +212,7 @@ public class Acknowledge extends Activity {
 		acknowledgeButton = (Button) findViewById(R.id.ackAcknowledgeAlarm_btn);
 		abortButton = (Button) findViewById(R.id.ackAbortAlarm_btn);
 
-		// Finding Progressbar views
+		// Finding ProgressBar view
 		redialProgressBar = (ProgressBar) findViewById(R.id.ackRedial_pb);
 
 		// Finding ImageView views
@@ -304,51 +223,33 @@ public class Acknowledge extends Activity {
 		if (Build.VERSION.SDK_INT < 11) {
 			divider1ImageView.setImageResource(R.drawable.gradient_divider_10_and_down);
 			divider2ImageView.setImageResource(R.drawable.gradient_divider_10_and_down);
-			logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":findViews()", "API level < 11, set bright gradients");
 		} else {
 			divider1ImageView.setImageResource(R.drawable.gradient_divider_11_and_up);
 			divider2ImageView.setImageResource(R.drawable.gradient_divider_11_and_up);
-			logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":findViews()", "API level > 10, set dark gradients");
 		}
 
-		// Log and hide UI widgets that user don't need to see right now
-		logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":findViews()", "Hiding elements not needed to show right now");
+		// Hide UI widgets that user don't need to see right now
 		lineBusyTextView.setVisibility(View.GONE);
 		countDownTextView.setVisibility(View.GONE);
 		secondsTextView.setVisibility(View.GONE);
 		redialProgressBar.setVisibility(View.GONE);
-
-		logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":findViews()", "All views found");
 	}
 
 	/**
-	 * To get <code>Shared Preferences</code> used by class <code>AcknowledgeHandler</code>.
-	 * 
-	 * @see LogHandler#logCat(LogPriorities, String , String) logCat(LogPriorities, String , String)
-	 * @see LogHandler#logCatTxt(LogPriorities, String, String, Throwable)
-	 * @see PreferencesHandler#fetchPrefs(PrefKeys, PrefKeys, DataTypes, Context)
+	 * To fetch all {@link SharedPreferences} used by {@link Acknowledge} class.
 	 */
-	private void getAckHandlerPrefs() {
-		logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":getAckHandlerPrefs()", "Start retrieving shared preferences needed by class AcknowledgeHandler");
-
-		// Get shared preferences needed by class Acknowledge Handler
+	private void fetchSharedPrefs() {
 		rescueService = (String) prefHandler.fetchPrefs(PrefKey.SHARED_PREF, PrefKey.RESCUE_SERVICE_KEY, DataType.STRING, this);
 		fullMessage = (String) prefHandler.fetchPrefs(PrefKey.SHARED_PREF, PrefKey.FULL_MESSAGE_KEY, DataType.STRING, this);
 		acknowledgeNumber = (String) prefHandler.fetchPrefs(PrefKey.SHARED_PREF, PrefKey.ACK_NUMBER_KEY, DataType.STRING, this);
 		hasCalled = (Boolean) prefHandler.fetchPrefs(PrefKey.SHARED_PREF, PrefKey.HAS_CALLED_KEY, DataType.BOOLEAN, this);
-
-		logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":getAckHandlerPrefs()", "Shared preferences retrieved");
 	}
 
 	/**
-	 * To set <code>TextViews</code> with data for a proper presentation of the UI.
-	 * 
-	 * @see LogHandler#logCat(LogPriorities, String , String)
+	 * To set {@link TextView}'s with correct texts for a proper presentation of the user interface.
 	 */
 	@SuppressLint("DefaultLocale")
 	private void setTextViews() {
-		logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":setTextViews()", "Setting textviews with proper data");
-
 		// Set TextViews from variables and resources
 		if (!"".equals(rescueService)) {
 			titleTextView.setText(rescueService.toUpperCase() + " " + getResources().getString(R.string.ALARM));
@@ -356,12 +257,11 @@ public class Acknowledge extends Activity {
 			titleTextView.setText(getString(R.string.ALARM));
 		}
 
+		// Show full alarm message
 		fullMessageTextView.setText(fullMessage);
 
 		// Check if the activity already has placed a call, in that case show TextViews for redial
 		if (hasCalled) {
-			logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":setTextViews()", "We have already placed a call, showing redial widgets");
-
 			lineBusyTextView.setVisibility(View.VISIBLE);
 			countDownTextView.setVisibility(View.VISIBLE);
 			secondsTextView.setVisibility(View.VISIBLE);
@@ -370,105 +270,60 @@ public class Acknowledge extends Activity {
 	}
 
 	/**
-	 * Checks the different phone states while placing a call. With that information given, we can arrange automatic redial functionality in this
-	 * parent class <code>AcknowledgeHandler</code>.
+	 * Checks the different phone states while placing a call. With that information given, it's possible to arrange automatic <b><i>Redial</i></b>
+	 * functionality in class {@link Acknowledge}.
 	 * 
 	 * @author Robert Nyholm <robert.nyholm@aland.net>
-	 * @version 2.2
+	 * @version 2.3.1
 	 * @since 2.1
 	 */
 	private class ListenToPhoneState extends PhoneStateListener {
+		// To keep track of the different phone states
+		private int prePhoneState = -1;
+		private int phoneState = -1;
 
 		/**
-		 * An inherited method to check when call state has changed. This implementation of that method helps to make an automatic redial.
-		 * 
-		 * @see #swapStates(int)
-		 * @see #stateName(int)
-		 * @see LogHandler#logCat(LogPriorities, String , String)
-		 * @see LogHandler#logCat(LogPriorities, String, String, Throwable)
-		 * @see PreferencesHandler#storePrefs(PrefKeys, PrefKeys, Object, Context)
+		 * To figure out different <b><i>Call State Changes</i></b> in such way that it's possible to figure out if a <b><i>Redial</i></b> is needed.
 		 */
 		@Override
 		public void onCallStateChanged(int state, String incomingNumber) {
-			logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":ListenToPhoneState().onCallStateChanged()", "Call state has changed");
-
 			// Swap the phone states
 			swapStates(state);
-			// Log phone states name(purely in debugging purpose)
-			stateName(state);
 
 			// Only do this if phone call go from OFFHOOK to IDLE state
 			if (prePhoneState == 2 && phoneState == 0 && NOT_EVALUATED) {
-				logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":ListenToPhoneState().onCallStateChanged()", "Call state went from \"Off hook\" to \"Idle\"");
-				// Set to false because we evaluate this right now
+				// Set to false because this state change is being evaluated right now
 				NOT_EVALUATED = false;
-				// Get date for end call
+
+				// Get date for end call and calculate call time
 				Date endCall = Calendar.getInstance().getTime();
-				// Calculate the call time
-				long time = endCall.getTime() - startCall.getTime();
 
-				logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":ListenToPhoneState().onCallStateChanged()", "Start time of call is:\"" + startCall.getTime() + "\", end time is:\"" + endCall.getTime() + "\" and the call time was:\"" + time + "\"");
-
-				// If call time is less than preconfigured value the line was busy and call did not go through. In this case we need to start the
-				// AcknowledgeHandler activity once more.
+				// If call time is less than minimum call time needed for it to count as a proper phone call the line was busy. In this case
+				// Acknowledge activity needs to be started once more
 				if (endCall.getTime() - startCall.getTime() < MIN_CALL_TIME) {
-					logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":ListenToPhoneState().onCallStateChanged()", "Call time was less than:\"" + MIN_CALL_TIME + "\", assumes the line was busy. Initializing and starting a new intent to place a new call");
 					Intent i = new Intent(Acknowledge.this, Acknowledge.class);
 					i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
 					startActivity(i);
 				} else {
-					logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":ListenToPhoneState().onCallStateChanged()", "Call time was more than:\"" + MIN_CALL_TIME + "\", assumes the call went through");
-
 					// Store variable to shared preferences indicating that a call has been placed with success
 					prefHandler.storePrefs(PrefKey.SHARED_PREF, PrefKey.HAS_CALLED_KEY, false, Acknowledge.this);
-					logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":ListenToPhoneState().onCallStateChanged()", "Finishing activity");
 
-					// Finish this activity
+					// Finish of this activity
 					finish();
 				}
 			}
+
+			// Don't forget, call super class implementation
 			super.onCallStateChanged(state, incomingNumber);
 		}
 
 		/**
-		 * To get phone state as String.
-		 * 
-		 * @param state
-		 *            Phone state as Integer
-		 * @return Phone state as String resolved from Integer
-		 * @see #onCallStateChanged(int, String)
-		 * @see LogHandler#logCat(LogPriorities, String , String)
-		 * @see LogHandler#logCatTxt(LogPriorities, String , String)
-		 */
-		String stateName(int state) {
-			// Switch through the different phone states
-			switch (state) {
-				case TelephonyManager.CALL_STATE_IDLE:
-					logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":ListenToPhoneState().stateName()", "Current call state is:\"Idle\"");
-					return "Idle";
-				case TelephonyManager.CALL_STATE_OFFHOOK:
-					logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":ListenToPhoneState().stateName()", "Current call state is:\"Off hook\"");
-					return "Off hook";
-				case TelephonyManager.CALL_STATE_RINGING:
-					logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":ListenToPhoneState().stateName()", "Current call state is:\"Ringing\"");
-					return "Ringing";
-				default:
-					logger.logCatTxt(LogPriorities.WARN, LOG_TAG + ":ListenToPhoneState().stateName()", "Unsupported call state occured, current state is:\"" + Integer.toString(state) + "\"");
-					return Integer.toString(state);
-			}
-		}
-
-		/**
-		 * To swap phone states in a way that we have both the previous phone state and current phone state stored.
+		 * To swap phone states in a way that both the previous phone state and current phone state stored.
 		 * 
 		 * @param currentState
-		 *            Phone state to be stored as the current phone state
-		 * @see #onCallStateChanged(int, String)
-		 * @see LogHandler#logCat(LogPriorities, String , String)
+		 *            Phone state to be stored as the current phone state.
 		 */
 		void swapStates(int currentState) {
-			logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":ListenToPhoneState().swapStates()", "Swapping phone states");
-
 			// Swap phone states
 			prePhoneState = phoneState;
 			phoneState = currentState;

@@ -12,7 +12,8 @@ import org.json.JSONException;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
-import ax.ha.it.smsalarm.handler.LogHandler.LogPriorities;
+import android.util.Log;
+import ax.ha.it.smsalarm.BuildConfig;
 
 /**
  * Class responsible for all {@link SharedPreferences} handling.<br>
@@ -35,7 +36,7 @@ public class PreferencesHandler {
 	}
 
 	/**
-	 * The different valid {@link SharedPreferences} keys.
+	 * The different valid {@link SharedPreferences}.
 	 * 
 	 * @author Robert Nyholm <robert.nyholm@aland.net>
 	 * @version 2.3.1
@@ -73,17 +74,17 @@ public class PreferencesHandler {
 		 * Creates a new {@link PrefKey}.
 		 * 
 		 * @param key
-		 *            Value(key) to associate with the <code>PrefKey</code> enumeration. This key is the actual key that data will be stored to or
-		 *            fetched from
+		 *            Value(key) to associate with the PrefKey enumeration. This key is the actual key that data will be stored to or fetched from
+		 *            {@link SharedPreferences} with.
 		 */
 		private PrefKey(String key) {
 			this.key = key;
 		}
 
 		/**
-		 * To get the actual <code>Key</code> to which data is stored to and fetched from in the {@link SharedPreferences}.
+		 * To get the actual <code>Key</code> with which data is stored to and fetched from {@link SharedPreferences} with.
 		 * 
-		 * @return the <code>Key</code>
+		 * @return The <code>Key</code>.
 		 */
 		public String getKey() {
 			return key;
@@ -93,28 +94,23 @@ public class PreferencesHandler {
 	// Singleton instance of this class
 	private static PreferencesHandler INSTANCE;
 
-	// Log tag
-	private final String LOG_TAG = getClass().getSimpleName();
-
-	// Variable used to log messages
-	private final LogHandler logger;
+	private static final String LOG_TAG = PreferencesHandler.class.getSimpleName();
 
 	// Variables needed for retrieving shared preferences
 	private SharedPreferences sharedPref;
 	private Editor prefsEditor;
 
 	/**
-	 * Private constructor, is private due to it's singleton pattern.
+	 * Creates a new instance of {@link PreferencesHandler}.
 	 */
 	private PreferencesHandler() {
-		logger = LogHandler.getInstance();
-		logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":PreferencesHandler()", "New instance of PreferencesHandler created");
+		// Just empty...
 	}
 
 	/**
-	 * To get the singleton instance of this class.
+	 * To get the <b><i>singleton</i></b> instance of {@link PreferencesHandler}.
 	 * 
-	 * @return Singleton instance of PreferencesHandler
+	 * @return Instance of <code>PreferencesHandler</code>.
 	 */
 	public static PreferencesHandler getInstance() {
 		// If instance of this object is null create a new one
@@ -135,15 +131,15 @@ public class PreferencesHandler {
 	 * <code>context</code>.
 	 * 
 	 * @param sharedPreferences
-	 *            <code>Shared Preferences</code> from which the values are fetched from
+	 *            <code>Shared Preferences</code> from which the values are fetched from.
 	 * @param sharedPreferencesKey
-	 *            <code>Key</code> in which <code>Shared Preferences</code> is stored
+	 *            <code>Key</code> in which <code>Shared Preferences</code> is stored.
 	 * @param type
-	 *            Which type of data that's supposed to be fetched
+	 *            Which type of data that's supposed to be fetched.
 	 * @param context
-	 *            Context in which <code>Shared Preferences</code> handling is done
+	 *            Context in which <code>Shared Preferences</code> handling is done.
 	 * @return Returns an object with the fetched value. This object can be an instance of <b><i>Integer</i></b>, <b><i>String</i></b>,
-	 *         <b><i>Boolean</i></b> or a <b><i>List of Strings</i></b>
+	 *         <b><i>Boolean</i></b> or a <b><i>List of Strings</i></b>.
 	 * @see #fetchPrefs(PrefKey, PrefKey, DataType, Context, Object)
 	 * @see #storePrefs(PrefKey, PrefKey, Object, Context)
 	 */
@@ -178,17 +174,17 @@ public class PreferencesHandler {
 	 * in consideration</i></b>. <br>
 	 * 
 	 * @param sharedPreferences
-	 *            <code>Shared Preferences</code> from which the values are fetched from
+	 *            <code>Shared Preferences</code> from which the values are fetched from.
 	 * @param sharedPreferencesKey
-	 *            <code>Key</code> in which <code>Shared Preferences</code> is stored
+	 *            <code>Key</code> in which <code>Shared Preferences</code> is stored.
 	 * @param type
-	 *            Which type of data that's supposed to be fetched
+	 *            Which type of data that's supposed to be fetched.
 	 * @param context
-	 *            Context in which <code>Shared Preferences</code> handling is done
+	 *            Context in which <code>Shared Preferences</code> handling is done.
 	 * @param defaultObject
-	 *            Default value to be fetched from <code>Shared Preferences</code> if no previous value exist
+	 *            Default value to be fetched from <code>Shared Preferences</code> if no previous value exist.
 	 * @return Returns an object with the fetched value. This object can be an instance of <b><i>Integer</i></b>, <b><i>String</i></b>,
-	 *         <b><i>Boolean</i></b> or a <b><i>List of Strings</i></b>
+	 *         <b><i>Boolean</i></b> or a <b><i>List of Strings</i></b>.
 	 * @see #fetchPrefs(PrefKey, PrefKey, DataType, Context)
 	 * @see #storePrefs(PrefKey, PrefKey, Object, Context)
 	 */
@@ -200,29 +196,22 @@ public class PreferencesHandler {
 			case INTEGER:
 				// Check that defaultObject is of correct instance else collect "hard coded" default value of 0
 				if (defaultObject instanceof Integer) {
-					logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":fetchPrefs()", "Integer with value \"" + Integer.toString(sharedPref.getInt(sharedPreferencesKey.getKey(), (Integer) defaultObject)) + "\" retrieved from shared preferences: \"" + sharedPreferences.getKey() + ", with key: " + sharedPreferencesKey.getKey() + "\", type: \"" + type.name() + "\", context: \"" + context.toString() + "\" and default value: \"" + Integer.toString((Integer) defaultObject) + "\"");
 					return sharedPref.getInt(sharedPreferencesKey.getKey(), (Integer) defaultObject);
 				} else {
-					logger.logCatTxt(LogPriorities.ERROR, LOG_TAG + ":fetchPrefs()", "Default value couldn't be set because of instance mismatch, hardcoded default value of 0 is used. However Integer with value \"" + Integer.toString(sharedPref.getInt(sharedPreferencesKey.getKey(), 0)) + "\" retrieved from shared preferences: \"" + sharedPreferences.getKey() + "\", with key: \"" + sharedPreferencesKey.getKey() + "\", type: \"" + type.name() + "\", context: \"" + context.toString()
-							+ "\" and default value: \"" + Integer.toString((Integer) defaultObject) + "\"");
 					return sharedPref.getInt(sharedPreferencesKey.getKey(), 0);
 				}
 			case STRING:
 				// Check that defaultObject is of correct instance else collect "hard coded" default value of ""
 				if (defaultObject instanceof String) {
-					logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":fetchPrefs()", "String with value \"" + sharedPref.getString(sharedPreferencesKey.getKey(), (String) defaultObject) + "\" retrieved from shared preferences: \"" + sharedPreferences.getKey() + "\", with key: \"" + sharedPreferencesKey.getKey() + "\", type: \"" + type.name() + "\" and context: \"" + context.toString() + "\" and default value: \"" + (String) defaultObject + "\"");
 					return sharedPref.getString(sharedPreferencesKey.getKey(), (String) defaultObject);
 				} else {
-					logger.logCatTxt(LogPriorities.ERROR, LOG_TAG + ":fetchPrefs()", "Default value couldn't be set because of instance mismatch, hardcoded default value of \"\" is used. However String with value\"" + sharedPref.getString(sharedPreferencesKey.getKey(), "") + "\" retrieved from shared preferences: \"" + sharedPreferences.getKey() + "\", with key: \"" + sharedPreferencesKey.getKey() + "\", type: \"" + type.name() + "\" and context: " + context.toString() + "\"");
 					return sharedPref.getString(sharedPreferencesKey.getKey(), "");
 				}
 			case BOOLEAN:
 				// Check that defaultObject is of correct instance else collect "hard coded" default value of false
 				if (defaultObject instanceof Boolean) {
-					logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":fetchPrefs()", "Boolean with value \"" + sharedPref.getBoolean(sharedPreferencesKey.getKey(), (Boolean) defaultObject) + "\" retrieved from shared preferences: \"" + sharedPreferences.getKey() + "\", with key: \"" + sharedPreferencesKey.getKey() + "\", type: \"" + type.name() + "\" and context: \"" + context.toString() + "\" and default value: \"" + defaultObject + "\"");
 					return sharedPref.getBoolean(sharedPreferencesKey.getKey(), (Boolean) defaultObject);
 				} else {
-					logger.logCatTxt(LogPriorities.ERROR, LOG_TAG + ":fetchPrefs()", "Default value couldn't be set because of instance mismatch, hardcoded default value of false is used. However Boolean with value \"" + sharedPref.getBoolean(sharedPreferencesKey.getKey(), false) + "\" retrieved from shared preferences: \"" + sharedPreferences.getKey() + "\", with key: \"" + sharedPreferencesKey.getKey() + "\", type: \"" + type.name() + "\" and context: \"" + context.toString() + "\"");
 					return sharedPref.getBoolean(sharedPreferencesKey.getKey(), false);
 				}
 			case LIST:
@@ -242,13 +231,13 @@ public class PreferencesHandler {
 							list.add(secondaryListenNumber);
 						}
 
-						logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":fetchPrefs()", "List<String> with value(s) \"" + json + "\"  retrieved from shared preferences: \"" + sharedPreferences.getKey() + "\", with key: \"" + sharedPreferencesKey.getKey() + "\", type: \"" + type.name() + "\" and context: \"" + context.toString() + "\"");
 						return list;
 					} catch (JSONException e) {
-						logger.logCatTxt(LogPriorities.ERROR, LOG_TAG + ":fetchPrefs()", "Failed to retrieve List<String> from shared preferences: \"" + sharedPreferences.getKey() + "\", with key: \"" + sharedPreferencesKey.getKey() + "\", type: \"" + type.name() + "\" and context: \"" + context.toString() + "\"", e);
+						if (BuildConfig.DEBUG) {
+							Log.e(LOG_TAG + ":fetchPrefs()", "Failed to retrieve List<String> from shared preferences: \"" + sharedPreferences.getKey() + "\", with key: \"" + sharedPreferencesKey.getKey() + "\", type: \"" + type.name() + "\" and context: \"" + context.toString() + "\"", e);
+						}
 					}
 				} else { // <--If JSON string is empty, return empty List
-					logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":fetchPrefs()", "List<String> with value(s) \"" + json + "\"  retrieved from shared preferences: \"" + sharedPreferences.getKey() + "\", with key: \"" + sharedPreferencesKey.getKey() + "\", type: \"" + type.name() + "\" and context: \"" + context.toString() + "\"");
 					return list;
 				}
 				break;
@@ -258,7 +247,11 @@ public class PreferencesHandler {
 
 		// If application end up here then some error has occurred
 		IllegalArgumentException exception = new IllegalArgumentException("Failed to fetch shared preferences: \"" + sharedPreferences.getKey() + "\", with key: \"" + sharedPreferencesKey.getKey() + "\", data type: \"" + type.name() + "\" and context: \"" + context.toString() + "\". Cause: \"Data type given as argument is unsupported\", valid data types are: \"INTEGER\", \"STRING\", \"BOOLEAN\" and \"LIST\"");
-		logger.logCatTxt(LogPriorities.ERROR, LOG_TAG + ":fetchPrefs()", "An exception occurred while fetching shared preferences", exception);
+
+		if (BuildConfig.DEBUG) {
+			Log.e(LOG_TAG + ":fetchPrefs()", "An exception occurred while fetching shared preferences", exception);
+		}
+
 		throw exception;
 	}
 
@@ -269,14 +262,14 @@ public class PreferencesHandler {
 	 * <code>storePrefs(PrefKey.SHARED_PREF, PrefKey.ACKNUMBER_KEY, "0457 0000 000", context)</code>
 	 * 
 	 * @param sharedPreference
-	 *            <code>Shared Preferences</code> to which given object is stored to
+	 *            <code>Shared Preferences</code> to which given object is stored to.
 	 * @param sharedPreferencesKey
-	 *            <code>Key</code> to which <code>Shared Preference</code> the object is going to be stored to
+	 *            <code>Key</code> to which <code>Shared Preference</code> the object is going to be stored to.
 	 * @param object
 	 *            Object to be stored to <code>Shared Preference</code>, supported instances are <code>Integer</code>, <code>String</code>,
-	 *            <code>Boolean</code> and <code>List(containing instances of String)</code>
+	 *            <code>Boolean</code> and <code>List(containing instances of String)</code>.
 	 * @param context
-	 *            Context in which <code>Shared Preferences</code> handling is done
+	 *            Context in which <code>Shared Preferences</code> handling is done.
 	 * @see #fetchPrefs(PrefKey, PrefKey, DataType, Context)
 	 * @see #fetchPrefs(PrefKey, PrefKey, DataType, Context, Object)
 	 */
@@ -290,17 +283,14 @@ public class PreferencesHandler {
 			// Put shared preferences as Integer
 			prefsEditor.putInt(sharedPreferencesKey.getKey(), (Integer) object);
 			prefsEditor.commit();
-			logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":storePrefs()", "Instance of Integer stored to shared preferences: \"" + sharedPreference.getKey() + "\", with key: \"" + sharedPreferencesKey.getKey() + "\", value: \"" + Integer.toString((Integer) object) + "\" and context: \"" + context.toString() + "\"");
 		} else if (object instanceof String) {
 			// Put shared preferences as String
 			prefsEditor.putString(sharedPreferencesKey.getKey(), (String) object);
 			prefsEditor.commit();
-			logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":storePrefs()", "Instance of String stored to shared preferences: \"" + sharedPreference.getKey() + "\", with key: \"" + sharedPreferencesKey.getKey() + "\", value: \"" + object.toString() + "\" and context: \"" + context.toString() + "\"");
 		} else if (object instanceof Boolean) {
 			// Put shared preferences as Boolean
 			prefsEditor.putBoolean(sharedPreferencesKey.getKey(), (Boolean) object);
 			prefsEditor.commit();
-			logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":storePrefs()", "Instance of Boolean stored to shared preferences: \"" + sharedPreference.getKey() + "\", with key: \"" + sharedPreferencesKey.getKey() + "\", value: \"" + object + "\" and context: \"" + context.toString() + "\"");
 		} else if (object instanceof List<?>) {
 			// Create a new list and store object to it
 			List<String> list = new ArrayList<String>();
@@ -318,16 +308,18 @@ public class PreferencesHandler {
 			if (!list.isEmpty()) {
 				prefsEditor.putString(sharedPreferencesKey.getKey(), a.toString());
 				prefsEditor.commit();
-				logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":storePrefs()", "Instance of List<String> stored as String to shared preferences: \"" + sharedPreference.getKey() + "\", with key: \"" + sharedPreferencesKey.getKey() + "\", value: \"" + a.toString() + "\" and context: \"" + context.toString() + "\"");
 			} else {
 				prefsEditor.putString(sharedPreferencesKey.getKey(), "");
 				prefsEditor.commit();
-				logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":storePrefs()", "Instance of List<String> stored as String to shared preferences: \"" + sharedPreference.getKey() + "\", with key: \"" + sharedPreferencesKey.getKey() + "\", value: \"" + "" + "\" and context: \"" + context.toString() + "\"");
 			}
 		} else {
 			// If application end up here then some error has occurred
 			IllegalArgumentException exception = new IllegalArgumentException("Failed to store object to shared preferences: \"" + sharedPreference.getKey() + "\", with key: \"" + sharedPreferencesKey.getKey() + "\" and context: \"" + context.toString() + "\". Cause: \"Object of unsupported instance was given as argument\", given object is instance of: \"" + object.getClass().getSimpleName() + "\", valid instances are: \"int\", \"String\", \"boolean\" and \"List<String>\"");
-			logger.logCatTxt(LogPriorities.ERROR, LOG_TAG + ":storePrefs()", "An exception occurred while setting shared preferences", exception);
+
+			if (BuildConfig.DEBUG) {
+				Log.e(LOG_TAG + ":storePrefs()", "An exception occurred while setting shared preferences", exception);
+			}
+
 			throw exception;
 		}
 	}

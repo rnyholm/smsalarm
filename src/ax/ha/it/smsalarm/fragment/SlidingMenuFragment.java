@@ -6,22 +6,23 @@ package ax.ha.it.smsalarm.fragment;
 import android.annotation.SuppressLint;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ListView;
+import ax.ha.it.smsalarm.BuildConfig;
 import ax.ha.it.smsalarm.R;
 import ax.ha.it.smsalarm.activity.SmsAlarm;
-import ax.ha.it.smsalarm.handler.LogHandler;
-import ax.ha.it.smsalarm.handler.LogHandler.LogPriorities;
 import ax.ha.it.smsalarm.slidingmenu.adapter.SlidingMenuAdapter;
 import ax.ha.it.smsalarm.slidingmenu.model.SlidingMenuItem;
 
 import com.actionbarsherlock.app.SherlockListFragment;
+import com.jeremyfeinstein.slidingmenu.lib.SlidingMenu;
 
 /**
- * Class representing a <code>SherlockListFragment</code>, or simply said, a fragment. This fragment is used in this applications
- * <code>SlidingMenu</code>.
+ * {@link Fragment} containing all the views and user interface widgets for the {@link SlidingMenu} within the application. Also holds logic for
+ * creating {@link SlidingMenuItem}'s and for switching <code>Fragment</code>'s in the applications content view.
  * 
  * @author Robert Nyholm <robert.nyholm@aland.net>
  * @version 2.3.1
@@ -30,35 +31,31 @@ import com.actionbarsherlock.app.SherlockListFragment;
  * @see SlidingMenuAdapter
  */
 public class SlidingMenuFragment extends SherlockListFragment {
-	// For logging
-	private String LOG_TAG = getClass().getSimpleName();
-	private LogHandler logger = LogHandler.getInstance();
+	private static final String LOG_TAG = SlidingMenuFragment.class.getSimpleName();
 
 	/**
-	 * To get the correct <code>View</code> upon creation of this fragment. The layout is inflated using given <code>LayoutInflater</code>.
-	 * 
-	 * @param inflater
-	 *            Layout inflater to be used when this layout is to be inflated.
-	 * @param container
-	 * @param savedInstanceState
+	 * Creates a new instance of {@link SlidingMenuFragment}.
+	 */
+	public SlidingMenuFragment() {
+		// Just empty...
+	}
+
+	/**
+	 * To get the correct {@link View} upon creation of a {@link SlidingMenuFragment} object.
 	 */
 	@SuppressLint("InflateParams")
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-		logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":onCreateView()", "Layout for this fragment is about to be inflated and returned");
 		return inflater.inflate(R.layout.list, null);
 	}
 
 	/**
-	 * To populate this fragment with data and set correct adapter to it.
-	 * 
-	 * @param savedInstanceState
-	 * @see SlidingMenuFragment#createMenuItems(SlidingMenuAdapter)
+	 * To complete the creation of a {@link SlidingMenuFragment} object by setting correct adapter({@link SlidingMenuAdapter}) and populate the
+	 * <code>SlidingMenuFragment</code> with {@link SlidingMenuItem}'s.
 	 */
 	@Override
 	public void onActivityCreated(Bundle savedInstanceState) {
 		super.onActivityCreated(savedInstanceState);
-		logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":onActivityCreated()", "Activity has been created, creating menu items and setting the correct adapter to this fragment");
 
 		// Create adapter, menu items and at last set correct adapter to this fragment
 		SlidingMenuAdapter adapter = new SlidingMenuAdapter(getActivity());
@@ -67,15 +64,13 @@ public class SlidingMenuFragment extends SherlockListFragment {
 	}
 
 	/**
-	 * To build up the <code>SlidingMenuItem</code>'s in that goes into this <code>Fragment</code>. The menu items will be added to the given adapter
-	 * for correct data representation.
+	 * To create the {@link SlidingMenuItem}'s that goes into the {@link SlidingMenu} in the application. The created <code>SlidingMenuItems</code>'s
+	 * will be added to the given {@link SlidingMenuAdapter}.
 	 * 
 	 * @param adapter
-	 *            Adapter to which the created menu item's are added.
+	 *            SlidingMenuAdapter to which the created SlidingMenuItem's are added.
 	 */
 	private void createMenuItems(SlidingMenuAdapter adapter) {
-		logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":createMenuItems()", "Creating menu items and adding them to adapter");
-
 		// Create menu items and add them to given adapter
 		adapter.add(new SlidingMenuItem("Inställningar*"));
 		adapter.add(new SlidingMenuItem(101, "Sms*", R.drawable.ic_menu_sms));
@@ -92,8 +87,6 @@ public class SlidingMenuFragment extends SherlockListFragment {
 	public void onListItemClick(ListView lv, View v, int position, long id) {
 		Fragment fragment = null;
 		SlidingMenuItem menuItem = (SlidingMenuItem) getListView().getItemAtPosition(position);
-
-		logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":onListItemClick()", menuItem.toString() + " clicked");
 
 		// Resolve correct fragment by going through their unique ID's
 		switch (menuItem.getId()) {
@@ -118,8 +111,9 @@ public class SlidingMenuFragment extends SherlockListFragment {
 				fragment = new AboutFragment();
 				break;
 			default:
-				logger.logCatTxt(LogPriorities.WARN, LOG_TAG + ":onListItemClick()", "Unable to resolve a Fragment for given menu item id: \"" + Integer.toString(menuItem.getId()) + "\", check if implementation exist for menu item");
-				break;
+				if (BuildConfig.DEBUG) {
+					Log.e(LOG_TAG + ":onListItemClick()", "Unable to resolve a Fragment for given menu item id: \"" + menuItem.getId() + "\", check if implementation exist for menu item");
+				}
 		}
 
 		// Switch fragment, if it was possible to resolve a fragment
@@ -129,21 +123,14 @@ public class SlidingMenuFragment extends SherlockListFragment {
 	}
 
 	/**
-	 * To switch <code>Fragment</code> of <code>Activity SmsAlarm</code>.<br>
+	 * To switch {@link Fragment} in applications content view, located in {@link SmsAlarm}.
 	 * 
 	 * @param fragment
 	 *            Fragment to be placed "in front" by {@link SmsAlarm#switchContent(Fragment)}.
-	 * @see SmsAlarm#switchContent(Fragment)
-	 * @see LogHandler#logCat(LogPriorities, String, String)
-	 * @see LogHandler#logCatTxt(LogPriorities, String, String)
 	 */
 	private void switchFragment(Fragment fragment) {
-		logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":switchFragment()", "Fragment is about to be switched");
-
 		if (getActivity() instanceof SmsAlarm) {
 			((SmsAlarm) getActivity()).switchContent(fragment);
-		} else {
-			logger.logCatTxt(LogPriorities.ERROR, LOG_TAG + ":switchFragment()", "Unable to switch fragment. Reason: \"Activity of wrong instance\". Accepted instance is: \"SmsAlarm.class\", found instance is:\"" + getActivity().getLocalClassName() + "\"");
 		}
 	}
 }

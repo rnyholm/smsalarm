@@ -11,24 +11,21 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.util.Log;
 import ax.ha.it.smsalarm.Alarm;
-import ax.ha.it.smsalarm.enumeration.AlarmType;
-import ax.ha.it.smsalarm.handler.LogHandler.LogPriorities;
+import ax.ha.it.smsalarm.Alarm.AlarmType;
+import ax.ha.it.smsalarm.BuildConfig;
 
 /**
  * Class responsible for all <code>Database</code> access and handling. <code>Database</code> access and handling are done via the
- * <code>SQLiteOpenHelper</code> class.
+ * {@link SQLiteOpenHelper} class.
  * 
  * @author Robert Nyholm <robert.nyholm@aland.net>
- * @version 2.2.1
+ * @version 2.3.1
  * @since 2.1beta
  */
 public class DatabaseHandler extends SQLiteOpenHelper {
-	// Log tag string
-	private final String LOG_TAG = getClass().getSimpleName();
-
-	// Object for logging
-	private static final LogHandler logger = LogHandler.getInstance();
+	private static final String LOG_TAG = DatabaseHandler.class.getSimpleName();
 
 	// Database Version
 	private static final int DB_VERSION = 2;
@@ -52,25 +49,17 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 	private static final String KEY_ALARM_TYPE = "alarmType";
 
 	/**
-	 * Constructor for the <code>DatabaseHandler</code>, takes just context as argument. Calling super classes constructor with
-	 * <code>context, DATABASE_NAME, DATABASE_VERSION</code>.
+	 * Creates a new instance of {@link DatabaseHandler} with given {@link Context}.
 	 * 
 	 * @param context
-	 *            Context in which to create the <code>DatabaseHandler</code> object
-	 * @see ax.ha.it.smsalarm.handler.LogHandler#logCat(LogPriorities, String, String) logCat(LogPriorities, String, String)
+	 *            The Context in which <code>DatabaseHandler</code> will run.
 	 */
 	public DatabaseHandler(Context context) {
 		super(context, DB_NAME, null, DB_VERSION);
-
-		// Log in debug purpose
-		logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":DatabaseHandler()", "DatabaseHandler object has been created with following data:[DB_NAME:\"" + DB_NAME + "\", DB_VERSION:\"" + DB_VERSION + "\" and context:\"" + context.toString() + "\"]");
 	}
 
 	/**
-	 * To create table table with columns representing an <code>Alarm</code>.
-	 * 
-	 * @see ax.ha.it.smsalarm.handler.LogHandler#logCat(LogPriorities, String, String) logCat(LogPriorities, String, String)
-	 * @see ax.ha.it.smsalarm.Alarm ax.ha.it.smsalarm.Alarm
+	 * To create a table containing all <b><i>Columns</i></b> and <b><i>Attributes</i></b> needed for properly persist a {@link Alarm} object.
 	 */
 	@Override
 	public void onCreate(SQLiteDatabase db) {
@@ -79,120 +68,106 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 		// Run query
 		db.execSQL(CREATE_ALARMS_TABLE);
 
-		// Log in debug purpose
-		logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":onCreate()", "Executed SQL query:\"" + CREATE_ALARMS_TABLE + "\"");
-		logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":onCreate()", "Table has been created");
+		if (BuildConfig.DEBUG) {
+			Log.d(LOG_TAG + ":onCreate()", "Executed SQL query:\"" + CREATE_ALARMS_TABLE + "\"");
+		}
 	}
 
-	/**
-	 * To upgrade the database.
-	 * 
-	 * @see ax.ha.it.smsalarm.handler.LogHandler#logCat(LogPriorities, String, String) logCat(LogPriorities, String, String)
-	 */
 	@Override
 	public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-		// Log in debug purpose
-		logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":onUpgrade()", oldVersion + " -- " + newVersion);
+		if (BuildConfig.DEBUG) {
+			Log.d(LOG_TAG + ":onUpgrade()", oldVersion + " -- " + newVersion);
+		}
 
-		// If there is a new version of the database, reconstruct existing database and handle data
-		// migration
+		// If there is a new version of the database, reconstruct existing database and handle data migration
 		if (newVersion > oldVersion && newVersion == DB_VERSION) {
-			// Log in debug purpose
-			logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":onUpgrade()", "Table:\"" + TABLE_ALARMS + "\" already exists, begin upgrade of table structure and data migration");
+			if (BuildConfig.DEBUG) {
+				Log.d(LOG_TAG + ":onUpgrade()", "Table:\"" + TABLE_ALARMS + "\" already exists, begin upgrade of table structure and data migration");
+			}
 
 			// The queries needed for the upgrade and data migration
 			String ALTER_QUERY = "ALTER TABLE " + TABLE_ALARMS + " RENAME TO " + TMP + TABLE_ALARMS;
 			String DROP_QUERY = "DROP TABLE " + TMP + TABLE_ALARMS;
 			String INSERT_QUERY = "INSERT INTO " + TABLE_ALARMS + " (" + KEY_ID + "," + KEY_RECEIVED + "," + KEY_SENDER + "," + KEY_MESSAGE + "," + KEY_ACKNOWLEDGED + "," + KEY_ALARM_TYPE + ")" + "SELECT " + KEY_ID + "," + KEY_RECEIVED + "," + KEY_SENDER + "," + KEY_MESSAGE + "," + KEY_ACKNOWLEDGED + "," + KEY_ALARM_TYPE + " FROM " + TMP + TABLE_ALARMS;
 
-			// Begin data migration and reconstruction of existing database, beginning with renaming
-			// existing table
+			// Begin data migration and reconstruction of existing database, beginning with renaming existing table
 			db.execSQL(ALTER_QUERY);
-			logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":onUpgrade()", "Executed SQL query:\"" + ALTER_QUERY + "\"");
+
+			if (BuildConfig.DEBUG) {
+				Log.d(LOG_TAG + ":onUpgrade()", "Executed SQL query:\"" + ALTER_QUERY + "\"");
+			}
 
 			// Create the new and correct table
 			onCreate(db);
 
 			// Populate new table with existing data from old table(now seen as a temporary table)
 			db.execSQL(INSERT_QUERY);
-			logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":onUpgrade()", "Executed SQL query:\"" + INSERT_QUERY + "\"");
+
+			if (BuildConfig.DEBUG) {
+				Log.d(LOG_TAG + ":onUpgrade()", oldVersion + " -- " + newVersion);
+			}
 
 			// Now drop the temporary table
 			db.execSQL(DROP_QUERY);
-			logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":onUpgrade()", "Executed SQL query:\"" + DROP_QUERY + "\"");
-			logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":onUpgrade()", "Existing table:\"" + TABLE_ALARMS + "\" has been altered by adding column:\"" + KEY_TRIGGER_TEXT + "\" and populating it with existing data");
+			if (BuildConfig.DEBUG) {
+				Log.d(LOG_TAG + ":onUpgrade()", "Executed SQL query:\"" + DROP_QUERY + "\"");
+				Log.d(LOG_TAG + ":onUpgrade()", "Existing table:\"" + TABLE_ALARMS + "\" has been altered by adding column:\"" + KEY_TRIGGER_TEXT + "\" and populating it with existing data");
+			}
 		} else {
-			// Log in debug purpose
-			logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":onUpgrade()", "Table:\"" + TABLE_ALARMS + "\" doesn't exist, create a new one");
-
-			// Just create the new table
+			// Table does not exist, create a new table
 			onCreate(db);
 		}
 	}
 
 	/**
-	 * To insert a new <code>Alarm</code> in the database.
+	 * To insert a new {@link Alarm} to the database.
 	 * 
 	 * @param alarm
-	 *            Alarm to be inserted in database
-	 * @see ax.ha.it.smsalarm.handler.LogHandler#logCat(LogPriorities, String, String) logCat(LogPriorities, String, String)
-	 * @see ax.ha.it.smsalarm.Alarm ax.ha.it.smsalarm.Alarm
-	 * @see ax.ha.it.smsalarm.Alarm#getReceived() getReceived()
-	 * @see ax.ha.it.smsalarm.Alarm#getSender() getSender()
-	 * @see ax.ha.it.smsalarm.Alarm#getMessage() getMessage()
-	 * @see ax.ha.it.smsalarm.Alarm#getAcknowledged() getAcknowledged()
-	 * @see ax.ha.it.smsalarm.Alarm#getAlarmType() getAlarmType()
+	 *            Alarm to be inserted in database.
 	 */
-	public void addAlarm(Alarm alarm) {
+	public void insertAlarm(Alarm alarm) {
 		// Get a writable database handle
 		SQLiteDatabase db = getWritableDatabase();
 
+		// @formatter:off
 		// Fetch values from alarm and put the into a ContentValues variable
 		ContentValues values = new ContentValues();
-		values.put(KEY_RECEIVED, alarm.getReceived()); // Date and time when alarm was received
-		values.put(KEY_SENDER, alarm.getSender()); // Sender of the alarm
-		values.put(KEY_MESSAGE, alarm.getMessage()); // Alarm message
-		values.put(KEY_TRIGGER_TEXT, alarm.getTriggerText()); // Triggering text of a free text
-																// alarm
-		values.put(KEY_ACKNOWLEDGED, alarm.getAcknowledged()); // Date and time the alarm was
-																// acknowledged
+		values.put(KEY_RECEIVED, alarm.getReceived()); 				// Date and time when alarm was received
+		values.put(KEY_SENDER, alarm.getSender()); 					// Sender of the alarm
+		values.put(KEY_MESSAGE, alarm.getMessage()); 				// Alarm message
+		values.put(KEY_TRIGGER_TEXT, alarm.getTriggerText()); 		// Triggering text of a free text alarm
+		values.put(KEY_ACKNOWLEDGED, alarm.getAcknowledged()); 		// Date and time the alarm was acknowledged
 		values.put(KEY_ALARM_TYPE, alarm.getAlarmType().ordinal()); // Type of alarm
+		// @formatter:on
 
 		// Inserting Row
 		db.insert(TABLE_ALARMS, null, values);
 		db.close(); // Closing database connection
-
-		// Log in debug purpose
-		logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":addAlarm()", "An alarm with following data has been inserted into the database: [" + alarm.toString() + "]");
 	}
 
 	/**
-	 * To get a row from the database with the given <code>id</code> as an <code>Alarm</code> object.
+	 * To fetch an {@link Alarm} from the database with the given <code>id</code>.
 	 * 
 	 * @param id
-	 *            Find and return the <code>Alarm</code> object with this id given as <code>int</code>
-	 * @return <code>Alarm</code> object
-	 * @throws android.database.CursorIndexOutOfBoundsException
-	 *             If no row with the given id is found in the database
-	 * @see ax.ha.it.smsalarm.handler.LogHandler#logCat(LogPriorities, String, String) logCat(LogPriorities, String, String)
-	 * @see ax.ha.it.smsalarm.Alarm ax.ha.it.smsalarm.Alarm
+	 *            The id of the Alarm to fetch.
+	 * @return Fetched Alarm.
 	 */
-	public Alarm getAlarm(int id) throws android.database.CursorIndexOutOfBoundsException {
+	public Alarm fetchAlarm(int id) {
 		// Get a readable database handle
 		SQLiteDatabase db = getReadableDatabase();
 
 		// Create query and execute it, store result in cursor
 		Cursor cursor = db.query(TABLE_ALARMS, new String[] { KEY_ID, KEY_RECEIVED, KEY_SENDER, KEY_MESSAGE, KEY_TRIGGER_TEXT, KEY_ACKNOWLEDGED, KEY_ALARM_TYPE }, KEY_ID + "=?", new String[] { String.valueOf(id) }, null, null, null, null);
 
-		// CHeck if we got any results from the query
+		// Check if we got any results from the query
 		if (cursor != null) {
-			// Log in debug purpose
-			logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":getAlarm()", "Got results from query");
 			// Move to first element so we can fetch data from the cursor later
 			cursor.moveToFirst();
 		}
+
 		// Create a new alarm object with data resolved from cursor
 		Alarm alarm = new Alarm(Integer.parseInt(cursor.getString(0)), cursor.getString(1), cursor.getString(2), cursor.getString(3), cursor.getString(4), cursor.getString(5), AlarmType.of(Integer.parseInt(cursor.getString(6))));
+
 		// Close cursor and database
 		cursor.close();
 		db.close();
@@ -202,14 +177,12 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 	}
 
 	/**
-	 * To get all <code>Alarm</code> entries in database as a <code>List</code> of <code>Alarm</code> objects. An empty list will be returned if no
-	 * entries are found in database.
+	 * To fetch all {@link Alarm}'s stored in database as a {@link List} of <code>Alarm</code> objects. An empty list will be returned if no entries
+	 * are found in database.
 	 * 
-	 * @return All entries in database as a <code>List</code> of <code>Alarm</code> objects
-	 * @see ax.ha.it.smsalarm.handler.LogHandler#logCat(LogPriorities, String, String) logCat(LogPriorities, String, String)
-	 * @see ax.ha.it.smsalarm.Alarm ax.ha.it.smsalarm.Alarm
+	 * @return All Alarms stored in database.
 	 */
-	public List<Alarm> getAllAlarm() {
+	public List<Alarm> fetchAllAlarm() {
 		// List to store all alarms in
 		List<Alarm> alarmList = new ArrayList<Alarm>();
 
@@ -221,14 +194,11 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 
 		// Execute query, store result in cursor
 		Cursor cursor = db.rawQuery(selectQuery, null);
-		// Log in debug purpose
-		logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":getAllAlarm()", "All alarms have been fetched from the database with the following query:\"" + selectQuery + "\"");
 
 		// Iterate through all rows and adding to list
 		if (cursor.moveToFirst()) {
 			do {
-				// Create a new alarm object and fill it with data from cursor and add it to the
-				// list
+				// Create a new alarm object and fill it with data from cursor and add it to the list
 				alarmList.add(new Alarm(Integer.parseInt(cursor.getString(0)), cursor.getString(1), cursor.getString(2), cursor.getString(3), cursor.getString(4), cursor.getString(5), AlarmType.of(Integer.parseInt(cursor.getString(6)))));
 			} while (cursor.moveToNext());
 		}
@@ -237,17 +207,14 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 		cursor.close();
 		db.close();
 
-		// Log in debug purpose
-		logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":getAllAlarm()", "Returning following list of alarms:\"" + alarmList.toString() + "\"");
 		// return contact list
 		return alarmList;
 	}
 
 	/**
-	 * To count number of <code>Alarm</code>'s (entries) in database.
+	 * To get the number of {@link Alarm}'s in database.
 	 * 
-	 * @return Number of <code>Alarm</code>'s (entries) in database as <code>int</code>
-	 * @see ax.ha.it.smsalarm.handler.LogHandler#logCat(LogPriorities, String, String) logCat(LogPriorities, String, String)
+	 * @return Number of alarms.
 	 */
 	public int getAlarmsCount() {
 		// Select all query
@@ -258,6 +225,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 
 		// Get a readable database handle
 		SQLiteDatabase db = getReadableDatabase();
+
 		// Execute query, store result in cursor
 		Cursor cursor = db.rawQuery(countQuery, null);
 
@@ -268,169 +236,92 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 		cursor.close();
 		db.close();
 
-		// Log in debug purpose
-		logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":getAlarmsCount()", "Number of alarms(entries) in database are:\"" + Integer.toString(alarmsCount) + "\"");
-
 		// Return number of entries in database
 		return alarmsCount;
 	}
 
 	/**
-	 * To get the latest <code>Alarm</code> entry in the database.
-	 * 
-	 * @see #getAlarmsCount()
-	 * @see #getAlarm(int)
-	 * @see ax.ha.it.smsalarm.handler.LogHandler#logCat(LogPriorities, String, String) logCat(LogPriorities, String, String)
-	 * @see ax.ha.it.smsalarm.handler.LogHandler#logCatTxt(LogPriorities, String, String, Throwable) logCat(LogPriorities, String, String, Throwable)
-	 * @see ax.ha.it.smsalarm.Alarm ax.ha.it.smsalarm.Alarm
+	 * To fetch the latest {@link Alarm} entry in the database.
 	 */
-	public Alarm getLatestAlarm() {
-		// Log in debug purpose
-		logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":getLatestAlarm()", "Try to return latest alarm(entry) in database");
-
-		try {
-			// Returning latest alarm in database
-			return getAlarm(getAlarmsCount());
-		} catch (android.database.CursorIndexOutOfBoundsException e) {
-			// Log error
-			logger.logCatTxt(LogPriorities.ERROR, LOG_TAG + ":getLatestAlarm()", "android.database.CursorIndexOutOfBoundsException occurred while getting alarm from database", e);
-		}
-
-		// Log in debug purpose
-		logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":getLatestAlarm()", "Returning an empty alarm object");
-		// If an exception occurred return a new Alarm object
-		return new Alarm();
+	public Alarm fetchLatestAlarm() {
+		// Returning latest alarm in database
+		return fetchAlarm(getAlarmsCount());
 	}
 
 	/**
-	 * To update an existing <code>Alarm</code> entry in database. It finds correct entry to update on alarms <code>id</code>.
+	 * To update an existing {@link Alarm} in database.
 	 * 
 	 * @param alarm
-	 *            <code>Alarm</code> to be inserted in database.
-	 * @return <code>int</code> DON'T REALLY KNOW!?!?
-	 * @see ax.ha.it.smsalarm.handler.LogHandler#logCat(LogPriorities, String, String) logCat(LogPriorities, String, String)
-	 * @see ax.ha.it.smsalarm.Alarm ax.ha.it.smsalarm.Alarm
-	 * @see ax.ha.it.smsalarm.Alarm#getReceived() getReceived()
-	 * @see ax.ha.it.smsalarm.Alarm#getSender() getSender()
-	 * @see ax.ha.it.smsalarm.Alarm#getMessage() getMessage()
-	 * @see ax.ha.it.smsalarm.Alarm#getAcknowledged() getAcknowledged()
-	 * @see ax.ha.it.smsalarm.Alarm#getAlarmType() getAlarmType()
+	 *            Alarm to be inserted/updated in database.
+	 * @return Id of updated Alarm DON'T REALLY KNOW HOW AND WHY!?!?
 	 */
 	public int updateAlarm(Alarm alarm) {
 		// Get a writable database handle
 		SQLiteDatabase db = getWritableDatabase();
 
+		// @formatter:off
 		// Fetch values from alarm and put the into a ContentValues variable
 		ContentValues values = new ContentValues();
-		values.put(KEY_RECEIVED, alarm.getReceived()); // Date and time when alarm was received
-		values.put(KEY_SENDER, alarm.getSender()); // Sender of the alarm
-		values.put(KEY_MESSAGE, alarm.getMessage()); // Alarm message
-		values.put(KEY_TRIGGER_TEXT, alarm.getTriggerText()); // Triggering text of a free text
-																// alarm
-		values.put(KEY_ACKNOWLEDGED, alarm.getAcknowledged()); // Date and time the alarm was
-																// acknowledged
+		values.put(KEY_RECEIVED, alarm.getReceived()); 				// Date and time when alarm was received
+		values.put(KEY_SENDER, alarm.getSender()); 					// Sender of the alarm
+		values.put(KEY_MESSAGE, alarm.getMessage()); 				// Alarm message
+		values.put(KEY_TRIGGER_TEXT, alarm.getTriggerText()); 		// Triggering text of a free text alarm
+		values.put(KEY_ACKNOWLEDGED, alarm.getAcknowledged()); 		// Date and time the alarm was acknowledged
 		values.put(KEY_ALARM_TYPE, alarm.getAlarmType().ordinal()); // Type of alarm
-
-		// Log in debug purpose
-		logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":updateAlarm()", "Values have been retrieved from alarm object and database entry is going to be updated");
+		// @formatter:on
 
 		// Updating row
 		return db.update(TABLE_ALARMS, values, KEY_ID + " = ?", new String[] { String.valueOf(alarm.getId()) });
 	}
 
 	/**
-	 * To update latest <code>Alarm</code> entry's acknowledge time in database.
-	 * 
-	 * @see #getAlarmsCount()
-	 * @see #getAlarm(int)
-	 * @see #updateAlarm(Alarm)
-	 * @see ax.ha.it.smsalarm.handler.LogHandler#logCat(LogPriorities, String, String) logCat(LogPriorities, String, String)
-	 * @see ax.ha.it.smsalarm.handler.LogHandler#logCatTxt(LogPriorities, String, String, Throwable) logCat(LogPriorities, String, String, Throwable)
-	 * @see ax.ha.it.smsalarm.Alarm ax.ha.it.smsalarm.Alarm
-	 * @see ax.ha.it.smsalarm.Alarm#updateAcknowledged() updateAcknowledged()
+	 * To update latest {@link Alarm}'s acknowledge time in database.
 	 */
 	public void updateLatestAlarmAcknowledged() {
-		try {
-			// Log in debug purpose
-			logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":updateLatestAlarmAcknowledged()", "Trying to update latest alarms acknowledge time in database");
+		// Get and store number of entries(alarms) in database
+		int alarmsCount = getAlarmsCount();
 
-			// Get and store number of entries(alarms) in database
-			int alarmsCount = getAlarmsCount();
+		// Get latest entry(alarm) in database
+		Alarm alarm = fetchAlarm(alarmsCount);
+		// Update alarms acknowledge time
+		alarm.updateAcknowledged();
 
-			// Get latest entry(alarm) in database
-			Alarm alarm = getAlarm(alarmsCount);
-			// Update alarms acknowledge time
-			alarm.updateAcknowledged();
-
-			// Update alarm entry
-			updateAlarm(alarm);
-
-			// Log in debug purpose
-			logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":updateLatestAlarmAcknowledged()", "Latest alarms acknowledge time has been updated");
-		} catch (android.database.CursorIndexOutOfBoundsException e) {
-			// Log error
-			logger.logCatTxt(LogPriorities.ERROR, LOG_TAG + ":updateLatestAlarmAcknowledged()", "android.database.CursorIndexOutOfBoundsException occurred while getting alarm from database", e);
-		}
+		// Update alarm entry
+		updateAlarm(alarm);
 	}
 
 	/**
-	 * To update latest <b><i>PRIMARY</i></b> <code>Alarm</code> entry's acknowledge time in database.
-	 * 
-	 * @parm primaryAlarmNumber Phone number of primary alarms sender as String.
-	 * @see #getAlarmsCount()
-	 * @see #getAlarm(int)
-	 * @see #updateAlarm(Alarm)
-	 * @see ax.ha.it.smsalarm.handler.LogHandler#logCat(LogPriorities, String, String) logCat(LogPriorities, String, String)
-	 * @see ax.ha.it.smsalarm.handler.LogHandler#logCatTxt(LogPriorities, String, String, Throwable) logCat(LogPriorities, String, String, Throwable)
-	 * @see ax.ha.it.smsalarm.Alarm ax.ha.it.smsalarm.Alarm
-	 * @see ax.ha.it.smsalarm.Alarm#updateAcknowledged() updateAcknowledged()
-	 * @see ax.ha.it.smsalarm.Alarm#getAlarmType() getAlarmType()
+	 * To update the latest {@link Alarm} of {@link AlarmType#PRIMARY} with a new acknowledge time in database.
 	 */
 	public void updateLatestPrimaryAlarmAcknowledged() {
-		try {
-			// Log in debug purpose
-			logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":updateLatestPrimaryAlarmAcknowledged()", "Trying to update latest primary alarms acknowledge time in database");
+		// Iterate through all alarms in database from the last one and down
+		for (int i = getAlarmsCount(); i > 0; i--) {
+			// Get entry(alarm) in database
+			Alarm alarm = fetchAlarm(i);
 
-			// Iterate through all alarms in database from the last one and down
-			for (int i = getAlarmsCount(); i > 0; i--) {
-				// Get entry(alarm) in database
-				Alarm alarm = getAlarm(i);
+			// If alarm type is primary we want to update it's acknowledge time
+			if (AlarmType.PRIMARY.equals(alarm.getAlarmType())) {
+				// Update alarms acknowledge time
+				alarm.updateAcknowledged();
+				// Update alarm entry
+				updateAlarm(alarm);
 
-				// If alarm type is primary we want to update it's acknowledge time
-				if (alarm.getAlarmType().equals(AlarmType.PRIMARY)) {
-					// Update alarms acknowledge time
-					alarm.updateAcknowledged();
-					// Update alarm entry
-					updateAlarm(alarm);
-
-					// Log in debug purpose
-					logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":updateLatestPrimaryAlarmAcknowledged()", "Latest primary alarms acknowledge time has been updated");
-
-					// Get out of the loop
-					break;
-				}
+				// Get out of the loop, as rest of the alarm not is are of interest
+				break;
 			}
-		} catch (android.database.CursorIndexOutOfBoundsException e) {
-			// Log error
-			logger.logCatTxt(LogPriorities.ERROR, LOG_TAG + ":updateLatestPrimaryAlarmAcknowledged()", "android.database.CursorIndexOutOfBoundsException occurred while getting alarm from database", e);
 		}
 	}
 
 	/**
-	 * To delete an existing <code>Alarm</code> entry in database. It finds correct entry to delete on alarms <code>id</code>.
+	 * To delete an {@link Alarm} from the database.
 	 * 
 	 * @param alarm
-	 *            <code>Alarm</code> to be deleted from database.
-	 * @see ax.ha.it.smsalarm.handler.LogHandler#logCat(LogPriorities, String, String) logCat(LogPriorities, String, String)
-	 * @see ax.ha.it.smsalarm.Alarm ax.ha.it.smsalarm.Alarm
+	 *            Alarm to be deleted from database.
 	 */
 	public void deleteAlarm(Alarm alarm) {
 		// Get a writable database handle
 		SQLiteDatabase db = getWritableDatabase();
 		db.delete(TABLE_ALARMS, KEY_ID + " = ?", new String[] { String.valueOf(alarm.getId()) });
 		db.close();
-
-		// Log in debug purpose
-		logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":deleteAlarm()", "Alarm:\"" + alarm.toString() + "\" has been deleted from database");
 	}
 }

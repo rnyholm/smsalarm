@@ -10,15 +10,14 @@ import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
-import ax.ha.it.smsalarm.enumeration.AlarmType;
-import ax.ha.it.smsalarm.handler.LogHandler;
-import ax.ha.it.smsalarm.handler.LogHandler.LogPriorities;
+import android.util.Log;
+import ax.ha.it.smsalarm.Alarm.AlarmType;
 import ax.ha.it.smsalarm.handler.PreferencesHandler;
 import ax.ha.it.smsalarm.handler.PreferencesHandler.DataType;
 import ax.ha.it.smsalarm.handler.PreferencesHandler.PrefKey;
 
 /**
- * Helper to build up and show {@link Notification}, also creates {@link PendingIntent}'s for the <code>notification</code>.<br>
+ * Helper to build up and show {@link Notification}, also creates {@link PendingIntent}'s for the notification.<br>
  * <b><i>NOTE. Contains some deprecated functionality, this is to support <code>Android SDK</code> versions below 11.</b></i>
  * 
  * @author Robert Nyholm <robert.nyholm@aland.net>
@@ -28,12 +27,10 @@ import ax.ha.it.smsalarm.handler.PreferencesHandler.PrefKey;
 public class NotificationHelper extends IntentService {
 	private static final String LOG_TAG = NotificationHelper.class.getSimpleName();
 
-	// Objects needed for logging and shared preferences handling
-	private final LogHandler logger = LogHandler.getInstance();
 	private final PreferencesHandler prefHandler = PreferencesHandler.getInstance();
 
+	// @formatter:off
 	// Different variables needed to build up a correct notification
-	// @formatter:off	
 	private String tickerText = "";		// Scrolling text in notification bar
 	private String contentTitle = "";	// Title in expanded notification
 	// @formatter:on
@@ -41,7 +38,7 @@ public class NotificationHelper extends IntentService {
 	private int icon = 0; // Icon in notification bar
 
 	/**
-	 * To create a new instance of {@link NotificationHelper}.<br>
+	 * Creates a new instance of {@link NotificationHelper}.<br>
 	 * A constructor must be implemented and call it's <code>superclass</code>, {@link IntentService}, constructor with an <b><i>arbitrary</i></b>
 	 * <code>String</code> as argument.
 	 */
@@ -51,11 +48,11 @@ public class NotificationHelper extends IntentService {
 	}
 
 	/**
-	 * To handle {@link Intent}, builds up and dispatches a {@link Notification}. Contains some deprecated functionality just to support
+	 * To handle {@link Intent}, builds up and dispatches a notification. Contains some deprecated functionality just to support
 	 * <code>Android SDK</code> versions below 11.
 	 * 
 	 * @param i
-	 *            Intent for notification
+	 *            Intent for notification.
 	 * @deprecated
 	 */
 	@SuppressLint("DefaultLocale")
@@ -92,7 +89,9 @@ public class NotificationHelper extends IntentService {
 				configureNotification(android.R.drawable.ic_menu_close_clear_cancel, getString(R.string.SECONDARY_ALARM), rescueService.toUpperCase(), getString(R.string.SECONDARY_ALARM));
 				break;
 			default: // If this happens, something really weird is going on
-				logger.logCatTxt(LogPriorities.ERROR, LOG_TAG + ":onHandleIntent()", "Alarm type couldn't be find when configuring notification");
+				if (BuildConfig.DEBUG) {
+					Log.e(LOG_TAG + ":onHandleIntent()", "Alarm type couldn't be find when configuring notification");
+				}
 		}
 
 		// Create notification
@@ -104,8 +103,9 @@ public class NotificationHelper extends IntentService {
 
 		// This flag auto cancels the notification when clicked and indicating that devices LED should light up
 		notification.flags = Notification.FLAG_SHOW_LIGHTS | Notification.FLAG_AUTO_CANCEL;
-		// Configure LED
+
 		// @formatter:off
+		// Configure LED
 		notification.ledARGB = 0xFFff0000; 	// Red
 		notification.ledOnMS = 100;			// On time
 		notification.ledOffMS = 100; 		// Off time
@@ -116,17 +116,17 @@ public class NotificationHelper extends IntentService {
 	}
 
 	/**
-	 * To configure the {@link Notification} that's about to be dispatched correctly. The ticker text is built up dynamically depending on argument
+	 * To configure the notification that's about to be dispatched correctly. The ticker text is built up dynamically depending on argument
 	 * <code>rescueService</code>.
 	 * 
 	 * @param icon
-	 *            Icon as integer value, use <code>android.R.drawable.*</code>
+	 *            Icon as integer value, use <code>android.R.drawable.*</code>.
 	 * @param tickerText
-	 *            <code>Notification</code>'s ticker text
+	 *            Notifications ticker text.
 	 * @param rescueService
-	 *            String that may or may not contain rescue service's name
+	 *            Rescue service's/organizations name, if it exists.
 	 * @param contentTitle
-	 *            <code>Notification</code> contents title
+	 *            Notification> contents title.
 	 */
 	private void configureNotification(int icon, String tickerText, String rescueService, String contentTitle) {
 		// Set icon for notification

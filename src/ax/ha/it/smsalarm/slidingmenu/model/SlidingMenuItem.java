@@ -4,14 +4,13 @@
 package ax.ha.it.smsalarm.slidingmenu.model;
 
 import ax.ha.it.smsalarm.fragment.SlidingMenuFragment;
-import ax.ha.it.smsalarm.handler.LogHandler;
-import ax.ha.it.smsalarm.handler.LogHandler.LogPriorities;
 import ax.ha.it.smsalarm.slidingmenu.adapter.SlidingMenuAdapter;
 
 import com.google.common.base.Optional;
+import com.jeremyfeinstein.slidingmenu.lib.SlidingMenu;
 
 /**
- * Class representing an item in applications <code>SlidingMenu</code>.
+ * Class representing an item in <b><i>Sms Alarm</i></b>'s {@link SlidingMenu}.
  * 
  * @author Robert Nyholm <robert.nyholm@aland.net>
  * @version 2.3.1
@@ -20,17 +19,14 @@ import com.google.common.base.Optional;
  * @see SlidingMenuAdapter
  */
 public class SlidingMenuItem {
-	private String LOG_TAG = getClass().getSimpleName();
-
-	private LogHandler logger = LogHandler.getInstance();
-
+	// Id, title, and icon resource parts of a menu item
 	private int id = -1;
 	private String title;
 	private Optional<Integer> optionalIconResource;
 
 	/**
-	 * To create a new menu item with just a title, this means this menu items icon resource will be absent. This menu item will also get a id of
-	 * <b>-1</b>.
+	 * Creates a new instance of {@link SlidingMenuItem} with just a title.<br>
+	 * By doing this the menu item will get a icon resource that's <code>absent</code> and an id of <b>-1</b>.
 	 * 
 	 * @param title
 	 *            Title of this menu item.
@@ -38,11 +34,10 @@ public class SlidingMenuItem {
 	public SlidingMenuItem(String title) {
 		this.title = title;
 		this.optionalIconResource = Optional.absent();
-		logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":SlidingMenuItem()", "A new menu item has been created with id: \"" + this.id + "\", title: \"" + this.title + "\" and an absent icon resource");
 	}
 
 	/**
-	 * To create a new menu item with a id, title and a icon resource.
+	 * Creates a new instance of {@link SlidingMenuItem} with a id, title and icon resource.
 	 * 
 	 * @param id
 	 *            Id of this menu item.
@@ -55,46 +50,33 @@ public class SlidingMenuItem {
 		this.id = id;
 		this.title = title;
 		this.optionalIconResource = Optional.fromNullable(iconResource);
-
-		// Set correct log message
-		if (this.optionalIconResource.isPresent()) {
-			logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":SlidingMenuItem()", "A new menu item has been created with id: \"" + this.id + "\", title: \"" + this.title + "\" and optional icon resource: \"" + Integer.toString(this.optionalIconResource.get()) + "\"");
-		} else {
-			logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":SlidingMenuItem()", "A new menu item has been created with id: \"" + this.id + "\", title: \"" + this.title + "\" and an absent icon resource");
-		}
 	}
 
 	/**
-	 * To get this menu items id.
+	 * To get id of Sliding menu item.
 	 * 
-	 * @return This menu items id.
+	 * @return Id of Sliding menu item.
 	 */
 	public int getId() {
-		logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":getId()", "Menu items id: \"" + id + "\" will be returned");
 		return id;
 	}
 
 	/**
-	 * To get this menu items title.
+	 * To get title of Sliding menu item.
 	 * 
-	 * @return This menu items title.
+	 * @return Title of Sliding menu item.
 	 */
 	public String getTitle() {
-		logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":getTitle()", "Menu items title: \"" + title + "\" will be returned");
 		return title;
 	}
 
 	/**
-	 * To get this menu items <code>Optional</code> icon resource.
+	 * To get icon resource of Sliding menu item.
 	 * 
-	 * @return This menu items <code>Optional</code> icon resource.
+	 * @return {@link Optional}, either an <code>absent</code> one if no icon resource exists or a <code>present</code> one with Sliding menu items
+	 *         icon resource.
 	 */
 	public Optional<Integer> getIconResource() {
-		if (this.optionalIconResource.isPresent()) {
-			logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":getIconResource()", "Menu items optional icon resource: \"" + Integer.toString(this.optionalIconResource.get()) + "\" will be returned");
-		} else {
-			logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":getIconResource()", "An absent icon resource will be returned");
-		}
 		return optionalIconResource;
 	}
 

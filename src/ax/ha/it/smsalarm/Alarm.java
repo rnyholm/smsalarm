@@ -8,97 +8,112 @@ import java.util.Calendar;
 import java.util.Date;
 
 import android.content.Context;
-import ax.ha.it.smsalarm.enumeration.AlarmType;
-import ax.ha.it.smsalarm.handler.LogHandler;
-import ax.ha.it.smsalarm.handler.LogHandler.LogPriorities;
 
 /**
- * Class representing an Alarm. Mainly holds data for an Alarm but also some help methods for
- * setting and getting data.
+ * Class representing an Alarm. Mainly holds data for an Alarm but also some help methods for setting and getting data.
  * 
  * @author Robert Nyholm <robert.nyholm@aland.net>
- * @version 2.2.4
+ * @version 2.3.1
  * @since 2.1beta
  */
 public class Alarm {
-	// Log tag string
-	private final String LOG_TAG = getClass().getSimpleName();
+	/**
+	 * Enumeration for then different types of <b><i>Alarms</i></b>.
+	 * 
+	 * @author Robert Nyholm <robert.nyholm@aland.net>
+	 * @version 2.3.1
+	 * @since 2.1
+	 */
+	public enum AlarmType {
+		// @formatter:off
+		PRIMARY, 
+		SECONDARY, 
+		UNDEFINED;
+		// @formatter:on
 
-	// Object for logging
-	private final LogHandler logger = LogHandler.getInstance();
+		/**
+		 * To resolve the correct {@link AlarmType} from given numerical value. If an unsupported value is given as parameter a enumeration of type
+		 * <code>AlarmTypes.UNDEFINED</code> is returned.
+		 * 
+		 * @param value
+		 *            Numerical value that corresponds to a enumeration of AlarmType.
+		 * @return Corresponding AlarmType enumeration if it exists else <code>AlarmTypes.UNDEFINED</code>.
+		 */
+		public static AlarmType of(int value) {
+			switch (value) {
+				case (0):
+					return PRIMARY;
+				case (1):
+					return SECONDARY;
+				default:
+					return UNDEFINED;
+			}
+		}
+	}
 
+	// @formatter:off
 	// Variables holding data for an alarm
-	private int id; // Unique id for this alarm
-	private String received; // Localized datetime when the alarm was received
-	private String sender; // Sender of alarm(e-mail or phone number)
-	private String message; // Alarm message
-	private String triggerText; // Text found in message triggering an alarm
-	private String acknowledged; // Localized datetime when the alarm was acknowledged
-	private AlarmType alarmType = AlarmType.UNDEFINED; // Indicating which kind of alarm this
-															// object is
+	private int id; 									// Unique id for this alarm
+	private String received; 							// Localized DateTime when the alarm was received
+	private String sender; 								// Sender of alarm(phone number)
+	private String message; 							// Alarm message
+	private String triggerText; 						// Text found in message triggering an alarm
+	private String acknowledged; 						// Localized DateTime when the alarm was acknowledged
+	private AlarmType alarmType = AlarmType.UNDEFINED; 	// Indicating which kind of alarm this object is
+	// @formatter:on
 
 	/**
-	 * To create a new empty Alarm object.
-	 * 
-	 * @see ax.ha.it.smsalarm.handler.LogHandler#logCat(LogPriorities, String, String) logCat(LogPriorities,
-	 *      String, String)
+	 * Creates a new instance of {@link Alarm}.
 	 */
 	public Alarm() {
-		// Log in debug purpose
-		logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":Alarm()", "A new empty Alarm object was created");
+		// Just empty...
 	}
 
 	/**
-	 * To create a new Alarm object.
+	 * Creates a new instance of {@link Alarm}.
 	 * 
 	 * @param sender
-	 *            Alarm sender as <code>String</code>
+	 *            Sender of alarm.
 	 * @param message
-	 *            Alarm message as <code>String</code>
+	 *            Alarm message.
 	 * @param triggerText
-	 *            Alarm triggerText as <code>String</code>
+	 *            Text in income message that triggered an alarm.
 	 * @param alarmType
-	 *            Alarm type as <code>AlarmTypes</code>
-	 * 
-	 * @see ax.ha.it.smsalarm.handler.LogHandler#logCat(LogPriorities, String, String) logCat(LogPriorities,
-	 *      String, String)
+	 *            Type of alarm.
 	 */
 	public Alarm(String sender, String message, String triggerText, AlarmType alarmType) {
-		// Create and store a localized timestamp, this depends on users locale and/or settings
+		// Create and store a localized TimeStamp, this depends on users locale and/or settings
 		received = DateFormat.getDateTimeInstance().format(Calendar.getInstance().getTime());
 		this.sender = sender;
 		this.message = message;
+
 		if (triggerText.length() != 0) {
 			this.triggerText = triggerText;
 		} else {
 			this.triggerText = "-";
 		}
+
 		acknowledged = "-";
 		this.alarmType = alarmType;
-		// Log in debug purpose
-		logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":Alarm()", "A new alarm object was created with following data: [" + toString() + "]");
 	}
 
 	/**
-	 * To create a new Alarm object.
+	 * Creates a new instance of {@link Alarm}.
 	 * 
 	 * @param id
-	 *            Alarm id as <code>int</code>
+	 *            Id of alarm.
 	 * @param received
-	 *            Alarm received date and time as <code>String</code>
+	 *            Alarm received date and time.
 	 * @param sender
-	 *            Alarm sender as <code>String</code>
+	 *            Sender of alarm.
 	 * @param message
-	 *            Alarm message as <code>String</code>
+	 *            Alarm message.
 	 * @param triggerText
-	 *            Alarm triggerText as <code>String</code>
+	 *            Text in income message that triggered an alarm.
 	 * @param acknowledged
-	 *            Alarm acknowledge date and time as <code>String</code>
+	 *            Alarm acknowledge date and time.
 	 * @param alarmType
-	 *            Alarm type as <code>AlarmTypes</code>
-	 * 
-	 * @see ax.ha.it.smsalarm.handler.LogHandler#logCat(LogPriorities, String, String) logCat(LogPriorities,
-	 *      String, String)
+	 *            Type of alarm.
 	 */
 	public Alarm(int id, String received, String sender, String message, String triggerText, String acknowledged, AlarmType alarmType) {
 		this.id = id;
@@ -108,28 +123,18 @@ public class Alarm {
 		this.triggerText = triggerText;
 		this.acknowledged = acknowledged;
 		this.alarmType = alarmType;
-		// Log in debug purpose
-		logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":Alarm()", "A new alarm object was created with following data: [" + toString() + "]");
 	}
 
 	/**
-	 * To indicate whether this Alarm object is empty or not. An Alarm object is defined empty if
-	 * all member variables are empty.
+	 * To indicate whether this Alarm is empty or not. An alarm is defined empty if <b><i>all</i></b> member variables are empty.
 	 * 
-	 * @return <code>true</code> if this object is empty, else <code>false</code>
-	 * 
-	 * @see ax.ha.it.smsalarm.handler.LogHandler#logCat(LogPriorities, String, String) logCat(LogPriorities,
-	 *      String, String)
+	 * @return <code>true</code> if this object is empty, else <code>false</code>.
 	 */
 	public boolean isEmpty() {
 		// Check to see if the member variables are empty
 		if (getId() == 0 && (received.length() == 0) && (sender.length() == 0) && (message.length() == 0) && (triggerText.length() == 0) && (acknowledged.length() == 0) && (alarmType == AlarmType.UNDEFINED)) {
-			// Log in debug purpose
-			logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":isEmpty()", "This alarm object is empty, returning true");
 			return true;
 		} else {
-			// Log in debug purpose
-			logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":isEmpty()", "This alarm object is not empty, returning false");
 			return false;
 		}
 	}
@@ -137,14 +142,9 @@ public class Alarm {
 	/**
 	 * To get Alarm's id.
 	 * 
-	 * @return Alarm id as <code>int</code>
-	 * 
-	 * @see ax.ha.it.smsalarm.handler.LogHandler#logCat(LogPriorities, String, String) logCat(LogPriorities,
-	 *      String, String)
+	 * @return Id of alarm.
 	 */
 	public int getId() {
-		// Log in debug purpose
-		logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":getId()", "Returning alarm id:\"" + id + "\"");
 		return id;
 	}
 
@@ -152,78 +152,53 @@ public class Alarm {
 	 * To set Alarm's id.
 	 * 
 	 * @param id
-	 *            Alarm id as <code>int</code>
-	 * 
-	 * @see ax.ha.it.smsalarm.handler.LogHandler#logCat(LogPriorities, String, String) logCat(LogPriorities,
-	 *      String, String)
+	 *            Id of alarm.
 	 */
 	public void setId(int id) {
 		this.id = id;
-		// Log in debug purpose
-		logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":setId()", "Alarm id has been set, id is:\"" + id + "\"");
 	}
 
 	/**
-	 * To get date and time when an Alarm was received.
+	 * To get date and time when this Alarm was received.
 	 * 
-	 * @return Datetime when an Alarm was received as <code>String</code>
-	 * 
-	 * @see ax.ha.it.smsalarm.handler.LogHandler#logCat(LogPriorities, String, String) logCat(LogPriorities,
-	 *      String, String)
+	 * @return Date and time when this alarm was received.
 	 */
 	public String getReceived() {
-		// Log in debug purpose
-		logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":getReceived()", "Returning alarm received date and time:\"" + received + "\"");
 		return received;
 	}
 
 	/**
-	 * To set date and time when an Alarm was received.
+	 * To set date and time when this Alarm was received.
 	 * 
 	 * @param date
-	 *            Date when an Alarm was received as <code>Date</code>
-	 * 
+	 *            Date when this Alarm was received.
 	 * @see #updateReceived()
 	 * @see #setReceived(String)
-	 * @see ax.ha.it.smsalarm.handler.LogHandler#logCat(LogPriorities, String, String) logCat(LogPriorities,
-	 *      String, String)
 	 */
 	public void setReceived(Date date) {
-		// Create and store a localized timestamp, this depends on users locale and/or settings
+		// Create and store a localized TimeStamp, this depends on users locale and/or settings
 		received = DateFormat.getDateTimeInstance().format(date);
-		// Log in debug purpose
-		logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":setReceived()", "Alarm received date and time has been set to:\"" + received + "\"");
 	}
 
 	/**
-	 * To set date and time when an Alarm was received.
+	 * To set date and time when this Alarm was received.
 	 * 
 	 * @param received
-	 *            Date and time when an Alarm was received as <code>String</code>
-	 * 
+	 *            Date and time when this Alarm was received.
 	 * @see #updateReceived()
 	 * @see #setReceived(Date)
-	 * @see ax.ha.it.smsalarm.handler.LogHandler#logCat(LogPriorities, String, String) logCat(LogPriorities,
-	 *      String, String)
 	 */
 	public void setReceived(String received) {
-		// Create and store a localized timestamp, this depends on users locale and/or settings
+		// Create and store a localized TimeStamp, this depends on users locale and/or settings
 		this.received = received;
-		// Log in debug purpose
-		logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":setReceived()", "Alarm received date and time has been set to:\"" + received + "\"");
 	}
 
 	/**
 	 * To get Alarm's sender.
 	 * 
-	 * @return Sender as <code>String</code>
-	 * 
-	 * @see ax.ha.it.smsalarm.handler.LogHandler#logCat(LogPriorities, String, String) logCat(LogPriorities,
-	 *      String, String)
+	 * @return Sender of alarm.
 	 */
 	public String getSender() {
-		// Log in debug purpose
-		logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":getSender()", "Returning alarm sender:\"" + sender + "\"");
 		return sender;
 	}
 
@@ -231,86 +206,56 @@ public class Alarm {
 	 * To set Alarm's sender.
 	 * 
 	 * @param sender
-	 *            Sender as <code>String</code>
-	 * 
-	 * @see ax.ha.it.smsalarm.handler.LogHandler#logCat(LogPriorities, String, String) logCat(LogPriorities,
-	 *      String, String)
+	 *            Sender of alarm.
 	 */
 	public void setSender(String sender) {
 		this.sender = sender;
-		// Log in debug purpose
-		logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":setSender()", "Alarm sender has been set to:\"" + sender + "\"");
 	}
 
 	/**
 	 * To get Alarm's alarm message.
 	 * 
-	 * @return Alarm message as <code>String</code>
-	 * 
-	 * @see ax.ha.it.smsalarm.handler.LogHandler#logCat(LogPriorities, String, String) logCat(LogPriorities,
-	 *      String, String)
+	 * @return Message of alarm.
 	 */
 	public String getMessage() {
-		// Log in debug purpose
-		this.logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":getMessage()", "Returning alarm message:\"" + message + "\"");
 		return message;
 	}
 
 	/**
-	 * To set Alarm's alarm message.
+	 * To set Alarm's message.
 	 * 
 	 * @param message
-	 *            Alarm message as <code>String</code>
-	 * 
-	 * @see ax.ha.it.smsalarm.handler.LogHandler#logCat(LogPriorities, String, String) logCat(LogPriorities,
-	 *      String, String)
+	 *            Alarms message.
 	 */
 	public void setMessage(String message) {
 		this.message = message;
-		// Log in debug purpose
-		logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":setMessage()", "Alarm message has been set to:\"" + message + "\"");
 	}
 
 	/**
 	 * To get Alarm's trigger text.
 	 * 
-	 * @return Alarm trigger text as <code>String</code>
-	 * 
-	 * @see ax.ha.it.smsalarm.handler.LogHandler#logCat(LogPriorities, String, String) logCat(LogPriorities,
-	 *      String, String)
+	 * @return Alarms trigger text.
 	 */
 	public String getTriggerText() {
-		// Log in debug purpose
-		logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":getTriggerText()", "Returning alarm trigger text:\"" + triggerText + "\"");
 		return triggerText;
 	}
 
 	/**
 	 * To set Alarm's trigger text.
 	 * 
-	 * @param message
-	 *            Alarm trigger text as <code>String</code>
-	 * 
-	 * @see ax.ha.it.smsalarm.handler.LogHandler#logCat(LogPriorities, String, String) logCat(LogPriorities,
-	 *      String, String)
+	 * @param triggerText
+	 *            Trigger text of alarm.
 	 */
 	public void setTriggerText(String triggerText) {
 		this.triggerText = triggerText;
-		// Log in debug purpose
-		logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":setTriggerText()", "Alarm trigger text has been set to:\"" + triggerText + "\"");
 	}
 
 	/**
 	 * To get Alarm's acknowledge time.
 	 * 
-	 * @return Acknowledge time as <code>String</code>
-	 * 
-	 * @see ax.ha.it.smsalarm.handler.LogHandler#logCat(LogPriorities, String, String) logCat(LogPriorities,
-	 *      String, String)
+	 * @return Alarm's acknowledge time.
 	 */
 	public String getAcknowledged() {
-		// Log in debug purpose
-		logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":getAcknowledged()", "Returning alarm acknowledge date and time:\"" + acknowledged + "\"");
 		return acknowledged;
 	}
 
@@ -318,38 +263,28 @@ public class Alarm {
 	 * To set date and time when an Alarm was acknowledged.
 	 * 
 	 * @param context
-	 *            Context
+	 *            Context.
 	 * @param date
-	 *            Date when Alarm was acknowledged as <code>Date</code>
-	 * 
+	 *            Date when Alarm was acknowledged.
 	 * @see #updateAcknowledged()
 	 * @see #setAcknowledged(String)
-	 * @see ax.ha.it.smsalarm.handler.LogHandler#logCat(LogPriorities, String, String) logCat(LogPriorities,
-	 *      String, String)
 	 */
 	public void setAcknowledged(Context context, Date date) {
-		// Create and store a localized timestamp, this depends on users locale and/or settings
+		// Create and store a localized TimeStamp, this depends on users locale and/or settings
 		acknowledged = DateFormat.getDateTimeInstance().format(date);
-		// Log in debug purpose
-		logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":setAcknowledged()", "Alarm acknowledge date and time has been set to:\"" + acknowledged + "\"");
 	}
 
 	/**
 	 * To set date and time when an Alarm was acknowledged.
 	 * 
 	 * @param acknowledged
-	 *            Date and time when Alarm was acknowledged as <code>String</code>
-	 * 
+	 *            Date when Alarm was acknowledged.
 	 * @see #updateAcknowledged()
 	 * @see #setAcknowledged(Date)
-	 * @see ax.ha.it.smsalarm.handler.LogHandler#logCat(LogPriorities, String, String) logCat(LogPriorities,
-	 *      String, String)
 	 */
 	public void setAcknowledged(String acknowledged) {
-		// Create and store a localized timestamp, this depends on users locale and/or settings
+		// Create and store a localized TimeStamp, this depends on users locale and/or settings
 		this.acknowledged = acknowledged;
-		// Log in debug purpose
-		logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":setAcknowledged()", "Alarm acknowledge date and time has been set to:\"" + acknowledged + "\"");
 	}
 
 	/**
@@ -357,27 +292,18 @@ public class Alarm {
 	 * 
 	 * @see #setReceived(Date)
 	 * @see #setReceived(String)
-	 * @see ax.ha.it.smsalarm.handler.LogHandler#logCat(LogPriorities, String, String) logCat(LogPriorities,
-	 *      String, String)
 	 */
 	public void updateReceived() {
-		// Create and store a localized timestamp, this depends on users locale and/or settings
+		// Create and store a localized TimeStamp, this depends on users locale and/or settings
 		received = DateFormat.getDateTimeInstance().format(Calendar.getInstance().getTime());
-		// Log in debug purpose
-		logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":updateReceived()", "Alarm received date and time has been updated to:\"" + received + "\"");
 	}
 
 	/**
 	 * To get Alarm's type.
 	 * 
-	 * @return Alarm type as <code>AlarmTypes</code>
-	 * 
-	 * @see ax.ha.it.smsalarm.handler.LogHandler#logCat(LogPriorities, String, String) logCat(LogPriorities,
-	 *      String, String)
+	 * @return Type of alarm.
 	 */
 	public AlarmType getAlarmType() {
-		// Log in debug purpose
-		logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":getAlarmType()", "Returning alarmtype:\"" + alarmType.toString() + "\"");
 		return alarmType;
 	}
 
@@ -385,16 +311,11 @@ public class Alarm {
 	 * To set Alarm's type.
 	 * 
 	 * @param alarmType
-	 *            Alarm type as <code>AlarmTypes</code>
-	 * 
-	 * @see ax.ha.it.smsalarm.handler.LogHandler#logCat(LogPriorities, String, String) logCat(LogPriorities,
-	 *      String, String)
+	 *            Type of alarm.
 	 */
 	public void setAlarmType(AlarmType alarmType) {
 		// Set alarm type
 		this.alarmType = alarmType;
-		// Log in debug purpose
-		logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":getId()", "Alarm type has been set to:\"" + alarmType.toString() + "\"");
 	}
 
 	/**
@@ -402,21 +323,9 @@ public class Alarm {
 	 * 
 	 * @see #setAcknowledged(Date)
 	 * @see #setAcknowledged(String)
-	 * @see ax.ha.it.smsalarm.handler.LogHandler#logCat(LogPriorities, String, String) logCat(LogPriorities,
-	 *      String, String)
 	 */
 	public void updateAcknowledged() {
-		// Create and store a localized timestamp, this depends on users locale and/or settings
+		// Create and store a localized TimeStamp, this depends on users locale and/or settings
 		acknowledged = DateFormat.getDateTimeInstance().format(Calendar.getInstance().getTime());
-		// Log in debug purpose
-		logger.logCat(LogPriorities.DEBUG, LOG_TAG + ":updateAcknowledged()", "Alarm acknowledge date and time has been updated to:\"" + acknowledged + "\"");
-	}
-
-	/**
-	 * Alarm class overridden implementation of toString()
-	 */
-	@Override
-	public String toString() {
-		return "id:\"" + Integer.toString(id) + "\", received:\"" + received + "\", sender:\"" + sender + "\", message:\"" + message + "\", trigger text:\"" + triggerText + "\", acknowledged:\"" + acknowledged + "\" and alarmType:\"" + alarmType.toString() + "\"";
 	}
 }
