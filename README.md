@@ -1,7 +1,7 @@
 Sms Alarm
 =========
 
-Sms Alarm is an application for Android&Ttrade; devices which makes it's easier for you to notice when you have received an alarm, or just an important sms.
+Sms Alarm is an application for Android&trade; devices which makes it's easier for you to notice when you have received an alarm, or just an important sms.
 
 Overview
 --------
@@ -10,7 +10,7 @@ It works by listening to sms from user configured phone numbers, when an sms is 
 
 Installation & prerequisites
 ----------------------------
-In order to run this application you obviously needs a device running Android&trade;. Sms Alarm is developed for Android&trade; version 4.3(Jellybean) but runs fine on minimum 2.2(Froyo).<br />
+In order to run this application you obviously needs a device running Android&trade;. Sms Alarm is developed for Android&trade; version 4.4(KitKat) but runs fine on minimum 2.2(Froyo).<br />
 Sms Alarm is available through Google Play&trade; and is installed just as a normal application.
 
 Development
