@@ -50,6 +50,10 @@ public class AcknowledgeNotificationHelper extends IntentService {
 	@Deprecated
 	@Override
 	protected void onHandleIntent(Intent i) {
+		// Reset Shared Preference HAS_CALLED, to ensure that activity acknowledge not will place a acknowledge call onResume()
+		// This is done here because this is only relevant if application is set to acknowledge, and here intent for acknowledge is loaded
+		prefHandler.storePrefs(PrefKey.SHARED_PREF, PrefKey.HAS_CALLED_KEY, false, this);
+
 		// Fetch some values from the shared preferences
 		String contentText = (String) prefHandler.fetchPrefs(PrefKey.SHARED_PREF, PrefKey.MESSAGE_KEY, DataType.STRING, this);
 		String rescueService = (String) prefHandler.fetchPrefs(PrefKey.SHARED_PREF, PrefKey.RESCUE_SERVICE_KEY, DataType.STRING, this);
