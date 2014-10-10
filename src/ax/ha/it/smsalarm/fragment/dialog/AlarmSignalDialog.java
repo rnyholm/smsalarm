@@ -8,8 +8,8 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
-import ax.ha.it.smsalarm.pojo.Alarm.AlarmType;
 import ax.ha.it.smsalarm.R;
+import ax.ha.it.smsalarm.pojo.Alarm.AlarmType;
 
 /**
  * {@link DialogFragment} which let's the user select <b><i>Alarm Signal</i></b> for the different {@link AlarmType}.
@@ -59,7 +59,7 @@ public class AlarmSignalDialog extends DialogFragment {
 				// @formatter:on
 
 				// Set items to list view from resource containing alarm signals
-				.setItems(R.array.tones, new DialogInterface.OnClickListener() {
+				.setItems(R.array.alarm_signals, new DialogInterface.OnClickListener() {
 					@Override
 					public void onClick(DialogInterface arg0, int listPosition) {
 						// Create an intent and put data from this dialogs Spinner and associate it with a certain key

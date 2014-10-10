@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string-array name="tones">
+    <string-array name="alarm_signals">
         <item>Aeg TSE80 1</item>
         <item>Aeg TSE80 2</item>
         <item>Ambulance Alarm</item> 
@@ -37,6 +37,7 @@
         <item>Motorola Pageboy2000 6</item>
         <item>Motorola Pageboy2000 7</item>
         <item>Motorola Pageboy II</item>
+        <item>Nokia THR800</item>
         <item>Officers Alarm</item>         
         <item>Pager 1</item>
         <item>Pager 2</item>
@@ -91,6 +92,5 @@
         <item>Swissphone QuattroXLS 7</item>
         <item>Swissphone QuattroXLS 8</item>
         <item>Swissphone RE609</item>
-        <item>Virve</item>
     </string-array>
 </resources>

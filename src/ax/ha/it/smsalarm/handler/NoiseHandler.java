@@ -112,7 +112,7 @@ public class NoiseHandler {
 
 			// Resolve correct alarm signal depending on id
 			try {
-				afd = context.getAssets().openFd("tones/alarm/" + resolveAlarmSignal(context, id) + ".mp3");
+				afd = context.getAssets().openFd("alarm-signals/" + resolveAlarmSignal(context, id) + ".mp3");
 			} catch (IOException e) {
 				if (BuildConfig.DEBUG) {
 					Log.e(LOG_TAG + ":doNoise()", "An error occurred while setting correct alarm signal to AssetFileDescriptor", e);
@@ -215,7 +215,7 @@ public class NoiseHandler {
 	 */
 	public String resolveAlarmSignal(Context context, int alarmSignalId) {
 		// Resolve alarm signal from id
-		String[] tonesArr = context.getResources().getStringArray(R.array.tones);
-		return tonesArr[alarmSignalId];
+		String[] alarmSignals = context.getResources().getStringArray(R.array.alarm_signals);
+		return alarmSignals[alarmSignalId];
 	}
 }
