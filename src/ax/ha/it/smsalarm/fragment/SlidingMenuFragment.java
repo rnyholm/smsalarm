@@ -72,15 +72,15 @@ public class SlidingMenuFragment extends SherlockListFragment {
 	 */
 	private void createMenuItems(SlidingMenuAdapter adapter) {
 		// Create menu items and add them to given adapter
-		adapter.add(new SlidingMenuItem("Inställningar*"));
-		adapter.add(new SlidingMenuItem(101, "Sms*", R.drawable.ic_menu_sms));
-		adapter.add(new SlidingMenuItem(102, "Ord*", R.drawable.ic_menu_word));
-		adapter.add(new SlidingMenuItem(103, "Ljud*", R.drawable.ic_menu_sound));
-		adapter.add(new SlidingMenuItem(104, "Kvittering*", R.drawable.ic_menu_ack));
-		adapter.add(new SlidingMenuItem(105, "Övrigt*", R.drawable.ic_menu_other));
-		adapter.add(new SlidingMenuItem("Om*"));
-		adapter.add(new SlidingMenuItem(201, "Öppen källkod*", R.drawable.ic_menu_os));
-		adapter.add(new SlidingMenuItem(202, "Om Sms Alarm*", R.drawable.ic_menu_about));
+		adapter.add(new SlidingMenuItem(getString(R.string.MENU_TITLE_SETTINGS)));
+		adapter.add(new SlidingMenuItem(101, getString(R.string.MENU_TITLE_SMS), R.drawable.ic_menu_sms));
+		adapter.add(new SlidingMenuItem(102, getString(R.string.MENU_TITLE_FREE_TEXT), R.drawable.ic_menu_word));
+		adapter.add(new SlidingMenuItem(103, getString(R.string.MENU_TITLE_SOUND), R.drawable.ic_menu_sound));
+		adapter.add(new SlidingMenuItem(104, getString(R.string.MENU_TITLE_ACKNOWLEDGE), R.drawable.ic_menu_ack));
+		adapter.add(new SlidingMenuItem(105, getString(R.string.MENU_TITLE_OTHER), R.drawable.ic_menu_other));
+		adapter.add(new SlidingMenuItem(getString(R.string.MENU_TITLE_ABOUT)));
+		adapter.add(new SlidingMenuItem(201, getString(R.string.MENU_TITLE_OPEN_SOURCE), R.drawable.ic_menu_os));
+		adapter.add(new SlidingMenuItem(202, getString(R.string.ABOUT), R.drawable.ic_menu_about));
 	}
 
 	@Override

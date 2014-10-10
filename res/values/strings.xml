@@ -1,5 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <resources>
+    <!-- NEW STRINGS IN v.2.3.1 BEGIN -->
+    <string name="MENU_TITLE_SETTINGS">Inställningar</string>
+    <string name="MENU_TITLE_SMS">Sms</string>
+    <string name="MENU_TITLE_FREE_TEXT">Ord</string>
+    <string name="MENU_TITLE_SOUND">Ljud</string>
+    <string name="MENU_TITLE_ACKNOWLEDGE">Kvittering</string>
+    <string name="MENU_TITLE_OTHER">Övrigt</string>
+    <string name="MENU_TITLE_ABOUT">Om</string>
+    <string name="MENU_TITLE_OPEN_SOURCE">Öppen källkod</string>
+    <!-- NEW STRINGS IN v.2.3.1 END -->
     <string name="ABOUT">About Sms Alarm</string>
     <string name="ABOUT_BUILD">Build: %s</string>
 	<string name="ABOUT_COPYRIGHT">&#169;Copyright Robert Nyholm</string>
