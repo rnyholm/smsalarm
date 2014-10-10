@@ -12,7 +12,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.Uri;
-import android.os.Build;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.telephony.PhoneStateListener;
@@ -20,7 +19,6 @@ import android.telephony.TelephonyManager;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
-import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -62,12 +60,8 @@ public class Acknowledge extends Activity {
 	private Button acknowledgeButton;
 	private Button abortButton;
 
-	// ...ProgressBar...
+	// ...and ProgressBar
 	private ProgressBar redialProgressBar;
-
-	// ...ImageViews...
-	private ImageView divider1ImageView;
-	private ImageView divider2ImageView;
 
 	// Strings for the data presentation in UI
 	private String rescueService = "";
@@ -214,19 +208,6 @@ public class Acknowledge extends Activity {
 
 		// Finding ProgressBar view
 		redialProgressBar = (ProgressBar) findViewById(R.id.ackRedial_pb);
-
-		// Finding ImageView views
-		divider1ImageView = (ImageView) findViewById(R.id.ackDivider1_iv);
-		divider2ImageView = (ImageView) findViewById(R.id.ackDivider2_iv);
-
-		// If Android API level less then 11 set bright gradient else set dark gradient
-		if (Build.VERSION.SDK_INT < 11) {
-			divider1ImageView.setImageResource(R.drawable.gradient_divider_10_and_down);
-			divider2ImageView.setImageResource(R.drawable.gradient_divider_10_and_down);
-		} else {
-			divider1ImageView.setImageResource(R.drawable.gradient_divider_11_and_up);
-			divider2ImageView.setImageResource(R.drawable.gradient_divider_11_and_up);
-		}
 
 		// Hide UI widgets that user don't need to see right now
 		lineBusyTextView.setVisibility(View.GONE);
