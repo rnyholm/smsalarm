@@ -53,8 +53,18 @@ public class SmsAlarm extends SlidingFragmentActivity {
 	}
 
 	/**
-	 * When application is destroyed all {@link Alarm}'s stored in database will be written a <code>*.html</code> file. The widget will also be
-	 * updated upon application destroy.
+	 * When application pauses the widget({@link WidgetProvider}) will be updated.
+	 */
+	@Override
+	protected void onPause() {
+		super.onPause();
+
+		// Update all widgets associated to this application
+		WidgetProvider.updateWidgets(this);
+	}
+
+	/**
+	 * When application is destroyed all {@link Alarm}'s stored in database will be written a <code>*.html</code> file.
 	 */
 	@Override
 	public void onDestroy() {
@@ -62,8 +72,6 @@ public class SmsAlarm extends SlidingFragmentActivity {
 
 		// Get all alarms from database and log them into a *.html file
 		AlarmLogger.getInstance().logAlarms(db.fetchAllAlarm(), this);
-		// Update all widgets associated to this application
-		WidgetProvider.updateWidgets(this);
 	}
 
 	/**

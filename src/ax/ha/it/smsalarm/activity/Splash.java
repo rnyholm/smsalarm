@@ -97,8 +97,9 @@ public class Splash extends FragmentActivity {
 	 * @see EulaDialog
 	 */
 	public void doPositiveClick() {
-		// Put end user license agreed in shared preferences so we don't show this dialog again and switch activity
+		// Put end user license agreed in shared preferences so we don't show this dialog again, also enable Sms Alarm and at last switch activity
 		prefHandler.storePrefs(PrefKey.SHARED_PREF, PrefKey.END_USER_LICENSE_AGREED, true, Splash.this);
+		prefHandler.storePrefs(PrefKey.SHARED_PREF, PrefKey.ENABLE_SMS_ALARM_KEY, true, Splash.this);
 		switchActivity();
 	}
 

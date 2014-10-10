@@ -30,7 +30,7 @@
     <!-- Application info begin -->
     <string name="APP_NAME">Sms Alarm</string>
     <string name="APP_DESCR">The Alarm application for Android&#8482;</string>
-	<string name="APP_VERSION">2.2.5</string>   
+	<string name="APP_VERSION">2.3.1beta</string>   
 	<string name="APP_BUILD">20140415</string>
 	<!-- Application info end -->
     <string name="CANCEL">Cancel</string>
