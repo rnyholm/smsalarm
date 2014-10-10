@@ -1,7 +1,12 @@
 SmsAlarm changelog
 
+v2.3.1(version code 14)
+-Förbättrat gränssnittet, introducerat en sliding menu
+-Tagit bort onödig loggning
+-Bytt namn på alarmsignalen Virve till Nokia THR800
+
 v2.2.5(version code 13)
--Översättning till estiska lades till
+-Översättning till estniska lades till
 
 v2.2.4(version code 12)
 -Fixade NoSuchMethodError som resulterade i att appen krashade
