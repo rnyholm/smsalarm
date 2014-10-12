@@ -22,9 +22,9 @@ import android.widget.Toast;
 import ax.ha.it.smsalarm.R;
 import ax.ha.it.smsalarm.fragment.dialog.AddFreeTextDialog;
 import ax.ha.it.smsalarm.fragment.dialog.RemoveFreeTextDialog;
-import ax.ha.it.smsalarm.handler.PreferencesHandler;
-import ax.ha.it.smsalarm.handler.PreferencesHandler.DataType;
-import ax.ha.it.smsalarm.handler.PreferencesHandler.PrefKey;
+import ax.ha.it.smsalarm.handler.SharedPreferencesHandler;
+import ax.ha.it.smsalarm.handler.SharedPreferencesHandler.DataType;
+import ax.ha.it.smsalarm.handler.SharedPreferencesHandler.PrefKey;
 import ax.ha.it.smsalarm.util.Util;
 
 import com.actionbarsherlock.app.SherlockFragment;
@@ -41,7 +41,7 @@ public class FreeTextSettingsFragment extends SherlockFragment implements Applic
 	private static final String LOG_TAG = FreeTextSettingsFragment.class.getSimpleName();
 
 	// To handle shared preferences
-	private final PreferencesHandler prefHandler = PreferencesHandler.getInstance();
+	private final SharedPreferencesHandler prefHandler = SharedPreferencesHandler.getInstance();
 
 	// Must have the application context
 	private Context context;

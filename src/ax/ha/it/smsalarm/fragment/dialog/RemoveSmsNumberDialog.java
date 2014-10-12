@@ -9,8 +9,8 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
 import android.util.Log;
-import ax.ha.it.smsalarm.BuildConfig;
 import ax.ha.it.smsalarm.R;
+import ax.ha.it.smsalarm.activity.SmsAlarm;
 
 /**
  * {@link DialogFragment} which let's the user remove a <b><i>Phone Number</i></b> from the list of <b><i>Primary or Secondary Alarm Trigger Phone
@@ -76,7 +76,7 @@ public class RemoveSmsNumberDialog extends DialogFragment {
 				message = getString(R.string.DELETE_SECONDARY_NUMBER_PROMPT_MESSAGE) + " " + number + "?";
 				break;
 			default:
-				if (BuildConfig.DEBUG) {
+				if (SmsAlarm.DEBUG) {
 					Log.e(LOG_TAG + ":onCreateDialog()", "Cannot resolve dialog message due to an unsupported request code: \"" + getTargetRequestCode() + "\"");
 				}
 		}

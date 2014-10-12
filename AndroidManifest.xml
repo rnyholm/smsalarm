@@ -6,6 +6,7 @@
     <uses-sdk android:minSdkVersion="8" android:targetSdkVersion="19" />
     <uses-feature android:name="android.hardware.telephony" android:required="true"/>
     <uses-feature android:name="android.software.app_widgets" android:required="false"/>
+    <uses-feature android:name="android.hardware.camera" />
     
     <uses-permission android:name="android.permission.CALL_PHONE" />
     <uses-permission android:name="android.permission.RECEIVE_SMS" />
@@ -16,6 +17,7 @@
     <uses-permission android:name="android.permission.READ_PHONE_STATE" />
     <uses-permission android:name="android.permission.WAKE_LOCK" />  
     <uses-permission android:name="android.permission.EXPAND_STATUS_BAR" />
+    <uses-permission android:name="android.permission.CAMERA" />
     
     <supports-screens android:largeScreens="true" android:xlargeScreens="true" />
     
@@ -29,7 +31,6 @@
                 <category android:name="android.intent.category.LAUNCHER" />            
         	</intent-filter>       	
        	</activity>
-      ax.ha.it.smsalarm.activity.MainActivityndroid:name=".MainActivity" android:noHistory="true" android:label="@string/APP_NAME" />
         <activity android:name="ax.ha.it.smsalarm.activity.SmsAlarm" android:noHistory="true" android:label="@string/APP_NAME">
             <intent-filter>
  				<!-- Future intents and services for this activity goes here -->
@@ -48,8 +49,17 @@
            	</intent-filter>
            	<meta-data android:name="android.appwidget.provider"
                	android:resource="@xml/widget_configuration" />
-       	</receiver>      
-        <service android:name="ax.ha.it.smsalarm.helper.NotificationHelper"></service>   
-        <service android:name="ax.ha.it.smsalarm.helper.AcknowledgeNotificationHelper"></service>   
+       	</receiver> 
+       	<receiver android:name="ax.ha.it.smsalarm.receiver.FlashAlarmReceiver" />
+        <service android:name="ax.ha.it.smsalarm.service.NotificationService"></service>   
+        <service android:name="ax.ha.it.smsalarm.service.AcknowledgeNotificationService"></service>
+        <service android:name="ax.ha.it.smsalarm.service.FlashNotificationService"
+                 android:label="@string/APP_NAME"
+                 android:description="@string/ABOUT_VERSION"
+                 android:permission="android.permission.BIND_NOTIFICATION_LISTENER_SERVICE">
+            <intent-filter>
+                <action android:name="android.service.notification.NotificationListenerService" />
+            </intent-filter>
+        </service>
     </application>    
 </manifest>

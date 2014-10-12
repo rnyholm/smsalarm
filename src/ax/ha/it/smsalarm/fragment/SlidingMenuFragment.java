@@ -4,6 +4,7 @@
 package ax.ha.it.smsalarm.fragment;
 
 import android.annotation.SuppressLint;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.util.Log;
@@ -11,9 +12,9 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ListView;
-import ax.ha.it.smsalarm.BuildConfig;
 import ax.ha.it.smsalarm.R;
 import ax.ha.it.smsalarm.activity.SmsAlarm;
+import ax.ha.it.smsalarm.service.NotificationService;
 import ax.ha.it.smsalarm.slidingmenu.adapter.SlidingMenuAdapter;
 import ax.ha.it.smsalarm.slidingmenu.model.SlidingMenuItem;
 
@@ -81,6 +82,8 @@ public class SlidingMenuFragment extends SherlockListFragment {
 		adapter.add(new SlidingMenuItem(getString(R.string.MENU_TITLE_ABOUT)));
 		adapter.add(new SlidingMenuItem(201, getString(R.string.MENU_TITLE_OPEN_SOURCE), R.drawable.ic_menu_os));
 		adapter.add(new SlidingMenuItem(202, getString(R.string.ABOUT), R.drawable.ic_menu_about));
+		adapter.add(new SlidingMenuItem("Test"));
+		adapter.add(new SlidingMenuItem(301, "Notification", R.drawable.ic_menu_debug));
 	}
 
 	@Override
@@ -110,8 +113,12 @@ public class SlidingMenuFragment extends SherlockListFragment {
 			case (202):
 				fragment = new AboutFragment();
 				break;
+			case (301):
+				Intent notIntent = new Intent(getActivity(), NotificationService.class);
+				getActivity().startService(notIntent);
+				break;
 			default:
-				if (BuildConfig.DEBUG) {
+				if (SmsAlarm.DEBUG) {
 					Log.e(LOG_TAG + ":onListItemClick()", "Unable to resolve a Fragment for given menu item id: \"" + menuItem.getId() + "\", check if implementation exist for menu item");
 				}
 		}

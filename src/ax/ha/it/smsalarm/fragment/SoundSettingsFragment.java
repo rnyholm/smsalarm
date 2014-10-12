@@ -25,13 +25,13 @@ import android.widget.RelativeLayout;
 import android.widget.RelativeLayout.LayoutParams;
 import android.widget.Spinner;
 import android.widget.TextView;
-import ax.ha.it.smsalarm.BuildConfig;
 import ax.ha.it.smsalarm.R;
+import ax.ha.it.smsalarm.activity.SmsAlarm;
 import ax.ha.it.smsalarm.fragment.dialog.AlarmSignalDialog;
 import ax.ha.it.smsalarm.handler.NoiseHandler;
-import ax.ha.it.smsalarm.handler.PreferencesHandler;
-import ax.ha.it.smsalarm.handler.PreferencesHandler.DataType;
-import ax.ha.it.smsalarm.handler.PreferencesHandler.PrefKey;
+import ax.ha.it.smsalarm.handler.SharedPreferencesHandler;
+import ax.ha.it.smsalarm.handler.SharedPreferencesHandler.DataType;
+import ax.ha.it.smsalarm.handler.SharedPreferencesHandler.PrefKey;
 import ax.ha.it.smsalarm.pojo.Alarm.AlarmType;
 
 import com.actionbarsherlock.app.SherlockFragment;
@@ -48,7 +48,7 @@ public class SoundSettingsFragment extends SherlockFragment implements Applicati
 	private static final String LOG_TAG = SoundSettingsFragment.class.getSimpleName();
 
 	// Objects needed for shared preferences handling and noise handling
-	private final PreferencesHandler prefHandler = PreferencesHandler.getInstance();
+	private final SharedPreferencesHandler prefHandler = SharedPreferencesHandler.getInstance();
 	private final NoiseHandler noiseHandler = NoiseHandler.getInstance();
 
 	// Must have the application context
@@ -236,7 +236,7 @@ public class SoundSettingsFragment extends SherlockFragment implements Applicati
 						showAlarmSignalDialog(AlarmSignalDialog.SECONDARY_ALARM_SIGNAL_DIALOG_REQUEST_CODE);
 						break;
 					default:
-						if (BuildConfig.DEBUG) {
+						if (SmsAlarm.DEBUG) {
 							Log.e(LOG_TAG, "An unsupported alarm type spinner position occurred, spinner position is: \"" + alarmTypeSpinnerPos + "\", can't show dialog");
 						}
 				}
@@ -256,7 +256,7 @@ public class SoundSettingsFragment extends SherlockFragment implements Applicati
 						noiseHandler.doNoise(context, secondaryAlarmSignalId, useOsSoundSettings, false);
 						break;
 					default:
-						if (BuildConfig.DEBUG) {
+						if (SmsAlarm.DEBUG) {
 							Log.e(LOG_TAG, "An unsupported alarm type spinner position occurred, spinner position is: \"" + alarmTypeSpinnerPos + "\", can't listen at alarm signal");
 						}
 				}
@@ -332,7 +332,7 @@ public class SoundSettingsFragment extends SherlockFragment implements Applicati
 					updateSelectedAlarmSignalEditText();
 					break;
 				default:
-					if (BuildConfig.DEBUG) {
+					if (SmsAlarm.DEBUG) {
 						Log.e(LOG_TAG + ":onActivityResult()", "An unsupported result occurred, result code: \"" + resultCode + "\" and request code: \"" + requestCode + "\"");
 					}
 			}
@@ -361,7 +361,7 @@ public class SoundSettingsFragment extends SherlockFragment implements Applicati
 		} else if (alarmTypeSpinnerPos == 1) {
 			selectedAlarmSignalEditText.setText(noiseHandler.resolveAlarmSignal(context, secondaryAlarmSignalId));
 		} else {
-			if (BuildConfig.DEBUG) {
+			if (SmsAlarm.DEBUG) {
 				Log.e(LOG_TAG + ":updateSelectedAlarmSignalEditText()", "Invalid alarm type spinner position occurred. Current alarm type spinner position is: \"" + alarmTypeSpinnerPos + "\"");
 			}
 		}

@@ -19,13 +19,13 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.Spinner;
 import android.widget.Toast;
-import ax.ha.it.smsalarm.BuildConfig;
 import ax.ha.it.smsalarm.R;
+import ax.ha.it.smsalarm.activity.SmsAlarm;
 import ax.ha.it.smsalarm.fragment.dialog.AddSmsNumberDialog;
 import ax.ha.it.smsalarm.fragment.dialog.RemoveSmsNumberDialog;
-import ax.ha.it.smsalarm.handler.PreferencesHandler;
-import ax.ha.it.smsalarm.handler.PreferencesHandler.DataType;
-import ax.ha.it.smsalarm.handler.PreferencesHandler.PrefKey;
+import ax.ha.it.smsalarm.handler.SharedPreferencesHandler;
+import ax.ha.it.smsalarm.handler.SharedPreferencesHandler.DataType;
+import ax.ha.it.smsalarm.handler.SharedPreferencesHandler.PrefKey;
 import ax.ha.it.smsalarm.util.Util;
 
 import com.actionbarsherlock.app.SherlockFragment;
@@ -42,7 +42,7 @@ public class SmsSettingsFragment extends SherlockFragment implements Application
 	private static final String LOG_TAG = SmsSettingsFragment.class.getSimpleName();
 
 	// To handle shared preferences
-	private final PreferencesHandler prefHandler = PreferencesHandler.getInstance();
+	private final SharedPreferencesHandler prefHandler = SharedPreferencesHandler.getInstance();
 
 	// Must have the application context
 	private Context context;
@@ -262,7 +262,7 @@ public class SmsSettingsFragment extends SherlockFragment implements Application
 					updateSecondarySmsNumberSpinner();
 					break;
 				default:
-					if (BuildConfig.DEBUG) {
+					if (SmsAlarm.DEBUG) {
 						Log.e(LOG_TAG + ":onActivityResult()", "An unsupported result occurred, result code: \"" + resultCode + "\" and request code: \"" + requestCode + "\"");
 					}
 			}

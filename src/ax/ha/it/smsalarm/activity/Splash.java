@@ -16,9 +16,9 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import ax.ha.it.smsalarm.R;
 import ax.ha.it.smsalarm.fragment.dialog.EulaDialog;
-import ax.ha.it.smsalarm.handler.PreferencesHandler;
-import ax.ha.it.smsalarm.handler.PreferencesHandler.DataType;
-import ax.ha.it.smsalarm.handler.PreferencesHandler.PrefKey;
+import ax.ha.it.smsalarm.handler.SharedPreferencesHandler;
+import ax.ha.it.smsalarm.handler.SharedPreferencesHandler.DataType;
+import ax.ha.it.smsalarm.handler.SharedPreferencesHandler.PrefKey;
 
 /**
  * Activity just to show splash screen and after a certain time or a tap on screen activity switch to activity {@link SmsAlarm}.<br>
@@ -31,7 +31,7 @@ import ax.ha.it.smsalarm.handler.PreferencesHandler.PrefKey;
  */
 public class Splash extends FragmentActivity {
 	// To handle the shared preferences
-	private final PreferencesHandler prefHandler = PreferencesHandler.getInstance();
+	private final SharedPreferencesHandler prefHandler = SharedPreferencesHandler.getInstance();
 
 	// Time before the activities switch
 	private final int delay = 5000;

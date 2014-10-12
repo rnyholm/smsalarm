@@ -13,7 +13,7 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
 import android.util.Log;
-import ax.ha.it.smsalarm.BuildConfig;
+import ax.ha.it.smsalarm.activity.SmsAlarm;
 
 /**
  * Class responsible for all {@link SharedPreferences} handling.<br>
@@ -23,7 +23,7 @@ import ax.ha.it.smsalarm.BuildConfig;
  * @version 2.3.1
  * @since 2.0
  */
-public class PreferencesHandler {
+public class SharedPreferencesHandler {
 	/**
 	 * The different valid data types, for storing and fetching {@link SharedPreferences}.
 	 * 
@@ -92,30 +92,30 @@ public class PreferencesHandler {
 	}
 
 	// Singleton instance of this class
-	private static PreferencesHandler INSTANCE;
+	private static SharedPreferencesHandler INSTANCE;
 
-	private static final String LOG_TAG = PreferencesHandler.class.getSimpleName();
+	private static final String LOG_TAG = SharedPreferencesHandler.class.getSimpleName();
 
 	// Variables needed for retrieving shared preferences
 	private SharedPreferences sharedPref;
 	private Editor prefsEditor;
 
 	/**
-	 * Creates a new instance of {@link PreferencesHandler}.
+	 * Creates a new instance of {@link SharedPreferencesHandler}.
 	 */
-	private PreferencesHandler() {
+	private SharedPreferencesHandler() {
 		// Just empty...
 	}
 
 	/**
-	 * To get the <b><i>singleton</i></b> instance of {@link PreferencesHandler}.
+	 * To get the <b><i>singleton</i></b> instance of {@link SharedPreferencesHandler}.
 	 * 
 	 * @return Instance of <code>PreferencesHandler</code>.
 	 */
-	public static PreferencesHandler getInstance() {
+	public static SharedPreferencesHandler getInstance() {
 		// If instance of this object is null create a new one
 		if (INSTANCE == null) {
-			INSTANCE = new PreferencesHandler();
+			INSTANCE = new SharedPreferencesHandler();
 		}
 
 		return INSTANCE;
@@ -233,7 +233,7 @@ public class PreferencesHandler {
 
 						return list;
 					} catch (JSONException e) {
-						if (BuildConfig.DEBUG) {
+						if (SmsAlarm.DEBUG) {
 							Log.e(LOG_TAG + ":fetchPrefs()", "Failed to retrieve List<String> from shared preferences: \"" + sharedPreferences.getKey() + "\", with key: \"" + sharedPreferencesKey.getKey() + "\", type: \"" + type.name() + "\" and context: \"" + context.toString() + "\"", e);
 						}
 					}
@@ -248,7 +248,7 @@ public class PreferencesHandler {
 		// If application end up here then some error has occurred
 		IllegalArgumentException exception = new IllegalArgumentException("Failed to fetch shared preferences: \"" + sharedPreferences.getKey() + "\", with key: \"" + sharedPreferencesKey.getKey() + "\", data type: \"" + type.name() + "\" and context: \"" + context.toString() + "\". Cause: \"Data type given as argument is unsupported\", valid data types are: \"INTEGER\", \"STRING\", \"BOOLEAN\" and \"LIST\"");
 
-		if (BuildConfig.DEBUG) {
+		if (SmsAlarm.DEBUG) {
 			Log.e(LOG_TAG + ":fetchPrefs()", "An exception occurred while fetching shared preferences", exception);
 		}
 
@@ -316,7 +316,7 @@ public class PreferencesHandler {
 			// If application end up here then some error has occurred
 			IllegalArgumentException exception = new IllegalArgumentException("Failed to store object to shared preferences: \"" + sharedPreference.getKey() + "\", with key: \"" + sharedPreferencesKey.getKey() + "\" and context: \"" + context.toString() + "\". Cause: \"Object of unsupported instance was given as argument\", given object is instance of: \"" + object.getClass().getSimpleName() + "\", valid instances are: \"int\", \"String\", \"boolean\" and \"List<String>\"");
 
-			if (BuildConfig.DEBUG) {
+			if (SmsAlarm.DEBUG) {
 				Log.e(LOG_TAG + ":storePrefs()", "An exception occurred while setting shared preferences", exception);
 			}
 

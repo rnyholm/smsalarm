@@ -20,18 +20,18 @@ import android.os.Bundle;
 import android.os.PowerManager;
 import android.telephony.SmsMessage;
 import android.util.Log;
-import ax.ha.it.smsalarm.BuildConfig;
+import ax.ha.it.smsalarm.activity.SmsAlarm;
 import ax.ha.it.smsalarm.handler.DatabaseHandler;
 import ax.ha.it.smsalarm.handler.KitKatHandler;
 import ax.ha.it.smsalarm.handler.NoiseHandler;
-import ax.ha.it.smsalarm.handler.PreferencesHandler;
-import ax.ha.it.smsalarm.handler.PreferencesHandler.DataType;
-import ax.ha.it.smsalarm.handler.PreferencesHandler.PrefKey;
-import ax.ha.it.smsalarm.helper.AcknowledgeNotificationHelper;
-import ax.ha.it.smsalarm.helper.NotificationHelper;
+import ax.ha.it.smsalarm.handler.SharedPreferencesHandler;
+import ax.ha.it.smsalarm.handler.SharedPreferencesHandler.DataType;
+import ax.ha.it.smsalarm.handler.SharedPreferencesHandler.PrefKey;
 import ax.ha.it.smsalarm.pojo.Alarm;
 import ax.ha.it.smsalarm.pojo.Alarm.AlarmType;
 import ax.ha.it.smsalarm.provider.WidgetProvider;
+import ax.ha.it.smsalarm.service.AcknowledgeNotificationService;
+import ax.ha.it.smsalarm.service.NotificationService;
 import ax.ha.it.smsalarm.util.AlarmLogger;
 import ax.ha.it.smsalarm.util.WakeLocker;
 
@@ -53,7 +53,7 @@ public class SmsReceiver extends BroadcastReceiver {
 	private final int WAKE_LOCKER_ACQUIRE_TIME = 20000;
 
 	// Objects needed shared preferences, noise and KitKat handling
-	private final PreferencesHandler prefHandler = PreferencesHandler.getInstance();
+	private final SharedPreferencesHandler prefHandler = SharedPreferencesHandler.getInstance();
 	private final NoiseHandler noiseHandler = NoiseHandler.getInstance();
 	private final KitKatHandler kitKatHandler = KitKatHandler.getInstance();
 
@@ -183,7 +183,7 @@ public class SmsReceiver extends BroadcastReceiver {
 				break;
 			default:
 				// This is weird, log this case
-				if (BuildConfig.DEBUG) {
+				if (SmsAlarm.DEBUG) {
 					Log.e(LOG_TAG + ":handleSMS()", "SMS with AlarmType: \"UNDEFINED\" received, check why. However application can't decide how to handle this case");
 				}
 		}
@@ -205,11 +205,11 @@ public class SmsReceiver extends BroadcastReceiver {
 		// Acknowledge is enabled and it is a primary alarm, show acknowledge notification, else show "ordinary" notification
 		if (enableAlarmAck && alarmType.equals(AlarmType.PRIMARY)) {
 			// Start intent, AcknowledgeNotificationHelper - a helper to show acknowledge notification
-			Intent ackNotIntent = new Intent(context, AcknowledgeNotificationHelper.class);
+			Intent ackNotIntent = new Intent(context, AcknowledgeNotificationService.class);
 			context.startService(ackNotIntent);
 		} else {
 			// Start intent, NotificationHelper - a helper to show notification
-			Intent notIntent = new Intent(context, NotificationHelper.class);
+			Intent notIntent = new Intent(context, NotificationService.class);
 			context.startService(notIntent);
 		}
 	}

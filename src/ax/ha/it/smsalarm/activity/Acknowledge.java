@@ -24,9 +24,9 @@ import android.widget.TextView;
 import android.widget.Toast;
 import ax.ha.it.smsalarm.R;
 import ax.ha.it.smsalarm.handler.DatabaseHandler;
-import ax.ha.it.smsalarm.handler.PreferencesHandler;
-import ax.ha.it.smsalarm.handler.PreferencesHandler.DataType;
-import ax.ha.it.smsalarm.handler.PreferencesHandler.PrefKey;
+import ax.ha.it.smsalarm.handler.SharedPreferencesHandler;
+import ax.ha.it.smsalarm.handler.SharedPreferencesHandler.DataType;
+import ax.ha.it.smsalarm.handler.SharedPreferencesHandler.PrefKey;
 import ax.ha.it.smsalarm.provider.WidgetProvider;
 import ax.ha.it.smsalarm.util.AlarmLogger;
 
@@ -41,7 +41,7 @@ import ax.ha.it.smsalarm.util.AlarmLogger;
  */
 public class Acknowledge extends Activity {
 	// To handle the shared preferences
-	private final PreferencesHandler prefHandler = PreferencesHandler.getInstance();
+	private final SharedPreferencesHandler prefHandler = SharedPreferencesHandler.getInstance();
 
 	// To listen at the phones different states
 	private ListenToPhoneState customPhoneStateListener;
@@ -134,7 +134,7 @@ public class Acknowledge extends Activity {
 
 					// Place the acknowledge call
 					placeAcknowledgeCall();
-				} else { // No phonenumber to acknowledge to exists, show toast
+				} else { // No phone number to acknowledge to exists, show toast
 					Toast.makeText(Acknowledge.this, R.string.ACK_CANNOT, Toast.LENGTH_LONG).show();
 				}
 			}

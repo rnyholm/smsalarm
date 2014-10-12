@@ -33,7 +33,7 @@ public class SlidingMenuItem {
 	 */
 	public SlidingMenuItem(String title) {
 		this.title = title;
-		this.optionalIconResource = Optional.absent();
+		this.optionalIconResource = Optional.<Integer> absent();
 	}
 
 	/**

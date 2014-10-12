@@ -13,8 +13,8 @@ import java.util.List;
 import android.content.Context;
 import android.os.Environment;
 import android.util.Log;
-import ax.ha.it.smsalarm.BuildConfig;
 import ax.ha.it.smsalarm.R;
+import ax.ha.it.smsalarm.activity.SmsAlarm;
 import ax.ha.it.smsalarm.pojo.Alarm;
 
 /**
@@ -187,7 +187,7 @@ public class AlarmLogger {
 				bW.flush();
 				bW.close();
 			} catch (Exception e) {
-				if (BuildConfig.DEBUG) {
+				if (SmsAlarm.DEBUG) {
 					Log.e(LOG_TAG + ":logAlarms()", "An Exception occurred during writing to file: \"" + HTML_ALARM_FILE + "\"", e);
 				}
 			}
@@ -247,7 +247,7 @@ public class AlarmLogger {
 		try {
 			file.createNewFile();
 		} catch (IOException e) {
-			if (BuildConfig.DEBUG) {
+			if (SmsAlarm.DEBUG) {
 				Log.e(LOG_TAG + ":createFile()", "An error occurred while creating file: \"" + fileName + "\"", e);
 			}
 		}
@@ -270,7 +270,7 @@ public class AlarmLogger {
 			// Something else is wrong. It may be one of many other states, but all we need to know is we can neither read nor write
 			mExternalStorageAvailable = mExternalStorageWriteable = false;
 
-			if (BuildConfig.DEBUG) {
+			if (SmsAlarm.DEBUG) {
 				Log.e(LOG_TAG + ":checkExternalStorageState()", "Can't write log, cause: External storage is not available for writing or reading");
 			}
 		}

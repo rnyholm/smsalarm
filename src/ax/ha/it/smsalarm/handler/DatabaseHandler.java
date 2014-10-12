@@ -12,9 +12,9 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
+import ax.ha.it.smsalarm.activity.SmsAlarm;
 import ax.ha.it.smsalarm.pojo.Alarm;
 import ax.ha.it.smsalarm.pojo.Alarm.AlarmType;
-import ax.ha.it.smsalarm.BuildConfig;
 
 /**
  * Class responsible for all <code>Database</code> access and handling. <code>Database</code> access and handling are done via the
@@ -68,20 +68,20 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 		// Run query
 		db.execSQL(CREATE_ALARMS_TABLE);
 
-		if (BuildConfig.DEBUG) {
+		if (SmsAlarm.DEBUG) {
 			Log.d(LOG_TAG + ":onCreate()", "Executed SQL query:\"" + CREATE_ALARMS_TABLE + "\"");
 		}
 	}
 
 	@Override
 	public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-		if (BuildConfig.DEBUG) {
+		if (SmsAlarm.DEBUG) {
 			Log.d(LOG_TAG + ":onUpgrade()", oldVersion + " -- " + newVersion);
 		}
 
 		// If there is a new version of the database, reconstruct existing database and handle data migration
 		if (newVersion > oldVersion && newVersion == DB_VERSION) {
-			if (BuildConfig.DEBUG) {
+			if (SmsAlarm.DEBUG) {
 				Log.d(LOG_TAG + ":onUpgrade()", "Table:\"" + TABLE_ALARMS + "\" already exists, begin upgrade of table structure and data migration");
 			}
 
@@ -93,7 +93,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 			// Begin data migration and reconstruction of existing database, beginning with renaming existing table
 			db.execSQL(ALTER_QUERY);
 
-			if (BuildConfig.DEBUG) {
+			if (SmsAlarm.DEBUG) {
 				Log.d(LOG_TAG + ":onUpgrade()", "Executed SQL query:\"" + ALTER_QUERY + "\"");
 			}
 
@@ -103,13 +103,13 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 			// Populate new table with existing data from old table(now seen as a temporary table)
 			db.execSQL(INSERT_QUERY);
 
-			if (BuildConfig.DEBUG) {
+			if (SmsAlarm.DEBUG) {
 				Log.d(LOG_TAG + ":onUpgrade()", oldVersion + " -- " + newVersion);
 			}
 
 			// Now drop the temporary table
 			db.execSQL(DROP_QUERY);
-			if (BuildConfig.DEBUG) {
+			if (SmsAlarm.DEBUG) {
 				Log.d(LOG_TAG + ":onUpgrade()", "Executed SQL query:\"" + DROP_QUERY + "\"");
 				Log.d(LOG_TAG + ":onUpgrade()", "Existing table:\"" + TABLE_ALARMS + "\" has been altered by adding column:\"" + KEY_TRIGGER_TEXT + "\" and populating it with existing data");
 			}

@@ -19,9 +19,9 @@ import android.widget.TextView;
 import ax.ha.it.smsalarm.R;
 import ax.ha.it.smsalarm.activity.Splash;
 import ax.ha.it.smsalarm.handler.DatabaseHandler;
-import ax.ha.it.smsalarm.handler.PreferencesHandler;
-import ax.ha.it.smsalarm.handler.PreferencesHandler.DataType;
-import ax.ha.it.smsalarm.handler.PreferencesHandler.PrefKey;
+import ax.ha.it.smsalarm.handler.SharedPreferencesHandler;
+import ax.ha.it.smsalarm.handler.SharedPreferencesHandler.DataType;
+import ax.ha.it.smsalarm.handler.SharedPreferencesHandler.PrefKey;
 import ax.ha.it.smsalarm.pojo.Alarm;
 import ax.ha.it.smsalarm.util.AlarmLogger;
 
@@ -35,7 +35,7 @@ import ax.ha.it.smsalarm.util.AlarmLogger;
  */
 public class WidgetProvider extends AppWidgetProvider {
 	// To get access to shared preferences and database
-	private final PreferencesHandler prefHandler = PreferencesHandler.getInstance();
+	private final SharedPreferencesHandler prefHandler = SharedPreferencesHandler.getInstance();
 	private DatabaseHandler db;
 
 	// Max length of the latest alarm length in widget

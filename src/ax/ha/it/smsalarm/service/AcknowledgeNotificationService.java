@@ -1,7 +1,7 @@
 /**
  * Copyright (c) 2013 Robert Nyholm. All rights reserved.
  */
-package ax.ha.it.smsalarm.helper;
+package ax.ha.it.smsalarm.service;
 
 import android.annotation.SuppressLint;
 import android.app.IntentService;
@@ -12,9 +12,9 @@ import android.content.Context;
 import android.content.Intent;
 import ax.ha.it.smsalarm.R;
 import ax.ha.it.smsalarm.activity.Acknowledge;
-import ax.ha.it.smsalarm.handler.PreferencesHandler;
-import ax.ha.it.smsalarm.handler.PreferencesHandler.DataType;
-import ax.ha.it.smsalarm.handler.PreferencesHandler.PrefKey;
+import ax.ha.it.smsalarm.handler.SharedPreferencesHandler;
+import ax.ha.it.smsalarm.handler.SharedPreferencesHandler.DataType;
+import ax.ha.it.smsalarm.handler.SharedPreferencesHandler.PrefKey;
 
 /**
  * Helper to build up and show {@link Notification}, also creates {@link PendingIntent}'s for the notification.<br>
@@ -24,16 +24,16 @@ import ax.ha.it.smsalarm.handler.PreferencesHandler.PrefKey;
  * @version 2.3.1
  * @since 1.2.1-SE
  */
-public class AcknowledgeNotificationHelper extends IntentService {
+public class AcknowledgeNotificationService extends IntentService {
 
-	private final PreferencesHandler prefHandler = PreferencesHandler.getInstance();
+	private final SharedPreferencesHandler prefHandler = SharedPreferencesHandler.getInstance();
 
 	/**
-	 * Creates a new instance of {@link AcknowledgeNotificationHelper}.<br>
+	 * Creates a new instance of {@link AcknowledgeNotificationService}.<br>
 	 * A constructor must be implemented and call it's <code>superclass</code>, {@link IntentService}, constructor with an <b><i>arbitrary</i></b>
 	 * <code>String</code> as argument.
 	 */
-	public AcknowledgeNotificationHelper() {
+	public AcknowledgeNotificationService() {
 		// Note: MUST call super() constructor with an arbitrary string
 		super("AcknowledgeNotificationHelper");
 	}
@@ -91,6 +91,7 @@ public class AcknowledgeNotificationHelper extends IntentService {
 		notification.ledARGB = 0xFFff0000; 	// Red
 		notification.ledOnMS = 100; 		// On time
 		notification.ledOffMS = 100;		// Off time
+		notification.vibrate = new long[] { 1000, 1000, 1000, 1000, 1000 };
 		// @formatter:on
 
 		// Dispatch the notification

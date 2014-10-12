@@ -28,6 +28,8 @@ import com.jeremyfeinstein.slidingmenu.lib.app.SlidingFragmentActivity;
  * @since 0.9beta
  */
 public class SmsAlarm extends SlidingFragmentActivity {
+	public static final boolean DEBUG = true;
+
 	// To get database access
 	private DatabaseHandler db;
 

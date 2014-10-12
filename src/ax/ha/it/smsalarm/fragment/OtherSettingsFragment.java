@@ -22,12 +22,12 @@ import android.widget.EditText;
 import android.widget.RelativeLayout;
 import android.widget.RelativeLayout.LayoutParams;
 import android.widget.TextView;
-import ax.ha.it.smsalarm.BuildConfig;
 import ax.ha.it.smsalarm.R;
+import ax.ha.it.smsalarm.activity.SmsAlarm;
 import ax.ha.it.smsalarm.fragment.dialog.RescueServiceDialog;
-import ax.ha.it.smsalarm.handler.PreferencesHandler;
-import ax.ha.it.smsalarm.handler.PreferencesHandler.DataType;
-import ax.ha.it.smsalarm.handler.PreferencesHandler.PrefKey;
+import ax.ha.it.smsalarm.handler.SharedPreferencesHandler;
+import ax.ha.it.smsalarm.handler.SharedPreferencesHandler.DataType;
+import ax.ha.it.smsalarm.handler.SharedPreferencesHandler.PrefKey;
 
 import com.actionbarsherlock.app.SherlockFragment;
 
@@ -43,7 +43,7 @@ public class OtherSettingsFragment extends SherlockFragment implements Applicati
 	private static final String LOG_TAG = OtherSettingsFragment.class.getSimpleName();
 
 	// Need to handle shared shared preferences
-	private final PreferencesHandler prefHandler = PreferencesHandler.getInstance();
+	private final SharedPreferencesHandler prefHandler = SharedPreferencesHandler.getInstance();
 
 	// Must have the application context
 	private Context context;
@@ -223,7 +223,7 @@ public class OtherSettingsFragment extends SherlockFragment implements Applicati
 
 					break;
 				default:
-					if (BuildConfig.DEBUG) {
+					if (SmsAlarm.DEBUG) {
 						Log.e(LOG_TAG + ":onActivityResult()", "An unsupported result occurred, result code: \"" + resultCode + "\" and request code: \"" + requestCode + "\"");
 					}
 			}

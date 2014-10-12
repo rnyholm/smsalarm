@@ -9,9 +9,9 @@ import android.app.Application;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager.NameNotFoundException;
 import android.util.Log;
-import ax.ha.it.smsalarm.BuildConfig;
-import ax.ha.it.smsalarm.handler.PreferencesHandler.DataType;
-import ax.ha.it.smsalarm.handler.PreferencesHandler.PrefKey;
+import ax.ha.it.smsalarm.activity.SmsAlarm;
+import ax.ha.it.smsalarm.handler.SharedPreferencesHandler.DataType;
+import ax.ha.it.smsalarm.handler.SharedPreferencesHandler.PrefKey;
 
 /**
  * Responsible for any <b><i>update actions</i></b>. In other words if some changes has been made in current release of the application that needs to
@@ -29,7 +29,7 @@ public class UpdateHandler extends Application {
 	private static final String LOG_TAG = UpdateHandler.class.getSimpleName();
 
 	// To handle shared preferences
-	private final PreferencesHandler prefHandler = PreferencesHandler.getInstance();
+	private final SharedPreferencesHandler prefHandler = SharedPreferencesHandler.getInstance();
 
 	// Base value for a fresh installation
 	private static final int NEW_INSTALLATION = -1;
@@ -92,11 +92,11 @@ public class UpdateHandler extends Application {
 			}
 
 		} catch (NameNotFoundException e) {
-			if (BuildConfig.DEBUG) {
+			if (SmsAlarm.DEBUG) {
 				Log.e(LOG_TAG + ":onCreate()", "Name of application package could not be found", e);
 			}
 		} catch (Exception e) {
-			if (BuildConfig.DEBUG) {
+			if (SmsAlarm.DEBUG) {
 				Log.e(LOG_TAG + ":onCreate()", "An error occurred while handling update actions, version code is not updated. Current version code is: \"" + currentVersionCode + "\", old version code is: \"" + oldVersionCode + "\"", e);
 			}
 		}

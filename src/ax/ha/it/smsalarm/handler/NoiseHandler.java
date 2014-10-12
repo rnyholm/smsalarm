@@ -12,8 +12,8 @@ import android.media.MediaPlayer;
 import android.media.MediaPlayer.OnCompletionListener;
 import android.os.Vibrator;
 import android.util.Log;
-import ax.ha.it.smsalarm.BuildConfig;
 import ax.ha.it.smsalarm.R;
+import ax.ha.it.smsalarm.activity.SmsAlarm;
 
 /**
  * Class responsible for all sound and vibration handling. This means playing alarm signal, vibrate and so on, depending on application and phone
@@ -84,7 +84,7 @@ public class NoiseHandler {
 
 		// Need to wait until KitKat handler is in idle mode
 		while (!kitKatHandler.isIdle() && (System.currentTimeMillis() < (startTimeMillis + NOISE_DELAY_LIMIT))) {
-			if (BuildConfig.DEBUG) {
+			if (SmsAlarm.DEBUG) {
 				Log.d(LOG_TAG + ":doNoise()", "KitKatHandler running, waiting....");
 			}
 		}
@@ -114,7 +114,7 @@ public class NoiseHandler {
 			try {
 				afd = context.getAssets().openFd("alarm-signals/" + resolveAlarmSignal(context, id) + ".mp3");
 			} catch (IOException e) {
-				if (BuildConfig.DEBUG) {
+				if (SmsAlarm.DEBUG) {
 					Log.e(LOG_TAG + ":doNoise()", "An error occurred while setting correct alarm signal to AssetFileDescriptor", e);
 				}
 			}
@@ -124,11 +124,11 @@ public class NoiseHandler {
 				mediaPlayer.setDataSource(afd.getFileDescriptor(), afd.getStartOffset(), afd.getLength());
 				mediaPlayer.prepare();
 			} catch (IllegalStateException e) {
-				if (BuildConfig.DEBUG) {
+				if (SmsAlarm.DEBUG) {
 					Log.e(LOG_TAG + ":doNoise()", "Mediaplayer is in an illegal state for setting datasource or preparing it", e);
 				}
 			} catch (IOException e) {
-				if (BuildConfig.DEBUG) {
+				if (SmsAlarm.DEBUG) {
 					Log.e(LOG_TAG + ":doNoise()", "An error occurred while setting datasource to mediaplayer or preparing it", e);
 				}
 			}
@@ -167,7 +167,7 @@ public class NoiseHandler {
 
 						break;
 					default: // Unsupported RINGER_MODE
-						if (BuildConfig.DEBUG) {
+						if (SmsAlarm.DEBUG) {
 							Log.d(LOG_TAG + ":doNoise()", "Device is in a \"UNSUPPORTED\" ringer mode, can't decide what to do");
 						}
 				}

@@ -1,7 +1,7 @@
 /**
  * Copyright (c) 2013 Robert Nyholm. All rights reserved.
  */
-package ax.ha.it.smsalarm.helper;
+package ax.ha.it.smsalarm.service;
 
 import android.annotation.SuppressLint;
 import android.app.IntentService;
@@ -11,11 +11,11 @@ import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.util.Log;
-import ax.ha.it.smsalarm.BuildConfig;
 import ax.ha.it.smsalarm.R;
-import ax.ha.it.smsalarm.handler.PreferencesHandler;
-import ax.ha.it.smsalarm.handler.PreferencesHandler.DataType;
-import ax.ha.it.smsalarm.handler.PreferencesHandler.PrefKey;
+import ax.ha.it.smsalarm.activity.SmsAlarm;
+import ax.ha.it.smsalarm.handler.SharedPreferencesHandler;
+import ax.ha.it.smsalarm.handler.SharedPreferencesHandler.DataType;
+import ax.ha.it.smsalarm.handler.SharedPreferencesHandler.PrefKey;
 import ax.ha.it.smsalarm.pojo.Alarm.AlarmType;
 
 /**
@@ -26,10 +26,10 @@ import ax.ha.it.smsalarm.pojo.Alarm.AlarmType;
  * @version 2.3.1
  * @since 0.9beta
  */
-public class NotificationHelper extends IntentService {
-	private static final String LOG_TAG = NotificationHelper.class.getSimpleName();
+public class NotificationService extends IntentService {
+	private static final String LOG_TAG = NotificationService.class.getSimpleName();
 
-	private final PreferencesHandler prefHandler = PreferencesHandler.getInstance();
+	private final SharedPreferencesHandler prefHandler = SharedPreferencesHandler.getInstance();
 
 	// @formatter:off
 	// Different variables needed to build up a correct notification
@@ -40,11 +40,11 @@ public class NotificationHelper extends IntentService {
 	private int icon = 0; // Icon in notification bar
 
 	/**
-	 * Creates a new instance of {@link NotificationHelper}.<br>
+	 * Creates a new instance of {@link NotificationService}.<br>
 	 * A constructor must be implemented and call it's <code>superclass</code>, {@link IntentService}, constructor with an <b><i>arbitrary</i></b>
 	 * <code>String</code> as argument.
 	 */
-	public NotificationHelper() {
+	public NotificationService() {
 		// Note: MUST call super() constructor with an arbitrary string
 		super("NotificationHelper");
 	}
@@ -91,7 +91,7 @@ public class NotificationHelper extends IntentService {
 				configureNotification(android.R.drawable.ic_menu_close_clear_cancel, getString(R.string.SECONDARY_ALARM), rescueService.toUpperCase(), getString(R.string.SECONDARY_ALARM));
 				break;
 			default: // If this happens, something really weird is going on
-				if (BuildConfig.DEBUG) {
+				if (SmsAlarm.DEBUG) {
 					Log.e(LOG_TAG + ":onHandleIntent()", "Alarm type couldn't be find when configuring notification");
 				}
 		}
