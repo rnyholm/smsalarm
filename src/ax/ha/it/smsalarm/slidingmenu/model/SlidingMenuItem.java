@@ -37,6 +37,21 @@ public class SlidingMenuItem {
 	}
 
 	/**
+	 * Creates a new instance of {@link SlidingMenuItem} with a id and title.<br>
+	 * By doing this the menu item will get a icon resource that's <code>absent</code>.
+	 * 
+	 * @param id
+	 *            Id of this menu item.
+	 * @param title
+	 *            Title of this menu item.
+	 */
+	public SlidingMenuItem(int id, String title) {
+		this.id = id;
+		this.title = title;
+		this.optionalIconResource = Optional.<Integer> absent();
+	}
+
+	/**
 	 * Creates a new instance of {@link SlidingMenuItem} with a id, title and icon resource.
 	 * 
 	 * @param id

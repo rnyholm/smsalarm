@@ -129,4 +129,8 @@
   	<string name="WIDGET_ICON_CONTENT_DESCR">Widget sms alarm icon</string>
   	<string name="WIDGET_NOT_AGREED_EULA">You must start Sms Alarm and agree to the user agreement before you may use this widget.</string>
     <string name="YES">Yes</string>  
+    <!-- Strings for development/debug(only exists in default) begin -->
+    <string name="DEBUG_MENU_TITLE_DEVELOP">Develop Tools</string>
+    <string name="DEBUG_MENU_TITLE_NOTIFICATION">Dispatch Notification</string>
+    <!-- Strings for development/debug end -->
 </resources>

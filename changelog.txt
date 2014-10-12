@@ -6,6 +6,7 @@ v2.3.1(version code 14)
 -Bytt namn på alarmsignalen Virve till Nokia THR800
 -Fixade bugg att shared preference HAS_CALLED kan vara "true" när applikationen går in i Acknowledge.class,
 resulterar i att ett kvitteringssamtal rings direkt när man e inne i kvitterings gränssnittet
+-Alla ikoner som används i applikationen finns lokalt i projektet istället för att hämtas från Android resources
 
 v2.2.5(version code 13)
 -Översättning till estniska lades till

@@ -16,8 +16,6 @@ import ax.ha.it.smsalarm.R;
 import ax.ha.it.smsalarm.fragment.SlidingMenuFragment;
 import ax.ha.it.smsalarm.slidingmenu.model.SlidingMenuItem;
 
-import com.google.common.base.Optional;
-
 /**
  * An adapter for wrapping {@link SlidingMenuItem}'s into a neat {@link ListView}.
  * 
@@ -65,11 +63,14 @@ public class SlidingMenuAdapter extends ArrayAdapter<SlidingMenuItem> {
 			title.setText(menuItem.getTitle());
 		} else {
 			convertView = LayoutInflater.from(getContext()).inflate(R.layout.menu_item, null);
-
-			// Set correct icon to layout, it's safe to do a get() on an optional in this case
-			// because we know that it has present data already
 			ImageView icon = (ImageView) convertView.findViewById(R.id.menuItemIcon_iv);
-			icon.setImageResource(menuItem.getIconResource().get());
+
+			// If icon exists set it to image view, else hide image view
+			if (menuItem.getIconResource().isPresent()) {
+				icon.setImageResource(menuItem.getIconResource().get());
+			} else {
+				icon.setVisibility(View.GONE);
+			}
 
 			TextView title = (TextView) convertView.findViewById(R.id.menuItemTitle_tv);
 			title.setText(menuItem.getTitle());
@@ -104,20 +105,18 @@ public class SlidingMenuAdapter extends ArrayAdapter<SlidingMenuItem> {
 
 	/**
 	 * To figure out if menu item at given position is a sections title or a menu item in the section. This is decided whether or not the menu item
-	 * holds a <code>icon resource</code> or not (<code>Optional.isPresent()</code>). If an <code>absent</code> icon resource was found then this menu
-	 * item is a sections title, else not.
+	 * has a <b><i>id</i></b> larger than <b><i>-1</i></b> or not. If an the menu items id is -1 or lower then this menu item is a sections title,
+	 * else not.
 	 * 
 	 * @param position
 	 *            Position from where to get menu item to be checked.
 	 * @return <code>true</code> if menu item at given position is a sections title else return <code>false</code>.
 	 */
 	private boolean isItemSectionTitle(int position) {
-		Optional<Integer> optionalIconResource = getItem(position).getIconResource();
-
-		if (optionalIconResource.isPresent()) {
-			return false;
+		if (getItem(position).getId() < 0) {
+			return true;
 		}
 
-		return true;
+		return false;
 	}
 }
