@@ -59,61 +59,57 @@ public class CameraHandler {
 	}
 
 	/**
-	 * To safely initialize the {@link Camera} object within {@link CameraHandler} if needed. This decision is done with a null check of the Camera
-	 * object in CameraHandler. If null, it's being initialized, else not.
-	 */
-	private void initializeCamera() {
-		// Camera needs to be initialized
-		if (camera == null) {
-			PackageManager pm = context.getPackageManager();
-
-			// See if device has a camera feature
-			if (pm.hasSystemFeature(PackageManager.FEATURE_CAMERA)) {
-				try {
-					camera = Camera.open();
-
-					if (SmsAlarm.DEBUG) {
-						Log.i(LOG_TAG + ":initializeCamera()", "Camera successfully initialized");
-					}
-				} catch (RuntimeException e) {
-					if (SmsAlarm.DEBUG) {
-						Log.e(LOG_TAG + ":initializeCamera()", "An error occurred while initializing the camera, maybe application is running in a emulator", e);
-					}
-				}
-			}
-		}
-	}
-
-	/**
 	 * To toggle {@link CameraHandler}'s {@link Camera} objects <b><i>Flash Light</i></b> on or off. If it's currently being on ON then it's switched
 	 * OFF and vice versa.
 	 */
 	public void toggleCameraFlash() {
-		initializeCamera();
+		// Get the package manager in order to figure out if system service exists
+		PackageManager packageManager = context.getPackageManager();
 
-		// Get the parameters of from the camera, and especially the FlashMode
-		Parameters parameters = camera.getParameters();
-		String flashMode = parameters.getFlashMode();
+		// Only if device supports support camera flash
+		if (packageManager.hasSystemFeature(PackageManager.FEATURE_CAMERA)) {
+			// Initialize if null
+			if (camera == null) {
+				try {
+					camera = Camera.open();
 
-		// If FlashMode hasn't been set or it's off then switch it On and startPreview - IMPORTANT!
-		if (flashMode == null || Parameters.FLASH_MODE_OFF.equals(flashMode)) {
-			// This debug statement needs to be here as this can be tricky to test on an emulator else
-			if (SmsAlarm.DEBUG) {
-				Log.d(LOG_TAG + ":toggleCameraFlash()", "Switching camera flash LED ON");
+					if (SmsAlarm.DEBUG) {
+						Log.i(LOG_TAG + ":toggleCameraFlash()", "Camera successfully initialized");
+					}
+				} catch (RuntimeException e) {
+					if (SmsAlarm.DEBUG) {
+						Log.e(LOG_TAG + ":toggleCameraFlash()", "An error occurred while initializing the camera", e);
+					}
+				}
 			}
 
-			// Torch mode as we wan't the camera flash to light as bright as possible
-			parameters.setFlashMode(Parameters.FLASH_MODE_TORCH);
-			camera.setParameters(parameters);
-			camera.startPreview();
-		} else if (Parameters.FLASH_MODE_TORCH.equals(flashMode)) {
-			if (SmsAlarm.DEBUG) {
-				Log.d(LOG_TAG + ":toggleCameraFlash()", "Switching camera flash LED OFF");
-			}
+			// In case of camera failed to initialize, could be that device has no camera
+			if (camera != null) {
+				// Get the parameters of from the camera, and especially the FlashMode
+				Parameters parameters = camera.getParameters();
+				String flashMode = parameters.getFlashMode();
 
-			parameters.setFlashMode(Parameters.FLASH_MODE_OFF);
-			camera.setParameters(parameters);
-			camera.stopPreview();
+				// If FlashMode hasn't been set or it's off then switch it On and startPreview - IMPORTANT!
+				if (flashMode == null || Parameters.FLASH_MODE_OFF.equals(flashMode)) {
+					// This debug statement needs to be here as this can be tricky to test on an emulator else
+					if (SmsAlarm.DEBUG) {
+						Log.d(LOG_TAG + ":toggleCameraFlash()", "Switching camera flash LED ON");
+					}
+
+					// Torch mode as we wan't the camera flash to light as bright as possible
+					parameters.setFlashMode(Parameters.FLASH_MODE_TORCH);
+					camera.setParameters(parameters);
+					camera.startPreview();
+				} else if (Parameters.FLASH_MODE_TORCH.equals(flashMode)) {
+					if (SmsAlarm.DEBUG) {
+						Log.d(LOG_TAG + ":toggleCameraFlash()", "Switching camera flash LED OFF");
+					}
+
+					parameters.setFlashMode(Parameters.FLASH_MODE_OFF);
+					camera.setParameters(parameters);
+					camera.stopPreview();
+				}
+			}
 		}
 	}
 

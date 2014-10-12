@@ -33,9 +33,6 @@ import ax.ha.it.smsalarm.receiver.FlashAlarmReceiver;
  */
 @TargetApi(Build.VERSION_CODES.JELLY_BEAN_MR2)
 public class FlashNotificationService extends NotificationListenerService {
-	// Action for the intent used in this class
-	private static final String TOGGLE_CAMERA_FLASH = "ax.ha.it.smsalarm.TOGGLE_CAMERA_FLASH";
-
 	// Time until first camera flash and then the interval between them
 	private static final int FIRST_FLASH_DELAY = 1000;
 	private static final int FLASH_INTERVAL = 1000;
@@ -48,7 +45,6 @@ public class FlashNotificationService extends NotificationListenerService {
 			// Create the alarm manager, setup intents and pending intents
 			AlarmManager alarmManager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
 			Intent intent = new Intent(this, FlashAlarmReceiver.class);
-			intent.setAction(TOGGLE_CAMERA_FLASH);
 
 			// It's wanted to update any existing intent, hence requestCode = 0 and PendingIntent.FLAG_CANCEL_CURRENT
 			PendingIntent pendingIntent = PendingIntent.getBroadcast(this, 0, intent, PendingIntent.FLAG_CANCEL_CURRENT);
@@ -69,7 +65,6 @@ public class FlashNotificationService extends NotificationListenerService {
 		if (sbn.getPackageName().equals(getPackageName())) {
 			AlarmManager alarmManager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
 			Intent intent = new Intent(this, FlashAlarmReceiver.class);
-			intent.setAction(TOGGLE_CAMERA_FLASH);
 
 			PendingIntent pendingIntent = PendingIntent.getBroadcast(this, 0, intent, PendingIntent.FLAG_CANCEL_CURRENT);
 

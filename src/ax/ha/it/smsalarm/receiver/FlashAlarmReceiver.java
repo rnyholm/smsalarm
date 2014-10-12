@@ -11,9 +11,6 @@ import ax.ha.it.smsalarm.handler.CameraHandler;
 
 /**
  * Class responsible for switching the <b><i>Camera Flash Light</i></b> on and off for a certain amount of time, according to received intent.<br>
- * THis receiver is filtered to listen only at action:<br>
- * <code>ax.ha.it.smsalarm.TOGGLE_CAMERA_FLASH</code>
- * <p>
  * <b><i>Note.</i></b> This functionality will implicitly only work on devices running Android Jelly Bean MR2 (API Level 18) and higher, as the
  * invoking class is a subclass of {@link NotificationListenerService}.
  * 
