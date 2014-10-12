@@ -77,7 +77,7 @@ public class AcknowledgeNotificationService extends IntentService {
 		}
 
 		// Create notification
-		Notification notification = new Notification(android.R.drawable.ic_delete, tickerText, when);
+		Notification notification = new Notification(R.drawable.ic_primary_alarm, tickerText, when);
 
 		// Setup message and pending intent
 		PendingIntent contentIntent = PendingIntent.getActivity(this, 0, notificationIntent, 0);

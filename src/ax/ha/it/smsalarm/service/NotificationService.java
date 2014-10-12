@@ -85,10 +85,10 @@ public class NotificationService extends IntentService {
 		switch (alarmType) {
 			case PRIMARY:
 				// Set proper texts and icon to notification
-				configureNotification(android.R.drawable.ic_delete, getString(R.string.PRIMARY_ALARM), rescueService.toUpperCase(), getString(R.string.PRIMARY_ALARM));
+				configureNotification(R.drawable.ic_primary_alarm, getString(R.string.PRIMARY_ALARM), rescueService.toUpperCase(), getString(R.string.PRIMARY_ALARM));
 				break;
 			case SECONDARY:
-				configureNotification(android.R.drawable.ic_menu_close_clear_cancel, getString(R.string.SECONDARY_ALARM), rescueService.toUpperCase(), getString(R.string.SECONDARY_ALARM));
+				configureNotification(R.drawable.ic_secondary_alarm, getString(R.string.SECONDARY_ALARM), rescueService.toUpperCase(), getString(R.string.SECONDARY_ALARM));
 				break;
 			default: // If this happens, something really weird is going on
 				if (SmsAlarm.DEBUG) {
