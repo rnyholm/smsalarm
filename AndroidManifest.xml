@@ -50,12 +50,15 @@
            	<meta-data android:name="android.appwidget.provider"
                	android:resource="@xml/widget_configuration" />
        	</receiver> 
-       	<receiver android:name="ax.ha.it.smsalarm.receiver.FlashAlarmReceiver" />
+       	<receiver android:name="ax.ha.it.smsalarm.receiver.FlashAlarmReceiver" >
+           	<intent-filter> 
+         		<action android:name="ax.ha.it.smsalarm.TOGGLE_CAMERA_FLASH"/> 
+         	</intent-filter>      	    
+       	</receiver>
         <service android:name="ax.ha.it.smsalarm.service.NotificationService"></service>   
         <service android:name="ax.ha.it.smsalarm.service.AcknowledgeNotificationService"></service>
         <service android:name="ax.ha.it.smsalarm.service.FlashNotificationService"
                  android:label="@string/APP_NAME"
-                 android:description="@string/ABOUT_VERSION"
                  android:permission="android.permission.BIND_NOTIFICATION_LISTENER_SERVICE">
             <intent-filter>
                 <action android:name="android.service.notification.NotificationListenerService" />

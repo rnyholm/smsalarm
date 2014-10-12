@@ -13,10 +13,8 @@ import android.content.Intent;
 import android.os.Build;
 import android.service.notification.NotificationListenerService;
 import android.service.notification.StatusBarNotification;
-import android.util.Log;
-import ax.ha.it.smsalarm.activity.SmsAlarm;
+import ax.ha.it.smsalarm.handler.CameraHandler;
 import ax.ha.it.smsalarm.receiver.FlashAlarmReceiver;
-import ax.ha.it.smsalarm.receiver.FlashAlarmReceiver.CameraHandler;
 
 /**
  * Class responsible for the <b><i>Camera Flash Notifications</i></b>. This is done by listening at events in the <b><i>Notification Bar</i></b>, more
@@ -35,8 +33,10 @@ import ax.ha.it.smsalarm.receiver.FlashAlarmReceiver.CameraHandler;
  */
 @TargetApi(Build.VERSION_CODES.JELLY_BEAN_MR2)
 public class FlashNotificationService extends NotificationListenerService {
-	private static final String LOG_TAG = FlashNotificationService.class.getSimpleName();
+	// Action for the intent used in this class
+	private static final String TOGGLE_CAMERA_FLASH = "ax.ha.it.smsalarm.TOGGLE_CAMERA_FLASH";
 
+	// Time until first camera flash and then the interval between them
 	private static final int FIRST_FLASH_DELAY = 1000;
 	private static final int FLASH_INTERVAL = 1000;
 
@@ -45,13 +45,11 @@ public class FlashNotificationService extends NotificationListenerService {
 
 		// Only want to catch notifications posted to notification bar from our own applications package ax.ha.it.smsalarm
 		if (sbn.getPackageName().equals(getPackageName())) {
-			if (SmsAlarm.DEBUG) {
-				Log.i(LOG_TAG + ":onNotificationPosted()", "Notification originating from ax.ha.it.smsalarm posted, setting up AlarmManager and starting it");
-			}
-
 			// Create the alarm manager, setup intents and pending intents
 			AlarmManager alarmManager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
 			Intent intent = new Intent(this, FlashAlarmReceiver.class);
+			intent.setAction(TOGGLE_CAMERA_FLASH);
+
 			// It's wanted to update any existing intent, hence requestCode = 0 and PendingIntent.FLAG_CANCEL_CURRENT
 			PendingIntent pendingIntent = PendingIntent.getBroadcast(this, 0, intent, PendingIntent.FLAG_CANCEL_CURRENT);
 
@@ -69,15 +67,13 @@ public class FlashNotificationService extends NotificationListenerService {
 	public void onNotificationRemoved(StatusBarNotification sbn) {
 		// Only want to catch notifications removed from notification bar from our own applications package ax.ha.it.smsalarm
 		if (sbn.getPackageName().equals(getPackageName())) {
-			if (SmsAlarm.DEBUG) {
-				Log.i(LOG_TAG + ":onNotificationRemoved()", "Notification originating from ax.ha.it.smsalarm removed, setting up AlarmManager and cancel it");
-			}
-
 			AlarmManager alarmManager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
 			Intent intent = new Intent(this, FlashAlarmReceiver.class);
+			intent.setAction(TOGGLE_CAMERA_FLASH);
+
 			PendingIntent pendingIntent = PendingIntent.getBroadcast(this, 0, intent, PendingIntent.FLAG_CANCEL_CURRENT);
 
-			// Cancel alarms
+			// Cancel alarms and release the camera - IMPORTANT
 			alarmManager.cancel(pendingIntent);
 			CameraHandler.getInstance(this).releaseCamera();
 		}

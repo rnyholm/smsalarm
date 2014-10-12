@@ -42,10 +42,10 @@ public class WidgetProvider extends AppWidgetProvider {
 	private static final int ALARM_TEXT_MAX_LENGTH = 100;
 
 	// Strings representing different intents used to run different methods from intent
-	public static final String TOGGLE_ENABLE_SMS_ALARM = "ax.ha.it.smsalarm.TOGGLE_SMS_ALARM_ENABLE";
-	public static final String TOGGLE_USE_OS_SOUND_SETTINGS = "ax.ha.it.smsalarm.TOGGLE_USE_OS_SOUND_SETTINGS";
-	public static final String SHOW_RECEIVED_ALARMS = "ax.ha.it.smsalarm.SHOW_RECEIVED_ALARMS";
-	public static final String UPDATE_WIDGETS = "ax.ha.it.smsalarm.UPDATE_WIDGETS";
+	private static final String TOGGLE_ENABLE_SMS_ALARM = "ax.ha.it.smsalarm.TOGGLE_SMS_ALARM_ENABLE";
+	private static final String TOGGLE_USE_OS_SOUND_SETTINGS = "ax.ha.it.smsalarm.TOGGLE_USE_OS_SOUND_SETTINGS";
+	private static final String SHOW_RECEIVED_ALARMS = "ax.ha.it.smsalarm.SHOW_RECEIVED_ALARMS";
+	private static final String UPDATE_WIDGETS = "ax.ha.it.smsalarm.UPDATE_WIDGETS";
 
 	// Some booleans for retrieving preferences into
 	private boolean useOsSoundSettings = false;
@@ -71,7 +71,7 @@ public class WidgetProvider extends AppWidgetProvider {
 		fetchSharedPrefs(context);
 
 		// If statements to "catch" intent we looking for
-		if (intent.getAction().equals(TOGGLE_ENABLE_SMS_ALARM)) {
+		if (TOGGLE_ENABLE_SMS_ALARM.equals(intent.getAction())) {
 			// Set shared preferences depending on current preferences
 			if (enableSmsAlarm) {
 				setEnableSmsAlarmPref(context, false);
@@ -81,7 +81,7 @@ public class WidgetProvider extends AppWidgetProvider {
 
 			// Update widget
 			WidgetProvider.updateWidgets(context);
-		} else if (intent.getAction().equals(TOGGLE_USE_OS_SOUND_SETTINGS)) {
+		} else if (TOGGLE_USE_OS_SOUND_SETTINGS.equals(intent.getAction())) {
 			if (useOsSoundSettings) {
 				setUseOsSoundSettingsPref(context, false);
 			} else {
@@ -89,7 +89,7 @@ public class WidgetProvider extends AppWidgetProvider {
 			}
 
 			WidgetProvider.updateWidgets(context);
-		} else if (intent.getAction().equals(SHOW_RECEIVED_ALARMS)) {
+		} else if (SHOW_RECEIVED_ALARMS.equals(intent.getAction())) {
 			// Get full file path to alarm log file
 			String alarmLogFilePath = AlarmLogger.getInstance().getAlarmLogPath();
 
@@ -106,12 +106,12 @@ public class WidgetProvider extends AppWidgetProvider {
 			String ext = file.getName().substring(file.getName().indexOf(".") + 1);
 			String type = mime.getMimeTypeFromExtension(ext);
 
-			// Set data and type, in this case alarm log file and html
+			// Set data and type, in this case alarm log file and HTML
 			showReceivedAlarmsIntent.setDataAndType(Uri.fromFile(file), type);
 
 			// Start new activity from context
 			context.startActivity(showReceivedAlarmsIntent);
-		} else if (intent.getAction().equals(UPDATE_WIDGETS)) {
+		} else if (UPDATE_WIDGETS.equals(intent.getAction())) {
 			// Call onUpdate to update the widget instances
 			onUpdate(context, manager, AppWidgetManager.getInstance(context).getAppWidgetIds(new ComponentName(context.getPackageName(), getClass().getName())));
 		}
