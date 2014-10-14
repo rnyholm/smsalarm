@@ -12,7 +12,7 @@
             android:layout_marginLeft="5dp"
             android:layout_marginTop="5dp"
             android:contentDescription="@string/ACK_ICON_CONTENT_DESCR"
-            android:src="@android:drawable/ic_delete" />
+            android:src="@drawable/ic_primary_alarm" />
 
         <TextView
             android:id="@+id/ackTitle_tv"
@@ -67,7 +67,7 @@
             android:layout_marginLeft="5dp"
             android:layout_marginRight="5dp"
             android:layout_marginTop="5dp"
-            android:drawableLeft="@android:drawable/sym_call_outgoing"
+            android:drawableLeft="@drawable/ic_ack"
             android:text="@string/ACK" />
 
         <Button
@@ -77,7 +77,7 @@
             android:layout_alignLeft="@id/ackAcknowledgeAlarm_btn"
             android:layout_below="@id/ackAcknowledgeAlarm_btn"
             android:layout_marginRight="5dp"
-            android:drawableLeft="@android:drawable/sym_call_missed"
+            android:drawableLeft="@drawable/ic_ack_abort"
             android:text="@string/CANCEL" />
 
         <TextView
