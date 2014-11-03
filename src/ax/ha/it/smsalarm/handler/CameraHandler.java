@@ -1,45 +1,49 @@
-package ax.ha.it.smsalarm.handler;
-
 /**
  * Copyright (c) 2014 Robert Nyholm. All rights reserved.
  */
+package ax.ha.it.smsalarm.handler;
+
+import android.annotation.TargetApi;
 import android.content.Context;
 import android.content.pm.PackageManager;
 import android.hardware.Camera;
+import android.hardware.Camera.CameraInfo;
 import android.hardware.Camera.Parameters;
+import android.os.Build;
 import android.util.Log;
 import ax.ha.it.smsalarm.activity.SmsAlarm;
 
+import com.google.common.base.Optional;
+
 /**
  * Utility class for safely acquire a {@link Camera} object, handle it and releasing it.<br>
- * <b><i>{@link CameraHandler} is a singleton.</i></b>
+ * <b><i>{@link CameraHandler} is a singleton, eagerly initialized to avoid concurrent modification.</i></b>
  * 
  * @author Robert Nyholm <robert.nyholm@aland.net>
  * @version 2.3.1
  * @since 2.3.1
  */
+@TargetApi(Build.VERSION_CODES.GINGERBREAD)
 public class CameraHandler {
 	private static final String LOG_TAG = CameraHandler.class.getSimpleName();
 
-	// Singleton instance of this class
-	private static CameraHandler INSTANCE = null;
+	// Singleton instance of this class, eagerly initialized
+	private static final CameraHandler INSTANCE = new CameraHandler();
 
-	// Delay until the camera is being released from method being call to release it
-	private static final int RELEASE_DELAY = 1000;
+	// Context is needed in order to get the PackageManager
+	private static Context context;
 
 	private Camera camera = null;
 
-	// Context is needed in order to get the PackageManager
-	private Context context;;
-
 	/**
 	 * Creates a new instance of {@link CameraHandler} with given context.
-	 * 
-	 * @param context
-	 *            The context in which this CameraHandler runs in.
 	 */
-	private CameraHandler(Context context) {
-		this.context = context;
+	private CameraHandler() {
+		if (INSTANCE != null) {
+			if (SmsAlarm.DEBUG) {
+				Log.e(LOG_TAG + ":CameraHandler()", "CameraHandler already instantiated");
+			}
+		}
 	}
 
 	/**
@@ -49,10 +53,10 @@ public class CameraHandler {
 	 *            The context in which this CameraHandler runs in.
 	 * @return Instance of <code>CamerHandler</code>.
 	 */
-	public static CameraHandler getInstance(Context context) {
-		// If instance of this object is null create a new one
-		if (INSTANCE == null) {
-			INSTANCE = new CameraHandler(context);
+	public static CameraHandler getInstance(Context ctx) {
+		// If no context exists, set it
+		if (context == null) {
+			context = ctx;
 		}
 
 		return INSTANCE;
@@ -71,10 +75,15 @@ public class CameraHandler {
 			// Initialize if null
 			if (camera == null) {
 				try {
-					camera = Camera.open();
+					Optional<Integer> optionalCameraId = findBackFacingCamera();
 
-					if (SmsAlarm.DEBUG) {
-						Log.i(LOG_TAG + ":toggleCameraFlash()", "Camera successfully initialized");
+					// If device got any BackFacing camera
+					if (optionalCameraId.isPresent()) {
+						camera = Camera.open(optionalCameraId.get());
+
+						if (SmsAlarm.DEBUG) {
+							Log.i(LOG_TAG + ":toggleCameraFlash()", "Backfacing camera successfully initialized");
+						}
 					}
 				} catch (RuntimeException e) {
 					if (SmsAlarm.DEBUG) {
@@ -121,14 +130,6 @@ public class CameraHandler {
 	 */
 	public void releaseCamera() {
 		if (camera != null) {
-			// Need to know when called this method
-			long startTimeMillis = System.currentTimeMillis();
-
-			// Wait for a while to let ongoing camera handling finish
-			while (System.currentTimeMillis() < (startTimeMillis + RELEASE_DELAY))
-				;
-
-			// Also set camera to null
 			camera.release();
 			camera = null;
 
@@ -136,5 +137,29 @@ public class CameraHandler {
 				Log.i(LOG_TAG + ":releaseCamera()", "Camera released");
 			}
 		}
+	}
+
+	/**
+	 * To figure out which camera id the <b><i>BackFacing</i></b> camera has, if device has any camera facing back.
+	 * 
+	 * @return An {@link Optional} containing the id of the BackFacing camera, if device got any. Else an <code>absent</code> optional is returned.
+	 */
+	private Optional<Integer> findBackFacingCamera() {
+		// Iterate through each camera and check if it's facing backwards
+		for (int i = 0; i < Camera.getNumberOfCameras(); i++) {
+			CameraInfo cameraInfo = new CameraInfo();
+			Camera.getCameraInfo(i, cameraInfo);
+
+			// Check if current camera is facing back
+			if (cameraInfo.facing == CameraInfo.CAMERA_FACING_BACK) {
+				if (SmsAlarm.DEBUG) {
+					Log.d(LOG_TAG + ":findBackFacingCamera()", "Backfacing camera found with camera id: \"" + i + "\"");
+					return Optional.<Integer> of(i);
+				}
+			}
+		}
+
+		// No camera was found...
+		return Optional.<Integer> absent();
 	}
 }
