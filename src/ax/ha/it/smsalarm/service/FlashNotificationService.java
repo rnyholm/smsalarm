@@ -55,7 +55,7 @@ public class FlashNotificationService extends NotificationListenerService {
 			time.add(Calendar.MILLISECOND, FIRST_FLASH_DELAY);
 
 			// Set alarm manager to repeat
-			alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, time.getTimeInMillis(), FLASH_INTERVAL, pendingIntent);
+//			alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, time.getTimeInMillis(), FLASH_INTERVAL, pendingIntent);
 		}
 	}
 
@@ -69,7 +69,7 @@ public class FlashNotificationService extends NotificationListenerService {
 			PendingIntent pendingIntent = PendingIntent.getBroadcast(this, 0, intent, PendingIntent.FLAG_CANCEL_CURRENT);
 
 			// Cancel alarms and release the camera - IMPORTANT
-			alarmManager.cancel(pendingIntent);
+//			alarmManager.cancel(pendingIntent);
 			CameraHandler.getInstance(this).releaseCamera();
 		}
 	}

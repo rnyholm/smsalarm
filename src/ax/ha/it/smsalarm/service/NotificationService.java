@@ -3,13 +3,17 @@
  */
 package ax.ha.it.smsalarm.service;
 
+import java.util.Calendar;
+
 import android.annotation.SuppressLint;
+import android.app.AlarmManager;
 import android.app.IntentService;
 import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
+import android.support.v4.app.NotificationCompat;
 import android.util.Log;
 import ax.ha.it.smsalarm.R;
 import ax.ha.it.smsalarm.activity.SmsAlarm;
@@ -17,6 +21,8 @@ import ax.ha.it.smsalarm.handler.SharedPreferencesHandler;
 import ax.ha.it.smsalarm.handler.SharedPreferencesHandler.DataType;
 import ax.ha.it.smsalarm.handler.SharedPreferencesHandler.PrefKey;
 import ax.ha.it.smsalarm.pojo.Alarm.AlarmType;
+import ax.ha.it.smsalarm.receiver.FlashAlarmReceiver;
+import ax.ha.it.smsalarm.receiver.NotificationReceiver;
 
 /**
  * Helper to build up and show {@link Notification}, also creates {@link PendingIntent}'s for the notification.<br>
@@ -28,6 +34,14 @@ import ax.ha.it.smsalarm.pojo.Alarm.AlarmType;
  */
 public class NotificationService extends IntentService {
 	private static final String LOG_TAG = NotificationService.class.getSimpleName();
+
+	public static final String NOTIFICATION_ACTION = "notificationAction";
+	public static final int NOTIFICATION_PRESSED = 0;
+	public static final int NOTIFICATION_DISMISSED = 1;
+
+	// Time until first camera flash and then the interval between them
+	private static final int FIRST_FLASH_DELAY = 1000;
+	private static final int FLASH_INTERVAL = 1000;
 
 	private final SharedPreferencesHandler prefHandler = SharedPreferencesHandler.getInstance();
 
@@ -70,9 +84,14 @@ public class NotificationService extends IntentService {
 		// http://stackoverflow.com/questions/3708737/go-to-inbox-in-android fetched 21.10-11, this way of achieve the "go to messaging directory" is
 		// highly unrecommended.Thats because this method uses undocumented API and is not part of the Android core.This may or may not work on some
 		// devices and versions!
-		String SMS_MIME_TYPE = "vnd.android-dir/mms-sms";
-		Intent notificationIntent = new Intent(Intent.ACTION_MAIN); // Don't want to start any activity!
-		notificationIntent.setType(SMS_MIME_TYPE);
+//		String SMS_MIME_TYPE = "vnd.android-dir/mms-sms";
+//		Intent notificationIntent = new Intent(Intent.ACTION_MAIN); // Don't want to start any activity!
+//		notificationIntent.setType(SMS_MIME_TYPE);
+		Intent notificationPressedIntent = new Intent(this, NotificationReceiver.class);
+		notificationPressedIntent.putExtra(NOTIFICATION_ACTION, NOTIFICATION_PRESSED);
+
+		Intent notificationDismissedIntent = new Intent(this, NotificationReceiver.class);
+		notificationDismissedIntent.putExtra(NOTIFICATION_ACTION, NOTIFICATION_DISMISSED);
 
 		// Setup a notification, directly from Android developer site
 		NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
@@ -96,25 +115,55 @@ public class NotificationService extends IntentService {
 				}
 		}
 
-		// Create notification
-		Notification notification = new Notification(icon, tickerText, when);
+		// Setup pending intents for notification pressed and dismissed events
+		PendingIntent notificationPressedPendingIntent = PendingIntent.getBroadcast(this, 0, notificationPressedIntent, 0);
+//		notification.setLatestEventInfo(getApplicationContext(), contentTitle, contentText, notificationPressedPendingIntent);
 
-		// Setup message and pending intent
-		PendingIntent contentIntent = PendingIntent.getActivity(this, 0, notificationIntent, 0);
-		notification.setLatestEventInfo(getApplicationContext(), contentTitle, contentText, contentIntent);
+		// Setup pending intent for dismissed notification
+		PendingIntent notificationDismissedPendingIntent = PendingIntent.getBroadcast(this, 0, notificationDismissedIntent, 0);
+
+		// Create notification
+//		Notification notification = new Notification(icon, tickerText, when);
+		NotificationCompat.Builder builder = new NotificationCompat.Builder(this);
+		builder.setSmallIcon(icon);
+		builder.setTicker(tickerText);
+		builder.setWhen(when);
+		builder.setContentTitle(contentTitle);
+		builder.setContentText(contentText);
+		builder.setContentIntent(notificationPressedPendingIntent);
+		builder.setDeleteIntent(notificationDismissedPendingIntent);
+		builder.setAutoCancel(true);
+		builder.setLights(0xFFff0000, 100, 100);
 
 		// This flag auto cancels the notification when clicked and indicating that devices LED should light up
-		notification.flags = Notification.FLAG_SHOW_LIGHTS | Notification.FLAG_AUTO_CANCEL;
+//		notification.flags = Notification.FLAG_SHOW_LIGHTS | Notification.FLAG_AUTO_CANCEL;
 
 		// @formatter:off
 		// Configure LED
-		notification.ledARGB = 0xFFff0000; 	// Red
-		notification.ledOnMS = 100;			// On time
-		notification.ledOffMS = 100; 		// Off time
+//		notification.ledARGB = 0xFFff0000; 	// Red
+//		notification.ledOnMS = 100;			// On time
+//		notification.ledOffMS = 100; 		// Off time
 		// @formatter:on
+
+		Notification notification = builder.getNotification();
 
 		// Dispatch the notification
 		notificationManager.notify((int) REFRESH_ID, notification);
+
+		// Create the alarm manager, setup intents and pending intents
+		AlarmManager alarmManager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
+		Intent intent = new Intent(this, FlashAlarmReceiver.class);
+
+		// It's wanted to update any existing intent, hence requestCode = 0 and PendingIntent.FLAG_CANCEL_CURRENT
+		PendingIntent pendingIntent = PendingIntent.getBroadcast(this, 0, intent, PendingIntent.FLAG_CANCEL_CURRENT);
+
+		// Calendar instance is needed to figure out start time of first alarm triggering
+		Calendar time = Calendar.getInstance();
+		time.setTimeInMillis(System.currentTimeMillis());
+		time.add(Calendar.MILLISECOND, FIRST_FLASH_DELAY);
+
+		// Set alarm manager to repeat
+		alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, time.getTimeInMillis(), FLASH_INTERVAL, pendingIntent);
 	}
 
 	/**
