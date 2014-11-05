@@ -17,7 +17,7 @@ import ax.ha.it.smsalarm.handler.CameraHandler;
  * @author Robert Nyholm <robert.nyholm@aland.net>
  * @version 2.3.1
  * @since 2.3.1
- * @see CameraHandler1
+ * @see CameraHandler
  */
 public class FlashAlarmReceiver extends BroadcastReceiver {
 

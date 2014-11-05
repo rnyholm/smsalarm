@@ -10,11 +10,13 @@ import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
+import android.support.v4.app.NotificationCompat;
 import ax.ha.it.smsalarm.R;
-import ax.ha.it.smsalarm.activity.Acknowledge;
+import ax.ha.it.smsalarm.handler.FlashAlarmHandler;
 import ax.ha.it.smsalarm.handler.SharedPreferencesHandler;
 import ax.ha.it.smsalarm.handler.SharedPreferencesHandler.DataType;
 import ax.ha.it.smsalarm.handler.SharedPreferencesHandler.PrefKey;
+import ax.ha.it.smsalarm.receiver.NotificationReceiver;
 
 /**
  * Helper to build up and show {@link Notification}, also creates {@link PendingIntent}'s for the notification.<br>
@@ -39,8 +41,7 @@ public class AcknowledgeNotificationService extends IntentService {
 	}
 
 	/**
-	 * To handle {@link Intent}, builds up and dispatches a notification. Contains some deprecated functionality just to support
-	 * <code>Android SDK</code> versions below 11.
+	 * To handle {@link Intent}, builds up and dispatches a notification.
 	 * 
 	 * @param i
 	 *            Intent for notification.
@@ -58,9 +59,6 @@ public class AcknowledgeNotificationService extends IntentService {
 		String contentText = (String) prefHandler.fetchPrefs(PrefKey.SHARED_PREF, PrefKey.MESSAGE_KEY, DataType.STRING, this);
 		String rescueService = (String) prefHandler.fetchPrefs(PrefKey.SHARED_PREF, PrefKey.RESCUE_SERVICE_KEY, DataType.STRING, this);
 
-		// Set intent to AcknowledgeHandler
-		Intent notificationIntent = new Intent(this, Acknowledge.class);
-
 		// Setup a notification, directly from Android developer site
 		NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
 
@@ -76,25 +74,34 @@ public class AcknowledgeNotificationService extends IntentService {
 			tickerText = getString(R.string.PRIMARY_ALARM);
 		}
 
-		// Create notification
-		Notification notification = new Notification(R.drawable.ic_primary_alarm, tickerText, when);
+		// Setup intents for pressing notification and dismissing it
+		Intent notificationPressedIntent = new Intent(this, NotificationReceiver.class);
+		notificationPressedIntent.setAction(NotificationReceiver.ACTION_ACKNOWLEDGE);
 
-		// Setup message and pending intent
-		PendingIntent contentIntent = PendingIntent.getActivity(this, 0, notificationIntent, 0);
-		notification.setLatestEventInfo(getApplicationContext(), getString(R.string.PRIMARY_ALARM), contentText, contentIntent);
+		Intent notificationDismissedIntent = new Intent(this, NotificationReceiver.class);
 
-		// This flag auto cancels the notification when clicked and indicating that devices LED should light up
-		notification.flags = Notification.FLAG_SHOW_LIGHTS | Notification.FLAG_AUTO_CANCEL;
+		// Setup pending intents for notification pressed and dismissed events
+		PendingIntent notificationPressedPendingIntent = PendingIntent.getBroadcast(this, 0, notificationPressedIntent, 0);
+		PendingIntent notificationDismissedPendingIntent = PendingIntent.getBroadcast(this, 0, notificationDismissedIntent, 0);
 
+		// Create notification using builder
 		// @formatter:off
-		// Configure LED
-		notification.ledARGB = 0xFFff0000; 	// Red
-		notification.ledOnMS = 100; 		// On time
-		notification.ledOffMS = 100;		// Off time
-		notification.vibrate = new long[] { 1000, 1000, 1000, 1000, 1000 };
-		// @formatter:on
-
+		NotificationCompat.Builder builder = new NotificationCompat.Builder(this)
+			.setSmallIcon(R.drawable.ic_primary_alarm)
+			.setTicker(tickerText)
+			.setWhen(when)
+			.setContentTitle(getString(R.string.PRIMARY_ALARM))
+			.setContentText(contentText)
+			.setContentIntent(notificationPressedPendingIntent)
+			.setDeleteIntent(notificationDismissedPendingIntent)
+			.setAutoCancel(true)
+			.setLights(0xFFff0000, 100, 100);
+		// @formatter:off
+		
 		// Dispatch the notification
-		notificationManager.notify((int) REFRESH_ID, notification);
+		notificationManager.notify((int) REFRESH_ID, builder.getNotification());
+		
+		// Start the flash alarm notification
+		FlashAlarmHandler.flashAlarmStart(this);
 	}
 }

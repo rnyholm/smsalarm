@@ -132,5 +132,6 @@
     <!-- Strings for development/debug(only exists in default) begin -->
     <string name="DEBUG_MENU_TITLE_DEVELOP">Develop Tools</string>
     <string name="DEBUG_MENU_TITLE_NOTIFICATION">Dispatch Notification</string>
+    <string name="DEBUG_MENU_TITLE_ACK_NOTIFICATION">Dispatch Ack Notification</string>
     <!-- Strings for development/debug end -->
 </resources>

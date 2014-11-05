@@ -14,6 +14,7 @@ import android.view.ViewGroup;
 import android.widget.ListView;
 import ax.ha.it.smsalarm.R;
 import ax.ha.it.smsalarm.activity.SmsAlarm;
+import ax.ha.it.smsalarm.service.AcknowledgeNotificationService;
 import ax.ha.it.smsalarm.service.NotificationService;
 import ax.ha.it.smsalarm.slidingmenu.adapter.SlidingMenuAdapter;
 import ax.ha.it.smsalarm.slidingmenu.model.SlidingMenuItem;
@@ -87,6 +88,7 @@ public class SlidingMenuFragment extends SherlockListFragment {
 		if (SmsAlarm.DEBUG) {
 			adapter.add(new SlidingMenuItem(getString(R.string.DEBUG_MENU_TITLE_DEVELOP)));
 			adapter.add(new SlidingMenuItem(301, getString(R.string.DEBUG_MENU_TITLE_NOTIFICATION)));
+			adapter.add(new SlidingMenuItem(302, getString(R.string.DEBUG_MENU_TITLE_ACK_NOTIFICATION)));
 		}
 	}
 
@@ -118,8 +120,12 @@ public class SlidingMenuFragment extends SherlockListFragment {
 				fragment = new AboutFragment();
 				break;
 			case (301):
-				Intent notIntent = new Intent(getActivity(), NotificationService.class);
-				getActivity().startService(notIntent);
+				Intent notificationIntent = new Intent(getActivity(), NotificationService.class);
+				getActivity().startService(notificationIntent);
+				break;
+			case (302):
+				Intent acknowledgeNotificationIntent = new Intent(getActivity(), AcknowledgeNotificationService.class);
+				getActivity().startService(acknowledgeNotificationIntent);
 				break;
 			default:
 				if (SmsAlarm.DEBUG) {
