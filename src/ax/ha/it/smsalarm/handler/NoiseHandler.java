@@ -96,7 +96,7 @@ public class NoiseHandler {
 			final AudioManager am = (AudioManager) context.getSystemService(Context.AUDIO_SERVICE);
 			// AssetFileDescriptor to get mp3 file
 			AssetFileDescriptor afd = null;
-			// Set vibrator from context
+			// Set Vibrator from context
 			vibrator = (Vibrator) context.getSystemService(Context.VIBRATOR_SERVICE);
 			// Store original media volume
 			final int originalMediaVolume = am.getStreamVolume(AudioManager.STREAM_MUSIC);
@@ -168,7 +168,7 @@ public class NoiseHandler {
 						break;
 					default: // Unsupported RINGER_MODE
 						if (SmsAlarm.DEBUG) {
-							Log.d(LOG_TAG + ":doNoise()", "Device is in a \"UNSUPPORTED\" ringer mode, can't decide what to do");
+							Log.e(LOG_TAG + ":doNoise()", "Device is in a \"UNSUPPORTED\" ringer mode, can't decide what to do");
 						}
 				}
 			} else { // If not take OS sound setting into account, always ring at highest volume and vibrate

@@ -54,11 +54,8 @@
     <string name="INFO_ENABLE_ACKNOWLEDGE">Kui on valitud esmane teavitus, saadetakse kinnitus.</string>
     <string name="INFO_ENABLE_SMS_ALARM">Kui Sms Alarm on valitud, edastatakse teavitus, muul juhul mitte.</string>
     <string name="INFO_FREE_TEXT_TRIGGER_SETTINGS">Sisesta sõna, mille järgi Sms Alarm siseneva sõnumi tuvastab. Rakendus ei tee vahet suurtel ja väikestel tähtedel.</string>
-    <string name="INFO_MISC_SETTINGS">Määra oma päästekomando nimi ning kas Sms Alarm on aktiveeritud.</string>
     <string name="INFO_PLAY_TONE_TWICE_SETTING">Kui see on valitud, siis Sms Alarm edastab märguandetooni kaks korda, nii esmase kui sekundaarse teavituse puhul.</string>
     <string name="INFO_SMS_SETTINGS">Sisesta telefoninumber, millele Sms Alarm häire sms-id edastab.</string>
-    <string name="INFO_SOUND_SETTINGS">Määra märguandetoon esmasele ja sekundaarsele teavitusele ning kas Sms Alarm peaks võtma arvesse telefoni helinaseadeid ning kas märguandetoon edastatakse kaks korda.</string>
-    <string name="INFO_USE_OS_SOUND_SETTINGS">Kui see on valitud, siis Sms Alarm võtab arvesse seadme helitugevust ja hääleturežiimi.</string>
     <string name="LISTEN_ALARM_SIGNAL">Kuula märguannet</string> 
     <string name="NO">Ei</string>
     <string name="NO_RECEIVED_ALARMS_EXISTS">Väljakutseid ei ole laekunud.</string>
@@ -100,7 +97,6 @@
     <string name="TITLE_SMS_SETTINGS">Sms seaded</string>
     <string name="TITLE_SOUND_SETTINGS">Heliseaded</string>
     <string name="TITLE_TONE_SPINNER">Lisa märguanne</string>
-    <string name="TITLE_USE_OS_SOUND_SETTINGS">Kasuta seadme heliseadeid</string>
   	<string name="TONE_PROMPT_TITLE">Vali märguanne</string>   
     <string name="VERTICAL_DIVIDER_DESCR">Vertikaalne jagaja</string>
   	<string name="WIDGET_ICON_CONTENT_DESCR">Töölauavidina ikoon</string>

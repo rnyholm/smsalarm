@@ -12,7 +12,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.support.v4.app.NotificationCompat;
 import ax.ha.it.smsalarm.R;
-import ax.ha.it.smsalarm.handler.FlashAlarmHandler;
+import ax.ha.it.smsalarm.handler.FlashNotificationHandler;
 import ax.ha.it.smsalarm.handler.SharedPreferencesHandler;
 import ax.ha.it.smsalarm.handler.SharedPreferencesHandler.DataType;
 import ax.ha.it.smsalarm.handler.SharedPreferencesHandler.PrefKey;
@@ -101,7 +101,7 @@ public class AcknowledgeNotificationService extends IntentService {
 		// Dispatch the notification
 		notificationManager.notify((int) REFRESH_ID, builder.getNotification());
 		
-		// Start the flash alarm notification
-		FlashAlarmHandler.flashAlarmStart(this);
+		// Start the flash notification
+		FlashNotificationHandler.startFlashNotification(this);
 	}
 }

@@ -49,6 +49,9 @@ import ax.ha.it.smsalarm.util.WakeLocker;
 public class SmsReceiver extends BroadcastReceiver {
 	private static final String LOG_TAG = SmsReceiver.class.getSimpleName();
 
+	// Debug actions to skip abort broadcast, by not disabling this while dispatching a test SMS will cause an exception
+	public static final String ACTION_SKIP_ABORT_BROADCAST = "ax.ha.it.smsalarm.SKIP_ABORT_BROADCAST";
+
 	// How long we should acquire a wake lock
 	private final int WAKE_LOCKER_ACQUIRE_TIME = 20000;
 
@@ -122,7 +125,7 @@ public class SmsReceiver extends BroadcastReceiver {
 				// Check if the income SMS was any alarm
 				if (!alarmType.equals(AlarmType.UNDEFINED)) {
 					// Continue handling of received SMS
-					handleSMS(context);
+					handleSMS(context, intent);
 				}
 			}
 		}
@@ -136,10 +139,15 @@ public class SmsReceiver extends BroadcastReceiver {
 	 * 
 	 * @param context
 	 *            The Context in which the receiver is running.
+	 * @param intent
+	 *            Intent from which data are fetched.
 	 */
-	private void handleSMS(Context context) {
-		// Abort broadcast, SmsAlarm will handle income SMS on it's own
-		abortBroadcast();
+	private void handleSMS(Context context, Intent intent) {
+		// Only abort broadcast if not intent action skip abort broadcast are set, this action is used for debug/testing purpose
+		if (!ACTION_SKIP_ABORT_BROADCAST.equals(intent.getAction())) {
+			// Abort broadcast, SmsAlarm will handle income SMS on it's own
+			abortBroadcast();
+		}
 
 		// Get database access, add this income SMS(alarm) and log it to file
 		DatabaseHandler db = new DatabaseHandler(context);

@@ -9,6 +9,18 @@
     <string name="MENU_TITLE_OTHER">Övrigt</string>
     <string name="MENU_TITLE_ABOUT">Om</string>
     <string name="MENU_TITLE_OPEN_SOURCE">Öppen källkod</string>
+    <string name="INFO_MISC_SETTINGS">Ställ in din räddningstjänsts namn, om enhetens kamerablixt ska blinka vid inkommande larm och om Sms Alarm ska vara aktiverat.</string>
+    <string name="TITLE_USE_FLASH_NOTIFICATION">Använd blixtnotifikation(BETA)</string>
+    <string name="INFO_USE_FLASH_NOTIFICATION">Om vald blinkar kamerans blixt vid inkommande larm. Notera att detta i nuläget är en BETA funktion varvid oväntant beteende kan förekomma vid inkommande larm. Använd på egen risk.</string>
+    <string name="FLASH_NOTIFICATION_NOT_SUPPORTED_MIN_API_LEVEL">Blixtnotifikation stöds inte på grund av inkompatibel Android version, Gingerbread eller senare krävs.</string>
+    <string name="FLASH_NOTIFICATION_NOT_SUPPORTED_MISSING_CAMERA">Blixtnotifikation stöds inte på grund av att enheten saknar kamera.</string>
+    <string name="FLASH_NOTIFICATION_NOT_SUPPORTED_MISSING_CAMERA_FLASH">Blixtnotifikation stöds inte på grund av att enheten saknar blixt.</string>
+    <string name="FLASH_NOTIFICATION_NOT_SUPPORTED_MISSING_BACK_FACING_CAMERA">Blixtnotifikation stöds inte på grund av att enheten saknar en bakåtriktad kamera.</string>
+    <!-- OK IN ENGLISH, GERMAN BEGIN -->
+    <string name="INFO_SOUND_SETTINGS">Ställ in larmsignaler för primär- och sekundär larm, om Sms Alarm ska följa enhetens ljudinställningar samt om larmsignalen ska spelas upp två gånger.</string>
+    <string name="INFO_USE_OS_SOUND_SETTINGS">Om vald tar Sms Alarm hänsyn till enhetens ringvolym och ljudlöst läge.</string>
+    <string name="TITLE_USE_OS_SOUND_SETTINGS">Använd enhetens ljudinställningar</string>
+    <!-- OK IN ENGLISH, GERMAN END -->
     <!-- NEW STRINGS IN v.2.3.1 END -->
     <string name="ABOUT">About Sms Alarm</string>
     <string name="ABOUT_BUILD">Build: %s</string>
@@ -73,11 +85,8 @@
     <string name="INFO_ENABLE_ACKNOWLEDGE">If selected primary alarm can be acknowledged.</string>
     <string name="INFO_ENABLE_SMS_ALARM">If selected Sms Alarm will contact given telephone number, otherwise the application will not.</string>
     <string name="INFO_FREE_TEXT_TRIGGER_SETTINGS">Enter the words that should be used to notify in the Sms Alarm if present in the incoming sms. Note that this function is not case sensitive.</string>
-    <string name="INFO_MISC_SETTINGS">Set your rescue service name and if Sms Alarm should be enabled.</string>
     <string name="INFO_PLAY_TONE_TWICE_SETTING">If selected Sms Alarm will play alarm signal to both primary and secondary alarms twice.</string>
     <string name="INFO_SMS_SETTINGS">Enter the telephone numbers that Sms Alarm should send alerts for incoming sms.</string>
-    <string name="INFO_SOUND_SETTINGS">Set alarm signals for primary and secondary alarms, if Sms Alarm should follow the device sound settings and if the alarm signal should be played twice.</string>
-    <string name="INFO_USE_OS_SOUND_SETTINGS">If selected Sms Alarm will take into account the device ring volume and silent mode.</string>
     <string name="LISTEN_ALARM_SIGNAL">Listen to the signal</string> 
 	<string name="NEW_LINE">\n</string>	
     <string name="NO">No</string>
@@ -123,7 +132,6 @@
     <string name="TITLE_SMS_SETTINGS">Sms settings</string>
     <string name="TITLE_SOUND_SETTINGS">Sound settings</string>
     <string name="TITLE_TONE_SPINNER">Alarm signal for</string>
-    <string name="TITLE_USE_OS_SOUND_SETTINGS">Use the device sound settings</string>
   	<string name="TONE_PROMPT_TITLE">Select alarm signal</string>   
     <string name="VERTICAL_DIVIDER_DESCR">Vertical divider</string>
   	<string name="WIDGET_ICON_CONTENT_DESCR">Widget sms alarm icon</string>
@@ -131,7 +139,20 @@
     <string name="YES">Yes</string>  
     <!-- Strings for development/debug(only exists in default) begin -->
     <string name="DEBUG_MENU_TITLE_DEVELOP">Develop Tools</string>
+    <string name="DEBUG_MENU_TITLE_DISPATCH_MOCK_SMS">Dispatch Mock SMS</string>
+    <string name="DEBUG_MENU_TITLE_MOCK_SHARED_PREFS">Mock Shared Preferences</string>
     <string name="DEBUG_MENU_TITLE_NOTIFICATION">Dispatch Notification</string>
     <string name="DEBUG_MENU_TITLE_ACK_NOTIFICATION">Dispatch Ack Notification</string>
+    <string name="DEBUG_TOAST_SHARED_PREFERENCES_MOCKED">Shared preferences successfully mocked</string>
+    <string name="DEBUG_DISPATCH_MOCK_SMS_TITLE">Dispatch mock sms</string>
+    <string name="DEBUG_MOCK_SMS_SENDER_TITLE">Sender</string>
+    <string name="DEBUG_MOCK_SMS_SENDER_HINT">Enter sms sender..</string>
+    <string name="DEBUG_MOCK_SMS_BODY_TITLE">Message</string>
+    <string name="DEBUG_MOCK_SMS_BODY_HINT">Enter message of sms..</string>
+    <string name="DEBUG_CONFIRM_MOCK_SHARED_PREFERENCES_TITLE">Mock shared preferences</string>
+    <string name="DEBUG_CONFIRM_MOCK_SHARED_PREFERENCES_MESSAGE">Do you really want to mock shared preferences? Any existing preferences will be overwritten!</string>
+    <string name="DEBUG_CANCEL">Cancel</string>
+    <string name="DEBUG_YES">Yes</string>
+    <string name="DEBUG_NO">No</string>
     <!-- Strings for development/debug end -->
 </resources>

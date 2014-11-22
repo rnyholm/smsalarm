@@ -44,8 +44,7 @@ public class SharedPreferencesHandler {
 	 */
 	public enum PrefKey {
 		// @formatter:off
-		SHARED_PREF("smsAlarmPrefs"), 
-		NOT_KEY("notificationPref"), 
+		SHARED_PREF("smsAlarmPrefs"),  
 		PRIMARY_LISTEN_NUMBER_KEY("primaryListenNumberKey"), 
 		PRIMARY_LISTEN_NUMBERS_KEY("primaryListenNumbersKey"), 
 		SECONDARY_LISTEN_NUMBERS_KEY("secondaryListenNumbersKey"), 
@@ -64,7 +63,8 @@ public class SharedPreferencesHandler {
 		RESCUE_SERVICE_KEY("rescueService"), 
 		HAS_CALLED_KEY("hasCalled"), 
 		END_USER_LICENSE_AGREED("userLicenseAgreed"), 
-		VERSION_CODE("versionCode");
+		VERSION_CODE("versionCode"),
+		USE_FLASH_NOTIFICATION("useFlashNotification");
 		// @formatter:on
 
 		// The actual key to which data will be stored and fetched from

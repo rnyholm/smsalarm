@@ -54,7 +54,6 @@
     <string name="INFO_ENABLE_ACKNOWLEDGE">Falls gewählt, kann der Primäralarm bestätigt werden.</string>
     <string name="INFO_ENABLE_SMS_ALARM">Falls gewählt, kontaktiert Sms Alarm die eingegebene Telefonnummer.</string>
     <string name="INFO_FREE_TEXT_TRIGGER_SETTINGS">Geben Sie Wörter ein, auf die Sms Alarm reagieren soll, wenn diese in der einkommenden sms vorhanden sind. Beachten Sie, dass diese Funktion die Groß- und Kleinschreibung nicht beachtet.</string>
-    <string name="INFO_MISC_SETTINGS">Den Namen Ihres Rettungsdienstes einstellen und ob Sms Alarm aktiviert werden soll.</string>
     <string name="INFO_PLAY_TONE_TWICE_SETTING">Falls gewählt, spielt Sms Alarm zwei Mal ein Alarmsignal für Primär- und Sekundäralarm ab.</string>
     <string name="INFO_SMS_SETTINGS">Geben Sie ein, von welcher Telefonnummer aus Sms Alarm reagieren soll.</string>
     <string name="INFO_SOUND_SETTINGS">Alarmsignale für Primär- und Sekundäralarm einstellen, ob Sms Alarm sich nach den Klangeinstellungen des Geräts richten und ob das Alarmsignal zwei Mal abgespielt werden soll.</string>

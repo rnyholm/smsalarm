@@ -54,11 +54,8 @@
     <string name="INFO_ENABLE_ACKNOWLEDGE">Om vald kan primärlarm kvitteras.</string>
     <string name="INFO_ENABLE_SMS_ALARM">Om vald larmar Sms Alarm på angivna telefonnummer, annars gör applikationen inte det.</string>
     <string name="INFO_FREE_TEXT_TRIGGER_SETTINGS">Ställ in vilka ord som Sms Alarm ska larma på om de finns i inkommande sms. Notera att denna funktion inte är skiftlägeskänslig.</string>
-    <string name="INFO_MISC_SETTINGS">Ställ in din räddningstjänsts namn och om Sms Alarm ska vara aktiverat.</string>
     <string name="INFO_PLAY_TONE_TWICE_SETTING">Om vald spelar Sms Alarm upp larmsignalen för både primär- och sekundärlarm två gånger vid larm.</string>
     <string name="INFO_SMS_SETTINGS">Ställ in vilka telefonnummer som Sms Alarm ska larma på sms ifrån.</string>
-    <string name="INFO_SOUND_SETTINGS">Ställ in larmsignaler för primär- och sekundär larm, om Sms Alarm ska följa telefonens ljudinställningar samt om larmsignalen ska spelas upp två gånger.</string>
-    <string name="INFO_USE_OS_SOUND_SETTINGS">Om vald tar Sms Alarm hänsyn till telefonens ringvolym och ljudlöst läge.</string>
     <string name="LISTEN_ALARM_SIGNAL">Lyssna på signal</string>    
     <string name="NO">Nej</string>
     <string name="NO_RECEIVED_ALARMS_EXISTS">Inga larm har tagits emot ännu.</string>
@@ -100,7 +97,6 @@
     <string name="TITLE_SMS_SETTINGS">Sms-inställningar</string>
     <string name="TITLE_SOUND_SETTINGS">Ljudinställningar</string>
     <string name="TITLE_TONE_SPINNER">Larmsignal för</string>
-    <string name="TITLE_USE_OS_SOUND_SETTINGS">Använd telefonens ljudinställningar</string>
   	<string name="TONE_PROMPT_TITLE">Välj larmsignal</string>   
     <string name="VERTICAL_DIVIDER_DESCR">Vertikal delare</string>
   	<string name="WIDGET_ICON_CONTENT_DESCR">Widget smsalarmikon</string>

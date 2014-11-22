@@ -59,11 +59,32 @@
             android:text="@string/EDIT_RESCUE_SERVICE_NAME" />
 
         <CheckBox
-            android:id="@+id/enableSmsAlarm_chk"
+            android:id="@+id/useFlashNotification_chk"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignLeft="@id/editRescueServiceName_btn"
             android:layout_below="@id/editRescueServiceName_btn"
+            android:layout_marginRight="5dp"
+            android:text="@string/TITLE_USE_FLASH_NOTIFICATION" />
+
+        <TextView
+            android:id="@+id/useFlashNotificationHint_tv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignLeft="@id/useFlashNotification_chk"
+            android:layout_below="@id/useFlashNotification_chk"
+            android:layout_marginLeft="38dp"
+            android:layout_marginRight="5dp"
+            android:layout_marginTop="-9dp"
+            android:text="@string/INFO_USE_FLASH_NOTIFICATION"
+            android:textAppearance="?android:attr/textAppearanceSmall" />
+
+        <CheckBox
+            android:id="@+id/enableSmsAlarm_chk"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignLeft="@id/useFlashNotification_chk"
+            android:layout_below="@id/useFlashNotificationHint_tv"
             android:layout_marginRight="5dp"
             android:checked="true"
             android:text="@string/TITLE_ENABLE_SMS_ALARM" />
@@ -72,13 +93,14 @@
             android:id="@+id/enableSmsAlarmHint_tv"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignLeft="@+id/enableSmsAlarm_chk"
-            android:layout_below="@+id/enableSmsAlarm_chk"
+            android:layout_alignLeft="@id/enableSmsAlarm_chk"
+            android:layout_below="@id/enableSmsAlarm_chk"
             android:layout_marginLeft="38dp"
             android:layout_marginRight="5dp"
             android:layout_marginTop="-9dp"
             android:text="@string/INFO_ENABLE_SMS_ALARM"
             android:textAppearance="?android:attr/textAppearanceSmall" />
+
     </RelativeLayout>
 
 </ScrollView>

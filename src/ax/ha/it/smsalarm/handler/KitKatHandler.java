@@ -2,10 +2,11 @@ package ax.ha.it.smsalarm.handler;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.util.Timer;
+import java.util.TimerTask;
 
 import android.content.Context;
 import android.media.AudioManager;
-import android.os.Handler;
 import android.util.Log;
 import ax.ha.it.smsalarm.activity.SmsAlarm;
 
@@ -174,10 +175,11 @@ public class KitKatHandler {
 		// Expand the NotificationBar
 		expandNotificationBar();
 
-		new Handler().postDelayed(new Runnable() {
+		Timer timer = new Timer();
+		timer.schedule(new TimerTask() {
 			@Override
 			public void run() {
-				// After elapsed time the NotificationBar is collapsed
+				// After elapsed time the notifications bar is collapsed
 				collapseNotificationBar();
 			}
 		}, NOTIFICATIONS_BAR_EXPAND_COLLAPSE_DELAY);
@@ -193,7 +195,8 @@ public class KitKatHandler {
 			// Object is running
 			ringerModeSwitchInProgress = true;
 
-			new Handler().postDelayed(new Runnable() {
+			Timer timer = new Timer();
+			timer.schedule(new TimerTask() {
 				@Override
 				public void run() {
 					restoreRingerMode();

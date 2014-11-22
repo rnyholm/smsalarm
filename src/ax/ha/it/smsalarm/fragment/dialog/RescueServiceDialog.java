@@ -1,3 +1,6 @@
+/**
+ * Copyright (c) 2014 Robert Nyholm. All rights reserved.
+ */
 package ax.ha.it.smsalarm.fragment.dialog;
 
 import android.app.Activity;
@@ -61,7 +64,7 @@ public class RescueServiceDialog extends DialogFragment {
 		// @formatter:on
 
 		// If not null, the fragment is being re-created, get data from saved instance, if exist.
-		// If saved instance doesn't contain certain key or it's associated value the edittext field will be empty
+		// If saved instance doesn't contain certain key or it's associated value the EditText field will be empty
 		if (savedInstanceState != null) {
 			// Check if we got any data in saved instance associated with certain key
 			if (savedInstanceState.getCharSequence(RESCUE_SERVICE) != null) {

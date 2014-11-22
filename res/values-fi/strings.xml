@@ -54,11 +54,8 @@
     <string name="INFO_ENABLE_ACKNOWLEDGE">Jos valittu voidaan ensisijainen hälytys kuitata.</string>
     <string name="INFO_ENABLE_SMS_ALARM">Jos valittu hälyttää Sms Alarm tietyillä puh.nr:illa, muuten sovellus ei sitä tee.</string>
     <string name="INFO_FREE_TEXT_TRIGGER_SETTINGS">Asenna ne sanat joilla Sms Alarm täytyy hälyttää jos on tulevia viestejä.</string>
-    <string name="INFO_MISC_SETTINGS">Aseta pelastuspalvelun nimi ja jos Sms Alarm aktivoidaan.</string>
     <string name="INFO_PLAY_TONE_TWICE_SETTING">Jos valittu soittaa Sms Alarm hälytysäänen sekä ensi-ja toissijaisenhälytykseen kahdesti, hälytyksen yhteydessä.</string>
     <string name="INFO_SMS_SETTINGS">Asenna ne puhelinnumero joista Sms Alarm täytyy hälyttää viestin.</string>
-    <string name="INFO_SOUND_SETTINGS">Asetta hälytyksiä ensi- ja toissijaisiin hälytyksiin ja jos Sms Alarm seuraa puhelimen ääniasetuksia ja jos hälytysääni soitetaan kahdesti.</string>
-    <string name="INFO_USE_OS_SOUND_SETTINGS">Jos valittu, ottaa Sms Alarm huomioon puhelimen äänen voim ja äänettömyyden.</string>
     <string name="LISTEN_ALARM_SIGNAL">Kuuntele signaali</string>    
     <string name="NO">Ei</string>
     <string name="NO_PRIMARY_FREE_TEXT_EXISTS">Ei ole ensisijaishälytyssanaa, ei voi poistaa sanaa.</string>
@@ -100,7 +97,6 @@
     <string name="TITLE_SMS_SETTINGS">Tekstiasetukset</string>
     <string name="TITLE_SOUND_SETTINGS">Ääniasetukset</string>
     <string name="TITLE_TONE_SPINNER">Hälytysääni hätätilanteessa</string>
-    <string name="TITLE_USE_OS_SOUND_SETTINGS">Käytä puhelimen ääniasetuksia</string>
   	<string name="TONE_PROMPT_TITLE">Valitse hälytysääni</string>   
     <string name="VERTICAL_DIVIDER_DESCR">Vertikal jakaja</string>
   	<string name="WIDGET_ICON_CONTENT_DESCR">Widget smsalarmkuvake</string>

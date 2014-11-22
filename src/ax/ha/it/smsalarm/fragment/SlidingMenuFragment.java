@@ -4,7 +4,7 @@
 package ax.ha.it.smsalarm.fragment;
 
 import android.annotation.SuppressLint;
-import android.content.Intent;
+import android.app.Activity;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.util.Log;
@@ -12,12 +12,14 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ListView;
+import android.widget.Toast;
 import ax.ha.it.smsalarm.R;
 import ax.ha.it.smsalarm.activity.SmsAlarm;
-import ax.ha.it.smsalarm.service.AcknowledgeNotificationService;
-import ax.ha.it.smsalarm.service.NotificationService;
+import ax.ha.it.smsalarm.fragment.dialog.ConfirmMockSharedPreferencesDialog;
+import ax.ha.it.smsalarm.fragment.dialog.MockSmsDialog;
 import ax.ha.it.smsalarm.slidingmenu.adapter.SlidingMenuAdapter;
 import ax.ha.it.smsalarm.slidingmenu.model.SlidingMenuItem;
+import ax.ha.it.smsalarm.util.DebugUtils;
 
 import com.actionbarsherlock.app.SherlockListFragment;
 import com.jeremyfeinstein.slidingmenu.lib.SlidingMenu;
@@ -87,8 +89,10 @@ public class SlidingMenuFragment extends SherlockListFragment {
 		// Build up the testing/debug menu
 		if (SmsAlarm.DEBUG) {
 			adapter.add(new SlidingMenuItem(getString(R.string.DEBUG_MENU_TITLE_DEVELOP)));
-			adapter.add(new SlidingMenuItem(301, getString(R.string.DEBUG_MENU_TITLE_NOTIFICATION)));
-			adapter.add(new SlidingMenuItem(302, getString(R.string.DEBUG_MENU_TITLE_ACK_NOTIFICATION)));
+			adapter.add(new SlidingMenuItem(301, getString(R.string.DEBUG_MENU_TITLE_DISPATCH_MOCK_SMS)));
+			adapter.add(new SlidingMenuItem(302, getString(R.string.DEBUG_MENU_TITLE_NOTIFICATION)));
+			adapter.add(new SlidingMenuItem(303, getString(R.string.DEBUG_MENU_TITLE_ACK_NOTIFICATION)));
+			adapter.add(new SlidingMenuItem(304, getString(R.string.DEBUG_MENU_TITLE_MOCK_SHARED_PREFS)));
 		}
 	}
 
@@ -120,12 +124,20 @@ public class SlidingMenuFragment extends SherlockListFragment {
 				fragment = new AboutFragment();
 				break;
 			case (301):
-				Intent notificationIntent = new Intent(getActivity(), NotificationService.class);
-				getActivity().startService(notificationIntent);
+				MockSmsDialog mockSmsDialog = new MockSmsDialog();
+				mockSmsDialog.setTargetFragment(SlidingMenuFragment.this, MockSmsDialog.MOCK_SMS_DIALOG_REQUEST_CODE);
+				mockSmsDialog.show(getFragmentManager(), MockSmsDialog.MOCK_SMS_DIALOG_TAG);
 				break;
 			case (302):
-				Intent acknowledgeNotificationIntent = new Intent(getActivity(), AcknowledgeNotificationService.class);
-				getActivity().startService(acknowledgeNotificationIntent);
+				DebugUtils.dispatchNotification(getActivity());
+				break;
+			case (303):
+				DebugUtils.dispatchAcknowledgeNotification(getActivity());
+				break;
+			case (304):
+				ConfirmMockSharedPreferencesDialog confirmMockSharedPrefsDialog = new ConfirmMockSharedPreferencesDialog();
+				confirmMockSharedPrefsDialog.setTargetFragment(SlidingMenuFragment.this, ConfirmMockSharedPreferencesDialog.CONFIRM_MOCK_SHARED_PREFERENCES_CODE);
+				confirmMockSharedPrefsDialog.show(getFragmentManager(), ConfirmMockSharedPreferencesDialog.CONFIRM_MOCK_SHARED_PREFERENCES_TAG);
 				break;
 			default:
 				if (SmsAlarm.DEBUG) {
@@ -150,4 +162,30 @@ public class SlidingMenuFragment extends SherlockListFragment {
 			((SmsAlarm) getActivity()).switchContent(fragment);
 		}
 	}
+
+	@Override
+	public void onActivityResult(int requestCode, int resultCode, android.content.Intent data) {
+		// Only interested in OK results, don't care at all about the others
+		if (resultCode == Activity.RESULT_OK) {
+			// Only interested in certain request codes...
+			switch (requestCode) {
+				case (MockSmsDialog.MOCK_SMS_DIALOG_REQUEST_CODE):
+					// Get sender and body, at last dispatch sms
+					String smsSender = data.getStringExtra(MockSmsDialog.SMS_SENDER);
+					String smsBody = data.getStringExtra(MockSmsDialog.SMS_BODY);
+
+					DebugUtils.dispatchMockSMS(getActivity(), smsSender, smsBody);
+					break;
+				case (ConfirmMockSharedPreferencesDialog.CONFIRM_MOCK_SHARED_PREFERENCES_CODE):
+					// User obviously want to mock shared preferences, mock them
+					DebugUtils.mockSharedPreferences(getActivity());
+					Toast.makeText(getActivity(), getString(R.string.DEBUG_TOAST_SHARED_PREFERENCES_MOCKED), Toast.LENGTH_LONG).show();
+					break;
+				default:
+					if (SmsAlarm.DEBUG) {
+						Log.e(LOG_TAG + ":onActivityResult()", "An unsupported result occurred, result code: \"" + resultCode + "\" and request code: \"" + requestCode + "\"");
+					}
+			}
+		}
+	};
 }

@@ -3,10 +3,13 @@
  */
 package ax.ha.it.smsalarm.handler;
 
+import java.util.List;
+
 import android.annotation.TargetApi;
 import android.content.Context;
 import android.content.pm.PackageManager;
 import android.hardware.Camera;
+import android.hardware.Camera.AutoFocusCallback;
 import android.hardware.Camera.CameraInfo;
 import android.hardware.Camera.Parameters;
 import android.os.Build;
@@ -34,6 +37,9 @@ public class CameraHandler {
 	private static Context context;
 
 	private Camera camera = null;
+
+	// To store supported FlashMode to use
+	private Optional<String> flashModeToUse = Optional.<String> absent();
 
 	/**
 	 * Creates a new instance of {@link CameraHandler} with given context.
@@ -70,8 +76,8 @@ public class CameraHandler {
 		// Get the package manager in order to figure out if system service exists
 		PackageManager packageManager = context.getPackageManager();
 
-		// Only if device supports support camera flash
-		if (packageManager.hasSystemFeature(PackageManager.FEATURE_CAMERA)) {
+		// Only if device supports support camera and flash
+		if (packageManager.hasSystemFeature(PackageManager.FEATURE_CAMERA) && packageManager.hasSystemFeature(PackageManager.FEATURE_CAMERA_FLASH)) {
 			// Initialize if null
 			if (camera == null) {
 				try {
@@ -81,9 +87,8 @@ public class CameraHandler {
 					if (optionalCameraId.isPresent()) {
 						camera = Camera.open(optionalCameraId.get());
 
-						if (SmsAlarm.DEBUG) {
-							Log.i(LOG_TAG + ":toggleCameraFlash()", "Backfacing camera successfully initialized");
-						}
+						// Figure out correct FlashMode
+						flashModeToUse = resolveFlashMode();
 					}
 				} catch (RuntimeException e) {
 					if (SmsAlarm.DEBUG) {
@@ -92,31 +97,41 @@ public class CameraHandler {
 				}
 			}
 
-			// In case of camera failed to initialize, could be that device has no camera
-			if (camera != null) {
+			// In case of camera failed to initialize, could be that device has no camera, FlashMode must also be successfully
+			// resolved(Parameters.FLASH_MODE_TORCH or Parameters.FLASH_MODE_ON)
+			if (camera != null && flashModeToUse.isPresent()) {
 				// Get the parameters of from the camera, and especially the FlashMode
 				Parameters parameters = camera.getParameters();
-				String flashMode = parameters.getFlashMode();
+				String currentFlashMode = parameters.getFlashMode();
 
 				// If FlashMode hasn't been set or it's off then switch it On and startPreview - IMPORTANT!
-				if (flashMode == null || Parameters.FLASH_MODE_OFF.equals(flashMode)) {
-					// This debug statement needs to be here as this can be tricky to test on an emulator else
-					if (SmsAlarm.DEBUG) {
-						Log.d(LOG_TAG + ":toggleCameraFlash()", "Switching camera flash LED ON");
-					}
-
+				if (currentFlashMode == null || Parameters.FLASH_MODE_OFF.equals(currentFlashMode)) {
 					// Torch mode as we wan't the camera flash to light as bright as possible
-					parameters.setFlashMode(Parameters.FLASH_MODE_TORCH);
+					parameters.setFlashMode(flashModeToUse.get());
 					camera.setParameters(parameters);
-					camera.startPreview();
-				} else if (Parameters.FLASH_MODE_TORCH.equals(flashMode)) {
-					if (SmsAlarm.DEBUG) {
-						Log.d(LOG_TAG + ":toggleCameraFlash()", "Switching camera flash LED OFF");
-					}
-
+				} else if (flashModeToUse.get().equals(currentFlashMode)) {
 					parameters.setFlashMode(Parameters.FLASH_MODE_OFF);
 					camera.setParameters(parameters);
-					camera.stopPreview();
+				}
+
+				// Stopping preview in order to start it correctly again
+				camera.stopPreview();
+
+				// Try to start preview again, surrounded within try catch clause because this can fail sometimes
+				try {
+					camera.startPreview();
+
+					// Set AutoFocus even if we don't use it, recommended according to
+					// http://http://stackoverflow.com/questions/5503480/use-camera-flashlight-in-android
+					camera.autoFocus(new AutoFocusCallback() {
+						@Override
+						public void onAutoFocus(boolean success, Camera camera) {
+						}
+					});
+				} catch (RuntimeException re) {
+					if (SmsAlarm.DEBUG) {
+						Log.e(LOG_TAG + ":toggleCameraFlash()", "An error occurred while starting preview", re);
+					}
 				}
 			}
 		}
@@ -130,12 +145,9 @@ public class CameraHandler {
 	 */
 	public void releaseCamera() {
 		if (camera != null) {
+			camera.stopPreview();
 			camera.release();
 			camera = null;
-
-			if (SmsAlarm.DEBUG) {
-				Log.i(LOG_TAG + ":releaseCamera()", "Camera released");
-			}
 		}
 	}
 
@@ -144,7 +156,7 @@ public class CameraHandler {
 	 * 
 	 * @return An {@link Optional} containing the id of the BackFacing camera, if device got any. Else an <code>absent</code> optional is returned.
 	 */
-	private Optional<Integer> findBackFacingCamera() {
+	public static Optional<Integer> findBackFacingCamera() {
 		// Iterate through each camera and check if it's facing backwards
 		for (int i = 0; i < Camera.getNumberOfCameras(); i++) {
 			CameraInfo cameraInfo = new CameraInfo();
@@ -152,14 +164,37 @@ public class CameraHandler {
 
 			// Check if current camera is facing back
 			if (cameraInfo.facing == CameraInfo.CAMERA_FACING_BACK) {
-				if (SmsAlarm.DEBUG) {
-					Log.d(LOG_TAG + ":findBackFacingCamera()", "Backfacing camera found with camera id: \"" + i + "\"");
-					return Optional.<Integer> of(i);
-				}
+				return Optional.<Integer> of(i);
 			}
 		}
 
 		// No camera was found...
 		return Optional.<Integer> absent();
+	}
+
+	/**
+	 * To resolve correct <b><i>FlashMode</i></b>. This can be either <b><i>Parameters.FLASH_MODE_TORCH</i></b> or
+	 * <b><i>Parameters.FLASH_MODE_ON</i></b>, Parameters.FLASH_MODE_TORCH will have precedence over Parameters.FLASH_MODE_ON.<br>
+	 * If none of these are supported, no flash will be used.
+	 */
+	private Optional<String> resolveFlashMode() {
+		// Only if camera has been initialized
+		if (camera != null) {
+			// Figure out the supported FlashModes of this devices camera
+			Parameters parameters = camera.getParameters();
+			List<String> supportedFlashModes = parameters.getSupportedFlashModes();
+
+			// Could be null
+			if (supportedFlashModes != null) {
+				// Prioritize Parameters.FLASH_MODE_TORCH
+				if (supportedFlashModes.contains(Parameters.FLASH_MODE_TORCH)) {
+					return Optional.<String> of(Parameters.FLASH_MODE_TORCH);
+				} else if (supportedFlashModes.contains(Parameters.FLASH_MODE_ON)) {
+					return Optional.<String> of(Parameters.FLASH_MODE_ON);
+				}
+			}
+		}
+
+		return Optional.<String> absent();
 	}
 }

@@ -1,3 +1,6 @@
+/**
+ * Copyright (c) 2014 Robert Nyholm. All rights reserved.
+ */
 package ax.ha.it.smsalarm.fragment.dialog;
 
 import android.app.Activity;
@@ -9,7 +12,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
 import android.util.Log;
-import ax.ha.it.smsalarm.BuildConfig;
 import ax.ha.it.smsalarm.R;
 import ax.ha.it.smsalarm.activity.SmsAlarm;
 
