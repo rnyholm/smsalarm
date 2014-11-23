@@ -50,7 +50,7 @@ public class SlidingMenuFragment extends SherlockListFragment {
 	@SuppressLint("InflateParams")
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-		return inflater.inflate(R.layout.list, null);
+		return inflater.inflate(R.layout.menu_list, null);
 	}
 
 	/**
@@ -119,6 +119,7 @@ public class SlidingMenuFragment extends SherlockListFragment {
 				fragment = new OtherSettingsFragment();
 				break;
 			case (201):
+				fragment = new OpenSourceFragment();
 				break;
 			case (202):
 				fragment = new AboutFragment();
@@ -170,7 +171,7 @@ public class SlidingMenuFragment extends SherlockListFragment {
 			// Only interested in certain request codes...
 			switch (requestCode) {
 				case (MockSmsDialog.MOCK_SMS_DIALOG_REQUEST_CODE):
-					// Get sender and body, at last dispatch sms
+					// Get sender and body, at last dispatch SMS
 					String smsSender = data.getStringExtra(MockSmsDialog.SMS_SENDER);
 					String smsBody = data.getStringExtra(MockSmsDialog.SMS_BODY);
 

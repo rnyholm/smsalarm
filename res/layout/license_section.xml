@@ -1,18 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-	android:id="@+id/menuSection_ll"
+	android:id="@+id/licenseSection_ll"
    	android:layout_width="fill_parent"
    	android:layout_height="wrap_content"
    	android:orientation="vertical">
     
     <TextView
-        android:id="@+id/menuSectionTitle_tv"
+        android:id="@+id/licenseSectionTitle_tv"
         style="?android:attr/listSeparatorTextViewStyle"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:paddingBottom="7dp"
-        android:paddingTop="7dp"
-        android:text="@string/MENU_SECTION_TITLE"
+        android:paddingBottom="5dp"
+        android:paddingTop="5dp"
+        android:text="@string/LICENSE_SECTION_TITLE"
         android:textAppearance="?android:attr/textAppearanceMedium" />
     
 </LinearLayout>

@@ -16,6 +16,14 @@
     <string name="FLASH_NOTIFICATION_NOT_SUPPORTED_MISSING_CAMERA">Blixtnotifikation stöds inte på grund av att enheten saknar kamera.</string>
     <string name="FLASH_NOTIFICATION_NOT_SUPPORTED_MISSING_CAMERA_FLASH">Blixtnotifikation stöds inte på grund av att enheten saknar blixt.</string>
     <string name="FLASH_NOTIFICATION_NOT_SUPPORTED_MISSING_BACK_FACING_CAMERA">Blixtnotifikation stöds inte på grund av att enheten saknar en bakåtriktad kamera.</string>
+    <string name="LICENSE_APACHE_TITLE">Apache-Licenser</string>
+    <string name="LICENSE_OTHER_TITLE">Licenser</string>
+    <string name="LICENSE_ITEM_TITLE">License item title</string>
+    <string name="LICENSE_ITEM_URI">License item URI</string>
+    <string name="LICENSE_SECTION_TITLE">License section title</string>
+    <string name="MENU_ITEM_TITLE">Menu item title</string>
+    <string name="MENU_ITEM_IMAGE_DESCR">Menu item image</string>
+    <string name="MENU_SECTION_TITLE">Menu section title</string>
     <!-- OK IN ENGLISH, GERMAN BEGIN -->
     <string name="INFO_SOUND_SETTINGS">Ställ in larmsignaler för primär- och sekundär larm, om Sms Alarm ska följa enhetens ljudinställningar samt om larmsignalen ska spelas upp två gånger.</string>
     <string name="INFO_USE_OS_SOUND_SETTINGS">Om vald tar Sms Alarm hänsyn till enhetens ringvolym och ljudlöst läge.</string>
@@ -87,7 +95,13 @@
     <string name="INFO_FREE_TEXT_TRIGGER_SETTINGS">Enter the words that should be used to notify in the Sms Alarm if present in the incoming sms. Note that this function is not case sensitive.</string>
     <string name="INFO_PLAY_TONE_TWICE_SETTING">If selected Sms Alarm will play alarm signal to both primary and secondary alarms twice.</string>
     <string name="INFO_SMS_SETTINGS">Enter the telephone numbers that Sms Alarm should send alerts for incoming sms.</string>
-    <string name="LISTEN_ALARM_SIGNAL">Listen to the signal</string> 
+    <string name="LISTEN_ALARM_SIGNAL">Listen to the signal</string>    
+    <string name="LICENSE_APACHE_V2_TITLE">Apache License, Version 2.0</string>
+    <string name="LICENSE_APACHE_V2_URI">http://www.apache.org/licenses/LICENSE-2.0</string>
+    <string name="LICENSE_OTHER_SLIDING_MENU_TITLE">Sliding Menu</string>
+    <string name="LICENSE_OTHER_SLIDING_MENU_URI">https://github.com/jfeinstein10/SlidingMenu</string>
+	<string name="LICENSE_OTHER_ACTIONBAR_SHERLOCK_TITLE">Actionbar Sherlock</string>
+    <string name="LICENSE_OTHER_ACTIONBAR_SHERLOCK_URI">https://github.com/JakeWharton/ActionBarSherlock</string>
 	<string name="NEW_LINE">\n</string>	
     <string name="NO">No</string>
     <string name="NO_RECEIVED_ALARMS_EXISTS">No alarm has yet been received.</string>
@@ -136,7 +150,7 @@
     <string name="VERTICAL_DIVIDER_DESCR">Vertical divider</string>
   	<string name="WIDGET_ICON_CONTENT_DESCR">Widget sms alarm icon</string>
   	<string name="WIDGET_NOT_AGREED_EULA">You must start Sms Alarm and agree to the user agreement before you may use this widget.</string>
-    <string name="YES">Yes</string>  
+    <string name="YES">Yes</string>
     <!-- Strings for development/debug(only exists in default) begin -->
     <string name="DEBUG_MENU_TITLE_DEVELOP">Develop Tools</string>
     <string name="DEBUG_MENU_TITLE_DISPATCH_MOCK_SMS">Dispatch Mock SMS</string>

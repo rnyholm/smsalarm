@@ -94,9 +94,4 @@ public class SlidingMenuItem {
 	public Optional<Integer> getIconResource() {
 		return optionalIconResource;
 	}
-
-	@Override
-	public String toString() {
-		return "SlidingMenuItem [id=" + id + ", title=" + title + ", optionalIconResource=" + (optionalIconResource.isPresent() ? Integer.toString(optionalIconResource.get()) : "icon absent") + "]";
-	}
 }

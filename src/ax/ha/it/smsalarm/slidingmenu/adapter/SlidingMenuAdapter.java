@@ -59,7 +59,7 @@ public class SlidingMenuAdapter extends ArrayAdapter<SlidingMenuItem> {
 			convertView = LayoutInflater.from(getContext()).inflate(R.layout.menu_section, null);
 
 			// Set correct text to layout
-			TextView title = (TextView) convertView.findViewById(R.id.sectionTitle_tv);
+			TextView title = (TextView) convertView.findViewById(R.id.menuSectionTitle_tv);
 			title.setText(menuItem.getTitle());
 		} else {
 			convertView = LayoutInflater.from(getContext()).inflate(R.layout.menu_item, null);
