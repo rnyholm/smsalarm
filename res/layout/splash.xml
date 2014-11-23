@@ -3,8 +3,7 @@
     android:id="@+id/splash_rl"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/splash"
-    android:contentDescription="@string/SPLASH_DESCR" >
+    android:background="@drawable/splash_gradient" >
 
     <TextView
         android:id="@+id/splashTitle_tv"
@@ -36,5 +35,15 @@
         android:text="@string/SPLASH_VERSION"
         android:textAppearance="?android:attr/textAppearanceSmall"
         android:textColor="#313031" />
+
+    <ImageView
+        android:id="@+id/splashImage_iv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_centerVertical="true"
+        android:contentDescription="@string/SPLASH_DESCR"
+        android:padding="50dp"
+        android:src="@drawable/splash" />
 
 </RelativeLayout>
