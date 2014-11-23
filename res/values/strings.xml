@@ -164,7 +164,7 @@
     <string name="DEBUG_MOCK_SMS_BODY_TITLE">Message</string>
     <string name="DEBUG_MOCK_SMS_BODY_HINT">Enter message of sms..</string>
     <string name="DEBUG_CONFIRM_MOCK_SHARED_PREFERENCES_TITLE">Mock shared preferences</string>
-    <string name="DEBUG_CONFIRM_MOCK_SHARED_PREFERENCES_MESSAGE">Do you really want to mock shared preferences? Any existing preferences will be overwritten!</string>
+    <string name="DEBUG_CONFIRM_MOCK_SHARED_PREFERENCES_MESSAGE">Do you really want to mock shared preferences?\nAny existing preferences will be overwritten!</string>
     <string name="DEBUG_CANCEL">Cancel</string>
     <string name="DEBUG_YES">Yes</string>
     <string name="DEBUG_NO">No</string>

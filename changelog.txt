@@ -10,6 +10,7 @@ resulterar i att ett kvitteringssamtal rings direkt när man e inne i kvitterings
 -Möjlighet att blinka med kamerans blixt vid inkommande larm, dock bara en BETA feature ännu
 -En debugg/testmeny har lagts till för underlätta testande
 -En egen sida som listar alla open source licenser har lagts till
+-Sms Alarm ha fått en ny launcher ikon
 
 v2.2.5(version code 13)
 -Översättning till estniska lades till
