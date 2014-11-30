@@ -10,7 +10,6 @@ import android.content.res.AssetFileDescriptor;
 import android.media.AudioManager;
 import android.media.MediaPlayer;
 import android.media.MediaPlayer.OnCompletionListener;
-import android.os.Vibrator;
 import android.util.Log;
 import ax.ha.it.smsalarm.R;
 import ax.ha.it.smsalarm.activity.SmsAlarm;
@@ -30,15 +29,15 @@ public class NoiseHandler {
 
 	private static final String LOG_TAG = NoiseHandler.class.getSimpleName();
 
+	// Custom vibration pattern
+	public static long[] vibrationPattern = { 0, 5000, 500, 5000, 500, 5000, 500, 5000 };
+
 	// A limit time for how long we can wait for the KitKat handler to be idle, this works as a
 	// security to be sure that noise always going to be made
 	private static final long NOISE_DELAY_LIMIT = 10000;
 
 	// Initialize a MediaPlayer object
 	private final MediaPlayer mediaPlayer = new MediaPlayer();
-
-	// Need to handle vibration
-	private Vibrator vibrator;
 
 	// Handler needed for KitKat and later releases special treatment
 	private final KitKatHandler kitKatHandler;
@@ -93,22 +92,17 @@ public class NoiseHandler {
 		if (!mediaPlayer.isPlaying()) {
 			// Declarations of different objects needed by makeNoise
 			// AudioManager used to get and set different volume levels
-			final AudioManager am = (AudioManager) context.getSystemService(Context.AUDIO_SERVICE);
+			final AudioManager audioManager = (AudioManager) context.getSystemService(Context.AUDIO_SERVICE);
 			// AssetFileDescriptor to get mp3 file
 			AssetFileDescriptor afd = null;
-			// Set Vibrator from context
-			vibrator = (Vibrator) context.getSystemService(Context.VIBRATOR_SERVICE);
 			// Store original media volume
-			final int originalMediaVolume = am.getStreamVolume(AudioManager.STREAM_MUSIC);
+			final int originalMediaVolume = audioManager.getStreamVolume(AudioManager.STREAM_MUSIC);
 			// Variable indicating how many times the alarm signal should be played
 			final int toBePlayed;
 			// Calculate current ring volume in percent
-			float currentRingVolume = ((float) am.getStreamVolume(AudioManager.STREAM_RING) / (float) am.getStreamMaxVolume(AudioManager.STREAM_RING));
+			float currentRingVolume = ((float) audioManager.getStreamVolume(AudioManager.STREAM_RING) / (float) audioManager.getStreamMaxVolume(AudioManager.STREAM_RING));
 			// To store alarm volume in, calculate it at the same time
-			int alarmVolume = (int) (currentRingVolume * am.getStreamMaxVolume(AudioManager.STREAM_MUSIC));
-
-			// Custom vibration pattern
-			long[] pattern = { 0, 5000, 500, 5000, 500, 5000, 500, 5000 };
+			int alarmVolume = (int) (currentRingVolume * audioManager.getStreamMaxVolume(AudioManager.STREAM_MUSIC));
 
 			// Resolve correct alarm signal depending on id
 			try {
@@ -144,23 +138,16 @@ public class NoiseHandler {
 			// play tone and vibrate even if phone is in silent or vibrate mode
 			if (useSoundSettings) {
 				// Decide if phone are in normal, vibrate or silent state and take action
-				switch (am.getRingerMode()) {
+				switch (audioManager.getRingerMode()) {
 					case AudioManager.RINGER_MODE_SILENT:
-						// Reset media player
-						mediaPlayer.reset();
-
+						// Don't play alarm signal or vibrate
 						break;
 					case AudioManager.RINGER_MODE_VIBRATE:
-						// Vibrate, -1 = no repeat
-						vibrator.vibrate(pattern, -1);
-
+						// Don't play alarm signal, vibration are set up within the notification services
 						break;
 					case AudioManager.RINGER_MODE_NORMAL:
 						// Set correct volume to media player
-						am.setStreamVolume(AudioManager.STREAM_MUSIC, alarmVolume, 0);
-
-						// Vibrate, -1 = no repeat
-						vibrator.vibrate(pattern, -1);
+						audioManager.setStreamVolume(AudioManager.STREAM_MUSIC, alarmVolume, 0);
 
 						// Start play message tone
 						mediaPlayer.start();
@@ -173,9 +160,7 @@ public class NoiseHandler {
 				}
 			} else { // If not take OS sound setting into account, always ring at highest volume and vibrate
 				// Set maximum volume to audio manager
-				am.setStreamVolume(AudioManager.STREAM_MUSIC, am.getStreamMaxVolume(AudioManager.STREAM_MUSIC), 0);
-				// Vibrate, -1 = no repeat
-				vibrator.vibrate(pattern, -1);
+				audioManager.setStreamVolume(AudioManager.STREAM_MUSIC, audioManager.getStreamMaxVolume(AudioManager.STREAM_MUSIC), 0);
 				// Start play alarm signal
 				mediaPlayer.start();
 			}
@@ -196,7 +181,7 @@ public class NoiseHandler {
 						// Start play message tone
 						mediaPlayer.start();
 					} else {
-						am.setStreamVolume(AudioManager.STREAM_MUSIC, originalMediaVolume, 0);
+						audioManager.setStreamVolume(AudioManager.STREAM_MUSIC, originalMediaVolume, 0);
 						mediaPlayer.reset();
 					}
 				}
@@ -217,5 +202,16 @@ public class NoiseHandler {
 		// Resolve alarm signal from id
 		String[] alarmSignals = context.getResources().getStringArray(R.array.alarm_signals);
 		return alarmSignals[alarmSignalId];
+	}
+
+	/**
+	 * Convenience method to figure out what <b><i>Ringer Mode</i></b> the device is in.
+	 * 
+	 * @param context
+	 *            Context from which system service {@link Context#AUDIO_SERVICE} are taken.
+	 * @return Devices current ringer mode.
+	 */
+	public static int getRingerMode(Context context) {
+		return ((AudioManager) context.getSystemService(Context.AUDIO_SERVICE)).getRingerMode();
 	}
 }

@@ -10,7 +10,6 @@ import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.hardware.Camera;
-import android.util.Log;
 import ax.ha.it.smsalarm.handler.SharedPreferencesHandler.DataType;
 import ax.ha.it.smsalarm.handler.SharedPreferencesHandler.PrefKey;
 import ax.ha.it.smsalarm.receiver.FlashNotificationReceiver;
@@ -71,7 +70,6 @@ public class FlashNotificationHandler {
 
 		// Only cancel AlarmManager if it's up and running already
 		if (flashNotificationStarted) {
-			Log.i("FlashNotificationHandler:stopFlashNotification()", "Flashnotification is up and running, stop it");
 			AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
 			Intent intent = new Intent(context, FlashNotificationReceiver.class);
 
@@ -80,8 +78,6 @@ public class FlashNotificationHandler {
 			// Cancel alarms and release the camera - IMPORTANT
 			alarmManager.cancel(pendingIntent);
 			CameraHandler.getInstance(context).releaseCamera();
-		} else {
-			Log.i("FlashNotificationHandler:stopFlashNotification()", "Flashnotification isn't up and running, don't stop it");
 		}
 	}
 }
