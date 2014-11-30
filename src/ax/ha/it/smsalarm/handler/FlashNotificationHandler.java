@@ -10,6 +10,7 @@ import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.hardware.Camera;
+import android.util.Log;
 import ax.ha.it.smsalarm.handler.SharedPreferencesHandler.DataType;
 import ax.ha.it.smsalarm.handler.SharedPreferencesHandler.PrefKey;
 import ax.ha.it.smsalarm.receiver.FlashNotificationReceiver;
@@ -58,16 +59,19 @@ public class FlashNotificationHandler {
 	}
 
 	/**
-	 * To <b><i>Stop</i></b> a <b><i>Flash Notification</i></b>.
+	 * To <b><i>Stop</i></b> a <b><i>Flash Notification</i></b>. <br>
+	 * The Flash Notification will only be stopped if it's actually running.
 	 * 
 	 * @param context
 	 *            Context in which system services are taken.
 	 */
 	public static void stopFlashNotification(Context context) {
-		SharedPreferencesHandler prefHandler = SharedPreferencesHandler.getInstance();
+		// Figure out if AlarmManager is up and running already for the FlashNotification
+		boolean flashNotificationStarted = PendingIntent.getBroadcast(context, 0, new Intent(context, FlashNotificationReceiver.class), PendingIntent.FLAG_NO_CREATE) != null;
 
-		// Only stop AlarmManager if it's set that the flash notification should be used. Support is checked in the OtherSettingsFragment class
-		if ((Boolean) prefHandler.fetchPrefs(PrefKey.SHARED_PREF, PrefKey.USE_FLASH_NOTIFICATION, DataType.BOOLEAN, context)) {
+		// Only cancel AlarmManager if it's up and running already
+		if (flashNotificationStarted) {
+			Log.i("FlashNotificationHandler:stopFlashNotification()", "Flashnotification is up and running, stop it");
 			AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
 			Intent intent = new Intent(context, FlashNotificationReceiver.class);
 
@@ -76,6 +80,8 @@ public class FlashNotificationHandler {
 			// Cancel alarms and release the camera - IMPORTANT
 			alarmManager.cancel(pendingIntent);
 			CameraHandler.getInstance(context).releaseCamera();
+		} else {
+			Log.i("FlashNotificationHandler:stopFlashNotification()", "Flashnotification isn't up and running, don't stop it");
 		}
 	}
 }
