@@ -19,14 +19,12 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.PowerManager;
 import android.telephony.SmsMessage;
-import android.util.Log;
-import ax.ha.it.smsalarm.activity.SmsAlarm;
 import ax.ha.it.smsalarm.handler.DatabaseHandler;
 import ax.ha.it.smsalarm.handler.KitKatHandler;
-import ax.ha.it.smsalarm.handler.NoiseHandler;
 import ax.ha.it.smsalarm.handler.SharedPreferencesHandler;
 import ax.ha.it.smsalarm.handler.SharedPreferencesHandler.DataType;
 import ax.ha.it.smsalarm.handler.SharedPreferencesHandler.PrefKey;
+import ax.ha.it.smsalarm.handler.SoundHandler;
 import ax.ha.it.smsalarm.pojo.Alarm;
 import ax.ha.it.smsalarm.pojo.Alarm.AlarmType;
 import ax.ha.it.smsalarm.provider.WidgetProvider;
@@ -52,12 +50,15 @@ public class SmsReceiver extends BroadcastReceiver {
 	// Debug actions to skip abort broadcast, by not disabling this while dispatching a test SMS will cause an exception
 	public static final String ACTION_SKIP_ABORT_BROADCAST = "ax.ha.it.smsalarm.SKIP_ABORT_BROADCAST";
 
+	// URI to sms inbox
+	private static final String SMS_INBOX_URI = "content://sms/inbox";
+
 	// How long we should acquire a wake lock
-	private final int WAKE_LOCKER_ACQUIRE_TIME = 20000;
+	private static final int WAKE_LOCKER_ACQUIRE_TIME = 20000;
 
 	// Objects needed shared preferences, noise and KitKat handling
 	private final SharedPreferencesHandler prefHandler = SharedPreferencesHandler.getInstance();
-	private final NoiseHandler noiseHandler = NoiseHandler.getInstance();
+	private final SoundHandler soundHandler = SoundHandler.getInstance();
 	private final KitKatHandler kitKatHandler = KitKatHandler.getInstance();
 
 	// Lists of Strings containing primary- and secondary SMS numbers
@@ -69,11 +70,7 @@ public class SmsReceiver extends BroadcastReceiver {
 	private List<String> secondaryFreeTexts = new ArrayList<String>();
 
 	// To handle an incoming alarm properly
-	private int primaryMessageToneId = 0;
-	private int secondaryMessageToneId = 0;
-	private boolean useOsSoundSettings = false;
 	private boolean enableAlarmAck = false;
-	private boolean playToneTwice = false;
 	private boolean enableSmsAlarm = false;
 
 	private AlarmType alarmType = AlarmType.UNDEFINED;
@@ -179,22 +176,10 @@ public class SmsReceiver extends BroadcastReceiver {
 		ContentValues values = new ContentValues();
 		values.put("address", msgHeader);
 		values.put("body", msgBody);
-		context.getContentResolver().insert(Uri.parse("content://sms/inbox"), values);
+		context.getContentResolver().insert(Uri.parse(SMS_INBOX_URI), values);
 
-		// Play alarm signal and vibrate, different method calls depending on alarm type
-		switch (alarmType) {
-			case PRIMARY:
-				noiseHandler.doNoise(context, primaryMessageToneId, useOsSoundSettings, playToneTwice);
-				break;
-			case SECONDARY:
-				noiseHandler.doNoise(context, secondaryMessageToneId, useOsSoundSettings, playToneTwice);
-				break;
-			default:
-				// This is weird, log this case
-				if (SmsAlarm.DEBUG) {
-					Log.e(LOG_TAG + ":handleSMS()", "SMS with AlarmType: \"UNDEFINED\" received, check why. However application can't decide how to handle this case");
-				}
-		}
+		// Play alarm signal
+		soundHandler.alarm(context, alarmType);
 
 		// If alarm acknowledge is enabled and alarm type equals primary, store full alarm message
 		if (enableAlarmAck && alarmType.equals(AlarmType.PRIMARY)) {
@@ -234,11 +219,7 @@ public class SmsReceiver extends BroadcastReceiver {
 		secondarySmsNumbers = (List<String>) prefHandler.fetchPrefs(PrefKey.SHARED_PREF, PrefKey.SECONDARY_LISTEN_NUMBERS_KEY, DataType.LIST, context);
 		primaryFreeTexts = (List<String>) prefHandler.fetchPrefs(PrefKey.SHARED_PREF, PrefKey.PRIMARY_LISTEN_FREE_TEXTS_KEY, DataType.LIST, context);
 		secondaryFreeTexts = (List<String>) prefHandler.fetchPrefs(PrefKey.SHARED_PREF, PrefKey.SECONDARY_LISTEN_FREE_TEXTS_KEY, DataType.LIST, context);
-		primaryMessageToneId = (Integer) prefHandler.fetchPrefs(PrefKey.SHARED_PREF, PrefKey.PRIMARY_MESSAGE_TONE_KEY, DataType.INTEGER, context);
-		secondaryMessageToneId = (Integer) prefHandler.fetchPrefs(PrefKey.SHARED_PREF, PrefKey.SECONDARY_MESSAGE_TONE_KEY, DataType.INTEGER, context, 1);
-		useOsSoundSettings = (Boolean) prefHandler.fetchPrefs(PrefKey.SHARED_PREF, PrefKey.USE_OS_SOUND_SETTINGS_KEY, DataType.BOOLEAN, context);
 		enableAlarmAck = (Boolean) prefHandler.fetchPrefs(PrefKey.SHARED_PREF, PrefKey.ENABLE_ACK_KEY, DataType.BOOLEAN, context);
-		playToneTwice = (Boolean) prefHandler.fetchPrefs(PrefKey.SHARED_PREF, PrefKey.PLAY_TONE_TWICE_KEY, DataType.BOOLEAN, context);
 		enableSmsAlarm = (Boolean) prefHandler.fetchPrefs(PrefKey.SHARED_PREF, PrefKey.ENABLE_SMS_ALARM_KEY, DataType.BOOLEAN, context, true);
 	}
 

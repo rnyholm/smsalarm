@@ -42,7 +42,7 @@ public class CameraHandler {
 	private Optional<String> flashModeToUse = Optional.<String> absent();
 
 	/**
-	 * Creates a new instance of {@link CameraHandler} with given context.
+	 * Creates a new instance of {@link CameraHandler}.
 	 */
 	private CameraHandler() {
 		if (INSTANCE != null) {

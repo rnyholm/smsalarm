@@ -1,12 +1,19 @@
+/**
+ * Copyright (c) 2014 Robert Nyholm. All rights reserved.
+ */
 package ax.ha.it.smsalarm.fragment;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Locale;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.res.Resources;
-import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
@@ -15,24 +22,21 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
-import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
-import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.RelativeLayout.LayoutParams;
-import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 import ax.ha.it.smsalarm.R;
 import ax.ha.it.smsalarm.activity.SmsAlarm;
 import ax.ha.it.smsalarm.fragment.dialog.AlarmSignalDialog;
-import ax.ha.it.smsalarm.handler.NoiseHandler;
 import ax.ha.it.smsalarm.handler.SharedPreferencesHandler;
 import ax.ha.it.smsalarm.handler.SharedPreferencesHandler.DataType;
 import ax.ha.it.smsalarm.handler.SharedPreferencesHandler.PrefKey;
-import ax.ha.it.smsalarm.pojo.Alarm.AlarmType;
+import ax.ha.it.smsalarm.handler.SoundHandler;
+import ax.ha.it.smsalarm.util.Util;
 
 import com.actionbarsherlock.app.SherlockFragment;
 
@@ -47,28 +51,28 @@ import com.actionbarsherlock.app.SherlockFragment;
 public class SoundSettingsFragment extends SherlockFragment implements ApplicationFragment {
 	private static final String LOG_TAG = SoundSettingsFragment.class.getSimpleName();
 
-	// Objects needed for shared preferences handling and noise handling
+	// Objects needed for shared preferences handling and sound handling
 	private final SharedPreferencesHandler prefHandler = SharedPreferencesHandler.getInstance();
-	private final NoiseHandler noiseHandler = NoiseHandler.getInstance();
+	private final SoundHandler soundHandler = SoundHandler.getInstance();
 
 	// Must have the application context
 	private Context context;
 
-	// The EditTexts...
-	private EditText selectedAlarmSignalEditText;
-
-	// ...Buttons...
-	private Button editAlarmSignalButton;
-	private Button listenAlarmSignalButton;
+	// The LinearLayouts
+	private LinearLayout primaryAlarmSignalSelectionLinearLayout;
+	private LinearLayout secondaryAlarmSignalSelectionLinearLayout;
+	private LinearLayout primaryAlarmVibrationSelectionLinearLayout;
+	private LinearLayout secondaryAlarmVibrationSelectionLinearLayout;
 
 	// ...CheckBoxes...
 	private CheckBox soundSettingCheckBox;
 	private CheckBox playAlarmSignalTwiceSettingCheckBox;
 
-	// ...Spinners...
-	private Spinner alarmTypeSpinner;
-
 	// ...and TextViews
+	private TextView selectedPrimaryAlarmSignalTextView;
+	private TextView selectedSecondaryAlarmSignalTextView;
+	private TextView selectedPrimaryAlarmVibrationTextView;
+	private TextView selectedSecondaryAlarmVibrationTextView;
 	private TextView soundSettingInfoTextView;
 	private TextView playAlarmSignalTwiceInfoTextView;
 
@@ -76,12 +80,12 @@ public class SoundSettingsFragment extends SherlockFragment implements Applicati
 	private boolean useOsSoundSettings = false;
 	private boolean playAlarmSignalTwice = false;
 
-	// Integer holding alarm type spinners positions
-	private int alarmTypeSpinnerPos = 0;
+	// To store the selected alarm signals
+	private String primaryAlarmSignal;
+	private String secondaryAlarmSignal;
 
-	// Integer to store which alarm signal id to be used
-	private int primaryAlarmSignalId = 0;
-	private int secondaryAlarmSignalId = 1;
+	// List holding the paths to the user added alarm signals
+	private List<String> userAddedAlarmSignals = new ArrayList<String>();
 
 	/**
 	 * To create a new instance of {@link SoundSettingsFragment}.
@@ -115,23 +119,23 @@ public class SoundSettingsFragment extends SherlockFragment implements Applicati
 
 	@Override
 	public void findViews(View view) {
-		// Finding EditText views
-		selectedAlarmSignalEditText = (EditText) view.findViewById(R.id.alarmSignal_et);
-
-		// Finding Button Views
-		editAlarmSignalButton = (Button) view.findViewById(R.id.editAlarmSignal_btn);
-		listenAlarmSignalButton = (Button) view.findViewById(R.id.listenAlarmSignal_btn);
+		// Finding the LinearLayout views
+		primaryAlarmSignalSelectionLinearLayout = (LinearLayout) view.findViewById(R.id.primaryAlarmSignalSelection_ll);
+		secondaryAlarmSignalSelectionLinearLayout = (LinearLayout) view.findViewById(R.id.secondaryAlarmSignalSelection_ll);
+		primaryAlarmVibrationSelectionLinearLayout = (LinearLayout) view.findViewById(R.id.primaryAlarmVibrationSelection_ll);
+		secondaryAlarmVibrationSelectionLinearLayout = (LinearLayout) view.findViewById(R.id.secondaryAlarmVibrationSelection_ll);
 
 		// Finding CheckBox views
 		soundSettingCheckBox = (CheckBox) view.findViewById(R.id.useSysSoundSettings_chk);
 		playAlarmSignalTwiceSettingCheckBox = (CheckBox) view.findViewById(R.id.playAlarmSignalTwiceSetting_chk);
 
 		// Finding TextView, views
+		selectedPrimaryAlarmSignalTextView = (TextView) view.findViewById(R.id.selectedPrimaryAlarmSignal_tv);
+		selectedSecondaryAlarmSignalTextView = (TextView) view.findViewById(R.id.selectedSecondaryAlarmSignal_tv);
+		selectedPrimaryAlarmVibrationTextView = (TextView) view.findViewById(R.id.selectedPrimaryAlarmVibration_tv);
+		selectedSecondaryAlarmVibrationTextView = (TextView) view.findViewById(R.id.selectedSecondaryAlarmVibration_tv);
 		soundSettingInfoTextView = (TextView) view.findViewById(R.id.useSysSoundSettingsHint_tv);
 		playAlarmSignalTwiceInfoTextView = (TextView) view.findViewById(R.id.playAlarmSignalTwiceSettingHint_tv);
-
-		// Finding Spinner views
-		alarmTypeSpinner = (Spinner) view.findViewById(R.id.alarmTypeSpinner_sp);
 
 		// If Android API level is greater than Jelly Bean
 		if (Build.VERSION.SDK_INT > Build.VERSION_CODES.JELLY_BEAN) {
@@ -195,71 +199,86 @@ public class SoundSettingsFragment extends SherlockFragment implements Applicati
 				playAlarmSignalTwiceInfoTextView.setLayoutParams(paramsPlayToneTwiceInfoTextView);
 			}
 		}
-
-		// Set some attributes to the selectedToneEditText
-		selectedAlarmSignalEditText.setEnabled(false);
-		selectedAlarmSignalEditText.setClickable(false);
-		selectedAlarmSignalEditText.setFocusable(false);
-		selectedAlarmSignalEditText.setBackgroundColor(Color.WHITE);
-		selectedAlarmSignalEditText.setTextColor(Color.BLACK);
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
 	public void fetchSharedPrefs() {
-		primaryAlarmSignalId = (Integer) prefHandler.fetchPrefs(PrefKey.SHARED_PREF, PrefKey.PRIMARY_MESSAGE_TONE_KEY, DataType.INTEGER, context);
-		secondaryAlarmSignalId = (Integer) prefHandler.fetchPrefs(PrefKey.SHARED_PREF, PrefKey.SECONDARY_MESSAGE_TONE_KEY, DataType.INTEGER, context, 1);
 		useOsSoundSettings = (Boolean) prefHandler.fetchPrefs(PrefKey.SHARED_PREF, PrefKey.USE_OS_SOUND_SETTINGS_KEY, DataType.BOOLEAN, context);
 		playAlarmSignalTwice = (Boolean) prefHandler.fetchPrefs(PrefKey.SHARED_PREF, PrefKey.PLAY_TONE_TWICE_KEY, DataType.BOOLEAN, context);
+		primaryAlarmSignal = (String) prefHandler.fetchPrefs(PrefKey.SHARED_PREF, PrefKey.PRIMARY_ALARM_SIGNAL_KEY, DataType.STRING, context, soundHandler.resolveAlarmSignal(context, SoundHandler.DEFAULT_PRIMARY_ALARM_SIGNAL_ID));
+		secondaryAlarmSignal = (String) prefHandler.fetchPrefs(PrefKey.SHARED_PREF, PrefKey.SECONDARY_ALARM_SIGNAL_KEY, DataType.STRING, context, soundHandler.resolveAlarmSignal(context, SoundHandler.DEFAULT_SECONDARY_ALARM_SIGNAL_ID));
+		userAddedAlarmSignals = (List<String>) prefHandler.fetchPrefs(PrefKey.SHARED_PREF, PrefKey.USER_ADDED_ALARM_SIGNALS_KEY, DataType.LIST, context);
+
+		// Check that all alarm signals exists
+		validateUserAddedAlarmSignals();
 	}
 
 	@Override
 	public void updateFragmentView() {
-		// Update EditText field, CheckBoxes and Spinner
-		updateAlarmTypesSpinner();
-		updateSelectedAlarmSignalEditText();
+		updateSelectedPrimaryAlarmSignalTextView();
+		updateSelectedSecondaryAlarmSignalTextView();
 		updateUseOsSoundSettingsCheckBox();
 		updatePlayAlarmSignalTwiceCheckBox();
 	}
 
 	@Override
 	public void setListeners() {
-		// Set listener to Edit Alarm Signal Button
-		editAlarmSignalButton.setOnClickListener(new OnClickListener() {
+		// Set listener to Primary Alarm Signal selection LinearLayout
+		primaryAlarmSignalSelectionLinearLayout.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				// Get alarm type Spinner position as AlarmType and go through that
-				switch (AlarmType.of(alarmTypeSpinnerPos)) {
-					case PRIMARY:
-						showAlarmSignalDialog(AlarmSignalDialog.PRIMARY_ALARM_SIGNAL_DIALOG_REQUEST_CODE);
-						break;
-					case SECONDARY:
-						showAlarmSignalDialog(AlarmSignalDialog.SECONDARY_ALARM_SIGNAL_DIALOG_REQUEST_CODE);
-						break;
-					default:
-						if (SmsAlarm.DEBUG) {
-							Log.e(LOG_TAG, "An unsupported alarm type spinner position occurred, spinner position is: \"" + alarmTypeSpinnerPos + "\", can't show dialog");
-						}
-				}
+				showAlarmSignalDialog(AlarmSignalDialog.PRIMARY_ALARM_SIGNAL_DIALOG_REQUEST_CODE);
 			}
 		});
 
-		// Set listener to Listen Alarm Signal Button
-		listenAlarmSignalButton.setOnClickListener(new OnClickListener() {
+		// Set listener to Secondary Alarm Signal selection LinearLayout
+		secondaryAlarmSignalSelectionLinearLayout.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				switch (AlarmType.of(alarmTypeSpinnerPos)) {
-					case PRIMARY:
-						// Play alarm signal and vibrate
-						noiseHandler.doNoise(context, primaryAlarmSignalId, useOsSoundSettings, false);
-						break;
-					case SECONDARY:
-						noiseHandler.doNoise(context, secondaryAlarmSignalId, useOsSoundSettings, false);
-						break;
-					default:
-						if (SmsAlarm.DEBUG) {
-							Log.e(LOG_TAG, "An unsupported alarm type spinner position occurred, spinner position is: \"" + alarmTypeSpinnerPos + "\", can't listen at alarm signal");
-						}
-				}
+				showAlarmSignalDialog(AlarmSignalDialog.SECONDARY_ALARM_SIGNAL_DIALOG_REQUEST_CODE);
+			}
+		});
+
+		// Set listener to Primary Alarm Vibration selection LinearLayout
+		primaryAlarmVibrationSelectionLinearLayout.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				// @formatter:off
+				new AlertDialog.Builder(context)
+				.setIcon(android.R.drawable.ic_dialog_info) 
+				.setTitle("Shit sherlock...")
+				.setMessage("This feature of awesomeness does not hold any implementation yet, stay tuned..")
+				.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+					@Override
+					public void onClick(DialogInterface dialog, int which) {
+						// Do nothing...
+					}
+				})
+				.create()
+				.show();;
+				// @formatter:on
+			}
+		});
+
+		// Set listener to Secondary Alarm Vibration selection LinearLayout
+		secondaryAlarmVibrationSelectionLinearLayout.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				// @formatter:off
+				new AlertDialog.Builder(context)
+				.setIcon(android.R.drawable.ic_dialog_info) 
+				.setTitle("Shit sherlock...")
+				.setMessage("This feature of awesomeness does not hold any implementation yet, stay tuned..")
+				.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+					@Override
+					public void onClick(DialogInterface dialog, int which) {
+						// Do nothing...
+					}
+				})
+				.create()
+				.show();;
+				// @formatter:on
 			}
 		});
 
@@ -292,50 +311,124 @@ public class SoundSettingsFragment extends SherlockFragment implements Applicati
 				prefHandler.storePrefs(PrefKey.SHARED_PREF, PrefKey.PLAY_TONE_TWICE_KEY, playAlarmSignalTwice, context);
 			}
 		});
-
-		// Set listener to Alarm Type Spinner
-		alarmTypeSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-			@Override
-			public void onItemSelected(AdapterView<?> parent, View view, int pos, long id) {
-				// Store alarm type Spinners position
-				alarmTypeSpinnerPos = alarmTypeSpinner.getSelectedItemPosition();
-				// Update selected alarm signal EditText widget
-				updateSelectedAlarmSignalEditText();
-			}
-
-			@Override
-			public void onNothingSelected(AdapterView<?> arg0) {
-				// DO NOTHING!
-			}
-		});
 	}
 
 	@Override
 	public void onActivityResult(int requestCode, int resultCode, Intent data) {
-		// Only interested in OK results, don't care at all about the others
-		if (resultCode == Activity.RESULT_OK) {
+		// Only interested in OK results, don't care at all about the others. Except the add alarm signal request codes, everyone of them must be
+		// taken care of, regardless if the result is OK or NOT OK
+		if (resultCode == Activity.RESULT_OK || requestCode == AlarmSignalDialog.ADD_ALARM_SIGNAL_FROM_PRIMARY_DIALOG_REQUEST_CODE || requestCode == AlarmSignalDialog.ADD_ALARM_SIGNAL_FROM_SECONDARY_DIALOG_REQUEST_CODE) {
 			// Only interested in certain request codes...
 			switch (requestCode) {
 				case (AlarmSignalDialog.PRIMARY_ALARM_SIGNAL_DIALOG_REQUEST_CODE):
-					primaryAlarmSignalId = data.getIntExtra(AlarmSignalDialog.ALARM_SIGNAL, 0);
+					// Get the chosen primary alarm signal
+					primaryAlarmSignal = data.getStringExtra(AlarmSignalDialog.ALARM_SIGNAL);
 
 					// Store to shared preferences
-					prefHandler.storePrefs(PrefKey.SHARED_PREF, PrefKey.PRIMARY_MESSAGE_TONE_KEY, primaryAlarmSignalId, context);
+					prefHandler.storePrefs(PrefKey.SHARED_PREF, PrefKey.PRIMARY_ALARM_SIGNAL_KEY, primaryAlarmSignal, context);
 
-					// Update selected tone EditText
-					updateSelectedAlarmSignalEditText();
+					// Update selected primary alarm signal TextView
+					updateSelectedPrimaryAlarmSignalTextView();
 					break;
 				case (AlarmSignalDialog.SECONDARY_ALARM_SIGNAL_DIALOG_REQUEST_CODE):
-					secondaryAlarmSignalId = data.getIntExtra(AlarmSignalDialog.ALARM_SIGNAL, 1);
-					prefHandler.storePrefs(PrefKey.SHARED_PREF, PrefKey.SECONDARY_MESSAGE_TONE_KEY, secondaryAlarmSignalId, context);
+					secondaryAlarmSignal = data.getStringExtra(AlarmSignalDialog.ALARM_SIGNAL);
+					prefHandler.storePrefs(PrefKey.SHARED_PREF, PrefKey.SECONDARY_ALARM_SIGNAL_KEY, secondaryAlarmSignal, context);
 
-					updateSelectedAlarmSignalEditText();
+					updateSelectedSecondaryAlarmSignalTextView();
+					break;
+				case (AlarmSignalDialog.ADD_ALARM_SIGNAL_FROM_PRIMARY_DIALOG_REQUEST_CODE):
+					// Fall through to next case as the same actions are taken for both
+				case (AlarmSignalDialog.ADD_ALARM_SIGNAL_FROM_SECONDARY_DIALOG_REQUEST_CODE):
+					// Resolve request code from intents request code, in case the user added an own alarm signal
+					int resolvedRequestCode = AlarmSignalDialog.fromIntentToDialogRequestCode(requestCode);
+
+					if (resolvedRequestCode == AlarmSignalDialog.PRIMARY_ALARM_SIGNAL_DIALOG_REQUEST_CODE || resolvedRequestCode == AlarmSignalDialog.SECONDARY_ALARM_SIGNAL_DIALOG_REQUEST_CODE) {
+						// Handle the OK result by checking if selected alarm signal already exists, if not add it to the list and store it to shared
+						// preferences
+						if (resultCode == Activity.RESULT_OK) {
+							// Get the path to the selected alarm signal
+							String alarmSignal = data.getData().getPath();
+
+							// If it doesn't exist in the list of user added alarm signals
+							if (!Util.existsInConsiderCases(alarmSignal, userAddedAlarmSignals)) {
+								// Add the new alarm signal to the list
+								userAddedAlarmSignals.add(alarmSignal);
+
+								// Store it to shared preferences
+								prefHandler.storePrefs(PrefKey.SHARED_PREF, PrefKey.USER_ADDED_ALARM_SIGNALS_KEY, userAddedAlarmSignals, context);
+
+								// Check that all alarm signals exists
+								validateUserAddedAlarmSignals();
+							} else {
+								Toast.makeText(context, R.string.PATH_ALREADY_IN_ALARM_SIGNAL_PATH_LIST, Toast.LENGTH_LONG).show();
+							}
+						}
+
+						// Show dialog again
+						showAlarmSignalDialog(resolvedRequestCode);
+					}
 					break;
 				default:
 					if (SmsAlarm.DEBUG) {
 						Log.e(LOG_TAG + ":onActivityResult()", "An unsupported result occurred, result code: \"" + resultCode + "\" and request code: \"" + requestCode + "\"");
 					}
 			}
+		}
+	}
+
+	/**
+	 * To validate that <b><i>User Added Alarm Signals</i></b> exists on the device. If they don't they will be removed, the changes will be persisted
+	 * to {@link SharedPreferences} and a message will be created and displayed for the user as a {@link Toast} explaining which alarm signals that
+	 * was removed and why.<br>
+	 * <b><i>Note.</i></b> If the selected alarm signal for either primary or secondary alarm has been removed, then the default alarm signal for
+	 * corresponding alarm type will be set as the selected alarm signal, and also stored to <code>SharedPreferences</code>.
+	 */
+	private void validateUserAddedAlarmSignals() {
+		// Need a temporary list of alarm signal, the once that doesn't exist on the file system will be placed here for removal
+		List<String> missingAlarmSignals = new ArrayList<String>();
+
+		// Check that all user added alarm signals exist in the file system if not add them to another list for later removal
+		for (String alarmSignalPath : userAddedAlarmSignals) {
+			if (!Util.fileExists(alarmSignalPath)) {
+				missingAlarmSignals.add(alarmSignalPath);
+			}
+		}
+
+		// If there was any missing alarm signals
+		if (!missingAlarmSignals.isEmpty()) {
+			// Build up a message telling the user that some signals has been removed and why
+			// The built up string will look like: Signal_1, Signal_2, Signal_3 has been removed...
+			StringBuilder missingAlarmSignalsMessage = new StringBuilder();
+
+			for (String missingAlarmSignalPath : missingAlarmSignals) {
+				if (missingAlarmSignalsMessage.length() > 0) {
+					missingAlarmSignalsMessage.append(", ");
+				}
+
+				missingAlarmSignalsMessage.append(Util.getBaseFileName(missingAlarmSignalPath));
+			}
+
+			missingAlarmSignalsMessage.append(" ");
+
+			// Remove the missing alarm signal paths
+			userAddedAlarmSignals.removeAll(missingAlarmSignals);
+
+			// Store it to shared preferences
+			prefHandler.storePrefs(PrefKey.SHARED_PREF, PrefKey.USER_ADDED_ALARM_SIGNALS_KEY, userAddedAlarmSignals, context);
+
+			// If the selected alarm signal for primary or secondary alarm was removed, set it to the default
+			if (Util.existsInConsiderCases(primaryAlarmSignal, missingAlarmSignals)) {
+				primaryAlarmSignal = soundHandler.resolveAlarmSignal(context, SoundHandler.DEFAULT_PRIMARY_ALARM_SIGNAL_ID);
+				prefHandler.storePrefs(PrefKey.SHARED_PREF, PrefKey.PRIMARY_ALARM_SIGNAL_KEY, primaryAlarmSignal, context);
+			}
+
+			if (Util.existsInConsiderCases(secondaryAlarmSignal, missingAlarmSignals)) {
+				secondaryAlarmSignal = soundHandler.resolveAlarmSignal(context, SoundHandler.DEFAULT_SECONDARY_ALARM_SIGNAL_ID);
+				prefHandler.storePrefs(PrefKey.SHARED_PREF, PrefKey.SECONDARY_ALARM_SIGNAL_KEY, secondaryAlarmSignal, context);
+			}
+
+			// Show toast for the user
+			Toast.makeText(context, missingAlarmSignalsMessage.toString() + getText(R.string.ALARM_SIGNALS_REMOVED_DUE_TO_MISSING_PATHS), Toast.LENGTH_LONG).show();
 		}
 	}
 
@@ -352,19 +445,17 @@ public class SoundSettingsFragment extends SherlockFragment implements Applicati
 	}
 
 	/**
-	 * To update selected alarm signal {@link EditText} with correct value.
+	 * To update selected <b><i>Primary Alarm</i></b> {@link TextView} with correct value.
 	 */
-	private void updateSelectedAlarmSignalEditText() {
-		// Set message tone to the selectedToneEditText, depending on which value spinner has.
-		if (alarmTypeSpinnerPos == 0) {
-			selectedAlarmSignalEditText.setText(noiseHandler.resolveAlarmSignal(context, primaryAlarmSignalId));
-		} else if (alarmTypeSpinnerPos == 1) {
-			selectedAlarmSignalEditText.setText(noiseHandler.resolveAlarmSignal(context, secondaryAlarmSignalId));
-		} else {
-			if (SmsAlarm.DEBUG) {
-				Log.e(LOG_TAG + ":updateSelectedAlarmSignalEditText()", "Invalid alarm type spinner position occurred. Current alarm type spinner position is: \"" + alarmTypeSpinnerPos + "\"");
-			}
-		}
+	private void updateSelectedPrimaryAlarmSignalTextView() {
+		selectedPrimaryAlarmSignalTextView.setText(Util.getBaseFileName(primaryAlarmSignal));
+	}
+
+	/**
+	 * To update selected <b><i>Secondary Alarm</i></b> {@link TextView} with correct value.
+	 */
+	private void updateSelectedSecondaryAlarmSignalTextView() {
+		selectedSecondaryAlarmSignalTextView.setText(Util.getBaseFileName(secondaryAlarmSignal));
 	}
 
 	/**
@@ -383,16 +474,5 @@ public class SoundSettingsFragment extends SherlockFragment implements Applicati
 		if (playAlarmSignalTwice) {
 			playAlarmSignalTwiceSettingCheckBox.setChecked(true);
 		}
-	}
-
-	/**
-	 * To update alarm type {@link Spinner} with values alarm type values from resources.
-	 */
-	private void updateAlarmTypesSpinner() {
-		// Fill alarm types spinner with values using adapter
-		ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(context, R.array.alarms, android.R.layout.simple_spinner_item);
-		adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-
-		alarmTypeSpinner.setAdapter(adapter);
 	}
 }

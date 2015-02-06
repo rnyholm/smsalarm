@@ -29,7 +29,6 @@
     <string name="DIVIDER_DESCR">Delare</string>
     <string name="DUPLICATED_FREE_TEXTS">Ord för primär- och sekundärlarm får inte vara lika. Ange ett nytt ord.</string>
     <string name="DUPLICATED_NUMBERS">Telefonnummer för primär- och sekundärlarm får inte vara lika. Ange ett nytt telefonnummer.</string>
-    <string name="EDIT_ALARM_SIGNAL">Ändra signal</string>
     <string name="EDIT_NUMBER">Ändra nummer</string>   
     <string name="EDIT_RESCUE_SERVICE_NAME">Ändra räddningstjänst</string>
     <string name="EMPTY_SECONDARY_NUMBER">Det går inte att ange ett tomt telefonnummer för sekundärlarm. Ange ett nytt telefonnummer.</string>
@@ -55,8 +54,7 @@
     <string name="INFO_ENABLE_SMS_ALARM">Om vald larmar Sms Alarm på angivna telefonnummer, annars gör applikationen inte det.</string>
     <string name="INFO_FREE_TEXT_TRIGGER_SETTINGS">Ställ in vilka ord som Sms Alarm ska larma på om de finns i inkommande sms. Notera att denna funktion inte är skiftlägeskänslig.</string>
     <string name="INFO_PLAY_TONE_TWICE_SETTING">Om vald spelar Sms Alarm upp larmsignalen för både primär- och sekundärlarm två gånger vid larm.</string>
-    <string name="INFO_SMS_SETTINGS">Ställ in vilka telefonnummer som Sms Alarm ska larma på sms ifrån.</string>
-    <string name="LISTEN_ALARM_SIGNAL">Lyssna på signal</string>    
+    <string name="INFO_SMS_SETTINGS">Ställ in vilka telefonnummer som Sms Alarm ska larma på sms ifrån.</string>   
     <string name="NO">Nej</string>
     <string name="NO_RECEIVED_ALARMS_EXISTS">Inga larm har tagits emot ännu.</string>
     <string name="NO_PRIMARY_FREE_TEXT_EXISTS">Inga ord för primärlarm finns, kan ej ta bort ord.</string>
@@ -85,7 +83,6 @@
     <string name="TEXT_IS_NEEDED">Ett ord måste anges för att kunna spara.</string> 
     <string name="TITLE_ACK_NUMBER">Sms Alarm kvitterar till detta nummer</string> 
     <string name="TITLE_ACK_SETTINGS">Kvitteringsinställningar</string>
-    <string name="TITLE_ALARM_SIGNAL">Vald larmsignal</string>
     <string name="TITLE_ENABLE_ACKNOWLEDGE">Aktivera kvittering av primärlarm</string>
     <string name="TITLE_ENABLE_SMS_ALARM">Aktivera Sms Alarm</string>
     <string name="TITLE_FREE_TEXT_TRIGGER_SETTINGS">Ord inställningar</string>
@@ -95,8 +92,6 @@
     <string name="TITLE_RESCUE_SERVICE_NAME">Din räddningstjänst</string>   
     <string name="TITLE_SECONDARY_ALARM">Sekundärlarm</string>
     <string name="TITLE_SMS_SETTINGS">Sms-inställningar</string>
-    <string name="TITLE_SOUND_SETTINGS">Ljudinställningar</string>
-    <string name="TITLE_TONE_SPINNER">Larmsignal för</string>
   	<string name="TONE_PROMPT_TITLE">Välj larmsignal</string>   
     <string name="VERTICAL_DIVIDER_DESCR">Vertikal delare</string>
   	<string name="WIDGET_ICON_CONTENT_DESCR">Widget smsalarmikon</string>

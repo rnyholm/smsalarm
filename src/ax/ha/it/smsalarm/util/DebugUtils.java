@@ -1,3 +1,6 @@
+/**
+ * Copyright (c) 2014 Robert Nyholm. All rights reserved.
+ */
 package ax.ha.it.smsalarm.util;
 
 import java.io.ByteArrayOutputStream;
@@ -14,10 +17,19 @@ import android.telephony.PhoneNumberUtils;
 import android.util.Log;
 import ax.ha.it.smsalarm.handler.SharedPreferencesHandler;
 import ax.ha.it.smsalarm.handler.SharedPreferencesHandler.PrefKey;
+import ax.ha.it.smsalarm.handler.SoundHandler;
 import ax.ha.it.smsalarm.receiver.SmsReceiver;
 import ax.ha.it.smsalarm.service.AcknowledgeNotificationService;
 import ax.ha.it.smsalarm.service.NotificationService;
 
+/**
+ * Utility class containing different methods for <b><i>Debug/Test Usage</i></b>.<br>
+ * <b><i>Note. All of this functionality should be accessed in a static manner.</i></b>
+ * 
+ * @author Robert Nyholm <robert.nyholm@aland.net>
+ * @version 2.3.1
+ * @since 2.3.1
+ */
 public class DebugUtils {
 	private static final String LOG_TAG = DebugUtils.class.getSimpleName();
 
@@ -33,8 +45,8 @@ public class DebugUtils {
 		prefHandler.storePrefs(PrefKey.SHARED_PREF, PrefKey.SECONDARY_LISTEN_NUMBERS_KEY, Arrays.asList("44444", "55555"), context);
 		prefHandler.storePrefs(PrefKey.SHARED_PREF, PrefKey.PRIMARY_LISTEN_FREE_TEXTS_KEY, Arrays.asList("Grundlarm", "Brand", "test"), context);
 		prefHandler.storePrefs(PrefKey.SHARED_PREF, PrefKey.SECONDARY_LISTEN_FREE_TEXTS_KEY, Arrays.asList("Litet", "Larm"), context);
-		prefHandler.storePrefs(PrefKey.SHARED_PREF, PrefKey.PRIMARY_MESSAGE_TONE_KEY, 2, context);
-		prefHandler.storePrefs(PrefKey.SHARED_PREF, PrefKey.SECONDARY_MESSAGE_TONE_KEY, 7, context);
+		prefHandler.storePrefs(PrefKey.SHARED_PREF, PrefKey.PRIMARY_ALARM_SIGNAL_KEY, SoundHandler.getInstance().resolveAlarmSignal(context, 2), context);
+		prefHandler.storePrefs(PrefKey.SHARED_PREF, PrefKey.SECONDARY_ALARM_SIGNAL_KEY, SoundHandler.getInstance().resolveAlarmSignal(context, 7), context);
 		prefHandler.storePrefs(PrefKey.SHARED_PREF, PrefKey.MESSAGE_KEY, "Litet larm - Automatlarm vikingline lager(1682) Länsmanshägnan 7 jomala", context);
 		prefHandler.storePrefs(PrefKey.SHARED_PREF, PrefKey.FULL_MESSAGE_KEY, "02.02.2012 23:55:40 2.5 Litet larm - Automatlarm vikingline lager(1682) Länsmanshägnan 7 jomala", context);
 		prefHandler.storePrefs(PrefKey.SHARED_PREF, PrefKey.ENABLE_ACK_KEY, true, context);

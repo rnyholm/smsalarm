@@ -45,13 +45,13 @@ public class SharedPreferencesHandler {
 	public enum PrefKey {
 		// @formatter:off
 		SHARED_PREF("smsAlarmPrefs"),  
-		PRIMARY_LISTEN_NUMBER_KEY("primaryListenNumberKey"), 
+		PRIMARY_LISTEN_NUMBER_KEY("primaryListenNumberKey"), 			// Not used after version code 8
 		PRIMARY_LISTEN_NUMBERS_KEY("primaryListenNumbersKey"), 
 		SECONDARY_LISTEN_NUMBERS_KEY("secondaryListenNumbersKey"), 
 		PRIMARY_LISTEN_FREE_TEXTS_KEY("primaryListenFreeTextsKey"), 
 		SECONDARY_LISTEN_FREE_TEXTS_KEY("secondaryListenFreeTextsKey"), 
-		PRIMARY_MESSAGE_TONE_KEY("primaryMessageToneKey"), 
-		SECONDARY_MESSAGE_TONE_KEY("secondaryMessageToneKey"), 
+		PRIMARY_MESSAGE_TONE_KEY("primaryMessageToneKey"), 				// Not used after version code 13
+		SECONDARY_MESSAGE_TONE_KEY("secondaryMessageToneKey"), 			// Not used after version code 13
 		MESSAGE_KEY("messageKey"), 
 		FULL_MESSAGE_KEY("fullMessageKey"), 
 		ENABLE_ACK_KEY("enableAckKey"), 
@@ -64,7 +64,10 @@ public class SharedPreferencesHandler {
 		HAS_CALLED_KEY("hasCalled"), 
 		END_USER_LICENSE_AGREED("userLicenseAgreed"), 
 		VERSION_CODE("versionCode"),
-		USE_FLASH_NOTIFICATION("useFlashNotification");
+		USE_FLASH_NOTIFICATION("useFlashNotification"),
+		PRIMARY_ALARM_SIGNAL_KEY("primaryAlarmSignalKey"),
+		SECONDARY_ALARM_SIGNAL_KEY("secondaryAlarmSignalKey"),
+		USER_ADDED_ALARM_SIGNALS_KEY("userAddedAlarmSignalsKey");
 		// @formatter:on
 
 		// The actual key to which data will be stored and fetched from

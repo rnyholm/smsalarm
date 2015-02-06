@@ -134,6 +134,7 @@
                 android:src="@drawable/ic_ab_forward_holo_light_am" />
         </LinearLayout>
 
+        <!-- BEGIN -->
 
         <TextView
             android:id="@+id/alarmVibrationsTitle_tv"
@@ -261,7 +262,7 @@
             android:layout_alignLeft="@+id/useSysSoundSettings_chk"
             android:layout_below="@+id/useSysSoundSettings_chk"
             android:layout_marginLeft="33dp"
-            android:layout_marginTop="-9dp"
+            android:layout_marginTop="-6dp"
             android:text="@string/INFO_USE_OS_SOUND_SETTINGS"
             android:textAppearance="?android:attr/textAppearanceSmall" />
 
@@ -280,7 +281,7 @@
             android:layout_alignLeft="@+id/playAlarmSignalTwiceSetting_chk"
             android:layout_below="@+id/playAlarmSignalTwiceSetting_chk"
             android:layout_marginLeft="33dp"
-            android:layout_marginTop="-9dp"
+            android:layout_marginTop="-6dp"
             android:text="@string/INFO_PLAY_TONE_TWICE_SETTING"
             android:textAppearance="?android:attr/textAppearanceSmall" />
 

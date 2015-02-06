@@ -181,13 +181,10 @@ public class FreeTextSettingsFragment extends SherlockFragment implements Applic
 					newFreeText = data.getStringExtra(AddFreeTextDialog.ADD_FREE_TEXT);
 
 					// If input doesn't exist in the list of secondaryFreeTexts and input isn't empty
-					if (!Util.existsIn(newFreeText, secondaryFreeTexts) && !newFreeText.equals("")) {
-						// Iterate through all strings in the list of primaryFreeTexts to check if text already exists
-						for (String text : primaryFreeTexts) {
-							// If a string in the list is equal with the new free text then it's duplicated
-							if (text.equalsIgnoreCase(newFreeText)) {
-								duplicatedFreeTexts = true;
-							}
+					if (!Util.existsInIgnoreCases(newFreeText, secondaryFreeTexts) && !"".equals(newFreeText)) {
+						// Check that the list of primaryFreeTexts doesn't contain the new free text
+						if (Util.existsInIgnoreCases(newFreeText, primaryFreeTexts)) {
+							duplicatedFreeTexts = true;
 						}
 
 						// Store input if duplicated free texts is false
@@ -208,7 +205,7 @@ public class FreeTextSettingsFragment extends SherlockFragment implements Applic
 						}
 					} else {
 						// Empty input was given
-						if (newFreeText.equals("")) {
+						if ("".equals(newFreeText)) {
 							Toast.makeText(context, R.string.TEXT_IS_NEEDED, Toast.LENGTH_LONG).show();
 						} else { // Given primary free text exists in the list of secondary free texts
 							Toast.makeText(context, R.string.DUPLICATED_FREE_TEXTS, Toast.LENGTH_LONG).show();
@@ -220,11 +217,9 @@ public class FreeTextSettingsFragment extends SherlockFragment implements Applic
 				case (AddFreeTextDialog.ADD_SECONDARY_FREE_TEXT_DIALOG_REQUEST_CODE):
 					newFreeText = data.getStringExtra(AddFreeTextDialog.ADD_FREE_TEXT);
 
-					if (!Util.existsIn(newFreeText, primaryFreeTexts) && !newFreeText.equals("")) {
-						for (String text : secondaryFreeTexts) {
-							if (text.equalsIgnoreCase(newFreeText)) {
-								duplicatedFreeTexts = true;
-							}
+					if (!Util.existsInIgnoreCases(newFreeText, primaryFreeTexts) && !"".equals(newFreeText)) {
+						if (Util.existsInIgnoreCases(newFreeText, secondaryFreeTexts)) {
+							duplicatedFreeTexts = true;
 						}
 
 						if (!duplicatedFreeTexts) {
@@ -236,7 +231,7 @@ public class FreeTextSettingsFragment extends SherlockFragment implements Applic
 							showAddFreeTextDialog(AddFreeTextDialog.ADD_SECONDARY_FREE_TEXT_DIALOG_REQUEST_CODE);
 						}
 					} else {
-						if (newFreeText.equals("")) {
+						if ("".equals(newFreeText)) {
 							Toast.makeText(context, R.string.TEXT_IS_NEEDED, Toast.LENGTH_LONG).show();
 						} else {
 							Toast.makeText(context, R.string.DUPLICATED_FREE_TEXTS, Toast.LENGTH_LONG).show();

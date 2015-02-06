@@ -137,7 +137,7 @@ public class SlidingMenuFragment extends SherlockListFragment {
 				break;
 			case (304):
 				ConfirmMockSharedPreferencesDialog confirmMockSharedPrefsDialog = new ConfirmMockSharedPreferencesDialog();
-				confirmMockSharedPrefsDialog.setTargetFragment(SlidingMenuFragment.this, ConfirmMockSharedPreferencesDialog.CONFIRM_MOCK_SHARED_PREFERENCES_CODE);
+				confirmMockSharedPrefsDialog.setTargetFragment(SlidingMenuFragment.this, ConfirmMockSharedPreferencesDialog.CONFIRM_MOCK_SHARED_PREFERENCES_REQUEST_CODE);
 				confirmMockSharedPrefsDialog.show(getFragmentManager(), ConfirmMockSharedPreferencesDialog.CONFIRM_MOCK_SHARED_PREFERENCES_TAG);
 				break;
 			default:
@@ -177,7 +177,7 @@ public class SlidingMenuFragment extends SherlockListFragment {
 
 					DebugUtils.dispatchMockSMS(getActivity(), smsSender, smsBody);
 					break;
-				case (ConfirmMockSharedPreferencesDialog.CONFIRM_MOCK_SHARED_PREFERENCES_CODE):
+				case (ConfirmMockSharedPreferencesDialog.CONFIRM_MOCK_SHARED_PREFERENCES_REQUEST_CODE):
 					// User obviously want to mock shared preferences, mock them
 					DebugUtils.mockSharedPreferences(getActivity());
 					Toast.makeText(getActivity(), getString(R.string.DEBUG_TOAST_SHARED_PREFERENCES_MOCKED), Toast.LENGTH_LONG).show();

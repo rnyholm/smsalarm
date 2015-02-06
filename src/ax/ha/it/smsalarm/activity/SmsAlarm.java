@@ -3,6 +3,7 @@
  */
 package ax.ha.it.smsalarm.activity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
@@ -10,6 +11,8 @@ import android.view.KeyEvent;
 import ax.ha.it.smsalarm.R;
 import ax.ha.it.smsalarm.fragment.SlidingMenuFragment;
 import ax.ha.it.smsalarm.fragment.SmsSettingsFragment;
+import ax.ha.it.smsalarm.fragment.SoundSettingsFragment;
+import ax.ha.it.smsalarm.fragment.dialog.AlarmSignalDialog;
 import ax.ha.it.smsalarm.handler.DatabaseHandler;
 import ax.ha.it.smsalarm.pojo.Alarm;
 import ax.ha.it.smsalarm.provider.WidgetProvider;
@@ -193,5 +196,22 @@ public class SmsAlarm extends SlidingFragmentActivity {
 
 		// Close menu and show above view(content view)
 		getSlidingMenu().showContent();
+	}
+
+	@Override
+	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+		// Only interested in requestCodes indicating adding a new alarm signal, it doesn't matter what the resultCodes are, must take care of this
+		// event anyways
+		if (requestCode == AlarmSignalDialog.ADD_ALARM_SIGNAL_FROM_PRIMARY_DIALOG_REQUEST_CODE || requestCode == AlarmSignalDialog.ADD_ALARM_SIGNAL_FROM_SECONDARY_DIALOG_REQUEST_CODE) {
+			// To ensure that onResumeFragments() gets called, if we would do this a bunch of IllegalStateExceptions would be thrown
+			// See:
+			// http://stackoverflow.com/questions/7469082/getting-exception-illegalstateexception-can-not-perform-this-action-after-onsa/18824459#comment44854010_18824459
+			super.onPostResume();
+
+			// Find SoundSettingsFragment by id of content frame, we know that it's on top of the FragmentManagers BackStack so this is safe.
+			// Do further handling in fragments onActivityResult()
+			SoundSettingsFragment soundSettingsFragment = (SoundSettingsFragment) getSupportFragmentManager().findFragmentById(R.id.contentFrame_fl);
+			soundSettingsFragment.onActivityResult(requestCode, resultCode, data);
+		}
 	}
 }

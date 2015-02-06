@@ -29,7 +29,6 @@
     <string name="DIVIDER_DESCR">Jakaja</string>
     <string name="DUPLICATED_FREE_TEXTS">Ensi- ja toissijaisenhälytyksen sana ei saa olla sama. Anna uusi sana.</string>
     <string name="DUPLICATED_NUMBERS">Puhelinnumero ensisijaiseen ja toissijaiseen hälytykseen ei voi olla sama. Anna uusi puhelinnumero.</string>
-    <string name="EDIT_ALARM_SIGNAL">Vaihda signaali</string>
     <string name="EDIT_NUMBER">Vaihda numero</string>   
     <string name="EDIT_RESCUE_SERVICE_NAME">Vaihda pelastuspalvelu</string>
     <string name="EMPTY_SECONDARY_NUMBER">Älä jätä ilman puh.nro. toissijaiseen hälytykseen. Anna uusi puhelinnumero.</string>
@@ -55,8 +54,7 @@
     <string name="INFO_ENABLE_SMS_ALARM">Jos valittu hälyttää Sms Alarm tietyillä puh.nr:illa, muuten sovellus ei sitä tee.</string>
     <string name="INFO_FREE_TEXT_TRIGGER_SETTINGS">Asenna ne sanat joilla Sms Alarm täytyy hälyttää jos on tulevia viestejä.</string>
     <string name="INFO_PLAY_TONE_TWICE_SETTING">Jos valittu soittaa Sms Alarm hälytysäänen sekä ensi-ja toissijaisenhälytykseen kahdesti, hälytyksen yhteydessä.</string>
-    <string name="INFO_SMS_SETTINGS">Asenna ne puhelinnumero joista Sms Alarm täytyy hälyttää viestin.</string>
-    <string name="LISTEN_ALARM_SIGNAL">Kuuntele signaali</string>    
+    <string name="INFO_SMS_SETTINGS">Asenna ne puhelinnumero joista Sms Alarm täytyy hälyttää viestin.</string>   
     <string name="NO">Ei</string>
     <string name="NO_PRIMARY_FREE_TEXT_EXISTS">Ei ole ensisijaishälytyssanaa, ei voi poistaa sanaa.</string>
     <string name="NO_PRIMARY_NUMBER_EXISTS">Ei ole ensisijaishälytysnumeroa, ei voi poistaa numeroa.</string>
@@ -85,7 +83,6 @@
     <string name="TEXT_IS_NEEDED">Säästämistä varten on annettava texti.</string>  
     <string name="TITLE_ACK_NUMBER">Sms Alarm kuittaa tähän numeroon</string> 
     <string name="TITLE_ACK_SETTINGS">Kuittaus Asetukset</string>
-    <string name="TITLE_ALARM_SIGNAL">Valittu hälytysääni</string>
     <string name="TITLE_ENABLE_ACKNOWLEDGE">Aktivoi ensisijaisen hälytysen kuittaus</string>
     <string name="TITLE_ENABLE_SMS_ALARM">Aktivoi Sms Alarm</string>
     <string name="TITLE_FREE_TEXT_TRIGGER_SETTINGS">Sana-asennuksia</string>
@@ -95,8 +92,6 @@
     <string name="TITLE_RESCUE_SERVICE_NAME">Sinun pelastuspalvelu</string>   
     <string name="TITLE_SECONDARY_ALARM">Toissijainen hälytys</string>
     <string name="TITLE_SMS_SETTINGS">Tekstiasetukset</string>
-    <string name="TITLE_SOUND_SETTINGS">Ääniasetukset</string>
-    <string name="TITLE_TONE_SPINNER">Hälytysääni hätätilanteessa</string>
   	<string name="TONE_PROMPT_TITLE">Valitse hälytysääni</string>   
     <string name="VERTICAL_DIVIDER_DESCR">Vertikal jakaja</string>
   	<string name="WIDGET_ICON_CONTENT_DESCR">Widget smsalarmkuvake</string>

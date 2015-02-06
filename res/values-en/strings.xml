@@ -29,7 +29,6 @@
     <string name="DIVIDER_DESCR">Divider</string>
     <string name="DUPLICATED_FREE_TEXTS">Word for primary and secondary alarm cannot be same. Enter a new word.</string>
     <string name="DUPLICATED_NUMBERS">Telephone number for primary and secondary alarms may not be the same. Enter a new telephone number.</string>
-    <string name="EDIT_ALARM_SIGNAL">Edit signal</string>
     <string name="EDIT_NUMBER">Edit number</string>   
     <string name="EDIT_RESCUE_SERVICE_NAME">Edit rescue service</string>
     <string name="EMPTY_SECONDARY_NUMBER">It is not possible to enter an empty telephone number for secondary alarm. Enter a new telephone number.</string>
@@ -56,9 +55,7 @@
     <string name="INFO_FREE_TEXT_TRIGGER_SETTINGS">Enter the words that should be used to notify in the Sms Alarm if present in the incoming sms. Note that this function is not case sensitive.</string>
     <string name="INFO_PLAY_TONE_TWICE_SETTING">If selected Sms Alarm will play alarm signal to both primary and secondary alarms twice.</string>
     <string name="INFO_SMS_SETTINGS">Enter the telephone numbers that Sms Alarm should send alerts for incoming sms.</string>
-    <string name="INFO_SOUND_SETTINGS">Set alarm signals for primary and secondary alarms, if Sms Alarm should follow the device sound settings and if the alarm signal should be played twice.</string>
     <string name="INFO_USE_OS_SOUND_SETTINGS">If selected Sms Alarm will take into account the device ring volume and silent mode.</string>
-    <string name="LISTEN_ALARM_SIGNAL">Listen to the signal</string> 
     <string name="NO">No</string>
     <string name="NO_RECEIVED_ALARMS_EXISTS">No alarm has yet been received.</string>
     <string name="NO_PRIMARY_FREE_TEXT_EXISTS">No words present for primary alarm, can not remove word.</string>
@@ -87,7 +84,6 @@
     <string name="TEXT_IS_NEEDED">A word must be entered in order to save.</string> 
     <string name="TITLE_ACK_NUMBER">Sms Alarm acknowledges to this telephone number</string> 
     <string name="TITLE_ACK_SETTINGS">Acknowledgment settings</string>
-    <string name="TITLE_ALARM_SIGNAL">Selected alarm signal</string>
     <string name="TITLE_ENABLE_ACKNOWLEDGE">Enable acknowledgment</string>
     <string name="TITLE_ENABLE_SMS_ALARM">Enable Sms Alarm</string>
     <string name="TITLE_FREE_TEXT_TRIGGER_SETTINGS">Word settings</string>
@@ -97,8 +93,6 @@
     <string name="TITLE_RESCUE_SERVICE_NAME">Your rescue service</string>   
     <string name="TITLE_SECONDARY_ALARM">Secondary alarm</string>
     <string name="TITLE_SMS_SETTINGS">Sms settings</string>
-    <string name="TITLE_SOUND_SETTINGS">Sound settings</string>
-    <string name="TITLE_TONE_SPINNER">Alarm signal for</string>
     <string name="TITLE_USE_OS_SOUND_SETTINGS">Use the device sound settings</string>
   	<string name="TONE_PROMPT_TITLE">Select alarm signal</string>   
     <string name="VERTICAL_DIVIDER_DESCR">Vertical divider</string>

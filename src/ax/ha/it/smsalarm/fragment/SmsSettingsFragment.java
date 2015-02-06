@@ -183,13 +183,10 @@ public class SmsSettingsFragment extends SherlockFragment implements Application
 					newSmsNumber = data.getStringExtra(AddSmsNumberDialog.ADD_SMS_NUMBER);
 
 					// If input doesn't exist in the list of secondarySmsNumbers and input isn't empty
-					if (!Util.existsIn(newSmsNumber, secondarySmsNumbers) && !newSmsNumber.equals("")) {
-						// Iterate through all strings in the list of primarySmsNumbers to check if number already exists
-						for (String number : primarySmsNumbers) {
-							// If a string in the list is equal with the input then it'sduplicated
-							if (number.equalsIgnoreCase(newSmsNumber)) {
-								duplicatedNumbers = true;
-							}
+					if (!Util.existsInIgnoreCases(newSmsNumber, secondarySmsNumbers) && !newSmsNumber.equals("")) {
+						// If the new number exists in the list of primary sms numbers then it's duplicated
+						if (Util.existsInIgnoreCases(newSmsNumber, primarySmsNumbers)) {
+							duplicatedNumbers = true;
 						}
 
 						// Store input if duplicated numbers is false
@@ -222,11 +219,9 @@ public class SmsSettingsFragment extends SherlockFragment implements Application
 				case (AddSmsNumberDialog.ADD_SECONDARY_SMS_NUMBER_DIALOG_REQUEST_CODE):
 					newSmsNumber = data.getStringExtra(AddSmsNumberDialog.ADD_SMS_NUMBER);
 
-					if (!Util.existsIn(newSmsNumber, primarySmsNumbers) && !newSmsNumber.equals("")) {
-						for (String number : secondarySmsNumbers) {
-							if (number.equalsIgnoreCase(newSmsNumber)) {
-								duplicatedNumbers = true;
-							}
+					if (!Util.existsInIgnoreCases(newSmsNumber, primarySmsNumbers) && !newSmsNumber.equals("")) {
+						if (Util.existsInIgnoreCases(newSmsNumber, secondarySmsNumbers)) {
+							duplicatedNumbers = true;
 						}
 
 						if (!duplicatedNumbers) {

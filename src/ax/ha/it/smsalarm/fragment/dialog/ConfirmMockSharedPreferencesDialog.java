@@ -20,14 +20,14 @@ import ax.ha.it.smsalarm.R;
  * @version 2.3.1
  * @since 2.3.1
  * @see #CONFIRM_MOCK_SHARED_PREFERENCES_TAG
- * @see #CONFIRM_MOCK_SHARED_PREFERENCES_CODE
+ * @see #CONFIRM_MOCK_SHARED_PREFERENCES_REQUEST_CODE
  */
 public class ConfirmMockSharedPreferencesDialog extends DialogFragment {
 	// Dialog tag can come in handy for classes using this dialog
 	public static final String CONFIRM_MOCK_SHARED_PREFERENCES_TAG = "confirmMockSharedPreferences";
 
 	// Request code used for this dialog
-	public static final int CONFIRM_MOCK_SHARED_PREFERENCES_CODE = 14;
+	public static final int CONFIRM_MOCK_SHARED_PREFERENCES_REQUEST_CODE = 14;
 
 	// Must have application context
 	private Context context;

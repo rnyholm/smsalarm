@@ -29,7 +29,6 @@
     <string name="DIVIDER_DESCR">Jagaja</string>
     <string name="DUPLICATED_FREE_TEXTS">Sõna, mis on esmases ja sekundaarses teavituses, ei tohi olla sama. Sisesta uus sõna.</string>
     <string name="DUPLICATED_NUMBERS">Telefoninumber, mis on esmases ja sekundaarses teavituses, ei tohi olla sama. Sisesta uus telefoninumber.</string>
-    <string name="EDIT_ALARM_SIGNAL">Muuda märguannet</string>
     <string name="EDIT_NUMBER">Muuda numbrit</string>   
     <string name="EDIT_RESCUE_SERVICE_NAME">Muuda päästekomandot</string>
     <string name="EMPTY_SECONDARY_NUMBER">Tühja telefoninumbrit ei ole võimalik sisestada. Sisestage uus telefoninumber.</string>
@@ -56,7 +55,6 @@
     <string name="INFO_FREE_TEXT_TRIGGER_SETTINGS">Sisesta sõna, mille järgi Sms Alarm siseneva sõnumi tuvastab. Rakendus ei tee vahet suurtel ja väikestel tähtedel.</string>
     <string name="INFO_PLAY_TONE_TWICE_SETTING">Kui see on valitud, siis Sms Alarm edastab märguandetooni kaks korda, nii esmase kui sekundaarse teavituse puhul.</string>
     <string name="INFO_SMS_SETTINGS">Sisesta telefoninumber, millele Sms Alarm häire sms-id edastab.</string>
-    <string name="LISTEN_ALARM_SIGNAL">Kuula märguannet</string> 
     <string name="NO">Ei</string>
     <string name="NO_RECEIVED_ALARMS_EXISTS">Väljakutseid ei ole laekunud.</string>
     <string name="NO_PRIMARY_FREE_TEXT_EXISTS">Sõnu ei ole määratud esmases teavituses. Sõna ei saa eemaldada.</string>
@@ -85,7 +83,6 @@
     <string name="TEXT_IS_NEEDED">Sõna peab olema sisestatud, et salvestada.</string> 
     <string name="TITLE_ACK_NUMBER">Sms Alarm kinnitused sellele telefoninumbrile</string> 
     <string name="TITLE_ACK_SETTINGS">Kinnituse seaded</string>
-    <string name="TITLE_ALARM_SIGNAL">Valitud märguanne</string>
     <string name="TITLE_ENABLE_ACKNOWLEDGE">Luba kinnitamine</string>
     <string name="TITLE_ENABLE_SMS_ALARM">Luba Sms Alarm</string>
     <string name="TITLE_FREE_TEXT_TRIGGER_SETTINGS">Sõna seaded</string>
@@ -95,8 +92,6 @@
     <string name="TITLE_RESCUE_SERVICE_NAME">Teie päästekomando</string>   
     <string name="TITLE_SECONDARY_ALARM">Sekundaarne teavitus</string>
     <string name="TITLE_SMS_SETTINGS">Sms seaded</string>
-    <string name="TITLE_SOUND_SETTINGS">Heliseaded</string>
-    <string name="TITLE_TONE_SPINNER">Lisa märguanne</string>
   	<string name="TONE_PROMPT_TITLE">Vali märguanne</string>   
     <string name="VERTICAL_DIVIDER_DESCR">Vertikaalne jagaja</string>
   	<string name="WIDGET_ICON_CONTENT_DESCR">Töölauavidina ikoon</string>
