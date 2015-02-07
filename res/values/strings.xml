@@ -33,6 +33,8 @@
     <string name="INFO_SOUND_SETTINGS">Ställ in larmsignaler samt vibrationsmönster för primär- och sekundärlarm, om Sms Alarm ska följa enhetens ljudinställningar samt om larmsignalen ska spelas upp två gånger.</string>
     <string name="PATH_ALREADY_IN_ALARM_SIGNAL_PATH_LIST">Vald ljudsignal finns redan i listan av larmsignaler.</string>
     <string name="ALARM_SIGNALS_REMOVED_DUE_TO_MISSING_PATHS">har tagits bort från listan av larmsignaler eftersom de/dem inte kunde hittas på enheten.</string>
+    <string name="TITLE_PLAY_ALARM_SIGNAL_UNTIL_NOTIFICATION_HANDLED_SETTING">Spela upp larmsignalen oavbrutet</string>
+    <string name="INFO_PLAY_ALARM_SIGNAL_UNTIL_NOTIFICATION_HANDLED_SETTING">Om vald kommer larmsignalen för både primär- och sekundärlarm att spelas oavbrutet tills notifikationen för inkommande larm har hanterats.</string>
     <!-- OK IN ENGLISH, GERMAN BEGIN -->
     <string name="INFO_USE_OS_SOUND_SETTINGS">Om vald tar Sms Alarm hänsyn till enhetens ringvolym och ljudlöst läge.</string>
     <string name="TITLE_USE_OS_SOUND_SETTINGS">Använd enhetens ljudinställningar</string>
@@ -100,7 +102,7 @@
     <string name="INFO_ENABLE_ACKNOWLEDGE">If selected primary alarm can be acknowledged.</string>
     <string name="INFO_ENABLE_SMS_ALARM">If selected Sms Alarm will contact given telephone number, otherwise the application will not.</string>
     <string name="INFO_FREE_TEXT_TRIGGER_SETTINGS">Enter the words that should be used to notify in the Sms Alarm if present in the incoming sms. Note that this function is not case sensitive.</string>
-    <string name="INFO_PLAY_TONE_TWICE_SETTING">If selected Sms Alarm will play alarm signal to both primary and secondary alarms twice.</string>
+    <string name="INFO_PLAY_ALARM_SIGNAL_TWICE_SETTING">If selected Sms Alarm will play alarm signal to both primary and secondary alarms twice.</string>
     <string name="INFO_SMS_SETTINGS">Enter the telephone numbers that Sms Alarm should send alerts for incoming sms.</string>  
     <string name="LICENSE_APACHE_V2_TITLE">Apache License, Version 2.0</string>
     <string name="LICENSE_APACHE_V2_URI">http://www.apache.org/licenses/LICENSE-2.0</string>
@@ -144,7 +146,7 @@
     <string name="TITLE_ENABLE_SMS_ALARM">Enable Sms Alarm</string>
     <string name="TITLE_FREE_TEXT_TRIGGER_SETTINGS">Word settings</string>
     <string name="TITLE_MISC_SETTINGS">Other settings</string>
-    <string name="TITLE_PLAY_TONE_TWICE_SETTING">Play alarm signal twice</string>
+    <string name="TITLE_PLAY_ALARM_SIGNAL_TWICE_SETTING">Play alarm signal twice</string>
     <string name="TITLE_PRIMARY_ALARM">Primary alarm</string>
     <string name="TITLE_RESCUE_SERVICE_NAME">Your rescue service</string>   
     <string name="TITLE_SECONDARY_ALARM">Secondary alarm</string>

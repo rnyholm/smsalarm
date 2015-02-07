@@ -134,7 +134,6 @@
                 android:src="@drawable/ic_ab_forward_holo_light_am" />
         </LinearLayout>
 
-        <!-- BEGIN -->
 
         <TextView
             android:id="@+id/alarmVibrationsTitle_tv"
@@ -272,7 +271,7 @@
             android:layout_height="wrap_content"
             android:layout_alignLeft="@+id/useSysSoundSettings_chk"
             android:layout_below="@+id/useSysSoundSettingsHint_tv"
-            android:text="@string/TITLE_PLAY_TONE_TWICE_SETTING" />
+            android:text="@string/TITLE_PLAY_ALARM_SIGNAL_TWICE_SETTING" />
 
         <TextView
             android:id="@+id/playAlarmSignalTwiceSettingHint_tv"
@@ -282,7 +281,26 @@
             android:layout_below="@+id/playAlarmSignalTwiceSetting_chk"
             android:layout_marginLeft="33dp"
             android:layout_marginTop="-6dp"
-            android:text="@string/INFO_PLAY_TONE_TWICE_SETTING"
+            android:text="@string/INFO_PLAY_ALARM_SIGNAL_TWICE_SETTING"
+            android:textAppearance="?android:attr/textAppearanceSmall" />
+
+        <CheckBox
+            android:id="@+id/playAlarmSignalUntilNotificationHandledSetting_chk"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignLeft="@id/playAlarmSignalTwiceSetting_chk"
+            android:layout_below="@id/playAlarmSignalTwiceSettingHint_tv"
+            android:text="@string/TITLE_PLAY_ALARM_SIGNAL_UNTIL_NOTIFICATION_HANDLED_SETTING" />
+
+        <TextView
+            android:id="@+id/playAlarmSignalUntilNotificationHandledSettingHint_tv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignLeft="@id/playAlarmSignalUntilNotificationHandledSetting_chk"
+            android:layout_below="@id/playAlarmSignalUntilNotificationHandledSetting_chk"
+            android:layout_marginLeft="33dp"
+            android:layout_marginTop="-6dp"
+            android:text="@string/INFO_PLAY_ALARM_SIGNAL_UNTIL_NOTIFICATION_HANDLED_SETTING"
             android:textAppearance="?android:attr/textAppearanceSmall" />
 
     </RelativeLayout>

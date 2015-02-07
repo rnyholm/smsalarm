@@ -53,7 +53,7 @@
     <string name="INFO_ENABLE_ACKNOWLEDGE">Kui on valitud esmane teavitus, saadetakse kinnitus.</string>
     <string name="INFO_ENABLE_SMS_ALARM">Kui Sms Alarm on valitud, edastatakse teavitus, muul juhul mitte.</string>
     <string name="INFO_FREE_TEXT_TRIGGER_SETTINGS">Sisesta sõna, mille järgi Sms Alarm siseneva sõnumi tuvastab. Rakendus ei tee vahet suurtel ja väikestel tähtedel.</string>
-    <string name="INFO_PLAY_TONE_TWICE_SETTING">Kui see on valitud, siis Sms Alarm edastab märguandetooni kaks korda, nii esmase kui sekundaarse teavituse puhul.</string>
+    <string name="INFO_PLAY_ALARM_SIGNAL_TWICE_SETTING">Kui see on valitud, siis Sms Alarm edastab märguandetooni kaks korda, nii esmase kui sekundaarse teavituse puhul.</string>
     <string name="INFO_SMS_SETTINGS">Sisesta telefoninumber, millele Sms Alarm häire sms-id edastab.</string>
     <string name="NO">Ei</string>
     <string name="NO_RECEIVED_ALARMS_EXISTS">Väljakutseid ei ole laekunud.</string>
@@ -87,7 +87,7 @@
     <string name="TITLE_ENABLE_SMS_ALARM">Luba Sms Alarm</string>
     <string name="TITLE_FREE_TEXT_TRIGGER_SETTINGS">Sõna seaded</string>
     <string name="TITLE_MISC_SETTINGS">Muud seaded</string>
-    <string name="TITLE_PLAY_TONE_TWICE_SETTING">Mängi märguannet kaks korra</string>
+    <string name="TITLE_PLAY_ALARM_SIGNAL_TWICE_SETTING">Mängi märguannet kaks korra</string>
     <string name="TITLE_PRIMARY_ALARM">Esmane teavitus</string>
     <string name="TITLE_RESCUE_SERVICE_NAME">Teie päästekomando</string>   
     <string name="TITLE_SECONDARY_ALARM">Sekundaarne teavitus</string>
