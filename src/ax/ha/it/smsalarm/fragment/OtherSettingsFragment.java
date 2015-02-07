@@ -193,8 +193,8 @@ public class OtherSettingsFragment extends SherlockFragment implements Applicati
 		// If Flash Notification isn't supported we need to disable the possibilities to enable it and show the reason why it's not enabled
 		if (flashNotificationSupportError.isPresent()) {
 			useFlashNotificationCheckBox.setEnabled(false);
-			useFlashNotificationInfoTextView.setTextColor(Color.GRAY);
 			useFlashNotificationInfoTextView.setText(flashNotificationSupportError.get());
+			useFlashNotificationInfoTextView.setEnabled(false);
 		}
 	}
 
