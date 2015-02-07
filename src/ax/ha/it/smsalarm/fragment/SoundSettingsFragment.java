@@ -66,7 +66,8 @@ public class SoundSettingsFragment extends SherlockFragment implements Applicati
 
 	// ...CheckBoxes...
 	private CheckBox soundSettingCheckBox;
-	private CheckBox playAlarmSignalTwiceSettingCheckBox;
+	private CheckBox playAlarmSignalTwiceCheckBox;
+	private CheckBox playAlarmSignalRepeatedlyCheckBox;
 
 	// ...and TextViews
 	private TextView selectedPrimaryAlarmSignalTextView;
@@ -75,10 +76,12 @@ public class SoundSettingsFragment extends SherlockFragment implements Applicati
 	private TextView selectedSecondaryAlarmVibrationTextView;
 	private TextView soundSettingInfoTextView;
 	private TextView playAlarmSignalTwiceInfoTextView;
+	private TextView playAlarmSignalRepeatedlyInfoTextView;
 
-	// Boolean variables to store whether to use OS sound settings or not and if alarm signal should be played twice
+	// Boolean variables to store whether to use OS sound settings or not, if alarm signal should be played twice or repeatedly
 	private boolean useOsSoundSettings = false;
 	private boolean playAlarmSignalTwice = false;
+	private boolean playAlarmSignalRepeatedly = false;
 
 	// To store the selected alarm signals
 	private String primaryAlarmSignal;
@@ -127,7 +130,8 @@ public class SoundSettingsFragment extends SherlockFragment implements Applicati
 
 		// Finding CheckBox views
 		soundSettingCheckBox = (CheckBox) view.findViewById(R.id.useSysSoundSettings_chk);
-		playAlarmSignalTwiceSettingCheckBox = (CheckBox) view.findViewById(R.id.playAlarmSignalTwiceSetting_chk);
+		playAlarmSignalTwiceCheckBox = (CheckBox) view.findViewById(R.id.playAlarmSignalTwiceSetting_chk);
+		playAlarmSignalRepeatedlyCheckBox = (CheckBox) view.findViewById(R.id.playAlarmSignalRepeatedlySetting_chk);
 
 		// Finding TextView, views
 		selectedPrimaryAlarmSignalTextView = (TextView) view.findViewById(R.id.selectedPrimaryAlarmSignal_tv);
@@ -136,6 +140,7 @@ public class SoundSettingsFragment extends SherlockFragment implements Applicati
 		selectedSecondaryAlarmVibrationTextView = (TextView) view.findViewById(R.id.selectedSecondaryAlarmVibration_tv);
 		soundSettingInfoTextView = (TextView) view.findViewById(R.id.useSysSoundSettingsHint_tv);
 		playAlarmSignalTwiceInfoTextView = (TextView) view.findViewById(R.id.playAlarmSignalTwiceSettingHint_tv);
+		playAlarmSignalRepeatedlyInfoTextView = (TextView) view.findViewById(R.id.playAlarmSignalRepeatedlySettingHint_tv);
 
 		// If Android API level is greater than Jelly Bean
 		if (Build.VERSION.SDK_INT > Build.VERSION_CODES.JELLY_BEAN) {
@@ -167,15 +172,22 @@ public class SoundSettingsFragment extends SherlockFragment implements Applicati
 			// Add rule, align left of UI widget
 			paramsSoundSettingInfoTextView.addRule(RelativeLayout.ALIGN_LEFT, soundSettingCheckBox.getId());
 
-			// Set layout parameters for the play tone twice TextView
-			RelativeLayout.LayoutParams paramsPlayToneTwiceInfoTextView = new RelativeLayout.LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
-			paramsPlayToneTwiceInfoTextView.setMargins(pixelsLeft, pixelsTop, pixelsRight, 0);
-			paramsPlayToneTwiceInfoTextView.addRule(RelativeLayout.BELOW, playAlarmSignalTwiceSettingCheckBox.getId());
-			paramsPlayToneTwiceInfoTextView.addRule(RelativeLayout.ALIGN_LEFT, playAlarmSignalTwiceSettingCheckBox.getId());
+			// Set layout parameters for the play alarm signal twice TextView
+			RelativeLayout.LayoutParams paramsPlayAlarmSignalTwiceInfoTextView = new RelativeLayout.LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
+			paramsPlayAlarmSignalTwiceInfoTextView.setMargins(pixelsLeft, pixelsTop, pixelsRight, 0);
+			paramsPlayAlarmSignalTwiceInfoTextView.addRule(RelativeLayout.BELOW, playAlarmSignalTwiceCheckBox.getId());
+			paramsPlayAlarmSignalTwiceInfoTextView.addRule(RelativeLayout.ALIGN_LEFT, playAlarmSignalTwiceCheckBox.getId());
+
+			// Set layout parameters for the play alarm signal repeatedly TextView
+			RelativeLayout.LayoutParams paramsPlayAlarmSignalRepeatedlyInfoTextView = new RelativeLayout.LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
+			paramsPlayAlarmSignalRepeatedlyInfoTextView.setMargins(pixelsLeft, pixelsTop, pixelsRight, 0);
+			paramsPlayAlarmSignalRepeatedlyInfoTextView.addRule(RelativeLayout.BELOW, playAlarmSignalRepeatedlyCheckBox.getId());
+			paramsPlayAlarmSignalRepeatedlyInfoTextView.addRule(RelativeLayout.ALIGN_LEFT, playAlarmSignalRepeatedlyCheckBox.getId());
 
 			// Apply the previously configured layout parameters to the correct TextViews
 			soundSettingInfoTextView.setLayoutParams(paramsSoundSettingInfoTextView);
-			playAlarmSignalTwiceInfoTextView.setLayoutParams(paramsPlayToneTwiceInfoTextView);
+			playAlarmSignalTwiceInfoTextView.setLayoutParams(paramsPlayAlarmSignalTwiceInfoTextView);
+			playAlarmSignalRepeatedlyInfoTextView.setLayoutParams(paramsPlayAlarmSignalRepeatedlyInfoTextView);
 		} else { // The device has API level < 17, we just need to check if the locale is German
 			// If the locale on device is German(DE) we need to adjust the margin top for the information TextViews for the CheckBoxes to -6dp
 			if ("de".equals(Locale.getDefault().getLanguage())) {
@@ -190,13 +202,19 @@ public class SoundSettingsFragment extends SherlockFragment implements Applicati
 				paramsSoundSettingInfoTextView.addRule(RelativeLayout.BELOW, soundSettingCheckBox.getId());
 				paramsSoundSettingInfoTextView.addRule(RelativeLayout.ALIGN_LEFT, soundSettingCheckBox.getId());
 
-				RelativeLayout.LayoutParams paramsPlayToneTwiceInfoTextView = new RelativeLayout.LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
-				paramsPlayToneTwiceInfoTextView.setMargins(pixelsLeft, pixelsTop, pixelsRight, 0);
-				paramsPlayToneTwiceInfoTextView.addRule(RelativeLayout.BELOW, playAlarmSignalTwiceSettingCheckBox.getId());
-				paramsPlayToneTwiceInfoTextView.addRule(RelativeLayout.ALIGN_LEFT, playAlarmSignalTwiceSettingCheckBox.getId());
+				RelativeLayout.LayoutParams paramsPlayAlarmSignalTwiceInfoTextView = new RelativeLayout.LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
+				paramsPlayAlarmSignalTwiceInfoTextView.setMargins(pixelsLeft, pixelsTop, pixelsRight, 0);
+				paramsPlayAlarmSignalTwiceInfoTextView.addRule(RelativeLayout.BELOW, playAlarmSignalTwiceCheckBox.getId());
+				paramsPlayAlarmSignalTwiceInfoTextView.addRule(RelativeLayout.ALIGN_LEFT, playAlarmSignalTwiceCheckBox.getId());
+
+				RelativeLayout.LayoutParams paramsPlayAlarmSignalRepeatedlyInfoTextView = new RelativeLayout.LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
+				paramsPlayAlarmSignalRepeatedlyInfoTextView.setMargins(pixelsLeft, pixelsTop, pixelsRight, 0);
+				paramsPlayAlarmSignalRepeatedlyInfoTextView.addRule(RelativeLayout.BELOW, playAlarmSignalTwiceCheckBox.getId());
+				paramsPlayAlarmSignalRepeatedlyInfoTextView.addRule(RelativeLayout.ALIGN_LEFT, playAlarmSignalTwiceCheckBox.getId());
 
 				soundSettingInfoTextView.setLayoutParams(paramsSoundSettingInfoTextView);
-				playAlarmSignalTwiceInfoTextView.setLayoutParams(paramsPlayToneTwiceInfoTextView);
+				playAlarmSignalTwiceInfoTextView.setLayoutParams(paramsPlayAlarmSignalTwiceInfoTextView);
+				playAlarmSignalRepeatedlyInfoTextView.setLayoutParams(paramsPlayAlarmSignalRepeatedlyInfoTextView);
 			}
 		}
 	}
@@ -206,6 +224,7 @@ public class SoundSettingsFragment extends SherlockFragment implements Applicati
 	public void fetchSharedPrefs() {
 		useOsSoundSettings = (Boolean) prefHandler.fetchPrefs(PrefKey.SHARED_PREF, PrefKey.USE_OS_SOUND_SETTINGS_KEY, DataType.BOOLEAN, context);
 		playAlarmSignalTwice = (Boolean) prefHandler.fetchPrefs(PrefKey.SHARED_PREF, PrefKey.PLAY_TONE_TWICE_KEY, DataType.BOOLEAN, context);
+		playAlarmSignalRepeatedly = (Boolean) prefHandler.fetchPrefs(PrefKey.SHARED_PREF, PrefKey.PLAY_ALARM_SIGNAL_REPEATEDLY_KEY, DataType.BOOLEAN, context);
 		primaryAlarmSignal = (String) prefHandler.fetchPrefs(PrefKey.SHARED_PREF, PrefKey.PRIMARY_ALARM_SIGNAL_KEY, DataType.STRING, context, soundHandler.resolveAlarmSignal(context, SoundHandler.DEFAULT_PRIMARY_ALARM_SIGNAL_ID));
 		secondaryAlarmSignal = (String) prefHandler.fetchPrefs(PrefKey.SHARED_PREF, PrefKey.SECONDARY_ALARM_SIGNAL_KEY, DataType.STRING, context, soundHandler.resolveAlarmSignal(context, SoundHandler.DEFAULT_SECONDARY_ALARM_SIGNAL_ID));
 		userAddedAlarmSignals = (List<String>) prefHandler.fetchPrefs(PrefKey.SHARED_PREF, PrefKey.USER_ADDED_ALARM_SIGNALS_KEY, DataType.LIST, context);
@@ -220,6 +239,7 @@ public class SoundSettingsFragment extends SherlockFragment implements Applicati
 		updateSelectedSecondaryAlarmSignalTextView();
 		updateUseOsSoundSettingsCheckBox();
 		updatePlayAlarmSignalTwiceCheckBox();
+		updatePlayAlarmSignalRepeatedlyCheckBox();
 	}
 
 	@Override
@@ -299,16 +319,34 @@ public class SoundSettingsFragment extends SherlockFragment implements Applicati
 		});
 
 		// Set listener to Play Alarm Signal Twice CheckBox
-		playAlarmSignalTwiceSettingCheckBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+		playAlarmSignalTwiceCheckBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
 			@Override
 			public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-				if (playAlarmSignalTwiceSettingCheckBox.isChecked()) {
+				if (playAlarmSignalTwiceCheckBox.isChecked()) {
 					playAlarmSignalTwice = true;
 				} else {
 					playAlarmSignalTwice = false;
 				}
 
 				prefHandler.storePrefs(PrefKey.SHARED_PREF, PrefKey.PLAY_TONE_TWICE_KEY, playAlarmSignalTwice, context);
+
+				// Update some UI components
+				togglePlayAlarmSignalRepeatedlyComponents();
+			}
+		});
+
+		// Set listener to the Play Alarm Signal Repeatedly CheckBox
+		playAlarmSignalRepeatedlyCheckBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+			@Override
+			public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+				if (playAlarmSignalRepeatedlyCheckBox.isChecked()) {
+					playAlarmSignalRepeatedly = true;
+				} else {
+					playAlarmSignalRepeatedly = false;
+				}
+
+				prefHandler.storePrefs(PrefKey.SHARED_PREF, PrefKey.PLAY_ALARM_SIGNAL_REPEATEDLY_KEY, playAlarmSignalRepeatedly, context);
+				togglePlayAlarmSignalTwiceComponents();
 			}
 		});
 	}
@@ -472,7 +510,36 @@ public class SoundSettingsFragment extends SherlockFragment implements Applicati
 	 */
 	private void updatePlayAlarmSignalTwiceCheckBox() {
 		if (playAlarmSignalTwice) {
-			playAlarmSignalTwiceSettingCheckBox.setChecked(true);
+			playAlarmSignalTwiceCheckBox.setChecked(true);
 		}
+	}
+
+	/**
+	 * To update play alarm signal repeatedly {@link CheckBox} with correct value.
+	 */
+	private void updatePlayAlarmSignalRepeatedlyCheckBox() {
+		if (playAlarmSignalRepeatedly) {
+			playAlarmSignalRepeatedlyCheckBox.setChecked(true);
+		}
+	}
+
+	/**
+	 * To toggle the play alarm signal twice user interface components between being <b><i>enabled or disabled</i></b>. This depends on if the setting
+	 * to play alarm signal repeatedly has been set <b><i>true</i></b> or <b><i>false</i></b>.<br>
+	 * If it has been set to <code>true</code> then the UI components will be <b><i>disabled</i></b> else <b><i>enabled</i></b>.
+	 */
+	private void togglePlayAlarmSignalTwiceComponents() {
+		playAlarmSignalTwiceCheckBox.setEnabled(playAlarmSignalRepeatedly ? false : true);
+		playAlarmSignalTwiceInfoTextView.setEnabled(playAlarmSignalRepeatedly ? false : true);
+	}
+
+	/**
+	 * To toggle the play alarm signal repeatedly user interface components between being <b><i>enabled or disabled</i></b>. This depends on if the
+	 * setting to play alarm signal twice has been set <b><i>true</i></b> or <b><i>false</i></b>. <br>
+	 * If it has been set to <code>true</code> then the UI components will be <b><i>disabled</i></b> else <b><i>enabled</i></b>.
+	 */
+	private void togglePlayAlarmSignalRepeatedlyComponents() {
+		playAlarmSignalRepeatedlyCheckBox.setEnabled(playAlarmSignalTwice ? false : true);
+		playAlarmSignalRepeatedlyInfoTextView.setEnabled(playAlarmSignalTwice ? false : true);
 	}
 }

@@ -33,8 +33,8 @@
     <string name="INFO_SOUND_SETTINGS">Ställ in larmsignaler samt vibrationsmönster för primär- och sekundärlarm, om Sms Alarm ska följa enhetens ljudinställningar samt om larmsignalen ska spelas upp två gånger.</string>
     <string name="PATH_ALREADY_IN_ALARM_SIGNAL_PATH_LIST">Vald ljudsignal finns redan i listan av larmsignaler.</string>
     <string name="ALARM_SIGNALS_REMOVED_DUE_TO_MISSING_PATHS">har tagits bort från listan av larmsignaler eftersom de/dem inte kunde hittas på enheten.</string>
-    <string name="TITLE_PLAY_ALARM_SIGNAL_UNTIL_NOTIFICATION_HANDLED_SETTING">Spela upp larmsignalen oavbrutet</string>
-    <string name="INFO_PLAY_ALARM_SIGNAL_UNTIL_NOTIFICATION_HANDLED_SETTING">Om vald kommer larmsignalen för både primär- och sekundärlarm att spelas oavbrutet tills notifikationen för inkommande larm har hanterats.</string>
+    <string name="TITLE_PLAY_ALARM_SIGNAL_REPEATEDLY_SETTING">Spela upp larmsignalen oavbrutet</string>
+    <string name="INFO_PLAY_ALARM_SIGNAL_REPEATEDLY_SETTING">Om vald kommer larmsignalen för både primär- och sekundärlarm att spelas oavbrutet tills notifikationen för inkommande larm har hanterats.</string>
     <!-- OK IN ENGLISH, GERMAN BEGIN -->
     <string name="INFO_USE_OS_SOUND_SETTINGS">Om vald tar Sms Alarm hänsyn till enhetens ringvolym och ljudlöst läge.</string>
     <string name="TITLE_USE_OS_SOUND_SETTINGS">Använd enhetens ljudinställningar</string>
