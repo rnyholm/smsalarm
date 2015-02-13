@@ -36,7 +36,7 @@ public class UpdateHandler extends Application {
 
 	// Different update code levels, named as code level limit for update and a short description
 	private static final int LVL_9_CHANGE_DATATYPE = 9;
-	private static final int LVL_14_CHANGE_DATATYPE = 14;
+	private static final int LVL_14_CHANGE_DATATYPE_RENAME_SHARED_PREFERENCES = 14;
 
 	// To store both the current and old version code in
 	private int currentVersionCode;
@@ -83,11 +83,11 @@ public class UpdateHandler extends Application {
 				}
 
 				// Only if old version number is less than 14, in version 14 strings is used to identify selected alarm signals instead of integer
-				if (oldVersionCode < LVL_14_CHANGE_DATATYPE) {
+				if (oldVersionCode < LVL_14_CHANGE_DATATYPE_RENAME_SHARED_PREFERENCES) {
+					// Resolve the old alarm signal Id's and store them
 					int primaryAlarmSignalId = (Integer) prefHandler.fetchPrefs(PrefKey.SHARED_PREF, PrefKey.PRIMARY_MESSAGE_TONE_KEY, DataType.INTEGER, this);
 					int secondaryAlarmSignalId = (Integer) prefHandler.fetchPrefs(PrefKey.SHARED_PREF, PrefKey.SECONDARY_MESSAGE_TONE_KEY, DataType.INTEGER, this);
 
-					// Resolve the old alarm signal Id's and store them
 					prefHandler.storePrefs(PrefKey.SHARED_PREF, PrefKey.PRIMARY_ALARM_SIGNAL_KEY, SoundHandler.getInstance().resolveAlarmSignal(this, primaryAlarmSignalId), this);
 					prefHandler.storePrefs(PrefKey.SHARED_PREF, PrefKey.SECONDARY_ALARM_SIGNAL_KEY, SoundHandler.getInstance().resolveAlarmSignal(this, secondaryAlarmSignalId), this);
 
@@ -95,14 +95,22 @@ public class UpdateHandler extends Application {
 					prefHandler.storePrefs(PrefKey.SHARED_PREF, PrefKey.PRIMARY_MESSAGE_TONE_KEY, 0, this);
 					prefHandler.storePrefs(PrefKey.SHARED_PREF, PrefKey.SECONDARY_MESSAGE_TONE_KEY, 0, this);
 
-					prefHandler.storePrefs(PrefKey.SHARED_PREF, PrefKey.VERSION_CODE, LVL_14_CHANGE_DATATYPE, this);
+					// Resolve the old play alarm signal twice and store it in new shared preferences
+					boolean playAlarmSignalTwice = (Boolean) prefHandler.fetchPrefs(PrefKey.SHARED_PREF, PrefKey.PLAY_TONE_TWICE_KEY, DataType.BOOLEAN, this);
 
-					oldVersionCode = LVL_14_CHANGE_DATATYPE;
+					prefHandler.storePrefs(PrefKey.SHARED_PREF, PrefKey.PLAY_ALARM_SIGNAL_TWICE_KEY, playAlarmSignalTwice, this);
+
+					// Reset the old one
+					prefHandler.storePrefs(PrefKey.SHARED_PREF, PrefKey.PLAY_TONE_TWICE_KEY, false, this);
+
+					prefHandler.storePrefs(PrefKey.SHARED_PREF, PrefKey.VERSION_CODE, LVL_14_CHANGE_DATATYPE_RENAME_SHARED_PREFERENCES, this);
+
+					oldVersionCode = LVL_14_CHANGE_DATATYPE_RENAME_SHARED_PREFERENCES;
 				}
 
 				// No update actions needed except for storing the latest version code
 				// The old version code is larger than the latest update level code, this tells us that all updates has been done
-				if (oldVersionCode >= LVL_14_CHANGE_DATATYPE && oldVersionCode < currentVersionCode) {
+				if (oldVersionCode >= LVL_14_CHANGE_DATATYPE_RENAME_SHARED_PREFERENCES && oldVersionCode < currentVersionCode) {
 					prefHandler.storePrefs(PrefKey.SHARED_PREF, PrefKey.VERSION_CODE, currentVersionCode, this);
 				}
 			} else {

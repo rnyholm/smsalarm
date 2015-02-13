@@ -203,7 +203,7 @@ public class SoundHandler {
 
 				mediaPlayer.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
 					// Variable indicating how many times the alarm signal should be played
-					int toBePlayed = (Boolean) prefHandler.fetchPrefs(PrefKey.SHARED_PREF, PrefKey.PLAY_TONE_TWICE_KEY, DataType.BOOLEAN, context) ? 2 : 1;
+					int toBePlayed = (Boolean) prefHandler.fetchPrefs(PrefKey.SHARED_PREF, PrefKey.PLAY_ALARM_SIGNAL_TWICE_KEY, DataType.BOOLEAN, context) ? 2 : 1;
 					// Counter variable to count number of times played, we have already played the alarm signal once
 					int timesPlayed = 1;
 
