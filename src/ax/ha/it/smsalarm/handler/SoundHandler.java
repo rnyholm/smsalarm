@@ -35,6 +35,7 @@ public class SoundHandler {
 
 	// Constant defining path to alarm signals within assets
 	private static final String PATH_TO_ALARM_SIGNAL_ASSETS = "alarm-signals/";
+	private static final String MP3_EXTENSION = ".mp3";
 
 	// Constants used as keys when storing respective volumes into a HashMap
 	private static final String ORIGINAL_MEDIA_VOLUME = "originalMediaVolume";
@@ -96,7 +97,7 @@ public class SoundHandler {
 		switch (audioManager.getRingerMode()) {
 			case (AudioManager.RINGER_MODE_NORMAL):
 				// Stop MediaPlayer if it's already playing
-				stopMediaPlayer();
+				stopMediaPlayer(context);
 
 				// Calculate the different volumes
 				volumes = calculateVolume(audioManager);
@@ -108,7 +109,7 @@ public class SoundHandler {
 				mediaPlayer.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
 					@Override
 					public void onCompletion(MediaPlayer mp) {
-						audioManager.setStreamVolume(AudioManager.STREAM_MUSIC, volumes.get(ORIGINAL_MEDIA_VOLUME), 0);
+						restoreMediaVolume(audioManager);
 						mediaPlayer.reset();
 						mediaPlayer.release();
 						mediaPlayer = null;
@@ -170,7 +171,7 @@ public class SoundHandler {
 				}
 
 				// In case media player is already running stop it, could be that the user is previewing some signals
-				stopMediaPlayer();
+				stopMediaPlayer(context);
 
 				// Need to wait until KitKat handler is in idle mode
 				while (!KitKatHandler.getInstance().isIdle() && (System.currentTimeMillis() < (startTimeMillis + NOISE_DELAY_LIMIT))) {
@@ -206,10 +207,14 @@ public class SoundHandler {
 					// Counter variable to count number of times played, we have already played the alarm signal once
 					int timesPlayed = 1;
 
+					// Figure out if the alarm signal should be played repeatedly
+					boolean playAlarmSignalRepeatedly = (Boolean) prefHandler.fetchPrefs(PrefKey.SHARED_PREF, PrefKey.PLAY_ALARM_SIGNAL_REPEATEDLY_KEY, DataType.BOOLEAN, context);
+
 					@Override
 					public void onCompletion(MediaPlayer mp) {
-						// If alarm signal havn't been played enough times, else release media player
-						if (timesPlayed < toBePlayed) {
+						// If alarm signal havn't been played enough times or if it's wanted to play alarm signal repeatedly, else release media
+						// player
+						if (timesPlayed < toBePlayed || playAlarmSignalRepeatedly) {
 							// Add to counter
 							timesPlayed++;
 							// Seek to beginning of message tone
@@ -217,7 +222,7 @@ public class SoundHandler {
 							// Start play message tone
 							mediaPlayer.start();
 						} else {
-							audioManager.setStreamVolume(AudioManager.STREAM_MUSIC, volumes.get(ORIGINAL_MEDIA_VOLUME), 0);
+							restoreMediaVolume(audioManager);
 							mediaPlayer.reset();
 							mediaPlayer.release();
 							mediaPlayer = null;
@@ -273,6 +278,12 @@ public class SoundHandler {
 		mediaVolumesMap.put(CALCULATED_MEDIA_VOLUME, calculatedMediaVolume);
 
 		return mediaVolumesMap;
+	}
+
+	private void restoreMediaVolume(AudioManager audioManager) {
+		if (volumes != null && volumes.containsKey(ORIGINAL_MEDIA_VOLUME)) {
+			audioManager.setStreamVolume(AudioManager.STREAM_MUSIC, volumes.get(ORIGINAL_MEDIA_VOLUME), 0);
+		}
 	}
 
 	/**
@@ -372,7 +383,7 @@ public class SoundHandler {
 
 			// Open file descriptor with correct path
 			try {
-				afd = context.getAssets().openFd(PATH_TO_ALARM_SIGNAL_ASSETS + alarmSignal + ".mp3");
+				afd = context.getAssets().openFd(PATH_TO_ALARM_SIGNAL_ASSETS + alarmSignal + MP3_EXTENSION);
 			} catch (IOException e) {
 				if (SmsAlarm.DEBUG) {
 					Log.e(LOG_TAG + ":previewSignal()", "An error occurred while opening the FileDescriptor", e);
@@ -388,11 +399,34 @@ public class SoundHandler {
 	}
 
 	/**
-	 * To stop this {@link SoundHandler}'s instance of {@link MediaPlayer} if it's not <code>null</code> and if it's <b><i>playing</i></b>.
+	 * To stop this {@link SoundHandler}'s instance of {@link MediaPlayer} if it's not <code>null</code> and if it's <b><i>playing</i></b>.<br>
+	 * The <code>MediaPlayer</code> will be fully released by invoking following methods:
+	 * <ul>
+	 * <li>{@link MediaPlayer#stop()}</li>
+	 * <li>{@link MediaPlayer#reset()}</li>
+	 * <li>{@link MediaPlayer#release()}</li>
+	 * </ul>
+	 * <p>
+	 * At last the <code>MediaPlayer</code> object will be <code>nullified</code>.
+	 * <p>
+	 * This method does also restore the original <b><i>Media Volume</i></b>.
+	 * 
+	 * @param context
+	 *            The Context in which {@link SoundHandler} runs.
+	 * @see #restoreMediaVolume(AudioManager)
 	 */
-	public void stopMediaPlayer() {
+	public void stopMediaPlayer(Context context) {
 		if (mediaPlayer != null && mediaPlayer.isPlaying()) {
+			// Stop and release all MediaPlayer resources
 			mediaPlayer.stop();
+			mediaPlayer.reset();
+			mediaPlayer.release();
+			mediaPlayer = null;
+
+			// Get AudioManager in order to restore media volume
+			audioManager = (AudioManager) context.getSystemService(Context.AUDIO_SERVICE);
+			// Restore the media volume
+			restoreMediaVolume(audioManager);
 		}
 	}
 

@@ -139,7 +139,7 @@ public class AlarmSignalDialog extends DialogFragment {
 					@Override
 					public void onClick(DialogInterface dialog, int which) {
 						// Want to stop media player if it's already playing
-						soundHandler.stopMediaPlayer();
+						soundHandler.stopMediaPlayer(context);
 
 						// Create an intent and put selected alarm signal id in it and associate it with a certain key
 						Intent intent = new Intent();
@@ -153,7 +153,7 @@ public class AlarmSignalDialog extends DialogFragment {
 				.setNeutralButton(R.string.ADD, new DialogInterface.OnClickListener() {
 					@Override
 					public void onClick(DialogInterface dialog, int which) {
-						soundHandler.stopMediaPlayer();
+						soundHandler.stopMediaPlayer(context);
 
 						// Resolve the request code
 						int resolvedRequestCode = fromDialogToIntentRequestCode(getTargetRequestCode());
@@ -172,7 +172,7 @@ public class AlarmSignalDialog extends DialogFragment {
 				.setNegativeButton(R.string.CANCEL, new DialogInterface.OnClickListener() {
 					@Override
 					public void onClick(DialogInterface dialog, int whichButton) {
-						soundHandler.stopMediaPlayer();
+						soundHandler.stopMediaPlayer(context);
 						getTargetFragment().onActivityResult(getTargetRequestCode(), Activity.RESULT_CANCELED, null);
 					}
 				})

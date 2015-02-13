@@ -15,6 +15,7 @@ resulterar i att ett kvitteringssamtal rings direkt när man e inne i kvitterings
 -Ombyggt gränssnitt för ljud- och vibrationsinställningarna
 -Möjligt att testlyssna på larmsignaler direkt i dialogen där man väljer larmsignal
 -Möjligt att välja egna larmsignaler
+-Möjligt att spela upp larmsignal för inkommande larm(primär- och sekundärlarm) till notifikationen för larmet tagits hand om
 
 v2.2.5(version code 13)
 -Översättning till estniska lades till
