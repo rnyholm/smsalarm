@@ -10,6 +10,7 @@ import android.content.Intent;
 import ax.ha.it.smsalarm.activity.Acknowledge;
 import ax.ha.it.smsalarm.handler.FlashNotificationHandler;
 import ax.ha.it.smsalarm.handler.SoundHandler;
+import ax.ha.it.smsalarm.handler.VibrationHandler;
 
 /**
  * Class responsible for all actions in conjunction with all {@link Notification} interaction, more exactly Notifications dispatched from
@@ -37,8 +38,10 @@ public class NotificationReceiver extends BroadcastReceiver {
 		// Stop flash notification
 		FlashNotificationHandler.stopFlashNotification(context);
 
-		// Stop alarm signal from being played, if it's played
+		// Stop alarm signal from being played, if it's played..
 		SoundHandler.getInstance().stopMediaPlayer(context);
+		// ...also cancel the vibration if it vibrates
+		VibrationHandler.getInstance().cancelVibrator();
 
 		// Get action from intent, if it holds any, and figure out correct action depending on it
 		String intentAction = intent.getAction();

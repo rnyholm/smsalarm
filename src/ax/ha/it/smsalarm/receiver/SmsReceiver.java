@@ -25,6 +25,7 @@ import ax.ha.it.smsalarm.handler.SharedPreferencesHandler;
 import ax.ha.it.smsalarm.handler.SharedPreferencesHandler.DataType;
 import ax.ha.it.smsalarm.handler.SharedPreferencesHandler.PrefKey;
 import ax.ha.it.smsalarm.handler.SoundHandler;
+import ax.ha.it.smsalarm.handler.VibrationHandler;
 import ax.ha.it.smsalarm.pojo.Alarm;
 import ax.ha.it.smsalarm.pojo.Alarm.AlarmType;
 import ax.ha.it.smsalarm.provider.WidgetProvider;
@@ -45,8 +46,6 @@ import ax.ha.it.smsalarm.util.WakeLocker;
  * @since 0.9beta
  */
 public class SmsReceiver extends BroadcastReceiver {
-	private static final String LOG_TAG = SmsReceiver.class.getSimpleName();
-
 	// Debug actions to skip abort broadcast, by not disabling this while dispatching a test SMS will cause an exception
 	public static final String ACTION_SKIP_ABORT_BROADCAST = "ax.ha.it.smsalarm.SKIP_ABORT_BROADCAST";
 
@@ -58,7 +57,6 @@ public class SmsReceiver extends BroadcastReceiver {
 
 	// Objects needed shared preferences, noise and KitKat handling
 	private final SharedPreferencesHandler prefHandler = SharedPreferencesHandler.getInstance();
-	private final SoundHandler soundHandler = SoundHandler.getInstance();
 	private final KitKatHandler kitKatHandler = KitKatHandler.getInstance();
 
 	// Lists of Strings containing primary- and secondary SMS numbers
@@ -178,8 +176,9 @@ public class SmsReceiver extends BroadcastReceiver {
 		values.put("body", msgBody);
 		context.getContentResolver().insert(Uri.parse(SMS_INBOX_URI), values);
 
-		// Play alarm signal
-		soundHandler.alarm(context, alarmType);
+		// Play alarm signal and vibrate
+		SoundHandler.getInstance().alarm(context, alarmType);
+		VibrationHandler.getInstance().alarm(context, alarmType);
 
 		// If alarm acknowledge is enabled and alarm type equals primary, store full alarm message
 		if (enableAlarmAck && alarmType.equals(AlarmType.PRIMARY)) {

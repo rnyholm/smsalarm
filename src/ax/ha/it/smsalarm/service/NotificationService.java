@@ -10,7 +10,6 @@ import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
-import android.media.AudioManager;
 import android.support.v4.app.NotificationCompat;
 import android.util.Log;
 import ax.ha.it.smsalarm.R;
@@ -19,7 +18,6 @@ import ax.ha.it.smsalarm.handler.FlashNotificationHandler;
 import ax.ha.it.smsalarm.handler.SharedPreferencesHandler;
 import ax.ha.it.smsalarm.handler.SharedPreferencesHandler.DataType;
 import ax.ha.it.smsalarm.handler.SharedPreferencesHandler.PrefKey;
-import ax.ha.it.smsalarm.handler.SoundHandler;
 import ax.ha.it.smsalarm.pojo.Alarm.AlarmType;
 import ax.ha.it.smsalarm.receiver.NotificationReceiver;
 
@@ -119,11 +117,6 @@ public class NotificationService extends IntentService {
 			.setAutoCancel(true)
 			.setLights(0xFFff0000, 100, 100);
 		// @formatter:off
-		
-		// Only add vibration to the notification if device isn't in ringer mode silent
-		if (SoundHandler.getRingerMode(this) != AudioManager.RINGER_MODE_SILENT) {
-			builder.setVibrate(SoundHandler.vibrationPattern);
-		}
 
 		// Dispatch the notification
 		notificationManager.notify((int) REFRESH_ID, builder.getNotification());

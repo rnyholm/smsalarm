@@ -45,9 +45,6 @@ public class SoundHandler {
 	public static final int DEFAULT_PRIMARY_ALARM_SIGNAL_ID = 0; // This Id is used as fall back in case user added alarm signal isn't found
 	public static final int DEFAULT_SECONDARY_ALARM_SIGNAL_ID = 1;
 
-	// Custom vibration pattern
-	public static long[] vibrationPattern = { 0, 5000, 500, 5000, 500, 5000, 500, 5000 };
-
 	// A limit time for how long we can wait for the KitKat handler to be idle, this works as a
 	// security to be sure that noise always going to be made
 	private static final long NOISE_DELAY_LIMIT = 10000;
@@ -176,7 +173,7 @@ public class SoundHandler {
 				// Need to wait until KitKat handler is in idle mode
 				while (!KitKatHandler.getInstance().isIdle() && (System.currentTimeMillis() < (startTimeMillis + NOISE_DELAY_LIMIT))) {
 					if (SmsAlarm.DEBUG) {
-						Log.d(LOG_TAG + ":doNoise()", "KitKatHandler running, waiting....");
+						Log.d(LOG_TAG + ":alarm()", "KitKatHandler running, waiting....");
 					}
 				}
 
@@ -280,6 +277,15 @@ public class SoundHandler {
 		return mediaVolumesMap;
 	}
 
+	/**
+	 * To restore the devices <b><i>Media Volume</i></b> to the original media volume, what it was before any alarm signal was previewed or alarmed.
+	 * <p>
+	 * <b><i>Note. Safe to invoke any time as it checks that a original Media Volume actually has been set. If it hasn't, nothing happens.</i></b>
+	 * 
+	 * @param audioManager
+	 *            {@link AudioManager} to set volumes with.
+	 * @see #ORIGINAL_MEDIA_VOLUME
+	 */
 	private void restoreMediaVolume(AudioManager audioManager) {
 		if (volumes != null && volumes.containsKey(ORIGINAL_MEDIA_VOLUME)) {
 			audioManager.setStreamVolume(AudioManager.STREAM_MUSIC, volumes.get(ORIGINAL_MEDIA_VOLUME), 0);

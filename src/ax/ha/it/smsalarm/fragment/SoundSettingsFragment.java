@@ -8,9 +8,7 @@ import java.util.List;
 import java.util.Locale;
 
 import android.app.Activity;
-import android.app.AlertDialog;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.Resources;
@@ -32,10 +30,12 @@ import android.widget.Toast;
 import ax.ha.it.smsalarm.R;
 import ax.ha.it.smsalarm.activity.SmsAlarm;
 import ax.ha.it.smsalarm.fragment.dialog.AlarmSignalDialog;
+import ax.ha.it.smsalarm.fragment.dialog.AlarmVibrationDialog;
 import ax.ha.it.smsalarm.handler.SharedPreferencesHandler;
 import ax.ha.it.smsalarm.handler.SharedPreferencesHandler.DataType;
 import ax.ha.it.smsalarm.handler.SharedPreferencesHandler.PrefKey;
 import ax.ha.it.smsalarm.handler.SoundHandler;
+import ax.ha.it.smsalarm.handler.VibrationHandler;
 import ax.ha.it.smsalarm.util.Util;
 
 import com.actionbarsherlock.app.SherlockFragment;
@@ -86,6 +86,10 @@ public class SoundSettingsFragment extends SherlockFragment implements Applicati
 	// To store the selected alarm signals
 	private String primaryAlarmSignal;
 	private String secondaryAlarmSignal;
+
+	// To store the select alarm vibration patterns
+	private String primaryAlarmVibration;
+	private String secondaryAlarmVibration;
 
 	// List holding the paths to the user added alarm signals
 	private List<String> userAddedAlarmSignals = new ArrayList<String>();
@@ -228,6 +232,8 @@ public class SoundSettingsFragment extends SherlockFragment implements Applicati
 		primaryAlarmSignal = (String) prefHandler.fetchPrefs(PrefKey.SHARED_PREF, PrefKey.PRIMARY_ALARM_SIGNAL_KEY, DataType.STRING, context, soundHandler.resolveAlarmSignal(context, SoundHandler.DEFAULT_PRIMARY_ALARM_SIGNAL_ID));
 		secondaryAlarmSignal = (String) prefHandler.fetchPrefs(PrefKey.SHARED_PREF, PrefKey.SECONDARY_ALARM_SIGNAL_KEY, DataType.STRING, context, soundHandler.resolveAlarmSignal(context, SoundHandler.DEFAULT_SECONDARY_ALARM_SIGNAL_ID));
 		userAddedAlarmSignals = (List<String>) prefHandler.fetchPrefs(PrefKey.SHARED_PREF, PrefKey.USER_ADDED_ALARM_SIGNALS_KEY, DataType.LIST, context);
+		primaryAlarmVibration = (String) prefHandler.fetchPrefs(PrefKey.SHARED_PREF, PrefKey.PRIMARY_ALARM_VIBRATION_KEY, DataType.STRING, context, VibrationHandler.VIBRATION_PATTERN_SMS_ALARM);
+		secondaryAlarmVibration = (String) prefHandler.fetchPrefs(PrefKey.SHARED_PREF, PrefKey.SECONDARY_ALARM_VIBRATION_KEY, DataType.STRING, context, VibrationHandler.VIBRATION_PATTERN_SMS_ALARM);
 
 		// Check that all alarm signals exists
 		validateUserAddedAlarmSignals();
@@ -237,6 +243,8 @@ public class SoundSettingsFragment extends SherlockFragment implements Applicati
 	public void updateFragmentView() {
 		updateSelectedPrimaryAlarmSignalTextView();
 		updateSelectedSecondaryAlarmSignalTextView();
+		updateSelectedPrimaryAlarmVibrationTextView();
+		updateSelectedSecondaryAlarmVibrationTextView();
 		updateUseOsSoundSettingsCheckBox();
 		updatePlayAlarmSignalTwiceCheckBox();
 		updatePlayAlarmSignalRepeatedlyCheckBox();
@@ -264,20 +272,7 @@ public class SoundSettingsFragment extends SherlockFragment implements Applicati
 		primaryAlarmVibrationSelectionLinearLayout.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				// @formatter:off
-				new AlertDialog.Builder(context)
-				.setIcon(android.R.drawable.ic_dialog_info) 
-				.setTitle("Shit sherlock...")
-				.setMessage("This feature of awesomeness does not hold any implementation yet, stay tuned..")
-				.setPositiveButton("OK", new DialogInterface.OnClickListener() {
-					@Override
-					public void onClick(DialogInterface dialog, int which) {
-						// Do nothing...
-					}
-				})
-				.create()
-				.show();;
-				// @formatter:on
+				showAlarmVibrationDialog(AlarmVibrationDialog.PRIMARY_ALARM_VIBRATION_DIALOG_REQUEST_CODE);
 			}
 		});
 
@@ -285,20 +280,7 @@ public class SoundSettingsFragment extends SherlockFragment implements Applicati
 		secondaryAlarmVibrationSelectionLinearLayout.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				// @formatter:off
-				new AlertDialog.Builder(context)
-				.setIcon(android.R.drawable.ic_dialog_info) 
-				.setTitle("Shit sherlock...")
-				.setMessage("This feature of awesomeness does not hold any implementation yet, stay tuned..")
-				.setPositiveButton("OK", new DialogInterface.OnClickListener() {
-					@Override
-					public void onClick(DialogInterface dialog, int which) {
-						// Do nothing...
-					}
-				})
-				.create()
-				.show();;
-				// @formatter:on
+				showAlarmVibrationDialog(AlarmVibrationDialog.SECONDARY_ALARM_VIBRATION_DIALOG_REQUEST_CODE);
 			}
 		});
 
@@ -373,6 +355,18 @@ public class SoundSettingsFragment extends SherlockFragment implements Applicati
 					prefHandler.storePrefs(PrefKey.SHARED_PREF, PrefKey.SECONDARY_ALARM_SIGNAL_KEY, secondaryAlarmSignal, context);
 
 					updateSelectedSecondaryAlarmSignalTextView();
+					break;
+				case (AlarmVibrationDialog.PRIMARY_ALARM_VIBRATION_DIALOG_REQUEST_CODE):
+					primaryAlarmVibration = data.getStringExtra(AlarmVibrationDialog.ALARM_VIBRATION);
+					prefHandler.storePrefs(PrefKey.SHARED_PREF, PrefKey.PRIMARY_ALARM_VIBRATION_KEY, primaryAlarmVibration, context);
+
+					updateSelectedPrimaryAlarmVibrationTextView();
+					break;
+				case (AlarmVibrationDialog.SECONDARY_ALARM_VIBRATION_DIALOG_REQUEST_CODE):
+					secondaryAlarmVibration = data.getStringExtra(AlarmVibrationDialog.ALARM_VIBRATION);
+					prefHandler.storePrefs(PrefKey.SHARED_PREF, PrefKey.SECONDARY_ALARM_VIBRATION_KEY, secondaryAlarmVibration, context);
+
+					updateSelectedSecondaryAlarmVibrationTextView();
 					break;
 				case (AlarmSignalDialog.ADD_ALARM_SIGNAL_FROM_PRIMARY_DIALOG_REQUEST_CODE):
 					// Fall through to next case as the same actions are taken for both
@@ -483,17 +477,43 @@ public class SoundSettingsFragment extends SherlockFragment implements Applicati
 	}
 
 	/**
-	 * To update selected <b><i>Primary Alarm</i></b> {@link TextView} with correct value.
+	 * Convenience method to create a new instance of {@link AlarmVibrationDialog} and show it.
+	 * 
+	 * @param requestCode
+	 *            Request code for the created <code>AlarmVibrationDialog</code>.
+	 */
+	private void showAlarmVibrationDialog(int requestCode) {
+		AlarmVibrationDialog dialog = new AlarmVibrationDialog();
+		dialog.setTargetFragment(SoundSettingsFragment.this, requestCode);
+		dialog.show(getFragmentManager(), AlarmVibrationDialog.ALARM_VIBRATION_DIALOG_TAG);
+	}
+
+	/**
+	 * To update selected <b><i>Primary Alarm Signal</i></b> {@link TextView} with correct value.
 	 */
 	private void updateSelectedPrimaryAlarmSignalTextView() {
 		selectedPrimaryAlarmSignalTextView.setText(Util.getBaseFileName(primaryAlarmSignal));
 	}
 
 	/**
-	 * To update selected <b><i>Secondary Alarm</i></b> {@link TextView} with correct value.
+	 * To update selected <b><i>Secondary Alarm Signal</i></b> {@link TextView} with correct value.
 	 */
 	private void updateSelectedSecondaryAlarmSignalTextView() {
 		selectedSecondaryAlarmSignalTextView.setText(Util.getBaseFileName(secondaryAlarmSignal));
+	}
+
+	/**
+	 * To update selected <b><i>Primary Alarm Vibration</i></b> {@link TextView} with correct value.
+	 */
+	private void updateSelectedPrimaryAlarmVibrationTextView() {
+		selectedPrimaryAlarmVibrationTextView.setText(primaryAlarmVibration);
+	}
+
+	/**
+	 * To update selected <b><i>Secondary Alarm Vibration</i></b> {@link TextView} with correct value.
+	 */
+	private void updateSelectedSecondaryAlarmVibrationTextView() {
+		selectedSecondaryAlarmVibrationTextView.setText(secondaryAlarmVibration);
 	}
 
 	/**

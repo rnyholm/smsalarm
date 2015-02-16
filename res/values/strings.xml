@@ -35,6 +35,7 @@
     <string name="ALARM_SIGNALS_REMOVED_DUE_TO_MISSING_PATHS">har tagits bort från listan av larmsignaler eftersom de/dem inte kunde hittas på enheten.</string>
     <string name="TITLE_PLAY_ALARM_SIGNAL_REPEATEDLY_SETTING">Spela upp larmsignalen oavbrutet</string>
     <string name="INFO_PLAY_ALARM_SIGNAL_REPEATEDLY_SETTING">Om vald kommer larmsignalen för både primär- och sekundärlarm att spelas oavbrutet tills notifikationen för inkommande larm har hanterats.</string>
+    <string name="ALARM_VIBRATION_PROMPT_TITLE">Välj vibrationsmönster</string> 
     <!-- OK IN ENGLISH, GERMAN BEGIN -->
     <string name="INFO_USE_OS_SOUND_SETTINGS">Om vald tar Sms Alarm hänsyn till enhetens ringvolym och ljudlöst läge.</string>
     <string name="TITLE_USE_OS_SOUND_SETTINGS">Använd enhetens ljudinställningar</string>

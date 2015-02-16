@@ -69,7 +69,9 @@ public class SharedPreferencesHandler {
 		USE_FLASH_NOTIFICATION("useFlashNotification"),
 		PRIMARY_ALARM_SIGNAL_KEY("primaryAlarmSignalKey"),
 		SECONDARY_ALARM_SIGNAL_KEY("secondaryAlarmSignalKey"),
-		USER_ADDED_ALARM_SIGNALS_KEY("userAddedAlarmSignalsKey");
+		USER_ADDED_ALARM_SIGNALS_KEY("userAddedAlarmSignalsKey"),
+		PRIMARY_ALARM_VIBRATION_KEY("primaryAlarmVibrationKey"),
+		SECONDARY_ALARM_VIBRATION_KEY("secondaryAlarmVibrationKey");
 		// @formatter:on
 
 		// The actual key to which data will be stored and fetched from

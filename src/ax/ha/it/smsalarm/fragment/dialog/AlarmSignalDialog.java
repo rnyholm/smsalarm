@@ -27,7 +27,7 @@ import ax.ha.it.smsalarm.pojo.Alarm.AlarmType;
 import ax.ha.it.smsalarm.util.Util;
 
 /**
- * {@link DialogFragment} which let's the user select <b><i>Alarm Signal</i></b> for the different {@link AlarmType}. THis dialog also let's the user
+ * {@link DialogFragment} which let's the user select <b><i>Alarm Signal</i></b> for the different {@link AlarmType}. This dialog also let's the user
  * add an own alarm signal from the device with the only restriction that the alarm signal <b><i>must be in format mpeg format</i></b>.
  *
  * @author Robert Nyholm <robert.nyholm@aland.net>
@@ -89,7 +89,7 @@ public class AlarmSignalDialog extends DialogFragment {
 		// Set context here, it's safe because this dialog fragment has been attached to it's container, hence we have access to context
 		context = getActivity();
 
-		// Get all application provided and user added alarm signals, also smack them together into one sperate list
+		// Get all application provided and user added alarm signals, also smack them together into one separate list
 		appAlarmSignals = new ArrayList<String>(Arrays.asList(getResources().getStringArray(R.array.alarm_signals)));
 		userAddedAlarmSignals = (List<String>) prefHandler.fetchPrefs(PrefKey.SHARED_PREF, PrefKey.USER_ADDED_ALARM_SIGNALS_KEY, DataType.LIST, context);
 		allAlarmSignals.addAll(appAlarmSignals);
@@ -123,7 +123,7 @@ public class AlarmSignalDialog extends DialogFragment {
 				.setTitle(R.string.TONE_PROMPT_TITLE)		// Set title
 				// @formatter:on
 
-				// Set items to list view from resource containing alarm signals
+				// Set items to list view from all available alarm signals
 				.setSingleChoiceItems(alarmSignals.toArray(new String[alarmSignals.size()]), selectedAlarmSignalId, new DialogInterface.OnClickListener() {
 					@Override
 					public void onClick(DialogInterface arg0, int listPosition) {
@@ -141,7 +141,7 @@ public class AlarmSignalDialog extends DialogFragment {
 						// Want to stop media player if it's already playing
 						soundHandler.stopMediaPlayer(context);
 
-						// Create an intent and put selected alarm signal id in it and associate it with a certain key
+						// Create an intent and put selected alarm signal in it and associate it with a certain key
 						Intent intent = new Intent();
 						intent.putExtra(ALARM_SIGNAL, allAlarmSignals.get(selectedAlarmSignalId));
 
