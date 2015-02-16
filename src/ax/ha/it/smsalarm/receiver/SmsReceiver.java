@@ -32,6 +32,7 @@ import ax.ha.it.smsalarm.provider.WidgetProvider;
 import ax.ha.it.smsalarm.service.AcknowledgeNotificationService;
 import ax.ha.it.smsalarm.service.NotificationService;
 import ax.ha.it.smsalarm.util.AlarmLogger;
+import ax.ha.it.smsalarm.util.Util;
 import ax.ha.it.smsalarm.util.WakeLocker;
 
 /**
@@ -108,6 +109,9 @@ public class SmsReceiver extends BroadcastReceiver {
 					msgHeader = msgs[i].getOriginatingAddress();
 					msgBody += msgs[i].getMessageBody().toString();
 				}
+
+				// Get rid of any eventual white spaces in incoming phone number
+				msgHeader = Util.removeSpaces(msgHeader);
 
 				// Check if income SMS was an alarm
 				if (checkAlarm(context)) {

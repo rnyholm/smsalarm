@@ -171,4 +171,23 @@ public class Util {
 
 		return false;
 	}
+
+	/**
+	 * To remove all white spaces from given <code>String</code>.
+	 * <p>
+	 * If given <code>String</code> <code>null</code> or <code>empty</code> then an empty string is returned.
+	 * 
+	 * @param string
+	 *            String to get any eventual white spaces removed from.
+	 * @return Given String cleaned from white spaces.
+	 */
+	public static String removeSpaces(String string) {
+		String strippedString = "";
+
+		if (string != null && string.length() > 0) {
+			strippedString = string.replaceAll("\\s+", "");
+		}
+
+		return strippedString;
+	}
 }

@@ -83,4 +83,14 @@ public class UtilTest extends TestCase {
 		assertEquals("ledarlarm", Util.getBaseFileName("/ledarlarm.wma"));
 		assertEquals("ledarlarm", Util.getBaseFileName("ledarlarm.wma"));
 	}
+
+	public void testRemoveSpaces() {
+		assertEquals("", Util.removeSpaces(null));
+		assertEquals("", Util.removeSpaces(""));
+		assertEquals("+3584571234567", Util.removeSpaces("+3584571234567"));
+		assertEquals("+3584571234567", Util.removeSpaces(" +358 4571234567"));
+		assertEquals("+3584571234567", Util.removeSpaces("+   35 845 712 3 4       5 6   7"));
+		assertEquals("Justalittleteststringnow!", Util.removeSpaces("Just a little test string now!"));
+		assertEquals("Testingabitmooore,withsomeotherch4aract3rsalso!", Util.removeSpaces(" Te sting a   bit m o o o re, with some other ch4aract3rs also!    "));
+	}
 }
