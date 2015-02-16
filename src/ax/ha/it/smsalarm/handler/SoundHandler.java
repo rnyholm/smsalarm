@@ -147,6 +147,16 @@ public class SoundHandler {
 	public void alarm(final Context context, AlarmType alarmType) {
 		// Only do further handling if given AlarmType is supported
 		if (AlarmType.PRIMARY.equals(alarmType) || AlarmType.SECONDARY.equals(alarmType)) {
+			// Need to know when called this method
+			long startTimeMillis = System.currentTimeMillis();
+
+			// Need to wait until KitKat handler is in idle mode
+			while (!KitKatHandler.getInstance().isIdle() && (System.currentTimeMillis() < (startTimeMillis + NOISE_DELAY_LIMIT))) {
+				if (SmsAlarm.DEBUG) {
+					Log.d(LOG_TAG + ":alarm()", "KitKatHandler running, waiting....");
+				}
+			}
+
 			// AudioManager used to get and set different volume levels
 			audioManager = (AudioManager) context.getSystemService(Context.AUDIO_SERVICE);
 			// If SmsAlarm is setup to follow the devices sound settings or not
@@ -157,9 +167,6 @@ public class SoundHandler {
 				// Alarm signal to be played
 				String alarmSignal;
 
-				// Need to know when called this method
-				long startTimeMillis = System.currentTimeMillis();
-
 				// Resolve correct alarm signal id
 				if (AlarmType.PRIMARY.equals(alarmType)) {
 					alarmSignal = (String) prefHandler.fetchPrefs(PrefKey.SHARED_PREF, PrefKey.PRIMARY_ALARM_SIGNAL_KEY, DataType.STRING, context, resolveAlarmSignal(context, DEFAULT_PRIMARY_ALARM_SIGNAL_ID));
@@ -169,13 +176,6 @@ public class SoundHandler {
 
 				// In case media player is already running stop it, could be that the user is previewing some signals
 				stopMediaPlayer(context);
-
-				// Need to wait until KitKat handler is in idle mode
-				while (!KitKatHandler.getInstance().isIdle() && (System.currentTimeMillis() < (startTimeMillis + NOISE_DELAY_LIMIT))) {
-					if (SmsAlarm.DEBUG) {
-						Log.d(LOG_TAG + ":alarm()", "KitKatHandler running, waiting....");
-					}
-				}
 
 				// Calculate the different volumes
 				volumes = calculateVolume(audioManager);
