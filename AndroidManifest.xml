@@ -54,9 +54,9 @@
            	<meta-data android:name="android.appwidget.provider"
                	android:resource="@xml/widget_configuration" />
        	</receiver> 
-       	<receiver android:name="ax.ha.it.smsalarm.receiver.FlashNotificationReceiver" />
        	<receiver android:name="ax.ha.it.smsalarm.receiver.NotificationReceiver" />
         <service android:name="ax.ha.it.smsalarm.service.NotificationService"></service>   
         <service android:name="ax.ha.it.smsalarm.service.AcknowledgeNotificationService"></service>
+        <service android:name="ax.ha.it.smsalarm.service.FlashNotificationService"></service>
     </application>    
 </manifest>

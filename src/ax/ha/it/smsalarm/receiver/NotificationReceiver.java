@@ -8,9 +8,9 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import ax.ha.it.smsalarm.activity.Acknowledge;
-import ax.ha.it.smsalarm.handler.FlashNotificationHandler;
 import ax.ha.it.smsalarm.handler.SoundHandler;
 import ax.ha.it.smsalarm.handler.VibrationHandler;
+import ax.ha.it.smsalarm.service.FlashNotificationService;
 
 /**
  * Class responsible for all actions in conjunction with all {@link Notification} interaction, more exactly Notifications dispatched from
@@ -36,7 +36,7 @@ public class NotificationReceiver extends BroadcastReceiver {
 	@Override
 	public void onReceive(Context context, Intent intent) {
 		// Stop flash notification
-		FlashNotificationHandler.stopFlashNotification(context);
+		FlashNotificationService.stopFlashNotificationService(context);
 
 		// Stop alarm signal from being played, if it's played..
 		SoundHandler.getInstance().stopMediaPlayer(context);
