@@ -244,8 +244,6 @@
                 android:src="@drawable/ic_ab_forward_holo_light_am" />
         </LinearLayout>
 
-        <!-- END -->
-
         <CheckBox
             android:id="@+id/useSysSoundSettings_chk"
             android:layout_width="wrap_content"

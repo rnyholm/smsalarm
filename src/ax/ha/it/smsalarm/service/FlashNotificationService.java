@@ -6,7 +6,6 @@ package ax.ha.it.smsalarm.service;
 import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
-import android.hardware.Camera;
 import android.os.Handler;
 import android.os.IBinder;
 import ax.ha.it.smsalarm.handler.CameraHandler;
