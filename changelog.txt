@@ -18,8 +18,9 @@ resulterar i att ett kvitteringssamtal rings direkt när man e inne i kvitterings
 -Möjligt att spela upp larmsignal för inkommande larm(primär- och sekundärlarm) till notifikationen för larmet tagits hand om
 -Bytt namn på shared preferences MESSAGE_TONE -> ALARM_SIGNAL
 -Möjligt att välja vibrationsmönster för respektive larmtyp
--Möjligt att tysta/stoppa larmsignalen och vibrationen för inkommande larm genom att hantera notigikationen för larmet
+-Möjligt att tysta/stoppa larmsignalen och vibrationen för inkommande larm genom att hantera notifikationen för larmet
 -Eventuella mellanslag tas bort från det inkommande meddelandes telefonnummer
+-Utökade områdena att trycka på i widgeten -> lättare att trycka rätt
 
 v2.2.5(version code 13)
 -Översättning till estniska lades till

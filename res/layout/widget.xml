@@ -2,91 +2,87 @@
     android:id="@+id/widget_rl"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#FFFFFFFF" xmlns:android1="http://schemas.android.com/apk/res/android">
+    android:background="#FFFFFFFF"
+    android:padding="5dp" >
 
     <ImageView
-        android1:id="@+id/widget_logo_iv"
-        android1:layout_width="wrap_content"
-        android1:layout_height="wrap_content"
-        android1:layout_alignParentLeft="true"
-        android1:layout_alignParentTop="true"
-        android1:layout_marginBottom="5dp"
-        android1:layout_marginLeft="5dp"
-        android1:layout_marginRight="5dp"
-        android1:layout_marginTop="23dp"
-        android1:contentDescription="@string/WIDGET_ICON_CONTENT_DESCR"
-        android1:src="@drawable/ic_launcher_trans" />
+        android:id="@+id/widget_logo_iv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentTop="true"
+        android:layout_marginRight="5dp"
+        android:layout_marginTop="18dp"
+        android:contentDescription="@string/WIDGET_ICON_CONTENT_DESCR"
+        android:src="@drawable/ic_launcher_trans" />
 
     <TextView
-        android1:id="@+id/widget_divider1_tv"
-        android1:layout_width="1dp"
-        android1:layout_height="match_parent"
-        android1:layout_alignParentTop="true"
-        android1:layout_alignTop="@+id/widget_logo_iv"
-        android1:layout_marginBottom="5dp"
-        android1:layout_marginTop="5dp"
-        android1:layout_toRightOf="@+id/widget_logo_iv"
+        android:id="@+id/widget_divider1_tv"
+        android:layout_width="1dp"
+        android:layout_height="match_parent"
+        android:layout_alignParentTop="true"
+        android:layout_alignTop="@+id/widget_logo_iv"
+        android:layout_toRightOf="@+id/widget_logo_iv"
         android:background="#55000000"
-        android1:minWidth="1dp" />
+        android:minWidth="1dp" />
 
     <TextView
-        android1:id="@+id/widget_smsalarm_status_tv"
-        android1:layout_width="wrap_content"
-        android1:layout_height="wrap_content"
-        android1:layout_alignParentTop="true"
-        android1:layout_marginBottom="6dp"
-        android1:layout_marginLeft="5dp"
-        android1:layout_marginRight="5dp"
-        android1:layout_marginTop="8dp"
-        android1:layout_toRightOf="@+id/widget_divider1_tv"
-        android1:text="@string/SMS_ALARM_STATUS_DISABLED"
-        android1:textAppearance="?android:attr/textAppearanceSmall"
-        android1:textColor="#99000000" />
+        android:id="@+id/widget_smsalarm_status_tv"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_toRightOf="@+id/widget_divider1_tv"
+        android:paddingBottom="6dp"
+        android:paddingLeft="5dp"
+        android:paddingTop="3dp"
+        android:text="@string/SMS_ALARM_STATUS_DISABLED"
+        android:textAppearance="?android:attr/textAppearanceSmall"
+        android:textColor="#99000000" />
 
     <ImageView
-        android1:id="@+id/widget_divider2_iv"
-        android1:layout_width="match_parent"
-        android1:layout_height="1dp"
-        android1:layout_alignLeft="@+id/widget_smsalarm_status_tv"
-        android1:layout_below="@+id/widget_smsalarm_status_tv"
-        android1:layout_marginRight="5dp"
-        android1:contentDescription="@string/DIVIDER_DESCR"
-        android1:src="@drawable/gradient_divider_widget" />
+        android:id="@+id/widget_divider2_iv"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_below="@+id/widget_smsalarm_status_tv"
+        android:layout_marginLeft="5dp"
+        android:layout_toRightOf="@id/widget_divider1_tv"
+        android:contentDescription="@string/DIVIDER_DESCR"
+        android:src="@drawable/gradient_divider_widget" />
 
     <TextView
-        android1:id="@+id/widget_soundsettings_status_tv"
-        android1:layout_width="wrap_content"
-        android1:layout_height="wrap_content"
-        android1:layout_alignLeft="@+id/widget_smsalarm_status_tv"
-        android1:layout_below="@id/widget_divider2_iv"
-        android1:layout_marginBottom="6dp"
-        android1:layout_marginRight="5dp"
-        android1:layout_marginTop="6dp"
-        android1:text="@string/SOUND_SETTINGS_STATUS_DISABLED"
-        android1:textAppearance="?android:attr/textAppearanceSmall"
-        android1:textColor="#99000000" />
+        android:id="@+id/widget_soundsettings_status_tv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/widget_smsalarm_status_tv"
+        android:layout_below="@id/widget_divider2_iv"
+        android:paddingBottom="6dp"
+        android:paddingLeft="5dp"
+        android:paddingTop="6dp"
+        android:text="@string/SOUND_SETTINGS_STATUS_DISABLED"
+        android:textAppearance="?android:attr/textAppearanceSmall"
+        android:textColor="#99000000" />
 
     <ImageView
-        android1:id="@+id/widget_divider3_iv"
-        android1:layout_width="match_parent"
-        android1:layout_height="1dp"
-        android1:layout_alignLeft="@+id/widget_soundsettings_status_tv"
-        android1:layout_below="@+id/widget_soundsettings_status_tv"
-        android1:layout_marginRight="5dp"
-        android1:contentDescription="@string/DIVIDER_DESCR"
-        android1:src="@drawable/gradient_divider_widget" />
+        android:id="@+id/widget_divider3_iv"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_below="@+id/widget_soundsettings_status_tv"
+        android:layout_marginLeft="5dp"
+        android:layout_toRightOf="@id/widget_divider1_tv"
+        android:contentDescription="@string/DIVIDER_DESCR"
+        android:src="@drawable/gradient_divider_widget" />
 
     <TextView
-        android1:id="@+id/widget_latest_received_alarm_tv"
-        android1:layout_width="wrap_content"
-        android1:layout_height="wrap_content"
-        android1:layout_alignLeft="@+id/widget_soundsettings_status_tv"
-        android1:layout_below="@id/widget_divider3_iv"
-        android1:layout_marginBottom="8dp"
-        android1:layout_marginRight="5dp"
-        android1:layout_marginTop="6dp"
-        android1:text="@string/NO_RECEIVED_ALARMS_EXISTS"
-        android1:textAppearance="?android:attr/textAppearanceSmall"
-        android1:textColor="#99000000" />
+        android:id="@+id/widget_latest_received_alarm_tv"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/widget_soundsettings_status_tv"
+        android:layout_below="@id/widget_divider3_iv"
+        android:paddingBottom="3dp"
+        android:paddingLeft="5dp"
+        android:paddingTop="6dp"
+        android:text="@string/NO_RECEIVED_ALARMS_EXISTS"
+        android:textAppearance="?android:attr/textAppearanceSmall"
+        android:textColor="#99000000" />
 
 </RelativeLayout>
