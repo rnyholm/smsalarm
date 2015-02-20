@@ -26,6 +26,7 @@ import com.google.common.base.Optional;
  * @version 2.3.1
  * @since 2.3.1
  */
+@SuppressWarnings("deprecation")
 @TargetApi(Build.VERSION_CODES.GINGERBREAD)
 public class CameraHandler {
 	private static final String LOG_TAG = CameraHandler.class.getSimpleName();
