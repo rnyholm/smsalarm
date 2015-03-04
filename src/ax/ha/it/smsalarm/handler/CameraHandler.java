@@ -5,14 +5,12 @@ package ax.ha.it.smsalarm.handler;
 
 import java.util.List;
 
-import android.annotation.TargetApi;
 import android.content.Context;
 import android.content.pm.PackageManager;
 import android.hardware.Camera;
 import android.hardware.Camera.AutoFocusCallback;
 import android.hardware.Camera.CameraInfo;
 import android.hardware.Camera.Parameters;
-import android.os.Build;
 import android.util.Log;
 import ax.ha.it.smsalarm.activity.SmsAlarm;
 
@@ -27,7 +25,6 @@ import com.google.common.base.Optional;
  * @since 2.3.1
  */
 @SuppressWarnings("deprecation")
-@TargetApi(Build.VERSION_CODES.GINGERBREAD)
 public class CameraHandler {
 	private static final String LOG_TAG = CameraHandler.class.getSimpleName();
 

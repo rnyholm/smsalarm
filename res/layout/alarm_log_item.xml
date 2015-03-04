@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/alarmLogItem_ll"
+    android:layout_width="match_parent"
+    android:layout_height="50dp"
+    android:orientation="horizontal" >
+    
+    <ImageView
+        android:id="@+id/alarmLogItemIcon_iv"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:contentDescription="@string/ALARM_LOG_ITEM_IMAGE_DESCR"
+        android:padding="10dp"
+        android:src="@drawable/ic_primary_alarm" />
+    
+    <LinearLayout
+        android:id="@+id/alarmLogItemDetails_iv"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_weight="1"
+        android:gravity="center_vertical"
+        android:orientation="vertical" >
+
+        <TextView
+            android:id="@+id/alarmLogSender_tv"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/ALARM_LOG_ITEM_SENDER"
+            android:textAppearance="?android:attr/textAppearanceMedium" />
+
+        <LinearLayout
+            android:id="@+id/alarmLogItemDetailsMessageTime_ll"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal" >
+
+            <TextView
+                android:id="@+id/alarmLogMessage_tv"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="left"
+                android:layout_weight="1"
+                android:text="@string/ALARM_LOG_ITEM_MESSAGE"
+                android:textAppearance="?android:attr/textAppearanceSmall" />
+
+            <TextView
+                android:id="@+id/alarmLogDate_tv"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="right"
+                android:text="@string/ALARM_LOG_ITEM_DATE"
+                android:textAppearance="?android:attr/textAppearanceSmall" />
+
+        </LinearLayout>
+	    
+    </LinearLayout>
+</LinearLayout>

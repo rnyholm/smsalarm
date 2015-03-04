@@ -8,7 +8,7 @@
     tools:ignore="UseCompoundDrawables" >
 
     <ImageView
-        android:id="@+id/menuItemIcon_iv"
+        android:id="@+id/alarmLogItemIcon_iv"
         android:layout_width="50dp"
         android:layout_height="50dp"
         android:contentDescription="@string/MENU_ITEM_IMAGE_DESCR"

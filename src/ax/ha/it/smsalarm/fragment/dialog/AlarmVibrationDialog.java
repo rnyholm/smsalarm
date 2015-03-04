@@ -17,11 +17,11 @@ import android.util.Log;
 import android.widget.ListView;
 import ax.ha.it.smsalarm.R;
 import ax.ha.it.smsalarm.activity.SmsAlarm;
+import ax.ha.it.smsalarm.alarm.Alarm.AlarmType;
 import ax.ha.it.smsalarm.handler.SharedPreferencesHandler;
 import ax.ha.it.smsalarm.handler.SharedPreferencesHandler.DataType;
 import ax.ha.it.smsalarm.handler.SharedPreferencesHandler.PrefKey;
 import ax.ha.it.smsalarm.handler.VibrationHandler;
-import ax.ha.it.smsalarm.pojo.Alarm.AlarmType;
 
 /**
  * {@link DialogFragment} which let's the user select <b><i>Alarm Vibration Pattern</i></b> for the different {@link AlarmType}.

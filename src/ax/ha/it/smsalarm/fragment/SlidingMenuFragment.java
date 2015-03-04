@@ -82,17 +82,19 @@ public class SlidingMenuFragment extends SherlockListFragment {
 		adapter.add(new SlidingMenuItem(103, getString(R.string.MENU_TITLE_SOUND), R.drawable.ic_menu_sound));
 		adapter.add(new SlidingMenuItem(104, getString(R.string.MENU_TITLE_ACKNOWLEDGE), R.drawable.ic_menu_ack));
 		adapter.add(new SlidingMenuItem(105, getString(R.string.MENU_TITLE_OTHER), R.drawable.ic_menu_other));
+		adapter.add(new SlidingMenuItem(getString(R.string.MENU_TITLE_ALARM_LOG)));
+		adapter.add(new SlidingMenuItem(201, getString(R.string.MENU_TITLE_ALL_ALARMS_LOG)));
 		adapter.add(new SlidingMenuItem(getString(R.string.MENU_TITLE_ABOUT)));
-		adapter.add(new SlidingMenuItem(201, getString(R.string.MENU_TITLE_OPEN_SOURCE), R.drawable.ic_menu_os));
-		adapter.add(new SlidingMenuItem(202, getString(R.string.ABOUT), R.drawable.ic_menu_about));
+		adapter.add(new SlidingMenuItem(301, getString(R.string.MENU_TITLE_OPEN_SOURCE), R.drawable.ic_menu_os));
+		adapter.add(new SlidingMenuItem(302, getString(R.string.ABOUT), R.drawable.ic_menu_about));
 
 		// Build up the testing/debug menu
 		if (SmsAlarm.DEBUG) {
 			adapter.add(new SlidingMenuItem(getString(R.string.DEBUG_MENU_TITLE_DEVELOP)));
-			adapter.add(new SlidingMenuItem(301, getString(R.string.DEBUG_MENU_TITLE_DISPATCH_MOCK_SMS)));
-			adapter.add(new SlidingMenuItem(302, getString(R.string.DEBUG_MENU_TITLE_NOTIFICATION)));
-			adapter.add(new SlidingMenuItem(303, getString(R.string.DEBUG_MENU_TITLE_ACK_NOTIFICATION)));
-			adapter.add(new SlidingMenuItem(304, getString(R.string.DEBUG_MENU_TITLE_MOCK_SHARED_PREFS)));
+			adapter.add(new SlidingMenuItem(401, getString(R.string.DEBUG_MENU_TITLE_DISPATCH_MOCK_SMS)));
+			adapter.add(new SlidingMenuItem(402, getString(R.string.DEBUG_MENU_TITLE_NOTIFICATION)));
+			adapter.add(new SlidingMenuItem(403, getString(R.string.DEBUG_MENU_TITLE_ACK_NOTIFICATION)));
+			adapter.add(new SlidingMenuItem(404, getString(R.string.DEBUG_MENU_TITLE_MOCK_SHARED_PREFS)));
 		}
 	}
 
@@ -119,23 +121,26 @@ public class SlidingMenuFragment extends SherlockListFragment {
 				fragment = new OtherSettingsFragment();
 				break;
 			case (201):
-				fragment = new OpenSourceFragment();
-				break;
-			case (202):
-				fragment = new AboutFragment();
+				fragment = new AlarmLogFragment();
 				break;
 			case (301):
+				fragment = new OpenSourceFragment();
+				break;
+			case (302):
+				fragment = new AboutFragment();
+				break;
+			case (401):
 				MockSmsDialog mockSmsDialog = new MockSmsDialog();
 				mockSmsDialog.setTargetFragment(SlidingMenuFragment.this, MockSmsDialog.MOCK_SMS_DIALOG_REQUEST_CODE);
 				mockSmsDialog.show(getFragmentManager(), MockSmsDialog.MOCK_SMS_DIALOG_TAG);
 				break;
-			case (302):
+			case (402):
 				DebugUtils.dispatchNotification(getActivity());
 				break;
-			case (303):
+			case (403):
 				DebugUtils.dispatchAcknowledgeNotification(getActivity());
 				break;
-			case (304):
+			case (404):
 				ConfirmMockSharedPreferencesDialog confirmMockSharedPrefsDialog = new ConfirmMockSharedPreferencesDialog();
 				confirmMockSharedPrefsDialog.setTargetFragment(SlidingMenuFragment.this, ConfirmMockSharedPreferencesDialog.CONFIRM_MOCK_SHARED_PREFERENCES_REQUEST_CODE);
 				confirmMockSharedPrefsDialog.show(getFragmentManager(), ConfirmMockSharedPreferencesDialog.CONFIRM_MOCK_SHARED_PREFERENCES_TAG);

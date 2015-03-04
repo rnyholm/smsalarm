@@ -7,6 +7,8 @@
     <string name="MENU_TITLE_SOUND">Ljud och vibration</string>
     <string name="MENU_TITLE_ACKNOWLEDGE">Kvittering</string>
     <string name="MENU_TITLE_OTHER">Övrigt</string>
+    <string name="MENU_TITLE_ALARM_LOG">Larmlogg</string>
+    <string name="MENU_TITLE_ALL_ALARMS_LOG">Alla mottagna larm</string>
     <string name="MENU_TITLE_ABOUT">Om</string>
     <string name="MENU_TITLE_OPEN_SOURCE">Öppen källkod</string>
     <string name="INFO_MISC_SETTINGS">Ställ in din räddningstjänsts namn, om enhetens kamerablixt ska blinka vid inkommande larm och om Sms Alarm ska vara aktiverat.</string>
@@ -21,6 +23,11 @@
     <string name="LICENSE_ITEM_TITLE">License item title</string>
     <string name="LICENSE_ITEM_URI">License item URI</string>
     <string name="LICENSE_SECTION_TITLE">License section title</string>
+    <string name="ALARM_LOG_SECTION_TITLE">Alarm log section title</string>
+    <string name="ALARM_LOG_ITEM_SENDER">Alarm sender</string>
+    <string name="ALARM_LOG_ITEM_MESSAGE">Alarm message</string>
+    <string name="ALARM_LOG_ITEM_DATE">Alarm date</string>
+    <string name="ALARM_LOG_ITEM_IMAGE_DESCR">Alarm log item image</string>
     <string name="MENU_ITEM_TITLE">Menu item title</string>
     <string name="MENU_ITEM_IMAGE_DESCR">Menu item image</string>
     <string name="MENU_SECTION_TITLE">Menu section title</string>

@@ -9,12 +9,12 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.view.KeyEvent;
 import ax.ha.it.smsalarm.R;
+import ax.ha.it.smsalarm.alarm.Alarm;
 import ax.ha.it.smsalarm.fragment.SlidingMenuFragment;
 import ax.ha.it.smsalarm.fragment.SmsSettingsFragment;
 import ax.ha.it.smsalarm.fragment.SoundSettingsFragment;
 import ax.ha.it.smsalarm.fragment.dialog.AlarmSignalDialog;
 import ax.ha.it.smsalarm.handler.DatabaseHandler;
-import ax.ha.it.smsalarm.pojo.Alarm;
 import ax.ha.it.smsalarm.provider.WidgetProvider;
 import ax.ha.it.smsalarm.util.AlarmLogger;
 

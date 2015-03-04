@@ -460,7 +460,7 @@ public class SoundSettingsFragment extends SherlockFragment implements Applicati
 			}
 
 			// Show toast for the user
-			Toast.makeText(context, missingAlarmSignalsMessage.toString() + getText(R.string.ALARM_SIGNALS_REMOVED_DUE_TO_MISSING_PATHS), Toast.LENGTH_LONG).show();
+			Toast.makeText(context, missingAlarmSignalsMessage.toString() + getString(R.string.ALARM_SIGNALS_REMOVED_DUE_TO_MISSING_PATHS), Toast.LENGTH_LONG).show();
 		}
 	}
 

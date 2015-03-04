@@ -15,7 +15,7 @@ import android.os.Environment;
 import android.util.Log;
 import ax.ha.it.smsalarm.R;
 import ax.ha.it.smsalarm.activity.SmsAlarm;
-import ax.ha.it.smsalarm.pojo.Alarm;
+import ax.ha.it.smsalarm.alarm.Alarm;
 
 /**
  * Utility class for logging all {@link Alarm}'s within the database to a dedicated <code>*.html</code> file.<br>
@@ -166,11 +166,11 @@ public class AlarmLogger {
 					}
 
 					// Write the rest HTML for the table row
-					bW.write("\t\t\t\t<td>" + alarm.getReceived() + "</td>" + EOL);
+					bW.write("\t\t\t\t<td>" + alarm.getReceivedLocalized() + "</td>" + EOL);
 					bW.write("\t\t\t\t<td>" + alarm.getSender() + "</td>" + EOL);
 					bW.write("\t\t\t\t<td>" + alarm.getTriggerText() + "</td>" + EOL);
 					bW.write("\t\t\t\t<td>" + alarm.getMessage() + "</td>" + EOL);
-					bW.write("\t\t\t\t<td>" + alarm.getAcknowledged() + "</td>" + EOL);
+					bW.write("\t\t\t\t<td>" + alarm.getAcknowledgedLocalized() + "</td>" + EOL);
 					bW.write("\t\t\t</tr>" + EOL);
 
 					// Increase to get background color on correct rows

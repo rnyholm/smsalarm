@@ -64,7 +64,7 @@ public class SlidingMenuItem {
 	public SlidingMenuItem(int id, String title, int iconResource) {
 		this.id = id;
 		this.title = title;
-		this.optionalIconResource = Optional.fromNullable(iconResource);
+		this.optionalIconResource = Optional.<Integer> fromNullable(iconResource);
 	}
 
 	/**

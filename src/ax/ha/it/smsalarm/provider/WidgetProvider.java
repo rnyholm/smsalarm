@@ -18,11 +18,11 @@ import android.widget.RemoteViews;
 import android.widget.TextView;
 import ax.ha.it.smsalarm.R;
 import ax.ha.it.smsalarm.activity.Splash;
+import ax.ha.it.smsalarm.alarm.Alarm;
 import ax.ha.it.smsalarm.handler.DatabaseHandler;
 import ax.ha.it.smsalarm.handler.SharedPreferencesHandler;
 import ax.ha.it.smsalarm.handler.SharedPreferencesHandler.DataType;
 import ax.ha.it.smsalarm.handler.SharedPreferencesHandler.PrefKey;
-import ax.ha.it.smsalarm.pojo.Alarm;
 import ax.ha.it.smsalarm.util.AlarmLogger;
 
 /**
@@ -235,12 +235,12 @@ public class WidgetProvider extends AppWidgetProvider {
 			StringBuilder alarmInfo = new StringBuilder();
 			StringBuilder alarmMessage = new StringBuilder();
 
-			// Sanity check to see whether alarm object is empty or not
-			if (!alarm.isEmpty()) {
+			// Sanity check to see whether alarm holds valid info or not
+			if (alarm.holdsValidInfo()) {
 				// Build up the string representing the latest alarm from alarm object
 				alarmInfo.append(context.getString(R.string.HTML_WIDGET_RECEIVED));
 				alarmInfo.append(context.getString(R.string.COLON));
-				alarmInfo.append(alarm.getReceived());
+				alarmInfo.append(alarm.getReceivedLocalized());
 				alarmInfo.append(context.getString(R.string.NEW_LINE));
 
 				alarmInfo.append(context.getString(R.string.HTML_WIDGET_SENDER));
@@ -270,7 +270,7 @@ public class WidgetProvider extends AppWidgetProvider {
 
 				alarmInfo.append(context.getString(R.string.HTML_WIDGET_ACK));
 				alarmInfo.append(context.getString(R.string.COLON));
-				alarmInfo.append(alarm.getAcknowledged());
+				alarmInfo.append(alarm.getAcknowledgedLocalized());
 
 				// Return latest alarm as string
 				return alarmInfo.toString();

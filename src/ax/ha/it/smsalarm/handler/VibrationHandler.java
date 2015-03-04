@@ -12,9 +12,9 @@ import android.media.AudioManager;
 import android.os.Vibrator;
 import android.util.Log;
 import ax.ha.it.smsalarm.activity.SmsAlarm;
+import ax.ha.it.smsalarm.alarm.Alarm.AlarmType;
 import ax.ha.it.smsalarm.handler.SharedPreferencesHandler.DataType;
 import ax.ha.it.smsalarm.handler.SharedPreferencesHandler.PrefKey;
-import ax.ha.it.smsalarm.pojo.Alarm.AlarmType;
 
 /**
  * Class responsible for all vibration handling, this means responsible for all interactions with the {@link Vibrator} in this application.<br>

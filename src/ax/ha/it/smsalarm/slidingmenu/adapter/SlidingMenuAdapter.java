@@ -63,7 +63,7 @@ public class SlidingMenuAdapter extends ArrayAdapter<SlidingMenuItem> {
 			title.setText(menuItem.getTitle());
 		} else {
 			convertView = LayoutInflater.from(getContext()).inflate(R.layout.menu_item, null);
-			ImageView icon = (ImageView) convertView.findViewById(R.id.menuItemIcon_iv);
+			ImageView icon = (ImageView) convertView.findViewById(R.id.alarmLogItemIcon_iv);
 
 			// If icon exists set it to image view, else hide image view
 			if (menuItem.getIconResource().isPresent()) {

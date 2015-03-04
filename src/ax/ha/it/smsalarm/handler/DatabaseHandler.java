@@ -3,8 +3,15 @@
  */
 package ax.ha.it.smsalarm.handler;
 
+import java.text.DateFormat;
+import java.text.ParseException;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Comparator;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
+import java.util.TreeMap;
 
 import android.content.ContentValues;
 import android.content.Context;
@@ -13,8 +20,8 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
 import ax.ha.it.smsalarm.activity.SmsAlarm;
-import ax.ha.it.smsalarm.pojo.Alarm;
-import ax.ha.it.smsalarm.pojo.Alarm.AlarmType;
+import ax.ha.it.smsalarm.alarm.Alarm;
+import ax.ha.it.smsalarm.alarm.Alarm.AlarmType;
 
 /**
  * Class responsible for all <code>Database</code> access and handling. <code>Database</code> access and handling are done via the
@@ -27,8 +34,10 @@ import ax.ha.it.smsalarm.pojo.Alarm.AlarmType;
 public class DatabaseHandler extends SQLiteOpenHelper {
 	private static final String LOG_TAG = DatabaseHandler.class.getSimpleName();
 
-	// Database Version
-	private static final int DB_VERSION = 2;
+	// Database Version and the upgrade versions
+	private static final int DB_VERSION = 3;
+	private static final int DB_VERSION_ADD_TRIGGER_TEXT_COL = 2;
+	private static final int DB_VERSION_CHANGE_DATE_FORMAT = DB_VERSION;
 
 	// Database Name
 	private static final String DB_NAME = "alarmsManager";
@@ -79,10 +88,9 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 			Log.d(LOG_TAG + ":onUpgrade()", oldVersion + " -- " + newVersion);
 		}
 
-		// If there is a new version of the database, reconstruct existing database and handle data migration
-		if (newVersion > oldVersion && newVersion == DB_VERSION) {
+		if (oldVersion < DB_VERSION_ADD_TRIGGER_TEXT_COL) {
 			if (SmsAlarm.DEBUG) {
-				Log.d(LOG_TAG + ":onUpgrade()", "Table:\"" + TABLE_ALARMS + "\" already exists, begin upgrade of table structure and data migration");
+				Log.d(LOG_TAG + ":onUpgrade()", "Table:\"" + TABLE_ALARMS + "\" already exists, begin upgrade of table structure by adding column for trigger text and data migration");
 			}
 
 			// The queries needed for the upgrade and data migration
@@ -111,11 +119,108 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 			db.execSQL(DROP_QUERY);
 			if (SmsAlarm.DEBUG) {
 				Log.d(LOG_TAG + ":onUpgrade()", "Executed SQL query:\"" + DROP_QUERY + "\"");
-				Log.d(LOG_TAG + ":onUpgrade()", "Existing table:\"" + TABLE_ALARMS + "\" has been altered by adding column:\"" + KEY_TRIGGER_TEXT + "\" and populating it with existing data");
+				Log.d(LOG_TAG + ":onUpgrade()", "Existing table:\"" + TABLE_ALARMS + "\" has been altered by adding column:\"" + KEY_TRIGGER_TEXT + "\" and populating it with existing data.");
 			}
-		} else {
-			// Table does not exist, create a new table
+		}
+
+		if (oldVersion < DB_VERSION_CHANGE_DATE_FORMAT) {
+			if (SmsAlarm.DEBUG) {
+				Log.d(LOG_TAG + ":onUpgrade()", "Table:\"" + TABLE_ALARMS + "\" already exists, begin upgrade of table structure by changing datatype of timestamps and data migration.");
+			}
+
+			// The queries needed for the upgrade and data migration
+			String ALTER_QUERY = "ALTER TABLE " + TABLE_ALARMS + " RENAME TO " + TMP + TABLE_ALARMS;
+			String DROP_QUERY = "DROP TABLE " + TMP + TABLE_ALARMS;
+			String SELECT_ALL_QUERY = "SELECT * FROM " + TABLE_ALARMS;
+
+			// Fetch all received alarms into a cursor
+			Cursor cursor = db.rawQuery(SELECT_ALL_QUERY, null);
+
+			if (SmsAlarm.DEBUG) {
+				Log.d(LOG_TAG + ":onUpgrade()", "Executed SQL query:\"" + SELECT_ALL_QUERY + "\"");
+			}
+
+			// Rename existing alarm table
+			db.execSQL(ALTER_QUERY);
+
+			if (SmsAlarm.DEBUG) {
+				Log.d(LOG_TAG + ":onUpgrade()", "Executed SQL query:\"" + ALTER_QUERY + "\"");
+			}
+
+			// Create the new and correct table
 			onCreate(db);
+
+			// Iterate through all rows and adding to list
+			if (cursor.moveToFirst()) {
+				do {
+					ContentValues values = new ContentValues();
+					values.put(KEY_SENDER, cursor.getString(2));
+					values.put(KEY_MESSAGE, cursor.getString(3));
+					values.put(KEY_TRIGGER_TEXT, cursor.getString(4));
+					values.put(KEY_ALARM_TYPE, cursor.getInt(6));
+
+					// Get the localized time stamps from the cursor
+					String received = cursor.getString(1);
+					String acknowledged = cursor.getString(5);
+
+					// To store the time stamps in milliseconds
+					long receivedMillisecs = -1;
+					long acknowledgedMillisecs = -1;
+
+					// Iterate through each possible locale to try to find out the correct one for parsing
+					for (Locale locale : Locale.getAvailableLocales()) {
+						try {
+							if (receivedMillisecs < 0) {
+								receivedMillisecs = DateFormat.getDateTimeInstance(DateFormat.DEFAULT, DateFormat.DEFAULT, locale).parse(received).getTime();
+							}
+						} catch (ParseException e) {
+							if (SmsAlarm.DEBUG) {
+								Log.e(LOG_TAG + ":onUpgrade()", "Persisted timestamp for the Alarm received was parsed with wrong locale, try next locale", e);
+							}
+						}
+
+						try {
+							if (acknowledgedMillisecs < 0) {
+								acknowledgedMillisecs = DateFormat.getDateTimeInstance(DateFormat.DEFAULT, DateFormat.DEFAULT, locale).parse(acknowledged).getTime();
+							}
+						} catch (ParseException e) {
+							if (SmsAlarm.DEBUG) {
+								Log.e(LOG_TAG + ":onUpgrade()", "Persisted timestamp for the Alarm acknowledged was parsed with wrong locale or the Alarm has never been acknowledged, try next locale", e);
+							}
+						}
+					}
+
+					// Put the rest of the values and persist to database, if and only if we could parse out time stamp for Alarm received
+					if (receivedMillisecs > -1) {
+						values.put(KEY_RECEIVED, receivedMillisecs);
+						values.put(KEY_ACKNOWLEDGED, acknowledgedMillisecs);
+
+						// Inserting Row
+						db.insert(TABLE_ALARMS, null, values);
+					} else {
+						// Time stamp when the Alarm was received couldn't be resolved for some reason, we dont't want them to exist in the
+						// database anymore
+						if (SmsAlarm.DEBUG) {
+							Log.e(LOG_TAG + ":onUpgrade()", "Date and time when the Alarm was received couldn't be resolved, hence the alarm will not be insrted in the database");
+						}
+					}
+				} while (cursor.moveToNext());
+			}
+
+			// Close the cursor
+			cursor.close();
+
+			if (SmsAlarm.DEBUG) {
+				Log.d(LOG_TAG + ":onUpgrade()", oldVersion + " -- " + newVersion);
+			}
+
+			// Now drop the temporary table
+			db.execSQL(DROP_QUERY);
+
+			if (SmsAlarm.DEBUG) {
+				Log.d(LOG_TAG + ":onUpgrade()", "Executed SQL query:\"" + DROP_QUERY + "\"");
+				Log.d(LOG_TAG + ":onUpgrade()", "Existing table:\"" + TABLE_ALARMS + "\" has been altered by changing datatype of columns:\"" + KEY_RECEIVED + "\" and \"" + KEY_ACKNOWLEDGED + "\". The existing data has been migrated.");
+			}
 		}
 	}
 
@@ -132,12 +237,12 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 		// @formatter:off
 		// Fetch values from alarm and put the into a ContentValues variable
 		ContentValues values = new ContentValues();
-		values.put(KEY_RECEIVED, alarm.getReceived()); 				// Date and time when alarm was received
-		values.put(KEY_SENDER, alarm.getSender()); 					// Sender of the alarm
-		values.put(KEY_MESSAGE, alarm.getMessage()); 				// Alarm message
-		values.put(KEY_TRIGGER_TEXT, alarm.getTriggerText()); 		// Triggering text of a free text alarm
-		values.put(KEY_ACKNOWLEDGED, alarm.getAcknowledged()); 		// Date and time the alarm was acknowledged
-		values.put(KEY_ALARM_TYPE, alarm.getAlarmType().ordinal()); // Type of alarm
+		values.put(KEY_RECEIVED, alarm.getReceivedMillisecs()); 		// Date and time when alarm was received
+		values.put(KEY_SENDER, alarm.getSender()); 						// Sender of the alarm
+		values.put(KEY_MESSAGE, alarm.getMessage()); 					// Alarm message
+		values.put(KEY_TRIGGER_TEXT, alarm.getTriggerText()); 			// Triggering text of a free text alarm
+		values.put(KEY_ACKNOWLEDGED, alarm.getAcknowledgedMillisecs());	// Date and time the alarm was acknowledged
+		values.put(KEY_ALARM_TYPE, alarm.getAlarmType().ordinal()); 	// Type of alarm
 		// @formatter:on
 
 		// Inserting Row
@@ -166,7 +271,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 		}
 
 		// Create a new alarm object with data resolved from cursor
-		Alarm alarm = new Alarm(Integer.parseInt(cursor.getString(0)), cursor.getString(1), cursor.getString(2), cursor.getString(3), cursor.getString(4), cursor.getString(5), AlarmType.of(Integer.parseInt(cursor.getString(6))));
+		Alarm alarm = new Alarm(cursor.getInt(0), cursor.getString(1), cursor.getString(2), cursor.getString(3), cursor.getString(4), cursor.getString(5), AlarmType.of(cursor.getInt(6)));
 
 		// Close cursor and database
 		cursor.close();
@@ -199,7 +304,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 		if (cursor.moveToFirst()) {
 			do {
 				// Create a new alarm object and fill it with data from cursor and add it to the list
-				alarmList.add(new Alarm(Integer.parseInt(cursor.getString(0)), cursor.getString(1), cursor.getString(2), cursor.getString(3), cursor.getString(4), cursor.getString(5), AlarmType.of(Integer.parseInt(cursor.getString(6)))));
+				alarmList.add(new Alarm(cursor.getInt(0), cursor.getString(1), cursor.getString(2), cursor.getString(3), cursor.getString(4), cursor.getString(5), AlarmType.of(cursor.getInt(6))));
 			} while (cursor.moveToNext());
 		}
 
@@ -209,6 +314,61 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 
 		// return contact list
 		return alarmList;
+	}
+
+	public TreeMap<String, HashMap<String, List<Alarm>>> fetchAllAlarmsOrginised() {
+		TreeMap<String, HashMap<String, List<Alarm>>> organisedAlarms = new TreeMap<String, HashMap<String, List<Alarm>>>(new Comparator<String>() {
+			@Override
+			public int compare(String lhs, String rhs) {
+				int lhsYear = Integer.parseInt(lhs.substring(lhs.length() - 4));
+				int rhsYear = Integer.parseInt(rhs.substring(rhs.length() - 4));
+
+				if (lhsYear < rhsYear) {
+					return 1;
+				} else if (lhsYear > rhsYear) {
+					return -1;
+				}
+
+				return 0;
+			}
+		});
+
+		HashMap<String, List<Alarm>> alarmsPerMonth = new HashMap<String, List<Alarm>>();
+		List<Alarm> alarms = new ArrayList<Alarm>();
+
+		for (Alarm alarm : fetchAllAlarm()) {
+			// Get a calendar instance and set time from time and date when the alarm was received
+			Calendar calendar = Calendar.getInstance();
+
+			calendar.setTime(alarm.getReceived());
+			// Get year and month when the alarm was received
+			String yearReceived = String.valueOf(calendar.get(Calendar.YEAR));
+			String monthReceived = calendar.getDisplayName(Calendar.MONTH, Calendar.LONG, Locale.getDefault());
+
+			if (organisedAlarms.containsKey(yearReceived)) {
+				alarmsPerMonth = organisedAlarms.get(yearReceived);
+
+				if (alarmsPerMonth.containsKey(monthReceived)) {
+					alarms = alarmsPerMonth.get(monthReceived);
+					alarms.add(alarm);
+					alarmsPerMonth.put(monthReceived, alarms);
+				} else {
+					alarms = new ArrayList<Alarm>();
+					alarms.add(alarm);
+					alarmsPerMonth = new HashMap<String, List<Alarm>>();
+					alarmsPerMonth.put(monthReceived, alarms);
+				}
+			} else {
+				alarms = new ArrayList<Alarm>();
+				alarms.add(alarm);
+				alarmsPerMonth = new HashMap<String, List<Alarm>>();
+				alarmsPerMonth.put(monthReceived, alarms);
+			}
+
+			organisedAlarms.put(yearReceived, alarmsPerMonth);
+		}
+
+		return organisedAlarms;
 	}
 
 	/**
@@ -262,12 +422,12 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 		// @formatter:off
 		// Fetch values from alarm and put the into a ContentValues variable
 		ContentValues values = new ContentValues();
-		values.put(KEY_RECEIVED, alarm.getReceived()); 				// Date and time when alarm was received
-		values.put(KEY_SENDER, alarm.getSender()); 					// Sender of the alarm
-		values.put(KEY_MESSAGE, alarm.getMessage()); 				// Alarm message
-		values.put(KEY_TRIGGER_TEXT, alarm.getTriggerText()); 		// Triggering text of a free text alarm
-		values.put(KEY_ACKNOWLEDGED, alarm.getAcknowledged()); 		// Date and time the alarm was acknowledged
-		values.put(KEY_ALARM_TYPE, alarm.getAlarmType().ordinal()); // Type of alarm
+		values.put(KEY_RECEIVED, alarm.getReceivedMillisecs()); 		// Date and time when alarm was received
+		values.put(KEY_SENDER, alarm.getSender()); 						// Sender of the alarm
+		values.put(KEY_MESSAGE, alarm.getMessage()); 					// Alarm message
+		values.put(KEY_TRIGGER_TEXT, alarm.getTriggerText()); 			// Triggering text of a free text alarm
+		values.put(KEY_ACKNOWLEDGED, alarm.getAcknowledgedMillisecs());	// Date and time the alarm was acknowledged
+		values.put(KEY_ALARM_TYPE, alarm.getAlarmType().ordinal()); 	// Type of alarm
 		// @formatter:on
 
 		// Updating row

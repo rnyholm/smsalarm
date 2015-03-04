@@ -3,5 +3,6 @@
     <dimen name="slidingmenu_offset">60dp</dimen>
     <dimen name="menu_list_padding">10dp</dimen>
     <dimen name="license_list_padding">5dp</dimen>
+    <dimen name="alarm_log_list_padding">5dp</dimen>
     <dimen name="shadow_width">15dp</dimen>
 </resources>
