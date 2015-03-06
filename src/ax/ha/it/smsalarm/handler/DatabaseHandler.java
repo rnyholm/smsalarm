@@ -18,8 +18,6 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
-import android.util.Log;
-import ax.ha.it.smsalarm.activity.SmsAlarm;
 import ax.ha.it.smsalarm.alarm.Alarm;
 import ax.ha.it.smsalarm.alarm.Alarm.AlarmType;
 
@@ -76,23 +74,12 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 		String CREATE_ALARMS_TABLE = "CREATE TABLE " + TABLE_ALARMS + "(" + KEY_ID + " INTEGER PRIMARY KEY," + KEY_RECEIVED + " TEXT DEFAULT ''," + KEY_SENDER + " TEXT DEFAULT ''," + KEY_MESSAGE + " TEXT DEFAULT ''," + KEY_TRIGGER_TEXT + " TEXT DEFAULT '-'," + KEY_ACKNOWLEDGED + " TEXT DEFAULT ''," + KEY_ALARM_TYPE + " INTEGER)";
 		// Run query
 		db.execSQL(CREATE_ALARMS_TABLE);
-
-		if (SmsAlarm.DEBUG) {
-			Log.d(LOG_TAG + ":onCreate()", "Executed SQL query:\"" + CREATE_ALARMS_TABLE + "\"");
-		}
 	}
 
 	@Override
 	public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-		if (SmsAlarm.DEBUG) {
-			Log.d(LOG_TAG + ":onUpgrade()", oldVersion + " -- " + newVersion);
-		}
-
+		// Upgrade handling for adding free text trigger columns
 		if (oldVersion < DB_VERSION_ADD_TRIGGER_TEXT_COL) {
-			if (SmsAlarm.DEBUG) {
-				Log.d(LOG_TAG + ":onUpgrade()", "Table:\"" + TABLE_ALARMS + "\" already exists, begin upgrade of table structure by adding column for trigger text and data migration");
-			}
-
 			// The queries needed for the upgrade and data migration
 			String ALTER_QUERY = "ALTER TABLE " + TABLE_ALARMS + " RENAME TO " + TMP + TABLE_ALARMS;
 			String DROP_QUERY = "DROP TABLE " + TMP + TABLE_ALARMS;
@@ -101,54 +88,31 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 			// Begin data migration and reconstruction of existing database, beginning with renaming existing table
 			db.execSQL(ALTER_QUERY);
 
-			if (SmsAlarm.DEBUG) {
-				Log.d(LOG_TAG + ":onUpgrade()", "Executed SQL query:\"" + ALTER_QUERY + "\"");
-			}
-
 			// Create the new and correct table
 			onCreate(db);
 
 			// Populate new table with existing data from old table(now seen as a temporary table)
 			db.execSQL(INSERT_QUERY);
 
-			if (SmsAlarm.DEBUG) {
-				Log.d(LOG_TAG + ":onUpgrade()", oldVersion + " -- " + newVersion);
-			}
-
 			// Now drop the temporary table
 			db.execSQL(DROP_QUERY);
-			if (SmsAlarm.DEBUG) {
-				Log.d(LOG_TAG + ":onUpgrade()", "Executed SQL query:\"" + DROP_QUERY + "\"");
-				Log.d(LOG_TAG + ":onUpgrade()", "Existing table:\"" + TABLE_ALARMS + "\" has been altered by adding column:\"" + KEY_TRIGGER_TEXT + "\" and populating it with existing data.");
-			}
 		}
 
+		// Upgrade handling for changing date format of received alarms
 		if (oldVersion < DB_VERSION_CHANGE_DATE_FORMAT) {
-			if (SmsAlarm.DEBUG) {
-				Log.d(LOG_TAG + ":onUpgrade()", "Table:\"" + TABLE_ALARMS + "\" already exists, begin upgrade of table structure by changing datatype of timestamps and data migration.");
-			}
-
 			// The queries needed for the upgrade and data migration
 			String ALTER_QUERY = "ALTER TABLE " + TABLE_ALARMS + " RENAME TO " + TMP + TABLE_ALARMS;
 			String DROP_QUERY = "DROP TABLE " + TMP + TABLE_ALARMS;
-			String SELECT_ALL_QUERY = "SELECT * FROM " + TABLE_ALARMS;
-
-			// Fetch all received alarms into a cursor
-			Cursor cursor = db.rawQuery(SELECT_ALL_QUERY, null);
-
-			if (SmsAlarm.DEBUG) {
-				Log.d(LOG_TAG + ":onUpgrade()", "Executed SQL query:\"" + SELECT_ALL_QUERY + "\"");
-			}
+			String SELECT_ALL_QUERY = "SELECT * FROM " + TMP + TABLE_ALARMS;
 
 			// Rename existing alarm table
 			db.execSQL(ALTER_QUERY);
 
-			if (SmsAlarm.DEBUG) {
-				Log.d(LOG_TAG + ":onUpgrade()", "Executed SQL query:\"" + ALTER_QUERY + "\"");
-			}
-
 			// Create the new and correct table
 			onCreate(db);
+
+			// Fetch all received alarms into a cursor
+			Cursor cursor = db.rawQuery(SELECT_ALL_QUERY, null);
 
 			// Iterate through all rows and adding to list
 			if (cursor.moveToFirst()) {
@@ -174,9 +138,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 								receivedMillisecs = DateFormat.getDateTimeInstance(DateFormat.DEFAULT, DateFormat.DEFAULT, locale).parse(received).getTime();
 							}
 						} catch (ParseException e) {
-							if (SmsAlarm.DEBUG) {
-								Log.e(LOG_TAG + ":onUpgrade()", "Persisted timestamp for the Alarm received was parsed with wrong locale, try next locale", e);
-							}
+							// Swallow this, as this functionality relies on an exception
 						}
 
 						try {
@@ -184,25 +146,17 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 								acknowledgedMillisecs = DateFormat.getDateTimeInstance(DateFormat.DEFAULT, DateFormat.DEFAULT, locale).parse(acknowledged).getTime();
 							}
 						} catch (ParseException e) {
-							if (SmsAlarm.DEBUG) {
-								Log.e(LOG_TAG + ":onUpgrade()", "Persisted timestamp for the Alarm acknowledged was parsed with wrong locale or the Alarm has never been acknowledged, try next locale", e);
-							}
+							// Swallow this, as this functionality relies on an exception
 						}
 					}
 
 					// Put the rest of the values and persist to database, if and only if we could parse out time stamp for Alarm received
 					if (receivedMillisecs > -1) {
-						values.put(KEY_RECEIVED, receivedMillisecs);
-						values.put(KEY_ACKNOWLEDGED, acknowledgedMillisecs);
+						values.put(KEY_RECEIVED, String.valueOf(receivedMillisecs));
+						values.put(KEY_ACKNOWLEDGED, acknowledgedMillisecs == -1 ? "-" : String.valueOf(acknowledgedMillisecs));
 
 						// Inserting Row
 						db.insert(TABLE_ALARMS, null, values);
-					} else {
-						// Time stamp when the Alarm was received couldn't be resolved for some reason, we dont't want them to exist in the
-						// database anymore
-						if (SmsAlarm.DEBUG) {
-							Log.e(LOG_TAG + ":onUpgrade()", "Date and time when the Alarm was received couldn't be resolved, hence the alarm will not be insrted in the database");
-						}
 					}
 				} while (cursor.moveToNext());
 			}
@@ -210,17 +164,8 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 			// Close the cursor
 			cursor.close();
 
-			if (SmsAlarm.DEBUG) {
-				Log.d(LOG_TAG + ":onUpgrade()", oldVersion + " -- " + newVersion);
-			}
-
 			// Now drop the temporary table
 			db.execSQL(DROP_QUERY);
-
-			if (SmsAlarm.DEBUG) {
-				Log.d(LOG_TAG + ":onUpgrade()", "Executed SQL query:\"" + DROP_QUERY + "\"");
-				Log.d(LOG_TAG + ":onUpgrade()", "Existing table:\"" + TABLE_ALARMS + "\" has been altered by changing datatype of columns:\"" + KEY_RECEIVED + "\" and \"" + KEY_ACKNOWLEDGED + "\". The existing data has been migrated.");
-			}
 		}
 	}
 
@@ -316,8 +261,8 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 		return alarmList;
 	}
 
-	public TreeMap<String, HashMap<String, List<Alarm>>> fetchAllAlarmsOrginised() {
-		TreeMap<String, HashMap<String, List<Alarm>>> organisedAlarms = new TreeMap<String, HashMap<String, List<Alarm>>>(new Comparator<String>() {
+	public TreeMap<String, HashMap<String, List<Alarm>>> fetchAllAlarmsOrganized() {
+		TreeMap<String, HashMap<String, List<Alarm>>> organizedAlarms = new TreeMap<String, HashMap<String, List<Alarm>>>(new Comparator<String>() {
 			@Override
 			public int compare(String lhs, String rhs) {
 				int lhsYear = Integer.parseInt(lhs.substring(lhs.length() - 4));
@@ -345,8 +290,8 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 			String yearReceived = String.valueOf(calendar.get(Calendar.YEAR));
 			String monthReceived = calendar.getDisplayName(Calendar.MONTH, Calendar.LONG, Locale.getDefault());
 
-			if (organisedAlarms.containsKey(yearReceived)) {
-				alarmsPerMonth = organisedAlarms.get(yearReceived);
+			if (organizedAlarms.containsKey(yearReceived)) {
+				alarmsPerMonth = organizedAlarms.get(yearReceived);
 
 				if (alarmsPerMonth.containsKey(monthReceived)) {
 					alarms = alarmsPerMonth.get(monthReceived);
@@ -365,10 +310,10 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 				alarmsPerMonth.put(monthReceived, alarms);
 			}
 
-			organisedAlarms.put(yearReceived, alarmsPerMonth);
+			organizedAlarms.put(yearReceived, alarmsPerMonth);
 		}
 
-		return organisedAlarms;
+		return organizedAlarms;
 	}
 
 	/**

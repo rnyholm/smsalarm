@@ -53,7 +53,7 @@ public class AlarmLogFragment extends SherlockListFragment {
 		// Initialize database handler object from context
 		db = new DatabaseHandler(getActivity());
 
-		TreeMap<String, HashMap<String, List<Alarm>>> organisedAlarms = db.fetchAllAlarmsOrginised();
+		TreeMap<String, HashMap<String, List<Alarm>>> organisedAlarms = db.fetchAllAlarmsOrganized();
 
 		Iterator<Entry<String, HashMap<String, List<Alarm>>>> it0 = organisedAlarms.entrySet().iterator();
 		while (it0.hasNext()) {
