@@ -20,20 +20,6 @@
     <string name="FLASH_NOTIFICATION_NOT_SUPPORTED_MISSING_BACK_FACING_CAMERA">Blixtnotifikation stöds inte på grund av att enheten saknar en bakåtriktad kamera.</string>
     <string name="LICENSE_APACHE_TITLE">Apache-Licenser</string>
     <string name="LICENSE_OTHER_TITLE">Licenser</string>
-    <string name="LICENSE_ITEM_TITLE">License item title</string>
-    <string name="LICENSE_ITEM_URI">License item URI</string>
-    <string name="LICENSE_SECTION_TITLE">License section title</string>
-    <string name="ALARM_LOG_SECTION_TITLE">Alarm log section title</string>
-    <string name="ALARM_LOG_ITEM_SENDER">Alarm sender</string>
-    <string name="ALARM_LOG_ITEM_MESSAGE">Alarm message</string>
-    <string name="ALARM_LOG_ITEM_DATE">Alarm date</string>
-    <string name="ALARM_LOG_ITEM_IMAGE_DESCR">Alarm log item image</string>
-    <string name="MENU_ITEM_TITLE">Menu item title</string>
-    <string name="MENU_ITEM_IMAGE_DESCR">Menu item image</string>
-    <string name="MENU_SECTION_TITLE">Menu section title</string>
-    <string name="SELECTED_ALARM_SIGNAL">Vald larmsignal</string>
-    <string name="SELECTED_ALARM_VIBRATION">Vald vibration</string>
-    <string name="RIGHT_TURNED_ARROW_DESCR">Högervänd pil</string>
     <string name="TITLE_ALARM_SIGNALS">Larmsignaler</string>
     <string name="TITLE_ALARM_VIBRATIONS">Vibrationsmönster</string>
     <string name="TITLE_SOUND_SETTINGS">Ljud- och vibrationsinställningar</string>
@@ -42,12 +28,45 @@
     <string name="ALARM_SIGNALS_REMOVED_DUE_TO_MISSING_PATHS">har tagits bort från listan av larmsignaler eftersom de/dem inte kunde hittas på enheten.</string>
     <string name="TITLE_PLAY_ALARM_SIGNAL_REPEATEDLY_SETTING">Spela upp larmsignalen oavbrutet</string>
     <string name="INFO_PLAY_ALARM_SIGNAL_REPEATEDLY_SETTING">Om vald kommer larmsignalen för både primär- och sekundärlarm att spelas oavbrutet tills notifikationen för inkommande larm har hanterats.</string>
-    <string name="ALARM_VIBRATION_PROMPT_TITLE">Välj vibrationsmönster</string> 
-    <!-- OK IN ENGLISH, GERMAN BEGIN -->
+    <string name="ALARM_VIBRATION_PROMPT_TITLE">Välj vibrationsmönster</string>
+    <!-- OK IN ENGLIS AND GERMAN BEGIN -->
     <string name="INFO_USE_OS_SOUND_SETTINGS">Om vald tar Sms Alarm hänsyn till enhetens ringvolym och ljudlöst läge.</string>
     <string name="TITLE_USE_OS_SOUND_SETTINGS">Använd enhetens ljudinställningar</string>
-    <!-- OK IN ENGLISH, GERMAN END -->
+    <!-- OK IN ENGLISH AND GERMAN END -->
     <!-- NEW STRINGS IN v.2.3.1 END -->
+    
+    <!-- DUMMY STRINGS(PLACEHOLDER AND DESCRIPTIVES), ONLY ENGLISH - BEGIN -->
+    <string name="ACK_ICON_CONTENT_DESCR">Acknowledge alarm icon</string>
+    <string name="ALARM_INFO_SENDER">Alarm sender</string>
+    <string name="ALARM_INFO_RECEIVED">Alarm received</string>
+    <string name="ALARM_INFO_TRIGGER_TEXT">Alarm trigging word</string>
+    <string name="ALARM_LOG_ITEM_DATE_RECEIVED">Alarm date received</string>
+    <string name="ALARM_LOG_ITEM_IMAGE_DESCR">Alarm log item image</string>
+    <string name="ALARM_LOG_ITEM_MESSAGE">Alarm message</string>
+    <string name="ALARM_LOG_ITEM_SENDER">Alarm sender</string>
+    <string name="ALARM_LOG_SECTION_TITLE">Alarm log section title</string>
+    <string name="DIVIDER_DESCR">Divider</string>
+    <string name="LICENSE_ITEM_TITLE">License item title</string>
+    <string name="LICENSE_ITEM_URI">License item URI</string>
+    <string name="LICENSE_SECTION_TITLE">License section title</string>
+    <string name="MENU_ITEM_IMAGE_DESCR">Menu item image</string>
+    <string name="MENU_ITEM_TITLE">Menu item title</string>
+    <string name="MENU_SECTION_TITLE">Menu section title</string>
+    <string name="SELECTED_ALARM_SIGNAL">Selected alarm signal</string>
+    <string name="SELECTED_ALARM_VIBRATION">Selected vibration</string>
+    <string name="SPLASH_DESCR">Splash</string>
+    <string name="RIGHT_TURNED_ARROW_DESCR">Right turned arrow</string>
+    <string name="VERTICAL_DIVIDER_DESCR">Vertical divider</string>
+    <string name="WIDGET_ICON_CONTENT_DESCR">Widget sms alarm icon</string>
+    <!-- DUMMY STRINGS(PLACEHOLDER AND DESCRIPTIVES), ONLY ENGLISH - END -->
+    
+    <!-- APPLICATION INFO BEGIN -->
+    <string name="APP_NAME">Sms Alarm</string>
+    <string name="APP_DESCR">The Alarm application for Android&#8482;</string>
+	<string name="APP_VERSION">2.3.1beta</string>   
+	<string name="APP_BUILD">20150216</string>
+	<!-- APPLICATION INFO END -->
+    
     <string name="ABOUT">About Sms Alarm</string>
     <string name="ABOUT_BUILD">Build: %s</string>
 	<string name="ABOUT_COPYRIGHT">&#169;Copyright Robert Nyholm</string>
@@ -59,18 +78,16 @@
     <string name="ACK">Acknowledge Alarm</string>  
     <string name="ACK_CANNOT">Can not acknowledge! No telephone number for acknowledgment is given.</string> 
     <string name="ACK_FULL_MESSAGE">Complete alarm message</string>
-    <string name="ACK_ICON_CONTENT_DESCR">Acknowledge alarm icon</string>
     <string name="ACK_LINE_BUSY">Line busy, will call back in:</string>
     <string name="ACK_NUMBER_PROMPT_MESSAGE">Enter a telephone number for the application to send an acknowledgment to.</string>  
     <string name="ACK_TITLE">Acknowledgment title (with rescue service name)</string>  
 	<string name="ADD">Add</string>       
     <string name="ALARM">ALARM!</string>
-    <!-- Application info begin -->
-    <string name="APP_NAME">Sms Alarm</string>
-    <string name="APP_DESCR">The Alarm application for Android&#8482;</string>
-	<string name="APP_VERSION">2.3.1beta</string>   
-	<string name="APP_BUILD">20150216</string>
-	<!-- Application info end -->
+    <string name="ALARM_INFO_ACKNOWLEDGED_TITLE">Acknowledged</string>    
+    <string name="ALARM_INFO_ALARM_TITLE">Alarm</string>    
+    <string name="ALARM_INFO_RECEIVED_TITLE">Received</string>
+    <string name="ALARM_INFO_SENDER_TITLE">Sender</string>
+    <string name="ALARM_INFO_TRIGGER_TEXT_TITLE">Trigger word</string>
     <string name="CANCEL">Cancel</string>
 	<string name="COLON">:</string>
     <string name="DASH">-</string>
@@ -82,7 +99,6 @@
     <string name="DELETE_PRIMARY_NUMBER_PROMPT_MESSAGE">Do you want to remove following number from the list of primary alarms:</string>
     <string name="DELETE_SECONDARY_NUMBER_PROMPT_MESSAGE">Do you want to remove following number from the list of secondary alarms:</string>
     <string name="DELETE_SECONDARY_NUMBER_PROMPT_TITLE">Remove number</string> 
-    <string name="DIVIDER_DESCR">Divider</string>
     <string name="DUPLICATED_FREE_TEXTS">Word for primary and secondary alarm cannot be same. Enter a new word.</string>
     <string name="DUPLICATED_NUMBERS">Telephone number for primary and secondary alarms may not be the same. Enter a new telephone number.</string>
     <string name="EDIT_NUMBER">Edit number</string>   
@@ -100,12 +116,6 @@
     <string name="FREE_TEXT_ALREADY_IN_SECONDARY_LIST">The specified word already exists in the list of words for secondary alarm. Enter a new word.</string>
     <string name="FREE_TEXT_PROMPT_HINT">Word..</string>
     <string name="FREE_TEXT_PROMPT_TITLE">Enter a word</string>
-    <string name="HTML_WIDGET_ACK">Acknowledged</string>    
-    <string name="HTML_WIDGET_LARM">Alarm</string>    
-    <string name="HTML_WIDGET_RECEIVED_ALARMS">Received Alarm</string>
-    <string name="HTML_WIDGET_RECEIVED">Received</string>
-    <string name="HTML_WIDGET_SENDER">Sender</string>
-    <string name="HTML_WIDGET_TRIGGER_TEXT">Trigger word</string>
     <string name="INFO_ACK_SETTINGS">Set if alarm acknowlegment should be used and in such case which telephone number the acknowledgment should use.</string>
     <string name="INFO_ENABLE_ACKNOWLEDGE">If selected primary alarm can be acknowledged.</string>
     <string name="INFO_ENABLE_SMS_ALARM">If selected Sms Alarm will contact given telephone number, otherwise the application will not.</string>
@@ -145,7 +155,6 @@
     <string name="SMS_ALARM_STATUS_DISABLED">Sms Alarm is NOT ENABLED.</string>
     <string name="SOUND_SETTINGS_STATUS_ENABLED">The application DETECTS the device sound settings.</string>
     <string name="SOUND_SETTINGS_STATUS_DISABLED">The application DOES NOT DETECT the device sound settings.</string> 
-	<string name="SPLASH_DESCR">Splash</string>
     <string name="SPLASH_VERSION">v%s</string> 
     <string name="TEXT_IS_NEEDED">A word must be entered in order to save.</string>
     <string name="TITLE_ACK_NUMBER">Sms Alarm acknowledges to this telephone number</string> 
@@ -160,11 +169,10 @@
     <string name="TITLE_SECONDARY_ALARM">Secondary alarm</string>
     <string name="TITLE_SMS_SETTINGS">Sms settings</string>
   	<string name="TONE_PROMPT_TITLE">Select alarm signal</string>   
-    <string name="VERTICAL_DIVIDER_DESCR">Vertical divider</string>
-  	<string name="WIDGET_ICON_CONTENT_DESCR">Widget sms alarm icon</string>
   	<string name="WIDGET_NOT_AGREED_EULA">You must start Sms Alarm and agree to the user agreement before you may use this widget.</string>
     <string name="YES">Yes</string>
-    <!-- Strings for development/debug(only exists in default) begin -->
+    
+    <!-- STRINGS FOR DEVELOPMENT/DEBUG(ONLY EXISTS IN ENGLISH) - BEGIN -->
     <string name="DEBUG_MENU_TITLE_DEVELOP">Develop Tools</string>
     <string name="DEBUG_MENU_TITLE_DISPATCH_MOCK_SMS">Dispatch Mock SMS</string>
     <string name="DEBUG_MENU_TITLE_MOCK_SHARED_PREFS">Mock Shared Preferences</string>
@@ -181,5 +189,5 @@
     <string name="DEBUG_CANCEL">Cancel</string>
     <string name="DEBUG_YES">Yes</string>
     <string name="DEBUG_NO">No</string>
-    <!-- Strings for development/debug end -->
+    <!-- STRINGS FOR DEVELOPMENT/DEBUG(ONLY EXISTS IN ENGLISH) - BEGIN -->
 </resources>

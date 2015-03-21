@@ -10,12 +10,16 @@
     <string name="ACK">Kvittera Larm</string>  
     <string name="ACK_CANNOT">Kan ej kvittera! Inget telefonnummer att kvittera till är angivet.</string> 
     <string name="ACK_FULL_MESSAGE">Fullständigt larm meddelande</string>
-    <string name="ACK_ICON_CONTENT_DESCR">Kvittera larm ikon</string>
     <string name="ACK_LINE_BUSY">Upptaget, återuppringer om:</string>
     <string name="ACK_NUMBER_PROMPT_MESSAGE">Ange ett telefonnummer som applikationen kvitterar till.</string>  
     <string name="ACK_TITLE">Kvitterings titel(med räddningstjänsts namn)</string>  
 	<string name="ADD">Lägg till</string>       
     <string name="ALARM">LARM!</string>
+    <string name="ALARM_INFO_ACKNOWLEDGED_TITLE">Kvitterat</string>    
+    <string name="ALARM_INFO_ALARM_TITLE">Larm</string>
+    <string name="ALARM_INFO_RECEIVED_TITLE">Mottaget</string>
+    <string name="ALARM_INFO_SENDER_TITLE">Avsändare</string>
+    <string name="ALARM_INFO_TRIGGER_TEXT_TITLE">Triggande ord</string>
     <string name="APP_DESCR">Larmapplikationen för Android&#8482;</string>
     <string name="APP_NAME">Sms Alarm</string>
     <string name="CANCEL">Avbryt</string>
@@ -26,7 +30,6 @@
     <string name="DELETE_SECONDARY_NUMBER_PROMPT_MESSAGE">Vill du ta bort följande nummer från listan över sekundärlarm: </string>
     <string name="DELETE_PRIMARY_FREE_TEXT_PROMPT_MESSAGE">Vill du ta bort följande ord från listan över primärlarm: </string>
     <string name="DELETE_SECONDARY_FREE_TEXT_PROMPT_MESSAGE">Vill du ta bort följande ord från listan över sekundärlarm: </string>
-    <string name="DIVIDER_DESCR">Delare</string>
     <string name="DUPLICATED_FREE_TEXTS">Ord för primär- och sekundärlarm får inte vara lika. Ange ett nytt ord.</string>
     <string name="DUPLICATED_NUMBERS">Telefonnummer för primär- och sekundärlarm får inte vara lika. Ange ett nytt telefonnummer.</string>
     <string name="EDIT_NUMBER">Ändra nummer</string>   
@@ -43,12 +46,6 @@
     <string name="FREE_TEXT_ALREADY_IN_SECONDARY_LIST">Angivet ord finns redan i listan av ord för sekundärlarm. Ange ett nytt ord.</string>
     <string name="FREE_TEXT_PROMPT_HINT">Ord..</string>
     <string name="FREE_TEXT_PROMPT_TITLE">Ange ord</string>
-    <string name="HTML_WIDGET_ACK">Kvitterat</string>    
-    <string name="HTML_WIDGET_LARM">Larm</string>    
-    <string name="HTML_WIDGET_RECEIVED_ALARMS">Mottagna Larm</string>
-    <string name="HTML_WIDGET_RECEIVED">Mottaget</string>
-    <string name="HTML_WIDGET_SENDER">Avsändare</string>
-    <string name="HTML_WIDGET_TRIGGER_TEXT">Triggande ord</string>
     <string name="INFO_ACK_SETTINGS">Ställ in om larmkvittering skall användas och i sådana fall vilket telefonnummer som kvitteringen sker mot.</string>
     <string name="INFO_ENABLE_ACKNOWLEDGE">Om vald kan primärlarm kvitteras.</string>
     <string name="INFO_ENABLE_SMS_ALARM">Om vald larmar Sms Alarm på angivna telefonnummer, annars gör applikationen inte det.</string>
@@ -93,8 +90,6 @@
     <string name="TITLE_SECONDARY_ALARM">Sekundärlarm</string>
     <string name="TITLE_SMS_SETTINGS">Sms-inställningar</string>
   	<string name="TONE_PROMPT_TITLE">Välj larmsignal</string>   
-    <string name="VERTICAL_DIVIDER_DESCR">Vertikal delare</string>
-  	<string name="WIDGET_ICON_CONTENT_DESCR">Widget smsalarmikon</string>
   	<string name="WIDGET_NOT_AGREED_EULA">Du måste starta Sms Alarm och godkänna användaravtalet innan du kan använda denna widget.</string>
     <string name="YES">Ja</string>  
 </resources>

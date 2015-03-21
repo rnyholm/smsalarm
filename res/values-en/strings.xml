@@ -10,12 +10,16 @@
     <string name="ACK">Acknowledge Alarm</string>  
     <string name="ACK_CANNOT">Can not acknowledge! No telephone number for acknowledgment is given.</string> 
     <string name="ACK_FULL_MESSAGE">Complete alarm message</string>
-    <string name="ACK_ICON_CONTENT_DESCR">Acknowledge alarm icon</string>
     <string name="ACK_LINE_BUSY">Line busy, will call back in:</string>
     <string name="ACK_NUMBER_PROMPT_MESSAGE">Enter a telephone number for the application to send an acknowledgment to.</string>  
     <string name="ACK_TITLE">Acknowledgment title (with rescue service name)</string>  
 	<string name="ADD">Add</string>       
     <string name="ALARM">ALARM!</string>
+    <string name="ALARM_INFO_ACKNOWLEDGED_TITLE">Acknowledged</string>    
+    <string name="ALARM_INFO_ALARM_TITLE">Alarm</string>    
+    <string name="ALARM_INFO_RECEIVED_TITLE">Received</string>
+    <string name="ALARM_INFO_SENDER_TITLE">Sender</string>
+    <string name="ALARM_INFO_TRIGGER_TEXT_TITLE">Trigger word</string>
     <string name="APP_DESCR">The Alarm application for Android&#8482;</string>
     <string name="APP_NAME">Sms Alarm</string>
     <string name="CANCEL">Cancel</string>
@@ -26,7 +30,6 @@
     <string name="DELETE_SECONDARY_FREE_TEXT_PROMPT_MESSAGE">Do you want to remove following word from the list of secondary alarms:</string>
     <string name="DELETE_PRIMARY_NUMBER_PROMPT_MESSAGE">Do you want to remove following number from the list of primary alarms:</string>
     <string name="DELETE_SECONDARY_NUMBER_PROMPT_MESSAGE">Do you want to remove following number from the list of secondary alarms:</string>
-    <string name="DIVIDER_DESCR">Divider</string>
     <string name="DUPLICATED_FREE_TEXTS">Word for primary and secondary alarm cannot be same. Enter a new word.</string>
     <string name="DUPLICATED_NUMBERS">Telephone number for primary and secondary alarms may not be the same. Enter a new telephone number.</string>
     <string name="EDIT_NUMBER">Edit number</string>   
@@ -43,12 +46,6 @@
     <string name="FREE_TEXT_ALREADY_IN_SECONDARY_LIST">The specified word already exists in the list of words for secondary alarm. Enter a new word.</string>
     <string name="FREE_TEXT_PROMPT_HINT">Word..</string>
     <string name="FREE_TEXT_PROMPT_TITLE">Enter a word</string>
-    <string name="HTML_WIDGET_ACK">Acknowledged</string>    
-    <string name="HTML_WIDGET_LARM">Alarm</string>    
-    <string name="HTML_WIDGET_RECEIVED_ALARMS">Received Alarm</string>
-    <string name="HTML_WIDGET_RECEIVED">Received</string>
-    <string name="HTML_WIDGET_SENDER">Sender</string>
-    <string name="HTML_WIDGET_TRIGGER_TEXT">Trigger word</string>
     <string name="INFO_ACK_SETTINGS">Set if alarm acknowlegment should be used and in such case which telephone number the acknowledgment should use.</string>
     <string name="INFO_ENABLE_ACKNOWLEDGE">If selected primary alarm can be acknowledged.</string>
     <string name="INFO_ENABLE_SMS_ALARM">If selected Sms Alarm will contact given telephone number, otherwise the application will not.</string>
@@ -95,8 +92,6 @@
     <string name="TITLE_SMS_SETTINGS">Sms settings</string>
     <string name="TITLE_USE_OS_SOUND_SETTINGS">Use the device sound settings</string>
   	<string name="TONE_PROMPT_TITLE">Select alarm signal</string>   
-    <string name="VERTICAL_DIVIDER_DESCR">Vertical divider</string>
-  	<string name="WIDGET_ICON_CONTENT_DESCR">Widget sms alarm icon</string>
   	<string name="WIDGET_NOT_AGREED_EULA">You must start Sms Alarm and agree to the user agreement before you may use this widget.</string>
     <string name="YES">Yes</string>  
 </resources>
