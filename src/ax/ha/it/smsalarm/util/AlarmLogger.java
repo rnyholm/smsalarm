@@ -145,15 +145,15 @@ public class AlarmLogger {
 				bW.write("\t</head>" + EOL);
 				bW.write("" + EOL);
 				bW.write("\t<body>" + EOL);
-				bW.write("\t\t<h1>" + context.getString(R.string.APP_NAME) + " " + context.getString(R.string.DASH) + " " + context.getString(R.string.HTML_WIDGET_RECEIVED_ALARMS) + "</h1>" + EOL);
+				bW.write("\t\t<h1>" + context.getString(R.string.APP_NAME) + " " + context.getString(R.string.DASH) + "Received Alarms</h1>" + EOL);
 				bW.write("" + EOL);
 				bW.write("\t\t<table id=\"smsalarm\">" + EOL);
 				bW.write("\t\t\t<tr>" + EOL);
-				bW.write("\t\t\t\t<th>" + context.getString(R.string.HTML_WIDGET_RECEIVED) + "</th>" + EOL);
-				bW.write("\t\t\t\t<th>" + context.getString(R.string.HTML_WIDGET_SENDER) + "</th>" + EOL);
-				bW.write("\t\t\t\t<th>" + context.getString(R.string.HTML_WIDGET_TRIGGER_TEXT) + "</th>" + EOL);
-				bW.write("\t\t\t\t<th>" + context.getString(R.string.HTML_WIDGET_LARM) + "</th>" + EOL);
-				bW.write("\t\t\t\t<th>" + context.getString(R.string.HTML_WIDGET_ACK) + "</th>" + EOL);
+				bW.write("\t\t\t\t<th>" + context.getString(R.string.ALARM_INFO_RECEIVED_TITLE) + "</th>" + EOL);
+				bW.write("\t\t\t\t<th>" + context.getString(R.string.ALARM_INFO_SENDER_TITLE) + "</th>" + EOL);
+				bW.write("\t\t\t\t<th>" + context.getString(R.string.ALARM_INFO_TRIGGER_TEXT_TITLE) + "</th>" + EOL);
+				bW.write("\t\t\t\t<th>" + context.getString(R.string.ALARM_INFO_ALARM_TITLE) + "</th>" + EOL);
+				bW.write("\t\t\t\t<th>" + context.getString(R.string.ALARM_INFO_ACKNOWLEDGED_TITLE) + "</th>" + EOL);
 				bW.write("\t\t\t</tr>" + EOL);
 
 				// Populate table with alarms from list

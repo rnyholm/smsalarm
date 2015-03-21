@@ -39,7 +39,7 @@ public class WidgetProvider extends AppWidgetProvider {
 	private DatabaseHandler db;
 
 	// Max length of the latest alarm length in widget
-	private static final int ALARM_TEXT_MAX_LENGTH = 100;
+	private static final int ALARM_TEXT_MAX_LENGTH = 36;
 
 	// Strings representing different intents used to run different methods from intent
 	private static final String TOGGLE_ENABLE_SMS_ALARM = "ax.ha.it.smsalarm.TOGGLE_SMS_ALARM_ENABLE";
@@ -238,23 +238,23 @@ public class WidgetProvider extends AppWidgetProvider {
 			// Sanity check to see whether alarm holds valid info or not
 			if (alarm.holdsValidInfo()) {
 				// Build up the string representing the latest alarm from alarm object
-				alarmInfo.append(context.getString(R.string.HTML_WIDGET_RECEIVED));
+				alarmInfo.append(context.getString(R.string.ALARM_INFO_RECEIVED_TITLE));
 				alarmInfo.append(context.getString(R.string.COLON));
 				alarmInfo.append(alarm.getReceivedLocalized());
 				alarmInfo.append(context.getString(R.string.NEW_LINE));
 
-				alarmInfo.append(context.getString(R.string.HTML_WIDGET_SENDER));
+				alarmInfo.append(context.getString(R.string.ALARM_INFO_SENDER_TITLE));
 				alarmInfo.append(context.getString(R.string.COLON));
 				alarmInfo.append(alarm.getSender());
 				alarmInfo.append(context.getString(R.string.NEW_LINE));
 
-				alarmInfo.append(context.getString(R.string.HTML_WIDGET_TRIGGER_TEXT));
+				alarmInfo.append(context.getString(R.string.ALARM_INFO_TRIGGER_TEXT_TITLE));
 				alarmInfo.append(context.getString(R.string.COLON));
 				alarmInfo.append(alarm.getTriggerText());
 				alarmInfo.append(context.getString(R.string.NEW_LINE));
 
 				// Build up the alarm message in separate StringBuilder so we can shorten it if we need
-				alarmMessage.append(context.getString(R.string.HTML_WIDGET_LARM));
+				alarmMessage.append(context.getString(R.string.ALARM_INFO_ALARM_TITLE));
 				alarmMessage.append(context.getString(R.string.COLON));
 				alarmMessage.append(alarm.getMessage());
 
@@ -268,7 +268,7 @@ public class WidgetProvider extends AppWidgetProvider {
 				alarmInfo.append(alarmMessage.toString());
 				alarmInfo.append(context.getString(R.string.NEW_LINE));
 
-				alarmInfo.append(context.getString(R.string.HTML_WIDGET_ACK));
+				alarmInfo.append(context.getString(R.string.ALARM_INFO_ACKNOWLEDGED_TITLE));
 				alarmInfo.append(context.getString(R.string.COLON));
 				alarmInfo.append(alarm.getAcknowledgedLocalized());
 
