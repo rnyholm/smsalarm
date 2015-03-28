@@ -14,12 +14,7 @@
     <string name="ACK_NUMBER_PROMPT_MESSAGE">Eine Telefonnummer für die Anwendung eingeben, an welche eine Bestätigung gesendet wird.</string>  
     <string name="ACK_TITLE">Bestätigungstitel (mit Name des Rettungsdienstes)</string>  
 	<string name="ADD">Hinzufügen</string>       
-    <string name="ALARM">ALARM!</string>
-    <string name="ALARM_INFO_ACKNOWLEDGED_TITLE">Bestätigt</string>    
-    <string name="ALARM_INFO_ALARM_TITLE">Alarm</string>    
-    <string name="ALARM_INFO_RECEIVED_TITLE">Empfangen</string>
-    <string name="ALARM_INFO_SENDER_TITLE">Absender</string>
-    <string name="ALARM_INFO_TRIGGER_TEXT_TITLE">Auslösende Wörter</string>    
+    <string name="ALARM">ALARM!</string> 
     <string name="APP_DESCR">Alarmanwendung für Android&#8482;</string>
     <string name="APP_NAME">Sms Alarm</string>
     <string name="CANCEL">Abbrechen</string>
@@ -81,6 +76,10 @@
     <string name="TEXT_IS_NEEDED">Es muss ein Wort eingegeben werden, um es speichern zu können.</string> 
     <string name="TITLE_ACK_NUMBER">Sms Alarm bestätigt an diese Telefonnummer</string> 
     <string name="TITLE_ACK_SETTINGS">Bestätigungseinstellungen</string>
+    <string name="TITLE_ALARM_INFO_ACKNOWLEDGED">Bestätigt</string>      
+    <string name="TITLE_ALARM_INFO_RECEIVED">Empfangen</string>
+    <string name="TITLE_ALARM_INFO_SENDER">Absender</string>
+    <string name="TITLE_ALARM_INFO_TRIGGER_TEXT">Auslösende Wörter</string>   
     <string name="TITLE_ENABLE_ACKNOWLEDGE">Bestätigung des Primäralarms aktivieren</string>
     <string name="TITLE_ENABLE_SMS_ALARM">Sms Alarm aktivieren</string>
     <string name="TITLE_FREE_TEXT_TRIGGER_SETTINGS">Worteinstellungen</string>

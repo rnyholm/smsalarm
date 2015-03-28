@@ -15,11 +15,6 @@
     <string name="ACK_TITLE">Acknowledgment title (with rescue service name)</string>  
 	<string name="ADD">Add</string>       
     <string name="ALARM">ALARM!</string>
-    <string name="ALARM_INFO_ACKNOWLEDGED_TITLE">Acknowledged</string>    
-    <string name="ALARM_INFO_ALARM_TITLE">Alarm</string>    
-    <string name="ALARM_INFO_RECEIVED_TITLE">Received</string>
-    <string name="ALARM_INFO_SENDER_TITLE">Sender</string>
-    <string name="ALARM_INFO_TRIGGER_TEXT_TITLE">Trigger word</string>
     <string name="APP_DESCR">The Alarm application for Android&#8482;</string>
     <string name="APP_NAME">Sms Alarm</string>
     <string name="CANCEL">Cancel</string>
@@ -81,6 +76,11 @@
     <string name="TEXT_IS_NEEDED">A word must be entered in order to save.</string> 
     <string name="TITLE_ACK_NUMBER">Sms Alarm acknowledges to this telephone number</string> 
     <string name="TITLE_ACK_SETTINGS">Acknowledgment settings</string>
+    <string name="TITLE_ALARM_INFO_ACKNOWLEDGED">Acknowledged</string>    
+    <string name="TITLE_ALARM_INFO_MESSAGE">Message</string>    
+    <string name="TITLE_ALARM_INFO_RECEIVED">Received</string>
+    <string name="TITLE_ALARM_INFO_SENDER">Sender</string>
+    <string name="TITLE_ALARM_INFO_TRIGGER_TEXT">Trigger word</string>
     <string name="TITLE_ENABLE_ACKNOWLEDGE">Enable acknowledgment</string>
     <string name="TITLE_ENABLE_SMS_ALARM">Enable Sms Alarm</string>
     <string name="TITLE_FREE_TEXT_TRIGGER_SETTINGS">Word settings</string>

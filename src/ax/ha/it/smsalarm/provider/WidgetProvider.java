@@ -238,23 +238,23 @@ public class WidgetProvider extends AppWidgetProvider {
 			// Sanity check to see whether alarm holds valid info or not
 			if (alarm.holdsValidInfo()) {
 				// Build up the string representing the latest alarm from alarm object
-				alarmInfo.append(context.getString(R.string.ALARM_INFO_RECEIVED_TITLE));
+				alarmInfo.append(context.getString(R.string.TITLE_ALARM_INFO_RECEIVED));
 				alarmInfo.append(context.getString(R.string.COLON));
 				alarmInfo.append(alarm.getReceivedLocalized());
 				alarmInfo.append(context.getString(R.string.NEW_LINE));
 
-				alarmInfo.append(context.getString(R.string.ALARM_INFO_SENDER_TITLE));
+				alarmInfo.append(context.getString(R.string.TITLE_ALARM_INFO_SENDER));
 				alarmInfo.append(context.getString(R.string.COLON));
 				alarmInfo.append(alarm.getSender());
 				alarmInfo.append(context.getString(R.string.NEW_LINE));
 
-				alarmInfo.append(context.getString(R.string.ALARM_INFO_TRIGGER_TEXT_TITLE));
+				alarmInfo.append(context.getString(R.string.TITLE_ALARM_INFO_TRIGGER_TEXT));
 				alarmInfo.append(context.getString(R.string.COLON));
 				alarmInfo.append(alarm.getTriggerText());
 				alarmInfo.append(context.getString(R.string.NEW_LINE));
 
 				// Build up the alarm message in separate StringBuilder so we can shorten it if we need
-				alarmMessage.append(context.getString(R.string.ALARM_INFO_ALARM_TITLE));
+				alarmMessage.append(context.getString(R.string.TITLE_ALARM_INFO_MESSAGE));
 				alarmMessage.append(context.getString(R.string.COLON));
 				alarmMessage.append(alarm.getMessage());
 
@@ -268,7 +268,7 @@ public class WidgetProvider extends AppWidgetProvider {
 				alarmInfo.append(alarmMessage.toString());
 				alarmInfo.append(context.getString(R.string.NEW_LINE));
 
-				alarmInfo.append(context.getString(R.string.ALARM_INFO_ACKNOWLEDGED_TITLE));
+				alarmInfo.append(context.getString(R.string.TITLE_ALARM_INFO_ACKNOWLEDGED));
 				alarmInfo.append(context.getString(R.string.COLON));
 				alarmInfo.append(alarm.getAcknowledgedLocalized());
 

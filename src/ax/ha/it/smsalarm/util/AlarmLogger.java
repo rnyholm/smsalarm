@@ -149,11 +149,11 @@ public class AlarmLogger {
 				bW.write("" + EOL);
 				bW.write("\t\t<table id=\"smsalarm\">" + EOL);
 				bW.write("\t\t\t<tr>" + EOL);
-				bW.write("\t\t\t\t<th>" + context.getString(R.string.ALARM_INFO_RECEIVED_TITLE) + "</th>" + EOL);
-				bW.write("\t\t\t\t<th>" + context.getString(R.string.ALARM_INFO_SENDER_TITLE) + "</th>" + EOL);
-				bW.write("\t\t\t\t<th>" + context.getString(R.string.ALARM_INFO_TRIGGER_TEXT_TITLE) + "</th>" + EOL);
-				bW.write("\t\t\t\t<th>" + context.getString(R.string.ALARM_INFO_ALARM_TITLE) + "</th>" + EOL);
-				bW.write("\t\t\t\t<th>" + context.getString(R.string.ALARM_INFO_ACKNOWLEDGED_TITLE) + "</th>" + EOL);
+				bW.write("\t\t\t\t<th>" + context.getString(R.string.TITLE_ALARM_INFO_RECEIVED) + "</th>" + EOL);
+				bW.write("\t\t\t\t<th>" + context.getString(R.string.TITLE_ALARM_INFO_SENDER) + "</th>" + EOL);
+				bW.write("\t\t\t\t<th>" + context.getString(R.string.TITLE_ALARM_INFO_TRIGGER_TEXT) + "</th>" + EOL);
+				bW.write("\t\t\t\t<th>" + context.getString(R.string.TITLE_ALARM_INFO_MESSAGE) + "</th>" + EOL);
+				bW.write("\t\t\t\t<th>" + context.getString(R.string.TITLE_ALARM_INFO_ACKNOWLEDGED) + "</th>" + EOL);
 				bW.write("\t\t\t</tr>" + EOL);
 
 				// Populate table with alarms from list

@@ -84,27 +84,27 @@ public class AlarmInfoDialog extends DialogFragment {
 		alarmTypeTitleTextView.setText(sb.toString());
 
 		sb = new StringBuilder();
-		sb.append(getString(R.string.ALARM_INFO_SENDER_TITLE));
+		sb.append(getString(R.string.TITLE_ALARM_INFO_SENDER));
 		sb.append(getString(R.string.COLON));
 		senderTitleTextView.setText(sb.toString());
 
 		sb = new StringBuilder();
-		sb.append(getString(R.string.ALARM_INFO_RECEIVED_TITLE));
+		sb.append(getString(R.string.TITLE_ALARM_INFO_RECEIVED));
 		sb.append(getString(R.string.COLON));
 		receivedTitleTextView.setText(sb.toString());
 
 		sb = new StringBuilder();
-		sb.append(getString(R.string.ALARM_INFO_ACKNOWLEDGED_TITLE));
+		sb.append(getString(R.string.TITLE_ALARM_INFO_ACKNOWLEDGED));
 		sb.append(getString(R.string.COLON));
 		acknowledgedTitleTextView.setText(sb.toString());
 
 		sb = new StringBuilder();
-		sb.append(getString(R.string.ALARM_INFO_TRIGGER_TEXT_TITLE));
+		sb.append(getString(R.string.TITLE_ALARM_INFO_TRIGGER_TEXT));
 		sb.append(getString(R.string.COLON));
 		triggerTextTitleTextView.setText(sb.toString());
 
 		sb = new StringBuilder();
-		sb.append(getString(R.string.ALARM_INFO_ALARM_TITLE));
+		sb.append(getString(R.string.TITLE_ALARM_INFO_MESSAGE));
 		sb.append(getString(R.string.COLON));
 		alarmTitleTextView.setText(sb.toString());
 

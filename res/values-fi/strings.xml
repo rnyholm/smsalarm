@@ -15,11 +15,6 @@
     <string name="ACK_TITLE">Kuittauksen otsikko(pelastustoimen nimiellä)</string>  
 	<string name="ADD">Lisää</string>       
     <string name="ALARM">Hälytys!</string>
-    <string name="ALARM_INFO_ACKNOWLEDGED_TITLE">Kuitattu</string>    
-    <string name="ALARM_INFO_ALARM_TITLE">Hälytys</string>    
-    <string name="ALARM_INFO_RECEIVED_TITLE">Vastaanotettu</string>
-    <string name="ALARM_INFO_SENDER_TITLE">Lähettäjä</string>
-    <string name="ALARM_INFO_TRIGGER_TEXT_TITLE">Käynnistävä sana</string>
     <string name="APP_DESCR">Hälytyssovellus Android&#8482;</string>
     <string name="APP_NAME">Sms Alarm</string>
     <string name="CANCEL">Peruuta</string>
@@ -80,6 +75,10 @@
     <string name="TEXT_IS_NEEDED">Säästämistä varten on annettava texti.</string>  
     <string name="TITLE_ACK_NUMBER">Sms Alarm kuittaa tähän numeroon</string> 
     <string name="TITLE_ACK_SETTINGS">Kuittaus Asetukset</string>
+    <string name="TITLE_ALARM_INFO_ACKNOWLEDGED">Kuitattu</string>      
+    <string name="TITLE_ALARM_INFO_RECEIVED">Vastaanotettu</string>
+    <string name="TITLE_ALARM_INFO_SENDER">Lähettäjä</string>
+    <string name="TITLE_ALARM_INFO_TRIGGER_TEXT">Käynnistävä sana</string>
     <string name="TITLE_ENABLE_ACKNOWLEDGE">Aktivoi ensisijaisen hälytysen kuittaus</string>
     <string name="TITLE_ENABLE_SMS_ALARM">Aktivoi Sms Alarm</string>
     <string name="TITLE_FREE_TEXT_TRIGGER_SETTINGS">Sana-asennuksia</string>

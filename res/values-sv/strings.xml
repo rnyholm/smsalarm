@@ -15,11 +15,6 @@
     <string name="ACK_TITLE">Kvitterings titel(med räddningstjänsts namn)</string>  
 	<string name="ADD">Lägg till</string>       
     <string name="ALARM">LARM!</string>
-    <string name="ALARM_INFO_ACKNOWLEDGED_TITLE">Kvitterat</string>    
-    <string name="ALARM_INFO_ALARM_TITLE">Larm</string>
-    <string name="ALARM_INFO_RECEIVED_TITLE">Mottaget</string>
-    <string name="ALARM_INFO_SENDER_TITLE">Avsändare</string>
-    <string name="ALARM_INFO_TRIGGER_TEXT_TITLE">Triggande ord</string>
     <string name="APP_DESCR">Larmapplikationen för Android&#8482;</string>
     <string name="APP_NAME">Sms Alarm</string>
     <string name="CANCEL">Avbryt</string>
@@ -80,6 +75,11 @@
     <string name="TEXT_IS_NEEDED">Ett ord måste anges för att kunna spara.</string> 
     <string name="TITLE_ACK_NUMBER">Sms Alarm kvitterar till detta nummer</string> 
     <string name="TITLE_ACK_SETTINGS">Kvitteringsinställningar</string>
+    <string name="TITLE_ALARM_INFO_ACKNOWLEDGED">Kvitterat</string>    
+    <string name="TITLE_ALARM_INFO_MESSAGE">Meddelande</string>
+    <string name="TITLE_ALARM_INFO_RECEIVED">Mottaget</string>
+    <string name="TITLE_ALARM_INFO_SENDER">Avsändare</string>
+    <string name="TITLE_ALARM_INFO_TRIGGER_TEXT">Triggande ord</string>    
     <string name="TITLE_ENABLE_ACKNOWLEDGE">Aktivera kvittering av primärlarm</string>
     <string name="TITLE_ENABLE_SMS_ALARM">Aktivera Sms Alarm</string>
     <string name="TITLE_FREE_TEXT_TRIGGER_SETTINGS">Ord inställningar</string>
