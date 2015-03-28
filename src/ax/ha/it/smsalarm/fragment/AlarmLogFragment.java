@@ -38,8 +38,6 @@ import com.actionbarsherlock.app.SherlockListFragment;
  * @see AlarmLogItemAdapter
  */
 public class AlarmLogFragment extends SherlockListFragment {
-	// Need database access in order to fetch all received alarms
-	private DatabaseHandler db;
 
 	/**
 	 * Creates a new instance of {@link AlarmLogFragment}.
@@ -79,10 +77,10 @@ public class AlarmLogFragment extends SherlockListFragment {
 	 */
 	private void createAlarmLogItems(AlarmLogItemAdapter adapter) {
 		// Initialize database handler object from context
-		db = new DatabaseHandler(getActivity());
+		DatabaseHandler db = new DatabaseHandler(getActivity());
 
 		// Fetch all alarms in an organized way
-		TreeMap<String, HashMap<String, List<Alarm>>> organisedAlarms = db.fetchAllAlarmsOrganized();
+		TreeMap<String, HashMap<String, List<Alarm>>> organisedAlarms = db.fetchAllAlarmsSorted();
 
 		// Iterator for iterating over the years
 		Iterator<Entry<String, HashMap<String, List<Alarm>>>> it0 = organisedAlarms.entrySet().iterator();
@@ -116,6 +114,8 @@ public class AlarmLogFragment extends SherlockListFragment {
 
 	@Override
 	public void onListItemClick(ListView l, View v, int position, long id) {
+		// TODO: Decide if acknowledge UI or if the alarm info dialog should be shown
+
 		// Get alarm from selected alarm info
 		Alarm alarm = ((AlarmLogItem) getListView().getItemAtPosition(position)).getAlarm();
 

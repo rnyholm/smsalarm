@@ -132,6 +132,61 @@ public class Alarm implements Parcelable {
 	}
 
 	/**
+	 * Creates a new instance of {@link Alarm}.
+	 * 
+	 * @param in
+	 *            {@link Parcelable} containing all information needed to create a new instance of <code>Alarm</code>.
+	 */
+	public Alarm(Parcel in) {
+		readFromParcelable(in);
+	}
+
+	public static final Parcelable.Creator<Alarm> CREATOR = new Parcelable.Creator<Alarm>() {
+		@Override
+		public Alarm createFromParcel(Parcel source) {
+			return new Alarm(source);
+		}
+
+		@Override
+		public Alarm[] newArray(int size) {
+			return new Alarm[size];
+		}
+	};
+
+	@Override
+	public void writeToParcel(Parcel dest, int flags) {
+		dest.writeInt(id);
+		dest.writeSerializable(received);
+		dest.writeString(sender);
+		dest.writeString(message);
+		dest.writeString(triggerText);
+		dest.writeSerializable(optionalAcknowledged);
+		dest.writeInt(alarmType.ordinal());
+	}
+
+	@Override
+	public int describeContents() {
+		return 0;
+	}
+
+	/**
+	 * Reads information from given {@link Parcel} and sets it to this instance of {@link Alarm}.
+	 * 
+	 * @param source
+	 *            <code>Parcel</code> containing information needed to setup this instance of <code>Alarm</code>.
+	 */
+	@SuppressWarnings("unchecked")
+	private void readFromParcelable(Parcel source) {
+		id = source.readInt();
+		received = (Date) source.readSerializable();
+		sender = source.readString();
+		message = source.readString();
+		triggerText = source.readString();
+		optionalAcknowledged = (Optional<Date>) source.readSerializable();
+		alarmType = AlarmType.of(source.readInt());
+	}
+
+	/**
 	 * To find out if this Alarm holds enough valid data to be shown in the applications widget.<br>
 	 * Following data must be valid:<br>
 	 * <ul>
@@ -172,9 +227,15 @@ public class Alarm implements Parcelable {
 		return DateFormat.getDateTimeInstance().format(received);
 	}
 
+	/**
+	 * To get date and time when this Alarm was received as a {@link String} according to the default {@link Locale}.<br>
+	 * The date will be formatted in a <b><i>short way</i></b>, this will also be done according to default <code>Locale</code>.
+	 * 
+	 * @return Date and time when this alarm was received as a <code>String</code> in a short format.
+	 */
 	public String getReceivedForLog() {
 		DateFormat dateTimeInstance = DateFormat.getTimeInstance(DateFormat.SHORT, Locale.getDefault());
-		return dateTimeInstance.format(getReceived());
+		return dateTimeInstance.format(received);
 	}
 
 	/**
@@ -256,54 +317,8 @@ public class Alarm implements Parcelable {
 
 	/**
 	 * To update/set date and time when an Alarm was acknowledged. Date and time will be set to now.
-	 * 
-	 * @see #setAcknowledged(Date)
-	 * @see #setAcknowledged(String)
 	 */
 	public void updateAcknowledged() {
 		optionalAcknowledged = Optional.<Date> of(new Date());
-	}
-
-	@Override
-	public int describeContents() {
-		return 0;
-	}
-
-	@Override
-	public void writeToParcel(Parcel dest, int flags) {
-		dest.writeInt(id);
-		dest.writeSerializable(received);
-		dest.writeString(sender);
-		dest.writeString(message);
-		dest.writeString(triggerText);
-		dest.writeSerializable(optionalAcknowledged);
-		dest.writeInt(alarmType.ordinal());
-	}
-
-	@SuppressWarnings("unchecked")
-	private void readFromParcelable(Parcel source) {
-		id = source.readInt();
-		received = (Date) source.readSerializable();
-		sender = source.readString();
-		message = source.readString();
-		triggerText = source.readString();
-		optionalAcknowledged = (Optional<Date>) source.readSerializable();
-		alarmType = AlarmType.of(source.readInt());
-	}
-
-	public static final Parcelable.Creator<Alarm> CREATOR = new Parcelable.Creator<Alarm>() {
-		@Override
-		public Alarm createFromParcel(Parcel source) {
-			return new Alarm(source);
-		}
-
-		@Override
-		public Alarm[] newArray(int size) {
-			return new Alarm[size];
-		}
-	};
-
-	public Alarm(Parcel in) {
-		readFromParcelable(in);
 	}
 }

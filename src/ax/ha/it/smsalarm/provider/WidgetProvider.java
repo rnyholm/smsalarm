@@ -39,7 +39,7 @@ public class WidgetProvider extends AppWidgetProvider {
 	private DatabaseHandler db;
 
 	// Max length of the latest alarm length in widget
-	private static final int ALARM_TEXT_MAX_LENGTH = 36;
+	private static final int ALARM_TEXT_MAX_LENGTH = 100;
 
 	// Strings representing different intents used to run different methods from intent
 	private static final String TOGGLE_ENABLE_SMS_ALARM = "ax.ha.it.smsalarm.TOGGLE_SMS_ALARM_ENABLE";

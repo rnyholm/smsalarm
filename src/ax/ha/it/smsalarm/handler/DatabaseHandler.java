@@ -11,6 +11,7 @@ import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 import java.util.TreeMap;
 
 import android.content.ContentValues;
@@ -30,8 +31,6 @@ import ax.ha.it.smsalarm.alarm.Alarm.AlarmType;
  * @since 2.1beta
  */
 public class DatabaseHandler extends SQLiteOpenHelper {
-	private static final String LOG_TAG = DatabaseHandler.class.getSimpleName();
-
 	// Database Version and the upgrade versions
 	private static final int DB_VERSION = 3;
 	private static final int DB_VERSION_ADD_TRIGGER_TEXT_COL = 2;
@@ -261,8 +260,17 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 		return alarmList;
 	}
 
-	public TreeMap<String, HashMap<String, List<Alarm>>> fetchAllAlarmsOrganized() {
-		TreeMap<String, HashMap<String, List<Alarm>>> organizedAlarms = new TreeMap<String, HashMap<String, List<Alarm>>>(new Comparator<String>() {
+	/**
+	 * To fetch all alarms in from the database but sorted on <b><i>time when it was received</i></b>.<br>
+	 * The alarms will be returned as a {@link TreeMap} which has <b><i>year received</i></b> as key and a {@link HashMap} as value. That
+	 * <code>HashMap</code> in turn has <b><i>month received</i></b> as key and a {@link List} of {@link Alarm}'s that was received that month.<br>
+	 * In this way we got the <code>Alarm</code>'s sorted per month, per year.
+	 * 
+	 * @return All <code>Alarm</code>'s sorted in a nested {@link Map} structure.
+	 */
+	public TreeMap<String, HashMap<String, List<Alarm>>> fetchAllAlarmsSorted() {
+		// Initialize a TreeMap with a comparator, comparing on key which are year received
+		TreeMap<String, HashMap<String, List<Alarm>>> sortedAlarms = new TreeMap<String, HashMap<String, List<Alarm>>>(new Comparator<String>() {
 			@Override
 			public int compare(String lhs, String rhs) {
 				int lhsYear = Integer.parseInt(lhs);
@@ -278,6 +286,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 			}
 		});
 
+		// Map for month received and a list containing alarms received per month
 		HashMap<String, List<Alarm>> alarmsPerMonth = new HashMap<String, List<Alarm>>();
 		List<Alarm> alarms = new ArrayList<Alarm>();
 
@@ -290,8 +299,8 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 			String yearReceived = String.valueOf(calendar.get(Calendar.YEAR));
 			String monthReceived = calendar.getDisplayName(Calendar.MONTH, Calendar.LONG, Locale.getDefault());
 
-			if (organizedAlarms.containsKey(yearReceived)) {
-				alarmsPerMonth = organizedAlarms.get(yearReceived);
+			if (sortedAlarms.containsKey(yearReceived)) {
+				alarmsPerMonth = sortedAlarms.get(yearReceived);
 
 				if (alarmsPerMonth.containsKey(monthReceived)) {
 					alarms = alarmsPerMonth.get(monthReceived);
@@ -310,10 +319,10 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 				alarmsPerMonth.put(monthReceived, alarms);
 			}
 
-			organizedAlarms.put(yearReceived, alarmsPerMonth);
+			sortedAlarms.put(yearReceived, alarmsPerMonth);
 		}
 
-		return organizedAlarms;
+		return sortedAlarms;
 	}
 
 	/**
@@ -347,6 +356,8 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 
 	/**
 	 * To fetch the latest {@link Alarm} entry in the database.
+	 * 
+	 * @return Latest inserted <code>Alarm</code> in the database.
 	 */
 	public Alarm fetchLatestAlarm() {
 		// Returning latest alarm in database

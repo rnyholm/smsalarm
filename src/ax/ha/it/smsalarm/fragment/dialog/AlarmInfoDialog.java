@@ -67,7 +67,7 @@ public class AlarmInfoDialog extends DialogFragment {
 		TextView receivedTitleTextView = new TextView(context);
 		TextView acknowledgedTitleTextView = new TextView(context);
 		TextView triggerTextTitleTextView = new TextView(context);
-		TextView alarmTitleTextView = new TextView(context);
+		TextView messageTitleTextView = new TextView(context);
 
 		// ...then the actual information...
 		TextView alarmTypeTextView = new TextView(context);
@@ -75,7 +75,7 @@ public class AlarmInfoDialog extends DialogFragment {
 		TextView receivedTextView = new TextView(context);
 		TextView acknowledgedTextView = new TextView(context);
 		TextView triggerTextTextView = new TextView(context);
-		TextView alarmTextView = new TextView(context);
+		TextView messageTextView = new TextView(context);
 
 		// ...and setting text to the titles using StringBuilder
 		StringBuilder sb = new StringBuilder();
@@ -106,7 +106,7 @@ public class AlarmInfoDialog extends DialogFragment {
 		sb = new StringBuilder();
 		sb.append(getString(R.string.TITLE_ALARM_INFO_MESSAGE));
 		sb.append(getString(R.string.COLON));
-		alarmTitleTextView.setText(sb.toString());
+		messageTitleTextView.setText(sb.toString());
 
 		// ...then setting the actual information from the alarm to the TextViews
 		alarmTypeTextView.setText(resolveAlarmTypeLocalized(alarm.getAlarmType()));
@@ -114,7 +114,7 @@ public class AlarmInfoDialog extends DialogFragment {
 		receivedTextView.setText(alarm.getReceivedLocalized());
 		acknowledgedTextView.setText(alarm.getAcknowledgedLocalized());
 		triggerTextTextView.setText(alarm.getTriggerText());
-		alarmTextView.setText(alarm.getMessage());
+		messageTextView.setText(alarm.getMessage());
 
 		// Initialize the different LayoutParameters needed to build a correct dialog
 		LinearLayout.LayoutParams linearLayoutParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
@@ -132,7 +132,7 @@ public class AlarmInfoDialog extends DialogFragment {
 		receivedTitleTextView.setLayoutParams(titleTextViewLayoutParams);
 		acknowledgedTitleTextView.setLayoutParams(titleTextViewLayoutParams);
 		triggerTextTitleTextView.setLayoutParams(titleTextViewLayoutParams);
-		alarmTitleTextView.setLayoutParams(titleTextViewLayoutParams);
+		messageTitleTextView.setLayoutParams(titleTextViewLayoutParams);
 
 		// ...then the other TextViews
 		alarmTypeTextView.setLayoutParams(infoTextViewLayoutParams);
@@ -140,7 +140,7 @@ public class AlarmInfoDialog extends DialogFragment {
 		receivedTextView.setLayoutParams(infoTextViewLayoutParams);
 		acknowledgedTextView.setLayoutParams(infoTextViewLayoutParams);
 		triggerTextTextView.setLayoutParams(infoTextViewLayoutParams);
-		alarmTextView.setLayoutParams(infoTextViewLayoutParams);
+		messageTextView.setLayoutParams(infoTextViewLayoutParams);
 
 		// Now start build up the actual user interface by first setting up a ScrollView and a LinearLayout, also configure them
 		ScrollView scrollView = new ScrollView(context);
@@ -188,8 +188,8 @@ public class AlarmInfoDialog extends DialogFragment {
 		LinearLayout ll5 = new LinearLayout(context);
 		ll5.setOrientation(LinearLayout.HORIZONTAL);
 		ll5.setLayoutParams(linearLayoutParams);
-		ll5.addView(alarmTitleTextView);
-		ll5.addView(alarmTextView);
+		ll5.addView(messageTitleTextView);
+		ll5.addView(messageTextView);
 		linearLayout.addView(ll5);
 
 		// At last add the "main" LinearLayout to the ScrollView
