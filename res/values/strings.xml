@@ -29,6 +29,9 @@
     <string name="TITLE_PLAY_ALARM_SIGNAL_REPEATEDLY_SETTING">Spela upp larmsignalen oavbrutet</string>
     <string name="INFO_PLAY_ALARM_SIGNAL_REPEATEDLY_SETTING">Om vald kommer larmsignalen för både primär- och sekundärlarm att spelas oavbrutet tills notifikationen för inkommande larm har hanterats.</string>
     <string name="ALARM_VIBRATION_PROMPT_TITLE">Välj vibrationsmönster</string>
+    <string name="ALARM_INFO_PROMPT_TITLE">Larminfo</string>
+    <string name="ALARM_INFO_ALARM_TYPE_TITLE">Larmtyp</string>
+    <string name="TITLE_UNDEFINED_ALARM">Odefinierat larm</string> 
     <!-- OK IN ENGLIS AND GERMAN BEGIN -->
     <string name="INFO_USE_OS_SOUND_SETTINGS">Om vald tar Sms Alarm hänsyn till enhetens ringvolym och ljudlöst läge.</string>
     <string name="TITLE_USE_OS_SOUND_SETTINGS">Använd enhetens ljudinställningar</string>
@@ -37,6 +40,8 @@
     
     <!-- DUMMY STRINGS(PLACEHOLDER AND DESCRIPTIVES), ONLY ENGLISH - BEGIN -->
     <string name="ACK_ICON_CONTENT_DESCR">Acknowledge alarm icon</string>
+    <string name="ALARM_INFO_ACKNOWLEDGED">Alarm acknowledged</string>
+    <string name="ALARM_INFO_ALARM">Received alarm message</string>
     <string name="ALARM_INFO_SENDER">Alarm sender</string>
     <string name="ALARM_INFO_RECEIVED">Alarm received</string>
     <string name="ALARM_INFO_TRIGGER_TEXT">Alarm trigging word</string>

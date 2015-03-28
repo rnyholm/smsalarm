@@ -1,0 +1,193 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="wrap_content" >
+
+   <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="5dp" >
+
+       <TextView
+           android:id="@+id/alarmInfoSenderTitle_tv"
+           android:layout_width="wrap_content"
+           android:layout_height="wrap_content"
+           android:layout_alignParentLeft="true"
+           android:text="@string/ALARM_INFO_SENDER_TITLE"
+           android:textAppearance="?android:attr/textAppearanceMedium" />
+
+       <TextView
+           android:id="@+id/alarmInfoColon1_tv"
+           android:layout_width="wrap_content"
+           android:layout_height="wrap_content"
+           android:layout_alignBaseline="@+id/alarmInfoSenderTitle_tv"
+           android:layout_alignBottom="@+id/alarmInfoSenderTitle_tv"
+           android:layout_toRightOf="@+id/alarmInfoSenderTitle_tv"
+           android:text="@string/COLON"
+           android:textAppearance="?android:attr/textAppearanceMedium" />
+
+       <TextView
+           android:id="@+id/alarmInfoSender_tv"
+           android:layout_width="wrap_content"
+           android:layout_height="wrap_content"
+           android:layout_alignBaseline="@+id/alarmInfoColon1_tv"
+           android:layout_alignBottom="@+id/alarmInfoColon1_tv"
+           android:layout_marginLeft="5dp"
+           android:layout_toRightOf="@+id/alarmInfoColon1_tv"
+           android:text="@string/ALARM_INFO_SENDER"
+           android:textAppearance="?android:attr/textAppearanceMedium" />
+
+       <TextView
+           android:id="@+id/alarmInfoReceivedTitle_tv"
+           android:layout_width="wrap_content"
+           android:layout_height="wrap_content"
+           android:layout_alignParentLeft="true"
+           android:layout_below="@id/alarmInfoSender_tv"
+           android:text="@string/ALARM_INFO_RECEIVED_TITLE"
+           android:textAppearance="?android:attr/textAppearanceMedium" />
+
+       <TextView
+           android:id="@+id/alarmInfoColon2_tv"
+           android:layout_width="wrap_content"
+           android:layout_height="wrap_content"
+           android:layout_alignBaseline="@+id/alarmInfoReceivedTitle_tv"
+           android:layout_alignBottom="@+id/alarmInfoReceivedTitle_tv"
+           android:layout_toRightOf="@+id/alarmInfoReceivedTitle_tv"
+           android:text="@string/COLON"
+           android:textAppearance="?android:attr/textAppearanceMedium" />
+
+       <TextView
+           android:id="@+id/alarmInfoReceived_tv"
+           android:layout_width="wrap_content"
+           android:layout_height="wrap_content"
+           android:layout_alignBaseline="@+id/alarmInfoColon2_tv"
+           android:layout_alignBottom="@+id/alarmInfoColon2_tv"
+           android:layout_marginLeft="5dp"
+           android:layout_toRightOf="@+id/alarmInfoColon2_tv"
+           android:text="@string/ALARM_INFO_RECEIVED"
+           android:textAppearance="?android:attr/textAppearanceMedium" />
+
+       <TextView
+           android:id="@+id/alarmInfoAcknowledgedTitle_tv"
+           android:layout_width="wrap_content"
+           android:layout_height="wrap_content"
+           android:layout_alignParentLeft="true"
+           android:layout_below="@id/alarmInfoReceived_tv"
+           android:text="@string/ALARM_INFO_ACKNOWLEDGED_TITLE"
+           android:textAppearance="?android:attr/textAppearanceMedium" />
+
+       <TextView
+           android:id="@+id/alarmInfoColon3_tv"
+           android:layout_width="wrap_content"
+           android:layout_height="wrap_content"
+           android:layout_alignBaseline="@id/alarmInfoAcknowledgedTitle_tv"
+           android:layout_alignBottom="@id/alarmInfoAcknowledgedTitle_tv"
+           android:layout_toRightOf="@id/alarmInfoAcknowledgedTitle_tv"
+           android:text="@string/COLON"
+           android:textAppearance="?android:attr/textAppearanceMedium" />
+
+       <TextView
+           android:id="@+id/alarmInfoAcknowledged_tv"
+           android:layout_width="wrap_content"
+           android:layout_height="wrap_content"
+           android:layout_alignBaseline="@id/alarmInfoColon3_tv"
+           android:layout_alignBottom="@id/alarmInfoColon3_tv"
+           android:layout_marginLeft="5dp"
+           android:layout_toRightOf="@id/alarmInfoColon3_tv"
+           android:text="@string/ALARM_INFO_ACKNOWLEDGED"
+           android:textAppearance="?android:attr/textAppearanceMedium" />
+
+       <TextView
+           android:id="@+id/alarmInfoTriggerWordTitle_tv"
+           android:layout_width="wrap_content"
+           android:layout_height="wrap_content"
+           android:layout_alignParentLeft="true"
+           android:layout_below="@id/alarmInfoAcknowledged_tv"
+           android:text="@string/ALARM_INFO_TRIGGER_TEXT_TITLE"
+           android:textAppearance="?android:attr/textAppearanceMedium" />
+
+       <TextView
+           android:id="@+id/alarmInfoColon4_tv"
+           android:layout_width="wrap_content"
+           android:layout_height="wrap_content"
+           android:layout_alignBaseline="@+id/alarmInfoTriggerWordTitle_tv"
+           android:layout_alignBottom="@+id/alarmInfoTriggerWordTitle_tv"
+           android:layout_toRightOf="@+id/alarmInfoTriggerWordTitle_tv"
+           android:text="@string/COLON"
+           android:textAppearance="?android:attr/textAppearanceMedium" />
+
+       <TextView
+           android:id="@+id/alarmInfoTriggerText_tv"
+           android:layout_width="wrap_content"
+           android:layout_height="wrap_content"
+           android:layout_alignBaseline="@+id/alarmInfoColon4_tv"
+           android:layout_alignBottom="@+id/alarmInfoColon4_tv"
+           android:layout_marginLeft="5dp"
+           android:layout_toRightOf="@+id/alarmInfoColon4_tv"
+           android:text="@string/ALARM_INFO_TRIGGER_TEXT"
+           android:textAppearance="?android:attr/textAppearanceMedium" />
+
+       <TextView
+           android:id="@+id/alarmInfoAlarmTitle_tv"
+           android:layout_width="wrap_content"
+           android:layout_height="wrap_content"
+           android:layout_alignParentLeft="true"
+           android:layout_below="@id/alarmInfoTriggerText_tv"
+           android:text="@string/ALARM_INFO_ALARM_TITLE"
+           android:textAppearance="?android:attr/textAppearanceMedium" />
+
+       <TextView
+           android:id="@+id/alarmInfoColon5_tv"
+           android:layout_width="wrap_content"
+           android:layout_height="wrap_content"
+           android:layout_alignBaseline="@id/alarmInfoAlarmTitle_tv"
+           android:layout_alignBottom="@id/alarmInfoAlarmTitle_tv"
+           android:layout_toRightOf="@id/alarmInfoAlarmTitle_tv"
+           android:text="@string/COLON"
+           android:textAppearance="?android:attr/textAppearanceMedium" />
+
+       <TextView
+           android:id="@+id/alarmInfoAlarm_tv"
+           android:layout_width="wrap_content"
+           android:layout_height="wrap_content"
+           android:layout_alignBaseline="@id/alarmInfoColon5_tv"
+           android:layout_alignBottom="@id/alarmInfoColon5_tv"
+           android:layout_marginLeft="5dp"
+           android:layout_toRightOf="@id/alarmInfoColon5_tv"
+           android:text="@string/ALARM_INFO_ALARM"
+           android:textAppearance="?android:attr/textAppearanceMedium" />
+
+       <TableLayout
+           android:layout_width="wrap_content"
+           android:layout_height="wrap_content" >
+
+           <TableRow
+               android:id="@+id/tableRow1"
+               android:layout_width="wrap_content"
+               android:layout_height="wrap_content" >
+           </TableRow>
+
+           <TableRow
+               android:id="@+id/tableRow2"
+               android:layout_width="wrap_content"
+               android:layout_height="wrap_content" >
+           </TableRow>
+
+           <TableRow
+               android:id="@+id/tableRow3"
+               android:layout_width="wrap_content"
+               android:layout_height="wrap_content" >
+           </TableRow>
+
+           <TableRow
+               android:id="@+id/tableRow4"
+               android:layout_width="wrap_content"
+               android:layout_height="wrap_content" >
+           </TableRow>
+       </TableLayout>
+
+    </RelativeLayout>
+
+</ScrollView>
+
+

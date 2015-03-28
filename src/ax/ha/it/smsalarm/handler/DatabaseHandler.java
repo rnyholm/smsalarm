@@ -232,7 +232,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 	 * 
 	 * @return All Alarms stored in database.
 	 */
-	public List<Alarm> fetchAllAlarm() {
+	public List<Alarm> fetchAllAlarms() {
 		// List to store all alarms in
 		List<Alarm> alarmList = new ArrayList<Alarm>();
 
@@ -265,8 +265,8 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 		TreeMap<String, HashMap<String, List<Alarm>>> organizedAlarms = new TreeMap<String, HashMap<String, List<Alarm>>>(new Comparator<String>() {
 			@Override
 			public int compare(String lhs, String rhs) {
-				int lhsYear = Integer.parseInt(lhs.substring(lhs.length() - 4));
-				int rhsYear = Integer.parseInt(rhs.substring(rhs.length() - 4));
+				int lhsYear = Integer.parseInt(lhs);
+				int rhsYear = Integer.parseInt(rhs);
 
 				if (lhsYear < rhsYear) {
 					return 1;
@@ -281,7 +281,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 		HashMap<String, List<Alarm>> alarmsPerMonth = new HashMap<String, List<Alarm>>();
 		List<Alarm> alarms = new ArrayList<Alarm>();
 
-		for (Alarm alarm : fetchAllAlarm()) {
+		for (Alarm alarm : fetchAllAlarms()) {
 			// Get a calendar instance and set time from time and date when the alarm was received
 			Calendar calendar = Calendar.getInstance();
 

@@ -7,6 +7,9 @@ import java.text.DateFormat;
 import java.util.Date;
 import java.util.Locale;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 import com.google.common.base.Optional;
 
 /**
@@ -16,7 +19,7 @@ import com.google.common.base.Optional;
  * @version 2.3.1
  * @since 2.1beta
  */
-public class Alarm {
+public class Alarm implements Parcelable {
 	/**
 	 * Enumeration for then different types of <b><i>Alarms</i></b>.
 	 * 
@@ -50,8 +53,6 @@ public class Alarm {
 			}
 		}
 	}
-
-	private static final String LOG_TAG = Alarm.class.getSimpleName();
 
 	// @formatter:off
 	// Variables holding data for an alarm
@@ -172,25 +173,8 @@ public class Alarm {
 	}
 
 	public String getReceivedForLog() {
-//		String str = "";
-//		try {
-//			DateFormat dateTimeInstance = DateFormat.getTimeInstance(DateFormat.SHORT, Locale.getDefault());
-//			str = dateTimeInstance.format(getReceived());
-
-//			Calendar calendar = Calendar.getInstance(Locale.getDefault());
-//			calendar.setTime(getReceivedAsDate());
-//			
-//			String dayReceived = String.valueOf(calendar.get(Calendar.DAY_OF_MONTH));
-//			String monthReceived = calendar.getDisplayName(Calendar.MONTH, Calendar.LONG, Locale.getDefault());
-//
-//		} catch (ParseException e) {
-//			if (SmsAlarm.DEBUG) {
-//				Log.e(LOG_TAG + ":getReceivedForLog()", "Unable to get the time and date when the alarm was received", e);
-//			}
-//		}
-//
-//		return str;
-		return "";
+		DateFormat dateTimeInstance = DateFormat.getTimeInstance(DateFormat.SHORT, Locale.getDefault());
+		return dateTimeInstance.format(getReceived());
 	}
 
 	/**
@@ -278,5 +262,48 @@ public class Alarm {
 	 */
 	public void updateAcknowledged() {
 		optionalAcknowledged = Optional.<Date> of(new Date());
+	}
+
+	@Override
+	public int describeContents() {
+		return 0;
+	}
+
+	@Override
+	public void writeToParcel(Parcel dest, int flags) {
+		dest.writeInt(id);
+		dest.writeSerializable(received);
+		dest.writeString(sender);
+		dest.writeString(message);
+		dest.writeString(triggerText);
+		dest.writeSerializable(optionalAcknowledged);
+		dest.writeInt(alarmType.ordinal());
+	}
+
+	@SuppressWarnings("unchecked")
+	private void readFromParcelable(Parcel source) {
+		id = source.readInt();
+		received = (Date) source.readSerializable();
+		sender = source.readString();
+		message = source.readString();
+		triggerText = source.readString();
+		optionalAcknowledged = (Optional<Date>) source.readSerializable();
+		alarmType = AlarmType.of(source.readInt());
+	}
+
+	public static final Parcelable.Creator<Alarm> CREATOR = new Parcelable.Creator<Alarm>() {
+		@Override
+		public Alarm createFromParcel(Parcel source) {
+			return new Alarm(source);
+		}
+
+		@Override
+		public Alarm[] newArray(int size) {
+			return new Alarm[size];
+		}
+	};
+
+	public Alarm(Parcel in) {
+		readFromParcelable(in);
 	}
 }

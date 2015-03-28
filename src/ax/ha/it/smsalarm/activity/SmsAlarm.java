@@ -76,7 +76,7 @@ public class SmsAlarm extends SlidingFragmentActivity {
 		super.onDestroy();
 
 		// Get all alarms from database and log them into a *.html file
-		AlarmLogger.getInstance().logAlarms(db.fetchAllAlarm(), this);
+		AlarmLogger.getInstance().logAlarms(db.fetchAllAlarms(), this);
 	}
 
 	/**

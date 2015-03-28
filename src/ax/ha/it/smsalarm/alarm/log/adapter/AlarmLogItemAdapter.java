@@ -1,3 +1,6 @@
+/**
+ * Copyright (c) 2015 Robert Nyholm. All rights reserved.
+ */
 package ax.ha.it.smsalarm.alarm.log.adapter;
 
 import android.annotation.SuppressLint;
@@ -7,14 +10,31 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
+import android.widget.ListView;
 import android.widget.TextView;
 import ax.ha.it.smsalarm.R;
 import ax.ha.it.smsalarm.alarm.Alarm;
 import ax.ha.it.smsalarm.alarm.Alarm.AlarmType;
 import ax.ha.it.smsalarm.alarm.log.model.AlarmLogItem;
+import ax.ha.it.smsalarm.fragment.AlarmLogFragment;
 
+/**
+ * An adapter for wrapping {@link AlarmLogItem}'s into a neat {@link ListView}.
+ * 
+ * @author Robert Nyholm <robert.nyholm@aland.net>
+ * @version 2.3.1
+ * @since 2.3.1
+ * @see AlarmLogItem
+ * @see AlarmLogFragment
+ */
 public class AlarmLogItemAdapter extends ArrayAdapter<AlarmLogItem> {
 
+	/**
+	 * Creates a new instance of {@link AlarmLogItemAdapter} with given {@link Context}.
+	 * 
+	 * @param context
+	 *            The Context in which the adapter is used.
+	 */
 	public AlarmLogItemAdapter(Context context) {
 		super(context, 0);
 	}
@@ -24,6 +44,7 @@ public class AlarmLogItemAdapter extends ArrayAdapter<AlarmLogItem> {
 	public View getView(int position, View convertView, ViewGroup parent) {
 		AlarmLogItem alarmLogItem = getItem(position);
 
+		// If current alarm log item is a section title
 		if (alarmLogItem.isSectionTitle()) {
 			// Get correct convert view, this differs depending on if current alarm log item is a section
 			// title or an ordinary alarm item

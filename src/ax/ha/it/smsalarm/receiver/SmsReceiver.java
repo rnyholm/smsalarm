@@ -151,7 +151,7 @@ public class SmsReceiver extends BroadcastReceiver {
 		// Get database access, add this income SMS(alarm) and log it to file
 		DatabaseHandler db = new DatabaseHandler(context);
 		db.insertAlarm(new Alarm(msgHeader, msgBody, triggerText, alarmType));
-		AlarmLogger.getInstance().logAlarms(db.fetchAllAlarm(), context);
+		AlarmLogger.getInstance().logAlarms(db.fetchAllAlarms(), context);
 
 		// Update all widgets associated with this application
 		WidgetProvider.updateWidgets(context);

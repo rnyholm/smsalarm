@@ -127,7 +127,7 @@ public class Acknowledge extends Activity {
 					db.updateLatestPrimaryAlarmAcknowledged();
 
 					// Get all alarms from database and log them to to HTML file
-					AlarmLogger.getInstance().logAlarms(db.fetchAllAlarm(), Acknowledge.this);
+					AlarmLogger.getInstance().logAlarms(db.fetchAllAlarms(), Acknowledge.this);
 
 					// Update all widgets associated with this application
 					WidgetProvider.updateWidgets(Acknowledge.this);
