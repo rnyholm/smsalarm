@@ -4,6 +4,7 @@
 package ax.ha.it.smsalarm.alarm;
 
 import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
 
@@ -234,8 +235,10 @@ public class Alarm implements Parcelable {
 	 * @return Date and time when this alarm was received as a <code>String</code> in a short format.
 	 */
 	public String getReceivedForLog() {
-		DateFormat dateTimeInstance = DateFormat.getTimeInstance(DateFormat.SHORT, Locale.getDefault());
-		return dateTimeInstance.format(received);
+		// DateFormat to get time received in a short format and SimpleDateFormat to get day received in a short format
+		DateFormat localizedTimeFormatter = DateFormat.getTimeInstance(DateFormat.SHORT, Locale.getDefault());
+
+		return new SimpleDateFormat("EE d", Locale.getDefault()).format(received) + " " + localizedTimeFormatter.format(received);
 	}
 
 	/**
