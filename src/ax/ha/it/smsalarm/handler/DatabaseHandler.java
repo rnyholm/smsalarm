@@ -7,6 +7,7 @@ import java.text.DateFormat;
 import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
@@ -272,13 +273,13 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 		// Initialize a TreeMap with a comparator, comparing on key which are year received
 		TreeMap<String, HashMap<String, List<Alarm>>> sortedAlarms = new TreeMap<String, HashMap<String, List<Alarm>>>(new Comparator<String>() {
 			@Override
-			public int compare(String lhs, String rhs) {
-				int lhsYear = Integer.parseInt(lhs);
-				int rhsYear = Integer.parseInt(rhs);
+			public int compare(String y1, String y2) {
+				int year1 = Integer.parseInt(y1);
+				int year2 = Integer.parseInt(y2);
 
-				if (lhsYear < rhsYear) {
+				if (year1 < year2) {
 					return 1;
-				} else if (lhsYear > rhsYear) {
+				} else if (year1 > year2) {
 					return -1;
 				}
 
@@ -305,6 +306,21 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 				if (alarmsPerMonth.containsKey(monthReceived)) {
 					alarms = alarmsPerMonth.get(monthReceived);
 					alarms.add(alarm);
+
+					// Sort the list of alarms on when the alarms was received directly aftera new element was inserted
+					Collections.sort(alarms, new Comparator<Alarm>() {
+						@Override
+						public int compare(Alarm a1, Alarm a2) {
+							if (a1.getReceived().getTime() < a2.getReceived().getTime()) {
+								return 1;
+							} else if (a1.getReceived().getTime() > a2.getReceived().getTime()) {
+								return -1;
+							}
+
+							return 0;
+						}
+					});
+
 					alarmsPerMonth.put(monthReceived, alarms);
 				} else {
 					alarms = new ArrayList<Alarm>();
