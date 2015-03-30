@@ -9,6 +9,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.EnumSet;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
@@ -267,9 +268,11 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 	 * <code>HashMap</code> in turn has <b><i>month received</i></b> as key and a {@link List} of {@link Alarm}'s that was received that month.<br>
 	 * In this way we got the <code>Alarm</code>'s sorted per month, per year.
 	 * 
+	 * @param alarmTypes
+	 *            {@link EnumSet} of {@link AlarmType}'s containing all types of alarm that's wanted in the structure returned.
 	 * @return All <code>Alarm</code>'s sorted in a nested {@link Map} structure.
 	 */
-	public TreeMap<String, HashMap<String, List<Alarm>>> fetchAllAlarmsSorted() {
+	public TreeMap<String, HashMap<String, List<Alarm>>> fetchAllAlarmsSorted(EnumSet<AlarmType> alarmTypes) {
 		// Initialize a TreeMap with a comparator, comparing on key which are year received
 		TreeMap<String, HashMap<String, List<Alarm>>> sortedAlarms = new TreeMap<String, HashMap<String, List<Alarm>>>(new Comparator<String>() {
 			@Override
@@ -292,50 +295,53 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 		List<Alarm> alarms = new ArrayList<Alarm>();
 
 		for (Alarm alarm : fetchAllAlarms()) {
-			// Get a calendar instance and set time from time and date when the alarm was received
-			Calendar calendar = Calendar.getInstance();
+			// Only if alarm has a type within the enumset of alarm types
+			if (alarmTypes.contains(alarm.getAlarmType())) {
+				// Get a calendar instance and set time from time and date when the alarm was received
+				Calendar calendar = Calendar.getInstance();
 
-			calendar.setTime(alarm.getReceived());
-			// Get year and month when the alarm was received
-			String yearReceived = String.valueOf(calendar.get(Calendar.YEAR));
-			String monthReceived = calendar.getDisplayName(Calendar.MONTH, Calendar.LONG, Locale.getDefault());
+				calendar.setTime(alarm.getReceived());
+				// Get year and month when the alarm was received
+				String yearReceived = String.valueOf(calendar.get(Calendar.YEAR));
+				String monthReceived = calendar.getDisplayName(Calendar.MONTH, Calendar.LONG, Locale.getDefault());
 
-			if (sortedAlarms.containsKey(yearReceived)) {
-				alarmsPerMonth = sortedAlarms.get(yearReceived);
+				if (sortedAlarms.containsKey(yearReceived)) {
+					alarmsPerMonth = sortedAlarms.get(yearReceived);
 
-				if (alarmsPerMonth.containsKey(monthReceived)) {
-					alarms = alarmsPerMonth.get(monthReceived);
-					alarms.add(alarm);
+					if (alarmsPerMonth.containsKey(monthReceived)) {
+						alarms = alarmsPerMonth.get(monthReceived);
+						alarms.add(alarm);
 
-					// Sort the list of alarms on when the alarms was received directly aftera new element was inserted
-					Collections.sort(alarms, new Comparator<Alarm>() {
-						@Override
-						public int compare(Alarm a1, Alarm a2) {
-							if (a1.getReceived().getTime() < a2.getReceived().getTime()) {
-								return 1;
-							} else if (a1.getReceived().getTime() > a2.getReceived().getTime()) {
-								return -1;
+						// Sort the list of alarms on when the alarms was received directly aftera new element was inserted
+						Collections.sort(alarms, new Comparator<Alarm>() {
+							@Override
+							public int compare(Alarm a1, Alarm a2) {
+								if (a1.getReceived().getTime() < a2.getReceived().getTime()) {
+									return 1;
+								} else if (a1.getReceived().getTime() > a2.getReceived().getTime()) {
+									return -1;
+								}
+
+								return 0;
 							}
+						});
 
-							return 0;
-						}
-					});
-
-					alarmsPerMonth.put(monthReceived, alarms);
+						alarmsPerMonth.put(monthReceived, alarms);
+					} else {
+						alarms = new ArrayList<Alarm>();
+						alarms.add(alarm);
+						alarmsPerMonth = new HashMap<String, List<Alarm>>();
+						alarmsPerMonth.put(monthReceived, alarms);
+					}
 				} else {
 					alarms = new ArrayList<Alarm>();
 					alarms.add(alarm);
 					alarmsPerMonth = new HashMap<String, List<Alarm>>();
 					alarmsPerMonth.put(monthReceived, alarms);
 				}
-			} else {
-				alarms = new ArrayList<Alarm>();
-				alarms.add(alarm);
-				alarmsPerMonth = new HashMap<String, List<Alarm>>();
-				alarmsPerMonth.put(monthReceived, alarms);
-			}
 
-			sortedAlarms.put(yearReceived, alarmsPerMonth);
+				sortedAlarms.put(yearReceived, alarmsPerMonth);
+			}
 		}
 
 		return sortedAlarms;

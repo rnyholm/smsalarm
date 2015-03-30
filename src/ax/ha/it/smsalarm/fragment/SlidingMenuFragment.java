@@ -84,6 +84,8 @@ public class SlidingMenuFragment extends SherlockListFragment {
 		adapter.add(new SlidingMenuItem(105, getString(R.string.MENU_TITLE_OTHER), R.drawable.ic_menu_other));
 		adapter.add(new SlidingMenuItem(getString(R.string.MENU_TITLE_ALARM_LOG)));
 		adapter.add(new SlidingMenuItem(201, getString(R.string.MENU_TITLE_ALL_ALARMS_LOG), R.drawable.ic_menu_all_alarms));
+		adapter.add(new SlidingMenuItem(202, getString(R.string.MENU_TITLE_ALL_PRIMARY_ALARMS_LOG)));
+		adapter.add(new SlidingMenuItem(203, getString(R.string.MENU_TITLE_ALL_SECONDARY_ALARMS_LOG)));
 		adapter.add(new SlidingMenuItem(getString(R.string.MENU_TITLE_ABOUT)));
 		adapter.add(new SlidingMenuItem(301, getString(R.string.MENU_TITLE_OPEN_SOURCE), R.drawable.ic_menu_os));
 		adapter.add(new SlidingMenuItem(302, getString(R.string.ABOUT), R.drawable.ic_menu_about));
@@ -122,6 +124,12 @@ public class SlidingMenuFragment extends SherlockListFragment {
 				break;
 			case (201):
 				fragment = new AlarmLogFragment();
+				break;
+			case (202):
+				fragment = new PrimaryAlarmLogFragment();
+				break;
+			case (203):
+				fragment = new SecondaryAlarmLogFragment();
 				break;
 			case (301):
 				fragment = new OpenSourceFragment();

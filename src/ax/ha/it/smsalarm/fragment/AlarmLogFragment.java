@@ -3,6 +3,7 @@
  */
 package ax.ha.it.smsalarm.fragment;
 
+import java.util.EnumSet;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
@@ -18,6 +19,7 @@ import android.view.ViewGroup;
 import android.widget.ListView;
 import ax.ha.it.smsalarm.R;
 import ax.ha.it.smsalarm.alarm.Alarm;
+import ax.ha.it.smsalarm.alarm.Alarm.AlarmType;
 import ax.ha.it.smsalarm.alarm.log.adapter.AlarmLogItemAdapter;
 import ax.ha.it.smsalarm.alarm.log.model.AlarmLogItem;
 import ax.ha.it.smsalarm.fragment.dialog.AlarmInfoDialog;
@@ -29,13 +31,18 @@ import com.actionbarsherlock.app.SherlockListFragment;
  * {@link Fragment} containing all the views and user interface widgets for the list of {@link AlarmLogItem}'s within the application. An
  * <code>AlarmLogItem</code> is simply an {@link Alarm} object wrapped into another object(<code>AlarmLogItem</code>) along with some utility
  * information needed for proper presentation. Also holds logic for opening a {@link AlarmInfoDialog}, displaying all info about the
- * <code>Alarm</code>.
+ * <code>Alarm</code>.<br>
+ * This particular <code>AlarmLogFragment</code> shows <code>Alarm</code>'s of both {@link AlarmType#PRIMARY} and {@link AlarmType#SECONDARY}, the
+ * inherited classes {@link PrimaryAlarmLogFragment} and {@link SecondaryAlarmLogFragment} shows <code>Alarm</code>'s of respective
+ * <code>AlarmType</code>.
  * 
  * @author Robert Nyholm <robert.nyholm@aland.net>
  * @version 2.3.1
  * @since 2.3.1
  * @see AlarmLogItem
  * @see AlarmLogItemAdapter
+ * @see PrimaryAlarmLogFragment
+ * @see SecondaryAlarmLogFragment
  */
 public class AlarmLogFragment extends SherlockListFragment {
 
@@ -57,14 +64,15 @@ public class AlarmLogFragment extends SherlockListFragment {
 
 	/**
 	 * To complete the creation of a {@link AlarmLogFragment} object by setting correct adapter({@link AlarmLogItemAdapter}) and populate the
-	 * <code>AlarmLogFragment</code> with {@link AlarmLogItem}'s.
+	 * <code>AlarmLogFragment</code> with {@link AlarmLogItem}'s, containing {@link Alarm}'s of {@link AlarmType#PRIMARY} and
+	 * {@link AlarmType#SECONDARY}.
 	 */
 	@Override
 	public void onActivityCreated(Bundle savedInstanceState) {
 		super.onActivityCreated(savedInstanceState);
 
 		AlarmLogItemAdapter adapter = new AlarmLogItemAdapter(getActivity());
-		createAlarmLogItems(adapter);
+		createAlarmLogItems(adapter, EnumSet.<AlarmType> of(AlarmType.PRIMARY, AlarmType.SECONDARY));
 		setListAdapter(adapter);
 	}
 
@@ -74,13 +82,15 @@ public class AlarmLogFragment extends SherlockListFragment {
 	 * 
 	 * @param adapter
 	 *            AlarmLogItemAdapter to which the created AlarmLogItem are added.
+	 * @param alarmTypes
+	 *            {@link EnumSet} of {@link AlarmType}'s containing all types of alarm thats wanted to be displayed in the alarm log.
 	 */
-	private void createAlarmLogItems(AlarmLogItemAdapter adapter) {
+	protected void createAlarmLogItems(AlarmLogItemAdapter adapter, EnumSet<AlarmType> alarmTypes) {
 		// Initialize database handler object from context
 		DatabaseHandler db = new DatabaseHandler(getActivity());
 
 		// Fetch all alarms in an organized way
-		TreeMap<String, HashMap<String, List<Alarm>>> organisedAlarms = db.fetchAllAlarmsSorted();
+		TreeMap<String, HashMap<String, List<Alarm>>> organisedAlarms = db.fetchAllAlarmsSorted(alarmTypes);
 
 		// Iterator for iterating over the years
 		Iterator<Entry<String, HashMap<String, List<Alarm>>>> it0 = organisedAlarms.entrySet().iterator();

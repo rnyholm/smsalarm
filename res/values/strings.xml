@@ -9,6 +9,8 @@
     <string name="MENU_TITLE_OTHER">Övrigt</string>
     <string name="MENU_TITLE_ALARM_LOG">Larmlogg</string>
     <string name="MENU_TITLE_ALL_ALARMS_LOG">Alla mottagna larm</string>
+    <string name="MENU_TITLE_ALL_PRIMARY_ALARMS_LOG">Alla primärlarm</string>
+    <string name="MENU_TITLE_ALL_SECONDARY_ALARMS_LOG">Alla sekundärlarm</string>
     <string name="MENU_TITLE_ABOUT">Om</string>
     <string name="MENU_TITLE_OPEN_SOURCE">Öppen källkod</string>
     <string name="INFO_MISC_SETTINGS">Ställ in din räddningstjänsts namn, om enhetens kamerablixt ska blinka vid inkommande larm och om Sms Alarm ska vara aktiverat.</string>
