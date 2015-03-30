@@ -9,14 +9,13 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.view.KeyEvent;
 import ax.ha.it.smsalarm.R;
-import ax.ha.it.smsalarm.alarm.Alarm;
+import ax.ha.it.smsalarm.fragment.AlarmLogFragment;
 import ax.ha.it.smsalarm.fragment.SlidingMenuFragment;
 import ax.ha.it.smsalarm.fragment.SmsSettingsFragment;
 import ax.ha.it.smsalarm.fragment.SoundSettingsFragment;
 import ax.ha.it.smsalarm.fragment.dialog.AlarmSignalDialog;
 import ax.ha.it.smsalarm.handler.DatabaseHandler;
 import ax.ha.it.smsalarm.provider.WidgetProvider;
-import ax.ha.it.smsalarm.util.AlarmLogger;
 
 import com.actionbarsherlock.view.MenuItem;
 import com.jeremyfeinstein.slidingmenu.lib.SlidingMenu;
@@ -31,10 +30,12 @@ import com.jeremyfeinstein.slidingmenu.lib.app.SlidingFragmentActivity;
  * @since 0.9beta
  */
 public class SmsAlarm extends SlidingFragmentActivity {
+	// Important flag, if set all eventual DEBUG logging and the Debug/Test menu will be shown, set false for production!
 	public static final boolean DEBUG = true;
 
-	// To get database access
-	private DatabaseHandler db;
+	// Flag that can be set as extra to an intent if fragment should be switched or not to AlarmLogFragment upon creation of this activity or if
+	// intent of this activity changes
+	public static final String SWITCH_TO_ALARM_LOG_FRAGMENT = "switchToAlarmLogFragment";
 
 	/**
 	 * Perform initialization of <code>Layout</code>'s, {@link Fragment}'s, the {@link SlidingMenu} and {@link ActionBar}. Configuration of these
@@ -52,9 +53,6 @@ public class SmsAlarm extends SlidingFragmentActivity {
 
 		configureSlidingMenu();
 		configureActionBar();
-
-		// Initialize database handler object from context
-		db = new DatabaseHandler(this);
 	}
 
 	/**
@@ -68,15 +66,15 @@ public class SmsAlarm extends SlidingFragmentActivity {
 		WidgetProvider.updateWidgets(this);
 	}
 
-	/**
-	 * When application is destroyed all {@link Alarm}'s stored in database will be written a <code>*.html</code> file.
-	 */
 	@Override
-	public void onDestroy() {
-		super.onDestroy();
+	protected void onNewIntent(Intent intent) {
+		super.onNewIntent(intent);
 
-		// Get all alarms from database and log them into a *.html file
-		AlarmLogger.getInstance().logAlarms(db.fetchAllAlarms(), this);
+		// To ensure that onResumeFragments() gets called, if we would do this a bunch of IllegalStateExceptions would be thrown
+		// See:
+		// http://stackoverflow.com/questions/7469082/getting-exception-illegalstateexception-can-not-perform-this-action-after-onsa/18824459#comment44854010_18824459
+		super.onPostResume();
+		setContentFragment(intent);
 	}
 
 	/**
@@ -166,20 +164,57 @@ public class SmsAlarm extends SlidingFragmentActivity {
 
 	/**
 	 * To set correct {@link Fragment} to the <code>ContentFrame</code>.<br>
-	 * If no <code>savedInstanceState</code> exists a new instance of the default <code>Fragment</code> {@link SmsSettingsFragment} will be placed in
-	 * the <code>ContentFrame</code>.
+	 * If no <code>savedInstanceState</code> exists and if {@link SmsAlarm#SWITCH_TO_ALARM_LOG_FRAGMENT} is set as <code>false</code> in this
+	 * activities {@link Intent} a new instance of the default <code>Fragment</code> {@link SmsSettingsFragment} will be placed in the
+	 * <code>ContentFrame</code>.<br>
+	 * If {@link SmsAlarm#SWITCH_TO_ALARM_LOG_FRAGMENT} is <code>true</code> then a new instance of <code>Fragment</code> {@link AlarmLogFragment}
+	 * will be placed in the <code>ContentFrame</code>.
 	 * 
 	 * @param savedInstanceState
 	 *            If the activity is being re-initialized after previously being shut down then this Bundle contains the data it most recently
 	 *            supplied in {@link #onSaveInstanceState}. <b><i>Note: Otherwise it is null.</i></b>
+	 * @see #setContentFragment(Intent)
 	 */
 	private void setContentFragment(Bundle savedInstanceState) {
 		// Activity is not being re-created, set default fragment to content frame
 		if (savedInstanceState == null) {
-			FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
-			ft.replace(R.id.contentFrame_fl, new SmsSettingsFragment());
-			ft.commit();
+			// Set content fragment depending on intent
+			setContentFragment(getIntent());
 		}
+	}
+
+	/**
+	 * To set correct {@link Fragment} to the <code>ContentFrame</code>.<br>
+	 * What <code>Fragment</code> is to be placed in the <code>ContentFrame</code> depends on if given {@link Intent} has
+	 * {@link SmsAlarm#SWITCH_TO_ALARM_LOG_FRAGMENT} as extra and how it's set.<br>
+	 * If the <code>Intent</code> is missing that extra or if it got it but it's <code>false</code> then the default {@link SmsSettingsFragment} will
+	 * be placed in the <code>ContentFrame</code>. <br>
+	 * On the other hand if the extra exists and it's set <code>true</code> then a {@link AlarmLogFragment} will be placed in the
+	 * <code>ContentFrame</code>.
+	 * <p>
+	 * Note. If the <code>SlidingMenu</code> is showing when an <code>AlarmLogFragment</code> is placed in the <code>ContentView</code> it will be
+	 * placed in background, this is to ensure the <code>AlarmLogFragment</code> is on top.
+	 * 
+	 * @param intent
+	 *            <code>Intent</code> which extras are checked and upon them a decision what <code>Fragment</code> that should be placed in
+	 *            <code>ContentFrame</code> are taken.
+	 */
+	private void setContentFragment(Intent intent) {
+		FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+
+		// Check for switch to alarm log fragment extra exists and whether it's true or not
+		if (intent.getBooleanExtra(SWITCH_TO_ALARM_LOG_FRAGMENT, false)) {
+			ft.replace(R.id.contentFrame_fl, new AlarmLogFragment());
+
+			// If menu is showing, toggle it to background
+			if (getSlidingMenu().isMenuShowing()) {
+				toggle();
+			}
+		} else {
+			ft.replace(R.id.contentFrame_fl, new SmsSettingsFragment());
+		}
+
+		ft.commit();
 	}
 
 	/**

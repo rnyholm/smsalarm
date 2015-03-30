@@ -35,7 +35,7 @@
                 <category android:name="android.intent.category.LAUNCHER" />            
         	</intent-filter>       	
        	</activity>
-        <activity android:name="ax.ha.it.smsalarm.activity.SmsAlarm" android:noHistory="false" android:label="@string/APP_NAME">
+        <activity android:name="ax.ha.it.smsalarm.activity.SmsAlarm" android:noHistory="false" android:launchMode="singleTask"  android:label="@string/APP_NAME">
             <intent-filter>
  				<!-- Future intents and services for this activity goes here -->   
             </intent-filter>

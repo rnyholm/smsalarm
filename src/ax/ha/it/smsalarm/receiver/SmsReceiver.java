@@ -31,7 +31,6 @@ import ax.ha.it.smsalarm.handler.VibrationHandler;
 import ax.ha.it.smsalarm.provider.WidgetProvider;
 import ax.ha.it.smsalarm.service.AcknowledgeNotificationService;
 import ax.ha.it.smsalarm.service.NotificationService;
-import ax.ha.it.smsalarm.util.AlarmLogger;
 import ax.ha.it.smsalarm.util.Util;
 import ax.ha.it.smsalarm.util.WakeLocker;
 
@@ -148,10 +147,9 @@ public class SmsReceiver extends BroadcastReceiver {
 			abortBroadcast();
 		}
 
-		// Get database access, add this income SMS(alarm) and log it to file
+		// Get database access and add this income SMS(alarm) to database
 		DatabaseHandler db = new DatabaseHandler(context);
 		db.insertAlarm(new Alarm(msgHeader, msgBody, triggerText, alarmType));
-		AlarmLogger.getInstance().logAlarms(db.fetchAllAlarms(), context);
 
 		// Update all widgets associated with this application
 		WidgetProvider.updateWidgets(context);

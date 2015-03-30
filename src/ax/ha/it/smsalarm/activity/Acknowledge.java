@@ -28,7 +28,6 @@ import ax.ha.it.smsalarm.handler.SharedPreferencesHandler;
 import ax.ha.it.smsalarm.handler.SharedPreferencesHandler.DataType;
 import ax.ha.it.smsalarm.handler.SharedPreferencesHandler.PrefKey;
 import ax.ha.it.smsalarm.provider.WidgetProvider;
-import ax.ha.it.smsalarm.util.AlarmLogger;
 
 /**
  * Handles and are responsible for the <b><i>Sms Alarm's Acknowledge</i></b> by call functionality.<br>
@@ -125,9 +124,6 @@ public class Acknowledge extends Activity {
 				if (!"".equals(acknowledgeNumber)) {
 					// Update acknowledge time of latest received primary alarm in database
 					db.updateLatestPrimaryAlarmAcknowledged();
-
-					// Get all alarms from database and log them to to HTML file
-					AlarmLogger.getInstance().logAlarms(db.fetchAllAlarms(), Acknowledge.this);
 
 					// Update all widgets associated with this application
 					WidgetProvider.updateWidgets(Acknowledge.this);

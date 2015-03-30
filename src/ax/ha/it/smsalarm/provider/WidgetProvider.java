@@ -3,8 +3,6 @@
  */
 package ax.ha.it.smsalarm.provider;
 
-import java.io.File;
-
 import android.app.PendingIntent;
 import android.appwidget.AppWidgetManager;
 import android.appwidget.AppWidgetProvider;
@@ -12,18 +10,16 @@ import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.net.Uri;
-import android.webkit.MimeTypeMap;
 import android.widget.RemoteViews;
 import android.widget.TextView;
 import ax.ha.it.smsalarm.R;
+import ax.ha.it.smsalarm.activity.SmsAlarm;
 import ax.ha.it.smsalarm.activity.Splash;
 import ax.ha.it.smsalarm.alarm.Alarm;
 import ax.ha.it.smsalarm.handler.DatabaseHandler;
 import ax.ha.it.smsalarm.handler.SharedPreferencesHandler;
 import ax.ha.it.smsalarm.handler.SharedPreferencesHandler.DataType;
 import ax.ha.it.smsalarm.handler.SharedPreferencesHandler.PrefKey;
-import ax.ha.it.smsalarm.util.AlarmLogger;
 
 /**
  * Provider class for the application widgets. This class is responsible for all updates, data population, data presentation and so on for a widget.<br>
@@ -41,10 +37,9 @@ public class WidgetProvider extends AppWidgetProvider {
 	// Max length of the latest alarm length in widget
 	private static final int ALARM_TEXT_MAX_LENGTH = 100;
 
-	// Strings representing different intents used to run different methods from intent
+	// Strings representing different intent actions used to run different methods from intent
 	private static final String TOGGLE_ENABLE_SMS_ALARM = "ax.ha.it.smsalarm.TOGGLE_SMS_ALARM_ENABLE";
 	private static final String TOGGLE_USE_OS_SOUND_SETTINGS = "ax.ha.it.smsalarm.TOGGLE_USE_OS_SOUND_SETTINGS";
-	private static final String SHOW_RECEIVED_ALARMS = "ax.ha.it.smsalarm.SHOW_RECEIVED_ALARMS";
 	private static final String UPDATE_WIDGETS = "ax.ha.it.smsalarm.UPDATE_WIDGETS";
 
 	// Some booleans for retrieving preferences into
@@ -58,7 +53,6 @@ public class WidgetProvider extends AppWidgetProvider {
 	 * <ul>
 	 * <li>ax.ha.it.smsalarm.TOGGLE_SMS_ALARM_ENABLE</li>
 	 * <li>ax.ha.it.smsalarm.TOGGLE_USE_OS_SOUND_SETTINGS</li>
-	 * <li>ax.ha.it.smsalarm.SHOW_RECEIVED_ALARMS</li>
 	 * <li>ax.ha.it.smsalarm.UPDATE_WIDGETS</li>
 	 * </ul>
 	 */
@@ -89,28 +83,6 @@ public class WidgetProvider extends AppWidgetProvider {
 			}
 
 			WidgetProvider.updateWidgets(context);
-		} else if (SHOW_RECEIVED_ALARMS.equals(intent.getAction())) {
-			// Get full file path to alarm log file
-			String alarmLogFilePath = AlarmLogger.getInstance().getAlarmLogPath();
-
-			// Create an intent for opening the alarm log file
-			Intent showReceivedAlarmsIntent = new Intent();
-			showReceivedAlarmsIntent.setAction(android.content.Intent.ACTION_VIEW);
-			showReceivedAlarmsIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK); // Create new task
-
-			// File object for the alarm log file
-			File file = new File(alarmLogFilePath);
-
-			// Set mime type for deciding which file format file is in
-			MimeTypeMap mime = MimeTypeMap.getSingleton();
-			String ext = file.getName().substring(file.getName().indexOf(".") + 1);
-			String type = mime.getMimeTypeFromExtension(ext);
-
-			// Set data and type, in this case alarm log file and HTML
-			showReceivedAlarmsIntent.setDataAndType(Uri.fromFile(file), type);
-
-			// Start new activity from context
-			context.startActivity(showReceivedAlarmsIntent);
 		} else if (UPDATE_WIDGETS.equals(intent.getAction())) {
 			// Call onUpdate to update the widget instances
 			onUpdate(context, manager, AppWidgetManager.getInstance(context).getAppWidgetIds(new ComponentName(context.getPackageName(), getClass().getName())));
@@ -150,10 +122,10 @@ public class WidgetProvider extends AppWidgetProvider {
 			useOsSoundSettingsIntent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, appWidgetIds[i]);
 			PendingIntent useOsSoundSettingsPendingIntent = PendingIntent.getBroadcast(context, 0, useOsSoundSettingsIntent, PendingIntent.FLAG_UPDATE_CURRENT);
 
-			Intent showReceivedAlarmsIntent = new Intent(context, WidgetProvider.class);
-			showReceivedAlarmsIntent.setAction(WidgetProvider.SHOW_RECEIVED_ALARMS);
-			showReceivedAlarmsIntent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, appWidgetIds[i]);
-			PendingIntent showReceivedAlarmsPendingIntent = PendingIntent.getBroadcast(context, 0, showReceivedAlarmsIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+			Intent showAlarmLogIntent = new Intent(context, SmsAlarm.class);
+			showAlarmLogIntent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, appWidgetIds[i]);
+			showAlarmLogIntent.putExtra(SmsAlarm.SWITCH_TO_ALARM_LOG_FRAGMENT, true);
+			PendingIntent showAlarmLogPendingIntent = PendingIntent.getActivity(context, 0, showAlarmLogIntent, PendingIntent.FLAG_UPDATE_CURRENT);
 
 			// Set widget texts
 			setWidgetTextViews(rv, context);
@@ -166,7 +138,7 @@ public class WidgetProvider extends AppWidgetProvider {
 			if (endUserLicenseAgreed) {
 				rv.setOnClickPendingIntent(R.id.widget_smsalarm_status_tv, enableSmsAlarmPendingIntent);
 				rv.setOnClickPendingIntent(R.id.widget_soundsettings_status_tv, useOsSoundSettingsPendingIntent);
-				rv.setOnClickPendingIntent(R.id.widget_latest_received_alarm_tv, showReceivedAlarmsPendingIntent);
+				rv.setOnClickPendingIntent(R.id.widget_latest_received_alarm_tv, showAlarmLogPendingIntent);
 			}
 
 			// Update widget

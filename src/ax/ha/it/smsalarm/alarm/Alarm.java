@@ -231,6 +231,12 @@ public class Alarm implements Parcelable {
 	/**
 	 * To get date and time when this Alarm was received as a {@link String} according to the default {@link Locale}.<br>
 	 * The date will be formatted in a <b><i>short way</i></b>, this will also be done according to default <code>Locale</code>.
+	 * <p>
+	 * Example output, using <code>Locale</code> <b><i>en_US</i></b>:<br>
+	 * Sun 29 6:41 PM <br>
+	 * <br>
+	 * Example output, using <code>Locale</code> <b><i>sv_FI</i></b>:<br>
+	 * sön 29 18:41
 	 * 
 	 * @return Date and time when this alarm was received as a <code>String</code> in a short format.
 	 */
