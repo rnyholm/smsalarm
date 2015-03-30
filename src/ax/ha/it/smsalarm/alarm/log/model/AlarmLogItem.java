@@ -17,25 +17,29 @@ import ax.ha.it.smsalarm.fragment.AlarmLogFragment;
  * @see AlarmLogFragment
  */
 public class AlarmLogItem {
-	// Alarm, year- and month received
+	// Alarm, year- and month received. Also number of alarms received
 	private Alarm alarm;
 	private String yearReceived;
 	private String monthReceived;
+	private int numberOfAlarmsReceived;
 
 	/**
 	 * Creates a new instance of {@link AlarmLogItem} with <b><i>year</i></b> and <b><i>month</i></b> when the alarms was received.
 	 * <p>
 	 * <b><i>Note. If the <code>AlarmLogItem</code> is created with this constructor it will be seen as a "section title" in the
-	 * {@link AlarmLogFragment}</i></b>.
+	 * {@link AlarmLogFragment}, it also takes the number of {@link Alarm}'s received for this "section title"'s month</i></b>.
 	 * 
 	 * @param yearReceived
 	 *            {@link String} representing the year when alarms was received.
 	 * @param monthReceived
 	 *            <code>String</code> representing the year when the alarms was received.
+	 * @param numberOfAlarmsReceived
+	 *            {@link Integer} representing the number if alarms received.
 	 */
-	public AlarmLogItem(String yearReceived, String monthReceived) {
+	public AlarmLogItem(String yearReceived, String monthReceived, int numberOfAlarmsReceived) {
 		this.yearReceived = yearReceived;
 		this.monthReceived = monthReceived;
+		this.numberOfAlarmsReceived = numberOfAlarmsReceived;
 	}
 
 	/**
@@ -73,6 +77,15 @@ public class AlarmLogItem {
 	 */
 	public String getMonthReceived() {
 		return monthReceived;
+	}
+
+	/**
+	 * To get the number of alarms received, formatted for the <b><i>AlarmLog</i></b>.
+	 * 
+	 * @return Number of alarms received.
+	 */
+	public String getNumberOfAlarmsReceived() {
+		return "(" + String.valueOf(numberOfAlarmsReceived) + ")";
 	}
 
 	/**

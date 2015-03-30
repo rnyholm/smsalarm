@@ -47,7 +47,8 @@
     <string name="ALARM_LOG_ITEM_IMAGE_DESCR">Alarm log item image</string>
     <string name="ALARM_LOG_ITEM_MESSAGE">Alarm message</string>
     <string name="ALARM_LOG_ITEM_SENDER">Alarm sender</string>
-    <string name="ALARM_LOG_SECTION_TITLE">Alarm log section title</string>
+    <string name="ALARM_LOG_SECTION_MONTH_YEAR_TITLE">Month Year</string>
+    <string name="ALARM_LOG_SECTION_NUMBER_OF_ALARMS_TITLE">(Alarms)</string>
     <string name="DIVIDER_DESCR">Divider</string>
     <string name="LICENSE_ITEM_TITLE">License item title</string>
     <string name="LICENSE_ITEM_URI">License item URI</string>

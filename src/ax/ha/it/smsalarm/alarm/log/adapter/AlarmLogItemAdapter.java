@@ -51,8 +51,11 @@ public class AlarmLogItemAdapter extends ArrayAdapter<AlarmLogItem> {
 			convertView = LayoutInflater.from(getContext()).inflate(R.layout.alarm_log_section, null);
 
 			// Set correct text to layout
-			TextView title = (TextView) convertView.findViewById(R.id.alarmLogSectionTitle_tv);
-			title.setText(alarmLogItem.getMonthReceived() + " " + alarmLogItem.getYearReceived());
+			TextView monthYearTitle = (TextView) convertView.findViewById(R.id.alarmLogSectionMonthYearTitle_tv);
+			monthYearTitle.setText(alarmLogItem.getMonthReceived() + " " + alarmLogItem.getYearReceived());
+
+			TextView numberOfAlarmsReceivedTitle = (TextView) convertView.findViewById(R.id.alarmLogSectionNumberOfAlarmsReceivedTitle_tv);
+			numberOfAlarmsReceivedTitle.setText(alarmLogItem.getNumberOfAlarmsReceived());
 		} else {
 			Alarm alarm = alarmLogItem.getAlarm();
 

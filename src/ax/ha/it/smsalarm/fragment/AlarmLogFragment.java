@@ -101,11 +101,14 @@ public class AlarmLogFragment extends SherlockListFragment {
 				// Fetch entry alarms per month
 				Entry<String, List<Alarm>> alarmsPerMonthEntry = it1.next();
 
+				// Get the alarms
+				List<Alarm> alarms = alarmsPerMonthEntry.getValue();
+
 				// Add a "header" item to the adapter
-				adapter.add(new AlarmLogItem(alarmsPerYearEntry.getKey(), alarmsPerMonthEntry.getKey()));
+				adapter.add(new AlarmLogItem(alarmsPerYearEntry.getKey(), alarmsPerMonthEntry.getKey(), alarms.size()));
 
 				// Iterate over every alarm and add them to the adapter
-				for (Alarm alarm : alarmsPerMonthEntry.getValue()) {
+				for (Alarm alarm : alarms) {
 					adapter.add(new AlarmLogItem(alarm));
 				}
 			}
