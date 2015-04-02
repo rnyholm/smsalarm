@@ -175,8 +175,9 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 	 * 
 	 * @param alarm
 	 *            Alarm to be inserted in database.
+	 * @return Given alarm after it has been persisted.
 	 */
-	public void insertAlarm(Alarm alarm) {
+	public Alarm insertAlarm(Alarm alarm) {
 		// Get a writable database handle
 		SQLiteDatabase db = getWritableDatabase();
 
@@ -191,9 +192,12 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 		values.put(KEY_ALARM_TYPE, alarm.getAlarmType().ordinal()); 	// Type of alarm
 		// @formatter:on
 
-		// Inserting Row
-		db.insert(TABLE_ALARMS, null, values);
+		// Inserting row and get the (row) id
+		long rowId = db.insert(TABLE_ALARMS, null, values);
 		db.close(); // Closing database connection
+
+		// Fetch and return inserted alarm
+		return fetchAlarm((int) rowId);
 	}
 
 	/**
@@ -330,13 +334,11 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 					} else {
 						alarms = new ArrayList<Alarm>();
 						alarms.add(alarm);
-						alarmsPerMonth = new HashMap<String, List<Alarm>>();
 						alarmsPerMonth.put(monthReceived, alarms);
 					}
 				} else {
 					alarms = new ArrayList<Alarm>();
 					alarms.add(alarm);
-					alarmsPerMonth = new HashMap<String, List<Alarm>>();
 					alarmsPerMonth.put(monthReceived, alarms);
 				}
 
@@ -415,40 +417,40 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 	/**
 	 * To update latest {@link Alarm}'s acknowledge time in database.
 	 */
-	public void updateLatestAlarmAcknowledged() {
-		// Get and store number of entries(alarms) in database
-		int alarmsCount = getAlarmsCount();
-
-		// Get latest entry(alarm) in database
-		Alarm alarm = fetchAlarm(alarmsCount);
-		// Update alarms acknowledge time
-		alarm.updateAcknowledged();
-
-		// Update alarm entry
-		updateAlarm(alarm);
-	}
+//	public void updateLatestAlarmAcknowledged() {
+//		// Get and store number of entries(alarms) in database
+//		int alarmsCount = getAlarmsCount();
+//
+//		// Get latest entry(alarm) in database
+//		Alarm alarm = fetchAlarm(alarmsCount);
+//		// Update alarms acknowledge time
+//		alarm.updateAcknowledged();
+//
+//		// Update alarm entry
+//		updateAlarm(alarm);
+//	}
 
 	/**
 	 * To update the latest {@link Alarm} of {@link AlarmType#PRIMARY} with a new acknowledge time in database.
 	 */
-	public void updateLatestPrimaryAlarmAcknowledged() {
-		// Iterate through all alarms in database from the last one and down
-		for (int i = getAlarmsCount(); i > 0; i--) {
-			// Get entry(alarm) in database
-			Alarm alarm = fetchAlarm(i);
-
-			// If alarm type is primary we want to update it's acknowledge time
-			if (AlarmType.PRIMARY.equals(alarm.getAlarmType())) {
-				// Update alarms acknowledge time
-				alarm.updateAcknowledged();
-				// Update alarm entry
-				updateAlarm(alarm);
-
-				// Get out of the loop, as rest of the alarm not is are of interest
-				break;
-			}
-		}
-	}
+//	public void updateLatestPrimaryAlarmAcknowledged() {
+//		// Iterate through all alarms in database from the last one and down
+//		for (int i = getAlarmsCount(); i > 0; i--) {
+//			// Get entry(alarm) in database
+//			Alarm alarm = fetchAlarm(i);
+//
+//			// If alarm type is primary we want to update it's acknowledge time
+//			if (AlarmType.PRIMARY.equals(alarm.getAlarmType())) {
+//				// Update alarms acknowledge time
+//				alarm.updateAcknowledged();
+//				// Update alarm entry
+//				updateAlarm(alarm);
+//
+//				// Get out of the loop, as rest of the alarm not is are of interest
+//				break;
+//			}
+//		}
+//	}
 
 	/**
 	 * To delete an {@link Alarm} from the database.

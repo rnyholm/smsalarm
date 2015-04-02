@@ -14,11 +14,12 @@ import android.support.v4.app.NotificationCompat;
 import android.util.Log;
 import ax.ha.it.smsalarm.R;
 import ax.ha.it.smsalarm.activity.SmsAlarm;
-import ax.ha.it.smsalarm.alarm.Alarm.AlarmType;
+import ax.ha.it.smsalarm.alarm.Alarm;
 import ax.ha.it.smsalarm.handler.SharedPreferencesHandler;
 import ax.ha.it.smsalarm.handler.SharedPreferencesHandler.DataType;
 import ax.ha.it.smsalarm.handler.SharedPreferencesHandler.PrefKey;
 import ax.ha.it.smsalarm.receiver.NotificationReceiver;
+import ax.ha.it.smsalarm.util.Util;
 
 /**
  * Helper to build up and show {@link Notification}, also creates {@link PendingIntent}'s for the notification.<br>
@@ -30,10 +31,6 @@ import ax.ha.it.smsalarm.receiver.NotificationReceiver;
  */
 public class NotificationService extends IntentService {
 	private static final String LOG_TAG = NotificationService.class.getSimpleName();
-
-	public static final String NOTIFICATION_ACTION = "notificationAction";
-	public static final int NOTIFICATION_PRESSED = 0;
-	public static final int NOTIFICATION_DISMISSED = 1;
 
 	private final SharedPreferencesHandler prefHandler = SharedPreferencesHandler.getInstance();
 
@@ -65,11 +62,12 @@ public class NotificationService extends IntentService {
 	@SuppressLint("DefaultLocale")
 	@Deprecated
 	@Override
-	protected void onHandleIntent(Intent i) {
-		// Fetch some values from the shared preferences
-		String contentText = (String) prefHandler.fetchPrefs(PrefKey.SHARED_PREF, PrefKey.MESSAGE_KEY, DataType.STRING, this);
+	protected void onHandleIntent(Intent intent) {
+		// Get the alarm passed on from SmsReceiver
+		Alarm alarm = (Alarm) intent.getParcelableExtra(Alarm.TAG);
+
+		// Fetch rescue service from the shared preferences
 		String rescueService = (String) prefHandler.fetchPrefs(PrefKey.SHARED_PREF, PrefKey.RESCUE_SERVICE_KEY, DataType.STRING, this);
-		AlarmType alarmType = AlarmType.of((Integer) prefHandler.fetchPrefs(PrefKey.SHARED_PREF, PrefKey.LARM_TYPE_KEY, DataType.INTEGER, this));
 
 		// Setup a notification, directly from Android developer site
 		NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
@@ -79,7 +77,7 @@ public class NotificationService extends IntentService {
 		long when = System.currentTimeMillis();
 
 		// Configure notification depending on alarm type
-		switch (alarmType) {
+		switch (alarm.getAlarmType()) {
 			case PRIMARY:
 				// Set proper texts and icon to notification
 				configureNotification(R.drawable.ic_primary_alarm, getString(R.string.PRIMARY_ALARM), rescueService.toUpperCase(), getString(R.string.PRIMARY_ALARM));
@@ -93,7 +91,7 @@ public class NotificationService extends IntentService {
 				}
 		}
 
-		// Setup intents for pressing notification and dismissing it
+		// Setup intents for pressing notification and dismissing it, doesn't need to pass over alarm in this intent
 		Intent notificationPressedIntent = new Intent(this, NotificationReceiver.class);
 		notificationPressedIntent.setAction(NotificationReceiver.ACTION_OPEN_INBOX);
 
@@ -110,7 +108,7 @@ public class NotificationService extends IntentService {
 			.setTicker(tickerText)
 			.setWhen(when)
 			.setContentTitle(contentTitle)
-			.setContentText(contentText)
+			.setContentText(Util.cleanAlarmCentralAXMessage(alarm.getMessage()))
 			.setContentIntent(notificationPressedPendingIntent)
 			.setDeleteIntent(notificationDismissedPendingIntent)
 			.setAutoCancel(true)

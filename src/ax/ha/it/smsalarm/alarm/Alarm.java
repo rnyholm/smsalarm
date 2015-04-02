@@ -19,8 +19,12 @@ import com.google.common.base.Optional;
  * @author Robert Nyholm <robert.nyholm@aland.net>
  * @version 2.3.1
  * @since 2.1beta
+ * @see #TAG
  */
 public class Alarm implements Parcelable {
+	// Used as a key when putting data into bundles and intents
+	public static String TAG = "alarm";
+
 	/**
 	 * Enumeration for then different types of <b><i>Alarms</i></b>.
 	 * 
@@ -303,6 +307,18 @@ public class Alarm implements Parcelable {
 		}
 
 		return "-";
+	}
+
+	/**
+	 * To an {@link Optional} with a {@link Date} when this Alarm was acknowledged.
+	 * <p>
+	 * <b><i>Note. The acknowledged date is Optional, hence absent return values can occurre.</i></b>
+	 * 
+	 * @return <code>Optional</code> with <code>Date</code> when this Alarm was acknowledged, if present, else an <b><i>absent</i></b>
+	 *         <code>Optional</code> is returned.
+	 */
+	public Optional<Date> getAcknowledged() {
+		return optionalAcknowledged;
 	}
 
 	/**

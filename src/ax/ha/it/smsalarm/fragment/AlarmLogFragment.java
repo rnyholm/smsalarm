@@ -3,6 +3,7 @@
  */
 package ax.ha.it.smsalarm.fragment;
 
+import java.util.Date;
 import java.util.EnumSet;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -11,6 +12,7 @@ import java.util.Map.Entry;
 import java.util.TreeMap;
 
 import android.annotation.SuppressLint;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
@@ -18,12 +20,16 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ListView;
 import ax.ha.it.smsalarm.R;
+import ax.ha.it.smsalarm.activity.Acknowledge;
 import ax.ha.it.smsalarm.alarm.Alarm;
 import ax.ha.it.smsalarm.alarm.Alarm.AlarmType;
 import ax.ha.it.smsalarm.alarm.log.adapter.AlarmLogItemAdapter;
 import ax.ha.it.smsalarm.alarm.log.model.AlarmLogItem;
 import ax.ha.it.smsalarm.fragment.dialog.AlarmInfoDialog;
 import ax.ha.it.smsalarm.handler.DatabaseHandler;
+import ax.ha.it.smsalarm.handler.SharedPreferencesHandler;
+import ax.ha.it.smsalarm.handler.SharedPreferencesHandler.DataType;
+import ax.ha.it.smsalarm.handler.SharedPreferencesHandler.PrefKey;
 
 import com.actionbarsherlock.app.SherlockListFragment;
 
@@ -127,19 +133,42 @@ public class AlarmLogFragment extends SherlockListFragment {
 
 	@Override
 	public void onListItemClick(ListView l, View v, int position, long id) {
-		// TODO: Decide if acknowledge UI or if the alarm info dialog should be shown
-
 		// Get alarm from selected alarm info
 		Alarm alarm = ((AlarmLogItem) getListView().getItemAtPosition(position)).getAlarm();
 
-		// Must pass over alarm which information should be shown
-		Bundle arguments = new Bundle();
-		arguments.putParcelable(AlarmInfoDialog.ALARM_INFO, alarm);
+		// Whether or not acknowledgement activity should be opened
+		boolean startAcknowledgementActivity = false;
 
-		// Create dialog as usual, but put arguments in it also
-		AlarmInfoDialog dialog = new AlarmInfoDialog();
-		dialog.setArguments(arguments);
-		dialog.setTargetFragment(AlarmLogFragment.this, AlarmInfoDialog.ALARM_INFO_DIALOG_REQUEST_CODE);
-		dialog.show(getFragmentManager(), AlarmInfoDialog.ALARM_INFO_DIALOG_TAG);
+		// Only open acknowledge activity once again if alarm type is primary, alarm hasn't been acknowledged...
+		if (AlarmType.PRIMARY.equals(alarm.getAlarmType()) && !alarm.getAcknowledged().isPresent()) {
+			// ...alarm was received within the last 24hours...
+			if (alarm.getReceived().getTime() > (new Date().getTime() - 86400000)) {
+				// ...and application is set to use acknowledgement
+				if ((Boolean) SharedPreferencesHandler.getInstance().fetchPrefs(PrefKey.SHARED_PREF, PrefKey.ENABLE_ACK_KEY, DataType.BOOLEAN, getActivity())) {
+					startAcknowledgementActivity = true;
+				}
+			}
+		}
+
+		// OK to open acknowledge activity once again
+		if (startAcknowledgementActivity) {
+			// Build up the new intent and pass over the alarm to acknowledge activity
+			Intent acknowledgeIntent = new Intent(getActivity(), Acknowledge.class);
+			acknowledgeIntent.putExtra(Alarm.TAG, alarm);
+			acknowledgeIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+			getActivity().startActivity(acknowledgeIntent);
+
+			// TODO: Finish this activity?
+		} else { // We just open dialog displaying the information about selected alarm
+			// Must pass over alarm which information should be shown
+			Bundle arguments = new Bundle();
+			arguments.putParcelable(AlarmInfoDialog.ALARM_INFO, alarm);
+
+			// Create dialog as usual, but put arguments in it also
+			AlarmInfoDialog dialog = new AlarmInfoDialog();
+			dialog.setArguments(arguments);
+			dialog.setTargetFragment(AlarmLogFragment.this, AlarmInfoDialog.ALARM_INFO_DIALOG_REQUEST_CODE);
+			dialog.show(getFragmentManager(), AlarmInfoDialog.ALARM_INFO_DIALOG_TAG);
+		}
 	}
 }

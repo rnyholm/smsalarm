@@ -23,6 +23,7 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 import ax.ha.it.smsalarm.R;
+import ax.ha.it.smsalarm.alarm.Alarm;
 import ax.ha.it.smsalarm.handler.DatabaseHandler;
 import ax.ha.it.smsalarm.handler.SharedPreferencesHandler;
 import ax.ha.it.smsalarm.handler.SharedPreferencesHandler.DataType;
@@ -48,6 +49,9 @@ public class Acknowledge extends Activity {
 	// Database access
 	private DatabaseHandler db;
 
+	// Got to have the alarm which should be acknowledged
+	private Alarm alarm;
+
 	// The TextViews...
 	private TextView titleTextView;
 	private TextView fullMessageTextView;
@@ -62,9 +66,8 @@ public class Acknowledge extends Activity {
 	// ...and ProgressBar
 	private ProgressBar redialProgressBar;
 
-	// Strings for the data presentation in UI
+	// Rescue service name for data presentation in UI
 	private String rescueService = "";
-	private String fullMessage = "";
 
 	// String representing phone number to which we acknowledge to
 	private String acknowledgeNumber = "";
@@ -95,8 +98,15 @@ public class Acknowledge extends Activity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.ack);
 
+		// Reset Shared Preference HAS_CALLED, to ensure that activity acknowledge not will place a acknowledge call onResume()
+		// This is done here because this is only relevant if application is set to acknowledge, and here intent for acknowledge is loaded
+		prefHandler.storePrefs(PrefKey.SHARED_PREF, PrefKey.HAS_CALLED_KEY, false, this);
+
 		// Initialize database handler object from context
 		db = new DatabaseHandler(this);
+
+		// An alarm definitely should be in the intent at this point, get it
+		alarm = (Alarm) getIntent().getParcelableExtra(Alarm.TAG);
 
 		// Declare a telephony manager with proper SystemService and attach listener to it
 		TelephonyManager tManager = (TelephonyManager) getSystemService(Context.TELEPHONY_SERVICE);
@@ -122,8 +132,9 @@ public class Acknowledge extends Activity {
 			public void onClick(View v) {
 				// Check to see if any phone number to acknowledge to exists
 				if (!"".equals(acknowledgeNumber)) {
-					// Update acknowledge time of latest received primary alarm in database
-					db.updateLatestPrimaryAlarmAcknowledged();
+					// Update acknowledge time and persist it to database
+					alarm.updateAcknowledged();
+					db.updateAlarm(alarm);
 
 					// Update all widgets associated with this application
 					WidgetProvider.updateWidgets(Acknowledge.this);
@@ -217,7 +228,6 @@ public class Acknowledge extends Activity {
 	 */
 	private void fetchSharedPrefs() {
 		rescueService = (String) prefHandler.fetchPrefs(PrefKey.SHARED_PREF, PrefKey.RESCUE_SERVICE_KEY, DataType.STRING, this);
-		fullMessage = (String) prefHandler.fetchPrefs(PrefKey.SHARED_PREF, PrefKey.FULL_MESSAGE_KEY, DataType.STRING, this);
 		acknowledgeNumber = (String) prefHandler.fetchPrefs(PrefKey.SHARED_PREF, PrefKey.ACK_NUMBER_KEY, DataType.STRING, this);
 		hasCalled = (Boolean) prefHandler.fetchPrefs(PrefKey.SHARED_PREF, PrefKey.HAS_CALLED_KEY, DataType.BOOLEAN, this);
 	}
@@ -235,7 +245,7 @@ public class Acknowledge extends Activity {
 		}
 
 		// Show full alarm message
-		fullMessageTextView.setText(fullMessage);
+		fullMessageTextView.setText(alarm.getMessage());
 
 		// Check if the activity already has placed a call, in that case show TextViews for redial
 		if (hasCalled) {

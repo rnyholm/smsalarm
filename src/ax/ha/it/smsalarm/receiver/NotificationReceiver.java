@@ -8,6 +8,7 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import ax.ha.it.smsalarm.activity.Acknowledge;
+import ax.ha.it.smsalarm.alarm.Alarm;
 import ax.ha.it.smsalarm.handler.SoundHandler;
 import ax.ha.it.smsalarm.handler.VibrationHandler;
 import ax.ha.it.smsalarm.service.FlashNotificationService;
@@ -56,7 +57,12 @@ public class NotificationReceiver extends BroadcastReceiver {
 			// Use application context to start activity
 			context.getApplicationContext().startActivity(inboxIntent);
 		} else if (ACTION_ACKNOWLEDGE.equals(intentAction)) { // Start acknowledge activity
+			// Get the alarm which absolutely should exist
+			Alarm alarm = (Alarm) intent.getParcelableExtra(Alarm.TAG);
+
+			// Build up the new intent and pass over the alarm to acknowledge activity
 			Intent acknowledgeIntent = new Intent(context, Acknowledge.class);
+			acknowledgeIntent.putExtra(Alarm.TAG, alarm);
 			acknowledgeIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 			context.getApplicationContext().startActivity(acknowledgeIntent);
 		}

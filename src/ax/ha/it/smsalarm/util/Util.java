@@ -7,6 +7,8 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
@@ -226,5 +228,34 @@ public class Util {
 		}
 
 		return View.generateViewId();
+	}
+
+	/**
+	 * To clean a message from the following pattern if found in given {@link String}:
+	 * <p>
+	 * <code>dd.dd.dddd dd:dd:dd: d.d</code>
+	 * <p>
+	 * This is typical a message sent from <a href="http://www.alarmcentralen.ax">http://www.alarmcentralen.ax</a>.<br>
+	 * 
+	 * @param message
+	 *            Message to be be cleaned if necessary.
+	 * @return Cleaned message, if pattern was found, else given message as it is. If <code>null</code> is given as argument an empty
+	 *         <code>String</code> is returned.
+	 */
+	public static String cleanAlarmCentralAXMessage(String message) {
+		if (message != null) {
+			// Pattern for regular expression like this; dd.dd.dddd dd:dd:dd: d.d, alarm from http://www.alarmcentralen.ax has this pattern
+			Pattern pattern = Pattern.compile("(\\d{2}).(\\d{2}).(\\d{4})(\\s)(\\d{2}):(\\d{2}):(\\d{2})(\\s)(\\d{1}).(\\d{1})");
+			Matcher matcher = pattern.matcher(message);
+
+			// If message contain a string with correct pattern(alarm from http://www.alarmcentralen.ax), remove the date and time stamp in message
+			if (matcher.find()) {
+				message = message.replace(matcher.group(1) + "." + matcher.group(2) + "." + matcher.group(3) + matcher.group(4) + matcher.group(5) + ":" + matcher.group(6) + ":" + matcher.group(7) + matcher.group(8) + matcher.group(9) + "." + matcher.group(10), "");
+			}
+
+			return message.trim();
+		}
+
+		return "";
 	}
 }

@@ -6,8 +6,6 @@ package ax.ha.it.smsalarm.receiver;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 import android.content.BroadcastReceiver;
 import android.content.ContentValues;
@@ -147,9 +145,12 @@ public class SmsReceiver extends BroadcastReceiver {
 			abortBroadcast();
 		}
 
-		// Get database access and add this income SMS(alarm) to database
+		// Create a new alarm from this income SMS(alarm)...
+		Alarm alarm = new Alarm(msgHeader, msgBody, triggerText, alarmType);
+
+		// ...get database access and insert the alarm into database
 		DatabaseHandler db = new DatabaseHandler(context);
-		db.insertAlarm(new Alarm(msgHeader, msgBody, triggerText, alarmType));
+		alarm = db.insertAlarm(alarm);
 
 		// Update all widgets associated with this application
 		WidgetProvider.updateWidgets(context);
@@ -166,10 +167,6 @@ public class SmsReceiver extends BroadcastReceiver {
 			}
 		}
 
-		// Pattern for regular expression like this; dd.dd.dddd dd:dd:dd: d.d, alarm from http://www.alarmcentralen.ax has this pattern
-		Pattern p = Pattern.compile("(\\d{2}).(\\d{2}).(\\d{4})(\\s)(\\d{2}):(\\d{2}):(\\d{2})(\\s)(\\d{1}).(\\d{1})");
-		Matcher m = p.matcher(msgBody);
-
 		// Due to previous abort we have to store the SMS manually in phones inbox
 		// for some reason this must also be done even if application runs on KitKat, this is strange because abortBroadcast() should be totally
 		// ignored on that version, therefore the SMS should be placed in inbox without this snippet. Almost seems like a bug in Android....
@@ -182,28 +179,16 @@ public class SmsReceiver extends BroadcastReceiver {
 		SoundHandler.getInstance().alarm(context, alarmType);
 		VibrationHandler.getInstance().alarm(context, alarmType);
 
-		// If alarm acknowledge is enabled and alarm type equals primary, store full alarm message
-		if (enableAlarmAck && alarmType.equals(AlarmType.PRIMARY)) {
-			// Full message in income SMS needs to be stored in shared preferences in this case
-			prefHandler.storePrefs(PrefKey.SHARED_PREF, PrefKey.FULL_MESSAGE_KEY, msgBody, context);
-		}
-
-		// If message contain a string with correct pattern(alarm from http://www.alarmcentralen.ax), remove the date and time stamp in message
-		if (m.find()) {
-			msgBody = msgBody.replace(m.group(1) + "." + m.group(2) + "." + m.group(3) + m.group(4) + m.group(5) + ":" + m.group(6) + ":" + m.group(7) + m.group(8) + m.group(9) + "." + m.group(10), "");
-		}
-
-		// Store income SMS message in shared preferences so it can be shown in notification
-		prefHandler.storePrefs(PrefKey.SHARED_PREF, PrefKey.MESSAGE_KEY, msgBody, context);
-
 		// Acknowledge is enabled and it is a primary alarm, show acknowledge notification, else show "ordinary" notification
 		if (enableAlarmAck && alarmType.equals(AlarmType.PRIMARY)) {
-			// Start intent, AcknowledgeNotificationHelper - a helper to show acknowledge notification
+			// Start intent, AcknowledgeNotificationService with the received alarm as extra
 			Intent ackNotIntent = new Intent(context, AcknowledgeNotificationService.class);
+			ackNotIntent.putExtra(Alarm.TAG, alarm);
 			context.startService(ackNotIntent);
 		} else {
-			// Start intent, NotificationHelper - a helper to show notification
+			// Start intent, NotificationService
 			Intent notIntent = new Intent(context, NotificationService.class);
+			notIntent.putExtra(Alarm.TAG, alarm);
 			context.startService(notIntent);
 		}
 	}
@@ -255,7 +240,7 @@ public class SmsReceiver extends BroadcastReceiver {
 		for (String primarySmsNumber : primarySmsNumbers) {
 			// If msgHeader(senders phone number) exists in the list of primary SMS numbers, store alarm and return
 			if (msgHeader.equals(primarySmsNumber)) {
-				setAlarmType(AlarmType.PRIMARY, context);
+				alarmType = AlarmType.PRIMARY;
 				return true;
 			}
 		}
@@ -263,7 +248,7 @@ public class SmsReceiver extends BroadcastReceiver {
 		// ...then secondary alarm
 		for (String secondarySmsNumber : secondarySmsNumbers) {
 			if (msgHeader.equals(secondarySmsNumber)) {
-				setAlarmType(AlarmType.SECONDARY, context);
+				alarmType = AlarmType.SECONDARY;
 				return true;
 			}
 		}
@@ -285,7 +270,7 @@ public class SmsReceiver extends BroadcastReceiver {
 		for (String primaryFreeText : primaryFreeTexts) {
 			// If any of the words within the msgBody exists in the list of primary free texts, store alarm, set the trigger texts and return
 			if (findWordEqualsIgnore(primaryFreeText, msgBody)) {
-				setAlarmType(AlarmType.PRIMARY, context);
+				alarmType = AlarmType.PRIMARY;
 
 				// Need to know the trigger text
 				setTriggerText(primaryFreeText);
@@ -296,29 +281,14 @@ public class SmsReceiver extends BroadcastReceiver {
 		// ...then secondary alarm
 		for (String secondaryFreeText : secondaryFreeTexts) {
 			if (findWordEqualsIgnore(secondaryFreeText, msgBody)) {
-				setAlarmType(AlarmType.SECONDARY, context);
+				alarmType = AlarmType.SECONDARY;
+
 				setTriggerText(secondaryFreeText);
 				return true;
 			}
 		}
 
 		return false;
-	}
-
-	/**
-	 * Convenience method to flag {@link AlarmType} of income SMS.
-	 * 
-	 * @param alarmType
-	 *            Alarm type to be set.
-	 * @param context
-	 *            The Context in which the receiver is running.
-	 */
-	private void setAlarmType(AlarmType alarmType, Context context) {
-		// Set the given alarm type
-		this.alarmType = alarmType;
-
-		// The "ordinary" notification must know what type of alarm was received, therefore it's stored to shared preferences
-		prefHandler.storePrefs(PrefKey.SHARED_PREF, PrefKey.LARM_TYPE_KEY, alarmType.ordinal(), context);
 	}
 
 	/**

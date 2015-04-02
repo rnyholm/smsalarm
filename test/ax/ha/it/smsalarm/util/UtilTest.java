@@ -93,4 +93,12 @@ public class UtilTest extends TestCase {
 		assertEquals("Justalittleteststringnow!", Util.removeSpaces("Just a little test string now!"));
 		assertEquals("Testingabitmooore,withsomeotherch4aract3rsalso!", Util.removeSpaces(" Te sting a   bit m o o o re, with some other ch4aract3rs also!    "));
 	}
+
+	public void testCleanAlarmCentralAXMessage() {
+		assertEquals("", Util.cleanAlarmCentralAXMessage(null));
+		assertEquals("", Util.cleanAlarmCentralAXMessage(""));
+		assertEquals("test", Util.cleanAlarmCentralAXMessage("test"));
+		assertEquals("Litet larm - Automatlarm vikingline lager(1682) Länsmanshägnan 7 jomala", Util.cleanAlarmCentralAXMessage("Litet larm - Automatlarm vikingline lager(1682) Länsmanshägnan 7 jomala"));
+		assertEquals("Litet larm - Automatlarm vikingline lager(1682) Länsmanshägnan 7 jomala", Util.cleanAlarmCentralAXMessage("02.02.2012 23:55:40 2.5 Litet larm - Automatlarm vikingline lager(1682) Länsmanshägnan 7 jomala"));
+	}
 }

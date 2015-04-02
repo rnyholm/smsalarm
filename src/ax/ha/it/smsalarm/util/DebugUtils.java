@@ -15,6 +15,8 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.telephony.PhoneNumberUtils;
 import android.util.Log;
+import ax.ha.it.smsalarm.alarm.Alarm;
+import ax.ha.it.smsalarm.alarm.Alarm.AlarmType;
 import ax.ha.it.smsalarm.handler.SharedPreferencesHandler;
 import ax.ha.it.smsalarm.handler.SharedPreferencesHandler.PrefKey;
 import ax.ha.it.smsalarm.handler.SoundHandler;
@@ -47,12 +49,9 @@ public class DebugUtils {
 		prefHandler.storePrefs(PrefKey.SHARED_PREF, PrefKey.SECONDARY_LISTEN_FREE_TEXTS_KEY, Arrays.asList("Litet", "Larm"), context);
 		prefHandler.storePrefs(PrefKey.SHARED_PREF, PrefKey.PRIMARY_ALARM_SIGNAL_KEY, SoundHandler.getInstance().resolveAlarmSignal(context, 2), context);
 		prefHandler.storePrefs(PrefKey.SHARED_PREF, PrefKey.SECONDARY_ALARM_SIGNAL_KEY, SoundHandler.getInstance().resolveAlarmSignal(context, 7), context);
-		prefHandler.storePrefs(PrefKey.SHARED_PREF, PrefKey.MESSAGE_KEY, "Litet larm - Automatlarm vikingline lager(1682) Länsmanshägnan 7 jomala", context);
-		prefHandler.storePrefs(PrefKey.SHARED_PREF, PrefKey.FULL_MESSAGE_KEY, "02.02.2012 23:55:40 2.5 Litet larm - Automatlarm vikingline lager(1682) Länsmanshägnan 7 jomala", context);
 		prefHandler.storePrefs(PrefKey.SHARED_PREF, PrefKey.ENABLE_ACK_KEY, true, context);
 		prefHandler.storePrefs(PrefKey.SHARED_PREF, PrefKey.ACK_NUMBER_KEY, "04579999888", context);
 		prefHandler.storePrefs(PrefKey.SHARED_PREF, PrefKey.USE_OS_SOUND_SETTINGS_KEY, true, context);
-		prefHandler.storePrefs(PrefKey.SHARED_PREF, PrefKey.LARM_TYPE_KEY, 0, context);
 		prefHandler.storePrefs(PrefKey.SHARED_PREF, PrefKey.PLAY_ALARM_SIGNAL_TWICE_KEY, false, context);
 		prefHandler.storePrefs(PrefKey.SHARED_PREF, PrefKey.ENABLE_SMS_ALARM_KEY, true, context);
 		prefHandler.storePrefs(PrefKey.SHARED_PREF, PrefKey.RESCUE_SERVICE_KEY, "Test Räddningstjänst", context);
@@ -68,6 +67,7 @@ public class DebugUtils {
 	 */
 	public static void dispatchNotification(Context context) {
 		Intent notificationIntent = new Intent(context, NotificationService.class);
+		notificationIntent.putExtra(Alarm.TAG, new Alarm("1234567", "02.02.2012 23:55:40 2.5 Litet larm - Automatlarm vikingline lager(1682) Länsmanshägnan 7 jomala", "", AlarmType.SECONDARY));
 		context.startService(notificationIntent);
 	}
 
@@ -80,6 +80,7 @@ public class DebugUtils {
 	 */
 	public static void dispatchAcknowledgeNotification(Context context) {
 		Intent acknowledgeNotificationIntent = new Intent(context, AcknowledgeNotificationService.class);
+		acknowledgeNotificationIntent.putExtra(Alarm.TAG, new Alarm("1234567", "02.02.2012 23:55:40 2.5 Litet larm - Automatlarm vikingline lager(1682) Länsmanshägnan 7 jomala", "larm", AlarmType.PRIMARY));
 		context.startService(acknowledgeNotificationIntent);
 	}
 

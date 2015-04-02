@@ -12,10 +12,12 @@ import android.content.Context;
 import android.content.Intent;
 import android.support.v4.app.NotificationCompat;
 import ax.ha.it.smsalarm.R;
+import ax.ha.it.smsalarm.alarm.Alarm;
 import ax.ha.it.smsalarm.handler.SharedPreferencesHandler;
 import ax.ha.it.smsalarm.handler.SharedPreferencesHandler.DataType;
 import ax.ha.it.smsalarm.handler.SharedPreferencesHandler.PrefKey;
 import ax.ha.it.smsalarm.receiver.NotificationReceiver;
+import ax.ha.it.smsalarm.util.Util;
 
 /**
  * Helper to build up and show {@link Notification}, also creates {@link PendingIntent}'s for the notification.<br>
@@ -41,20 +43,18 @@ public class AcknowledgeNotificationService extends IntentService {
 	/**
 	 * To handle {@link Intent}, builds up and dispatches a notification.
 	 * 
-	 * @param i
-	 *            Intent for notification.
+	 * @param intent
+	 *            .get Intent for notification.
 	 * @deprecated
 	 */
 	@SuppressLint("DefaultLocale")
 	@Deprecated
 	@Override
-	protected void onHandleIntent(Intent i) {
-		// Reset Shared Preference HAS_CALLED, to ensure that activity acknowledge not will place a acknowledge call onResume()
-		// This is done here because this is only relevant if application is set to acknowledge, and here intent for acknowledge is loaded
-		prefHandler.storePrefs(PrefKey.SHARED_PREF, PrefKey.HAS_CALLED_KEY, false, this);
+	protected void onHandleIntent(Intent intent) {
+		// Get the alarm passed on from SmsReceiver
+		Alarm alarm = (Alarm) intent.getParcelableExtra(Alarm.TAG);
 
-		// Fetch some values from the shared preferences
-		String contentText = (String) prefHandler.fetchPrefs(PrefKey.SHARED_PREF, PrefKey.MESSAGE_KEY, DataType.STRING, this);
+		// Fetch rescue service from the shared preferences
 		String rescueService = (String) prefHandler.fetchPrefs(PrefKey.SHARED_PREF, PrefKey.RESCUE_SERVICE_KEY, DataType.STRING, this);
 
 		// Setup a notification, directly from Android developer site
@@ -67,19 +67,20 @@ public class AcknowledgeNotificationService extends IntentService {
 		// Resolve ticker text
 		String tickerText = "";
 		if (!"".equals(rescueService)) {
-			tickerText = rescueService + " " + getString(R.string.PRIMARY_ALARM);
+			tickerText = rescueService.toUpperCase() + " " + getString(R.string.PRIMARY_ALARM);
 		} else {
 			tickerText = getString(R.string.PRIMARY_ALARM);
 		}
 
-		// Setup intents for pressing notification and dismissing it
+		// Setup intents for pressing notification and dismissing it, pass along the bundled(income) alarm to the receiver
 		Intent notificationPressedIntent = new Intent(this, NotificationReceiver.class);
+		notificationPressedIntent.putExtra(Alarm.TAG, alarm);
 		notificationPressedIntent.setAction(NotificationReceiver.ACTION_ACKNOWLEDGE);
 
 		Intent notificationDismissedIntent = new Intent(this, NotificationReceiver.class);
 
 		// Setup pending intents for notification pressed and dismissed events
-		PendingIntent notificationPressedPendingIntent = PendingIntent.getBroadcast(this, 0, notificationPressedIntent, 0);
+		PendingIntent notificationPressedPendingIntent = PendingIntent.getBroadcast(this, 0, notificationPressedIntent, PendingIntent.FLAG_UPDATE_CURRENT);
 		PendingIntent notificationDismissedPendingIntent = PendingIntent.getBroadcast(this, 0, notificationDismissedIntent, 0);
 
 		// Create notification using builder
@@ -89,7 +90,7 @@ public class AcknowledgeNotificationService extends IntentService {
 			.setTicker(tickerText)
 			.setWhen(when)
 			.setContentTitle(getString(R.string.PRIMARY_ALARM))
-			.setContentText(contentText)
+			.setContentText(Util.cleanAlarmCentralAXMessage(alarm.getMessage()))
 			.setContentIntent(notificationPressedPendingIntent)
 			.setDeleteIntent(notificationDismissedPendingIntent)
 			.setAutoCancel(true)
