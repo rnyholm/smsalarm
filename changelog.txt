@@ -1,6 +1,6 @@
 SmsAlarm changelog
 
-v2.3.1(version code 14)
+v2.3.1(version code 16)
 -Förbättrat gränssnittet, introducerat en sliding menu
 -Tagit bort onödig loggning
 -Bytt namn på larmsignalen Virve till Nokia THR800
@@ -21,6 +21,14 @@ resulterar i att ett kvitteringssamtal rings direkt när man e inne i kvitterings
 -Möjligt att tysta/stoppa larmsignalen och vibrationen för inkommande larm genom att hantera notifikationen för larmet
 -Eventuella mellanslag tas bort från det inkommande meddelandes telefonnummer
 -Utökade områdena att trycka på i widgeten -> lättare att trycka rätt
+-Larmloggen är flyttad in till applikationen
+-Finns tre olika larmloggar, en för alla larm, en för primärlarm och en för sekundärlarm
+-Larmloggen visar larm per år och månad, totalt antal mottagna larm visas också per månad.
+-Dialog som visar larminfo visas med fullständiga information om larmet när man trycker på ett larm i någondera larmlogg.
+-Möjligt att kvittera ett larm på nytt om man missat att göra det ifrån notifikationsbaren, detta görs då via alarm loggen
+genom att trycka på ett larm där. För att ett larm ska vara giltigt för kvittering måste larmet vara ett primärlarm,
+inte redan vara kvitterat och måste ha tagits emot inom de senaste 24 timmarna. Utöver detta måste användaren ha valt att 
+använda kvittering.
 
 v2.2.5(version code 13)
 -Översättning till estniska lades till

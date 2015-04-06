@@ -1,6 +1,6 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="ax.ha.it.smsalarm"
-    android:versionCode="15"
+    android:versionCode="16"
     android:versionName="2.3.1beta">
 
     <uses-sdk android:minSdkVersion="9" android:targetSdkVersion="21" />
