@@ -3,7 +3,6 @@
  */
 package ax.ha.it.smsalarm.fragment;
 
-import java.util.Date;
 import java.util.EnumSet;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -136,29 +135,15 @@ public class AlarmLogFragment extends SherlockListFragment {
 		// Get alarm from selected alarm info
 		Alarm alarm = ((AlarmLogItem) getListView().getItemAtPosition(position)).getAlarm();
 
-		// Whether or not acknowledgement activity should be opened
-		boolean startAcknowledgementActivity = false;
-
-		// Only open acknowledge activity once again if alarm type is primary, alarm hasn't been acknowledged...
-		if (AlarmType.PRIMARY.equals(alarm.getAlarmType()) && !alarm.getAcknowledged().isPresent()) {
-			// ...alarm was received within the last 24hours...
-			if (alarm.getReceived().getTime() > (new Date().getTime() - 86400000)) {
-				// ...and application is set to use acknowledgement
-				if ((Boolean) SharedPreferencesHandler.getInstance().fetchPrefs(PrefKey.SHARED_PREF, PrefKey.ENABLE_ACK_KEY, DataType.BOOLEAN, getActivity())) {
-					startAcknowledgementActivity = true;
-				}
-			}
-		}
-
-		// OK to open acknowledge activity once again
-		if (startAcknowledgementActivity) {
+		// OK to open acknowledge activity once again if selected alarm is valid for acknowledgement and application is set to use acknowledgement
+		if (alarm.validToAcknowledge() && (Boolean) SharedPreferencesHandler.getInstance().fetchPrefs(PrefKey.SHARED_PREF, PrefKey.ENABLE_ACK_KEY, DataType.BOOLEAN, getActivity())) {
 			// Build up the new intent and pass over the alarm to acknowledge activity
 			Intent acknowledgeIntent = new Intent(getActivity(), Acknowledge.class);
 			acknowledgeIntent.putExtra(Alarm.TAG, alarm);
-			acknowledgeIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 			getActivity().startActivity(acknowledgeIntent);
 
-			// TODO: Finish this activity?
+			// Finish this activity as, we most likely want to just quit SmsAlarm after acknowledgement has been done
+			getActivity().finish();
 		} else { // We just open dialog displaying the information about selected alarm
 			// Must pass over alarm which information should be shown
 			Bundle arguments = new Bundle();

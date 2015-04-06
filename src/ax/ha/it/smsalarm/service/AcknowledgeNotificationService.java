@@ -80,7 +80,7 @@ public class AcknowledgeNotificationService extends IntentService {
 		Intent notificationDismissedIntent = new Intent(this, NotificationReceiver.class);
 
 		// Setup pending intents for notification pressed and dismissed events
-		PendingIntent notificationPressedPendingIntent = PendingIntent.getBroadcast(this, 0, notificationPressedIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+		PendingIntent notificationPressedPendingIntent = PendingIntent.getBroadcast(this, (int) when, notificationPressedIntent, PendingIntent.FLAG_UPDATE_CURRENT);
 		PendingIntent notificationDismissedPendingIntent = PendingIntent.getBroadcast(this, 0, notificationDismissedIntent, 0);
 
 		// Create notification using builder

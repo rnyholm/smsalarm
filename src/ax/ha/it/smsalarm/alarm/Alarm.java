@@ -23,7 +23,11 @@ import com.google.common.base.Optional;
  */
 public class Alarm implements Parcelable {
 	// Used as a key when putting data into bundles and intents
-	public static String TAG = "alarm";
+	public static final String TAG = "alarm";
+
+	// Limit in time for how long it's possible to acknowledge an alarm after it has been received
+	// Set to 24 hours for now but can be changed
+	private static final long ACKNOWLEDGE_TIME_LIMIT = 86400000;
 
 	/**
 	 * Enumeration for then different types of <b><i>Alarms</i></b>.
@@ -310,18 +314,6 @@ public class Alarm implements Parcelable {
 	}
 
 	/**
-	 * To an {@link Optional} with a {@link Date} when this Alarm was acknowledged.
-	 * <p>
-	 * <b><i>Note. The acknowledged date is Optional, hence absent return values can occurre.</i></b>
-	 * 
-	 * @return <code>Optional</code> with <code>Date</code> when this Alarm was acknowledged, if present, else an <b><i>absent</i></b>
-	 *         <code>Optional</code> is returned.
-	 */
-	public Optional<Date> getAcknowledged() {
-		return optionalAcknowledged;
-	}
-
-	/**
 	 * To get date and time when this Alarm was acknowledged as a {@link String} in milliseconds.<br>
 	 * If this Alarm doesn't contain any date and time acknowledged <b><i>-</i></b> is returned.
 	 * 
@@ -338,6 +330,29 @@ public class Alarm implements Parcelable {
 	 */
 	public AlarmType getAlarmType() {
 		return alarmType;
+	}
+
+	/**
+	 * To figure out if this Alarm is valid to <b><i>Acknowledge</i></b> or not. For an Alarm to be valid for acknowledgement it has to fulfill
+	 * following criterias:
+	 * <ul>
+	 * <li>Must be of {@link AlarmType#PRIMARY}</li>
+	 * <li>Must not already been acknowledged</li>
+	 * <li>Must have been received within the last 24 hours</li>
+	 * </ul>
+	 * 
+	 * @return <code>true</code> if this Alarm is valid to acknowledge, else <code>false</code>.
+	 */
+	public boolean validToAcknowledge() {
+		// Only valid to acknowledge if alarm type is primary, alarm hasn't been acknowledged...
+		if (AlarmType.PRIMARY.equals(alarmType) && !optionalAcknowledged.isPresent()) {
+			// ...alarm was received within the last 24hours...
+			if (received.getTime() > (new Date().getTime() - ACKNOWLEDGE_TIME_LIMIT)) {
+				return true;
+			}
+		}
+
+		return false;
 	}
 
 	/**
