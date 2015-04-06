@@ -144,6 +144,7 @@ public class AlarmInfoDialog extends DialogFragment {
 
 		// Now start build up the actual user interface by first setting up a ScrollView and a LinearLayout, also configure them
 		ScrollView scrollView = new ScrollView(context);
+		scrollView.setPadding(5, 5, 5, 5);
 		LinearLayout linearLayout = new LinearLayout(context);
 		linearLayout.setOrientation(LinearLayout.VERTICAL);
 		linearLayout.setPadding(5, 5, 5, 5);
