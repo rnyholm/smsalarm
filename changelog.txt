@@ -21,6 +21,8 @@ resulterar i att ett kvitteringssamtal rings direkt när man e inne i kvitterings
 -Möjligt att tysta/stoppa larmsignalen och vibrationen för inkommande larm genom att hantera notifikationen för larmet
 -Eventuella mellanslag tas bort från det inkommande meddelandes telefonnummer
 -Utökade områdena att trycka på i widgeten -> lättare att trycka rätt
+-Estninska översättningarna borttagna
+-Alla ikoner finns nu för respektive upplösning
 -Larmloggen är flyttad in till applikationen
 -Finns tre olika larmloggar, en för alla larm, en för primärlarm och en för sekundärlarm
 -Larmloggen visar larm per år och månad, totalt antal mottagna larm visas också per månad.
