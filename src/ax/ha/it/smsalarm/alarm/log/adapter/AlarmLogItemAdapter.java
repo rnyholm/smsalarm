@@ -80,6 +80,11 @@ public class AlarmLogItemAdapter extends ArrayAdapter<AlarmLogItem> {
 
 	@Override
 	public boolean areAllItemsEnabled() {
-		return true;
+		return false;
+	}
+
+	@Override
+	public boolean isEnabled(int position) {
+		return !getItem(position).isSectionTitle();
 	}
 }
