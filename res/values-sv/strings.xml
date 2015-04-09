@@ -48,10 +48,10 @@
     <string name="INFO_PLAY_ALARM_SIGNAL_TWICE_SETTING">Om vald spelar Sms Alarm upp larmsignalen för både primär- och sekundärlarm två gånger vid larm.</string>
     <string name="INFO_SMS_SETTINGS">Ställ in vilka telefonnummer som Sms Alarm ska larma på sms ifrån.</string>   
     <string name="NO">Nej</string>
-    <string name="NO_RECEIVED_ALARMS_EXISTS">Inga larm har tagits emot ännu.</string>
     <string name="NO_PRIMARY_FREE_TEXT_EXISTS">Inga ord för primärlarm finns, kan ej ta bort ord.</string>
-    <string name="NO_SECONDARY_FREE_TEXT_EXISTS">Inga ord för sekundärlarm finns, kan ej ta bort ord.</string>
-    <string name="NO_PRIMARY_NUMBER_EXISTS">Inga telefonnummer för primärlarm finns, kan ej ta bort nummer.</string>  
+    <string name="NO_PRIMARY_NUMBER_EXISTS">Inga telefonnummer för primärlarm finns, kan ej ta bort nummer.</string>
+    <string name="NO_RECEIVED_ALARMS_EXISTS">Inga larm har tagits emot ännu.</string>
+    <string name="NO_SECONDARY_FREE_TEXT_EXISTS">Inga ord för sekundärlarm finns, kan ej ta bort ord.</string>  
     <string name="NO_SECONDARY_NUMBER_EXISTS">Inga nummer för sekundärlarm finns, kan ej ta bort nummer.</string>
     <string name="NUMBER_ALREADY_IN_PRIMARY_LIST">Angivet telefonnummer finns redan i listan över primärlarm. Ange ett nytt telefonnummer.</string>
     <string name="NUMBER_ALREADY_IN_SECONDARY_LIST">Angivet telefonnummer finns redan i listan över sekundärlarm. Ange ett nytt telefonnummer.</string>
@@ -79,7 +79,8 @@
     <string name="TITLE_ALARM_INFO_MESSAGE">Meddelande</string>
     <string name="TITLE_ALARM_INFO_RECEIVED">Mottaget</string>
     <string name="TITLE_ALARM_INFO_SENDER">Avsändare</string>
-    <string name="TITLE_ALARM_INFO_TRIGGER_TEXT">Triggande ord</string>    
+    <string name="TITLE_ALARM_INFO_TRIGGER_TEXT">Triggande ord</string>
+    <string name="TITLE_ALARM_LOG_NO_ALARM_RECEIVED">Inga larm har tagits emot ännu</string>    
     <string name="TITLE_ENABLE_ACKNOWLEDGE">Aktivera kvittering av primärlarm</string>
     <string name="TITLE_ENABLE_SMS_ALARM">Aktivera Sms Alarm</string>
     <string name="TITLE_FREE_TEXT_TRIGGER_SETTINGS">Ord inställningar</string>

@@ -4,7 +4,6 @@
 package ax.ha.it.smsalarm.fragment;
 
 import java.util.EnumSet;
-import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map.Entry;
@@ -72,10 +71,21 @@ public class AlarmLogFragment extends SherlockListFragment {
 	 * <code>AlarmLogFragment</code> with {@link AlarmLogItem}'s, containing {@link Alarm}'s of {@link AlarmType#PRIMARY} and
 	 * {@link AlarmType#SECONDARY}.
 	 */
+	@SuppressLint("InflateParams")
 	@Override
 	public void onActivityCreated(Bundle savedInstanceState) {
 		super.onActivityCreated(savedInstanceState);
 
+		// Must set empty view to this fragments ListView, starting by get LayoutInflater and inflate the View we want to be seen when list is empty
+		LayoutInflater inflater = getLayoutInflater(savedInstanceState);
+		View emptyView = inflater.inflate(R.layout.alarm_log_list_no_alarm_received, null);
+
+		// ...this is important, we must resolve the ViewGroup of the ListView(or it's parent) and add the empty View to it, if this isn't done the
+		// empty View will not show. After this it's safe to add the empty view to the ListView as usual
+		((ViewGroup) getListView().getParent()).addView(emptyView);
+		getListView().setEmptyView(emptyView);
+
+		// Create the adapter as usual and set it to this Fragment
 		AlarmLogItemAdapter adapter = new AlarmLogItemAdapter(getActivity());
 		createAlarmLogItems(adapter, EnumSet.<AlarmType> of(AlarmType.PRIMARY, AlarmType.SECONDARY));
 		setListAdapter(adapter);
@@ -95,18 +105,18 @@ public class AlarmLogFragment extends SherlockListFragment {
 		DatabaseHandler db = new DatabaseHandler(getActivity());
 
 		// Fetch all alarms in an organized way
-		TreeMap<String, HashMap<String, List<Alarm>>> organisedAlarms = db.fetchAllAlarmsSorted(alarmTypes);
+		TreeMap<String, TreeMap<String, List<Alarm>>> organisedAlarms = db.fetchAllAlarmsSorted(alarmTypes);
 
 		// Iterator for iterating over the years
-		Iterator<Entry<String, HashMap<String, List<Alarm>>>> it0 = organisedAlarms.entrySet().iterator();
+		Iterator<Entry<String, TreeMap<String, List<Alarm>>>> it0 = organisedAlarms.entrySet().iterator();
 
 		// Iterate through the map and populate the adapter with data
 		while (it0.hasNext()) {
 			// Fetch entry alarms per year
-			Entry<String, HashMap<String, List<Alarm>>> alarmsPerYearEntry = it0.next();
+			Entry<String, TreeMap<String, List<Alarm>>> alarmsPerYearEntry = it0.next();
 
 			// Get the map containing alarms per month
-			HashMap<String, List<Alarm>> alarmsPerMonth = alarmsPerYearEntry.getValue();
+			TreeMap<String, List<Alarm>> alarmsPerMonth = alarmsPerYearEntry.getValue();
 
 			// Iterator to iterate over alarms per month
 			Iterator<Entry<String, List<Alarm>>> it1 = alarmsPerMonth.entrySet().iterator();

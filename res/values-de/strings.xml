@@ -50,9 +50,9 @@
     <string name="INFO_USE_OS_SOUND_SETTINGS">Falls gewählt, berücksichtigt Sms Alarm die Klingeltonlautstärke und den Lautlos-Modus des Geräts.</string>   
     <string name="NO">Nein</string>
     <string name="NO_PRIMARY_FREE_TEXT_EXISTS">Gibt es keine Wörter für das primäre Alarm, können keine Wörter entfernt werden.</string>
-    <string name="NO_SECONDARY_FREE_TEXT_EXISTS">Gibt es keine Wörter für das sekundäre Alarm, können keine Wörter entfernt werden.</string>
     <string name="NO_PRIMARY_NUMBER_EXISTS">Gibt es keine Telefonnummern für das primäre Alarm, können keine Nummern entfernt werden.</string>
-    <string name="NO_RECEIVED_ALARMS_EXISTS">Keine Benachrichtigungen wurden bisher empfangen.</string>  
+    <string name="NO_RECEIVED_ALARMS_EXISTS">Keine Benachrichtigungen wurden bisher empfangen.</string>
+    <string name="NO_SECONDARY_FREE_TEXT_EXISTS">Gibt es keine Wörter für das sekundäre Alarm, können keine Wörter entfernt werden.</string>  
     <string name="NO_SECONDARY_NUMBER_EXISTS">Keine Telefonnummer für Sekundäralarm vorhanden, kann Telefonnummer nicht entfernen.</string>
     <string name="NUMBER_ALREADY_IN_PRIMARY_LIST">Die angegebene Telefonnummer gibt es bereits in der Liste der primären Alarm. Geben Sie eine neue Telefonnummer ein.</string>
     <string name="NUMBER_ALREADY_IN_SECONDARY_LIST">Die eingegebene Nummer befindet sich bereits in der Liste für den Sekundäralarm. Eine neue Telefonnummer eingeben.</string>
@@ -79,7 +79,8 @@
     <string name="TITLE_ALARM_INFO_ACKNOWLEDGED">Bestätigt</string>      
     <string name="TITLE_ALARM_INFO_RECEIVED">Empfangen</string>
     <string name="TITLE_ALARM_INFO_SENDER">Absender</string>
-    <string name="TITLE_ALARM_INFO_TRIGGER_TEXT">Auslösende Wörter</string>   
+    <string name="TITLE_ALARM_INFO_TRIGGER_TEXT">Auslösende Wörter</string>  
+    <string name="TITLE_ALARM_LOG_NO_ALARM_RECEIVED">Keine Benachrichtigungen wurden bisher empfangen</string> 
     <string name="TITLE_ENABLE_ACKNOWLEDGE">Bestätigung des Primäralarms aktivieren</string>
     <string name="TITLE_ENABLE_SMS_ALARM">Sms Alarm aktivieren</string>
     <string name="TITLE_FREE_TEXT_TRIGGER_SETTINGS">Worteinstellungen</string>

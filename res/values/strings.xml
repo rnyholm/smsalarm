@@ -47,6 +47,7 @@
     <string name="ACK_ICON_CONTENT_DESCR">Acknowledge alarm icon</string>
     <string name="ALARM_LOG_ITEM_DATE_RECEIVED">Alarm date received</string>
     <string name="ALARM_LOG_ITEM_IMAGE_DESCR">Alarm log item image</string>
+    <string name="ALARM_LOG_NO_ITEM_DESCR">Alarm log item missing image</string>
     <string name="ALARM_LOG_ITEM_MESSAGE">Alarm message</string>
     <string name="ALARM_LOG_ITEM_SENDER">Alarm sender</string>
     <string name="ALARM_LOG_SECTION_MONTH_YEAR_TITLE">Month Year</string>
@@ -131,9 +132,9 @@
     <string name="LICENSE_OTHER_ACTIONBAR_SHERLOCK_URI">https://github.com/JakeWharton/ActionBarSherlock</string>
 	<string name="NEW_LINE">\n</string>	
     <string name="NO">No</string>
-    <string name="NO_RECEIVED_ALARMS_EXISTS">No alarm has yet been received.</string>
     <string name="NO_PRIMARY_FREE_TEXT_EXISTS">No words present for primary alarm, can not remove word.</string>
     <string name="NO_PRIMARY_NUMBER_EXISTS">No telephone number for primary alarm exists, can not remove telephone number.</string>
+    <string name="NO_RECEIVED_ALARMS_EXISTS">No alarm has yet been received.</string>
     <string name="NO_SECONDARY_FREE_TEXT_EXISTS">No words present for secondary alarm, can not remove word.</string>  
     <string name="NO_SECONDARY_NUMBER_EXISTS">No telephone number for secondary alarm exists, can not remove telephone number.</string>
     <string name="NUMBER_ALREADY_IN_PRIMARY_LIST">Specified phone number is already in the list of primary alarms. Enter a new phone number.</string>
@@ -164,6 +165,7 @@
     <string name="TITLE_ALARM_INFO_RECEIVED">Received</string>
     <string name="TITLE_ALARM_INFO_SENDER">Sender</string>
     <string name="TITLE_ALARM_INFO_TRIGGER_TEXT">Trigger word</string>
+    <string name="TITLE_ALARM_LOG_NO_ALARM_RECEIVED">No alarm has yet been received</string>
     <string name="TITLE_ENABLE_ACKNOWLEDGE">Enable acknowledgment</string>
     <string name="TITLE_ENABLE_SMS_ALARM">Enable Sms Alarm</string>
     <string name="TITLE_FREE_TEXT_TRIGGER_SETTINGS">Word settings</string>
@@ -183,7 +185,9 @@
     <string name="DEBUG_MENU_TITLE_MOCK_SHARED_PREFS">Mock Shared Preferences</string>
     <string name="DEBUG_MENU_TITLE_NOTIFICATION">Dispatch Notification</string>
     <string name="DEBUG_MENU_TITLE_ACK_NOTIFICATION">Dispatch Ack Notification</string>
+    <string name="DEBUG_MENU_TITLE_INSERT_MOCK_ALARMS">Insert Mock Alarms</string>
     <string name="DEBUG_TOAST_SHARED_PREFERENCES_MOCKED">Shared preferences successfully mocked</string>
+    <string name="DEBUG_TOAST_MOCK_ALARMS_INSERTED">Alarms successfully mocked and inserted into the database</string>
     <string name="DEBUG_DISPATCH_MOCK_SMS_TITLE">Dispatch mock sms</string>
     <string name="DEBUG_MOCK_SMS_SENDER_TITLE">Sender</string>
     <string name="DEBUG_MOCK_SMS_SENDER_HINT">Enter sms sender..</string>
@@ -191,6 +195,8 @@
     <string name="DEBUG_MOCK_SMS_BODY_HINT">Enter message of sms..</string>
     <string name="DEBUG_CONFIRM_MOCK_SHARED_PREFERENCES_TITLE">Mock shared preferences</string>
     <string name="DEBUG_CONFIRM_MOCK_SHARED_PREFERENCES_MESSAGE">Do you really want to mock shared preferences?\nAny existing preferences will be overwritten!</string>
+    <string name="DEBUG_CONFIRM_INSERT_MOCK_ALARMS_TITLE">Insert mock alarms</string>
+    <string name="DEBUG_CONFIRM_INSERT_MOCK_ALARMS_MESSAGE">Do you really want to insert mock alarms into the database?\nInserted alarms can not be removed without clearing application data!</string>
     <string name="DEBUG_CANCEL">Cancel</string>
     <string name="DEBUG_YES">Yes</string>
     <string name="DEBUG_NO">No</string>

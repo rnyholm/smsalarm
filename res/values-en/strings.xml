@@ -49,9 +49,9 @@
     <string name="INFO_SMS_SETTINGS">Enter the telephone numbers that Sms Alarm should send alerts for incoming sms.</string>
     <string name="INFO_USE_OS_SOUND_SETTINGS">If selected Sms Alarm will take into account the device ring volume and silent mode.</string>
     <string name="NO">No</string>
-    <string name="NO_RECEIVED_ALARMS_EXISTS">No alarm has yet been received.</string>
     <string name="NO_PRIMARY_FREE_TEXT_EXISTS">No words present for primary alarm, can not remove word.</string>
     <string name="NO_PRIMARY_NUMBER_EXISTS">No telephone number for primary alarm exists, can not remove telephone number.</string>
+    <string name="NO_RECEIVED_ALARMS_EXISTS">No alarm has yet been received.</string>
     <string name="NO_SECONDARY_FREE_TEXT_EXISTS">No words present for secondary alarm, can not remove word.</string>
     <string name="NO_SECONDARY_NUMBER_EXISTS">No telephone number for secondary alarm exists, can not remove telephone number.</string>
     <string name="NUMBER_ALREADY_IN_PRIMARY_LIST">Specified phone number is already in the list of primary alarms. Enter a new phone number.</string>
@@ -81,6 +81,7 @@
     <string name="TITLE_ALARM_INFO_RECEIVED">Received</string>
     <string name="TITLE_ALARM_INFO_SENDER">Sender</string>
     <string name="TITLE_ALARM_INFO_TRIGGER_TEXT">Trigger word</string>
+    <string name="TITLE_ALARM_LOG_NO_ALARM_RECEIVED">No alarm has yet been received</string>
     <string name="TITLE_ENABLE_ACKNOWLEDGE">Enable acknowledgment</string>
     <string name="TITLE_ENABLE_SMS_ALARM">Enable Sms Alarm</string>
     <string name="TITLE_FREE_TEXT_TRIGGER_SETTINGS">Word settings</string>
