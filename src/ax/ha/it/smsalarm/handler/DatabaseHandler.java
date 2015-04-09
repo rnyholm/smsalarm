@@ -5,6 +5,7 @@ package ax.ha.it.smsalarm.handler;
 
 import java.text.DateFormat;
 import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collections;
@@ -21,6 +22,8 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.util.Log;
+import ax.ha.it.smsalarm.activity.SmsAlarm;
 import ax.ha.it.smsalarm.alarm.Alarm;
 import ax.ha.it.smsalarm.alarm.Alarm.AlarmType;
 
@@ -33,6 +36,8 @@ import ax.ha.it.smsalarm.alarm.Alarm.AlarmType;
  * @since 2.1beta
  */
 public class DatabaseHandler extends SQLiteOpenHelper {
+	private static final String LOG_TAG = DatabaseHandler.class.getSimpleName();
+
 	// Database Version and the upgrade versions
 	private static final int DB_VERSION = 3;
 	private static final int DB_VERSION_ADD_TRIGGER_TEXT_COL = 2;
@@ -276,9 +281,46 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 	 *            {@link EnumSet} of {@link AlarmType}'s containing all types of alarm that's wanted in the structure returned.
 	 * @return All <code>Alarm</code>'s sorted in a nested {@link Map} structure.
 	 */
-	public TreeMap<String, HashMap<String, List<Alarm>>> fetchAllAlarmsSorted(EnumSet<AlarmType> alarmTypes) {
+	public TreeMap<String, TreeMap<String, List<Alarm>>> fetchAllAlarmsSorted(EnumSet<AlarmType> alarmTypes) {
+		// Need to create a comparator this way as it's used at several places
+		Comparator<String> monthComparator = new Comparator<String>() {
+			@Override
+			public int compare(String m1, String m2) {
+				int month1 = 0;
+				int month2 = 0;
+
+				try {
+					// Get a formatter for the month input, get a calendar instance and set time to it from m1...
+					SimpleDateFormat inputFormat = new SimpleDateFormat("MMMM", Locale.getDefault());
+					Calendar cal = Calendar.getInstance();
+					cal.setTime(inputFormat.parse(m1));
+
+					// ...get month as integer from m1...
+					month1 = cal.get(Calendar.MONTH);
+
+					// ...set time to calendar from m2...
+					cal.setTime(inputFormat.parse(m2));
+
+					// ...at last get month as integer from m2
+					month2 = cal.get(Calendar.MONTH);
+				} catch (ParseException e) {
+					if (SmsAlarm.DEBUG) {
+						Log.e(LOG_TAG + ":fetchAllAlarmsSorted()", "An error occurred while parsing out Date from given month as String using default Locale", e);
+					}
+				}
+
+				if (month1 < month2) {
+					return 1;
+				} else if (month1 > month2) {
+					return -1;
+				}
+
+				return 0;
+			}
+		};
+
 		// Initialize a TreeMap with a comparator, comparing on key which are year received
-		TreeMap<String, HashMap<String, List<Alarm>>> sortedAlarms = new TreeMap<String, HashMap<String, List<Alarm>>>(new Comparator<String>() {
+		TreeMap<String, TreeMap<String, List<Alarm>>> sortedAlarms = new TreeMap<String, TreeMap<String, List<Alarm>>>(new Comparator<String>() {
 			@Override
 			public int compare(String y1, String y2) {
 				int year1 = Integer.parseInt(y1);
@@ -294,17 +336,19 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 			}
 		});
 
-		// Map for month received and a list containing alarms received per month
-		HashMap<String, List<Alarm>> alarmsPerMonth = new HashMap<String, List<Alarm>>();
+		// Map for month received and a list containing alarms received per month, sorted on month
+		TreeMap<String, List<Alarm>> alarmsPerMonth = new TreeMap<String, List<Alarm>>(monthComparator);
+
+		// List for storing alarms
 		List<Alarm> alarms = new ArrayList<Alarm>();
 
 		for (Alarm alarm : fetchAllAlarms()) {
-			// Only if alarm has a type within the enumset of alarm types
+			// Only if alarm has a type within the enumeration set of alarm types
 			if (alarmTypes.contains(alarm.getAlarmType())) {
 				// Get a calendar instance and set time from time and date when the alarm was received
 				Calendar calendar = Calendar.getInstance();
-
 				calendar.setTime(alarm.getReceived());
+
 				// Get year and month when the alarm was received
 				String yearReceived = String.valueOf(calendar.get(Calendar.YEAR));
 				String monthReceived = calendar.getDisplayName(Calendar.MONTH, Calendar.LONG, Locale.getDefault());
@@ -339,6 +383,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 				} else {
 					alarms = new ArrayList<Alarm>();
 					alarms.add(alarm);
+					alarmsPerMonth = new TreeMap<String, List<Alarm>>(monthComparator);
 					alarmsPerMonth.put(monthReceived, alarms);
 				}
 
@@ -424,6 +469,190 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 		// Get a writable database handle
 		SQLiteDatabase db = getWritableDatabase();
 		db.delete(TABLE_ALARMS, KEY_ID + " = ?", new String[] { String.valueOf(alarm.getId()) });
+		db.close();
+	}
+
+	/**
+	 * To create mock {@link Alarm}'s and insert them into the database. The <code>Alarm</code>'s being mocked are all different.
+	 * 
+	 * @deprecated Only for DEBUG and TEST!
+	 */
+	@Deprecated
+	public void insertMockAlarms() {
+		SQLiteDatabase db = getWritableDatabase();
+
+		ContentValues cv0 = new ContentValues();
+		cv0.put(KEY_RECEIVED, "1293867274000");
+		cv0.put(KEY_SENDER, "12116");
+		cv0.put(KEY_MESSAGE, "Testar ett larm meddelande från 1 januari 2011");
+		cv0.put(KEY_TRIGGER_TEXT, "meddelande");
+		cv0.put(KEY_ACKNOWLEDGED, "1293867465000");
+		cv0.put(KEY_ALARM_TYPE, 0);
+
+		ContentValues cv1 = new ContentValues();
+		cv1.put(KEY_RECEIVED, "1301127711000");
+		cv1.put(KEY_SENDER, "04571234567");
+		cv1.put(KEY_MESSAGE, "Testar ett larm meddelande från 26 mars 2011");
+		cv1.put(KEY_TRIGGER_TEXT, "");
+		cv1.put(KEY_ACKNOWLEDGED, "-");
+		cv1.put(KEY_ALARM_TYPE, 0);
+
+		ContentValues cv2 = new ContentValues();
+		cv2.put(KEY_RECEIVED, "1301296911000");
+		cv2.put(KEY_SENDER, "04571234567");
+		cv2.put(KEY_MESSAGE, "Testar ett larm meddelande från 28 mars 2011");
+		cv2.put(KEY_TRIGGER_TEXT, "Testar");
+		cv2.put(KEY_ACKNOWLEDGED, "1301307891000");
+		cv2.put(KEY_ALARM_TYPE, 0);
+
+		ContentValues cv3 = new ContentValues();
+		cv3.put(KEY_RECEIVED, "1305375777000");
+		cv3.put(KEY_SENDER, "12116");
+		cv3.put(KEY_MESSAGE, "Testar ett larm meddelande från 14 maj 2011");
+		cv3.put(KEY_TRIGGER_TEXT, "");
+		cv3.put(KEY_ACKNOWLEDGED, "-");
+		cv3.put(KEY_ALARM_TYPE, 1);
+
+		ContentValues cv4 = new ContentValues();
+		cv4.put(KEY_RECEIVED, "1324829678000");
+		cv4.put(KEY_SENDER, "12006");
+		cv4.put(KEY_MESSAGE, "Testar ett larm meddelande från 25 december 2011");
+		cv4.put(KEY_TRIGGER_TEXT, "december");
+		cv4.put(KEY_ACKNOWLEDGED, "-");
+		cv4.put(KEY_ALARM_TYPE, 0);
+
+		ContentValues cv5 = new ContentValues();
+		cv5.put(KEY_RECEIVED, "1357010018000");
+		cv5.put(KEY_SENDER, "12116");
+		cv5.put(KEY_MESSAGE, "Testar ett larm meddelande från 1 januari 2013");
+		cv5.put(KEY_TRIGGER_TEXT, "");
+		cv5.put(KEY_ACKNOWLEDGED, "-");
+		cv5.put(KEY_ALARM_TYPE, 1);
+
+		ContentValues cv6 = new ContentValues();
+		cv6.put(KEY_RECEIVED, "1359277895000");
+		cv6.put(KEY_SENDER, "12116");
+		cv6.put(KEY_MESSAGE, "Testar ett larm meddelande från 27 januari 2013");
+		cv6.put(KEY_TRIGGER_TEXT, "januari");
+		cv6.put(KEY_ACKNOWLEDGED, "1359278123000");
+		cv6.put(KEY_ALARM_TYPE, 0);
+
+		ContentValues cv7 = new ContentValues();
+		cv7.put(KEY_RECEIVED, "1373695702000");
+		cv7.put(KEY_SENDER, "12345");
+		cv7.put(KEY_MESSAGE, "Testar ett larm meddelande från 13 juli 2013");
+		cv7.put(KEY_TRIGGER_TEXT, "");
+		cv7.put(KEY_ACKNOWLEDGED, "-");
+		cv7.put(KEY_ALARM_TYPE, 1);
+
+		ContentValues cv8 = new ContentValues();
+		cv8.put(KEY_RECEIVED, "1386827183000");
+		cv8.put(KEY_SENDER, "12345");
+		cv8.put(KEY_MESSAGE, "Testar ett larm meddelande från 12 december 2013");
+		cv8.put(KEY_TRIGGER_TEXT, "");
+		cv8.put(KEY_ACKNOWLEDGED, "-");
+		cv8.put(KEY_ALARM_TYPE, 1);
+
+		ContentValues cv9 = new ContentValues();
+		cv9.put(KEY_RECEIVED, "1388551934000");
+		cv9.put(KEY_SENDER, "12345");
+		cv9.put(KEY_MESSAGE, "Testar ett larm meddelande från 1 januari 2014");
+		cv9.put(KEY_TRIGGER_TEXT, "2014");
+		cv9.put(KEY_ACKNOWLEDGED, "1388552118000");
+		cv9.put(KEY_ALARM_TYPE, 0);
+
+		ContentValues cv10 = new ContentValues();
+		cv10.put(KEY_RECEIVED, "1411122196000");
+		cv10.put(KEY_SENDER, "12116");
+		cv10.put(KEY_MESSAGE, "Testar ett larm meddelande från 19 september 2014");
+		cv10.put(KEY_TRIGGER_TEXT, "");
+		cv10.put(KEY_ACKNOWLEDGED, "-");
+		cv10.put(KEY_ALARM_TYPE, 1);
+
+		ContentValues cv11 = new ContentValues();
+		cv11.put(KEY_RECEIVED, "1411548567000");
+		cv11.put(KEY_SENDER, "12116");
+		cv11.put(KEY_MESSAGE, "Testar ett larm meddelande från 24 september 2014");
+		cv11.put(KEY_TRIGGER_TEXT, "");
+		cv11.put(KEY_ACKNOWLEDGED, "1411548827000");
+		cv11.put(KEY_ALARM_TYPE, 0);
+
+		ContentValues cv12 = new ContentValues();
+		cv12.put(KEY_RECEIVED, "1417764826000");
+		cv12.put(KEY_SENDER, "12117");
+		cv12.put(KEY_MESSAGE, "Testar ett larm meddelande från 5 december 2014");
+		cv12.put(KEY_TRIGGER_TEXT, "");
+		cv12.put(KEY_ACKNOWLEDGED, "-");
+		cv12.put(KEY_ALARM_TYPE, 0);
+
+		ContentValues cv13 = new ContentValues();
+		cv13.put(KEY_RECEIVED, "1420052131000");
+		cv13.put(KEY_SENDER, "12117");
+		cv13.put(KEY_MESSAGE, "Testar ett larm meddelande från 31 december 2014");
+		cv13.put(KEY_TRIGGER_TEXT, "");
+		cv13.put(KEY_ACKNOWLEDGED, "-");
+		cv13.put(KEY_ALARM_TYPE, 1);
+
+		ContentValues cv14 = new ContentValues();
+		cv14.put(KEY_RECEIVED, "1420101691000");
+		cv14.put(KEY_SENDER, "12345");
+		cv14.put(KEY_MESSAGE, "Testar ett larm meddelande från 1 januari 2015");
+		cv14.put(KEY_TRIGGER_TEXT, "Testar");
+		cv14.put(KEY_ACKNOWLEDGED, "1420102412000");
+		cv14.put(KEY_ALARM_TYPE, 0);
+
+		ContentValues cv15 = new ContentValues();
+		cv15.put(KEY_RECEIVED, "1421155434000");
+		cv15.put(KEY_SENDER, "12345");
+		cv15.put(KEY_MESSAGE, "Testar ett larm meddelande från 13 januari 2015");
+		cv15.put(KEY_TRIGGER_TEXT, "");
+		cv15.put(KEY_ACKNOWLEDGED, "-");
+		cv15.put(KEY_ALARM_TYPE, 1);
+
+		ContentValues cv16 = new ContentValues();
+		cv16.put(KEY_RECEIVED, "1422716505000");
+		cv16.put(KEY_SENDER, "12116");
+		cv16.put(KEY_MESSAGE, "Testar ett larm meddelande från 31 januari 2015");
+		cv16.put(KEY_TRIGGER_TEXT, "");
+		cv16.put(KEY_ACKNOWLEDGED, "-");
+		cv16.put(KEY_ALARM_TYPE, 1);
+
+		ContentValues cv17 = new ContentValues();
+		cv17.put(KEY_RECEIVED, "1423424321000");
+		cv17.put(KEY_SENDER, "04571234567");
+		cv17.put(KEY_MESSAGE, "Testar ett larm meddelande från 8 februari 2015");
+		cv17.put(KEY_TRIGGER_TEXT, "meddelande");
+		cv17.put(KEY_ACKNOWLEDGED, "1423424571000");
+		cv17.put(KEY_ALARM_TYPE, 0);
+
+		ContentValues cv18 = new ContentValues();
+		cv18.put(KEY_RECEIVED, "1312625679000");
+		cv18.put(KEY_SENDER, "12006");
+		cv18.put(KEY_MESSAGE, "Testar ett larm meddelande från 6 augusti 2011");
+		cv18.put(KEY_TRIGGER_TEXT, "augusti");
+		cv18.put(KEY_ACKNOWLEDGED, "-");
+		cv18.put(KEY_ALARM_TYPE, 1);
+
+		db.insert(TABLE_ALARMS, null, cv0);
+		db.insert(TABLE_ALARMS, null, cv1);
+		db.insert(TABLE_ALARMS, null, cv2);
+		db.insert(TABLE_ALARMS, null, cv3);
+		db.insert(TABLE_ALARMS, null, cv4);
+		db.insert(TABLE_ALARMS, null, cv5);
+		db.insert(TABLE_ALARMS, null, cv6);
+		db.insert(TABLE_ALARMS, null, cv7);
+		db.insert(TABLE_ALARMS, null, cv8);
+		db.insert(TABLE_ALARMS, null, cv9);
+		db.insert(TABLE_ALARMS, null, cv10);
+		db.insert(TABLE_ALARMS, null, cv11);
+		db.insert(TABLE_ALARMS, null, cv12);
+		db.insert(TABLE_ALARMS, null, cv13);
+		db.insert(TABLE_ALARMS, null, cv14);
+		db.insert(TABLE_ALARMS, null, cv15);
+		db.insert(TABLE_ALARMS, null, cv16);
+		db.insert(TABLE_ALARMS, null, cv17);
+		db.insert(TABLE_ALARMS, null, cv18);
+
 		db.close();
 	}
 }
