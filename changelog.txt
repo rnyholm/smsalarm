@@ -1,6 +1,6 @@
 SmsAlarm changelog
 
-v2.3.1(version code 16)
+v2.3.1(version code 17)
 -Förbättrat gränssnittet, introducerat en sliding menu
 -Tagit bort onödig loggning
 -Bytt namn på larmsignalen Virve till Nokia THR800
