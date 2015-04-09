@@ -17,6 +17,7 @@ import android.telephony.PhoneNumberUtils;
 import android.util.Log;
 import ax.ha.it.smsalarm.alarm.Alarm;
 import ax.ha.it.smsalarm.alarm.Alarm.AlarmType;
+import ax.ha.it.smsalarm.handler.DatabaseHandler;
 import ax.ha.it.smsalarm.handler.SharedPreferencesHandler;
 import ax.ha.it.smsalarm.handler.SharedPreferencesHandler.PrefKey;
 import ax.ha.it.smsalarm.handler.SoundHandler;
@@ -56,6 +57,19 @@ public class DebugUtils {
 		prefHandler.storePrefs(PrefKey.SHARED_PREF, PrefKey.ENABLE_SMS_ALARM_KEY, true, context);
 		prefHandler.storePrefs(PrefKey.SHARED_PREF, PrefKey.RESCUE_SERVICE_KEY, "Test Räddningstjänst", context);
 		prefHandler.storePrefs(PrefKey.SHARED_PREF, PrefKey.USE_FLASH_NOTIFICATION, false, context);
+	}
+
+	/**
+	 * To create mock {@link Alarm}'s and insert them into the <b><i>Database</i></b>. To only be used for debug and testing purpose.
+	 * 
+	 * @param context
+	 *            Context in which <code>Alarm</code>'s are being mocked and inserted into database.
+	 * @see DatabaseHandler#insertMockAlarms()
+	 */
+	@SuppressWarnings("deprecation")
+	public static void insertMockAlarms(Context context) {
+		DatabaseHandler db = new DatabaseHandler(context);
+		db.insertMockAlarms();
 	}
 
 	/**
