@@ -15,6 +15,7 @@ import android.widget.ListView;
 import android.widget.Toast;
 import ax.ha.it.smsalarm.R;
 import ax.ha.it.smsalarm.activity.SmsAlarm;
+import ax.ha.it.smsalarm.fragment.dialog.ConfirmInsertMockAlarmsDialog;
 import ax.ha.it.smsalarm.fragment.dialog.ConfirmMockSharedPreferencesDialog;
 import ax.ha.it.smsalarm.fragment.dialog.MockSmsDialog;
 import ax.ha.it.smsalarm.slidingmenu.adapter.SlidingMenuAdapter;
@@ -96,7 +97,8 @@ public class SlidingMenuFragment extends SherlockListFragment {
 			adapter.add(new SlidingMenuItem(401, getString(R.string.DEBUG_MENU_TITLE_DISPATCH_MOCK_SMS)));
 			adapter.add(new SlidingMenuItem(402, getString(R.string.DEBUG_MENU_TITLE_NOTIFICATION)));
 			adapter.add(new SlidingMenuItem(403, getString(R.string.DEBUG_MENU_TITLE_ACK_NOTIFICATION)));
-			adapter.add(new SlidingMenuItem(404, getString(R.string.DEBUG_MENU_TITLE_MOCK_SHARED_PREFS)));
+			adapter.add(new SlidingMenuItem(404, getString(R.string.DEBUG_MENU_TITLE_INSERT_MOCK_ALARMS)));
+			adapter.add(new SlidingMenuItem(405, getString(R.string.DEBUG_MENU_TITLE_MOCK_SHARED_PREFS)));
 		}
 	}
 
@@ -149,6 +151,11 @@ public class SlidingMenuFragment extends SherlockListFragment {
 				DebugUtils.dispatchAcknowledgeNotification(getActivity());
 				break;
 			case (404):
+				ConfirmInsertMockAlarmsDialog confirmInsertMockAlarmsDialog = new ConfirmInsertMockAlarmsDialog();
+				confirmInsertMockAlarmsDialog.setTargetFragment(SlidingMenuFragment.this, ConfirmInsertMockAlarmsDialog.CONFIRM_INSERT_MOCK_ALARMS_REQUEST_CODE);
+				confirmInsertMockAlarmsDialog.show(getFragmentManager(), ConfirmInsertMockAlarmsDialog.CONFIRM_INSERT_MOCK_ALARMS_TAG);
+				break;
+			case (405):
 				ConfirmMockSharedPreferencesDialog confirmMockSharedPrefsDialog = new ConfirmMockSharedPreferencesDialog();
 				confirmMockSharedPrefsDialog.setTargetFragment(SlidingMenuFragment.this, ConfirmMockSharedPreferencesDialog.CONFIRM_MOCK_SHARED_PREFERENCES_REQUEST_CODE);
 				confirmMockSharedPrefsDialog.show(getFragmentManager(), ConfirmMockSharedPreferencesDialog.CONFIRM_MOCK_SHARED_PREFERENCES_TAG);
@@ -194,6 +201,11 @@ public class SlidingMenuFragment extends SherlockListFragment {
 					// User obviously want to mock shared preferences, mock them
 					DebugUtils.mockSharedPreferences(getActivity());
 					Toast.makeText(getActivity(), getString(R.string.DEBUG_TOAST_SHARED_PREFERENCES_MOCKED), Toast.LENGTH_LONG).show();
+					break;
+				case (ConfirmInsertMockAlarmsDialog.CONFIRM_INSERT_MOCK_ALARMS_REQUEST_CODE):
+					// User wants to insert mock alarms, insert them
+					DebugUtils.insertMockAlarms(getActivity());
+					Toast.makeText(getActivity(), getString(R.string.DEBUG_TOAST_MOCK_ALARMS_INSERTED), Toast.LENGTH_LONG).show();
 					break;
 				default:
 					if (SmsAlarm.DEBUG) {
