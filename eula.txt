@@ -23,9 +23,3 @@ FI
 Sms Alarm ei korvaa henkilöhakulaitteita tai muita hälytysjärjestelmiä hätäkeskuksessa. Sms Alarmin kehittäjä ei vastaa eikä voida pitää
 vastuussa mahdollisista henkivahingoista, omaisuus- tai ympäristövahingoista Sms Alarmia käytettäessä. Sms Alarmin kehittäjä ei myöskään 
 ole vastuussa mahdollisista vahingoista jotka voivat syntyä Sms Alarmin käyttöönottoyhteydessä.
-
-ET
-==
-Sms Alarm ei ole mõeldud asendama piiparit või muud päästetöötajate teavitamiseks mõeldud süsteemi. Sms Alarmi arendaja ei vastuta kahjude
-eest, mis on tekkinud elule, varale või keskkonnale Sms Alarmi kasutamisest johtuvalt. Ka ei vastuta Sms Alarmi arendaja kahjude eest, mis 
-on tekkinud seadmetele seoses Sms Alarmi kasutamisega.
