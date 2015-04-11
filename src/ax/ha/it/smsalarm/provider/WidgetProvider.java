@@ -37,6 +37,9 @@ public class WidgetProvider extends AppWidgetProvider {
 	// Max length of the latest alarm length in widget
 	private static final int ALARM_TEXT_MAX_LENGTH = 100;
 
+	// Used only in widget
+	private static final String BLANK_SPACE = " ";
+
 	// Strings representing different intent actions used to run different methods from intent
 	private static final String TOGGLE_ENABLE_SMS_ALARM = "ax.ha.it.smsalarm.TOGGLE_SMS_ALARM_ENABLE";
 	private static final String TOGGLE_USE_OS_SOUND_SETTINGS = "ax.ha.it.smsalarm.TOGGLE_USE_OS_SOUND_SETTINGS";
@@ -208,26 +211,36 @@ public class WidgetProvider extends AppWidgetProvider {
 			StringBuilder alarmMessage = new StringBuilder();
 
 			// Sanity check to see whether alarm holds valid info or not
-			if (alarm.holdsValidInfo()) {
+			if (alarm.isValid()) {
 				// Build up the string representing the latest alarm from alarm object
-				alarmInfo.append(context.getString(R.string.TITLE_ALARM_INFO_RECEIVED));
+				alarmInfo.append(context.getString(R.string.TITLE_ALARM_INFO_ALARM_TYPE));
 				alarmInfo.append(context.getString(R.string.COLON));
-				alarmInfo.append(alarm.getReceivedLocalized());
+				alarmInfo.append(BLANK_SPACE);
+				alarmInfo.append(alarm.getAlarmTypeLocalized(context));
 				alarmInfo.append(context.getString(R.string.NEW_LINE));
 
 				alarmInfo.append(context.getString(R.string.TITLE_ALARM_INFO_SENDER));
 				alarmInfo.append(context.getString(R.string.COLON));
+				alarmInfo.append(BLANK_SPACE);
 				alarmInfo.append(alarm.getSender());
 				alarmInfo.append(context.getString(R.string.NEW_LINE));
 
-				alarmInfo.append(context.getString(R.string.TITLE_ALARM_INFO_TRIGGER_TEXT));
+				alarmInfo.append(context.getString(R.string.TITLE_ALARM_INFO_RECEIVED));
 				alarmInfo.append(context.getString(R.string.COLON));
-				alarmInfo.append(alarm.getTriggerText());
+				alarmInfo.append(BLANK_SPACE);
+				alarmInfo.append(alarm.getReceivedLocalized());
+				alarmInfo.append(context.getString(R.string.NEW_LINE));
+
+				alarmInfo.append(context.getString(R.string.TITLE_ALARM_INFO_ACKNOWLEDGED));
+				alarmInfo.append(context.getString(R.string.COLON));
+				alarmInfo.append(BLANK_SPACE);
+				alarmInfo.append(alarm.getAcknowledgedLocalized());
 				alarmInfo.append(context.getString(R.string.NEW_LINE));
 
 				// Build up the alarm message in separate StringBuilder so we can shorten it if we need
 				alarmMessage.append(context.getString(R.string.TITLE_ALARM_INFO_MESSAGE));
 				alarmMessage.append(context.getString(R.string.COLON));
+				alarmMessage.append(BLANK_SPACE);
 				alarmMessage.append(alarm.getMessage());
 
 				// Check if alarm message is longer than the limits for the TextView
@@ -238,11 +251,6 @@ public class WidgetProvider extends AppWidgetProvider {
 				}
 
 				alarmInfo.append(alarmMessage.toString());
-				alarmInfo.append(context.getString(R.string.NEW_LINE));
-
-				alarmInfo.append(context.getString(R.string.TITLE_ALARM_INFO_ACKNOWLEDGED));
-				alarmInfo.append(context.getString(R.string.COLON));
-				alarmInfo.append(alarm.getAcknowledgedLocalized());
 
 				// Return latest alarm as string
 				return alarmInfo.toString();

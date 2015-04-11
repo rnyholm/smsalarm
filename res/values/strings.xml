@@ -32,7 +32,7 @@
     <string name="INFO_PLAY_ALARM_SIGNAL_REPEATEDLY_SETTING">Om vald kommer larmsignalen för både primär- och sekundärlarm att spelas oavbrutet tills notifikationen för inkommande larm har hanterats.</string>
     <string name="ALARM_VIBRATION_PROMPT_TITLE">Välj vibrationsmönster</string>
     <string name="ALARM_INFO_PROMPT_TITLE">Larminfo</string>
-    <string name="ALARM_INFO_ALARM_TYPE_TITLE">Larmtyp</string>
+    <string name="TITLE_ALARM_INFO_ALARM_TYPE">Larmtyp</string>
     <string name="TITLE_UNDEFINED_ALARM">Odefinierat larm</string> 
     <!-- OK IN ENGLISH AND GERMAN BEGIN -->
     <string name="INFO_USE_OS_SOUND_SETTINGS">Om vald tar Sms Alarm hänsyn till enhetens ringvolym och ljudlöst läge.</string>

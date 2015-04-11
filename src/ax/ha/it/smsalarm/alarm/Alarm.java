@@ -8,8 +8,10 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
 
+import android.content.Context;
 import android.os.Parcel;
 import android.os.Parcelable;
+import ax.ha.it.smsalarm.R;
 
 import com.google.common.base.Optional;
 
@@ -202,16 +204,14 @@ public class Alarm implements Parcelable {
 	 * <li><b><i>Date and time received</i></b></li>
 	 * <li><b><i>Sender</i></b></li>
 	 * <li><b><i>Message</i></b></li>
-	 * <li><b><i>Trigger text</i></b></li>
-	 * <li><b><i>Alarm type</i></b></li>
 	 * </ul>
 	 * <p>
 	 * To be valid each of the checked item must not be <code>null</code> and hold correct content.
 	 * 
 	 * @return <code>true</code> if this alarm holds enough data to be shown in the widget, else <code>false</code>.
 	 */
-	public boolean holdsValidInfo() {
-		if (received != null && sender != null && sender.length() > 0 && message != null && message.length() > 0 && triggerText != null && triggerText.length() > 0 && !AlarmType.UNDEFINED.equals(alarmType)) {
+	public boolean isValid() {
+		if (received != null && sender != null && sender.length() > 0 && message != null && message.length() > 0) {
 			return true;
 		}
 
@@ -330,6 +330,24 @@ public class Alarm implements Parcelable {
 	 */
 	public AlarmType getAlarmType() {
 		return alarmType;
+	}
+
+	/**
+	 * To get a <b><i>Localized</i></b> text representation from this {@link Alarm}'s {@link AlarmType}.
+	 * 
+	 * @param context
+	 *            {@link Context} from where {@link String} resources should be taken from.
+	 * @return Given <code>AlarmType</code> localized into a {@link String}.
+	 */
+	public String getAlarmTypeLocalized(Context context) {
+		switch (alarmType) {
+			case PRIMARY:
+				return context.getString(R.string.TITLE_PRIMARY_ALARM);
+			case SECONDARY:
+				return context.getString(R.string.TITLE_SECONDARY_ALARM);
+			default:
+				return context.getString(R.string.TITLE_UNDEFINED_ALARM);
+		}
 	}
 
 	/**

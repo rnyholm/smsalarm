@@ -14,7 +14,6 @@ import android.widget.ScrollView;
 import android.widget.TextView;
 import ax.ha.it.smsalarm.R;
 import ax.ha.it.smsalarm.alarm.Alarm;
-import ax.ha.it.smsalarm.alarm.Alarm.AlarmType;
 
 /**
  * {@link DialogFragment} which shows all details of {@link Alarm} set to this dialog..
@@ -79,7 +78,7 @@ public class AlarmInfoDialog extends DialogFragment {
 
 		// ...and setting text to the titles using StringBuilder
 		StringBuilder sb = new StringBuilder();
-		sb.append(getString(R.string.ALARM_INFO_ALARM_TYPE_TITLE));
+		sb.append(getString(R.string.TITLE_ALARM_INFO_ALARM_TYPE));
 		sb.append(getString(R.string.COLON));
 		alarmTypeTitleTextView.setText(sb.toString());
 
@@ -109,7 +108,7 @@ public class AlarmInfoDialog extends DialogFragment {
 		messageTitleTextView.setText(sb.toString());
 
 		// ...then setting the actual information from the alarm to the TextViews
-		alarmTypeTextView.setText(resolveAlarmTypeLocalized(alarm.getAlarmType()));
+		alarmTypeTextView.setText(alarm.getAlarmTypeLocalized(context));
 		senderTextView.setText(alarm.getSender());
 		receivedTextView.setText(alarm.getReceivedLocalized());
 		acknowledgedTextView.setText(alarm.getAcknowledgedLocalized());
@@ -212,23 +211,5 @@ public class AlarmInfoDialog extends DialogFragment {
 				})
 
 				.create();
-	}
-
-	/**
-	 * Convenience method to resolve a <b><i>Localized</i></b> text representation of given {@link AlarmType}.
-	 * 
-	 * @param alarmType
-	 *            <code>AlarmType</code> to resolve localized text from.
-	 * @return Given <code>AlarmType</code> localized into a {@link String}.
-	 */
-	public String resolveAlarmTypeLocalized(AlarmType alarmType) {
-		switch (alarmType) {
-			case PRIMARY:
-				return getString(R.string.TITLE_PRIMARY_ALARM);
-			case SECONDARY:
-				return getString(R.string.TITLE_SECONDARY_ALARM);
-			default:
-				return getString(R.string.TITLE_UNDEFINED_ALARM);
-		}
 	}
 }

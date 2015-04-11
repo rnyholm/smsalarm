@@ -25,12 +25,13 @@ resulterar i att ett kvitteringssamtal rings direkt när man e inne i kvitterings
 -Alla ikoner finns nu för respektive upplösning
 -Larmloggen är flyttad in till applikationen
 -Finns tre olika larmloggar, en för alla larm, en för primärlarm och en för sekundärlarm
--Larmloggen visar larm per år och månad, totalt antal mottagna larm visas också per månad.
--Dialog som visar larminfo visas med fullständiga information om larmet när man trycker på ett larm i någondera larmlogg.
+-Larmloggen visar larm per år och månad, totalt antal mottagna larm visas också per månad
+-Dialog som visar larminfo visas med fullständiga information om larmet när man trycker på ett larm i någondera larmlogg
 -Möjligt att kvittera ett larm på nytt om man missat att göra det ifrån notifikationsbaren, detta görs då via alarm loggen
 genom att trycka på ett larm där. För att ett larm ska vara giltigt för kvittering måste larmet vara ett primärlarm,
 inte redan vara kvitterat och måste ha tagits emot inom de senaste 24 timmarna. Utöver detta måste användaren ha valt att 
-använda kvittering.
+använda kvittering
+-Widgeten visar nu larmtyp medans triggande ord har tagits bort. Informationen vissas nu också i samma följd som den görs i dialogen för larminfo
 
 v2.2.5(version code 13)
 -Översättning till estniska lades till
