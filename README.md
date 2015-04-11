@@ -10,12 +10,12 @@ It works by listening to sms from user configured phone numbers, when an sms is 
 
 Installation & prerequisites
 ----------------------------
-In order to run this application you obviously needs a device running Android&trade;. Sms Alarm is developed for Android&trade; version 5.0(Lollipop) but runs fine on minimum 2.2(Froyo).<br />
+In order to run this application you obviously needs a device running Android&trade;. Sms Alarm is developed for Android&trade; version 5.0(Lollipop) but runs fine on minimum 2.3(Gingerbread).<br />
 Sms Alarm is available through Google Play&trade; and is installed just as a normal application.
 
 Development
 -----------
 Developer: Robert Nyholm <robert.nyholm@aland.net><br />
 Development environment: Eclipse IDE Luna Release v4.4.0<br />
-Android SDK Tools: Rev. 23.0.2<br />
+Android SDK Tools: Rev. 24.1.2<br />
 Version control system: Git v1.8.3.1<br />
