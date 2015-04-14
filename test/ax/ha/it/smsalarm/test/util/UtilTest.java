@@ -1,11 +1,12 @@
 /**
  * Copyright (c) 2015 Robert Nyholm. All rights reserved.
  */
-package ax.ha.it.smsalarm.util;
+package ax.ha.it.smsalarm.test.util;
 
 import java.util.Arrays;
 import java.util.List;
 
+import ax.ha.it.smsalarm.util.Util;
 import junit.framework.TestCase;
 
 /**

@@ -1,6 +1,6 @@
 SmsAlarm changelog
 
-v2.3.1(version code 17)
+v2.3.1(version code 18)
 -Förbättrat gränssnittet, introducerat en sliding menu
 -Tagit bort onödig loggning
 -Bytt namn på larmsignalen Virve till Nokia THR800
@@ -32,6 +32,7 @@ genom att trycka på ett larm där. För att ett larm ska vara giltigt för kvitteri
 inte redan vara kvitterat och måste ha tagits emot inom de senaste 24 timmarna. Utöver detta måste användaren ha valt att 
 använda kvittering
 -Widgeten visar nu larmtyp medans triggande ord har tagits bort. Informationen vissas nu också i samma följd som den görs i dialogen för larminfo
+-Fixade bugg som gjorde att mottaget primärlarm nergraderades till ett sekundär larm om applikationen triggade sekundärlarmet på ord.
 
 v2.2.5(version code 13)
 -Översättning till estniska lades till

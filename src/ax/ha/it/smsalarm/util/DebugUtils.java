@@ -15,6 +15,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.telephony.PhoneNumberUtils;
 import android.util.Log;
+import ax.ha.it.smsalarm.activity.SmsAlarm;
 import ax.ha.it.smsalarm.alarm.Alarm;
 import ax.ha.it.smsalarm.alarm.Alarm.AlarmType;
 import ax.ha.it.smsalarm.handler.DatabaseHandler;
@@ -112,6 +113,30 @@ public class DebugUtils {
 	 *            Message of the SMS.
 	 */
 	public static void dispatchMockSMS(Context context, String sender, String body) {
+		byte[] pdu = createMockSMS(sender, body);
+		if (pdu != null) {
+			Intent intent = new Intent(context, SmsReceiver.class);
+			intent.putExtra("pdus", new Object[] { pdu });
+			intent.putExtra("format", "3gpp");
+			intent.setAction(SmsReceiver.ACTION_SKIP_ABORT_BROADCAST);
+			context.sendBroadcast(intent);
+		} else {
+			if (SmsAlarm.DEBUG) {
+				Log.e(LOG_TAG, "An error seems to have occurred as the created mock SMS (pdu byte[]) is null, see previous error messages");
+			}
+		}
+	}
+
+	/**
+	 * To create a mock SMS. The created SMS will be fully compatible, or in other words, look exactly the same as a real SMS to it's structure.
+	 * 
+	 * @param sender
+	 *            Sender of the SMS.
+	 * @param body
+	 *            Message of the SMS.
+	 * @return Created mock SMS as a {@link Byte} array.
+	 */
+	public static byte[] createMockSMS(String sender, String body) {
 		byte[] pdu = null;
 		byte[] scBytes = PhoneNumberUtils.networkPortionToCalledPartyBCD("0000000000");
 		byte[] senderBytes = PhoneNumberUtils.networkPortionToCalledPartyBCD(sender);
@@ -145,18 +170,19 @@ public class DebugUtils {
 				byte[] bodybytes = (byte[]) stringToGsm7BitPacked.invoke(null, body);
 				bo.write(bodybytes);
 			} catch (Exception e) {
-				Log.e(LOG_TAG, "Failed convert string: \"" + body + "\" to GSM 7 Bit Packed", e);
+				if (SmsAlarm.DEBUG) {
+					Log.e(LOG_TAG, "Failed convert string: \"" + body + "\" to GSM 7 Bit Packed", e);
+				}
 			}
 
 			pdu = bo.toByteArray();
 		} catch (IOException e) {
+			if (SmsAlarm.DEBUG) {
+				Log.e(LOG_TAG, "Failed to write created mock SMS to ByteArrayOutputStream", e);
+			}
 		}
 
-		Intent intent = new Intent(context, SmsReceiver.class);
-		intent.putExtra("pdus", new Object[] { pdu });
-		intent.putExtra("format", "3gpp");
-		intent.setAction(SmsReceiver.ACTION_SKIP_ABORT_BROADCAST);
-		context.sendBroadcast(intent);
+		return pdu;
 	}
 
 	/**

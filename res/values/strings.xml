@@ -71,7 +71,7 @@
     <string name="APP_NAME">Sms Alarm</string>
     <string name="APP_DESCR">The Alarm application for Android&#8482;</string>
 	<string name="APP_VERSION">2.3.1beta</string>   
-	<string name="APP_BUILD">20150409</string>
+	<string name="APP_BUILD">20150414</string>
 	<!-- APPLICATION INFO END -->
     
     <string name="ABOUT">About Sms Alarm</string>

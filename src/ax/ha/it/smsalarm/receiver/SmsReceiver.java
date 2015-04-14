@@ -47,7 +47,7 @@ public class SmsReceiver extends BroadcastReceiver {
 	// Debug actions to skip abort broadcast, by not disabling this while dispatching a test SMS will cause an exception
 	public static final String ACTION_SKIP_ABORT_BROADCAST = "ax.ha.it.smsalarm.SKIP_ABORT_BROADCAST";
 
-	// URI to sms inbox
+	// URI to SMS inbox
 	private static final String SMS_INBOX_URI = "content://sms/inbox";
 
 	// How long we should acquire a wake lock
@@ -236,24 +236,31 @@ public class SmsReceiver extends BroadcastReceiver {
 	 * @return <code>true</code> if income SMS was an <b><i>Number Triggered</i></b> alarm else <code>false</code>.
 	 */
 	private boolean checkSmsAlarm(Context context) {
+		// Needed to figure out if income SMS is an alarm
+		boolean isAlarm = false;
+
 		// First check for primary alarm...
 		for (String primarySmsNumber : primarySmsNumbers) {
-			// If msgHeader(senders phone number) exists in the list of primary SMS numbers, store alarm and return
-			if (msgHeader.equals(primarySmsNumber)) {
+			// If msgHeader(senders phone number) exists in the list of primary SMS numbers, store alarm type and indicate that the SMS is an alarm.
+			// Only needed to check this also if the income SMS hasn't been recognized as an alarm yet
+			if (!isAlarm && msgHeader.equals(primarySmsNumber)) {
 				alarmType = AlarmType.PRIMARY;
-				return true;
+				isAlarm = true;
 			}
 		}
 
-		// ...then secondary alarm
-		for (String secondarySmsNumber : secondarySmsNumbers) {
-			if (msgHeader.equals(secondarySmsNumber)) {
-				alarmType = AlarmType.SECONDARY;
-				return true;
+		// Income SMS already figured out to be a primary alarm as it triggered on number, no need for further checks
+		if (!isAlarm) {
+			// / ...then secondary alarm if income SMS wasn't resolved as a primary alarm from number triggering
+			for (String secondarySmsNumber : secondarySmsNumbers) {
+				if (!isAlarm && msgHeader.equals(secondarySmsNumber)) {
+					alarmType = AlarmType.SECONDARY;
+					isAlarm = true;
+				}
 			}
 		}
 
-		return false;
+		return isAlarm;
 	}
 
 	/**
@@ -265,6 +272,8 @@ public class SmsReceiver extends BroadcastReceiver {
 	 * @return <code>true</code> if income SMS was an <b><i>Free Text Triggered</i></b> alarm else <code>false</code>.
 	 */
 	private boolean checkFreeTextAlarm(Context context) {
+		// Needed to figure out if income SMS is an alarm
+		boolean isAlarm = false;
 
 		// First check for primary alarm...
 		for (String primaryFreeText : primaryFreeTexts) {
@@ -274,21 +283,27 @@ public class SmsReceiver extends BroadcastReceiver {
 
 				// Need to know the trigger text
 				setTriggerText(primaryFreeText);
-				return true;
+				isAlarm = true;
 			}
 		}
 
-		// ...then secondary alarm
-		for (String secondaryFreeText : secondaryFreeTexts) {
-			if (findWordEqualsIgnore(secondaryFreeText, msgBody)) {
-				alarmType = AlarmType.SECONDARY;
+		// Income SMS already figured out to be a primary alarm as it triggered on free text, no need for further checks
+		if (!isAlarm) {
+			// ...then secondary alarm if income SMS wasn't resolved as a primary alarm from free text triggering
+			for (String secondaryFreeText : secondaryFreeTexts) {
+				if (findWordEqualsIgnore(secondaryFreeText, msgBody)) {
+					// Only if current, resolved alarm type isn't primary, we don't want to down grade a primary alarm
+					if (!AlarmType.PRIMARY.equals(alarmType)) {
+						alarmType = AlarmType.SECONDARY;
 
-				setTriggerText(secondaryFreeText);
-				return true;
+						setTriggerText(secondaryFreeText);
+						isAlarm = true;
+					}
+				}
 			}
 		}
 
-		return false;
+		return isAlarm;
 	}
 
 	/**
