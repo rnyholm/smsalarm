@@ -126,8 +126,8 @@ public class WidgetProvider extends AppWidgetProvider {
 			PendingIntent useOsSoundSettingsPendingIntent = PendingIntent.getBroadcast(context, 0, useOsSoundSettingsIntent, PendingIntent.FLAG_UPDATE_CURRENT);
 
 			Intent showAlarmLogIntent = new Intent(context, SmsAlarm.class);
+			showAlarmLogIntent.setAction(SmsAlarm.ACTION_SWITCH_TO_ALARM_LOG_FRAGMENT);
 			showAlarmLogIntent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, appWidgetIds[i]);
-			showAlarmLogIntent.putExtra(SmsAlarm.SWITCH_TO_ALARM_LOG_FRAGMENT, true);
 			PendingIntent showAlarmLogPendingIntent = PendingIntent.getActivity(context, 0, showAlarmLogIntent, PendingIntent.FLAG_UPDATE_CURRENT);
 
 			// Set widget texts

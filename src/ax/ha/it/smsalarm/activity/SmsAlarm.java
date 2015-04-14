@@ -33,9 +33,8 @@ public class SmsAlarm extends SlidingFragmentActivity {
 	// Important flag, if set all eventual DEBUG logging and the Debug/Test menu will be shown, set false for production!
 	public static final boolean DEBUG = true;
 
-	// Flag that can be set as extra to an intent if fragment should be switched or not to AlarmLogFragment upon creation of this activity or if
-	// intent of this activity changes
-	public static final String SWITCH_TO_ALARM_LOG_FRAGMENT = "switchToAlarmLogFragment";
+	// Action that can be set to an intent if fragment should be switched to AlarmLogFragment upon creation/new intent of this activity
+	public static final String ACTION_SWITCH_TO_ALARM_LOG_FRAGMENT = "ax.ha.it.smsalarm.SWITCH_TO_ALARM_LOG_FRAGMENT";
 
 	/**
 	 * Perform initialization of <code>Layout</code>'s, {@link Fragment}'s, the {@link SlidingMenu} and {@link ActionBar}. Configuration of these
@@ -164,11 +163,11 @@ public class SmsAlarm extends SlidingFragmentActivity {
 
 	/**
 	 * To set correct {@link Fragment} to the <code>ContentFrame</code>.<br>
-	 * If no <code>savedInstanceState</code> exists and if {@link SmsAlarm#SWITCH_TO_ALARM_LOG_FRAGMENT} is set as <code>false</code> in this
+	 * If no <code>savedInstanceState</code> exists and if {@link SmsAlarm#ACTION_SWITCH_TO_ALARM_LOG_FRAGMENT} hasn't been set as action to this
 	 * activities {@link Intent} a new instance of the default <code>Fragment</code> {@link SmsSettingsFragment} will be placed in the
 	 * <code>ContentFrame</code>.<br>
-	 * If {@link SmsAlarm#SWITCH_TO_ALARM_LOG_FRAGMENT} is <code>true</code> then a new instance of <code>Fragment</code> {@link AlarmLogFragment}
-	 * will be placed in the <code>ContentFrame</code>.
+	 * If {@link SmsAlarm#ACTION_SWITCH_TO_ALARM_LOG_FRAGMENT} has been set as action to this activities <code>Intent</code> then a new instance of
+	 * <code>Fragment</code> {@link AlarmLogFragment} will be placed in the <code>ContentFrame</code>.
 	 * 
 	 * @param savedInstanceState
 	 *            If the activity is being re-initialized after previously being shut down then this Bundle contains the data it most recently
@@ -186,24 +185,22 @@ public class SmsAlarm extends SlidingFragmentActivity {
 	/**
 	 * To set correct {@link Fragment} to the <code>ContentFrame</code>.<br>
 	 * What <code>Fragment</code> is to be placed in the <code>ContentFrame</code> depends on if given {@link Intent} has
-	 * {@link SmsAlarm#SWITCH_TO_ALARM_LOG_FRAGMENT} as extra and how it's set.<br>
-	 * If the <code>Intent</code> is missing that extra or if it got it but it's <code>false</code> then the default {@link SmsSettingsFragment} will
-	 * be placed in the <code>ContentFrame</code>. <br>
-	 * On the other hand if the extra exists and it's set <code>true</code> then a {@link AlarmLogFragment} will be placed in the
-	 * <code>ContentFrame</code>.
+	 * {@link SmsAlarm#ACTION_SWITCH_TO_ALARM_LOG_FRAGMENT} set as action.<br>
+	 * If the <code>Intent</code> is missing that action then the default {@link SmsSettingsFragment} will be placed in the <code>ContentFrame</code>. <br>
+	 * On the other hand if the action exists then a {@link AlarmLogFragment} will be placed in the <code>ContentFrame</code>.
 	 * <p>
 	 * Note. If the <code>SlidingMenu</code> is showing when an <code>AlarmLogFragment</code> is placed in the <code>ContentView</code> it will be
 	 * placed in background, this is to ensure the <code>AlarmLogFragment</code> is on top.
 	 * 
 	 * @param intent
-	 *            <code>Intent</code> which extras are checked and upon them a decision what <code>Fragment</code> that should be placed in
+	 *            <code>Intent</code> which action are checked and from it a decision what <code>Fragment</code> that should be placed in
 	 *            <code>ContentFrame</code> are taken.
 	 */
 	private void setContentFragment(Intent intent) {
 		FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
 
-		// Check for switch to alarm log fragment extra exists and whether it's true or not
-		if (intent.getBooleanExtra(SWITCH_TO_ALARM_LOG_FRAGMENT, false)) {
+		// Check if switch to alarm log fragment action exists
+		if (ACTION_SWITCH_TO_ALARM_LOG_FRAGMENT.equals(intent.getAction())) {
 			ft.replace(R.id.contentFrame_fl, new AlarmLogFragment());
 
 			// If menu is showing, toggle it to background
