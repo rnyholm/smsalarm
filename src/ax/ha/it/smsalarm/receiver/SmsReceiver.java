@@ -44,7 +44,8 @@ import ax.ha.it.smsalarm.util.WakeLocker;
  * @since 0.9beta
  */
 public class SmsReceiver extends BroadcastReceiver {
-	// Debug actions to skip abort broadcast, by not disabling this while dispatching a test SMS will cause an exception
+	// Debug actions to skip abort broadcast, by not disabling this while dispatching a test SMS will cause an exception. Also if this action is set
+	// then the income SMS will not be stored into the inbox
 	public static final String ACTION_SKIP_ABORT_BROADCAST = "ax.ha.it.smsalarm.SKIP_ABORT_BROADCAST";
 
 	// URI to SMS inbox
@@ -143,6 +144,14 @@ public class SmsReceiver extends BroadcastReceiver {
 		if (!ACTION_SKIP_ABORT_BROADCAST.equals(intent.getAction())) {
 			// Abort broadcast, SmsAlarm will handle income SMS on it's own
 			abortBroadcast();
+
+			// Due to previous abort we have to store the SMS manually in phones inbox
+			// for some reason this must also be done even if application runs on KitKat, this is strange because abortBroadcast() should be totally
+			// ignored on that version, therefore the SMS should be placed in inbox without this snippet. Almost seems like a bug in Android....
+			ContentValues values = new ContentValues();
+			values.put("address", msgHeader);
+			values.put("body", msgBody);
+			context.getContentResolver().insert(Uri.parse(SMS_INBOX_URI), values);
 		}
 
 		// Create a new alarm from this income SMS(alarm)...
@@ -166,14 +175,6 @@ public class SmsReceiver extends BroadcastReceiver {
 				WakeLocker.acquireAndRelease(context, WAKE_LOCKER_ACQUIRE_TIME);
 			}
 		}
-
-		// Due to previous abort we have to store the SMS manually in phones inbox
-		// for some reason this must also be done even if application runs on KitKat, this is strange because abortBroadcast() should be totally
-		// ignored on that version, therefore the SMS should be placed in inbox without this snippet. Almost seems like a bug in Android....
-		ContentValues values = new ContentValues();
-		values.put("address", msgHeader);
-		values.put("body", msgBody);
-		context.getContentResolver().insert(Uri.parse(SMS_INBOX_URI), values);
 
 		// Play alarm signal and vibrate
 		SoundHandler.getInstance().alarm(context, alarmType);
