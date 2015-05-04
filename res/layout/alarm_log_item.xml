@@ -25,6 +25,7 @@
             android:id="@+id/alarmLogSender_tv"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginRight="5dp"
             android:text="@string/ALARM_LOG_ITEM_SENDER"
             android:textAppearance="?android:attr/textAppearanceMedium" />
 
@@ -49,6 +50,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="right"
+                android:layout_marginRight="5dp"
                 android:text="@string/ALARM_LOG_ITEM_DATE_RECEIVED"
                 android:textAppearance="?android:attr/textAppearanceSmall" />
 
