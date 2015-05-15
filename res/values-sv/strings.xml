@@ -54,7 +54,7 @@
     <string name="NUMBER_ALREADY_IN_SECONDARY_LIST">Angivet telefonnummer finns redan i listan över sekundärlarm. Ange ett nytt telefonnummer.</string>
     <string name="NUMBER_IS_NEEDED">Ett telefonnummer måste anges för att kunna spara.</string>
     <string name="NUMBER_PROMPT_HINT">Telefonnummer..</string>
-    <string name="NUMBER_PROMPT_TITLE">Ange ett telefonnummer</string>
+    <string name="NUMBER_PROMPT_TITLE">Ange telefonnummer</string>
     <string name="PRIMARY_ALARM">PRIMÄR LARM!</string>
     <string name="PRIMARY_NUMBER_PROMPT_MESSAGE">Ange ett telefonnummer som Sms Alarm larmar primärlarm på.</string>
     <string name="PRIMARY_FREE_TEXT_PROMPT_MESSAGE">Ange ett ord som Sms Alarm ska larma primärlarm på om det finns i mottaget SMS.</string>

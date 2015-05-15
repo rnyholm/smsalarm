@@ -42,7 +42,7 @@
     <string name="ENTER_MESSAGE_HINT">Ange meddelande..</string>
     <string name="EDIT_MESSAGE">Ändra meddelande</string>
     <string name="MESSAGE_PROMPT_HINT">Meddelande..</string>
-    <string name="MESSAGE_PROMPT_TITLE">Ange ett meddelande</string>
+    <string name="MESSAGE_PROMPT_TITLE">Ange meddelande</string>
     <string name="ACK_MESSAGE_PROMPT_MESSAGE">Ange ett meddelande som applikationen kvitterar med.</string>  
     <!-- OK IN ENGLISH AND GERMAN BEGIN -->
     <string name="INFO_USE_OS_SOUND_SETTINGS">Om vald tar Sms Alarm hänsyn till enhetens ringvolym och ljudlöst läge.</string>
