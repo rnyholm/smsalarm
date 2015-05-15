@@ -9,10 +9,8 @@
     <string name="ABOUT_VISIT">For more information visit:\nsmsalarm-app.net</string>
     <string name="ACK">Acknowledge Alarm</string>  
     <string name="ACK_CANNOT">Can not acknowledge! No telephone number for acknowledgment is given.</string> 
-    <string name="ACK_FULL_MESSAGE">Complete alarm message</string>
     <string name="ACK_LINE_BUSY">Line busy, will call back in:</string>
     <string name="ACK_NUMBER_PROMPT_MESSAGE">Enter a telephone number for the application to send an acknowledgment to.</string>  
-    <string name="ACK_TITLE">Acknowledgment title (with rescue service name)</string>  
 	<string name="ADD">Add</string>       
     <string name="ALARM">ALARM!</string>
     <string name="APP_DESCR">The Alarm application for Android&#8482;</string>

@@ -9,10 +9,8 @@
     <string name="ABOUT_VISIT">För mer information besök:\nsmsalarm-app.net</string>
     <string name="ACK">Kvittera Larm</string>  
     <string name="ACK_CANNOT">Kan ej kvittera! Inget telefonnummer att kvittera till är angivet.</string> 
-    <string name="ACK_FULL_MESSAGE">Fullständigt larm meddelande</string>
     <string name="ACK_LINE_BUSY">Upptaget, återuppringer om:</string>
     <string name="ACK_NUMBER_PROMPT_MESSAGE">Ange ett telefonnummer som applikationen kvitterar till.</string>  
-    <string name="ACK_TITLE">Kvitterings titel(med räddningstjänsts namn)</string>  
 	<string name="ADD">Lägg till</string>       
     <string name="ALARM">LARM!</string>
     <string name="APP_DESCR">Larmapplikationen för Android&#8482;</string>

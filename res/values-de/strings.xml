@@ -9,10 +9,8 @@
     <string name="ABOUT_VISIT">Für weitere Informationen besuchen Sie:\nsmsalarm-app.net</string>
     <string name="ACK">Bestätigungsbenachrichtigung</string>  
     <string name="ACK_CANNOT">Kann nicht bestätigen! Keine Telefonnummer zur Bestätigung wurde eingegeben.</string> 
-    <string name="ACK_FULL_MESSAGE">Kompletter Benachrichtigungstext</string>
     <string name="ACK_LINE_BUSY">Leitung besetzt, rufe zurück in:</string>
     <string name="ACK_NUMBER_PROMPT_MESSAGE">Eine Telefonnummer für die Anwendung eingeben, an welche eine Bestätigung gesendet wird.</string>  
-    <string name="ACK_TITLE">Bestätigungstitel (mit Name des Rettungsdienstes)</string>  
 	<string name="ADD">Hinzufügen</string>       
     <string name="ALARM">ALARM!</string> 
     <string name="APP_DESCR">Alarmanwendung für Android&#8482;</string>

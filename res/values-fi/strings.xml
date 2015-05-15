@@ -8,11 +8,9 @@
     <string name="ABOUT_CONTACT">Jos sinulla on kysyttävää, lähetä sähköpostia osoitteeseen:\ninfo@smsalarm-app.net</string>
     <string name="ABOUT_VISIT">Lisätietoja osoitteesta:\nsmsalarm-app.net</string>
     <string name="ACK">Kuittaa hälytys</string>  
-    <string name="ACK_CANNOT">Ei voi kuitata! Kuittauspuh.nro. puuttuu.</string> 
-    <string name="ACK_FULL_MESSAGE">Täydellinen hälytysilmoitus</string>
+    <string name="ACK_CANNOT">Ei voi kuitata! Kuittauspuh.nro. puuttuu.</string>
     <string name="ACK_LINE_BUSY">Varattu, soitaa takaisin, jos:</string>
-    <string name="ACK_NUMBER_PROMPT_MESSAGE">Anna puh.nro. johon applikaatio kuittaa.</string>  
-    <string name="ACK_TITLE">Kuittauksen otsikko(pelastustoimen nimiellä)</string>  
+    <string name="ACK_NUMBER_PROMPT_MESSAGE">Anna puh.nro. johon applikaatio kuittaa.</string>    
 	<string name="ADD">Lisää</string>       
     <string name="ALARM">Hälytys!</string>
     <string name="APP_DESCR">Hälytyssovellus Android&#8482;</string>
