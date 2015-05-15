@@ -16,15 +16,20 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.RelativeLayout;
 import android.widget.RelativeLayout.LayoutParams;
+import android.widget.Spinner;
 import android.widget.TextView;
 import ax.ha.it.smsalarm.R;
+import ax.ha.it.smsalarm.activity.Acknowledge.AcknowledgeMethod;
 import ax.ha.it.smsalarm.activity.SmsAlarm;
+import ax.ha.it.smsalarm.fragment.dialog.AcknowledgeMessageDialog;
 import ax.ha.it.smsalarm.fragment.dialog.AcknowledgeNumberDialog;
 import ax.ha.it.smsalarm.handler.SharedPreferencesHandler;
 import ax.ha.it.smsalarm.handler.SharedPreferencesHandler.DataType;
@@ -51,21 +56,30 @@ public class AcknowledgeSettingsFragment extends SherlockFragment implements App
 
 	// The EditText...
 	private EditText ackNumberEditText;
+	private EditText ackMessageEditText;
 
 	// ...Button...
 	private Button ackNumberButton;
+	private Button ackMessageButton;
 
 	// ...CheckBox...
 	private CheckBox enableAckCheckBox;
 
-	// ...and the TextView
+	// ...TextView...
 	private TextView enableAckInfoTextView;
+
+	// ...and Spinner
+	private Spinner ackMethodSpinner;
 
 	// Indicating whether acknowledgement of alarm should be used or not
 	private boolean useAlarmAcknowledge = false;
 
-	// This number should acknowledgement be made to
+	// What number and message that should be used while acknowledge
 	private String acknowledgeNumber = "";
+	private String acknowledgeMessage = "";
+
+	// What method acknowledgement should be done with, CALL is default
+	private AcknowledgeMethod acknowledgeMethod = AcknowledgeMethod.CALL;
 
 	/**
 	 * To create a new instance of {@link AcknowledgeSettingsFragment}.
@@ -99,17 +113,27 @@ public class AcknowledgeSettingsFragment extends SherlockFragment implements App
 
 	@Override
 	public void findViews(View view) {
-		// Finding EditText view
+		// Finding EditText views
 		ackNumberEditText = (EditText) view.findViewById(R.id.ackNumber_et);
+		ackMessageEditText = (EditText) view.findViewById(R.id.ackMessage_et);
 
 		// Finding Button view
 		ackNumberButton = (Button) view.findViewById(R.id.editAckNumber_btn);
+		ackMessageButton = (Button) view.findViewById(R.id.editAckMessage_btn);
 
 		// Finding CheckBox view
-		enableAckCheckBox = (CheckBox) view.findViewById(R.id.enableAcknowledge_chk);
+		enableAckCheckBox = (CheckBox) view.findViewById(R.id.enableAck_chk);
 
 		// Finding TextView
-		enableAckInfoTextView = (TextView) view.findViewById(R.id.enableAcknowledgeHint_tv);
+		enableAckInfoTextView = (TextView) view.findViewById(R.id.enableAckHint_tv);
+
+		// Finding Spinner
+		ackMethodSpinner = (Spinner) view.findViewById(R.id.ackMethodSpinner_sp);
+
+		// Populate the spinner with items directly after it has been found
+		ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(context, R.array.ack_methods, android.R.layout.simple_spinner_item);
+		adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+		ackMethodSpinner.setAdapter(adapter);
 
 		// If Android API level is greater than Jelly Bean
 		if (Build.VERSION.SDK_INT > Build.VERSION_CODES.JELLY_BEAN) {
@@ -145,7 +169,7 @@ public class AcknowledgeSettingsFragment extends SherlockFragment implements App
 			if ("de".equals(Locale.getDefault().getLanguage())) {
 				Resources resources = getResources();
 
-				int pixelsLeft = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 38, resources.getDisplayMetrics());
+				int pixelsLeft = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 33, resources.getDisplayMetrics());
 				int pixelsRight = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 5, resources.getDisplayMetrics());
 				int pixelsTop = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, -6, resources.getDisplayMetrics());
 
@@ -158,23 +182,32 @@ public class AcknowledgeSettingsFragment extends SherlockFragment implements App
 			}
 		}
 
-		// Set some attributes to the ackNumberEditText
+		// Set some attributes to the EditTexts
 		ackNumberEditText.setEnabled(false);
 		ackNumberEditText.setClickable(false);
 		ackNumberEditText.setFocusable(false);
 		ackNumberEditText.setBackgroundColor(Color.WHITE);
+
+		ackMessageEditText.setEnabled(false);
+		ackMessageEditText.setClickable(false);
+		ackMessageEditText.setFocusable(false);
+		ackMessageEditText.setBackgroundColor(Color.WHITE);
 	}
 
 	@Override
 	public void fetchSharedPrefs() {
 		useAlarmAcknowledge = (Boolean) prefHandler.fetchPrefs(PrefKey.SHARED_PREF, PrefKey.ENABLE_ACK_KEY, DataType.BOOLEAN, context);
 		acknowledgeNumber = (String) prefHandler.fetchPrefs(PrefKey.SHARED_PREF, PrefKey.ACK_NUMBER_KEY, DataType.STRING, context);
+		acknowledgeMessage = (String) prefHandler.fetchPrefs(PrefKey.SHARED_PREF, PrefKey.ACK_MESSAGE_KEY, DataType.STRING, context);
+		acknowledgeMethod = AcknowledgeMethod.of((Integer) prefHandler.fetchPrefs(PrefKey.SHARED_PREF, PrefKey.ACK_METHOD_KEY, DataType.INTEGER, context));
 	}
 
 	@Override
 	public void updateFragmentView() {
-		// Update acknowledge number EditText and other widgets in relation to alarm acknowledgment
+		// Update widgets in relation to alarm acknowledgment
 		updateAcknowledgeNumberEditText();
+		updateAcknowledgeMessageEditText();
+		updateAcknowledgeMethodSpinner();
 		updateAcknowledgeWidgets();
 	}
 
@@ -187,6 +220,36 @@ public class AcknowledgeSettingsFragment extends SherlockFragment implements App
 				AcknowledgeNumberDialog dialog = new AcknowledgeNumberDialog();
 				dialog.setTargetFragment(AcknowledgeSettingsFragment.this, AcknowledgeNumberDialog.ACKNOWLEDGE_NUMBER_DIALOG_REQUEST_CODE);
 				dialog.show(getFragmentManager(), AcknowledgeNumberDialog.ACKNOWLEDGE_NUMBER_DIALOG_TAG);
+			}
+		});
+
+		// Set listener to the acknowledge message button
+		ackMessageButton.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				AcknowledgeMessageDialog dialog = new AcknowledgeMessageDialog();
+				dialog.setTargetFragment(AcknowledgeSettingsFragment.this, AcknowledgeMessageDialog.ACKNOWLEDGE_MESSAGE_DIALOG_REQUEST_CODE);
+				dialog.show(getFragmentManager(), AcknowledgeMessageDialog.ACKNOWLEDGE_MESSAGE_DIALOG_TAG);
+			}
+		});
+
+		// Set listener to the acknowledge method spinner
+		ackMethodSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+			@Override
+			public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+				// Get the new acknowledge method
+				acknowledgeMethod = AcknowledgeMethod.of(ackMethodSpinner.getSelectedItemPosition());
+
+				// Persist the acknowledge method
+				prefHandler.storePrefs(PrefKey.SHARED_PREF, PrefKey.ACK_METHOD_KEY, acknowledgeMethod.ordinal(), context);
+
+				// Update affected UI widgets
+				updateAcknowledgeWidgets();
+			}
+
+			@Override
+			public void onNothingSelected(AdapterView<?> parent) {
+				// DO NOTHING!
 			}
 		});
 
@@ -223,6 +286,13 @@ public class AcknowledgeSettingsFragment extends SherlockFragment implements App
 					updateAcknowledgeNumberEditText();
 
 					break;
+				case (AcknowledgeMessageDialog.ACKNOWLEDGE_MESSAGE_DIALOG_REQUEST_CODE):
+					acknowledgeMessage = data.getStringExtra(AcknowledgeMessageDialog.ACKNOWLEDGE_MESSAGE);
+
+					prefHandler.storePrefs(PrefKey.SHARED_PREF, PrefKey.ACK_MESSAGE_KEY, acknowledgeMessage, context);
+					updateAcknowledgeMessageEditText();
+
+					break;
 				default:
 					if (SmsAlarm.DEBUG) {
 						Log.e(LOG_TAG + ":onActivityResult()", "An unsupported result occurred, result code: \"" + resultCode + "\" and request code: \"" + requestCode + "\"");
@@ -239,18 +309,52 @@ public class AcknowledgeSettingsFragment extends SherlockFragment implements App
 	}
 
 	/**
-	 * To update widgets with relations to alarm acknowledgement. These are widgets of type {@link CheckBox}, {@link Button} and {@link EditText}.
+	 * To update acknowledge message {@link EditText} with correct value.
+	 */
+	private void updateAcknowledgeMessageEditText() {
+		ackMessageEditText.setText(acknowledgeMessage);
+	}
+
+	/**
+	 * To update acknowledge method {@link Spinner} by setting correct selection.
+	 */
+	private void updateAcknowledgeMethodSpinner() {
+		try {
+			ackMethodSpinner.setSelection(acknowledgeMethod.ordinal());
+		} catch (IndexOutOfBoundsException e) {
+			if (SmsAlarm.DEBUG) {
+				Log.e(LOG_TAG + ":updateAcknowledgeMethodSpinner()", "An acknowledge method with an index outside the spinners bounds has been set. Acknowledge method: \"" + acknowledgeMethod.toString() + "\"(ordinal:\"" + acknowledgeMethod.ordinal() + "\")", e);
+			}
+		}
+	}
+
+	/**
+	 * To update widgets with relations to alarm acknowledgement. These are widgets of type {@link CheckBox}, {@link Button}, {@link EditText} and
+	 * {@link Spinner}.
 	 */
 	private void updateAcknowledgeWidgets() {
-		// If acknowledge should be used, the button for setting acknowledge phone number should be enabled
-		// and the EditText field showing this number should also be "ungreyed"
-		if (useAlarmAcknowledge) {
-			enableAckCheckBox.setChecked(true);
+		// Set CheckBox state and acknowledge method Spinner enabled depending on if acknowledgement should be used or not
+		enableAckCheckBox.setChecked(useAlarmAcknowledge);
+		ackMethodSpinner.setEnabled(useAlarmAcknowledge);
+
+		// Set states and look of the user interface depending on if acknowledgement should be used or not
+		if (useAlarmAcknowledge && (AcknowledgeMethod.CALL.equals(acknowledgeMethod) || AcknowledgeMethod.SMS.equals(acknowledgeMethod))) {
 			ackNumberButton.setEnabled(true);
 			ackNumberEditText.setTextColor(Color.BLACK);
+
+			// Only if user wants to use acknowledge by SMS
+			if (AcknowledgeMethod.SMS.equals(acknowledgeMethod)) {
+				ackMessageButton.setEnabled(true);
+				ackMessageEditText.setTextColor(Color.BLACK);
+			} else {
+				ackMessageButton.setEnabled(false);
+				ackMessageEditText.setTextColor(Color.GRAY);
+			}
 		} else {
 			ackNumberButton.setEnabled(false);
 			ackNumberEditText.setTextColor(Color.GRAY);
+			ackMessageButton.setEnabled(false);
+			ackMessageEditText.setTextColor(Color.GRAY);
 		}
 	}
 }

@@ -12,6 +12,8 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
 import android.text.InputType;
+import android.view.Gravity;
+import android.view.ViewGroup.LayoutParams;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -64,12 +66,17 @@ public class MockSmsDialog extends DialogFragment {
 		// Setup the EditTexts
 		// @formatter:off
 		smsSenderEditText = new EditText(context);
-		smsSenderEditText.setHint(R.string.DEBUG_MOCK_SMS_SENDER_HINT | InputType.TYPE_TEXT_FLAG_MULTI_LINE); 	// Set hint to EditText
-		smsSenderEditText.setInputType(InputType.TYPE_CLASS_TEXT);												// Set input type to EditText
+		smsSenderEditText.setHint(R.string.DEBUG_MOCK_SMS_SENDER_HINT); 	// Set hint to EditText
+		smsSenderEditText.setInputType(InputType.TYPE_CLASS_TEXT);		 	// Set input type to EditText
 		
 		smsBodyEditText = new EditText(context);
 		smsBodyEditText.setHint(R.string.DEBUG_MOCK_SMS_BODY_HINT);
-		smsBodyEditText.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_FLAG_MULTI_LINE);
+		smsBodyEditText.setInputType(InputType.TYPE_TEXT_FLAG_CAP_SENTENCES | InputType.TYPE_TEXT_FLAG_MULTI_LINE);
+		smsBodyEditText.setMinLines(4); 																			// Set minimum lines
+		smsBodyEditText.setLines(4); 																				// Set lines
+		smsBodyEditText.setGravity(Gravity.TOP | Gravity.LEFT); 												 	// Set gravity to top/left in order to get the caret at the beginning
+		smsBodyEditText.setHorizontallyScrolling(false);															// Don't want to have horizontal scrolling
+		smsBodyEditText.setLayoutParams(new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT)); 	// Set layout parameters for correct wrapping and matching of content
 		// @formatter:on
 
 		// If not null, the fragment is being re-created, get data from saved instance, if exist.

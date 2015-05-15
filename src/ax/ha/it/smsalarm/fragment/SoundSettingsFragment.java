@@ -197,7 +197,7 @@ public class SoundSettingsFragment extends SherlockFragment implements Applicati
 			if ("de".equals(Locale.getDefault().getLanguage())) {
 				Resources resources = getResources();
 
-				int pixelsLeft = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 38, resources.getDisplayMetrics());
+				int pixelsLeft = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 33, resources.getDisplayMetrics());
 				int pixelsRight = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 5, resources.getDisplayMetrics());
 				int pixelsTop = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, -6, resources.getDisplayMetrics());
 

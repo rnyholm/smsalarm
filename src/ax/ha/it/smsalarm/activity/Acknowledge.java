@@ -3,6 +3,7 @@
  */
 package ax.ha.it.smsalarm.activity;
 
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 
@@ -15,6 +16,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.telephony.PhoneStateListener;
+import android.telephony.SmsManager;
 import android.telephony.TelephonyManager;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -40,6 +42,43 @@ import ax.ha.it.smsalarm.provider.WidgetProvider;
  * @see ListenToPhoneState
  */
 public class Acknowledge extends Activity {
+	/**
+	 * Enumeration for then different <b><i>Acknowledge</i></b> methods.
+	 * 
+	 * @author Robert Nyholm <robert.nyholm@aland.net>
+	 * @version 2.3.1
+	 * @since 2.3.1
+	 */
+	public enum AcknowledgeMethod {
+		// @formatter:off
+		CALL, 
+		SMS, 
+		RETURN_RECEIVED_SMS,
+		UNDEFINED;
+		// @formatter:on
+
+		/**
+		 * To resolve the correct {@link AcknowledgeMethod} from given numerical value. If an unsupported value is given as parameter a enumeration of
+		 * type <code>AcknowledgeMethod.UNDEFINED</code> is returned.
+		 * 
+		 * @param value
+		 *            Numerical value that corresponds to a enumeration of AcknowledgeMethod.
+		 * @return Corresponding AcknowledgeMethod enumeration if it exists else <code>AcknowledgeMethod.UNDEFINED</code>.
+		 */
+		public static AcknowledgeMethod of(int value) {
+			switch (value) {
+				case (0):
+					return CALL;
+				case (1):
+					return SMS;
+				case (2):
+					return RETURN_RECEIVED_SMS;
+				default:
+					return UNDEFINED;
+			}
+		}
+	}
+
 	// To handle the shared preferences
 	private final SharedPreferencesHandler prefHandler = SharedPreferencesHandler.getInstance();
 
@@ -69,8 +108,12 @@ public class Acknowledge extends Activity {
 	// Rescue service name for data presentation in UI
 	private String rescueService = "";
 
-	// String representing phone number to which we acknowledge to
+	// What number and message that should be used while acknowledge
 	private String acknowledgeNumber = "";
+	private String acknowledgeMessage = "";
+
+	// What method acknowledgement should be done with, UNDEFINED is default here
+	private AcknowledgeMethod acknowledgeMethod = AcknowledgeMethod.UNDEFINED;
 
 	// Boolean to indicate if a called has been placed already
 	private boolean hasCalled = false;
@@ -97,10 +140,6 @@ public class Acknowledge extends Activity {
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.ack);
-
-		// Reset Shared Preference HAS_CALLED, to ensure that activity acknowledge not will place a acknowledge call onResume()
-		// This is done here because this is only relevant if application is set to acknowledge, and here intent for acknowledge is loaded
-		prefHandler.storePrefs(PrefKey.SHARED_PREF, PrefKey.HAS_CALLED_KEY, false, this);
 
 		// Initialize database handler object from context
 		db = new DatabaseHandler(this);
@@ -130,22 +169,75 @@ public class Acknowledge extends Activity {
 		acknowledgeButton.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				// Check to see if any phone number to acknowledge to exists
-				if (!"".equals(acknowledgeNumber)) {
-					// Update acknowledge time and persist it to database
-					alarm.updateAcknowledged();
-					db.updateAlarm(alarm);
+				// Take acknowledge action according to user settings
+				switch (acknowledgeMethod) {
+					case CALL:
+						if (!"".equals(acknowledgeNumber)) {
+							// Do some internal acknowledge handling
+							acknowledgeInternally();
 
-					// Update all widgets associated with this application
-					WidgetProvider.updateWidgets(Acknowledge.this);
+							// Place the acknowledge call
+							placeAcknowledgeCall();
+						} else { // No phone number to acknowledge to exists, show toast
+							Toast.makeText(Acknowledge.this, R.string.ACK_CANNOT, Toast.LENGTH_LONG).show();
+						}
 
-					// Place the acknowledge call
-					placeAcknowledgeCall();
-				} else { // No phone number to acknowledge to exists, show toast
-					Toast.makeText(Acknowledge.this, R.string.ACK_CANNOT, Toast.LENGTH_LONG).show();
+						break;
+					case SMS:
+						if (!"".equals(acknowledgeNumber)) {
+							// Do some internal acknowledge handling
+							acknowledgeInternally();
+
+							SmsManager smsManager = SmsManager.getDefault();
+							ArrayList<String> parts = smsManager.divideMessage(acknowledgeMessage);
+							smsManager.sendMultipartTextMessage(acknowledgeNumber, null, parts, null, null);
+						} else {
+							Toast.makeText(Acknowledge.this, R.string.ACK_CANNOT, Toast.LENGTH_LONG).show();
+						}
+
+						break;
+					case RETURN_RECEIVED_SMS:
+
+						break;
+					default:
+						break;
 				}
+//				// Check to see if any phone number to acknowledge to exists
+//				if (!"".equals(acknowledgeNumber)) {
+//					// Update acknowledge time and persist it to database
+//					alarm.updateAcknowledged();
+//					db.updateAlarm(alarm);
+//
+//					// Update all widgets associated with this application
+//					WidgetProvider.updateWidgets(Acknowledge.this);
+//
+//					// Place the acknowledge call
+//					placeAcknowledgeCall();
+//				} else { // No phone number to acknowledge to exists, show toast
+//					Toast.makeText(Acknowledge.this, R.string.ACK_CANNOT, Toast.LENGTH_LONG).show();
+//				}
 			}
 		});
+	}
+
+	/**
+	 * To do proper acknowledge handling for components and data within <b><i>Sms Alarm</i></b>.<br>
+	 * The actions taken are:<br>
+	 * <ul>
+	 * <li>Current alarm is acknowledged and stored into database.</li>
+	 * <li>Widget is updated with updated alarm info.</li>
+	 * </ul>
+	 * <p>
+	 * <b><i>Note. This method does not do the actual acknowledgement, eg. placing phone call or sending SMS, it only does the internal acknowledge
+	 * handling.</i></b>
+	 */
+	private void acknowledgeInternally() {
+		// Update acknowledge time and persist it to database
+		alarm.updateAcknowledged();
+		db.updateAlarm(alarm);
+
+		// Update all widgets associated with this application
+		WidgetProvider.updateWidgets(Acknowledge.this);
 	}
 
 	/**
@@ -178,6 +270,15 @@ public class Acknowledge extends Activity {
 				}
 			}.start();
 		}
+	}
+
+	@Override
+	protected void onDestroy() {
+		super.onDestroy();
+
+		// Reset Shared Preference HAS_CALLED, to ensure that this activity will not place an acknowledge call directly on next onResume(), when this
+		// activity is created.
+		prefHandler.storePrefs(PrefKey.SHARED_PREF, PrefKey.HAS_CALLED_KEY, false, this);
 	}
 
 	/**
@@ -229,6 +330,8 @@ public class Acknowledge extends Activity {
 	private void fetchSharedPrefs() {
 		rescueService = (String) prefHandler.fetchPrefs(PrefKey.SHARED_PREF, PrefKey.RESCUE_SERVICE_KEY, DataType.STRING, this);
 		acknowledgeNumber = (String) prefHandler.fetchPrefs(PrefKey.SHARED_PREF, PrefKey.ACK_NUMBER_KEY, DataType.STRING, this);
+		acknowledgeMessage = (String) prefHandler.fetchPrefs(PrefKey.SHARED_PREF, PrefKey.ACK_MESSAGE_KEY, DataType.STRING, this);
+		acknowledgeMethod = AcknowledgeMethod.of((Integer) prefHandler.fetchPrefs(PrefKey.SHARED_PREF, PrefKey.ACK_METHOD_KEY, DataType.INTEGER, this));
 		hasCalled = (Boolean) prefHandler.fetchPrefs(PrefKey.SHARED_PREF, PrefKey.HAS_CALLED_KEY, DataType.BOOLEAN, this);
 	}
 

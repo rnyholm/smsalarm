@@ -15,15 +15,15 @@ import android.widget.EditText;
  * @version 2.3.1
  * @since 2.3.1
  */
-public class NoBlanksInputEditText extends EditText {
+public class NoBlanksEditText extends EditText {
 
 	/**
-	 * Creates a new instance of {@link NoBlanksInputEditText} with given context.
+	 * Creates a new instance of {@link NoBlanksEditText} with given context.
 	 * 
 	 * @param context
-	 *            The Context in which this implementation of EditText will operate.
+	 *            The Context in which this implementation of <code>EditText</code> will operate.
 	 */
-	public NoBlanksInputEditText(Context context) {
+	public NoBlanksEditText(Context context) {
 		super(context);
 
 		// To listen on text changes

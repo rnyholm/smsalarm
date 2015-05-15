@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <resources>
     <!-- NEW STRINGS IN v.2.3.1 BEGIN -->
+    <!-- REMEMBER TO TRANSLATE ack_methods.xml ALSO -->
     <string name="MENU_TITLE_SETTINGS">Inställningar</string>
     <string name="MENU_TITLE_SMS">Sms</string>
     <string name="MENU_TITLE_FREE_TEXT">Ord</string>
@@ -25,7 +26,7 @@
     <string name="TITLE_ALARM_SIGNALS">Larmsignaler</string>
     <string name="TITLE_ALARM_VIBRATIONS">Vibrationsmönster</string>
     <string name="TITLE_SOUND_SETTINGS">Ljud- och vibrationsinställningar</string>
-    <string name="INFO_SOUND_SETTINGS">Ställ in larmsignaler samt vibrationsmönster för primär- och sekundärlarm, om Sms Alarm ska följa enhetens ljudinställningar samt om larmsignalen ska spelas upp två gånger.</string>
+    <string name="INFO_SOUND_SETTINGS">Ställ in larmsignaler samt vibrationsmönster för primär- och sekundärlarm samt om Sms Alarm ska följa enhetens ljudinställningar. Det är också möjligt att ställa in om larmsignalen ska spelas upp två gånger och om larmsignalen ska spelas upp oavbrutet.</string>
     <string name="PATH_ALREADY_IN_ALARM_SIGNAL_PATH_LIST">Vald ljudsignal finns redan i listan av larmsignaler.</string>
     <string name="ALARM_SIGNALS_REMOVED_DUE_TO_MISSING_PATHS">har tagits bort från listan av larmsignaler eftersom de/dem inte kunde hittas på enheten.</string>
     <string name="TITLE_PLAY_ALARM_SIGNAL_REPEATEDLY_SETTING">Spela upp larmsignalen oavbrutet</string>
@@ -33,7 +34,16 @@
     <string name="ALARM_VIBRATION_PROMPT_TITLE">Välj vibrationsmönster</string>
     <string name="ALARM_INFO_PROMPT_TITLE">Larminfo</string>
     <string name="TITLE_ALARM_INFO_ALARM_TYPE">Larmtyp</string>
-    <string name="TITLE_UNDEFINED_ALARM">Odefinierat larm</string> 
+    <string name="TITLE_UNDEFINED_ALARM">Odefinierat larm</string>
+    <string name="INFO_ACK_SETTINGS">Ställ in om larmkvittering skall användas och i sådana fall på vilket sätt kvittering sker, samt telefonnummer som kvittering sker mot och kvitteringsmeddelande.</string>
+    <string name="TITLE_ACK_BY">Kvittera genom:</string>
+    <string name="TITLE_ACK_NUMBER">Telefonnummer för kvittering</string>
+    <string name="TITLE_ACK_MESSAGE">Meddelande för kvittering</string>
+    <string name="ENTER_MESSAGE_HINT">Ange meddelande..</string>
+    <string name="EDIT_MESSAGE">Ändra meddelande</string>
+    <string name="MESSAGE_PROMPT_HINT">Meddelande..</string>
+    <string name="MESSAGE_PROMPT_TITLE">Ange ett meddelande</string>
+    <string name="ACK_MESSAGE_PROMPT_MESSAGE">Ange ett meddelande som applikationen kvitterar med.</string>  
     <!-- OK IN ENGLISH AND GERMAN BEGIN -->
     <string name="INFO_USE_OS_SOUND_SETTINGS">Om vald tar Sms Alarm hänsyn till enhetens ringvolym och ljudlöst läge.</string>
     <string name="TITLE_USE_OS_SOUND_SETTINGS">Använd enhetens ljudinställningar</string>
@@ -118,7 +128,6 @@
     <string name="FREE_TEXT_ALREADY_IN_SECONDARY_LIST">The specified word already exists in the list of words for secondary alarm. Enter a new word.</string>
     <string name="FREE_TEXT_PROMPT_HINT">Word..</string>
     <string name="FREE_TEXT_PROMPT_TITLE">Enter a word</string>
-    <string name="INFO_ACK_SETTINGS">Set if alarm acknowlegment should be used and in such case which telephone number the acknowledgment should use.</string>
     <string name="INFO_ENABLE_ACKNOWLEDGE">If selected primary alarm can be acknowledged.</string>
     <string name="INFO_ENABLE_SMS_ALARM">If selected Sms Alarm will contact given telephone number, otherwise the application will not.</string>
     <string name="INFO_FREE_TEXT_TRIGGER_SETTINGS">Enter the words that should be used to notify in the Sms Alarm if present in the incoming sms. Note that this function is not case sensitive.</string>
@@ -158,8 +167,7 @@
     <string name="SOUND_SETTINGS_STATUS_ENABLED">The application DETECTS the device sound settings.</string>
     <string name="SOUND_SETTINGS_STATUS_DISABLED">The application DOES NOT DETECT the device sound settings.</string> 
     <string name="SPLASH_VERSION">v%s</string> 
-    <string name="TEXT_IS_NEEDED">A word must be entered in order to save.</string>
-    <string name="TITLE_ACK_NUMBER">Sms Alarm acknowledges to this telephone number</string> 
+    <string name="TEXT_IS_NEEDED">A word must be entered in order to save.</string> 
     <string name="TITLE_ACK_SETTINGS">Acknowledgment settings</string>
     <string name="TITLE_ALARM_INFO_ACKNOWLEDGED">Acknowledged</string>    
     <string name="TITLE_ALARM_INFO_RECEIVED">Received</string>

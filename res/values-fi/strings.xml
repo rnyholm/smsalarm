@@ -41,7 +41,6 @@
     <string name="FREE_TEXT_ALREADY_IN_SECONDARY_LIST">Annettu sana on jo toissijaishälytyslistalla. Anna uusi sana.</string>
     <string name="FREE_TEXT_PROMPT_HINT">Sana..</string>
     <string name="FREE_TEXT_PROMPT_TITLE">Anna sana</string>
-    <string name="INFO_ACK_SETTINGS">Aseta hälytys kuittaus jota on tarkoitus käyttää ja puhelinnumero kuittauksena.</string>
     <string name="INFO_ENABLE_ACKNOWLEDGE">Jos valittu voidaan ensisijainen hälytys kuitata.</string>
     <string name="INFO_ENABLE_SMS_ALARM">Jos valittu hälyttää Sms Alarm tietyillä puh.nr:illa, muuten sovellus ei sitä tee.</string>
     <string name="INFO_FREE_TEXT_TRIGGER_SETTINGS">Asenna ne sanat joilla Sms Alarm täytyy hälyttää jos on tulevia viestejä.</string>
@@ -73,7 +72,6 @@
     <string name="SOUND_SETTINGS_STATUS_ENABLED">Sovellus SEURAA laitteen ääniasetuksia.</string>
     <string name="SOUND_SETTINGS_STATUS_DISABLED">Sovellus EI SEURAA laitteen ääniasetuksia.</string>
     <string name="TEXT_IS_NEEDED">Säästämistä varten on annettava texti.</string>  
-    <string name="TITLE_ACK_NUMBER">Sms Alarm kuittaa tähän numeroon</string> 
     <string name="TITLE_ACK_SETTINGS">Kuittaus Asetukset</string>
     <string name="TITLE_ALARM_INFO_ACKNOWLEDGED">Kuitattu</string>      
     <string name="TITLE_ALARM_INFO_RECEIVED">Vastaanotettu</string>

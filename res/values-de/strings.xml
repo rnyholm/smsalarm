@@ -41,7 +41,6 @@
     <string name="FREE_TEXT_ALREADY_IN_SECONDARY_LIST">Das angegebene Wort gibt es bereits in der Liste der Wörter für das sekundäre Alarm. Geben Sie ein neues Wort ein.</string>
     <string name="FREE_TEXT_PROMPT_HINT">Wort..</string>
     <string name="FREE_TEXT_PROMPT_TITLE">Geben Sie ein Wort ein</string>
-    <string name="INFO_ACK_SETTINGS">Einstellen, ob Alarmbestätigung verwendet werden und welche Telefonnummer in solchen Fällen für die Bestätigung verwendet werden soll.</string>
     <string name="INFO_ENABLE_ACKNOWLEDGE">Falls gewählt, kann der Primäralarm bestätigt werden.</string>
     <string name="INFO_ENABLE_SMS_ALARM">Falls gewählt, kontaktiert Sms Alarm die eingegebene Telefonnummer.</string>
     <string name="INFO_FREE_TEXT_TRIGGER_SETTINGS">Geben Sie Wörter ein, auf die Sms Alarm reagieren soll, wenn diese in der einkommenden sms vorhanden sind. Beachten Sie, dass diese Funktion die Groß- und Kleinschreibung nicht beachtet.</string>
@@ -74,7 +73,6 @@
     <string name="SOUND_SETTINGS_STATUS_ENABLED">Die Anwendung ERKENNT die Klangeinstellungen des Geräts.</string>
     <string name="SOUND_SETTINGS_STATUS_DISABLED">Die Anwendung ERKENNT NICHT die Klangeinstellungen des Geräts.</string>
     <string name="TEXT_IS_NEEDED">Es muss ein Wort eingegeben werden, um es speichern zu können.</string> 
-    <string name="TITLE_ACK_NUMBER">Sms Alarm bestätigt an diese Telefonnummer</string> 
     <string name="TITLE_ACK_SETTINGS">Bestätigungseinstellungen</string>
     <string name="TITLE_ALARM_INFO_ACKNOWLEDGED">Bestätigt</string>      
     <string name="TITLE_ALARM_INFO_RECEIVED">Empfangen</string>

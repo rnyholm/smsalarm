@@ -41,7 +41,6 @@
     <string name="FREE_TEXT_ALREADY_IN_SECONDARY_LIST">The specified word already exists in the list of words for secondary alarm. Enter a new word.</string>
     <string name="FREE_TEXT_PROMPT_HINT">Word..</string>
     <string name="FREE_TEXT_PROMPT_TITLE">Enter a word</string>
-    <string name="INFO_ACK_SETTINGS">Set if alarm acknowlegment should be used and in such case which telephone number the acknowledgment should use.</string>
     <string name="INFO_ENABLE_ACKNOWLEDGE">If selected primary alarm can be acknowledged.</string>
     <string name="INFO_ENABLE_SMS_ALARM">If selected Sms Alarm will contact given telephone number, otherwise the application will not.</string>
     <string name="INFO_FREE_TEXT_TRIGGER_SETTINGS">Enter the words that should be used to notify in the Sms Alarm if present in the incoming sms. Note that this function is not case sensitive.</string>
@@ -74,7 +73,6 @@
     <string name="SOUND_SETTINGS_STATUS_ENABLED">The application DETECTS the device sound settings.</string>
     <string name="SOUND_SETTINGS_STATUS_DISABLED">The application DOES NOT DETECT the device sound settings.</string>
     <string name="TEXT_IS_NEEDED">A word must be entered in order to save.</string> 
-    <string name="TITLE_ACK_NUMBER">Sms Alarm acknowledges to this telephone number</string> 
     <string name="TITLE_ACK_SETTINGS">Acknowledgment settings</string>
     <string name="TITLE_ALARM_INFO_ACKNOWLEDGED">Acknowledged</string>    
     <string name="TITLE_ALARM_INFO_MESSAGE">Message</string>    

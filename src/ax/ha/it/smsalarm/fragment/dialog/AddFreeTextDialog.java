@@ -15,7 +15,7 @@ import android.text.InputType;
 import android.util.Log;
 import ax.ha.it.smsalarm.R;
 import ax.ha.it.smsalarm.activity.SmsAlarm;
-import ax.ha.it.smsalarm.ui.NoBlanksInputEditText;
+import ax.ha.it.smsalarm.ui.NoBlanksEditText;
 
 /**
  * {@link DialogFragment} which let's the user add a <b><i>Free Text</i></b> to the list of <b><i>Primary or Secondary Alarm Trigger Free
@@ -45,7 +45,7 @@ public class AddFreeTextDialog extends DialogFragment {
 	private Context context;
 
 	// Must be declared as class variable as it will be used when handling instance states
-	private NoBlanksInputEditText inputEditText;
+	private NoBlanksEditText inputEditText;
 
 	/**
 	 * To create a new instance of {@link AddFreeTextDialog}.
@@ -66,7 +66,7 @@ public class AddFreeTextDialog extends DialogFragment {
 	public Dialog onCreateDialog(Bundle savedInstanceState) {
 		// Setup the EditText
 		// @formatter:off
-		inputEditText = new NoBlanksInputEditText(context);
+		inputEditText = new NoBlanksEditText(context);
 		inputEditText.setHint(R.string.FREE_TEXT_PROMPT_HINT);	// Set hint to EditText
 		inputEditText.setInputType(InputType.TYPE_CLASS_TEXT);	// Set input type to EditText
 		// @formatter:on

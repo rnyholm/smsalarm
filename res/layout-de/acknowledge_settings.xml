@@ -5,15 +5,13 @@
 
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" >
+        android:layout_height="wrap_content"
+        android:padding="5dp" >
 
         <TextView
-            android:id="@+id/ackSettings_tv"
+            android:id="@+id/ackSettingsTitle_tv"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="5dp"
-            android:layout_marginRight="5dp"
-            android:layout_marginTop="5dp"
             android:text="@string/TITLE_ACK_SETTINGS"
             android:textAppearance="?android:attr/textAppearanceMedium" />
 
@@ -21,49 +19,62 @@
             android:id="@+id/ackSettingsInfo_tv"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignLeft="@+id/ackSettings_tv"
-            android:layout_below="@+id/ackSettings_tv"
-            android:layout_marginRight="5dp"
+            android:layout_below="@+id/ackSettingsTitle_tv"
             android:text="@string/INFO_ACK_SETTINGS"
             android:textAppearance="?android:attr/textAppearanceSmall" />
 
         <CheckBox
-            android:id="@+id/enableAcknowledge_chk"
+            android:id="@+id/enableAck_chk"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignLeft="@+id/ackSettingsInfo_tv"
             android:layout_below="@+id/ackSettingsInfo_tv"
             android:layout_marginTop="5dp"
             android:text="@string/TITLE_ENABLE_ACKNOWLEDGE" />
 
         <TextView
-            android:id="@+id/enableAcknowledgeHint_tv"
+            android:id="@+id/enableAckHint_tv"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignLeft="@+id/enableAcknowledge_chk"
-            android:layout_below="@+id/enableAcknowledge_chk"
-            android:layout_marginLeft="38dp"
-            android:layout_marginRight="5dp"
+            android:layout_below="@+id/enableAck_chk"
+            android:layout_marginLeft="33dp"
             android:layout_marginTop="-6dp"
             android:text="@string/INFO_ENABLE_ACKNOWLEDGE"
             android:textAppearance="?android:attr/textAppearanceSmall" />
 
-        <TextView
-            android:id="@+id/acknowledgeNumberTitle_tv"
+        <LinearLayout
+            android:id="@+id/ackMethodSelection_ll"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignLeft="@+id/enableAcknowledge_chk"
-            android:layout_below="@+id/enableAcknowledgeHint_tv"
+            android:layout_below="@id/enableAckHint_tv" >
+
+            <TextView
+                android:id="@+id/ackByTitle_tv"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/TITLE_ACK_BY"
+                android:textAppearance="?android:attr/textAppearanceMedium" />
+
+            <Spinner
+                android:id="@+id/ackMethodSpinner_sp"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1" />
+
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/ackNumberTitle_tv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/ackMethodSelection_ll"
             android:text="@string/TITLE_ACK_NUMBER"
             android:textAppearance="?android:attr/textAppearanceMedium" />
 
         <EditText
             android:id="@+id/ackNumber_et"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_alignLeft="@id/acknowledgeNumberTitle_tv"
-            android:layout_below="@id/acknowledgeNumberTitle_tv"
-            android:layout_marginTop="2dp"
+            android:layout_below="@id/ackNumberTitle_tv"
             android:hint="@string/ENTER_PHONE_NUMBER_HINT"
             android:inputType="number|numberSigned|phone"
             android:singleLine="true" />
@@ -72,11 +83,34 @@
             android:id="@+id/editAckNumber_btn"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignBottom="@+id/ackNumber_et"
-            android:layout_alignParentRight="true"
-            android:layout_marginRight="5dp"
-            android:layout_toRightOf="@+id/ackNumber_et"
+            android:layout_below="@id/ackNumber_et"
             android:text="@string/EDIT_NUMBER" />
+
+        <TextView
+            android:id="@+id/ackMessageTitle_tv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/editAckNumber_btn"
+            android:text="@string/TITLE_ACK_MESSAGE"
+            android:textAppearance="?android:attr/textAppearanceMedium" />
+
+        <EditText
+            android:id="@+id/ackMessage_et"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/ackMessageTitle_tv"
+            android:gravity="top|left"
+            android:hint="@string/ENTER_MESSAGE_HINT"
+            android:inputType="textCapSentences|textMultiLine"
+            android:minLines="4" >
+        </EditText>
+
+        <Button
+            android:id="@+id/editAckMessage_btn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/ackMessage_et"
+            android:text="@string/EDIT_MESSAGE" />
     </RelativeLayout>
 
 </ScrollView>

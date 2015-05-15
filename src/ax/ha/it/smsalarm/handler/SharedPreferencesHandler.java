@@ -54,6 +54,8 @@ public class SharedPreferencesHandler {
 		SECONDARY_MESSAGE_TONE_KEY("secondaryMessageToneKey"), 			// Not used after version code 13
 		ENABLE_ACK_KEY("enableAckKey"), 
 		ACK_NUMBER_KEY("ackNumber"), 
+		ACK_MESSAGE_KEY("ackMessageKey"),
+		ACK_METHOD_KEY("ackMethodKey"),
 		USE_OS_SOUND_SETTINGS_KEY("useOsSoundSettings"), 
 		PLAY_TONE_TWICE_KEY("playToneTwice"),							// Not used after version code 13
 		PLAY_ALARM_SIGNAL_TWICE_KEY("playAlarmSignalTwice"),
