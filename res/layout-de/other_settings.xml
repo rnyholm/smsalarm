@@ -1,19 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="fill_parent"
+    android:layout_width="match_parent"
     android:layout_height="wrap_content" >
 
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" >
+        android:layout_height="wrap_content"
+        android:padding="5dp" >
 
         <TextView
-            android:id="@+id/miscSettings_tv"
+            android:id="@+id/miscSettingsTitle_tv"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="5dp"
-            android:layout_marginRight="5dp"
-            android:layout_marginTop="5dp"
             android:text="@string/TITLE_MISC_SETTINGS"
             android:textAppearance="?android:attr/textAppearanceMedium" />
 
@@ -21,9 +19,7 @@
             android:id="@+id/miscSettingsInfo_tv"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignLeft="@+id/miscSettings_tv"
-            android:layout_below="@+id/miscSettings_tv"
-            android:layout_marginRight="5dp"
+            android:layout_below="@+id/miscSettingsTitle_tv"
             android:text="@string/INFO_MISC_SETTINGS"
             android:textAppearance="?android:attr/textAppearanceSmall" />
 
@@ -31,7 +27,6 @@
             android:id="@+id/rescueServiceNameTitle_tv"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignLeft="@+id/miscSettingsInfo_tv"
             android:layout_below="@+id/miscSettingsInfo_tv"
             android:layout_marginTop="5dp"
             android:text="@string/TITLE_RESCUE_SERVICE_NAME"
@@ -39,11 +34,9 @@
 
         <EditText
             android:id="@+id/rescueServiceName_et"
-            android:layout_width="fill_parent"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_alignLeft="@id/rescueServiceNameTitle_tv"
             android:layout_below="@id/rescueServiceNameTitle_tv"
-            android:layout_marginRight="5dp"
             android:ems="10"
             android:hint="@string/RESCUE_SERVICE_NAME_HINT"
             android:inputType="text"
@@ -53,28 +46,23 @@
             android:id="@+id/editRescueServiceName_btn"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignLeft="@id/rescueServiceName_et"
             android:layout_below="@id/rescueServiceName_et"
-            android:layout_marginTop="2dp"
             android:text="@string/EDIT_RESCUE_SERVICE_NAME" />
 
         <CheckBox
             android:id="@+id/useFlashNotification_chk"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignLeft="@id/editRescueServiceName_btn"
             android:layout_below="@id/editRescueServiceName_btn"
-            android:layout_marginRight="5dp"
+            android:layout_marginTop="5dp"
             android:text="@string/TITLE_USE_FLASH_NOTIFICATION" />
 
         <TextView
             android:id="@+id/useFlashNotificationHint_tv"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignLeft="@id/useFlashNotification_chk"
             android:layout_below="@id/useFlashNotification_chk"
             android:layout_marginLeft="38dp"
-            android:layout_marginRight="5dp"
             android:layout_marginTop="-6dp"
             android:text="@string/INFO_USE_FLASH_NOTIFICATION"
             android:textAppearance="?android:attr/textAppearanceSmall" />
@@ -83,9 +71,7 @@
             android:id="@+id/enableSmsAlarm_chk"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignLeft="@id/useFlashNotification_chk"
             android:layout_below="@id/useFlashNotificationHint_tv"
-            android:layout_marginRight="5dp"
             android:checked="true"
             android:text="@string/TITLE_ENABLE_SMS_ALARM" />
 
@@ -93,10 +79,8 @@
             android:id="@+id/enableSmsAlarmHint_tv"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignLeft="@id/enableSmsAlarm_chk"
             android:layout_below="@id/enableSmsAlarm_chk"
             android:layout_marginLeft="38dp"
-            android:layout_marginRight="5dp"
             android:layout_marginTop="-6dp"
             android:text="@string/INFO_ENABLE_SMS_ALARM"
             android:textAppearance="?android:attr/textAppearanceSmall" />

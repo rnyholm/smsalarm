@@ -154,8 +154,6 @@ public class SoundSettingsFragment extends SherlockFragment implements Applicati
 			// Calculate pixel dimensions for the different margins
 			// 32dp calculated to pixels
 			int pixelsLeft = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 32, resources.getDisplayMetrics());
-			// 5dp calculated to pixels
-			int pixelsRight = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 5, resources.getDisplayMetrics());
 			int pixelsTop = 0;
 			// If the locale on device is German(DE) set pixels top to -6dp else -9dp
 			if ("de".equals(Locale.getDefault().getLanguage())) {
@@ -170,7 +168,7 @@ public class SoundSettingsFragment extends SherlockFragment implements Applicati
 			// Wrap content, both on height and width
 			RelativeLayout.LayoutParams paramsSoundSettingInfoTextView = new RelativeLayout.LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
 			// Margins left, top, right, bottom
-			paramsSoundSettingInfoTextView.setMargins(pixelsLeft, pixelsTop, pixelsRight, 0);
+			paramsSoundSettingInfoTextView.setMargins(pixelsLeft, pixelsTop, 0, 0);
 			// Add rule, below UI widget
 			paramsSoundSettingInfoTextView.addRule(RelativeLayout.BELOW, soundSettingCheckBox.getId());
 			// Add rule, align left of UI widget
@@ -178,13 +176,13 @@ public class SoundSettingsFragment extends SherlockFragment implements Applicati
 
 			// Set layout parameters for the play alarm signal twice TextView
 			RelativeLayout.LayoutParams paramsPlayAlarmSignalTwiceInfoTextView = new RelativeLayout.LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
-			paramsPlayAlarmSignalTwiceInfoTextView.setMargins(pixelsLeft, pixelsTop, pixelsRight, 0);
+			paramsPlayAlarmSignalTwiceInfoTextView.setMargins(pixelsLeft, pixelsTop, 0, 0);
 			paramsPlayAlarmSignalTwiceInfoTextView.addRule(RelativeLayout.BELOW, playAlarmSignalTwiceCheckBox.getId());
 			paramsPlayAlarmSignalTwiceInfoTextView.addRule(RelativeLayout.ALIGN_LEFT, playAlarmSignalTwiceCheckBox.getId());
 
 			// Set layout parameters for the play alarm signal repeatedly TextView
 			RelativeLayout.LayoutParams paramsPlayAlarmSignalRepeatedlyInfoTextView = new RelativeLayout.LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
-			paramsPlayAlarmSignalRepeatedlyInfoTextView.setMargins(pixelsLeft, pixelsTop, pixelsRight, 0);
+			paramsPlayAlarmSignalRepeatedlyInfoTextView.setMargins(pixelsLeft, pixelsTop, 0, 0);
 			paramsPlayAlarmSignalRepeatedlyInfoTextView.addRule(RelativeLayout.BELOW, playAlarmSignalRepeatedlyCheckBox.getId());
 			paramsPlayAlarmSignalRepeatedlyInfoTextView.addRule(RelativeLayout.ALIGN_LEFT, playAlarmSignalRepeatedlyCheckBox.getId());
 
@@ -197,22 +195,21 @@ public class SoundSettingsFragment extends SherlockFragment implements Applicati
 			if ("de".equals(Locale.getDefault().getLanguage())) {
 				Resources resources = getResources();
 
-				int pixelsLeft = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 33, resources.getDisplayMetrics());
-				int pixelsRight = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 5, resources.getDisplayMetrics());
+				int pixelsLeft = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 38, resources.getDisplayMetrics());
 				int pixelsTop = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, -6, resources.getDisplayMetrics());
 
 				RelativeLayout.LayoutParams paramsSoundSettingInfoTextView = new RelativeLayout.LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
-				paramsSoundSettingInfoTextView.setMargins(pixelsLeft, pixelsTop, pixelsRight, 0);
+				paramsSoundSettingInfoTextView.setMargins(pixelsLeft, pixelsTop, 0, 0);
 				paramsSoundSettingInfoTextView.addRule(RelativeLayout.BELOW, soundSettingCheckBox.getId());
 				paramsSoundSettingInfoTextView.addRule(RelativeLayout.ALIGN_LEFT, soundSettingCheckBox.getId());
 
 				RelativeLayout.LayoutParams paramsPlayAlarmSignalTwiceInfoTextView = new RelativeLayout.LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
-				paramsPlayAlarmSignalTwiceInfoTextView.setMargins(pixelsLeft, pixelsTop, pixelsRight, 0);
+				paramsPlayAlarmSignalTwiceInfoTextView.setMargins(pixelsLeft, pixelsTop, 0, 0);
 				paramsPlayAlarmSignalTwiceInfoTextView.addRule(RelativeLayout.BELOW, playAlarmSignalTwiceCheckBox.getId());
 				paramsPlayAlarmSignalTwiceInfoTextView.addRule(RelativeLayout.ALIGN_LEFT, playAlarmSignalTwiceCheckBox.getId());
 
 				RelativeLayout.LayoutParams paramsPlayAlarmSignalRepeatedlyInfoTextView = new RelativeLayout.LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
-				paramsPlayAlarmSignalRepeatedlyInfoTextView.setMargins(pixelsLeft, pixelsTop, pixelsRight, 0);
+				paramsPlayAlarmSignalRepeatedlyInfoTextView.setMargins(pixelsLeft, pixelsTop, 0, 0);
 				paramsPlayAlarmSignalRepeatedlyInfoTextView.addRule(RelativeLayout.BELOW, playAlarmSignalTwiceCheckBox.getId());
 				paramsPlayAlarmSignalRepeatedlyInfoTextView.addRule(RelativeLayout.ALIGN_LEFT, playAlarmSignalTwiceCheckBox.getId());
 

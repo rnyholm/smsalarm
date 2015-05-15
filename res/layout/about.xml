@@ -1,18 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="fill_parent" android:layout_height="wrap_content">
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="match_parent" android:layout_height="wrap_content">
+
 <LinearLayout
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:isScrollContainer="true"
     android:orientation="vertical"
+    android:padding="5dp"
     android:weightSum="1" >
 
     <TextView
         android:id="@+id/aboutTitle_tv"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="5dp"
-        android:layout_marginTop="5dp"
         android:text="@string/APP_NAME"
         android:textAppearance="?android:attr/textAppearanceMedium" />
 
@@ -20,7 +20,6 @@
         android:id="@+id/aboutDescr_tv"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="5dp"
         android:text="@string/APP_DESCR"
         android:textAppearance="?android:attr/textAppearanceSmall" />
 
@@ -28,7 +27,6 @@
         android:id="@+id/aboutVersion_tv"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="5dp"
         android:layout_marginTop="10dp"
         android:text="@string/ABOUT_VERSION"
         android:textAppearance="?android:attr/textAppearanceSmall" >
@@ -38,7 +36,6 @@
         android:id="@+id/aboutBuild_tv"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="5dp"
         android:text="@string/ABOUT_BUILD"
         android:textAppearance="?android:attr/textAppearanceSmall" >
     </TextView>
@@ -47,7 +44,6 @@
         android:id="@+id/aboutCopyright_tv"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="5dp"
         android:text="@string/ABOUT_COPYRIGHT"
         android:textAppearance="?android:attr/textAppearanceSmall" >
     </TextView>
@@ -56,8 +52,6 @@
         android:id="@+id/aboutRightsReserved_tv"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="5dp"
-        android:layout_marginLeft="5dp"
         android:text="@string/ABOUT_RIGHTS_RESERVED"
         android:textAppearance="?android:attr/textAppearanceSmall" />
 
@@ -65,9 +59,7 @@
         android:id="@+id/aboutVisit_tv"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="5dp"
-        android:layout_marginRight="5dp"
-        android:layout_marginTop="10dp"
+        android:layout_marginTop="15dp"
         android:autoLink="web"
         android:linksClickable="true"
         android:text="@string/ABOUT_VISIT"
@@ -77,8 +69,6 @@
         android:id="@+id/aboutContact_tv"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="5dp"
-        android:layout_marginRight="5dp"
         android:layout_marginTop="5dp"
         android:autoLink="email"
         android:text="@string/ABOUT_CONTACT"
@@ -88,10 +78,7 @@
         android:id="@+id/aboutThisApp_tv"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="5dp"
-        android:layout_marginLeft="5dp"
-        android:layout_marginRight="5dp"
-        android:layout_marginTop="10dp"
+        android:layout_marginTop="15dp"
         android:text="@string/ABOUT_THIS_APPLICATION"
         android:textAppearance="?android:attr/textAppearanceSmall" />
 

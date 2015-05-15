@@ -41,9 +41,9 @@
     <string name="FREE_TEXT_PROMPT_TITLE">Ange ord</string>
     <string name="INFO_ENABLE_ACKNOWLEDGE">Om vald kan primärlarm kvitteras.</string>
     <string name="INFO_ENABLE_SMS_ALARM">Om vald larmar Sms Alarm på angivna telefonnummer, annars gör applikationen inte det.</string>
-    <string name="INFO_FREE_TEXT_TRIGGER_SETTINGS">Ställ in vilka ord som Sms Alarm ska larma på om de finns i inkommande sms. Notera att denna funktion inte är skiftlägeskänslig.</string>
+    <string name="INFO_FREE_TEXT_TRIGGER_SETTINGS">Ställ in vilka ord som Sms Alarm ska larma på om de finns i inkommande SMS. Notera att denna funktion inte är skiftlägeskänslig.</string>
     <string name="INFO_PLAY_ALARM_SIGNAL_TWICE_SETTING">Om vald spelar Sms Alarm upp larmsignalen för både primär- och sekundärlarm två gånger vid larm.</string>
-    <string name="INFO_SMS_SETTINGS">Ställ in vilka telefonnummer som Sms Alarm ska larma på sms ifrån.</string>   
+    <string name="INFO_SMS_SETTINGS">Ställ in vilka telefonnummer som Sms Alarm ska larma på SMS ifrån.</string>   
     <string name="NO">Nej</string>
     <string name="NO_PRIMARY_FREE_TEXT_EXISTS">Inga ord för primärlarm finns, kan ej ta bort ord.</string>
     <string name="NO_PRIMARY_NUMBER_EXISTS">Inga telefonnummer för primärlarm finns, kan ej ta bort nummer.</string>
@@ -57,13 +57,13 @@
     <string name="NUMBER_PROMPT_TITLE">Ange ett telefonnummer</string>
     <string name="PRIMARY_ALARM">PRIMÄR LARM!</string>
     <string name="PRIMARY_NUMBER_PROMPT_MESSAGE">Ange ett telefonnummer som Sms Alarm larmar primärlarm på.</string>
-    <string name="PRIMARY_FREE_TEXT_PROMPT_MESSAGE">Ange ett ord som Sms Alarm ska larma primärlarm på om det finns i mottaget sms.</string>
+    <string name="PRIMARY_FREE_TEXT_PROMPT_MESSAGE">Ange ett ord som Sms Alarm ska larma primärlarm på om det finns i mottaget SMS.</string>
     <string name="RESCUE_SERVICE_NAME_HINT">Ange räddningstjänstens namn..</string>
     <string name="RESCUE_SERVICE_PROMPT_MESSAGE">Ange din räddningstjänsts namn.</string>
     <string name="RESCUE_SERVICE_PROMPT_TITLE">Ange räddningstjänst</string>
     <string name="SECS">sek.</string>
     <string name="SECONDARY_ALARM">SEKUNDÄR LARM!</string> 
-    <string name="SECONDARY_FREE_TEXT_PROMPT_MESSAGE">Ange ett ord som Sms Alarm ska larma sekundärlarm på om det finns i mottaget sms.</string>
+    <string name="SECONDARY_FREE_TEXT_PROMPT_MESSAGE">Ange ett ord som Sms Alarm ska larma sekundärlarm på om det finns i mottaget SMS.</string>
     <string name="SECONDARY_NUMBER_PROMPT_MESSAGE">Ange ett telefonnummer som Sms Alarm larmar sekundärlarm på.</string>
     <string name="SMS_ALARM_STATUS_ENABLED">Sms Alarm är AKTIVERAT.</string>
     <string name="SMS_ALARM_STATUS_DISABLED">Sms Alarm är EJ AKTIVERAT.</string>
@@ -85,7 +85,7 @@
     <string name="TITLE_PRIMARY_ALARM">Primärlarm</string>
     <string name="TITLE_RESCUE_SERVICE_NAME">Din räddningstjänst</string>   
     <string name="TITLE_SECONDARY_ALARM">Sekundärlarm</string>
-    <string name="TITLE_SMS_SETTINGS">Sms-inställningar</string>
+    <string name="TITLE_SMS_SETTINGS">SMS-inställningar</string>
   	<string name="TONE_PROMPT_TITLE">Välj larmsignal</string>   
   	<string name="WIDGET_NOT_AGREED_EULA">Du måste starta Sms Alarm och godkänna användaravtalet innan du kan använda denna widget.</string>
     <string name="YES">Ja</string>  

@@ -131,8 +131,6 @@ public class OtherSettingsFragment extends SherlockFragment implements Applicati
 			// Calculate pixel dimensions for the different margins
 			// 32dp calculated to pixels
 			int pixelsLeft = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 32, resources.getDisplayMetrics());
-			// 5dp calculated to pixels
-			int pixelsRight = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 5, resources.getDisplayMetrics());
 			int pixelsTop = 0;
 			// If the locale on device is German(DE) set pixels top to -6dp else -9dp
 			if ("de".equals(Locale.getDefault().getLanguage())) {
@@ -146,13 +144,13 @@ public class OtherSettingsFragment extends SherlockFragment implements Applicati
 			// Wrap content, both on height and width
 			// Set layout parameters for the enable Sms Alarm info TextView
 			RelativeLayout.LayoutParams paramsEnableSmsAlarmInfoTextView = new RelativeLayout.LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
-			paramsEnableSmsAlarmInfoTextView.setMargins(pixelsLeft, pixelsTop, pixelsRight, 0);
+			paramsEnableSmsAlarmInfoTextView.setMargins(pixelsLeft, pixelsTop, 0, 0);
 			paramsEnableSmsAlarmInfoTextView.addRule(RelativeLayout.BELOW, enableSmsAlarmCheckBox.getId());
 			paramsEnableSmsAlarmInfoTextView.addRule(RelativeLayout.ALIGN_LEFT, enableSmsAlarmCheckBox.getId());
 
 			// Set layout parameters for the use flash notification info TextView
 			RelativeLayout.LayoutParams paramsUseFlashNotificationInfoTextView = new RelativeLayout.LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
-			paramsUseFlashNotificationInfoTextView.setMargins(pixelsLeft, pixelsTop, pixelsRight, 0);
+			paramsUseFlashNotificationInfoTextView.setMargins(pixelsLeft, pixelsTop, 0, 0);
 			paramsUseFlashNotificationInfoTextView.addRule(RelativeLayout.BELOW, useFlashNotificationCheckBox.getId());
 			paramsUseFlashNotificationInfoTextView.addRule(RelativeLayout.ALIGN_LEFT, useFlashNotificationCheckBox.getId());
 
@@ -165,16 +163,15 @@ public class OtherSettingsFragment extends SherlockFragment implements Applicati
 				Resources resources = getResources();
 
 				int pixelsLeft = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 38, resources.getDisplayMetrics());
-				int pixelsRight = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 5, resources.getDisplayMetrics());
 				int pixelsTop = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, -6, resources.getDisplayMetrics());
 
 				RelativeLayout.LayoutParams paramsEnableSmsAlarmInfoTextView = new RelativeLayout.LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
-				paramsEnableSmsAlarmInfoTextView.setMargins(pixelsLeft, pixelsTop, pixelsRight, 0);
+				paramsEnableSmsAlarmInfoTextView.setMargins(pixelsLeft, pixelsTop, 0, 0);
 				paramsEnableSmsAlarmInfoTextView.addRule(RelativeLayout.BELOW, enableSmsAlarmCheckBox.getId());
 				paramsEnableSmsAlarmInfoTextView.addRule(RelativeLayout.ALIGN_LEFT, enableSmsAlarmCheckBox.getId());
 
 				RelativeLayout.LayoutParams paramsUseFlashNotificationInfoTextView = new RelativeLayout.LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
-				paramsUseFlashNotificationInfoTextView.setMargins(pixelsLeft, pixelsTop, pixelsRight, 0);
+				paramsUseFlashNotificationInfoTextView.setMargins(pixelsLeft, pixelsTop, 0, 0);
 				paramsUseFlashNotificationInfoTextView.addRule(RelativeLayout.BELOW, useFlashNotificationCheckBox.getId());
 				paramsUseFlashNotificationInfoTextView.addRule(RelativeLayout.ALIGN_LEFT, useFlashNotificationCheckBox.getId());
 
@@ -183,7 +180,7 @@ public class OtherSettingsFragment extends SherlockFragment implements Applicati
 			}
 		}
 
-		// Set some attributes to the fireDepartmentEditText
+		// Set some attributes to the rescue service EditText
 		rescueServiceEditText.setEnabled(false);
 		rescueServiceEditText.setClickable(false);
 		rescueServiceEditText.setFocusable(false);

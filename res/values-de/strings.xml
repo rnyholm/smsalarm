@@ -41,7 +41,7 @@
     <string name="FREE_TEXT_PROMPT_TITLE">Geben Sie ein Wort ein</string>
     <string name="INFO_ENABLE_ACKNOWLEDGE">Falls gewählt, kann der Primäralarm bestätigt werden.</string>
     <string name="INFO_ENABLE_SMS_ALARM">Falls gewählt, kontaktiert Sms Alarm die eingegebene Telefonnummer.</string>
-    <string name="INFO_FREE_TEXT_TRIGGER_SETTINGS">Geben Sie Wörter ein, auf die Sms Alarm reagieren soll, wenn diese in der einkommenden sms vorhanden sind. Beachten Sie, dass diese Funktion die Groß- und Kleinschreibung nicht beachtet.</string>
+    <string name="INFO_FREE_TEXT_TRIGGER_SETTINGS">Geben Sie Wörter ein, auf die Sms Alarm reagieren soll, wenn diese in der einkommenden SMS vorhanden sind. Beachten Sie, dass diese Funktion die Groß- und Kleinschreibung nicht beachtet.</string>
     <string name="INFO_PLAY_ALARM_SIGNAL_TWICE_SETTING">Falls gewählt, spielt Sms Alarm zwei Mal ein Alarmsignal für Primär- und Sekundäralarm ab.</string>
     <string name="INFO_SMS_SETTINGS">Geben Sie ein, von welcher Telefonnummer aus Sms Alarm reagieren soll.</string>
     <string name="INFO_USE_OS_SOUND_SETTINGS">Falls gewählt, berücksichtigt Sms Alarm die Klingeltonlautstärke und den Lautlos-Modus des Geräts.</string>   
@@ -57,14 +57,14 @@
     <string name="NUMBER_PROMPT_HINT">Telefonnummer..</string>
     <string name="NUMBER_PROMPT_TITLE">Eine Telefonnummer eingeben</string>
     <string name="PRIMARY_ALARM">PRIMÄRALARM!</string>
-    <string name="PRIMARY_FREE_TEXT_PROMPT_MESSAGE">Geben Sie ein Wort ein, auf das Sms Alarm als primäres Alarm reagiert, wenn dieses in der empfangenen sms erscheint.</string>
+    <string name="PRIMARY_FREE_TEXT_PROMPT_MESSAGE">Geben Sie ein Wort ein, auf das Sms Alarm als primäres Alarm reagiert, wenn dieses in der empfangenen SMS erscheint.</string>
     <string name="PRIMARY_NUMBER_PROMPT_MESSAGE">Eine Telefonnummer für Sms Alarm für Primäralarm eingeben.</string>
     <string name="RESCUE_SERVICE_NAME_HINT">Rettungsdienstes eingeben..</string>
     <string name="RESCUE_SERVICE_PROMPT_MESSAGE">Name des Rettungsdienstes eingeben.</string>
     <string name="RESCUE_SERVICE_PROMPT_TITLE">Rettungsdienst eingeben</string>
     <string name="SECS">Sek.</string>
     <string name="SECONDARY_ALARM">SEKUNDÄRALARM!</string>
-    <string name="SECONDARY_FREE_TEXT_PROMPT_MESSAGE">Geben Sie ein Wort ein, auf das Sms Alarm als sekundäres Alarm reagieren soll, wenn dieses in der empfangenen sms erscheint.</string>
+    <string name="SECONDARY_FREE_TEXT_PROMPT_MESSAGE">Geben Sie ein Wort ein, auf das Sms Alarm als sekundäres Alarm reagieren soll, wenn dieses in der empfangenen SMS erscheint.</string>
     <string name="SECONDARY_NUMBER_PROMPT_MESSAGE">Geben Sie eine Telefonnummer ein, auf die Sms Alarm als sekundäres Alarm reagiert.</string>
     <string name="SMS_ALARM_STATUS_ENABLED">Sms Alarm ist AKTIVIERT.</string>
     <string name="SMS_ALARM_STATUS_DISABLED">Sms Alarm ist DEAKTIVIERT.</string>
@@ -85,7 +85,7 @@
     <string name="TITLE_PRIMARY_ALARM">Primäralarm</string>
     <string name="TITLE_RESCUE_SERVICE_NAME">Ihr Rettungsdienst</string>   
     <string name="TITLE_SECONDARY_ALARM">Sekundäralarm</string>
-    <string name="TITLE_SMS_SETTINGS">Sms-einstellungen</string>
+    <string name="TITLE_SMS_SETTINGS">SMS-einstellungen</string>
     <string name="TITLE_USE_OS_SOUND_SETTINGS">Die Klangeinstellungen des Geräts verwende</string>
   	<string name="TONE_PROMPT_TITLE">Alarmsignal auswählen</string>   
   	<string name="WIDGET_NOT_AGREED_EULA">Sie müssen die Sms Alarm starten und der Nutzungsvereinbarung zustimmen, bevor Sie dieses Widget verwenden können.</string>

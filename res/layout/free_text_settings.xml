@@ -1,19 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="fill_parent"
+    android:layout_width="match_parent"
     android:layout_height="wrap_content" >
 
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" >
+        android:layout_height="wrap_content"
+        android:padding="5dp" >
 
         <TextView
-            android:id="@+id/freeTextSettings_tv"
+            android:id="@+id/freeTextSettingsTitle_tv"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="5dp"
-            android:layout_marginRight="5dp"
-            android:layout_marginTop="5dp"
             android:text="@string/TITLE_FREE_TEXT_TRIGGER_SETTINGS"
             android:textAppearance="?android:attr/textAppearanceMedium" />
 
@@ -21,9 +19,7 @@
             android:id="@+id/freeTextSettingsInfo_tv"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignLeft="@id/freeTextSettings_tv"
-            android:layout_below="@id/freeTextSettings_tv"
-            android:layout_marginRight="5dp"
+            android:layout_below="@id/freeTextSettingsTitle_tv"
             android:text="@string/INFO_FREE_TEXT_TRIGGER_SETTINGS"
             android:textAppearance="?android:attr/textAppearanceSmall" />
 
@@ -31,7 +27,6 @@
             android:id="@+id/freeTextPrimaryAlarmTitle_tv"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignLeft="@id/freeTextSettingsInfo_tv"
             android:layout_below="@id/freeTextSettingsInfo_tv"
             android:layout_marginTop="5dp"
             android:text="@string/TITLE_PRIMARY_ALARM"
@@ -41,17 +36,13 @@
             android:id="@+id/primaryFreeTextSpinner_sp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignLeft="@id/freeTextPrimaryAlarmTitle_tv"
-            android:layout_below="@id/freeTextPrimaryAlarmTitle_tv"
-            android:layout_marginRight="5dp" />
+            android:layout_below="@id/freeTextPrimaryAlarmTitle_tv" />
 
         <Button
             android:id="@+id/addPrimaryFreeText_btn"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignLeft="@id/freeTextPrimaryAlarmTitle_tv"
             android:layout_below="@id/primaryFreeTextSpinner_sp"
-            android:layout_marginTop="-3dp"
             android:text="@string/ADD" />
 
         <Button
@@ -59,7 +50,6 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignBaseline="@+id/addPrimaryFreeText_btn"
-            android:layout_marginRight="5dp"
             android:layout_toRightOf="@id/addPrimaryFreeText_btn"
             android:text="@string/DELETE" />
 
@@ -67,8 +57,8 @@
             android:id="@+id/freeTextSecondaryAlarmTitle_tv"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignLeft="@id/freeTextPrimaryAlarmTitle_tv"
             android:layout_below="@id/addPrimaryFreeText_btn"
+            android:layout_marginTop="5dp"
             android:text="@string/TITLE_SECONDARY_ALARM"
             android:textAppearance="?android:attr/textAppearanceMedium" />
 
@@ -76,17 +66,13 @@
             android:id="@+id/secondaryFreeTextSpinner_sp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignLeft="@id/freeTextPrimaryAlarmTitle_tv"
-            android:layout_below="@id/freeTextSecondaryAlarmTitle_tv"
-            android:layout_marginRight="5dp" />
+            android:layout_below="@id/freeTextSecondaryAlarmTitle_tv" />
 
         <Button
             android:id="@+id/addSecondaryFreeText_btn"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignLeft="@id/freeTextPrimaryAlarmTitle_tv"
             android:layout_below="@id/secondaryFreeTextSpinner_sp"
-            android:layout_marginTop="-3dp"
             android:text="@string/ADD" />
 
         <Button
@@ -94,7 +80,6 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignBaseline="@id/addSecondaryFreeText_btn"
-            android:layout_marginRight="5dp"
             android:layout_toRightOf="@id/addSecondaryFreeText_btn"
             android:text="@string/DELETE" />
     </RelativeLayout>

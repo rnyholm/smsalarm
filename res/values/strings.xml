@@ -3,7 +3,7 @@
     <!-- NEW STRINGS IN v.2.3.1 BEGIN -->
     <!-- REMEMBER TO TRANSLATE ack_methods.xml ALSO -->
     <string name="MENU_TITLE_SETTINGS">Inställningar</string>
-    <string name="MENU_TITLE_SMS">Sms</string>
+    <string name="MENU_TITLE_SMS">SMS</string>
     <string name="MENU_TITLE_FREE_TEXT">Ord</string>
     <string name="MENU_TITLE_SOUND">Ljud och vibration</string>
     <string name="MENU_TITLE_ACKNOWLEDGE">Kvittering</string>
@@ -26,7 +26,7 @@
     <string name="TITLE_ALARM_SIGNALS">Larmsignaler</string>
     <string name="TITLE_ALARM_VIBRATIONS">Vibrationsmönster</string>
     <string name="TITLE_SOUND_SETTINGS">Ljud- och vibrationsinställningar</string>
-    <string name="INFO_SOUND_SETTINGS">Ställ in larmsignaler samt vibrationsmönster för primär- och sekundärlarm samt om Sms Alarm ska följa enhetens ljudinställningar. Det är också möjligt att ställa in om larmsignalen ska spelas upp två gånger och om larmsignalen ska spelas upp oavbrutet.</string>
+    <string name="INFO_SOUND_SETTINGS">Ställ in larmsignaler och vibrationsmönster för primär- och sekundärlarm samt om Sms Alarm ska följa enhetens ljudinställningar. Det är också möjligt att ställa in om larmsignalen ska spelas upp två gånger eller oavbrutet.</string>
     <string name="PATH_ALREADY_IN_ALARM_SIGNAL_PATH_LIST">Vald ljudsignal finns redan i listan av larmsignaler.</string>
     <string name="ALARM_SIGNALS_REMOVED_DUE_TO_MISSING_PATHS">har tagits bort från listan av larmsignaler eftersom de/dem inte kunde hittas på enheten.</string>
     <string name="TITLE_PLAY_ALARM_SIGNAL_REPEATEDLY_SETTING">Spela upp larmsignalen oavbrutet</string>
@@ -35,7 +35,7 @@
     <string name="ALARM_INFO_PROMPT_TITLE">Larminfo</string>
     <string name="TITLE_ALARM_INFO_ALARM_TYPE">Larmtyp</string>
     <string name="TITLE_UNDEFINED_ALARM">Odefinierat larm</string>
-    <string name="INFO_ACK_SETTINGS">Ställ in om larmkvittering skall användas och i sådana fall på vilket sätt kvittering sker, samt telefonnummer som kvittering sker mot och kvitteringsmeddelande.</string>
+    <string name="INFO_ACK_SETTINGS">Ställ in om larmkvittering skall användas och i sådana fall på vilket sätt kvittering sker, telefonnummer som kvittering sker mot och kvitteringsmeddelande.</string>
     <string name="TITLE_ACK_BY">Kvittera genom:</string>
     <string name="TITLE_ACK_NUMBER">Telefonnummer för kvittering</string>
     <string name="TITLE_ACK_MESSAGE">Meddelande för kvittering</string>
@@ -76,7 +76,7 @@
     <string name="SPLASH_DESCR">Splash</string>
     <string name="RIGHT_TURNED_ARROW_DESCR">Right turned arrow</string>
     <string name="VERTICAL_DIVIDER_DESCR">Vertical divider</string>
-    <string name="WIDGET_ICON_CONTENT_DESCR">Widget sms alarm icon</string>
+    <string name="WIDGET_ICON_CONTENT_DESCR">Widget Sms Alarm icon</string>
     <!-- DUMMY STRINGS(PLACEHOLDER AND DESCRIPTIVES), ONLY ENGLISH - END -->
     
     <!-- APPLICATION INFO BEGIN -->
@@ -130,9 +130,9 @@
     <string name="FREE_TEXT_PROMPT_TITLE">Enter a word</string>
     <string name="INFO_ENABLE_ACKNOWLEDGE">If selected primary alarm can be acknowledged.</string>
     <string name="INFO_ENABLE_SMS_ALARM">If selected Sms Alarm will contact given telephone number, otherwise the application will not.</string>
-    <string name="INFO_FREE_TEXT_TRIGGER_SETTINGS">Enter the words that should be used to notify in the Sms Alarm if present in the incoming sms. Note that this function is not case sensitive.</string>
+    <string name="INFO_FREE_TEXT_TRIGGER_SETTINGS">Enter the words that should be used to notify in the Sms Alarm if present in the incoming SMS. Note that this function is not case sensitive.</string>
     <string name="INFO_PLAY_ALARM_SIGNAL_TWICE_SETTING">If selected Sms Alarm will play alarm signal to both primary and secondary alarms twice.</string>
-    <string name="INFO_SMS_SETTINGS">Enter the telephone numbers that Sms Alarm should send alerts for incoming sms.</string>  
+    <string name="INFO_SMS_SETTINGS">Enter the telephone numbers that Sms Alarm should send alerts for incoming SMS.</string>  
     <string name="LICENSE_APACHE_V2_TITLE">Apache License, Version 2.0</string>
     <string name="LICENSE_APACHE_V2_URI">http://www.apache.org/licenses/LICENSE-2.0</string>
     <string name="LICENSE_OTHER_SLIDING_MENU_TITLE">Sliding Menu</string>
@@ -153,14 +153,14 @@
     <string name="NUMBER_PROMPT_TITLE">Enter a telephone number</string>
     <string name="OK">OK</string>
     <string name="PRIMARY_ALARM">PRIMARY ALARM!</string>
-    <string name="PRIMARY_FREE_TEXT_PROMPT_MESSAGE">Enter a word that Sms Alarm will alert the primary alarm on, if present in the received sms.</string>
+    <string name="PRIMARY_FREE_TEXT_PROMPT_MESSAGE">Enter a word that Sms Alarm will alert the primary alarm on, if present in the received SMS.</string>
     <string name="PRIMARY_NUMBER_PROMPT_MESSAGE">Enter a telephone number for Sms Alarm to alert for primary alarm.</string>
     <string name="RESCUE_SERVICE_NAME_HINT">Enter rescue service name..</string>
     <string name="RESCUE_SERVICE_PROMPT_MESSAGE">Enter your rescue service name.</string>
     <string name="RESCUE_SERVICE_PROMPT_TITLE">Enter rescue service</string>
     <string name="SECS">secs.</string>
     <string name="SECONDARY_ALARM">SECONDARY ALARM!</string>
-    <string name="SECONDARY_FREE_TEXT_PROMPT_MESSAGE">Enter a word that Sms Alarm will alert the secondary alarm on, if present in the received sms.</string>
+    <string name="SECONDARY_FREE_TEXT_PROMPT_MESSAGE">Enter a word that Sms Alarm will alert the secondary alarm on, if present in the received SMS.</string>
     <string name="SECONDARY_NUMBER_PROMPT_MESSAGE">Enter a phone number onto which Sms Alarm alerts secondary alarms.</string> 
     <string name="SMS_ALARM_STATUS_ENABLED">Sms Alarm is ENABLED.</string>
     <string name="SMS_ALARM_STATUS_DISABLED">Sms Alarm is NOT ENABLED.</string>
@@ -182,7 +182,7 @@
     <string name="TITLE_PRIMARY_ALARM">Primary alarm</string>
     <string name="TITLE_RESCUE_SERVICE_NAME">Your rescue service</string>   
     <string name="TITLE_SECONDARY_ALARM">Secondary alarm</string>
-    <string name="TITLE_SMS_SETTINGS">Sms settings</string>
+    <string name="TITLE_SMS_SETTINGS">SMS settings</string>
   	<string name="TONE_PROMPT_TITLE">Select alarm signal</string>   
   	<string name="WIDGET_NOT_AGREED_EULA">You must start Sms Alarm and agree to the user agreement before you may use this widget.</string>
     <string name="YES">Yes</string>
@@ -196,11 +196,11 @@
     <string name="DEBUG_MENU_TITLE_INSERT_MOCK_ALARMS">Insert Mock Alarms</string>
     <string name="DEBUG_TOAST_SHARED_PREFERENCES_MOCKED">Shared preferences successfully mocked</string>
     <string name="DEBUG_TOAST_MOCK_ALARMS_INSERTED">Alarms successfully mocked and inserted into the database</string>
-    <string name="DEBUG_DISPATCH_MOCK_SMS_TITLE">Dispatch mock sms</string>
+    <string name="DEBUG_DISPATCH_MOCK_SMS_TITLE">Dispatch mock SMS</string>
     <string name="DEBUG_MOCK_SMS_SENDER_TITLE">Sender</string>
-    <string name="DEBUG_MOCK_SMS_SENDER_HINT">Enter sms sender..</string>
+    <string name="DEBUG_MOCK_SMS_SENDER_HINT">Enter SMS sender..</string>
     <string name="DEBUG_MOCK_SMS_BODY_TITLE">Message</string>
-    <string name="DEBUG_MOCK_SMS_BODY_HINT">Enter message of sms..</string>
+    <string name="DEBUG_MOCK_SMS_BODY_HINT">Enter message of SMS..</string>
     <string name="DEBUG_CONFIRM_MOCK_SHARED_PREFERENCES_TITLE">Mock shared preferences</string>
     <string name="DEBUG_CONFIRM_MOCK_SHARED_PREFERENCES_MESSAGE">Do you really want to mock shared preferences?\nAny existing preferences will be overwritten!</string>
     <string name="DEBUG_CONFIRM_INSERT_MOCK_ALARMS_TITLE">Insert mock alarms</string>

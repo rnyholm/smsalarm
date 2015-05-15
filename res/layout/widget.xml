@@ -28,7 +28,7 @@
 
     <TextView
         android:id="@+id/widget_smsalarm_status_tv"
-        android:layout_width="fill_parent"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
         android:layout_toRightOf="@+id/widget_divider1_tv"
@@ -74,7 +74,7 @@
 
     <TextView
         android:id="@+id/widget_latest_received_alarm_tv"
-        android:layout_width="fill_parent"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignLeft="@+id/widget_soundsettings_status_tv"
         android:layout_below="@id/widget_divider3_iv"

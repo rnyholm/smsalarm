@@ -41,9 +41,9 @@
     <string name="FREE_TEXT_PROMPT_TITLE">Enter a word</string>
     <string name="INFO_ENABLE_ACKNOWLEDGE">If selected primary alarm can be acknowledged.</string>
     <string name="INFO_ENABLE_SMS_ALARM">If selected Sms Alarm will contact given telephone number, otherwise the application will not.</string>
-    <string name="INFO_FREE_TEXT_TRIGGER_SETTINGS">Enter the words that should be used to notify in the Sms Alarm if present in the incoming sms. Note that this function is not case sensitive.</string>
+    <string name="INFO_FREE_TEXT_TRIGGER_SETTINGS">Enter the words that should be used to notify in the Sms Alarm if present in the incoming SMS. Note that this function is not case sensitive.</string>
     <string name="INFO_PLAY_ALARM_SIGNAL_TWICE_SETTING">If selected Sms Alarm will play alarm signal to both primary and secondary alarms twice.</string>
-    <string name="INFO_SMS_SETTINGS">Enter the telephone numbers that Sms Alarm should send alerts for incoming sms.</string>
+    <string name="INFO_SMS_SETTINGS">Enter the telephone numbers that Sms Alarm should send alerts for incoming SMS.</string>
     <string name="INFO_USE_OS_SOUND_SETTINGS">If selected Sms Alarm will take into account the device ring volume and silent mode.</string>
     <string name="NO">No</string>
     <string name="NO_PRIMARY_FREE_TEXT_EXISTS">No words present for primary alarm, can not remove word.</string>
@@ -57,14 +57,14 @@
     <string name="NUMBER_PROMPT_HINT">Telephone number..</string>
     <string name="NUMBER_PROMPT_TITLE">Enter a telephone number</string>
     <string name="PRIMARY_ALARM">PRIMARY ALARM!</string>
-    <string name="PRIMARY_FREE_TEXT_PROMPT_MESSAGE">Enter a word that Sms Alarm will alert the primary alarm on, if present in the received sms.</string>
+    <string name="PRIMARY_FREE_TEXT_PROMPT_MESSAGE">Enter a word that Sms Alarm will alert the primary alarm on, if present in the received SMS.</string>
     <string name="PRIMARY_NUMBER_PROMPT_MESSAGE">Enter a telephone number for Sms Alarm to alert for primary alarm.</string>
     <string name="RESCUE_SERVICE_NAME_HINT">Enter rescue service name..</string>
     <string name="RESCUE_SERVICE_PROMPT_MESSAGE">Enter your rescue service name.</string>
     <string name="RESCUE_SERVICE_PROMPT_TITLE">Enter rescue service</string>
     <string name="SECS">secs.</string>
     <string name="SECONDARY_ALARM">SECONDARY ALARM!</string> 
-    <string name="SECONDARY_FREE_TEXT_PROMPT_MESSAGE">Enter a word that Sms Alarm will alert the secondary alarm on, if present in the received sms.</string>
+    <string name="SECONDARY_FREE_TEXT_PROMPT_MESSAGE">Enter a word that Sms Alarm will alert the secondary alarm on, if present in the received SMS.</string>
     <string name="SECONDARY_NUMBER_PROMPT_MESSAGE">Enter a phone number onto which Sms Alarm alerts secondary alarms.</string>
     <string name="SMS_ALARM_STATUS_ENABLED">Sms Alarm is ENABLED.</string>
     <string name="SMS_ALARM_STATUS_DISABLED">Sms Alarm is NOT ENABLED.</string>
@@ -86,7 +86,7 @@
     <string name="TITLE_PRIMARY_ALARM">Primary alarm</string>
     <string name="TITLE_RESCUE_SERVICE_NAME">Your rescue service</string>   
     <string name="TITLE_SECONDARY_ALARM">Secondary alarm</string>
-    <string name="TITLE_SMS_SETTINGS">Sms settings</string>
+    <string name="TITLE_SMS_SETTINGS">SMS settings</string>
     <string name="TITLE_USE_OS_SOUND_SETTINGS">Use the device sound settings</string>
   	<string name="TONE_PROMPT_TITLE">Select alarm signal</string>   
   	<string name="WIDGET_NOT_AGREED_EULA">You must start Sms Alarm and agree to the user agreement before you may use this widget.</string>

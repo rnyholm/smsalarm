@@ -3,7 +3,8 @@
     android:id="@+id/splash_rl"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/splash_gradient" >
+    android:background="@drawable/splash_gradient"
+    android:padding="5dp" >
 
     <TextView
         android:id="@+id/splashTitle_tv"
@@ -11,7 +12,7 @@
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="26dp"
+        android:layout_marginTop="20dp"
         android:text="@string/APP_NAME"
         android:textAppearance="?android:attr/textAppearanceLarge"
         android:textColor="#000000" />
@@ -31,7 +32,7 @@
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
-        android:layout_marginBottom="14dp"
+        android:layout_marginBottom="10dp"
         android:text="@string/SPLASH_VERSION"
         android:textAppearance="?android:attr/textAppearanceSmall"
         android:textColor="#313031" />

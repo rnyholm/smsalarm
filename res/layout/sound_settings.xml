@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="fill_parent"
+    android:layout_width="match_parent"
     android:layout_height="wrap_content" >
 
     <RelativeLayout
@@ -9,7 +9,7 @@
         android:padding="5dp" >
 
         <TextView
-            android:id="@+id/soundSettings_tv"
+            android:id="@+id/soundSettingsTitle_tv"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/TITLE_SOUND_SETTINGS"
@@ -19,8 +19,7 @@
             android:id="@+id/soundSettingsInfo_tv"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignLeft="@+id/soundSettings_tv"
-            android:layout_below="@+id/soundSettings_tv"
+            android:layout_below="@+id/soundSettingsTitle_tv"
             android:layout_marginBottom="2dp"
             android:text="@string/INFO_SOUND_SETTINGS"
             android:textAppearance="?android:attr/textAppearanceSmall" />
@@ -30,7 +29,6 @@
             style="?android:attr/listSeparatorTextViewStyle"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_alignLeft="@id/soundSettingsInfo_tv"
             android:layout_below="@id/soundSettingsInfo_tv"
             android:text="@string/TITLE_ALARM_SIGNALS"
             android:textAppearance="?android:attr/textAppearanceMedium" />
@@ -84,7 +82,6 @@
             android:id="@+id/soundSettingsDivider1_vw"
             android:layout_width="wrap_content"
             android:layout_height="1dp"
-            android:layout_alignLeft="@id/primaryAlarmSignalSelection_ll"
             android:layout_alignRight="@id/primaryAlarmSignalSelection_ll"
             android:layout_below="@id/primaryAlarmSignalSelection_ll"
             android:background="?android:attr/listDivider" />
@@ -134,13 +131,11 @@
                 android:src="@drawable/ic_ab_forward_holo_light_am" />
         </LinearLayout>
 
-
         <TextView
             android:id="@+id/alarmVibrationsTitle_tv"
             style="?android:attr/listSeparatorTextViewStyle"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_alignLeft="@id/secondaryAlarmSignalSelection_ll"
             android:layout_below="@id/secondaryAlarmSignalSelection_ll"
             android:text="@string/TITLE_ALARM_VIBRATIONS"
             android:textAppearance="?android:attr/textAppearanceMedium" />
@@ -194,7 +189,6 @@
             android:id="@+id/soundSettingsDivider2_vw"
             android:layout_width="wrap_content"
             android:layout_height="1dp"
-            android:layout_alignLeft="@id/primaryAlarmVibrationSelection_ll"
             android:layout_alignRight="@id/primaryAlarmVibrationSelection_ll"
             android:layout_below="@id/primaryAlarmVibrationSelection_ll"
             android:background="?android:attr/listDivider" />
@@ -248,17 +242,16 @@
             android:id="@+id/useSysSoundSettings_chk"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignLeft="@id/secondaryAlarmVibrationSelection_ll"
             android:layout_below="@id/secondaryAlarmVibrationSelection_ll"
+            android:layout_marginTop="2dp"
             android:text="@string/TITLE_USE_OS_SOUND_SETTINGS" />
 
         <TextView
             android:id="@+id/useSysSoundSettingsHint_tv"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignLeft="@+id/useSysSoundSettings_chk"
             android:layout_below="@+id/useSysSoundSettings_chk"
-            android:layout_marginLeft="33dp"
+            android:layout_marginLeft="38dp"
             android:layout_marginTop="-9dp"
             android:text="@string/INFO_USE_OS_SOUND_SETTINGS"
             android:textAppearance="?android:attr/textAppearanceSmall" />
@@ -267,7 +260,6 @@
             android:id="@+id/playAlarmSignalTwiceSetting_chk"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignLeft="@+id/useSysSoundSettings_chk"
             android:layout_below="@+id/useSysSoundSettingsHint_tv"
             android:text="@string/TITLE_PLAY_ALARM_SIGNAL_TWICE_SETTING" />
 
@@ -275,9 +267,8 @@
             android:id="@+id/playAlarmSignalTwiceSettingHint_tv"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignLeft="@+id/playAlarmSignalTwiceSetting_chk"
             android:layout_below="@+id/playAlarmSignalTwiceSetting_chk"
-            android:layout_marginLeft="33dp"
+            android:layout_marginLeft="38dp"
             android:layout_marginTop="-9dp"
             android:text="@string/INFO_PLAY_ALARM_SIGNAL_TWICE_SETTING"
             android:textAppearance="?android:attr/textAppearanceSmall" />
@@ -286,7 +277,6 @@
             android:id="@+id/playAlarmSignalRepeatedlySetting_chk"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignLeft="@id/playAlarmSignalTwiceSetting_chk"
             android:layout_below="@id/playAlarmSignalTwiceSettingHint_tv"
             android:text="@string/TITLE_PLAY_ALARM_SIGNAL_REPEATEDLY_SETTING" />
 
@@ -294,9 +284,8 @@
             android:id="@+id/playAlarmSignalRepeatedlySettingHint_tv"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignLeft="@id/playAlarmSignalRepeatedlySetting_chk"
             android:layout_below="@id/playAlarmSignalRepeatedlySetting_chk"
-            android:layout_marginLeft="33dp"
+            android:layout_marginLeft="38dp"
             android:layout_marginTop="-9dp"
             android:text="@string/INFO_PLAY_ALARM_SIGNAL_REPEATEDLY_SETTING"
             android:textAppearance="?android:attr/textAppearanceSmall" />

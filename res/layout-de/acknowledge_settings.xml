@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="fill_parent"
+    android:layout_width="match_parent"
     android:layout_height="wrap_content" >
 
     <RelativeLayout
@@ -24,7 +24,7 @@
             android:textAppearance="?android:attr/textAppearanceSmall" />
 
         <CheckBox
-            android:id="@+id/enableAck_chk"
+            android:id="@+id/ackSettingsAckEnable_chk"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_below="@+id/ackSettingsInfo_tv"
@@ -32,30 +32,31 @@
             android:text="@string/TITLE_ENABLE_ACKNOWLEDGE" />
 
         <TextView
-            android:id="@+id/enableAckHint_tv"
+            android:id="@+id/ackSettingsAckEnableHint_tv"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/enableAck_chk"
-            android:layout_marginLeft="33dp"
+            android:layout_below="@+id/ackSettingsAckEnable_chk"
+            android:layout_marginLeft="38dp"
             android:layout_marginTop="-6dp"
             android:text="@string/INFO_ENABLE_ACKNOWLEDGE"
             android:textAppearance="?android:attr/textAppearanceSmall" />
 
         <LinearLayout
-            android:id="@+id/ackMethodSelection_ll"
+            android:id="@+id/ackSettingsMethodSelection_ll"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_below="@id/enableAckHint_tv" >
+            android:layout_below="@id/ackSettingsAckEnableHint_tv"
+            android:layout_marginTop="5dp" >
 
             <TextView
-                android:id="@+id/ackByTitle_tv"
+                android:id="@+id/ackSettingsAckMethodTitle_tv"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/TITLE_ACK_BY"
                 android:textAppearance="?android:attr/textAppearanceMedium" />
 
             <Spinner
-                android:id="@+id/ackMethodSpinner_sp"
+                android:id="@+id/ackSettingsAckMethodSpinner_sp"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1" />
@@ -63,18 +64,19 @@
         </LinearLayout>
 
         <TextView
-            android:id="@+id/ackNumberTitle_tv"
+            android:id="@+id/ackSettingsAckNumberTitle_tv"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_below="@id/ackMethodSelection_ll"
+            android:layout_below="@id/ackSettingsMethodSelection_ll"
+            android:layout_marginTop="5dp"
             android:text="@string/TITLE_ACK_NUMBER"
             android:textAppearance="?android:attr/textAppearanceMedium" />
 
         <EditText
-            android:id="@+id/ackNumber_et"
+            android:id="@+id/ackSettingsAckNumber_et"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@id/ackNumberTitle_tv"
+            android:layout_below="@id/ackSettingsAckNumberTitle_tv"
             android:hint="@string/ENTER_PHONE_NUMBER_HINT"
             android:inputType="number|numberSigned|phone"
             android:singleLine="true" />
@@ -83,22 +85,23 @@
             android:id="@+id/editAckNumber_btn"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_below="@id/ackNumber_et"
+            android:layout_below="@id/ackSettingsAckNumber_et"
             android:text="@string/EDIT_NUMBER" />
 
         <TextView
-            android:id="@+id/ackMessageTitle_tv"
+            android:id="@+id/ackSettingsAckMessageTitle_tv"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_below="@id/editAckNumber_btn"
+            android:layout_marginTop="5dp"
             android:text="@string/TITLE_ACK_MESSAGE"
             android:textAppearance="?android:attr/textAppearanceMedium" />
 
         <EditText
-            android:id="@+id/ackMessage_et"
+            android:id="@+id/ackSettingsAckMessage_et"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@id/ackMessageTitle_tv"
+            android:layout_below="@id/ackSettingsAckMessageTitle_tv"
             android:gravity="top|left"
             android:hint="@string/ENTER_MESSAGE_HINT"
             android:inputType="textCapSentences|textMultiLine"
@@ -109,7 +112,7 @@
             android:id="@+id/editAckMessage_btn"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_below="@id/ackMessage_et"
+            android:layout_below="@id/ackSettingsAckMessage_et"
             android:text="@string/EDIT_MESSAGE" />
     </RelativeLayout>
 
