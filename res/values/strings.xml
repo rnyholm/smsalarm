@@ -43,7 +43,8 @@
     <string name="EDIT_MESSAGE">Ändra meddelande</string>
     <string name="MESSAGE_PROMPT_HINT">Meddelande..</string>
     <string name="MESSAGE_PROMPT_TITLE">Ange meddelande</string>
-    <string name="ACK_MESSAGE_PROMPT_MESSAGE">Ange ett meddelande som applikationen kvitterar med.</string>  
+    <string name="ACK_MESSAGE_PROMPT_MESSAGE">Ange ett meddelande som applikationen kvitterar med.</string>
+    <string name="INFO_ENABLE_SMS_ALARM">Om vald larmar Sms Alarm enligt angiven information, annars gör applikationen inte det.</string> 
     <!-- OK IN ENGLISH AND GERMAN BEGIN -->
     <string name="INFO_USE_OS_SOUND_SETTINGS">Om vald tar Sms Alarm hänsyn till enhetens ringvolym och ljudlöst läge.</string>
     <string name="TITLE_USE_OS_SOUND_SETTINGS">Använd enhetens ljudinställningar</string>
@@ -53,7 +54,7 @@
     <!-- OK IN ENGLISH AND SWEDISH END -->
     <!-- NEW STRINGS IN v.2.3.1 END -->
     
-    <!-- DUMMY STRINGS(PLACEHOLDER AND DESCRIPTIVES), ONLY ENGLISH - BEGIN -->
+    <!-- DUMMY STRINGS(PLACEHOLDER AND DESCRIPTIVES), ONLY EXISTS IN ENGLISH - BEGIN -->
     <string name="ACK_ICON_CONTENT_DESCR">Acknowledge alarm icon</string>
     <string name="ACK_TITLE">Acknowledgment title (with rescue service name)</string>
     <string name="ACK_FULL_MESSAGE">Complete alarm message</string>
@@ -77,7 +78,7 @@
     <string name="RIGHT_TURNED_ARROW_DESCR">Right turned arrow</string>
     <string name="VERTICAL_DIVIDER_DESCR">Vertical divider</string>
     <string name="WIDGET_ICON_CONTENT_DESCR">Widget Sms Alarm icon</string>
-    <!-- DUMMY STRINGS(PLACEHOLDER AND DESCRIPTIVES), ONLY ENGLISH - END -->
+    <!-- DUMMY STRINGS(PLACEHOLDER AND DESCRIPTIVES), ONLY EXISTS IN ENGLISH - END -->
     
     <!-- APPLICATION INFO BEGIN -->
     <string name="APP_NAME">Sms Alarm</string>
@@ -129,7 +130,6 @@
     <string name="FREE_TEXT_PROMPT_HINT">Word..</string>
     <string name="FREE_TEXT_PROMPT_TITLE">Enter a word</string>
     <string name="INFO_ENABLE_ACKNOWLEDGE">If selected primary alarm can be acknowledged.</string>
-    <string name="INFO_ENABLE_SMS_ALARM">If selected Sms Alarm will contact given telephone number, otherwise the application will not.</string>
     <string name="INFO_FREE_TEXT_TRIGGER_SETTINGS">Enter the words that should be used to notify in the Sms Alarm if present in the incoming SMS. Note that this function is not case sensitive.</string>
     <string name="INFO_PLAY_ALARM_SIGNAL_TWICE_SETTING">If selected Sms Alarm will play alarm signal to both primary and secondary alarms twice.</string>
     <string name="INFO_SMS_SETTINGS">Enter the telephone numbers that Sms Alarm should send alerts for incoming SMS.</string>  

@@ -40,7 +40,6 @@
     <string name="FREE_TEXT_PROMPT_HINT">Ord..</string>
     <string name="FREE_TEXT_PROMPT_TITLE">Ange ord</string>
     <string name="INFO_ENABLE_ACKNOWLEDGE">Om vald kan primärlarm kvitteras.</string>
-    <string name="INFO_ENABLE_SMS_ALARM">Om vald larmar Sms Alarm på angivna telefonnummer, annars gör applikationen inte det.</string>
     <string name="INFO_FREE_TEXT_TRIGGER_SETTINGS">Ställ in vilka ord som Sms Alarm ska larma på om de finns i inkommande SMS. Notera att denna funktion inte är skiftlägeskänslig.</string>
     <string name="INFO_PLAY_ALARM_SIGNAL_TWICE_SETTING">Om vald spelar Sms Alarm upp larmsignalen för både primär- och sekundärlarm två gånger vid larm.</string>
     <string name="INFO_SMS_SETTINGS">Ställ in vilka telefonnummer som Sms Alarm ska larma på SMS ifrån.</string>   
