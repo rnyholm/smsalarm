@@ -1,3 +1,6 @@
+/**
+ * Copyright (c) 2014 Robert Nyholm. All rights reserved.
+ */
 package ax.ha.it.smsalarm.fragment;
 
 import android.os.Bundle;

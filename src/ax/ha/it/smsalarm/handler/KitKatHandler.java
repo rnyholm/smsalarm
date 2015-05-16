@@ -1,3 +1,6 @@
+/**
+ * Copyright (c) 2014 Robert Nyholm. All rights reserved.
+ */
 package ax.ha.it.smsalarm.handler;
 
 import java.lang.reflect.InvocationTargetException;
