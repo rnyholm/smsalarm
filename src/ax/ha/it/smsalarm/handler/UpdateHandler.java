@@ -9,6 +9,7 @@ import android.app.Application;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager.NameNotFoundException;
 import android.util.Log;
+import ax.ha.it.smsalarm.activity.Acknowledge.AcknowledgeMethod;
 import ax.ha.it.smsalarm.activity.SmsAlarm;
 import ax.ha.it.smsalarm.handler.SharedPreferencesHandler.DataType;
 import ax.ha.it.smsalarm.handler.SharedPreferencesHandler.PrefKey;
@@ -37,6 +38,7 @@ public class UpdateHandler extends Application {
 	// Different update code levels, named as code level limit for update and a short description
 	private static final int LVL_9_CHANGE_DATATYPE = 9;
 	private static final int LVL_15_CHANGE_DATATYPE_RENAME_SHARED_PREFERENCES = 15;
+	private static final int LVL_19_EXTENDED_ACKNOWLEDGE_FUNCTIONALTIY = 19;
 
 	// To store both the current and old version code in
 	private int currentVersionCode;
@@ -82,7 +84,7 @@ public class UpdateHandler extends Application {
 					oldVersionCode = LVL_9_CHANGE_DATATYPE;
 				}
 
-				// Only if old version number is less than 14, in version 14 strings is used to identify selected alarm signals instead of integer
+				// Only if old version number is less than 15, in version 15 strings is used to identify selected alarm signals instead of integer
 				if (oldVersionCode < LVL_15_CHANGE_DATATYPE_RENAME_SHARED_PREFERENCES) {
 					// Resolve the old alarm signal Id's and store them
 					int primaryAlarmSignalId = (Integer) prefHandler.fetchPrefs(PrefKey.SHARED_PREF, PrefKey.PRIMARY_MESSAGE_TONE_KEY, DataType.INTEGER, this);
@@ -108,9 +110,21 @@ public class UpdateHandler extends Application {
 					oldVersionCode = LVL_15_CHANGE_DATATYPE_RENAME_SHARED_PREFERENCES;
 				}
 
-				// No update actions needed except for storing the latest version code
-				// The old version code is larger than the latest update level code, this tells us that all updates has been done
-				if (oldVersionCode >= LVL_15_CHANGE_DATATYPE_RENAME_SHARED_PREFERENCES && oldVersionCode < currentVersionCode) {
+				// Only if old version code is less than 19, in version 19 acknowledge functionality was extended and existing settings must be taken
+				// care of
+				if (oldVersionCode < LVL_19_EXTENDED_ACKNOWLEDGE_FUNCTIONALTIY) {
+					// If acknowledge of alarm is used, set the acknowledge method to CALL, as it's the only old way of acknowledge an alarm, don't
+					// care about the phone number as it's using the same key as before this extension of acknowledgement
+					if ((Boolean) prefHandler.fetchPrefs(PrefKey.SHARED_PREF, PrefKey.ENABLE_ACK_KEY, DataType.BOOLEAN, this)) {
+						prefHandler.storePrefs(PrefKey.SHARED_PREF, PrefKey.ACK_METHOD_KEY, AcknowledgeMethod.CALL.ordinal(), this);
+					}
+
+					oldVersionCode = LVL_19_EXTENDED_ACKNOWLEDGE_FUNCTIONALTIY;
+				}
+
+				// The old version code is larger than or equal the latest update level code, this tells us that all updates has been done or no
+				// update actions needed, store the latest version code
+				if (oldVersionCode >= LVL_19_EXTENDED_ACKNOWLEDGE_FUNCTIONALTIY || oldVersionCode < currentVersionCode) {
 					prefHandler.storePrefs(PrefKey.SHARED_PREF, PrefKey.VERSION_CODE, currentVersionCode, this);
 				}
 			} else {
