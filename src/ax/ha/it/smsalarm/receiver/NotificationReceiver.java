@@ -9,6 +9,8 @@ import android.content.Context;
 import android.content.Intent;
 import ax.ha.it.smsalarm.activity.Acknowledge;
 import ax.ha.it.smsalarm.alarm.Alarm;
+import ax.ha.it.smsalarm.handler.SharedPreferencesHandler;
+import ax.ha.it.smsalarm.handler.SharedPreferencesHandler.PrefKey;
 import ax.ha.it.smsalarm.handler.SoundHandler;
 import ax.ha.it.smsalarm.handler.VibrationHandler;
 import ax.ha.it.smsalarm.service.FlashNotificationService;
@@ -57,6 +59,10 @@ public class NotificationReceiver extends BroadcastReceiver {
 			// Use application context to start activity
 			context.getApplicationContext().startActivity(inboxIntent);
 		} else if (ACTION_ACKNOWLEDGE.equals(intentAction)) { // Start acknowledge activity
+			// Reset Shared Preference HAS_CALLED, to ensure that activity acknowledge not will place a acknowledge call in onResume() first time the
+			// user interface is loaded. This is done here because this is only relevant if application is set to acknowledge
+			SharedPreferencesHandler.getInstance().storePrefs(PrefKey.SHARED_PREF, PrefKey.HAS_CALLED_KEY, false, context);
+
 			// Get the alarm which absolutely should exist
 			Alarm alarm = (Alarm) intent.getParcelableExtra(Alarm.TAG);
 

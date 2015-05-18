@@ -147,6 +147,10 @@ public class AlarmLogFragment extends SherlockListFragment {
 
 		// OK to open acknowledge activity once again if selected alarm is valid for acknowledgement and application is set to use acknowledgement
 		if (alarm.validToAcknowledge() && (Boolean) SharedPreferencesHandler.getInstance().fetchPrefs(PrefKey.SHARED_PREF, PrefKey.ENABLE_ACK_KEY, DataType.BOOLEAN, getActivity())) {
+			// Reset Shared Preference HAS_CALLED, to ensure that activity acknowledge not will place a acknowledge call in onResume() first time the
+			// user interface is loaded. This is done here because this is only relevant if application is set to acknowledge
+			SharedPreferencesHandler.getInstance().storePrefs(PrefKey.SHARED_PREF, PrefKey.HAS_CALLED_KEY, false, getActivity());
+
 			// Build up the new intent and pass over the alarm to acknowledge activity
 			Intent acknowledgeIntent = new Intent(getActivity(), Acknowledge.class);
 			acknowledgeIntent.putExtra(Alarm.TAG, alarm);
