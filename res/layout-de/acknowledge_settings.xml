@@ -105,7 +105,8 @@
             android:gravity="top|left"
             android:hint="@string/ENTER_MESSAGE_HINT"
             android:inputType="textCapSentences|textMultiLine"
-            android:minLines="4" >
+            android:minLines="4"
+            android:maxLength="160" >
         </EditText>
 
         <Button

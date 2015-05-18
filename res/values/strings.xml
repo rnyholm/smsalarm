@@ -45,6 +45,13 @@
     <string name="MESSAGE_PROMPT_TITLE">Ange meddelande</string>
     <string name="ACK_MESSAGE_PROMPT_MESSAGE">Ange ett meddelande som applikationen kvitterar med.</string>
     <string name="INFO_ENABLE_SMS_ALARM">Om vald larmar Sms Alarm enligt angiven information, annars gör applikationen inte det.</string> 
+    <string name="ACK_CANNOT_NO_PHONE_NUMBER_EXISTS">Kan ej kvittera! Inget telefonnummer att kvittera till finns. Kontrollera inställningarna och avsändare av mottaget SMS.</string>
+    <string name="ACK_SMS_SENDING">Skickar kvitteringsmeddelande..</string>
+    <string name="ACK_SMS_SENT">Kvitteringsmeddelande skickat!</string>
+    <string name="ACK_CANNOT_SEND_ACK_MESSAGE">Kan ej skicka kvitteringsmeddelande!</string>
+    <string name="ACK_SMS_ERROR_AIRPLANE_MODE">Enheten är i flyplansläge.</string>
+    <string name="ACK_SMS_ERROR_NO_SERVICE">Enheten saknar täckning.</string>
+    <string name="ACK_SMS_ERROR_GENERIC">Ett oväntant fel har uppstått.</string>
     <!-- OK IN ENGLISH AND GERMAN BEGIN -->
     <string name="INFO_USE_OS_SOUND_SETTINGS">Om vald tar Sms Alarm hänsyn till enhetens ringvolym och ljudlöst läge.</string>
     <string name="TITLE_USE_OS_SOUND_SETTINGS">Använd enhetens ljudinställningar</string>
@@ -96,7 +103,6 @@
     <string name="ABOUT_CONTACT">For questions, send an email to:\ninfo@smsalarm-app.net</string>
     <string name="ABOUT_VISIT">For more information visit:\nsmsalarm-app.net</string>
     <string name="ACK">Acknowledge Alarm</string>  
-    <string name="ACK_CANNOT">Can not acknowledge! No telephone number for acknowledgment is given.</string>
     <string name="ACK_LINE_BUSY">Line busy, will call back in:</string>
     <string name="ACK_NUMBER_PROMPT_MESSAGE">Enter a telephone number for the application to send an acknowledgment to.</string>    
 	<string name="ADD">Add</string>       

@@ -34,6 +34,9 @@ public class Util {
 	public static final String URI_HTTP = "http://";
 	public static final String URI_HTTPS = "https://";
 
+	// Max length of single SMS
+	public static final int SINGLE_SMS_MAX_CHARACTERS = 160;
+
 	// Used when figuring out unique View ID's
 	private static final AtomicInteger sNextGeneratedId = new AtomicInteger(1);
 
@@ -254,6 +257,31 @@ public class Util {
 			}
 
 			return message.trim();
+		}
+
+		return "";
+	}
+
+	/**
+	 * To adjust length of given {@link String} to given <code>maxLength</code> if needed. If given <code>string</code> is <code>null</code> or given
+	 * <code>maxLength</code> is smaller than <b><i>0</i></b> then an <b><i>empty</i></b> <code>string</code> is returned.<br>
+	 * If length of given <code>string</code> is greater than the given <code>maxLength</code> then a <b><i>substring</i></b> of the given
+	 * <code>string</code> from position <b><i>0</i></b> to <code>maxLength</code> is returned.<br>
+	 * In all other cases the given <code>string</code> is returned as it is.
+	 * 
+	 * @param string
+	 *            <code>string</code> to get it's length adjusted if needed.
+	 * @param maxLength
+	 *            Length to adjust given <code>string</code> to.
+	 * @return The adjusted <code>string</code>.
+	 */
+	public static String adjustStringLength(String string, int maxLength) {
+		if (string != null && maxLength > 0) {
+			if (string.length() > maxLength) {
+				return string.substring(0, maxLength);
+			}
+
+			return string;
 		}
 
 		return "";

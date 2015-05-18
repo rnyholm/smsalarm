@@ -6,8 +6,8 @@ package ax.ha.it.smsalarm.test.util;
 import java.util.Arrays;
 import java.util.List;
 
-import ax.ha.it.smsalarm.util.Util;
 import junit.framework.TestCase;
+import ax.ha.it.smsalarm.util.Util;
 
 /**
  * Test class for {@link Util} and it's methods.
@@ -101,5 +101,16 @@ public class UtilTest extends TestCase {
 		assertEquals("test", Util.cleanAlarmCentralAXMessage("test"));
 		assertEquals("Litet larm - Automatlarm vikingline lager(1682) Länsmanshägnan 7 jomala", Util.cleanAlarmCentralAXMessage("Litet larm - Automatlarm vikingline lager(1682) Länsmanshägnan 7 jomala"));
 		assertEquals("Litet larm - Automatlarm vikingline lager(1682) Länsmanshägnan 7 jomala", Util.cleanAlarmCentralAXMessage("02.02.2012 23:55:40 2.5 Litet larm - Automatlarm vikingline lager(1682) Länsmanshägnan 7 jomala"));
+	}
+
+	public void testAdjustStringLength() {
+		assertEquals("", Util.adjustStringLength(null, 12));
+		assertEquals("", Util.adjustStringLength("testar", -1));
+		assertEquals("", Util.adjustStringLength(null, -5));
+		assertEquals("testar", Util.adjustStringLength("testar", 10));
+		assertEquals("testar", Util.adjustStringLength("testar", 6));
+		assertEquals("tes", Util.adjustStringLength("testar", 3));
+		assertEquals("", Util.adjustStringLength("testar", 0));
+		assertEquals("testar ett lite ", Util.adjustStringLength("testar ett lite längre nu", 16));
 	}
 }

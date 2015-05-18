@@ -3,14 +3,16 @@
  */
 package ax.ha.it.smsalarm.activity;
 
-import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
+import android.app.PendingIntent;
+import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
@@ -18,6 +20,7 @@ import android.os.CountDownTimer;
 import android.telephony.PhoneStateListener;
 import android.telephony.SmsManager;
 import android.telephony.TelephonyManager;
+import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
@@ -31,6 +34,7 @@ import ax.ha.it.smsalarm.handler.SharedPreferencesHandler;
 import ax.ha.it.smsalarm.handler.SharedPreferencesHandler.DataType;
 import ax.ha.it.smsalarm.handler.SharedPreferencesHandler.PrefKey;
 import ax.ha.it.smsalarm.provider.WidgetProvider;
+import ax.ha.it.smsalarm.util.Util;
 
 /**
  * Handles and are responsible for the <b><i>Sms Alarm's Acknowledge</i></b> by call functionality.<br>
@@ -79,6 +83,11 @@ public class Acknowledge extends Activity {
 		}
 	}
 
+	private static final String LOG_TAG = Acknowledge.class.getSimpleName();
+
+	// Actions for monitoring SMS sent statuses
+	public static final String ACTION_SMS_SENT = "ax.ha.it.smsalarm.SMS_SENT";
+
 	// To handle the shared preferences
 	private final SharedPreferencesHandler prefHandler = SharedPreferencesHandler.getInstance();
 
@@ -90,6 +99,10 @@ public class Acknowledge extends Activity {
 
 	// Got to have the alarm which should be acknowledged
 	private Alarm alarm;
+
+	// Receiver for listening at the states and results after an acknowledge SMS is sent. The receiver is registered within the activity because user
+	// feedback is presented depending on the results of SMS send operation
+	private SmsSentReceiver smsSentReceiver;
 
 	// The TextViews...
 	private TextView titleTextView;
@@ -172,72 +185,35 @@ public class Acknowledge extends Activity {
 				// Take acknowledge action according to user settings
 				switch (acknowledgeMethod) {
 					case CALL:
-						if (!"".equals(acknowledgeNumber)) {
+						// Check to see if any phone number to acknowledge to exists
+						if (acknowledgeNumber != null && acknowledgeNumber.length() > 0) {
 							// Do some internal acknowledge handling
-							acknowledgeInternally();
+							acknowledgeAlarmInApplication();
 
 							// Place the acknowledge call
 							placeAcknowledgeCall();
 						} else { // No phone number to acknowledge to exists, show toast
-							Toast.makeText(Acknowledge.this, R.string.ACK_CANNOT, Toast.LENGTH_LONG).show();
+							Toast.makeText(Acknowledge.this, getString(R.string.ACK_CANNOT_NO_PHONE_NUMBER_EXISTS), Toast.LENGTH_LONG).show();
 						}
 
 						break;
 					case SMS:
-						if (!"".equals(acknowledgeNumber)) {
-							// Do some internal acknowledge handling
-							acknowledgeInternally();
-
-							SmsManager smsManager = SmsManager.getDefault();
-							ArrayList<String> parts = smsManager.divideMessage(acknowledgeMessage);
-							smsManager.sendMultipartTextMessage(acknowledgeNumber, null, parts, null, null);
-						} else {
-							Toast.makeText(Acknowledge.this, R.string.ACK_CANNOT, Toast.LENGTH_LONG).show();
-						}
-
+						// Send the SMS with user given information, data validation of acknowledge number and message will be done within send
+						// message method as well as the internal acknowledgement
+						sendSMS(acknowledgeNumber, acknowledgeMessage);
 						break;
 					case RETURN_RECEIVED_SMS:
-
+						// Send the SMS with information from received alarm
+						sendSMS(alarm.getSender(), alarm.getMessage());
 						break;
 					default:
+						if (SmsAlarm.DEBUG) {
+							Log.e(LOG_TAG + ":onCreate()", "An unhandled acknowledge method has occurred, can't decide what to do. Acknowledge method:\"" + acknowledgeMethod.toString() + "\"");
+						}
 						break;
 				}
-//				// Check to see if any phone number to acknowledge to exists
-//				if (!"".equals(acknowledgeNumber)) {
-//					// Update acknowledge time and persist it to database
-//					alarm.updateAcknowledged();
-//					db.updateAlarm(alarm);
-//
-//					// Update all widgets associated with this application
-//					WidgetProvider.updateWidgets(Acknowledge.this);
-//
-//					// Place the acknowledge call
-//					placeAcknowledgeCall();
-//				} else { // No phone number to acknowledge to exists, show toast
-//					Toast.makeText(Acknowledge.this, R.string.ACK_CANNOT, Toast.LENGTH_LONG).show();
-//				}
 			}
 		});
-	}
-
-	/**
-	 * To do proper acknowledge handling for components and data within <b><i>Sms Alarm</i></b>.<br>
-	 * The actions taken are:<br>
-	 * <ul>
-	 * <li>Current alarm is acknowledged and stored into database.</li>
-	 * <li>Widget is updated with updated alarm info.</li>
-	 * </ul>
-	 * <p>
-	 * <b><i>Note. This method does not do the actual acknowledgement, eg. placing phone call or sending SMS, it only does the internal acknowledge
-	 * handling.</i></b>
-	 */
-	private void acknowledgeInternally() {
-		// Update acknowledge time and persist it to database
-		alarm.updateAcknowledged();
-		db.updateAlarm(alarm);
-
-		// Update all widgets associated with this application
-		WidgetProvider.updateWidgets(Acknowledge.this);
 	}
 
 	/**
@@ -273,12 +249,73 @@ public class Acknowledge extends Activity {
 	}
 
 	@Override
-	protected void onDestroy() {
-		super.onDestroy();
+	protected void onStart() {
+		super.onStart();
 
-		// Reset Shared Preference HAS_CALLED, to ensure that this activity will not place an acknowledge call directly on next onResume(), when this
-		// activity is created.
-		prefHandler.storePrefs(PrefKey.SHARED_PREF, PrefKey.HAS_CALLED_KEY, false, this);
+		// Initialize the receiver and register it for catching SMS sent results
+		smsSentReceiver = new SmsSentReceiver();
+		registerReceiver(smsSentReceiver, new IntentFilter(ACTION_SMS_SENT));
+	}
+
+	@Override
+	protected void onStop() {
+		super.onStop();
+
+		// IMPORTANT! Remember to unregister the receiver in order to prevent memory leaks
+		unregisterReceiver(smsSentReceiver);
+	}
+
+	/**
+	 * To do proper acknowledge handling for components and data within <b><i>Sms Alarm</i></b>.<br>
+	 * The actions taken are:<br>
+	 * <ul>
+	 * <li>Current alarm is acknowledged and stored into database.</li>
+	 * <li>Widget is updated with updated alarm info.</li>
+	 * </ul>
+	 * <p>
+	 * <b><i>Note. This method does not do the actual acknowledgement, eg. placing phone call or sending SMS, it only does the internal acknowledge
+	 * handling.</i></b>
+	 */
+	private void acknowledgeAlarmInApplication() {
+		// Update acknowledge time and persist it to database
+		alarm.updateAcknowledged();
+		db.updateAlarm(alarm);
+
+		// Update all widgets associated with this application
+		WidgetProvider.updateWidgets(Acknowledge.this);
+	}
+
+	/**
+	 * To send a <b><i>Single</i></b> SMS to given <b><i>phone number</i></b> and with given <b><i>message</i></b>. SMS will only be sent if given
+	 * phone number is not <code>null</code> and not empty.<br>
+	 * Due to limitations within the {@link SmsManager} which prevents a <code>null</code> or empty message to be sent, a empty dummy string will be
+	 * sent in those cases.
+	 * 
+	 * @param phoneNumber
+	 *            To send SMS to.
+	 * @param message
+	 *            Message of SMS to be sent.
+	 */
+	private void sendSMS(String phoneNumber, String message) {
+		// Only send SMS if we got a "sane" phone number
+		if (phoneNumber != null && phoneNumber.length() > 0) {
+			// SmsManager's sendTextMessage doesn't accept an empty message(or null), and an empty message is allowed to set in the application hence
+			// we must in these cases set a message, so we set it to one blank space so it appears empty
+			if (message == null || message.length() == 0) {
+				message = " ";
+			}
+
+			// Set up pending intent for monitoring the SMS sent statuses and results
+			PendingIntent smsSentPendingIntent = PendingIntent.getBroadcast(this, 0, new Intent(ACTION_SMS_SENT), 0);
+
+			// Show toast telling the user that acknowledge is being sent
+			Toast.makeText(Acknowledge.this, getString(R.string.ACK_SMS_SENDING), Toast.LENGTH_LONG).show();
+
+			// Send the actual acknowledge SMS
+			SmsManager.getDefault().sendTextMessage(phoneNumber, null, Util.adjustStringLength(message, Util.SINGLE_SMS_MAX_CHARACTERS), smsSentPendingIntent, null);
+		} else { // No phone number to acknowledge to exists, show toast
+			Toast.makeText(Acknowledge.this, getString(R.string.ACK_CANNOT_NO_PHONE_NUMBER_EXISTS), Toast.LENGTH_LONG).show();
+		}
 	}
 
 	/**
@@ -341,8 +378,8 @@ public class Acknowledge extends Activity {
 	@SuppressLint("DefaultLocale")
 	private void setTextViews() {
 		// Set TextViews from variables and resources
-		if (!"".equals(rescueService)) {
-			titleTextView.setText(rescueService.toUpperCase() + " " + getResources().getString(R.string.ALARM));
+		if (rescueService != null && rescueService.length() > 0) {
+			titleTextView.setText(rescueService.toUpperCase() + " " + getString(R.string.ALARM));
 		} else {
 			titleTextView.setText(getString(R.string.ALARM));
 		}
@@ -356,6 +393,46 @@ public class Acknowledge extends Activity {
 			countDownTextView.setVisibility(View.VISIBLE);
 			secondsTextView.setVisibility(View.VISIBLE);
 			redialProgressBar.setVisibility(View.VISIBLE);
+		}
+	}
+
+	/**
+	 * Class responsible for receiving SMS and handle them accordingly to the application settings. {@link BroadcastReceiver} which listens at action:
+	 * {@link Acknowledge#ACTION_SMS_SENT}, which in turn is fired when an acknowledge is done by <b><i>SMS</i></b>.<br>
+	 * The receiver is defined within and dynamically registered/unregistered within {@link Acknowledge} {@link Activity} for the reason that the user
+	 * feedback is totally depending on <b><i>Results</i></b> taken care of in this receiver.
+	 * 
+	 * @author Robert Nyholm <robert.nyholm@aland.net>
+	 * @version 2.3.1
+	 * @since 2.3.1
+	 * @see Acknowledge#sendSMS(String, String)
+	 * @see Acknowledge#onStart()
+	 * @see Acknowledge#onStop()
+	 */
+	private class SmsSentReceiver extends BroadcastReceiver {
+		@Override
+		public void onReceive(Context context, Intent intent) {
+			switch (getResultCode()) {
+				case Activity.RESULT_OK:
+					// Show success toast and acknowledge the alarm for the application
+					Toast.makeText(Acknowledge.this, getString(R.string.ACK_SMS_SENT), Toast.LENGTH_LONG).show();
+					acknowledgeAlarmInApplication();
+
+					// Finish off the activity only if SMS was successfully sent
+					finish();
+
+					break;
+				case SmsManager.RESULT_ERROR_NO_SERVICE:
+					// Show no success toast
+					Toast.makeText(Acknowledge.this, getString(R.string.ACK_CANNOT_SEND_ACK_MESSAGE) + " " + getString(R.string.ACK_SMS_ERROR_NO_SERVICE), Toast.LENGTH_LONG).show();
+					break;
+				case SmsManager.RESULT_ERROR_RADIO_OFF:
+					Toast.makeText(Acknowledge.this, getString(R.string.ACK_CANNOT_SEND_ACK_MESSAGE) + " " + getString(R.string.ACK_SMS_ERROR_AIRPLANE_MODE), Toast.LENGTH_LONG).show();
+					break;
+				default:
+					Toast.makeText(Acknowledge.this, getString(R.string.ACK_CANNOT_SEND_ACK_MESSAGE) + " " + getString(R.string.ACK_SMS_ERROR_GENERIC), Toast.LENGTH_LONG).show();
+					break;
+			}
 		}
 	}
 
@@ -392,6 +469,7 @@ public class Acknowledge extends Activity {
 				// Acknowledge activity needs to be started once more
 				if (endCall.getTime() - startCall.getTime() < MIN_CALL_TIME) {
 					Intent i = new Intent(Acknowledge.this, Acknowledge.class);
+					i.putExtra(Alarm.TAG, alarm);
 					i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
 					startActivity(i);
 				} else {

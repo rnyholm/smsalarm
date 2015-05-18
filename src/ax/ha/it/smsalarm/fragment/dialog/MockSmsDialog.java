@@ -11,13 +11,17 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
+import android.text.Editable;
+import android.text.InputFilter;
 import android.text.InputType;
+import android.text.TextWatcher;
 import android.view.Gravity;
 import android.view.ViewGroup.LayoutParams;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import ax.ha.it.smsalarm.R;
+import ax.ha.it.smsalarm.util.Util;
 
 /**
  * {@link DialogFragment} which let's the user mock a SMS (both sender and message) for testing purpose.
@@ -63,6 +67,18 @@ public class MockSmsDialog extends DialogFragment {
 
 	@Override
 	public Dialog onCreateDialog(Bundle savedInstanceState) {
+		// A TextView to keep track on SMS length, initial value of 0
+		final TextView charCountTextView = new TextView(context);
+		charCountTextView.setText("0");
+
+		// Another TextView is needed to display the maximum numbers of characters, so the end result of both TextViews will look like 53/160
+		TextView maxCharsTextView = new TextView(context);
+		maxCharsTextView.setText("/" + Util.SINGLE_SMS_MAX_CHARACTERS);
+
+		// Need to define input filters, and it will contain one filter which only allows maximum 160 characters
+		InputFilter[] filters = new InputFilter[1];
+		filters[0] = new InputFilter.LengthFilter(Util.SINGLE_SMS_MAX_CHARACTERS);
+
 		// Setup the EditTexts
 		// @formatter:off
 		smsSenderEditText = new EditText(context);
@@ -73,11 +89,32 @@ public class MockSmsDialog extends DialogFragment {
 		smsBodyEditText.setHint(R.string.DEBUG_MOCK_SMS_BODY_HINT);
 		smsBodyEditText.setInputType(InputType.TYPE_TEXT_FLAG_CAP_SENTENCES | InputType.TYPE_TEXT_FLAG_MULTI_LINE);
 		smsBodyEditText.setMinLines(4); 																			// Set minimum lines
-		smsBodyEditText.setLines(4); 																				// Set lines
+		smsBodyEditText.setLines(4); 	
+		smsBodyEditText.setFilters(filters);																		// Set filter, only allowing max 160 characters in the EditText// Set lines
 		smsBodyEditText.setGravity(Gravity.TOP | Gravity.LEFT); 												 	// Set gravity to top/left in order to get the caret at the beginning
 		smsBodyEditText.setHorizontallyScrolling(false);															// Don't want to have horizontal scrolling
 		smsBodyEditText.setLayoutParams(new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT)); 	// Set layout parameters for correct wrapping and matching of content
 		// @formatter:on
+
+		// Must add a text changed listener in order to update the current number of characters TextView
+		smsBodyEditText.addTextChangedListener(new TextWatcher() {
+
+			@Override
+			public void onTextChanged(CharSequence s, int start, int before, int count) {
+				// DO NOTHING!
+			}
+
+			@Override
+			public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+				// DO NOTHING!
+			}
+
+			@Override
+			public void afterTextChanged(Editable s) {
+				// Just update the TextView showing number of characters with the length of text in EditText field
+				charCountTextView.setText(String.valueOf(smsBodyEditText.getText().toString().length()));
+			}
+		});
 
 		// If not null, the fragment is being re-created, get data from saved instance, if exist.
 		// If saved instance doesn't contain certain key or it's associated value the EditText field will be empty
@@ -89,6 +126,9 @@ public class MockSmsDialog extends DialogFragment {
 
 			if (savedInstanceState.getCharSequence(SMS_BODY) != null) {
 				smsBodyEditText.setText(savedInstanceState.getCharSequence(SMS_BODY).toString());
+
+				// Also update the TextView showing number of characters
+				charCountTextView.setText(String.valueOf(smsBodyEditText.getText().toString().length()));
 			}
 		}
 
@@ -99,6 +139,13 @@ public class MockSmsDialog extends DialogFragment {
 		smsSenderTextView.setText(R.string.DEBUG_MOCK_SMS_SENDER_TITLE);
 		smsBodyTextView.setText(R.string.DEBUG_MOCK_SMS_BODY_TITLE);
 
+		// Need a layout for the TextViews displaying the current number of characters and the maximum numbers of characters
+		LinearLayout charCountLayout = new LinearLayout(context);
+		charCountLayout.setOrientation(LinearLayout.HORIZONTAL);
+		charCountLayout.setGravity(Gravity.RIGHT);
+		charCountLayout.addView(charCountTextView);
+		charCountLayout.addView(maxCharsTextView);
+
 		LinearLayout layout = new LinearLayout(context);
 		layout.setOrientation(LinearLayout.VERTICAL);
 		layout.setPadding(5, 5, 5, 5);
@@ -106,6 +153,7 @@ public class MockSmsDialog extends DialogFragment {
 		layout.addView(smsSenderEditText);
 		layout.addView(smsBodyTextView);
 		layout.addView(smsBodyEditText);
+		layout.addView(charCountLayout);
 
 		// Setup the dialog with correct resources, listeners and values
 		// @formatter:off

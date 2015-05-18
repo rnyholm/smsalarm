@@ -8,7 +8,6 @@
     <string name="ABOUT_CONTACT">Vid frågor, skicka ett mail till:\ninfo@smsalarm-app.net</string>
     <string name="ABOUT_VISIT">För mer information besök:\nsmsalarm-app.net</string>
     <string name="ACK">Kvittera Larm</string>  
-    <string name="ACK_CANNOT">Kan ej kvittera! Inget telefonnummer att kvittera till är angivet.</string> 
     <string name="ACK_LINE_BUSY">Upptaget, återuppringer om:</string>
     <string name="ACK_NUMBER_PROMPT_MESSAGE">Ange ett telefonnummer som applikationen kvitterar till.</string>  
 	<string name="ADD">Lägg till</string>       
