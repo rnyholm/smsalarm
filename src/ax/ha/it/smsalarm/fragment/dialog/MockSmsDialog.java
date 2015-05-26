@@ -98,7 +98,6 @@ public class MockSmsDialog extends DialogFragment {
 
 		// Must add a text changed listener in order to update the current number of characters TextView
 		smsBodyEditText.addTextChangedListener(new TextWatcher() {
-
 			@Override
 			public void onTextChanged(CharSequence s, int start, int before, int count) {
 				// DO NOTHING!

@@ -28,7 +28,6 @@
     <string name="EDIT_RESCUE_SERVICE_NAME">Vaihda pelastuspalvelu</string>
     <string name="EMPTY_SECONDARY_NUMBER">Älä jätä ilman puh.nro. toissijaiseen hälytykseen. Anna uusi puhelinnumero.</string>
     <string name="ENTER_FREE_TEXT_HINT">Anna sana..</string>
-    <string name="ENTER_PHONE_NUMBER_HINT">Anna numero..</string>
     <string name="ERROR_RETRIEVING_FROM_DB">Virhe noudettaessa ilmoituksia tietokannasta. Katso virhelokista yksityiskohtia.</string>
     <string name="EULA">Sms Alarm ei korvaa henkilöhakulaitteita tai muita hälytysjärjestelmiä hätäkeskuksessa. Sms Alarmin kehittäjä ei vastaa eikä voida pitää vastuussa mahdollisista henkivahingoista, omaisuus- tai ympäristövahingoista Sms Alarmia käytettäessä. Sms Alarmin kehittäjä ei myöskään ole vastuussa mahdollisista vahingoista jotka voivat syntyä Sms Alarmin käyttöönottoyhteydessä.</string>
     <string name="EULA_AGREE">Hyväksy</string>

@@ -152,7 +152,7 @@ public class Acknowledge extends Activity {
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.ack);
+		setContentView(R.layout.acknowledge);
 
 		// Initialize database handler object from context
 		db = new DatabaseHandler(this);

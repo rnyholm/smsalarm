@@ -28,7 +28,6 @@
     <string name="EDIT_RESCUE_SERVICE_NAME">Rettungsdienst bearbeiten</string>
     <string name="EMPTY_SECONDARY_NUMBER">Es kann keine leere Telefonnummer für den Sekundäralarm eingegeben werden. Eine neue Telefonnummer eingeben.</string>
     <string name="ENTER_FREE_TEXT_HINT">Geben Sie ein Wort ein..</string>
-    <string name="ENTER_PHONE_NUMBER_HINT">Nummer eingeben..</string>
     <string name="ERROR_RETRIEVING_FROM_DB">Ein Fehler ist beim Abrufen des Alarms aus der Datenbank aufgetreten. Siehe Fehlerbericht für weitere Informationen.</string>
     <string name="EULA">Sms Alarm ist kein Ersatz für Pager oder andere Systeme, die zur Alarmierung von Rettungspersonal gedacht sind. Der Entwickler von Sms Alarm kann nicht zur Verantwortung gezogen werden für jedwede Schäden für Leben, Eigentum oder die Umwelt, die aus der Verwendung von Sms Alarm erwachsen. Der Entwickler von Sms Alarm ist ebenso wenig haftbar zu machen für jedwede Schäden, die am Gerät im Zusammenhang mit der Verwendung von Sms Alarm entstehen können.</string>
     <string name="EULA_AGREE">Zustimmen</string>

@@ -91,7 +91,6 @@ public class AcknowledgeMessageDialog extends DialogFragment {
 
 		// Must add a text changed listener in order to update the current number of characters TextView
 		inputEditText.addTextChangedListener(new TextWatcher() {
-
 			@Override
 			public void onTextChanged(CharSequence s, int start, int before, int count) {
 				// DO NOTHING!

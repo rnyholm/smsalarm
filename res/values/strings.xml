@@ -36,7 +36,7 @@
     <string name="TITLE_ALARM_INFO_ALARM_TYPE">Larmtyp</string>
     <string name="TITLE_UNDEFINED_ALARM">Odefinierat larm</string>
     <string name="INFO_ACK_SETTINGS">Ställ in om larmkvittering skall användas och i sådana fall på vilket sätt kvittering sker, telefonnummer som kvittering sker mot och kvitteringsmeddelande.</string>
-    <string name="TITLE_ACK_BY">Kvittera genom:</string>
+    <string name="TITLE_ACK_BY">Kvittera genom</string>
     <string name="TITLE_ACK_NUMBER">Telefonnummer för kvittering</string>
     <string name="TITLE_ACK_MESSAGE">Meddelande för kvittering</string>
     <string name="ENTER_MESSAGE_HINT">Ange meddelande..</string>
@@ -52,6 +52,7 @@
     <string name="ACK_SMS_ERROR_AIRPLANE_MODE">Enheten är i flyplansläge.</string>
     <string name="ACK_SMS_ERROR_NO_SERVICE">Enheten saknar täckning.</string>
     <string name="ACK_SMS_ERROR_GENERIC">Ett oväntant fel har uppstått.</string>
+    <string name="ENTER_PHONE_NUMBER_HINT">Ange telefonnummer..</string>
     <!-- OK IN ENGLISH AND GERMAN BEGIN -->
     <string name="INFO_USE_OS_SOUND_SETTINGS">Om vald tar Sms Alarm hänsyn till enhetens ringvolym och ljudlöst läge.</string>
     <string name="TITLE_USE_OS_SOUND_SETTINGS">Använd enhetens ljudinställningar</string>
@@ -125,7 +126,6 @@
     <string name="EMPTY_SECONDARY_NUMBER">It is not possible to enter an empty telephone number for secondary alarm. Enter a new telephone number.</string>
 	<string name="EMPTY_STRING">""</string>
 	<string name="ENTER_FREE_TEXT_HINT">Enter a word..</string>
-    <string name="ENTER_PHONE_NUMBER_HINT">Enter number..</string>
     <string name="ERROR_RETRIEVING_FROM_DB">An error occurred retrieving alarm from the database. See the error log for more information.</string>
     <string name="EULA">Sms Alarm is not a substitute for pagers or other systems designed for alerting rescue personnel. The developer of Sms Alarm is not responsible for and can not be held responsible for any damages to life, property or the environment arising from the use of Sms Alarm. The developer of the Sms Alarm will also not be responsible for any damage incurred to the device in connection with the use of Sms Alarm.</string>
     <string name="EULA_AGREE">Agree</string>
