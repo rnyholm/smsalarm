@@ -16,22 +16,22 @@ import android.widget.EditText;
 import ax.ha.it.smsalarm.R;
 
 /**
- * {@link DialogFragment} which let's the user add or remove the <b><i>Rescue Service Name</i></b>.
+ * {@link DialogFragment} which let's the user add or remove the <b><i>Organization</i></b>.
  *
  * @author Robert Nyholm <robert.nyholm@aland.net>
  * @version 2.3.1
  * @since 2.3.1
- * @see #RESCUE_SERVICE
- * @see #RESCUE_SERVICE_DIALOG_TAG
- * @see #RESCUE_SERVICE_DIALOG_REQUEST_CODE
+ * @see #ORGANIZATION
+ * @see #ORGANIZATION_DIALOG_TAG
+ * @see #ORGANIZATION_DIALOG_REQUEST_CODE
  */
-public class RescueServiceDialog extends DialogFragment {
+public class OrganizationDialog extends DialogFragment {
 	// Used as a key when putting data into bundles and intents, dialog tag can come in handy for classes using this dialog
-	public static final String RESCUE_SERVICE = "rescueService";
-	public static final String RESCUE_SERVICE_DIALOG_TAG = "rescueServiceDialog";
+	public static final String ORGANIZATION = "organization";
+	public static final String ORGANIZATION_DIALOG_TAG = "organizationDialog";
 
 	// Request code used for this dialog
-	public static final int RESCUE_SERVICE_DIALOG_REQUEST_CODE = 12;
+	public static final int ORGANIZATION_DIALOG_REQUEST_CODE = 12;
 
 	// Must have application context
 	private Context context;
@@ -40,9 +40,9 @@ public class RescueServiceDialog extends DialogFragment {
 	private EditText inputEditText;
 
 	/**
-	 * To create a new instance of {@link RescueServiceDialog}.
+	 * To create a new instance of {@link OrganizationDialog}.
 	 */
-	public RescueServiceDialog() {
+	public OrganizationDialog() {
 		// Just empty...
 	}
 
@@ -59,7 +59,7 @@ public class RescueServiceDialog extends DialogFragment {
 		// Setup the EditText
 		// @formatter:off
 		inputEditText = new EditText(context);
-		inputEditText.setHint(R.string.RESCUE_SERVICE_NAME_HINT); 	// Set hint to EditText
+		inputEditText.setHint(R.string.ORGANIZATION_PROMPT_HINT); 	// Set hint to EditText
 		inputEditText.setInputType(InputType.TYPE_CLASS_TEXT);		// Set input type to EditText
 		// @formatter:on
 
@@ -67,8 +67,8 @@ public class RescueServiceDialog extends DialogFragment {
 		// If saved instance doesn't contain certain key or it's associated value the EditText field will be empty
 		if (savedInstanceState != null) {
 			// Check if we got any data in saved instance associated with certain key
-			if (savedInstanceState.getCharSequence(RESCUE_SERVICE) != null) {
-				inputEditText.setText(savedInstanceState.getCharSequence(RESCUE_SERVICE).toString());
+			if (savedInstanceState.getCharSequence(ORGANIZATION) != null) {
+				inputEditText.setText(savedInstanceState.getCharSequence(ORGANIZATION).toString());
 			}
 		}
 
@@ -76,8 +76,8 @@ public class RescueServiceDialog extends DialogFragment {
 		// @formatter:off
 		return new AlertDialog.Builder(context)
 				.setIcon(android.R.drawable.ic_dialog_info) 		// Set icon
-				.setTitle(R.string.RESCUE_SERVICE_PROMPT_TITLE) 	// Set title
-				.setMessage(R.string.RESCUE_SERVICE_PROMPT_MESSAGE) // Set message
+				.setTitle(R.string.ORGANIZATION_PROMPT_TITLE) 		// Set title
+				.setMessage(R.string.ORGANIZATION_PROMPT_MESSAGE) 	// Set message
 				.setView(inputEditText) 							// Bind dialog to EditText
 				// @formatter:on
 
@@ -86,7 +86,7 @@ public class RescueServiceDialog extends DialogFragment {
 					public void onClick(DialogInterface dialog, int whichButton) {
 						// Create an intent and put data from this dialogs EditText and associate it with a certain key
 						Intent intent = new Intent();
-						intent.putExtra(RESCUE_SERVICE, inputEditText.getText().toString());
+						intent.putExtra(ORGANIZATION, inputEditText.getText().toString());
 
 						// Make a call to this dialog fragments owning fragments onAcitivityResult with correct request code, result code and intent
 						getTargetFragment().onActivityResult(getTargetRequestCode(), Activity.RESULT_OK, intent);
@@ -106,6 +106,6 @@ public class RescueServiceDialog extends DialogFragment {
 	@Override
 	public void onSaveInstanceState(Bundle arg0) {
 		super.onSaveInstanceState(arg0);
-		arg0.putCharSequence(RESCUE_SERVICE, inputEditText.getText().toString());
+		arg0.putCharSequence(ORGANIZATION, inputEditText.getText().toString());
 	}
 }

@@ -24,36 +24,36 @@
             android:textAppearance="?android:attr/textAppearanceSmall" />
 
         <TextView
-            android:id="@+id/rescueServiceNameTitle_tv"
+            android:id="@+id/organizationTitle_tv"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_below="@+id/miscSettingsInfo_tv"
             android:layout_marginTop="5dp"
-            android:text="@string/TITLE_RESCUE_SERVICE_NAME"
+            android:text="@string/TITLE_ORGANIZATION"
             android:textAppearance="?android:attr/textAppearanceMedium" />
 
         <EditText
-            android:id="@+id/rescueServiceName_et"
+            android:id="@+id/organization_et"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@id/rescueServiceNameTitle_tv"
+            android:layout_below="@id/organizationTitle_tv"
             android:ems="10"
-            android:hint="@string/RESCUE_SERVICE_NAME_HINT"
+            android:hint="@string/ENTER_ORGANIZATION_HINT"
             android:inputType="text"
             android:singleLine="true" />
 
         <Button
-            android:id="@+id/editRescueServiceName_btn"
+            android:id="@+id/editOrganization_btn"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_below="@id/rescueServiceName_et"
-            android:text="@string/EDIT_RESCUE_SERVICE_NAME" />
+            android:layout_below="@id/organization_et"
+            android:text="@string/EDIT_ORGANIZATION" />
 
         <CheckBox
             android:id="@+id/useFlashNotification_chk"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_below="@id/editRescueServiceName_btn"
+            android:layout_below="@id/editOrganization_btn"
             android:layout_marginTop="5dp"
             android:text="@string/TITLE_USE_FLASH_NOTIFICATION" />
 

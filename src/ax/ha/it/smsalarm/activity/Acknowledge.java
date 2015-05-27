@@ -118,8 +118,8 @@ public class Acknowledge extends Activity {
 	// ...and ProgressBar
 	private ProgressBar redialProgressBar;
 
-	// Rescue service name for data presentation in UI
-	private String rescueService = "";
+	// Organization for data presentation in UI
+	private String organization = "";
 
 	// What number and message that should be used while acknowledge
 	private String acknowledgeNumber = "";
@@ -365,7 +365,7 @@ public class Acknowledge extends Activity {
 	 * To fetch all {@link SharedPreferences} used by {@link Acknowledge} class.
 	 */
 	private void fetchSharedPrefs() {
-		rescueService = (String) prefHandler.fetchPrefs(PrefKey.SHARED_PREF, PrefKey.RESCUE_SERVICE_KEY, DataType.STRING, this);
+		organization = (String) prefHandler.fetchPrefs(PrefKey.SHARED_PREF, PrefKey.ORGANIZATION_KEY, DataType.STRING, this);
 		acknowledgeNumber = (String) prefHandler.fetchPrefs(PrefKey.SHARED_PREF, PrefKey.ACK_NUMBER_KEY, DataType.STRING, this);
 		acknowledgeMessage = (String) prefHandler.fetchPrefs(PrefKey.SHARED_PREF, PrefKey.ACK_MESSAGE_KEY, DataType.STRING, this);
 		acknowledgeMethod = AcknowledgeMethod.of((Integer) prefHandler.fetchPrefs(PrefKey.SHARED_PREF, PrefKey.ACK_METHOD_KEY, DataType.INTEGER, this));
@@ -378,8 +378,8 @@ public class Acknowledge extends Activity {
 	@SuppressLint("DefaultLocale")
 	private void setTextViews() {
 		// Set TextViews from variables and resources
-		if (rescueService != null && rescueService.length() > 0) {
-			titleTextView.setText(rescueService.toUpperCase() + " " + getString(R.string.ALARM));
+		if (organization != null && organization.length() > 0) {
+			titleTextView.setText(organization.toUpperCase() + " " + getString(R.string.ALARM));
 		} else {
 			titleTextView.setText(getString(R.string.ALARM));
 		}

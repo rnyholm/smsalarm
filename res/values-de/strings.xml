@@ -25,7 +25,6 @@
     <string name="DUPLICATED_FREE_TEXTS">Das Wort für das primäre und sekundäre Alarm darf nicht identisch sein. Geben Sie ein neues Wort ein.</string>
     <string name="DUPLICATED_NUMBERS">Telefonnummer für Primär- und Sekundäralarm können nicht gleich sein. Eine neue Telefonnummer eingeben.</string>
     <string name="EDIT_NUMBER">Nummer bearbeiten</string>   
-    <string name="EDIT_RESCUE_SERVICE_NAME">Rettungsdienst bearbeiten</string>
     <string name="EMPTY_SECONDARY_NUMBER">Es kann keine leere Telefonnummer für den Sekundäralarm eingegeben werden. Eine neue Telefonnummer eingeben.</string>
     <string name="ENTER_FREE_TEXT_HINT">Geben Sie ein Wort ein..</string>
     <string name="ERROR_RETRIEVING_FROM_DB">Ein Fehler ist beim Abrufen des Alarms aus der Datenbank aufgetreten. Siehe Fehlerbericht für weitere Informationen.</string>
@@ -56,9 +55,6 @@
     <string name="PRIMARY_ALARM">PRIMÄRALARM!</string>
     <string name="PRIMARY_FREE_TEXT_PROMPT_MESSAGE">Geben Sie ein Wort ein, auf das Sms Alarm als primäres Alarm reagiert, wenn dieses in der empfangenen SMS erscheint.</string>
     <string name="PRIMARY_NUMBER_PROMPT_MESSAGE">Eine Telefonnummer für Sms Alarm für Primäralarm eingeben.</string>
-    <string name="RESCUE_SERVICE_NAME_HINT">Rettungsdienstes eingeben..</string>
-    <string name="RESCUE_SERVICE_PROMPT_MESSAGE">Name des Rettungsdienstes eingeben.</string>
-    <string name="RESCUE_SERVICE_PROMPT_TITLE">Rettungsdienst eingeben</string>
     <string name="SECS">Sek.</string>
     <string name="SECONDARY_ALARM">SEKUNDÄRALARM!</string>
     <string name="SECONDARY_FREE_TEXT_PROMPT_MESSAGE">Geben Sie ein Wort ein, auf das Sms Alarm als sekundäres Alarm reagieren soll, wenn dieses in der empfangenen SMS erscheint.</string>
@@ -79,8 +75,7 @@
     <string name="TITLE_FREE_TEXT_TRIGGER_SETTINGS">Worteinstellungen</string>
     <string name="TITLE_MISC_SETTINGS">Andere Einstellungen</string>
     <string name="TITLE_PLAY_ALARM_SIGNAL_TWICE_SETTING">Alarmsignal zwei Mal abspielen</string>
-    <string name="TITLE_PRIMARY_ALARM">Primäralarm</string>
-    <string name="TITLE_RESCUE_SERVICE_NAME">Ihr Rettungsdienst</string>   
+    <string name="TITLE_PRIMARY_ALARM">Primäralarm</string>   
     <string name="TITLE_SECONDARY_ALARM">Sekundäralarm</string>
     <string name="TITLE_SMS_SETTINGS">SMS-einstellungen</string>
     <string name="TITLE_USE_OS_SOUND_SETTINGS">Die Klangeinstellungen des Geräts verwende</string>

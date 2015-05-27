@@ -61,7 +61,8 @@ public class SharedPreferencesHandler {
 		PLAY_ALARM_SIGNAL_TWICE_KEY("playAlarmSignalTwice"),
 		PLAY_ALARM_SIGNAL_REPEATEDLY_KEY("playAlarmSignalRepeatedly"),
 		ENABLE_SMS_ALARM_KEY("enableSmsAlarm"), 
-		RESCUE_SERVICE_KEY("rescueService"), 
+		RESCUE_SERVICE_KEY("rescueService"), 							// Not used after version code 19
+		ORGANIZATION_KEY("organization"),
 		HAS_CALLED_KEY("hasCalled"), 
 		END_USER_LICENSE_AGREED("userLicenseAgreed"), 
 		VERSION_CODE("versionCode"),

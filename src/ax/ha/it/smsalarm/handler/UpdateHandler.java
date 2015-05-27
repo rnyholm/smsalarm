@@ -39,6 +39,7 @@ public class UpdateHandler extends Application {
 	private static final int LVL_9_CHANGE_DATATYPE = 9;
 	private static final int LVL_15_CHANGE_DATATYPE_RENAME_SHARED_PREFERENCES = 15;
 	private static final int LVL_19_EXTENDED_ACKNOWLEDGE_FUNCTIONALTIY = 19;
+	private static final int LVL_20_RENAME_SHARED_PREFERENCES = 20;
 
 	// To store both the current and old version code in
 	private int currentVersionCode;
@@ -120,6 +121,15 @@ public class UpdateHandler extends Application {
 					}
 
 					oldVersionCode = LVL_19_EXTENDED_ACKNOWLEDGE_FUNCTIONALTIY;
+				}
+
+				// Only if old version code is less than 20, in version 20 shared preferences RESCUE_SERVICE_NAME is renamed to ORGANIZATION_KEY
+				if (oldVersionCode < LVL_20_RENAME_SHARED_PREFERENCES) {
+					// Just fetch the existing value for rescue service and store it into organization instead
+					String rescueService = (String) prefHandler.fetchPrefs(PrefKey.SHARED_PREF, PrefKey.RESCUE_SERVICE_KEY, DataType.STRING, this);
+					prefHandler.storePrefs(PrefKey.SHARED_PREF, PrefKey.ORGANIZATION_KEY, rescueService, this);
+
+					oldVersionCode = LVL_20_RENAME_SHARED_PREFERENCES;
 				}
 
 				// The old version code is larger than or equal the latest update level code, this tells us that all updates has been done or no

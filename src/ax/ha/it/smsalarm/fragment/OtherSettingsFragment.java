@@ -28,7 +28,7 @@ import android.widget.RelativeLayout.LayoutParams;
 import android.widget.TextView;
 import ax.ha.it.smsalarm.R;
 import ax.ha.it.smsalarm.activity.SmsAlarm;
-import ax.ha.it.smsalarm.fragment.dialog.RescueServiceDialog;
+import ax.ha.it.smsalarm.fragment.dialog.OrganizationDialog;
 import ax.ha.it.smsalarm.handler.CameraHandler;
 import ax.ha.it.smsalarm.handler.SharedPreferencesHandler;
 import ax.ha.it.smsalarm.handler.SharedPreferencesHandler.DataType;
@@ -55,10 +55,10 @@ public class OtherSettingsFragment extends SherlockFragment implements Applicati
 	private Context context;
 
 	// The EditText...
-	private EditText rescueServiceEditText;
+	private EditText organizationEditText;
 
 	// ...Button...
-	private Button editRescueServiceButton;
+	private Button editOrganizationButton;
 
 	// ...CheckBoxes...
 	private CheckBox enableSmsAlarmCheckBox;
@@ -68,8 +68,8 @@ public class OtherSettingsFragment extends SherlockFragment implements Applicati
 	private TextView enableSmsAlarmInfoTextView;
 	private TextView useFlashNotificationInfoTextView;
 
-	// To store the name of rescue service, or organization
-	private String rescueService = "";
+	// To store the name of organization
+	private String organization = "";
 
 	// To indicate whether Sms Alarm should be enabled or not and if flash notifications should be used
 	private boolean enableSmsAlarm = true;
@@ -113,10 +113,10 @@ public class OtherSettingsFragment extends SherlockFragment implements Applicati
 	@Override
 	public void findViews(View view) {
 		// Finding EditText view
-		rescueServiceEditText = (EditText) view.findViewById(R.id.rescueServiceName_et);
+		organizationEditText = (EditText) view.findViewById(R.id.organization_et);
 
 		// Finding Button view
-		editRescueServiceButton = (Button) view.findViewById(R.id.editRescueServiceName_btn);
+		editOrganizationButton = (Button) view.findViewById(R.id.editOrganization_btn);
 
 		// Finding CheckBox views
 		enableSmsAlarmCheckBox = (CheckBox) view.findViewById(R.id.enableSmsAlarm_chk);
@@ -183,12 +183,12 @@ public class OtherSettingsFragment extends SherlockFragment implements Applicati
 			}
 		}
 
-		// Set some attributes to the rescue service EditText
-		rescueServiceEditText.setEnabled(false);
-		rescueServiceEditText.setClickable(false);
-		rescueServiceEditText.setFocusable(false);
-		rescueServiceEditText.setBackgroundColor(Color.WHITE);
-		rescueServiceEditText.setTextColor(Color.BLACK);
+		// Set some attributes to the organization EditText
+		organizationEditText.setEnabled(false);
+		organizationEditText.setClickable(false);
+		organizationEditText.setFocusable(false);
+		organizationEditText.setBackgroundColor(Color.WHITE);
+		organizationEditText.setTextColor(Color.BLACK);
 
 		// If Flash Notification isn't supported we need to disable the possibilities to enable it and show the reason why it's not enabled
 		if (flashNotificationSupportError.isPresent()) {
@@ -202,25 +202,25 @@ public class OtherSettingsFragment extends SherlockFragment implements Applicati
 	public void fetchSharedPrefs() {
 		enableSmsAlarm = (Boolean) prefHandler.fetchPrefs(PrefKey.SHARED_PREF, PrefKey.ENABLE_SMS_ALARM_KEY, DataType.BOOLEAN, context);
 		useFlashNotification = (Boolean) prefHandler.fetchPrefs(PrefKey.SHARED_PREF, PrefKey.USE_FLASH_NOTIFICATION, DataType.BOOLEAN, context);
-		rescueService = (String) prefHandler.fetchPrefs(PrefKey.SHARED_PREF, PrefKey.RESCUE_SERVICE_KEY, DataType.STRING, context);
+		organization = (String) prefHandler.fetchPrefs(PrefKey.SHARED_PREF, PrefKey.ORGANIZATION_KEY, DataType.STRING, context);
 	}
 
 	@Override
 	public void updateFragmentView() {
-		updateRescueServiceEditText();
+		updateOrganizationEditText();
 		updateEnableSmsAlarmCheckBox();
 		updateUseFlashNotificationCheckBox();
 	}
 
 	@Override
 	public void setListeners() {
-		// Set listener to Edit Rescue Service Button
-		editRescueServiceButton.setOnClickListener(new OnClickListener() {
+		// Set listener to Edit Organization Button
+		editOrganizationButton.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				RescueServiceDialog dialog = new RescueServiceDialog();
-				dialog.setTargetFragment(OtherSettingsFragment.this, RescueServiceDialog.RESCUE_SERVICE_DIALOG_REQUEST_CODE);
-				dialog.show(getFragmentManager(), RescueServiceDialog.RESCUE_SERVICE_DIALOG_TAG);
+				OrganizationDialog dialog = new OrganizationDialog();
+				dialog.setTargetFragment(OtherSettingsFragment.this, OrganizationDialog.ORGANIZATION_DIALOG_REQUEST_CODE);
+				dialog.show(getFragmentManager(), OrganizationDialog.ORGANIZATION_DIALOG_TAG);
 			}
 		});
 
@@ -261,14 +261,14 @@ public class OtherSettingsFragment extends SherlockFragment implements Applicati
 		if (resultCode == Activity.RESULT_OK) {
 			// Only interested in certain request codes...
 			switch (requestCode) {
-				case (RescueServiceDialog.RESCUE_SERVICE_DIALOG_REQUEST_CODE):
-					rescueService = data.getStringExtra(RescueServiceDialog.RESCUE_SERVICE);
+				case (OrganizationDialog.ORGANIZATION_DIALOG_REQUEST_CODE):
+					organization = data.getStringExtra(OrganizationDialog.ORGANIZATION);
 
 					// Store to shared preferences
-					prefHandler.storePrefs(PrefKey.SHARED_PREF, PrefKey.RESCUE_SERVICE_KEY, rescueService, context);
+					prefHandler.storePrefs(PrefKey.SHARED_PREF, PrefKey.ORGANIZATION_KEY, organization, context);
 
 					// Update affected UI widgets
-					updateRescueServiceEditText();
+					updateOrganizationEditText();
 
 					break;
 				default:
@@ -280,10 +280,10 @@ public class OtherSettingsFragment extends SherlockFragment implements Applicati
 	}
 
 	/**
-	 * To update rescue service {@link EditText} with correct value.
+	 * To update organization {@link EditText} with correct value.
 	 */
-	private void updateRescueServiceEditText() {
-		rescueServiceEditText.setText(rescueService);
+	private void updateOrganizationEditText() {
+		organizationEditText.setText(organization);
 	}
 
 	/**

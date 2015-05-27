@@ -14,7 +14,7 @@
     <string name="MENU_TITLE_ALL_SECONDARY_ALARMS_LOG">Sekundärlarm</string>
     <string name="MENU_TITLE_ABOUT">Om</string>
     <string name="MENU_TITLE_OPEN_SOURCE">Öppen källkod</string>
-    <string name="INFO_MISC_SETTINGS">Ställ in din räddningstjänsts namn, om enhetens kamerablixt ska blinka vid inkommande larm och om Sms Alarm ska vara aktiverat.</string>
+    <string name="INFO_MISC_SETTINGS">Ställ in din organisations namn, om enhetens kamerablixt ska blinka vid inkommande larm och om Sms Alarm ska vara aktiverat.</string>
     <string name="TITLE_USE_FLASH_NOTIFICATION">Använd blixtnotifikation(BETA)</string>
     <string name="INFO_USE_FLASH_NOTIFICATION">Om vald blinkar kamerans blixt vid inkommande larm. Notera att detta i nuläget är en BETA funktion varvid oväntant beteende kan förekomma vid inkommande larm. Använd på egen risk.</string>
     <string name="FLASH_NOTIFICATION_NOT_SUPPORTED_MIN_API_LEVEL">Blixtnotifikation stöds inte på grund av inkompatibel Android version, Gingerbread eller senare krävs.</string>
@@ -53,6 +53,12 @@
     <string name="ACK_SMS_ERROR_NO_SERVICE">Enheten saknar täckning.</string>
     <string name="ACK_SMS_ERROR_GENERIC">Ett oväntant fel har uppstått.</string>
     <string name="ENTER_PHONE_NUMBER_HINT">Ange telefonnummer..</string>
+    <string name="TITLE_ORGANIZATION">Organisation</string>
+    <string name="ENTER_ORGANIZATION_HINT">Ange organisation..</string>
+    <string name="ORGANIZATION_PROMPT_HINT">Organisation..</string>
+    <string name="ORGANIZATION_PROMPT_MESSAGE">Ange din organisations namn.</string>
+    <string name="ORGANIZATION_PROMPT_TITLE">Ange organisation</string>
+    <string name="EDIT_ORGANIZATION">Ändra organisation</string>
     <!-- OK IN ENGLISH AND GERMAN BEGIN -->
     <string name="INFO_USE_OS_SOUND_SETTINGS">Om vald tar Sms Alarm hänsyn till enhetens ringvolym och ljudlöst läge.</string>
     <string name="TITLE_USE_OS_SOUND_SETTINGS">Använd enhetens ljudinställningar</string>
@@ -122,7 +128,6 @@
     <string name="DUPLICATED_FREE_TEXTS">Word for primary and secondary alarm cannot be same. Enter a new word.</string>
     <string name="DUPLICATED_NUMBERS">Telephone number for primary and secondary alarms may not be the same. Enter a new telephone number.</string>
     <string name="EDIT_NUMBER">Edit number</string>   
-    <string name="EDIT_RESCUE_SERVICE_NAME">Edit rescue service</string>
     <string name="EMPTY_SECONDARY_NUMBER">It is not possible to enter an empty telephone number for secondary alarm. Enter a new telephone number.</string>
 	<string name="EMPTY_STRING">""</string>
 	<string name="ENTER_FREE_TEXT_HINT">Enter a word..</string>
@@ -161,9 +166,6 @@
     <string name="PRIMARY_ALARM">PRIMARY ALARM!</string>
     <string name="PRIMARY_FREE_TEXT_PROMPT_MESSAGE">Enter a word that Sms Alarm will alert the primary alarm on, if present in the received SMS.</string>
     <string name="PRIMARY_NUMBER_PROMPT_MESSAGE">Enter a telephone number for Sms Alarm to alert for primary alarm.</string>
-    <string name="RESCUE_SERVICE_NAME_HINT">Enter rescue service name..</string>
-    <string name="RESCUE_SERVICE_PROMPT_MESSAGE">Enter your rescue service name.</string>
-    <string name="RESCUE_SERVICE_PROMPT_TITLE">Enter rescue service</string>
     <string name="SECS">secs.</string>
     <string name="SECONDARY_ALARM">SECONDARY ALARM!</string>
     <string name="SECONDARY_FREE_TEXT_PROMPT_MESSAGE">Enter a word that Sms Alarm will alert the secondary alarm on, if present in the received SMS.</string>
@@ -185,8 +187,7 @@
     <string name="TITLE_FREE_TEXT_TRIGGER_SETTINGS">Word settings</string>
     <string name="TITLE_MISC_SETTINGS">Other settings</string>
     <string name="TITLE_PLAY_ALARM_SIGNAL_TWICE_SETTING">Play alarm signal twice</string>
-    <string name="TITLE_PRIMARY_ALARM">Primary alarm</string>
-    <string name="TITLE_RESCUE_SERVICE_NAME">Your rescue service</string>   
+    <string name="TITLE_PRIMARY_ALARM">Primary alarm</string>   
     <string name="TITLE_SECONDARY_ALARM">Secondary alarm</string>
     <string name="TITLE_SMS_SETTINGS">SMS settings</string>
   	<string name="TONE_PROMPT_TITLE">Select alarm signal</string>   

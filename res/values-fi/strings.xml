@@ -25,7 +25,6 @@
     <string name="DUPLICATED_FREE_TEXTS">Ensi- ja toissijaisenhälytyksen sana ei saa olla sama. Anna uusi sana.</string>
     <string name="DUPLICATED_NUMBERS">Puhelinnumero ensisijaiseen ja toissijaiseen hälytykseen ei voi olla sama. Anna uusi puhelinnumero.</string>
     <string name="EDIT_NUMBER">Vaihda numero</string>   
-    <string name="EDIT_RESCUE_SERVICE_NAME">Vaihda pelastuspalvelu</string>
     <string name="EMPTY_SECONDARY_NUMBER">Älä jätä ilman puh.nro. toissijaiseen hälytykseen. Anna uusi puhelinnumero.</string>
     <string name="ENTER_FREE_TEXT_HINT">Anna sana..</string>
     <string name="ERROR_RETRIEVING_FROM_DB">Virhe noudettaessa ilmoituksia tietokannasta. Katso virhelokista yksityiskohtia.</string>
@@ -55,9 +54,6 @@
     <string name="PRIMARY_ALARM">ENSISIJAINEN HÄLYTYS!</string>
     <string name="PRIMARY_FREE_TEXT_PROMPT_MESSAGE">Anna sana jolla Sms Alarm ensihälyttää jos viesti on vastaanotettu.</string>
     <string name="PRIMARY_NUMBER_PROMPT_MESSAGE">Anna puhelinnumero joho Sms Alarm hälyttää ensijaisesti.</string>
-    <string name="RESCUE_SERVICE_NAME_HINT">Anna pelastuspalvelun nimi..</string>
-    <string name="RESCUE_SERVICE_PROMPT_MESSAGE">Anna pelastuspalvelusi nimi.</string>
-    <string name="RESCUE_SERVICE_PROMPT_TITLE">Anna pelastuspalvelu</string>
     <string name="SECS">sek.</string>
     <string name="SECONDARY_ALARM">TOISSIJAINEN HÄLYTYS!</string> 
     <string name="SECONDARY_FREE_TEXT_PROMPT_MESSAGE">Anna sana jolla Sms Alarm hälyttää toissijaisesti jos viesti on vastaanotettu.</string>
@@ -78,8 +74,7 @@
     <string name="TITLE_FREE_TEXT_TRIGGER_SETTINGS">Sana-asennuksia</string>
     <string name="TITLE_MISC_SETTINGS">Muut asetukset</string>
     <string name="TITLE_PLAY_ALARM_SIGNAL_TWICE_SETTING">Soita hälytysääni kahdesti</string>
-    <string name="TITLE_PRIMARY_ALARM">Ensisijainen hälytys</string>
-    <string name="TITLE_RESCUE_SERVICE_NAME">Sinun pelastuspalvelu</string>   
+    <string name="TITLE_PRIMARY_ALARM">Ensisijainen hälytys</string>   
     <string name="TITLE_SECONDARY_ALARM">Toissijainen hälytys</string>
     <string name="TITLE_SMS_SETTINGS">Tekstiasetukset</string>
   	<string name="TONE_PROMPT_TITLE">Valitse hälytysääni</string>

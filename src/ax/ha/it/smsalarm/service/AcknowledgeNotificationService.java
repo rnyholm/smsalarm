@@ -54,8 +54,8 @@ public class AcknowledgeNotificationService extends IntentService {
 		// Get the alarm passed on from SmsReceiver
 		Alarm alarm = (Alarm) intent.getParcelableExtra(Alarm.TAG);
 
-		// Fetch rescue service from the shared preferences
-		String rescueService = (String) prefHandler.fetchPrefs(PrefKey.SHARED_PREF, PrefKey.RESCUE_SERVICE_KEY, DataType.STRING, this);
+		// Fetch organization from the shared preferences
+		String organization = (String) prefHandler.fetchPrefs(PrefKey.SHARED_PREF, PrefKey.ORGANIZATION_KEY, DataType.STRING, this);
 
 		// Setup a notification, directly from Android developer site
 		NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
@@ -66,8 +66,8 @@ public class AcknowledgeNotificationService extends IntentService {
 
 		// Resolve ticker text
 		String tickerText = "";
-		if (!"".equals(rescueService)) {
-			tickerText = rescueService.toUpperCase() + " " + getString(R.string.PRIMARY_ALARM);
+		if (!"".equals(organization)) {
+			tickerText = organization.toUpperCase() + " " + getString(R.string.PRIMARY_ALARM);
 		} else {
 			tickerText = getString(R.string.PRIMARY_ALARM);
 		}

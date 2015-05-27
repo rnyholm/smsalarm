@@ -25,7 +25,6 @@
     <string name="DUPLICATED_FREE_TEXTS">Ord för primär- och sekundärlarm får inte vara lika. Ange ett nytt ord.</string>
     <string name="DUPLICATED_NUMBERS">Telefonnummer för primär- och sekundärlarm får inte vara lika. Ange ett nytt telefonnummer.</string>
     <string name="EDIT_NUMBER">Ändra nummer</string>   
-    <string name="EDIT_RESCUE_SERVICE_NAME">Ändra räddningstjänst</string>
     <string name="EMPTY_SECONDARY_NUMBER">Det går inte att ange ett tomt telefonnummer för sekundärlarm. Ange ett nytt telefonnummer.</string>
     <string name="ENTER_FREE_TEXT_HINT">Ange ord..</string>
     <string name="ERROR_RETRIEVING_FROM_DB">Ett fel inträffade vid hämtande av larm från databasen. Se felloggen för mer information.</string>
@@ -55,9 +54,6 @@
     <string name="PRIMARY_ALARM">PRIMÄR LARM!</string>
     <string name="PRIMARY_NUMBER_PROMPT_MESSAGE">Ange ett telefonnummer som Sms Alarm larmar primärlarm på.</string>
     <string name="PRIMARY_FREE_TEXT_PROMPT_MESSAGE">Ange ett ord som Sms Alarm ska larma primärlarm på om det finns i mottaget SMS.</string>
-    <string name="RESCUE_SERVICE_NAME_HINT">Ange räddningstjänstens namn..</string>
-    <string name="RESCUE_SERVICE_PROMPT_MESSAGE">Ange din räddningstjänsts namn.</string>
-    <string name="RESCUE_SERVICE_PROMPT_TITLE">Ange räddningstjänst</string>
     <string name="SECS">sek.</string>
     <string name="SECONDARY_ALARM">SEKUNDÄR LARM!</string> 
     <string name="SECONDARY_FREE_TEXT_PROMPT_MESSAGE">Ange ett ord som Sms Alarm ska larma sekundärlarm på om det finns i mottaget SMS.</string>
@@ -79,8 +75,7 @@
     <string name="TITLE_FREE_TEXT_TRIGGER_SETTINGS">Ord inställningar</string>
     <string name="TITLE_MISC_SETTINGS">Övriga inställningar</string>
     <string name="TITLE_PLAY_ALARM_SIGNAL_TWICE_SETTING">Spela upp larmsignal två gånger</string>
-    <string name="TITLE_PRIMARY_ALARM">Primärlarm</string>
-    <string name="TITLE_RESCUE_SERVICE_NAME">Din räddningstjänst</string>   
+    <string name="TITLE_PRIMARY_ALARM">Primärlarm</string>   
     <string name="TITLE_SECONDARY_ALARM">Sekundärlarm</string>
     <string name="TITLE_SMS_SETTINGS">SMS-inställningar</string>
   	<string name="TONE_PROMPT_TITLE">Välj larmsignal</string>   

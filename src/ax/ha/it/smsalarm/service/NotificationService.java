@@ -66,8 +66,8 @@ public class NotificationService extends IntentService {
 		// Get the alarm passed on from SmsReceiver
 		Alarm alarm = (Alarm) intent.getParcelableExtra(Alarm.TAG);
 
-		// Fetch rescue service from the shared preferences
-		String rescueService = (String) prefHandler.fetchPrefs(PrefKey.SHARED_PREF, PrefKey.RESCUE_SERVICE_KEY, DataType.STRING, this);
+		// Fetch organization from the shared preferences
+		String organization = (String) prefHandler.fetchPrefs(PrefKey.SHARED_PREF, PrefKey.ORGANIZATION_KEY, DataType.STRING, this);
 
 		// Setup a notification, directly from Android developer site
 		NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
@@ -80,10 +80,10 @@ public class NotificationService extends IntentService {
 		switch (alarm.getAlarmType()) {
 			case PRIMARY:
 				// Set proper texts and icon to notification
-				configureNotification(R.drawable.ic_primary_alarm, getString(R.string.PRIMARY_ALARM), rescueService.toUpperCase(), getString(R.string.PRIMARY_ALARM));
+				configureNotification(R.drawable.ic_primary_alarm, getString(R.string.PRIMARY_ALARM), organization.toUpperCase(), getString(R.string.PRIMARY_ALARM));
 				break;
 			case SECONDARY:
-				configureNotification(R.drawable.ic_secondary_alarm, getString(R.string.SECONDARY_ALARM), rescueService.toUpperCase(), getString(R.string.SECONDARY_ALARM));
+				configureNotification(R.drawable.ic_secondary_alarm, getString(R.string.SECONDARY_ALARM), organization.toUpperCase(), getString(R.string.SECONDARY_ALARM));
 				break;
 			default: // If this happens, something really weird is going on
 				if (SmsAlarm.DEBUG) {
@@ -124,24 +124,24 @@ public class NotificationService extends IntentService {
 
 	/**
 	 * To configure the notification that's about to be dispatched correctly. The ticker text is built up dynamically depending on argument
-	 * <code>rescueService</code>.
+	 * <code>organization</code>.
 	 * 
 	 * @param icon
 	 *            Icon as integer value, use <code>android.R.drawable.*</code>.
 	 * @param tickerText
 	 *            Notifications ticker text.
-	 * @param rescueService
-	 *            Rescue service's/organizations name, if it exists.
+	 * @param organization
+	 *            Organizations name, if it exists.
 	 * @param contentTitle
 	 *            Notification> contents title.
 	 */
-	private void configureNotification(int icon, String tickerText, String rescueService, String contentTitle) {
+	private void configureNotification(int icon, String tickerText, String organization, String contentTitle) {
 		// Set icon for notification
 		this.icon = icon;
 
-		// Set ticker text, with rescue service name if it exists
-		if (!"".equals(rescueService)) {
-			this.tickerText = rescueService + " " + tickerText;
+		// Set ticker text, with organization name if it exists
+		if (!"".equals(organization)) {
+			this.tickerText = organization + " " + tickerText;
 		} else {
 			this.tickerText = tickerText;
 		}

@@ -25,7 +25,6 @@
     <string name="DUPLICATED_FREE_TEXTS">Word for primary and secondary alarm cannot be same. Enter a new word.</string>
     <string name="DUPLICATED_NUMBERS">Telephone number for primary and secondary alarms may not be the same. Enter a new telephone number.</string>
     <string name="EDIT_NUMBER">Edit number</string>   
-    <string name="EDIT_RESCUE_SERVICE_NAME">Edit rescue service</string>
     <string name="EMPTY_SECONDARY_NUMBER">It is not possible to enter an empty telephone number for secondary alarm. Enter a new telephone number.</string>
     <string name="ENTER_FREE_TEXT_HINT">Enter a word..</string>
     <string name="ERROR_RETRIEVING_FROM_DB">An error occurred retrieving alarm from the database. See the error log for more information.</string>
@@ -56,9 +55,6 @@
     <string name="PRIMARY_ALARM">PRIMARY ALARM!</string>
     <string name="PRIMARY_FREE_TEXT_PROMPT_MESSAGE">Enter a word that Sms Alarm will alert the primary alarm on, if present in the received SMS.</string>
     <string name="PRIMARY_NUMBER_PROMPT_MESSAGE">Enter a telephone number for Sms Alarm to alert for primary alarm.</string>
-    <string name="RESCUE_SERVICE_NAME_HINT">Enter rescue service name..</string>
-    <string name="RESCUE_SERVICE_PROMPT_MESSAGE">Enter your rescue service name.</string>
-    <string name="RESCUE_SERVICE_PROMPT_TITLE">Enter rescue service</string>
     <string name="SECS">secs.</string>
     <string name="SECONDARY_ALARM">SECONDARY ALARM!</string> 
     <string name="SECONDARY_FREE_TEXT_PROMPT_MESSAGE">Enter a word that Sms Alarm will alert the secondary alarm on, if present in the received SMS.</string>
@@ -80,8 +76,7 @@
     <string name="TITLE_FREE_TEXT_TRIGGER_SETTINGS">Word settings</string>
     <string name="TITLE_MISC_SETTINGS">Other settings</string>
     <string name="TITLE_PLAY_ALARM_SIGNAL_TWICE_SETTING">Play alarm signal twice</string>
-    <string name="TITLE_PRIMARY_ALARM">Primary alarm</string>
-    <string name="TITLE_RESCUE_SERVICE_NAME">Your rescue service</string>   
+    <string name="TITLE_PRIMARY_ALARM">Primary alarm</string>   
     <string name="TITLE_SECONDARY_ALARM">Secondary alarm</string>
     <string name="TITLE_SMS_SETTINGS">SMS settings</string>
     <string name="TITLE_USE_OS_SOUND_SETTINGS">Use the device sound settings</string>
