@@ -125,8 +125,10 @@ public class UpdateHandler extends Application {
 
 				// Only if old version code is less than 20, in version 20 shared preferences RESCUE_SERVICE_NAME is renamed to ORGANIZATION_KEY
 				if (oldVersionCode < LVL_20_RENAME_SHARED_PREFERENCES) {
-					// Just fetch the existing value for rescue service and store it into organization instead
+					// Just fetch the existing value for rescue service and store it into organization instead, also set the rescue service name pref
+					// to empty
 					String rescueService = (String) prefHandler.fetchPrefs(PrefKey.SHARED_PREF, PrefKey.RESCUE_SERVICE_KEY, DataType.STRING, this);
+					prefHandler.storePrefs(PrefKey.SHARED_PREF, PrefKey.RESCUE_SERVICE_KEY, "", this);
 					prefHandler.storePrefs(PrefKey.SHARED_PREF, PrefKey.ORGANIZATION_KEY, rescueService, this);
 
 					oldVersionCode = LVL_20_RENAME_SHARED_PREFERENCES;
