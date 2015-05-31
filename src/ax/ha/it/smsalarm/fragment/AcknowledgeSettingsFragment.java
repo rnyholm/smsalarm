@@ -217,7 +217,8 @@ public class AcknowledgeSettingsFragment extends SherlockFragment implements App
 		acknowledgeNumberButton.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				AcknowledgeNumberDialog dialog = new AcknowledgeNumberDialog();
+				// Create a new instance of AcknowledgeNumberDialog prepared with the existing acknowledge number in it
+				AcknowledgeNumberDialog dialog = AcknowledgeNumberDialog.newInstance(acknowledgeNumber);
 				dialog.setTargetFragment(AcknowledgeSettingsFragment.this, AcknowledgeNumberDialog.ACKNOWLEDGE_NUMBER_DIALOG_REQUEST_CODE);
 				dialog.show(getFragmentManager(), AcknowledgeNumberDialog.ACKNOWLEDGE_NUMBER_DIALOG_TAG);
 			}
@@ -227,7 +228,7 @@ public class AcknowledgeSettingsFragment extends SherlockFragment implements App
 		acknowledgeMessageButton.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				AcknowledgeMessageDialog dialog = new AcknowledgeMessageDialog();
+				AcknowledgeMessageDialog dialog = AcknowledgeMessageDialog.newInstance(acknowledgeMessage);
 				dialog.setTargetFragment(AcknowledgeSettingsFragment.this, AcknowledgeMessageDialog.ACKNOWLEDGE_MESSAGE_DIALOG_REQUEST_CODE);
 				dialog.show(getFragmentManager(), AcknowledgeMessageDialog.ACKNOWLEDGE_MESSAGE_DIALOG_TAG);
 			}

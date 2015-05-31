@@ -218,7 +218,7 @@ public class OtherSettingsFragment extends SherlockFragment implements Applicati
 		editOrganizationButton.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				OrganizationDialog dialog = new OrganizationDialog();
+				OrganizationDialog dialog = OrganizationDialog.newInstance(organization);
 				dialog.setTargetFragment(OtherSettingsFragment.this, OrganizationDialog.ORGANIZATION_DIALOG_REQUEST_CODE);
 				dialog.show(getFragmentManager(), OrganizationDialog.ORGANIZATION_DIALOG_TAG);
 			}

@@ -40,6 +40,21 @@ public class OrganizationDialog extends DialogFragment {
 	private EditText inputEditText;
 
 	/**
+	 * Creates and returns a new instance of {@link OrganizationDialog}, with given organization in it.
+	 * 
+	 * @param organization
+	 *            Organization to be placed within this dialogs {@link EditText} upon creation.
+	 * @return New instance of <code>OrganizationDialog</code> prepared with given organization as argument.
+	 */
+	public static OrganizationDialog newInstance(String organization) {
+		OrganizationDialog dialogFragment = new OrganizationDialog();
+		Bundle args = new Bundle();
+		args.putString(ORGANIZATION, organization);
+		dialogFragment.setArguments(args);
+		return dialogFragment;
+	}
+
+	/**
 	 * To create a new instance of {@link OrganizationDialog}.
 	 */
 	public OrganizationDialog() {
@@ -63,12 +78,16 @@ public class OrganizationDialog extends DialogFragment {
 		inputEditText.setInputType(InputType.TYPE_CLASS_TEXT);		// Set input type to EditText
 		// @formatter:on
 
-		// If not null, the fragment is being re-created, get data from saved instance, if exist.
-		// If saved instance doesn't contain certain key or it's associated value the EditText field will be empty
+		// If saved instance state isn't null, try to get the organization name from them, if they exists. Else try to get the organization name from
+		// arguments as they can be set upon creation of this dialog. In other cases the edit text field showing the organization name will be empty
 		if (savedInstanceState != null) {
-			// Check if we got any data in saved instance associated with certain key
+			// Check if we got any data in saved instance associated with certain key or if we got any arguments
 			if (savedInstanceState.getCharSequence(ORGANIZATION) != null) {
-				inputEditText.setText(savedInstanceState.getCharSequence(ORGANIZATION).toString());
+				setTextAndChangeSelection(savedInstanceState.getCharSequence(ORGANIZATION).toString());
+			}
+		} else if (getArguments() != null) {
+			if (getArguments().getString(ORGANIZATION) != null) {
+				setTextAndChangeSelection(getArguments().getString(ORGANIZATION));
 			}
 		}
 
@@ -107,5 +126,17 @@ public class OrganizationDialog extends DialogFragment {
 	public void onSaveInstanceState(Bundle arg0) {
 		super.onSaveInstanceState(arg0);
 		arg0.putCharSequence(ORGANIZATION, inputEditText.getText().toString());
+	}
+
+	/**
+	 * Convenience method to set a text to this {@link OrganizationDialog}'s {@link EditText} for input. This method will also moves the cursor to the
+	 * end of the text in the <code>EditText</code>.
+	 * 
+	 * @param text
+	 *            Text To be placed in the <code>EditText</code> within this dialog.
+	 */
+	private void setTextAndChangeSelection(String text) {
+		inputEditText.setText(text);
+		inputEditText.setSelection(inputEditText.length());
 	}
 }

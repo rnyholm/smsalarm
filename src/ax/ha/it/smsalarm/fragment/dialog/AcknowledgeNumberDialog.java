@@ -12,6 +12,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
 import android.text.InputType;
+import android.widget.EditText;
 import ax.ha.it.smsalarm.R;
 import ax.ha.it.smsalarm.ui.NoBlanksEditText;
 
@@ -40,6 +41,21 @@ public class AcknowledgeNumberDialog extends DialogFragment {
 	private NoBlanksEditText inputEditText;
 
 	/**
+	 * Creates and returns a new instance of {@link AcknowledgeNumberDialog}, with given acknowledge number in it.
+	 * 
+	 * @param acknowledgeNumber
+	 *            Acknowledge number to be placed within this dialogs {@link EditText} upon creation.
+	 * @return New instance of <code>AcknowledgeNumberDialog</code> prepared with given acknowledge number as argument.
+	 */
+	public static AcknowledgeNumberDialog newInstance(String acknowledgeNumber) {
+		AcknowledgeNumberDialog dialogFragment = new AcknowledgeNumberDialog();
+		Bundle args = new Bundle();
+		args.putString(ACKNOWLEDGE_NUMBER, acknowledgeNumber);
+		dialogFragment.setArguments(args);
+		return dialogFragment;
+	}
+
+	/**
 	 * To create a new instance of {@link AcknowledgeNumberDialog}.
 	 */
 	public AcknowledgeNumberDialog() {
@@ -63,12 +79,16 @@ public class AcknowledgeNumberDialog extends DialogFragment {
 		inputEditText.setInputType(InputType.TYPE_CLASS_PHONE);	// Set input type to EditText
 		// @formatter:on
 
-		// If not null, the fragment is being re-created, get data from saved instance, if exist.
-		// If saved instance doesn't contain certain key or it's associated value the EditText field will be empty
+		// If saved instance state isn't null, try to get the number from them, if they exists. Else try to get the number from arguments as they can
+		// be set upon creation of this dialog. In other cases the edit text field showing the number will be empty
 		if (savedInstanceState != null) {
-			// Check if we got any data in saved instance associated with certain key
+			// Check if we got any data in saved instance associated with certain key or if we got any arguments
 			if (savedInstanceState.getCharSequence(ACKNOWLEDGE_NUMBER) != null) {
-				inputEditText.setText(savedInstanceState.getCharSequence(ACKNOWLEDGE_NUMBER).toString());
+				setTextAndChangeSelection(savedInstanceState.getCharSequence(ACKNOWLEDGE_NUMBER).toString());
+			}
+		} else if (getArguments() != null) {
+			if (getArguments().getString(ACKNOWLEDGE_NUMBER) != null) {
+				setTextAndChangeSelection(getArguments().getString(ACKNOWLEDGE_NUMBER));
 			}
 		}
 
@@ -107,5 +127,17 @@ public class AcknowledgeNumberDialog extends DialogFragment {
 	public void onSaveInstanceState(Bundle arg0) {
 		super.onSaveInstanceState(arg0);
 		arg0.putCharSequence(ACKNOWLEDGE_NUMBER, inputEditText.getText().toString());
+	}
+
+	/**
+	 * Convenience method to set a text to this {@link AcknowledgeNumberDialog}'s {@link EditText} for input. This method will also moves the cursor
+	 * to the end of the text in the <code>EditText</code>.
+	 * 
+	 * @param text
+	 *            Text To be placed in the <code>EditText</code> within this dialog.
+	 */
+	private void setTextAndChangeSelection(String text) {
+		inputEditText.setText(text);
+		inputEditText.setSelection(inputEditText.length());
 	}
 }

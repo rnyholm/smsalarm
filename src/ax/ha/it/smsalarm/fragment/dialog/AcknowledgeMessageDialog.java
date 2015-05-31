@@ -48,6 +48,21 @@ public class AcknowledgeMessageDialog extends DialogFragment {
 	private EditText inputEditText;
 
 	/**
+	 * Creates and returns a new instance of {@link AcknowledgeMessageDialog}, with given acknowledge message in it.
+	 * 
+	 * @param acknowledgeMessage
+	 *            Acknowledge message to be placed within this dialogs {@link EditText} upon creation.
+	 * @return New instance of <code>AcknowledgeMessageDialog</code> prepared with given acknowledge message as argument.
+	 */
+	public static AcknowledgeMessageDialog newInstance(String acknowledgeMessage) {
+		AcknowledgeMessageDialog dialogFragment = new AcknowledgeMessageDialog();
+		Bundle args = new Bundle();
+		args.putString(ACKNOWLEDGE_MESSAGE, acknowledgeMessage);
+		dialogFragment.setArguments(args);
+		return dialogFragment;
+	}
+
+	/**
 	 * To create a new instance of {@link AcknowledgeMessageDialog}
 	 */
 	public AcknowledgeMessageDialog() {
@@ -66,7 +81,6 @@ public class AcknowledgeMessageDialog extends DialogFragment {
 	public Dialog onCreateDialog(Bundle savedInstanceState) {
 		// A TextView to keep track on SMS length, initial value of 0
 		final TextView charCountTextView = new TextView(context);
-		charCountTextView.setText("0");
 
 		// Another TextView is needed to display the maximum numbers of characters, so the end result of both TextViews will look like 53/160
 		TextView maxCharsTextView = new TextView(context);
@@ -108,20 +122,21 @@ public class AcknowledgeMessageDialog extends DialogFragment {
 			}
 		});
 
-		// If not null, the fragment is being re-created, get data from saved instance, if exist.
-		// If saved instance doesn't contain certain key or it's associated value the EditText field will be empty
+		// If saved instance state isn't null, try to get the message from them, if they exists. Else try to get the message from arguments as they
+		// can be set upon creation of this dialog. In other cases the edit text field showing the message will be empty
 		if (savedInstanceState != null) {
-			// Check if we got any data in saved instance associated with certain key
+			// Check if we got any data in saved instance associated with certain key or if we got any arguments
 			if (savedInstanceState.getCharSequence(ACKNOWLEDGE_MESSAGE) != null) {
-				inputEditText.setText(savedInstanceState.getCharSequence(ACKNOWLEDGE_MESSAGE).toString());
-
-				// Place cursor at the end of the text within the EditText
-				inputEditText.setSelection(inputEditText.length());
-
-				// Also update the TextView showing number of characters
-				charCountTextView.setText(String.valueOf(inputEditText.getText().toString().length()));
+				setTextAndChangeSelection(savedInstanceState.getCharSequence(ACKNOWLEDGE_MESSAGE).toString());
+			}
+		} else if (getArguments() != null) {
+			if (getArguments().getString(ACKNOWLEDGE_MESSAGE) != null) {
+				setTextAndChangeSelection(getArguments().getString(ACKNOWLEDGE_MESSAGE));
 			}
 		}
+
+		// Also update the TextView showing number of characters
+		charCountTextView.setText(String.valueOf(inputEditText.getText().toString().length()));
 
 		// Need a layout for the TextViews displaying the current number of characters and the maximum numbers of characters
 		LinearLayout charCountLayout = new LinearLayout(context);
@@ -172,5 +187,17 @@ public class AcknowledgeMessageDialog extends DialogFragment {
 	public void onSaveInstanceState(Bundle arg0) {
 		super.onSaveInstanceState(arg0);
 		arg0.putCharSequence(ACKNOWLEDGE_MESSAGE, inputEditText.getText().toString());
+	}
+
+	/**
+	 * Convenience method to set a text to this {@link AcknowledgeMessageDialog}'s {@link EditText} for input. This method will also moves the cursor
+	 * to the end of the text in the <code>EditText</code>.
+	 * 
+	 * @param text
+	 *            Text To be placed in the <code>EditText</code> within this dialog.
+	 */
+	private void setTextAndChangeSelection(String text) {
+		inputEditText.setText(text);
+		inputEditText.setSelection(inputEditText.length());
 	}
 }
