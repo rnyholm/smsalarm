@@ -53,6 +53,8 @@ public class Util {
 	 */
 	@SuppressLint("DefaultLocale")
 	public static boolean existsInIgnoreCases(String string, List<String> list) {
+		boolean exists = false;
+
 		if (string != null && list != null) {
 			List<String> caseUpperList = new ArrayList<String>();
 
@@ -60,10 +62,10 @@ public class Util {
 				caseUpperList.add(str.toUpperCase());
 			}
 
-			return caseUpperList.contains(string.toUpperCase());
+			exists = caseUpperList.contains(string.toUpperCase());
 		}
 
-		return false;
+		return exists;
 	}
 
 	/**
@@ -79,11 +81,13 @@ public class Util {
 	 */
 	@SuppressLint("DefaultLocale")
 	public static boolean existsInConsiderCases(String string, List<String> list) {
+		boolean exists = false;
+
 		if (string != null && list != null) {
-			return list.contains(string);
+			exists = list.contains(string);
 		}
 
-		return false;
+		return exists;
 	}
 
 	/**
@@ -131,11 +135,13 @@ public class Util {
 	 * @see #getBaseFileName(String)
 	 */
 	public static String getFileName(String filePath) {
+		String fileName = "";
+
 		if (filePath != null && filePath.length() > 0) {
-			return new File(filePath).getName();
+			fileName = new File(filePath).getName();
 		}
 
-		return "";
+		return fileName;
 	}
 
 	/**
@@ -176,11 +182,13 @@ public class Util {
 	 * @return <code>true</code> if given file path exists, else <code>false</code>.
 	 */
 	public static boolean fileExists(String filePath) {
+		boolean exists = false;
+
 		if (filePath != null && filePath.length() > 0) {
-			return new File(filePath).exists();
+			exists = new File(filePath).exists();
 		}
 
-		return false;
+		return exists;
 	}
 
 	/**
@@ -246,6 +254,8 @@ public class Util {
 	 *         <code>String</code> is returned.
 	 */
 	public static String cleanAlarmCentralAXMessage(String message) {
+		String cleanedMessage = "";
+
 		if (message != null) {
 			// Pattern for regular expression like this; dd.dd.dddd dd:dd:dd: d.d, alarm from http://www.alarmcentralen.ax has this pattern
 			Pattern pattern = Pattern.compile("(\\d{2}).(\\d{2}).(\\d{4})(\\s)(\\d{2}):(\\d{2}):(\\d{2})(\\s)(\\d{1}).(\\d{1})");
@@ -256,10 +266,10 @@ public class Util {
 				message = message.replace(matcher.group(1) + "." + matcher.group(2) + "." + matcher.group(3) + matcher.group(4) + matcher.group(5) + ":" + matcher.group(6) + ":" + matcher.group(7) + matcher.group(8) + matcher.group(9) + "." + matcher.group(10), "");
 			}
 
-			return message.trim();
+			cleanedMessage = message.trim();
 		}
 
-		return "";
+		return cleanedMessage;
 	}
 
 	/**
@@ -276,14 +286,16 @@ public class Util {
 	 * @return The adjusted <code>string</code>.
 	 */
 	public static String adjustStringLength(String string, int maxLength) {
+		String adjustedString = "";
+
 		if (string != null && maxLength > 0) {
 			if (string.length() > maxLength) {
-				return string.substring(0, maxLength);
+				adjustedString = string.substring(0, maxLength);
+			} else {
+				adjustedString = string;
 			}
-
-			return string;
 		}
 
-		return "";
+		return adjustedString;
 	}
 }
