@@ -13,16 +13,16 @@
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="20dp"
-        android:text="@string/APP_NAME"
+        android:text="@string/APPLICATION_NAME"
         android:textAppearance="?android:attr/textAppearanceLarge"
         android:textColor="#000000" />
-    <TextView
+    <TextView
         android:id="@+id/splashDescr_tv"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@id/splashTitle_tv"
         android:layout_centerHorizontal="true"
-        android:text="@string/APP_DESCR"
+        android:text="@string/APPLICATION_DESCR"
         android:textAppearance="?android:attr/textAppearanceMedium"
         android:textColor="#313031" />
 

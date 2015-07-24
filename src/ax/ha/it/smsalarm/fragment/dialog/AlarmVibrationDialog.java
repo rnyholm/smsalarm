@@ -88,7 +88,7 @@ public class AlarmVibrationDialog extends DialogFragment {
 		// @formatter:off
 		return new AlertDialog.Builder(context)
 				.setIcon(android.R.drawable.ic_dialog_info)	// Set icon
-				.setTitle(R.string.ALARM_VIBRATION_PROMPT_TITLE)		// Set title
+				.setTitle(R.string.ALARM_VIBRATION_DIALOG_TITLE)		// Set title
 				// @formatter:on
 
 				// Set items in list view from a list of all available vibration patterns

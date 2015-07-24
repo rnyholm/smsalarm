@@ -28,23 +28,23 @@
     
     <supports-screens android:largeScreens="true" android:xlargeScreens="true" />
     
-    <application android:label="@string/APP_NAME"
+    <application android:label="@string/APPLICATION_NAME"
         android:enabled="true"
         android:icon="@drawable/ic_launcher"
         android:theme="@style/Theme.Sherlock.Light.DarkActionBar" android:allowBackup="false" android:name="ax.ha.it.smsalarm.handler.UpdateHandler">
-        <activity android:name="ax.ha.it.smsalarm.activity.Splash" android:label="@string/APP_NAME" android:noHistory="true" android:screenOrientation="portrait">
+        <activity android:name="ax.ha.it.smsalarm.activity.Splash" android:label="@string/APPLICATION_NAME" android:noHistory="true" android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />            
         	</intent-filter>       	
        	</activity>
-        <activity android:name="ax.ha.it.smsalarm.activity.SmsAlarm" android:noHistory="false" android:launchMode="singleTask" android:label="@string/APP_NAME">
+        <activity android:name="ax.ha.it.smsalarm.activity.SmsAlarm" android:noHistory="false" android:launchMode="singleTask" android:label="@string/APPLICATION_NAME">
             <intent-filter>
  				<!-- Future intents and services for this activity goes here -->   
             </intent-filter>
         </activity> 
         <!-- This activity has another task affinity than the other tasks, this is to prevent opening of running activities when acknowledgement has been done -->      
-        <activity android:name="ax.ha.it.smsalarm.activity.Acknowledge" android:noHistory="true" android:taskAffinity="" android:screenOrientation="portrait" android:label="@string/APP_NAME">
+        <activity android:name="ax.ha.it.smsalarm.activity.Acknowledge" android:noHistory="true" android:taskAffinity="" android:screenOrientation="portrait" android:label="@string/APPLICATION_NAME">
         </activity>        
         <receiver android:name="ax.ha.it.smsalarm.receiver.SmsReceiver" android:enabled="true" android:exported="true">
          	<intent-filter android:priority="999"> 

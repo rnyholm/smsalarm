@@ -23,6 +23,7 @@ import ax.ha.it.smsalarm.activity.SmsAlarm;
  * @version 2.3.1
  * @since 2.3.1
  * @see AddFreeTextDialog
+ * @see EditFreeTextDialog
  * @see #REMOVE_FREE_TEXT
  * @see #REMOVE_FREE_TEXT_DIALOG_TAG
  * @see #REMOVE_PRIMARY_FREE_TEXT_DIALOG_REQUEST_CODE
@@ -73,10 +74,10 @@ public class RemoveFreeTextDialog extends DialogFragment {
 		String message = "";
 		switch (getTargetRequestCode()) {
 			case (REMOVE_PRIMARY_FREE_TEXT_DIALOG_REQUEST_CODE):
-				message = getString(R.string.DELETE_PRIMARY_FREE_TEXT_PROMPT_MESSAGE) + " " + freeText + "?";
+				message = getString(R.string.REMOVE_PRIMARY_FREE_TEXT_DIALOG_MESSAGE) + " " + freeText + "?";
 				break;
 			case (REMOVE_SECONDARY_FREE_TEXT_DIALOG_REQUEST_CODE):
-				message = getString(R.string.DELETE_SECONDARY_FREE_TEXT_PROMPT_MESSAGE) + " " + freeText + "?";
+				message = getString(R.string.REMOVE_SECONDARY_FREE_TEXT_DIALOG_MESSAGE) + " " + freeText + "?";
 				break;
 			default:
 				if (SmsAlarm.DEBUG) {
@@ -88,7 +89,7 @@ public class RemoveFreeTextDialog extends DialogFragment {
 		// @formatter:off
 		return new AlertDialog.Builder(context)
 				.setIcon(android.R.drawable.ic_dialog_alert)		// Set icon
-				.setTitle(R.string.DELETE_FREE_TEXT_PROMPT_TITLE)	// Set title
+				.setTitle(R.string.REMOVE_FREE_TEXT_DIALOG_TITLE)	// Set title
 				.setMessage(message)								// Set resolved message
 				// @formatter:on
 

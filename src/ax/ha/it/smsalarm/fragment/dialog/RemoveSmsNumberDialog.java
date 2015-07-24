@@ -23,6 +23,7 @@ import ax.ha.it.smsalarm.activity.SmsAlarm;
  * @version 2.3.1
  * @since 2.3.1
  * @see AddSmsNumberDialog
+ * @see EditSmsNumberDialog
  * @see #REMOVE_SMS_NUMBER
  * @see #REMOVE_SMS_NUMBER_DIALOG_TAG
  * @see #REMOVE_PRIMARY_SMS_NUMBER_DIALOG_REQUEST_CODE
@@ -73,10 +74,10 @@ public class RemoveSmsNumberDialog extends DialogFragment {
 		String message = "";
 		switch (getTargetRequestCode()) {
 			case (REMOVE_PRIMARY_SMS_NUMBER_DIALOG_REQUEST_CODE):
-				message = getString(R.string.DELETE_PRIMARY_NUMBER_PROMPT_MESSAGE) + " " + number + "?";
+				message = getString(R.string.REMOVE_PRIMARY_PHONE_NUMBER_DIALOG_MESSAGE) + " " + number + "?";
 				break;
 			case (REMOVE_SECONDARY_SMS_NUMBER_DIALOG_REQUEST_CODE):
-				message = getString(R.string.DELETE_SECONDARY_NUMBER_PROMPT_MESSAGE) + " " + number + "?";
+				message = getString(R.string.REMOVE_SECONDARY_PHONE_NUMBER_DIALOG_MESSAGE) + " " + number + "?";
 				break;
 			default:
 				if (SmsAlarm.DEBUG) {
@@ -87,9 +88,9 @@ public class RemoveSmsNumberDialog extends DialogFragment {
 		// Setup the dialog with correct resources, listeners and values
 		// @formatter:off
 		return new AlertDialog.Builder(context)
-				.setIcon(android.R.drawable.ic_dialog_alert)	// Set icon
-				.setTitle(R.string.DELETE_NUMBER_PROMPT_TITLE)	// Set title
-				.setMessage(message)							// Set resolved message
+				.setIcon(android.R.drawable.ic_dialog_alert)			// Set icon
+				.setTitle(R.string.REMOVE_PHONE_NUMBER_DIALOG_TITLE)	// Set title
+				.setMessage(message)									// Set resolved message
 				// @formatter:on
 
 				.setPositiveButton(R.string.YES, new DialogInterface.OnClickListener() {

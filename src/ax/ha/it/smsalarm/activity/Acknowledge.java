@@ -193,7 +193,7 @@ public class Acknowledge extends Activity {
 							// Place the acknowledge call
 							placeAcknowledgeCall();
 						} else { // No phone number to acknowledge to exists, show toast
-							Toast.makeText(Acknowledge.this, getString(R.string.ACK_CANNOT_NO_PHONE_NUMBER_EXISTS), Toast.LENGTH_LONG).show();
+							Toast.makeText(Acknowledge.this, getString(R.string.TOAST_CANNOT_ACKNOWLEDGE_NO_PHONE_NUMBER_EXISTS), Toast.LENGTH_LONG).show();
 						}
 
 						break;
@@ -309,12 +309,12 @@ public class Acknowledge extends Activity {
 			PendingIntent smsSentPendingIntent = PendingIntent.getBroadcast(this, 0, new Intent(ACTION_SMS_SENT), 0);
 
 			// Show toast telling the user that acknowledge is being sent
-			Toast.makeText(Acknowledge.this, getString(R.string.ACK_SMS_SENDING), Toast.LENGTH_LONG).show();
+			Toast.makeText(Acknowledge.this, getString(R.string.TOAST_SENDING_ACKNOWLEDGE_SMS), Toast.LENGTH_LONG).show();
 
 			// Send the actual acknowledge SMS
 			SmsManager.getDefault().sendTextMessage(phoneNumber, null, Util.adjustStringLength(message, Util.SINGLE_SMS_MAX_CHARACTERS), smsSentPendingIntent, null);
 		} else { // No phone number to acknowledge to exists, show toast
-			Toast.makeText(Acknowledge.this, getString(R.string.ACK_CANNOT_NO_PHONE_NUMBER_EXISTS), Toast.LENGTH_LONG).show();
+			Toast.makeText(Acknowledge.this, getString(R.string.TOAST_CANNOT_ACKNOWLEDGE_NO_PHONE_NUMBER_EXISTS), Toast.LENGTH_LONG).show();
 		}
 	}
 
@@ -415,7 +415,7 @@ public class Acknowledge extends Activity {
 			switch (getResultCode()) {
 				case Activity.RESULT_OK:
 					// Show success toast and acknowledge the alarm for the application
-					Toast.makeText(Acknowledge.this, getString(R.string.ACK_SMS_SENT), Toast.LENGTH_LONG).show();
+					Toast.makeText(Acknowledge.this, getString(R.string.TOAST_ACKNOWLEDGE_SMS_SENT), Toast.LENGTH_LONG).show();
 					acknowledgeAlarmInApplication();
 
 					// Finish off the activity only if SMS was successfully sent
@@ -424,13 +424,13 @@ public class Acknowledge extends Activity {
 					break;
 				case SmsManager.RESULT_ERROR_NO_SERVICE:
 					// Show no success toast
-					Toast.makeText(Acknowledge.this, getString(R.string.ACK_CANNOT_SEND_ACK_MESSAGE) + " " + getString(R.string.ACK_SMS_ERROR_NO_SERVICE), Toast.LENGTH_LONG).show();
+					Toast.makeText(Acknowledge.this, getString(R.string.TOAST_CANNOT_SEND_ACKNOWLEDGE_SMS) + " " + getString(R.string.ACKNOWLEDGE_SMS_ERROR_NO_SERVICE), Toast.LENGTH_LONG).show();
 					break;
 				case SmsManager.RESULT_ERROR_RADIO_OFF:
-					Toast.makeText(Acknowledge.this, getString(R.string.ACK_CANNOT_SEND_ACK_MESSAGE) + " " + getString(R.string.ACK_SMS_ERROR_AIRPLANE_MODE), Toast.LENGTH_LONG).show();
+					Toast.makeText(Acknowledge.this, getString(R.string.TOAST_CANNOT_SEND_ACKNOWLEDGE_SMS) + " " + getString(R.string.ACKNOWLEDGE_SMS_ERROR_AIRPLANE_MODE), Toast.LENGTH_LONG).show();
 					break;
 				default:
-					Toast.makeText(Acknowledge.this, getString(R.string.ACK_CANNOT_SEND_ACK_MESSAGE) + " " + getString(R.string.ACK_SMS_ERROR_GENERIC), Toast.LENGTH_LONG).show();
+					Toast.makeText(Acknowledge.this, getString(R.string.TOAST_CANNOT_SEND_ACKNOWLEDGE_SMS) + " " + getString(R.string.ACKNOWLEDGE_SMS_ERROR_GENERIC), Toast.LENGTH_LONG).show();
 					break;
 			}
 		}

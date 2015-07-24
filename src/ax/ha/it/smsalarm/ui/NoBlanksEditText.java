@@ -15,7 +15,7 @@ import android.widget.EditText;
  * @version 2.3.1
  * @since 2.3.1
  */
-public class NoBlanksEditText extends EditText {
+public class NoBlanksEditText extends CursorAdjustingEditText {
 
 	/**
 	 * Creates a new instance of {@link NoBlanksEditText} with given context.

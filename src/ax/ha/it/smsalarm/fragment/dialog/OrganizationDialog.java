@@ -14,6 +14,7 @@ import android.support.v4.app.DialogFragment;
 import android.text.InputType;
 import android.widget.EditText;
 import ax.ha.it.smsalarm.R;
+import ax.ha.it.smsalarm.ui.CursorAdjustingEditText;
 
 /**
  * {@link DialogFragment} which let's the user add or remove the <b><i>Organization</i></b>.
@@ -37,7 +38,7 @@ public class OrganizationDialog extends DialogFragment {
 	private Context context;
 
 	// Must be declared as class variable as it will be used when handling instance states
-	private EditText inputEditText;
+	private CursorAdjustingEditText inputEditText;
 
 	/**
 	 * Creates and returns a new instance of {@link OrganizationDialog}, with given organization in it.
@@ -73,8 +74,8 @@ public class OrganizationDialog extends DialogFragment {
 	public Dialog onCreateDialog(Bundle savedInstanceState) {
 		// Setup the EditText
 		// @formatter:off
-		inputEditText = new EditText(context);
-		inputEditText.setHint(R.string.ORGANIZATION_PROMPT_HINT); 	// Set hint to EditText
+		inputEditText = new CursorAdjustingEditText(context);
+		inputEditText.setHint(R.string.ORGANIZATION_DIALOG_HINT); 	// Set hint to EditText
 		inputEditText.setInputType(InputType.TYPE_CLASS_TEXT);		// Set input type to EditText
 		// @formatter:on
 
@@ -83,11 +84,11 @@ public class OrganizationDialog extends DialogFragment {
 		if (savedInstanceState != null) {
 			// Check if we got any data in saved instance associated with certain key or if we got any arguments
 			if (savedInstanceState.getCharSequence(ORGANIZATION) != null) {
-				setTextAndChangeSelection(savedInstanceState.getCharSequence(ORGANIZATION).toString());
+				inputEditText.setText(savedInstanceState.getCharSequence(ORGANIZATION).toString());
 			}
 		} else if (getArguments() != null) {
 			if (getArguments().getString(ORGANIZATION) != null) {
-				setTextAndChangeSelection(getArguments().getString(ORGANIZATION));
+				inputEditText.setText(getArguments().getString(ORGANIZATION));
 			}
 		}
 
@@ -95,8 +96,8 @@ public class OrganizationDialog extends DialogFragment {
 		// @formatter:off
 		return new AlertDialog.Builder(context)
 				.setIcon(android.R.drawable.ic_dialog_info) 		// Set icon
-				.setTitle(R.string.ORGANIZATION_PROMPT_TITLE) 		// Set title
-				.setMessage(R.string.ORGANIZATION_PROMPT_MESSAGE) 	// Set message
+				.setTitle(R.string.ORGANIZATION_DIALOG_TITLE) 		// Set title
+				.setMessage(R.string.ORGANIZATION_DIALOG_MESSAGE) 	// Set message
 				.setView(inputEditText) 							// Bind dialog to EditText
 				// @formatter:on
 
@@ -126,17 +127,5 @@ public class OrganizationDialog extends DialogFragment {
 	public void onSaveInstanceState(Bundle arg0) {
 		super.onSaveInstanceState(arg0);
 		arg0.putCharSequence(ORGANIZATION, inputEditText.getText().toString());
-	}
-
-	/**
-	 * Convenience method to set a text to this {@link OrganizationDialog}'s {@link EditText} for input. This method will also moves the cursor to the
-	 * end of the text in the <code>EditText</code>.
-	 * 
-	 * @param text
-	 *            Text To be placed in the <code>EditText</code> within this dialog.
-	 */
-	private void setTextAndChangeSelection(String text) {
-		inputEditText.setText(text);
-		inputEditText.setSelection(inputEditText.length());
 	}
 }

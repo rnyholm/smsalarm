@@ -36,8 +36,8 @@ public class AboutFragment extends SherlockFragment {
 		TextView versionTextView = (TextView) view.findViewById(R.id.aboutVersion_tv);
 
 		// Set correct text, build and version number, to the TextViews
-		buildTextView.setText(String.format(getString(R.string.ABOUT_BUILD), getString(R.string.APP_BUILD)));
-		versionTextView.setText(String.format(getString(R.string.ABOUT_VERSION), getString(R.string.APP_VERSION)));
+		buildTextView.setText(String.format(getString(R.string.ABOUT_BUILD), getString(R.string.APPLICATION_BUILD)));
+		versionTextView.setText(String.format(getString(R.string.ABOUT_VERSION), getString(R.string.APPLICATION_VERSION)));
 
 		return view;
 	}

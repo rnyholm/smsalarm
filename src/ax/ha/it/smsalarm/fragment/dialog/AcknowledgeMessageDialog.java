@@ -21,6 +21,7 @@ import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import ax.ha.it.smsalarm.R;
+import ax.ha.it.smsalarm.ui.CursorAdjustingEditText;
 import ax.ha.it.smsalarm.util.Util;
 
 /**
@@ -45,7 +46,7 @@ public class AcknowledgeMessageDialog extends DialogFragment {
 	private Context context;
 
 	// Must be declared as class variable as it will be used when handling instance states
-	private EditText inputEditText;
+	private CursorAdjustingEditText inputEditText;
 
 	/**
 	 * Creates and returns a new instance of {@link AcknowledgeMessageDialog}, with given acknowledge message in it.
@@ -92,8 +93,8 @@ public class AcknowledgeMessageDialog extends DialogFragment {
 
 		// Setup the EditText
 		// @formatter:off
-		inputEditText = new EditText(context);
-		inputEditText.setHint(R.string.MESSAGE_PROMPT_HINT);														// Set hint to EditText
+		inputEditText = new CursorAdjustingEditText(context);
+		inputEditText.setHint(R.string.ACKNOWLEDGE_MESSAGE_DIALOG_HINT);											// Set hint to EditText
 		inputEditText.setInputType(InputType.TYPE_TEXT_FLAG_CAP_SENTENCES | InputType.TYPE_TEXT_FLAG_MULTI_LINE);	// Set input type to EditText
 		inputEditText.setMinLines(4); 																				// Set minimum lines
 		inputEditText.setLines(4); 																				// Set lines
@@ -127,11 +128,11 @@ public class AcknowledgeMessageDialog extends DialogFragment {
 		if (savedInstanceState != null) {
 			// Check if we got any data in saved instance associated with certain key or if we got any arguments
 			if (savedInstanceState.getCharSequence(ACKNOWLEDGE_MESSAGE) != null) {
-				setTextAndChangeSelection(savedInstanceState.getCharSequence(ACKNOWLEDGE_MESSAGE).toString());
+				inputEditText.setText(savedInstanceState.getCharSequence(ACKNOWLEDGE_MESSAGE).toString());
 			}
 		} else if (getArguments() != null) {
 			if (getArguments().getString(ACKNOWLEDGE_MESSAGE) != null) {
-				setTextAndChangeSelection(getArguments().getString(ACKNOWLEDGE_MESSAGE));
+				inputEditText.setText(getArguments().getString(ACKNOWLEDGE_MESSAGE));
 			}
 		}
 
@@ -154,11 +155,11 @@ public class AcknowledgeMessageDialog extends DialogFragment {
 
 		// Setup the dialog with correct resources, listeners and values
 		// @formatter:off
-		return new AlertDialog.Builder(context)
-				.setIcon(android.R.drawable.ic_dialog_info) 		// Set icon
-				.setTitle(R.string.MESSAGE_PROMPT_TITLE) 			// Set title
-				.setMessage(R.string.ACK_MESSAGE_PROMPT_MESSAGE) 	// Set message
-				.setView(dialogLayout) 								// Bind dialog to built up Layout
+		return new AlertDialog.Builder(context)	
+				.setIcon(android.R.drawable.ic_dialog_info) 				// Set icon
+				.setTitle(R.string.ACKNOWLEDGE_MESSAGE_DIALOG_TITLE) 					// Set title
+				.setMessage(R.string.ACKNOWLEDGE_MESSAGE_DIALOG_MESSAGE) 	// Set message
+				.setView(dialogLayout) 										// Bind dialog to built up Layout
 				// @formatter:on
 
 				.setPositiveButton(R.string.OK, new DialogInterface.OnClickListener() {
@@ -187,17 +188,5 @@ public class AcknowledgeMessageDialog extends DialogFragment {
 	public void onSaveInstanceState(Bundle arg0) {
 		super.onSaveInstanceState(arg0);
 		arg0.putCharSequence(ACKNOWLEDGE_MESSAGE, inputEditText.getText().toString());
-	}
-
-	/**
-	 * Convenience method to set a text to this {@link AcknowledgeMessageDialog}'s {@link EditText} for input. This method will also moves the cursor
-	 * to the end of the text in the <code>EditText</code>.
-	 * 
-	 * @param text
-	 *            Text To be placed in the <code>EditText</code> within this dialog.
-	 */
-	private void setTextAndChangeSelection(String text) {
-		inputEditText.setText(text);
-		inputEditText.setSelection(inputEditText.length());
 	}
 }

@@ -96,7 +96,7 @@ public class SlidingMenuFragment extends SherlockListFragment {
 			adapter.add(new SlidingMenuItem(getString(R.string.DEBUG_MENU_TITLE_DEVELOP)));
 			adapter.add(new SlidingMenuItem(401, getString(R.string.DEBUG_MENU_TITLE_DISPATCH_MOCK_SMS)));
 			adapter.add(new SlidingMenuItem(402, getString(R.string.DEBUG_MENU_TITLE_NOTIFICATION)));
-			adapter.add(new SlidingMenuItem(403, getString(R.string.DEBUG_MENU_TITLE_ACK_NOTIFICATION)));
+			adapter.add(new SlidingMenuItem(403, getString(R.string.DEBUG_MENU_TITLE_ACKNOWLEDGE_NOTIFICATION)));
 			adapter.add(new SlidingMenuItem(404, getString(R.string.DEBUG_MENU_TITLE_INSERT_MOCK_ALARMS)));
 			adapter.add(new SlidingMenuItem(405, getString(R.string.DEBUG_MENU_TITLE_MOCK_SHARED_PREFS)));
 		}

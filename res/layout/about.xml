@@ -13,14 +13,14 @@
         android:id="@+id/aboutTitle_tv"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/APP_NAME"
+        android:text="@string/APPLICATION_NAME"
         android:textAppearance="?android:attr/textAppearanceMedium" />
 
     <TextView
         android:id="@+id/aboutDescr_tv"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/APP_DESCR"
+        android:text="@string/APPLICATION_DESCR"
         android:textAppearance="?android:attr/textAppearanceSmall" />
 
     <TextView

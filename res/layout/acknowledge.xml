@@ -19,7 +19,7 @@
             android:id="@+id/ackIcon_iv"
             android:layout_width="50dp"
             android:layout_height="50dp"
-            android:contentDescription="@string/ACK_ICON_CONTENT_DESCR"
+            android:contentDescription="@string/ACKNOWLEDGE_ICON_CONTENT_DESCR"
             android:padding="10dp"
             android:src="@drawable/ic_primary_alarm" />
 
@@ -28,7 +28,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical"
-            android:text="@string/ACK_TITLE"
+            android:text="@string/ACKNOWLEDGE_TITLE"
             android:textAppearance="?android:attr/textAppearanceMedium" />
 
     </LinearLayout>
@@ -48,7 +48,7 @@
         android:layout_height="wrap_content"
         android:layout_below="@+id/ackDivider1_iv"
         android:layout_marginTop="5dp"
-        android:text="@string/ACK_FULL_MESSAGE"
+        android:text="@string/ACKNOWLEDGE_FULL_MESSAGE"
         android:textAppearance="?android:attr/textAppearanceMedium" />
 
     <View
@@ -67,7 +67,7 @@
         android:layout_below="@+id/ackDivider2_iv"
         android:layout_marginTop="5dp"
         android:drawableLeft="@drawable/ic_ack"
-        android:text="@string/ACK" />
+        android:text="@string/ACKNOWLEDGE" />
 
     <Button
         android:id="@+id/ackAbortAlarm_btn"
@@ -83,7 +83,7 @@
         android:layout_height="wrap_content"
         android:layout_below="@id/ackAbortAlarm_btn"
         android:layout_marginTop="40dp"
-        android:text="@string/ACK_LINE_BUSY"
+        android:text="@string/ACKNOWLEDGE_LINE_BUSY"
         android:textAppearance="?android:attr/textAppearanceMedium" />
 
     <TextView

@@ -59,7 +59,7 @@ public class Splash extends FragmentActivity {
 
 		// Text with correct version number
 		versionTextView = (TextView) findViewById(R.id.splashVersion_tv);
-		versionTextView.setText(String.format(getString(R.string.SPLASH_VERSION), getString(R.string.APP_VERSION)));
+		versionTextView.setText(String.format(getString(R.string.SPLASH_VERSION), getString(R.string.APPLICATION_VERSION)));
 
 		// Fetch value from shared preferences, this is to decide if user has agreed user the user license before or not
 		endUserLicenseAgreed = (Boolean) prefHandler.fetchPrefs(PrefKey.SHARED_PREF, PrefKey.END_USER_LICENSE_AGREED, DataType.BOOLEAN, this, false);

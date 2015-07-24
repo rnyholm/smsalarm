@@ -119,8 +119,8 @@ public class AlarmSignalDialog extends DialogFragment {
 		// Setup the dialog with correct resources, listeners and values
 		// @formatter:off
 		return new AlertDialog.Builder(context)
-				.setIcon(android.R.drawable.ic_dialog_info)	// Set icon
-				.setTitle(R.string.TONE_PROMPT_TITLE)		// Set title
+				.setIcon(android.R.drawable.ic_dialog_info)		// Set icon
+				.setTitle(R.string.ALARM_SIGNAL_DIALOG_TITLE)	// Set title
 				// @formatter:on
 
 				// Set items to list view from all available alarm signals

@@ -199,7 +199,7 @@ public class AlarmInfoDialog extends DialogFragment {
 		// @formatter:off
 		return new AlertDialog.Builder(context)
 				.setIcon(android.R.drawable.ic_dialog_info) 	// Set icon
-				.setTitle(R.string.ALARM_INFO_PROMPT_TITLE) 	// Set title
+				.setTitle(R.string.ALARM_INFO_DIALOG_TITLE) 	// Set title
 				.setView(scrollView) 							// Bind dialog to Layout
 				// @formatter:on
 

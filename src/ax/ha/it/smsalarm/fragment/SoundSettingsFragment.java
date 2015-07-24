@@ -389,7 +389,7 @@ public class SoundSettingsFragment extends SherlockFragment implements Applicati
 								// Check that all alarm signals exists
 								validateUserAddedAlarmSignals();
 							} else {
-								Toast.makeText(context, R.string.PATH_ALREADY_IN_ALARM_SIGNAL_PATH_LIST, Toast.LENGTH_LONG).show();
+								Toast.makeText(context, R.string.TOAST_PATH_ALREADY_IN_ALARM_SIGNAL_PATH_LIST, Toast.LENGTH_LONG).show();
 							}
 						}
 
@@ -457,7 +457,7 @@ public class SoundSettingsFragment extends SherlockFragment implements Applicati
 			}
 
 			// Show toast for the user
-			Toast.makeText(context, missingAlarmSignalsMessage.toString() + getString(R.string.ALARM_SIGNALS_REMOVED_DUE_TO_MISSING_PATHS), Toast.LENGTH_LONG).show();
+			Toast.makeText(context, missingAlarmSignalsMessage.toString() + getString(R.string.TOAST_ALARM_SIGNALS_REMOVED_DUE_TO_MISSING_PATHS), Toast.LENGTH_LONG).show();
 		}
 	}
 

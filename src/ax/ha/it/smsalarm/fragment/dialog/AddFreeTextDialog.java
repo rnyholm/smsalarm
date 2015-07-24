@@ -24,6 +24,7 @@ import ax.ha.it.smsalarm.ui.NoBlanksEditText;
  * @author Robert Nyholm <robert.nyholm@aland.net>
  * @version 2.3.1
  * @since 2.3.1
+ * @see EditFreeTextDialog
  * @see RemoveFreeTextDialog
  * @see #ADD_FREE_TEXT
  * @see #ADD_FREE_TEXT_DIALOG_TAG
@@ -67,7 +68,7 @@ public class AddFreeTextDialog extends DialogFragment {
 		// Setup the EditText
 		// @formatter:off
 		inputEditText = new NoBlanksEditText(context);
-		inputEditText.setHint(R.string.FREE_TEXT_PROMPT_HINT);	// Set hint to EditText
+		inputEditText.setHint(R.string.FREE_TEXT_DIALOG_HINT);	// Set hint to EditText
 		inputEditText.setInputType(InputType.TYPE_CLASS_TEXT);	// Set input type to EditText
 		// @formatter:on
 
@@ -84,10 +85,10 @@ public class AddFreeTextDialog extends DialogFragment {
 		String message = "";
 		switch (getTargetRequestCode()) {
 			case (ADD_PRIMARY_FREE_TEXT_DIALOG_REQUEST_CODE):
-				message = getString(R.string.PRIMARY_FREE_TEXT_PROMPT_MESSAGE);
+				message = getString(R.string.ADD_PRIMARY_FREE_TEXT_DIALOG_MESSAGE);
 				break;
 			case (ADD_SECONDARY_FREE_TEXT_DIALOG_REQUEST_CODE):
-				message = getString(R.string.SECONDARY_FREE_TEXT_PROMPT_MESSAGE);
+				message = getString(R.string.ADD_SECONDARY_FREE_TEXT_DIALOG_MESSAGE);
 				break;
 			default:
 				if (SmsAlarm.DEBUG) {
@@ -98,10 +99,10 @@ public class AddFreeTextDialog extends DialogFragment {
 		// Setup the dialog with correct resources, listeners and values
 		// @formatter:off
 		return new AlertDialog.Builder(context)
-				.setIcon(android.R.drawable.ic_dialog_info)	// Set icon
-				.setTitle(R.string.FREE_TEXT_PROMPT_TITLE)	// Set title
-				.setMessage(message)						// Set resolved message
-				.setView(inputEditText)						// Bind dialog to input
+				.setIcon(android.R.drawable.ic_dialog_info)		// Set icon
+				.setTitle(R.string.ADD_FREE_TEXT_DIALOG_TITLE)	// Set title
+				.setMessage(message)							// Set resolved message
+				.setView(inputEditText)							// Bind dialog to input
 				// @formatter:on
 
 				.setPositiveButton(R.string.OK, new DialogInterface.OnClickListener() {

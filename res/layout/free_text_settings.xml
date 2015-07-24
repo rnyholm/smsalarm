@@ -46,12 +46,20 @@
             android:text="@string/ADD" />
 
         <Button
+            android:id="@+id/editPrimaryFreeText_btn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignBaseline="@id/addPrimaryFreeText_btn"
+            android:layout_toRightOf="@id/addPrimaryFreeText_btn"
+            android:text="@string/EDIT" />
+
+        <Button
             android:id="@+id/deletePrimaryFreeText_btn"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignBaseline="@+id/addPrimaryFreeText_btn"
-            android:layout_toRightOf="@id/addPrimaryFreeText_btn"
-            android:text="@string/DELETE" />
+            android:layout_alignBaseline="@+id/editPrimaryFreeText_btn"
+            android:layout_toRightOf="@id/editPrimaryFreeText_btn"
+            android:text="@string/REMOVE" />
 
         <TextView
             android:id="@+id/freeTextSecondaryAlarmTitle_tv"
@@ -76,12 +84,20 @@
             android:text="@string/ADD" />
 
         <Button
-            android:id="@+id/deleteSecondaryFreeText_btn"
+            android:id="@+id/editSecondaryFreeText_btn"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignBaseline="@id/addSecondaryFreeText_btn"
             android:layout_toRightOf="@id/addSecondaryFreeText_btn"
-            android:text="@string/DELETE" />
+            android:text="@string/EDIT" />
+
+        <Button
+            android:id="@+id/deleteSecondaryFreeText_btn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignBaseline="@id/editSecondaryFreeText_btn"
+            android:layout_toRightOf="@id/editSecondaryFreeText_btn"
+            android:text="@string/REMOVE" />
     </RelativeLayout>
 
 </ScrollView>

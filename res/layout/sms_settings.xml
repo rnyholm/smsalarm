@@ -44,12 +44,20 @@
             android:text="@string/ADD" />
 
         <Button
-            android:id="@+id/deletePrimarySmsNumber_btn"
+            android:id="@+id/editPrimarySmsNumber_btn"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignBaseline="@id/addPrimarySmsNumber_btn"
             android:layout_toRightOf="@id/addPrimarySmsNumber_btn"
-            android:text="@string/DELETE" />
+            android:text="@string/EDIT" />
+
+        <Button
+            android:id="@+id/deletePrimarySmsNumber_btn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignBaseline="@id/editPrimarySmsNumber_btn"
+            android:layout_toRightOf="@id/editPrimarySmsNumber_btn"
+            android:text="@string/REMOVE" />
 
         <TextView
             android:id="@+id/smsSecondaryAlarmTitle_tv"
@@ -74,11 +82,19 @@
             android:text="@string/ADD" />
 
         <Button
-            android:id="@+id/deleteSecondarySmsNumber_btn"
+            android:id="@+id/editSecondarySmsNumber_btn"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignBaseline="@id/addSecondarySmsNumber_btn"
             android:layout_toRightOf="@id/addSecondarySmsNumber_btn"
-            android:text="@string/DELETE" />
+            android:text="@string/EDIT" />
+
+        <Button
+            android:id="@+id/deleteSecondarySmsNumber_btn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignBaseline="@id/editSecondarySmsNumber_btn"
+            android:layout_toRightOf="@id/editSecondarySmsNumber_btn"
+            android:text="@string/REMOVE" />
         </RelativeLayout>
 </ScrollView>

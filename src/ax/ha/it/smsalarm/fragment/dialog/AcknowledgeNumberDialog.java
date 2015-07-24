@@ -75,8 +75,8 @@ public class AcknowledgeNumberDialog extends DialogFragment {
 		// Setup the EditText
 		// @formatter:off
 		inputEditText = new NoBlanksEditText(context);
-		inputEditText.setHint(R.string.NUMBER_PROMPT_HINT);		// Set hint to EditText
-		inputEditText.setInputType(InputType.TYPE_CLASS_PHONE);	// Set input type to EditText
+		inputEditText.setHint(R.string.PHONE_NUMBER_DIALOG_HINT);	// Set hint to EditText
+		inputEditText.setInputType(InputType.TYPE_CLASS_PHONE);		// Set input type to EditText
 		// @formatter:on
 
 		// If saved instance state isn't null, try to get the number from them, if they exists. Else try to get the number from arguments as they can
@@ -84,21 +84,21 @@ public class AcknowledgeNumberDialog extends DialogFragment {
 		if (savedInstanceState != null) {
 			// Check if we got any data in saved instance associated with certain key or if we got any arguments
 			if (savedInstanceState.getCharSequence(ACKNOWLEDGE_NUMBER) != null) {
-				setTextAndChangeSelection(savedInstanceState.getCharSequence(ACKNOWLEDGE_NUMBER).toString());
+				inputEditText.setText(savedInstanceState.getCharSequence(ACKNOWLEDGE_NUMBER).toString());
 			}
 		} else if (getArguments() != null) {
 			if (getArguments().getString(ACKNOWLEDGE_NUMBER) != null) {
-				setTextAndChangeSelection(getArguments().getString(ACKNOWLEDGE_NUMBER));
+				inputEditText.setText(getArguments().getString(ACKNOWLEDGE_NUMBER));
 			}
 		}
 
 		// Setup the dialog with correct resources, listeners and values
 		// @formatter:off
 		return new AlertDialog.Builder(context)
-				.setIcon(android.R.drawable.ic_dialog_info) 	// Set icon
-				.setTitle(R.string.NUMBER_PROMPT_TITLE) 		// Set title
-				.setMessage(R.string.ACK_NUMBER_PROMPT_MESSAGE) // Set message
-				.setView(inputEditText) 						// Bind dialog to EditText
+				.setIcon(android.R.drawable.ic_dialog_info) 					// Set icon
+				.setTitle(R.string.PHONE_NUMBER_DIALOG_TITLE) 					// Set title
+				.setMessage(R.string.ACKNOWLEDGE_PHONE_NUMBER_DIALOG_MESSAGE)	// Set message
+				.setView(inputEditText) 										// Bind dialog to EditText
 				// @formatter:on
 
 				.setPositiveButton(R.string.OK, new DialogInterface.OnClickListener() {
@@ -127,17 +127,5 @@ public class AcknowledgeNumberDialog extends DialogFragment {
 	public void onSaveInstanceState(Bundle arg0) {
 		super.onSaveInstanceState(arg0);
 		arg0.putCharSequence(ACKNOWLEDGE_NUMBER, inputEditText.getText().toString());
-	}
-
-	/**
-	 * Convenience method to set a text to this {@link AcknowledgeNumberDialog}'s {@link EditText} for input. This method will also moves the cursor
-	 * to the end of the text in the <code>EditText</code>.
-	 * 
-	 * @param text
-	 *            Text To be placed in the <code>EditText</code> within this dialog.
-	 */
-	private void setTextAndChangeSelection(String text) {
-		inputEditText.setText(text);
-		inputEditText.setSelection(inputEditText.length());
 	}
 }

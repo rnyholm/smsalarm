@@ -4,6 +4,7 @@
 package ax.ha.it.smsalarm.fragment;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import android.app.Activity;
@@ -21,10 +22,12 @@ import android.widget.Spinner;
 import android.widget.Toast;
 import ax.ha.it.smsalarm.R;
 import ax.ha.it.smsalarm.fragment.dialog.AddFreeTextDialog;
+import ax.ha.it.smsalarm.fragment.dialog.EditFreeTextDialog;
 import ax.ha.it.smsalarm.fragment.dialog.RemoveFreeTextDialog;
 import ax.ha.it.smsalarm.handler.SharedPreferencesHandler;
 import ax.ha.it.smsalarm.handler.SharedPreferencesHandler.DataType;
 import ax.ha.it.smsalarm.handler.SharedPreferencesHandler.PrefKey;
+import ax.ha.it.smsalarm.util.InitializableString;
 import ax.ha.it.smsalarm.util.Util;
 
 import com.actionbarsherlock.app.SherlockFragment;
@@ -48,8 +51,10 @@ public class FreeTextSettingsFragment extends SherlockFragment implements Applic
 
 	// The Buttons...
 	private Button addPrimaryFreeTextButton;
+	private Button editPrimaryFreeTextButton;
 	private Button removePrimaryFreeTextButton;
 	private Button addSecondaryFreeTextButton;
+	private Button editSecondaryFreeTextButton;
 	private Button removeSecondaryFreeTextButton;
 
 	// ... and Spinners
@@ -95,8 +100,10 @@ public class FreeTextSettingsFragment extends SherlockFragment implements Applic
 	public void findViews(View view) {
 		// Finding Button views
 		addPrimaryFreeTextButton = (Button) view.findViewById(R.id.addPrimaryFreeText_btn);
+		editPrimaryFreeTextButton = (Button) view.findViewById(R.id.editPrimaryFreeText_btn);
 		removePrimaryFreeTextButton = (Button) view.findViewById(R.id.deletePrimaryFreeText_btn);
 		addSecondaryFreeTextButton = (Button) view.findViewById(R.id.addSecondaryFreeText_btn);
+		editSecondaryFreeTextButton = (Button) view.findViewById(R.id.editSecondaryFreeText_btn);
 		removeSecondaryFreeTextButton = (Button) view.findViewById(R.id.deleteSecondaryFreeText_btn);
 
 		// Finding Spinner views
@@ -128,6 +135,16 @@ public class FreeTextSettingsFragment extends SherlockFragment implements Applic
 			}
 		});
 
+		// Set listener to Edit Primary Free Text Button
+		editPrimaryFreeTextButton.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				// Resolve free text to be edited
+				String primaryFreeTextToBeEdited = primaryFreeTexts.get(primaryFreeTextSpinner.getSelectedItemPosition());
+				showEditFreeTextDialog(EditFreeTextDialog.EDIT_PRIMARY_FREE_TEXT_DIALOG_REQUEST_CODE, primaryFreeTextToBeEdited);
+			}
+		});
+
 		// Set listener to Remove Primary Free Text Button
 		removePrimaryFreeTextButton.setOnClickListener(new OnClickListener() {
 			@Override
@@ -151,6 +168,16 @@ public class FreeTextSettingsFragment extends SherlockFragment implements Applic
 			}
 		});
 
+		// Set listener to Edit Secondary Free Text Button
+		editSecondaryFreeTextButton.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				// Resolve free text to be edited
+				String secondaryFreeTextToBeEdited = secondaryFreeTexts.get(secondaryFreeTextSpinner.getSelectedItemPosition());
+				showEditFreeTextDialog(EditFreeTextDialog.EDIT_SECONDARY_FREE_TEXT_DIALOG_REQUEST_CODE, secondaryFreeTextToBeEdited);
+			}
+		});
+
 		// Set listener to Remove Secondary Free Text Button
 		removeSecondaryFreeTextButton.setOnClickListener(new OnClickListener() {
 			@Override
@@ -170,10 +197,11 @@ public class FreeTextSettingsFragment extends SherlockFragment implements Applic
 	public void onActivityResult(int requestCode, int resultCode, Intent data) {
 		// Only interested in OK results, don't care at all about the others
 		if (resultCode == Activity.RESULT_OK) {
-			// Boolean indicating if there are duplicates of the primary and secondary free texts
-			boolean duplicatedFreeTexts = false;
 			// To store the entered free text for further handling
 			String newFreeText = "";
+
+			// To store the edited free text and the free text to be replaced for further handling
+			InitializableString initializableString;
 
 			// Only interested in certain request codes...
 			switch (requestCode) {
@@ -182,13 +210,8 @@ public class FreeTextSettingsFragment extends SherlockFragment implements Applic
 
 					// If input doesn't exist in the list of secondaryFreeTexts and input isn't empty
 					if (!Util.existsInIgnoreCases(newFreeText, secondaryFreeTexts) && !"".equals(newFreeText)) {
-						// Check that the list of primaryFreeTexts doesn't contain the new free text
-						if (Util.existsInIgnoreCases(newFreeText, primaryFreeTexts)) {
-							duplicatedFreeTexts = true;
-						}
-
-						// Store input if duplicated free texts is false
-						if (!duplicatedFreeTexts) {
+						// Store input if the list of primaryFreeTexts doesn't contain the new free text
+						if (!Util.existsInIgnoreCases(newFreeText, primaryFreeTexts)) {
 							// Add given input to list
 							primaryFreeTexts.add(newFreeText);
 
@@ -198,7 +221,7 @@ public class FreeTextSettingsFragment extends SherlockFragment implements Applic
 							// Update affected UI widgets
 							updatePrimaryFreeTextSpinner();
 						} else {
-							Toast.makeText(context, R.string.FREE_TEXT_ALREADY_IN_PRIMARY_LIST, Toast.LENGTH_LONG).show();
+							Toast.makeText(context, R.string.TOAST_FREE_TEXT_ALREADY_IN_PRIMARY_LIST, Toast.LENGTH_LONG).show();
 
 							// Showing dialog again with correct request code
 							showAddFreeTextDialog(AddFreeTextDialog.ADD_PRIMARY_FREE_TEXT_DIALOG_REQUEST_CODE);
@@ -206,9 +229,9 @@ public class FreeTextSettingsFragment extends SherlockFragment implements Applic
 					} else {
 						// Empty input was given
 						if ("".equals(newFreeText)) {
-							Toast.makeText(context, R.string.TEXT_IS_NEEDED, Toast.LENGTH_LONG).show();
+							Toast.makeText(context, R.string.TOAST_FREE_TEXT_MISSING, Toast.LENGTH_LONG).show();
 						} else { // Given primary free text exists in the list of secondary free texts
-							Toast.makeText(context, R.string.DUPLICATED_FREE_TEXTS, Toast.LENGTH_LONG).show();
+							Toast.makeText(context, R.string.TOAST_DUPLICATED_FREE_TEXTS, Toast.LENGTH_LONG).show();
 						}
 
 						showAddFreeTextDialog(AddFreeTextDialog.ADD_PRIMARY_FREE_TEXT_DIALOG_REQUEST_CODE);
@@ -218,26 +241,72 @@ public class FreeTextSettingsFragment extends SherlockFragment implements Applic
 					newFreeText = data.getStringExtra(AddFreeTextDialog.ADD_FREE_TEXT);
 
 					if (!Util.existsInIgnoreCases(newFreeText, primaryFreeTexts) && !"".equals(newFreeText)) {
-						if (Util.existsInIgnoreCases(newFreeText, secondaryFreeTexts)) {
-							duplicatedFreeTexts = true;
-						}
-
-						if (!duplicatedFreeTexts) {
+						if (!Util.existsInIgnoreCases(newFreeText, secondaryFreeTexts)) {
 							secondaryFreeTexts.add(newFreeText);
 							prefHandler.storePrefs(PrefKey.SHARED_PREF, PrefKey.SECONDARY_LISTEN_FREE_TEXTS_KEY, secondaryFreeTexts, context);
 							updateSecondaryFreeTextSpinner();
 						} else {
-							Toast.makeText(context, R.string.FREE_TEXT_ALREADY_IN_SECONDARY_LIST, Toast.LENGTH_LONG).show();
+							Toast.makeText(context, R.string.TOAST_FREE_TEXT_ALREADY_IN_SECONDARY_LIST, Toast.LENGTH_LONG).show();
 							showAddFreeTextDialog(AddFreeTextDialog.ADD_SECONDARY_FREE_TEXT_DIALOG_REQUEST_CODE);
 						}
 					} else {
 						if ("".equals(newFreeText)) {
-							Toast.makeText(context, R.string.TEXT_IS_NEEDED, Toast.LENGTH_LONG).show();
+							Toast.makeText(context, R.string.TOAST_FREE_TEXT_MISSING, Toast.LENGTH_LONG).show();
 						} else {
-							Toast.makeText(context, R.string.DUPLICATED_FREE_TEXTS, Toast.LENGTH_LONG).show();
+							Toast.makeText(context, R.string.TOAST_DUPLICATED_FREE_TEXTS, Toast.LENGTH_LONG).show();
 						}
 
 						showAddFreeTextDialog(AddFreeTextDialog.ADD_SECONDARY_FREE_TEXT_DIALOG_REQUEST_CODE);
+					}
+					break;
+				case (EditFreeTextDialog.EDIT_PRIMARY_FREE_TEXT_DIALOG_REQUEST_CODE):
+					initializableString = (InitializableString) data.getParcelableExtra(EditFreeTextDialog.EDIT_FREE_TEXT);
+
+					if (!"".equals(initializableString.getValue()) && !Util.existsInIgnoreCases(initializableString.getValue(), secondaryFreeTexts)) {
+						if (!Util.existsInIgnoreCases(initializableString.getValue(), primaryFreeTexts)) {
+							// Replace existing element in list of primary free texts with the new one
+							Collections.replaceAll(primaryFreeTexts, initializableString.getInitialValue(), initializableString.getValue());
+
+							// Store to shared preferences
+							prefHandler.storePrefs(PrefKey.SHARED_PREF, PrefKey.PRIMARY_LISTEN_FREE_TEXTS_KEY, primaryFreeTexts, context);
+
+							// Update affected UI widgets
+							updatePrimaryFreeTextSpinner();
+						} else {
+							Toast.makeText(context, R.string.TOAST_FREE_TEXT_ALREADY_IN_PRIMARY_LIST, Toast.LENGTH_LONG).show();
+							showEditFreeTextDialog(EditFreeTextDialog.EDIT_PRIMARY_FREE_TEXT_DIALOG_REQUEST_CODE, initializableString.getInitialValue());
+						}
+					} else {
+						// Empty input was given
+						if ("".equals(initializableString.getValue())) {
+							Toast.makeText(context, R.string.TOAST_FREE_TEXT_MISSING, Toast.LENGTH_LONG).show();
+						} else { // Given primary free text exists in the list of secondary free texts
+							Toast.makeText(context, R.string.TOAST_DUPLICATED_FREE_TEXTS, Toast.LENGTH_LONG).show();
+						}
+
+						showEditFreeTextDialog(EditFreeTextDialog.EDIT_PRIMARY_FREE_TEXT_DIALOG_REQUEST_CODE, initializableString.getInitialValue());
+					}
+					break;
+				case (EditFreeTextDialog.EDIT_SECONDARY_FREE_TEXT_DIALOG_REQUEST_CODE):
+					initializableString = (InitializableString) data.getParcelableExtra(EditFreeTextDialog.EDIT_FREE_TEXT);
+
+					if (!"".equals(initializableString.getValue()) && !Util.existsInIgnoreCases(initializableString.getValue(), primaryFreeTexts)) {
+						if (!Util.existsInIgnoreCases(initializableString.getValue(), secondaryFreeTexts)) {
+							Collections.replaceAll(secondaryFreeTexts, initializableString.getInitialValue(), initializableString.getValue());
+							prefHandler.storePrefs(PrefKey.SHARED_PREF, PrefKey.SECONDARY_LISTEN_FREE_TEXTS_KEY, secondaryFreeTexts, context);
+							updateSecondaryFreeTextSpinner();
+						} else {
+							Toast.makeText(context, R.string.TOAST_FREE_TEXT_ALREADY_IN_SECONDARY_LIST, Toast.LENGTH_LONG).show();
+							showEditFreeTextDialog(EditFreeTextDialog.EDIT_SECONDARY_FREE_TEXT_DIALOG_REQUEST_CODE, initializableString.getInitialValue());
+						}
+					} else {
+						if ("".equals(initializableString.getValue())) {
+							Toast.makeText(context, R.string.TOAST_FREE_TEXT_MISSING, Toast.LENGTH_LONG).show();
+						} else {
+							Toast.makeText(context, R.string.TOAST_DUPLICATED_FREE_TEXTS, Toast.LENGTH_LONG).show();
+						}
+
+						showEditFreeTextDialog(EditFreeTextDialog.EDIT_SECONDARY_FREE_TEXT_DIALOG_REQUEST_CODE, initializableString.getInitialValue());
 					}
 					break;
 				case (RemoveFreeTextDialog.REMOVE_PRIMARY_FREE_TEXT_DIALOG_REQUEST_CODE):
@@ -267,6 +336,20 @@ public class FreeTextSettingsFragment extends SherlockFragment implements Applic
 		AddFreeTextDialog dialog = new AddFreeTextDialog();
 		dialog.setTargetFragment(FreeTextSettingsFragment.this, requestCode);
 		dialog.show(getFragmentManager(), AddFreeTextDialog.ADD_FREE_TEXT_DIALOG_TAG);
+	}
+
+	/**
+	 * Convenience method to create a new instance of {@link EditFreeTextDialog} and show it.
+	 * 
+	 * @param requestCode
+	 *            Request code for the created <code>EditFreeTextDialog</code>.
+	 * @param freeTextToBeEdited
+	 *            Free text to be edited.
+	 */
+	private void showEditFreeTextDialog(int requestCode, String freeTextToBeEdited) {
+		EditFreeTextDialog dialog = EditFreeTextDialog.newInstance(new InitializableString(freeTextToBeEdited));
+		dialog.setTargetFragment(FreeTextSettingsFragment.this, requestCode);
+		dialog.show(getFragmentManager(), EditFreeTextDialog.EDIT_FREE_TEXT_DIALOG_TAG);
 	}
 
 	/**
@@ -303,7 +386,7 @@ public class FreeTextSettingsFragment extends SherlockFragment implements Applic
 		} else {
 			// Only add item to list if it's empty
 			if (emptyFreeTexts.isEmpty()) {
-				emptyFreeTexts.add(getString(R.string.ENTER_FREE_TEXT_HINT));
+				emptyFreeTexts.add(getString(R.string.ADD_FREE_TEXT_HINT));
 			}
 			ArrayAdapter<String> adapter = new ArrayAdapter<String>(context, android.R.layout.simple_spinner_item, emptyFreeTexts);
 			adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
@@ -325,7 +408,7 @@ public class FreeTextSettingsFragment extends SherlockFragment implements Applic
 		} else {
 			// Only add item to list if it's empty
 			if (emptyFreeTexts.isEmpty()) {
-				emptyFreeTexts.add(getString(R.string.ENTER_FREE_TEXT_HINT));
+				emptyFreeTexts.add(getString(R.string.ADD_FREE_TEXT_HINT));
 			}
 			ArrayAdapter<String> adapter = new ArrayAdapter<String>(context, android.R.layout.simple_spinner_item, emptyFreeTexts);
 			adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);

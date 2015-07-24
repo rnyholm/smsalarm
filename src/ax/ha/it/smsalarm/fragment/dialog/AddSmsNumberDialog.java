@@ -23,6 +23,7 @@ import ax.ha.it.smsalarm.ui.NoBlanksEditText;
  * @author Robert Nyholm <robert.nyholm@aland.net>
  * @version 2.3.1
  * @since 2.3.1
+ * @see EditSmsNumberDialog
  * @see RemoveSmsNumberDialog
  * @see #ADD_SMS_NUMBER
  * @see #ADD_SMS_NUMBER_DIALOG_TAG
@@ -66,8 +67,8 @@ public class AddSmsNumberDialog extends DialogFragment {
 		// Setup the EditText
 		// @formatter:off
 		inputEditText = new NoBlanksEditText(context);
-		inputEditText.setHint(R.string.NUMBER_PROMPT_HINT);	// Set hint to EditText
-		inputEditText.setInputType(InputType.TYPE_CLASS_TEXT);	// Set input type to EditText
+		inputEditText.setHint(R.string.PHONE_NUMBER_DIALOG_HINT);	// Set hint to EditText
+		inputEditText.setInputType(InputType.TYPE_CLASS_TEXT);		// Set input type to EditText
 		// @formatter:on
 
 		// If not null, the fragment is being re-created, get data from saved instance, if exist.
@@ -83,10 +84,10 @@ public class AddSmsNumberDialog extends DialogFragment {
 		String message = "";
 		switch (getTargetRequestCode()) {
 			case (ADD_PRIMARY_SMS_NUMBER_DIALOG_REQUEST_CODE):
-				message = getString(R.string.PRIMARY_NUMBER_PROMPT_MESSAGE);
+				message = getString(R.string.ADD_PRIMARY_PHONE_NUMBER_DIALOG_MESSAGE);
 				break;
 			case (ADD_SECONDARY_SMS_NUMBER_DIALOG_REQUEST_CODE):
-				message = getString(R.string.SECONDARY_NUMBER_PROMPT_MESSAGE);
+				message = getString(R.string.ADD_SECONDARY_PHONE_NUMBER_DIALOG_MESSAGE);
 				break;
 			default:
 				Log.e(LOG_TAG + ":onCreateDialog()", "Cannot resolve dialog message due to an unsupported request code: \"" + getTargetRequestCode() + "\"");
@@ -95,10 +96,10 @@ public class AddSmsNumberDialog extends DialogFragment {
 		// Setup the dialog with correct resources, listeners and values
 		// @formatter:off
 		return new AlertDialog.Builder(context)
-				.setIcon(android.R.drawable.ic_dialog_info)	// Set icon
-				.setTitle(R.string.NUMBER_PROMPT_TITLE)	// Set title
-				.setMessage(message)						// Set resolved message
-				.setView(inputEditText)						// Bind dialog to input
+				.setIcon(android.R.drawable.ic_dialog_info)			// Set icon
+				.setTitle(R.string.ADD_PHONE_NUMBER_DIALOG_TITLE)	// Set title
+				.setMessage(message)								// Set resolved message
+				.setView(inputEditText)								// Bind dialog to input
 				// @formatter:on
 
 				.setPositiveButton(R.string.OK, new DialogInterface.OnClickListener() {

@@ -82,11 +82,11 @@ public class MockSmsDialog extends DialogFragment {
 		// Setup the EditTexts
 		// @formatter:off
 		smsSenderEditText = new EditText(context);
-		smsSenderEditText.setHint(R.string.DEBUG_MOCK_SMS_SENDER_HINT); 	// Set hint to EditText
+		smsSenderEditText.setHint(R.string.DEBUG_MOCK_SMS_SENDER_DIALOG_HINT); 	// Set hint to EditText
 		smsSenderEditText.setInputType(InputType.TYPE_CLASS_TEXT);		 	// Set input type to EditText
 		
 		smsBodyEditText = new EditText(context);
-		smsBodyEditText.setHint(R.string.DEBUG_MOCK_SMS_BODY_HINT);
+		smsBodyEditText.setHint(R.string.DEBUG_MOCK_SMS_BODY_DIALOG_HINT);
 		smsBodyEditText.setInputType(InputType.TYPE_TEXT_FLAG_CAP_SENTENCES | InputType.TYPE_TEXT_FLAG_MULTI_LINE);
 		smsBodyEditText.setMinLines(4); 																			// Set minimum lines
 		smsBodyEditText.setLines(4); 	
@@ -135,8 +135,8 @@ public class MockSmsDialog extends DialogFragment {
 		TextView smsSenderTextView = new TextView(context);
 		TextView smsBodyTextView = new TextView(context);
 
-		smsSenderTextView.setText(R.string.DEBUG_MOCK_SMS_SENDER_TITLE);
-		smsBodyTextView.setText(R.string.DEBUG_MOCK_SMS_BODY_TITLE);
+		smsSenderTextView.setText(R.string.DEBUG_MOCK_SMS_SENDER_DIALOG_TITLE);
+		smsBodyTextView.setText(R.string.DEBUG_MOCK_SMS_BODY_DIALOG_TITLE);
 
 		// Need a layout for the TextViews displaying the current number of characters and the maximum numbers of characters
 		LinearLayout charCountLayout = new LinearLayout(context);
@@ -158,7 +158,7 @@ public class MockSmsDialog extends DialogFragment {
 		// @formatter:off
 		return new AlertDialog.Builder(context)
 				.setIcon(android.R.drawable.ic_dialog_info) 			// Set icon
-				.setTitle(R.string.DEBUG_DISPATCH_MOCK_SMS_TITLE) 		// Set title
+				.setTitle(R.string.DEBUG_DISPATCH_MOCK_SMS_DIALOG_TITLE) 		// Set title
 				.setView(layout) 										// Bind dialog to Layout
 				// @formatter:on
 

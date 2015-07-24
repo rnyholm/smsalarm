@@ -12,7 +12,7 @@
             android:id="@+id/ackSettingsTitle_tv"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/TITLE_ACK_SETTINGS"
+            android:text="@string/TITLE_ACKNOWLEDGE_SETTINGS"
             android:textAppearance="?android:attr/textAppearanceMedium" />
 
         <TextView
@@ -20,7 +20,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_below="@+id/ackSettingsTitle_tv"
-            android:text="@string/INFO_ACK_SETTINGS"
+            android:text="@string/INFO_ACKNOWLEDGE_SETTINGS"
             android:textAppearance="?android:attr/textAppearanceSmall" />
 
         <CheckBox
@@ -52,7 +52,7 @@
                 android:id="@+id/ackSettingsAckMethodTitle_tv"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/TITLE_ACK_BY"
+                android:text="@string/TITLE_ACKNOWLEDGE_BY"
                 android:textAppearance="?android:attr/textAppearanceMedium" />
 
             <Spinner
@@ -69,7 +69,7 @@
             android:layout_height="wrap_content"
             android:layout_below="@id/ackSettingsMethodSelection_ll"
             android:layout_marginTop="5dp"
-            android:text="@string/TITLE_ACK_NUMBER"
+            android:text="@string/TITLE_ACKNOWLEDGE_PHONE_NUMBER"
             android:textAppearance="?android:attr/textAppearanceMedium" />
 
         <EditText
@@ -86,7 +86,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_below="@id/ackSettingsAckNumber_et"
-            android:text="@string/EDIT_NUMBER" />
+            android:text="@string/EDIT_PHONE_NUMBER" />
 
         <TextView
             android:id="@+id/ackSettingsAckMessageTitle_tv"
@@ -94,7 +94,7 @@
             android:layout_height="wrap_content"
             android:layout_below="@id/editAckNumber_btn"
             android:layout_marginTop="5dp"
-            android:text="@string/TITLE_ACK_MESSAGE"
+            android:text="@string/TITLE_ACKNOWLEDGE_MESSAGE"
             android:textAppearance="?android:attr/textAppearanceMedium" />
 
         <EditText
