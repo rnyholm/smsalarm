@@ -44,7 +44,22 @@ public class RemoveSmsNumberDialog extends DialogFragment {
 	private Context context;
 
 	// SMS number to be removed
-	private String number = "";
+	private String phoneNumber = "";
+
+	/**
+	 * Creates and returns a new instance of {@link RemoveSmsNumberDialog}, with given phone number in it.
+	 * 
+	 * @param phoneNumber
+	 *            Phone number to be placed within this dialog upon creation.
+	 * @return New instance of <code>RemoveSmsNumberDialog</code> prepared with given phone number as argument.
+	 */
+	public static RemoveSmsNumberDialog newInstance(String phoneNumber) {
+		RemoveSmsNumberDialog dialogFragment = new RemoveSmsNumberDialog();
+		Bundle args = new Bundle();
+		args.putString(REMOVE_SMS_NUMBER, phoneNumber);
+		dialogFragment.setArguments(args);
+		return dialogFragment;
+	}
 
 	/**
 	 * To create a new instance of {@link RemoveSmsNumberDialog}.
@@ -59,25 +74,23 @@ public class RemoveSmsNumberDialog extends DialogFragment {
 
 		// Set context here, it's safe because this dialog fragment has been attached to it's container, hence we have access to context
 		context = getActivity();
-
-		// Must get the SMS number from bundle for two reasons:
-		// 1. For user experience, SMS number to be removed will be shown in the dialog
-		// 2. To avoid some weird "this flagged string will be removed condition" in caller class, SMS number passed over from this dialog will be
-		// handled by calling class and it's removal logic
-		Bundle arguments = getArguments();
-		number = arguments.getString(REMOVE_SMS_NUMBER);
 	}
 
 	@Override
 	public Dialog onCreateDialog(Bundle savedInstanceState) {
+		// Get the phone number from the arguments, it should definitely be there but check to be sure
+		if (getArguments() != null && getArguments().getString(REMOVE_SMS_NUMBER) != null) {
+			phoneNumber = getArguments().getString(REMOVE_SMS_NUMBER);
+		}
+
 		// Need to resolve correct message in dialog depending on request code
 		String message = "";
 		switch (getTargetRequestCode()) {
 			case (REMOVE_PRIMARY_SMS_NUMBER_DIALOG_REQUEST_CODE):
-				message = getString(R.string.REMOVE_PRIMARY_PHONE_NUMBER_DIALOG_MESSAGE) + " " + number + "?";
+				message = getString(R.string.REMOVE_PRIMARY_PHONE_NUMBER_DIALOG_MESSAGE) + " " + phoneNumber + "?";
 				break;
 			case (REMOVE_SECONDARY_SMS_NUMBER_DIALOG_REQUEST_CODE):
-				message = getString(R.string.REMOVE_SECONDARY_PHONE_NUMBER_DIALOG_MESSAGE) + " " + number + "?";
+				message = getString(R.string.REMOVE_SECONDARY_PHONE_NUMBER_DIALOG_MESSAGE) + " " + phoneNumber + "?";
 				break;
 			default:
 				if (SmsAlarm.DEBUG) {
@@ -98,7 +111,7 @@ public class RemoveSmsNumberDialog extends DialogFragment {
 					public void onClick(DialogInterface dialog, int whichButton) {
 						// Create an intent and put data from this dialogs number string and associate it with a certain key
 						Intent intent = new Intent();
-						intent.putExtra(REMOVE_SMS_NUMBER, number);
+						intent.putExtra(REMOVE_SMS_NUMBER, phoneNumber);
 
 						// Make a call to this dialog fragments owning fragments onAcitivityResult with correct request code, result code and intent
 						getTargetFragment().onActivityResult(getTargetRequestCode(), Activity.RESULT_OK, intent);

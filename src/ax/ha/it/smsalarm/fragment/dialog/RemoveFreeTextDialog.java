@@ -47,6 +47,21 @@ public class RemoveFreeTextDialog extends DialogFragment {
 	private String freeText = "";
 
 	/**
+	 * Creates and returns a new instance of {@link RemoveFreeTextDialog}, with given free text in it.
+	 * 
+	 * @param freeText
+	 *            Free text to be placed within this dialog upon creation.
+	 * @return New instance of <code>RemoveFreeTextDialog</code> prepared with given free text as argument.
+	 */
+	public static RemoveFreeTextDialog newInstance(String freeText) {
+		RemoveFreeTextDialog dialogFragment = new RemoveFreeTextDialog();
+		Bundle args = new Bundle();
+		args.putString(REMOVE_FREE_TEXT, freeText);
+		dialogFragment.setArguments(args);
+		return dialogFragment;
+	}
+
+	/**
 	 * To create a new instance of {@link RemoveFreeTextDialog}.
 	 */
 	public RemoveFreeTextDialog() {
@@ -59,17 +74,15 @@ public class RemoveFreeTextDialog extends DialogFragment {
 
 		// Set context here, it's safe because this dialog fragment has been attached to it's container, hence we have access to context
 		context = getActivity();
-
-		// Must get the free text from bundle for two reasons:
-		// 1. For user experience, free text to be removed will be shown in the dialog
-		// 2. To avoid some weird "this flagged string will be removed condition" in caller class, free text passed over from this dialog will be
-		// handled by calling class and it's removal logic
-		Bundle arguments = getArguments();
-		freeText = arguments.getString(REMOVE_FREE_TEXT);
 	}
 
 	@Override
 	public Dialog onCreateDialog(Bundle savedInstanceState) {
+		// Get the free text from the arguments, it should definitely be there but check to be sure
+		if (getArguments() != null && getArguments().getString(REMOVE_FREE_TEXT) != null) {
+			freeText = getArguments().getString(REMOVE_FREE_TEXT);
+		}
+
 		// Need to resolve correct message in dialog depending on request code
 		String message = "";
 		switch (getTargetRequestCode()) {

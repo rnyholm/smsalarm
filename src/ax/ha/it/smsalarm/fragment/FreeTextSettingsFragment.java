@@ -361,13 +361,8 @@ public class FreeTextSettingsFragment extends SherlockFragment implements Applic
 	 *            Free text to be removed.
 	 */
 	private void showRemoveFreeTextDialog(int requestCode, String freeTextToBeRemoved) {
-		// Must pass over free text to be removed
-		Bundle arguments = new Bundle();
-		arguments.putString(RemoveFreeTextDialog.REMOVE_FREE_TEXT, freeTextToBeRemoved);
-
-		// Create Dialog as usual, but put arguments in it also
-		RemoveFreeTextDialog dialog = new RemoveFreeTextDialog();
-		dialog.setArguments(arguments);
+		// Create a new instance of RemoveFreeTextDialog prepared with correct free text
+		RemoveFreeTextDialog dialog = RemoveFreeTextDialog.newInstance(freeTextToBeRemoved);
 		dialog.setTargetFragment(FreeTextSettingsFragment.this, requestCode);
 		dialog.show(getFragmentManager(), RemoveFreeTextDialog.REMOVE_FREE_TEXT_DIALOG_TAG);
 	}

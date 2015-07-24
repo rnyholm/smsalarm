@@ -367,13 +367,8 @@ public class SmsSettingsFragment extends SherlockFragment implements Application
 	 *            SMS number to be removed.
 	 */
 	private void showRemoveSmsNumberDialog(int requestCode, String smsNumber) {
-		// Must pass over SMS number to be removed
-		Bundle arguments = new Bundle();
-		arguments.putString(RemoveSmsNumberDialog.REMOVE_SMS_NUMBER, smsNumber);
-
-		// Create Dialog as usual, but put arguments in it also
-		RemoveSmsNumberDialog dialog = new RemoveSmsNumberDialog();
-		dialog.setArguments(arguments);
+		// Create a new instance of RemoveSmsNumberDialog prepared with correct phone number
+		RemoveSmsNumberDialog dialog = RemoveSmsNumberDialog.newInstance(smsNumber);
 		dialog.setTargetFragment(SmsSettingsFragment.this, requestCode);
 		dialog.show(getFragmentManager(), RemoveSmsNumberDialog.REMOVE_SMS_NUMBER_DIALOG_TAG);
 	}
