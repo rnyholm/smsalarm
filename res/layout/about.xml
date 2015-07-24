@@ -56,20 +56,10 @@
         android:textAppearance="?android:attr/textAppearanceSmall" />
 
     <TextView
-        android:id="@+id/aboutVisit_tv"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="15dp"
-        android:autoLink="web"
-        android:linksClickable="true"
-        android:text="@string/ABOUT_VISIT"
-        android:textAppearance="?android:attr/textAppearanceSmall" />
-
-    <TextView
         android:id="@+id/aboutContact_tv"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="5dp"
+        android:layout_marginTop="15dp"
         android:autoLink="email"
         android:text="@string/ABOUT_CONTACT"
         android:textAppearance="?android:attr/textAppearanceSmall" />
