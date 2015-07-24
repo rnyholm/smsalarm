@@ -27,11 +27,7 @@
     <string name="INFO_PLAY_ALARM_SIGNAL_TWICE_SETTING">Om vald spelar Sms Alarm upp larmsignalen för både primär- och sekundärlarm två gånger vid larm.</string>
     <string name="INFO_SMS_SETTINGS">Ställ in vilka telefonnummer som Sms Alarm ska larma på SMS ifrån.</string>
     <string name="NO">Nej</string>
-    <string name="NO_PRIMARY_FREE_TEXT_EXISTS">Inga ord för primärlarm finns, kan ej ta bort ord.</string>
-    <string name="NO_PRIMARY_NUMBER_EXISTS">Inga telefonnummer för primärlarm finns, kan ej ta bort nummer.</string>
     <string name="NO_RECEIVED_ALARMS_EXISTS">Inga larm har tagits emot ännu.</string>
-    <string name="NO_SECONDARY_FREE_TEXT_EXISTS">Inga ord för sekundärlarm finns, kan ej ta bort ord.</string>  
-    <string name="NO_SECONDARY_NUMBER_EXISTS">Inga nummer för sekundärlarm finns, kan ej ta bort nummer.</string>
     <string name="PHONE_NUMBER_DIALOG_HINT">Telefonnummer..</string>
     <string name="PHONE_NUMBER_DIALOG_TITLE">Ange telefonnummer</string>
     <string name="PRIMARY_ALARM">PRIMÄRLARM!</string>

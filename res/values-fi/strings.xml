@@ -27,11 +27,7 @@
     <string name="INFO_PLAY_ALARM_SIGNAL_TWICE_SETTING">Jos valittu soittaa Sms Alarm hälytysäänen sekä ensi-ja toissijaisenhälytykseen kahdesti, hälytyksen yhteydessä.</string>
     <string name="INFO_SMS_SETTINGS">Asenna ne puhelinnumero joista Sms Alarm täytyy hälyttää viestin.</string>   
     <string name="NO">Ei</string>
-    <string name="NO_PRIMARY_FREE_TEXT_EXISTS">Ei ole ensisijaishälytyssanaa, ei voi poistaa sanaa.</string>
-    <string name="NO_PRIMARY_NUMBER_EXISTS">Ei ole ensisijaishälytysnumeroa, ei voi poistaa numeroa.</string>
     <string name="NO_RECEIVED_ALARMS_EXISTS">Hälytystä ei ole saatu vielä.</string>
-    <string name="NO_SECONDARY_FREE_TEXT_EXISTS">Ei ole toissijaishälytyssanaa, ei voi poistaa sanaa.</string>
-    <string name="NO_SECONDARY_NUMBER_EXISTS">Ei ole toissijaishälytysnumeroa, ei voi poistaa numeroa.</string>
     <string name="PHONE_NUMBER_DIALOG_HINT">Puhelinnumerot..</string>
     <string name="PHONE_NUMBER_DIALOG_TITLE">Anna puhelinnumero</string>
     <string name="PRIMARY_ALARM">ENSISIJAINEN HÄLYTYS!</string>

@@ -156,11 +156,7 @@
     <string name="LICENSE_OTHER_ACTIONBAR_SHERLOCK_URI">https://github.com/JakeWharton/ActionBarSherlock</string>   
    	<string name="NEW_LINE">\n</string>	
     <string name="NO">No</string>
-    <string name="NO_PRIMARY_FREE_TEXT_EXISTS">No words present for primary alarm, can not remove word.</string>
-    <string name="NO_PRIMARY_NUMBER_EXISTS">No telephone number for primary alarm exists, can not remove telephone number.</string>
     <string name="NO_RECEIVED_ALARMS_EXISTS">No alarm has yet been received.</string>
-    <string name="NO_SECONDARY_FREE_TEXT_EXISTS">No words present for secondary alarm, can not remove word.</string>  
-    <string name="NO_SECONDARY_NUMBER_EXISTS">No telephone number for secondary alarm exists, can not remove telephone number.</string>  
     <string name="OK">OK</string> 
     <string name="PHONE_NUMBER_DIALOG_HINT">Telephone number..</string>
     <string name="PHONE_NUMBER_DIALOG_TITLE">Enter a telephone number</string>

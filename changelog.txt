@@ -36,8 +36,9 @@ använda kvittering
 -Gränssnittet använder paddings istället för marginaler vilket leder till att gränssnittet renderas effektivare.
 -Möjlighet att kvittera genom SMS, både till förinställt nummer med förinställt meddelande och genom att returnera mottaget SMS. SMS:et kan vara max 160 tecken långt.
 -Räddningstjänst har bytts ut till organisation, på så vis blir appen mindre specifik för just räddningstjänsten.
--Alla fält för inmatning flyttar nu cursorn till slutet av texten, även fast man vänder skärmen. Möjligt att nu ändra befintliga telefonnummer och fritexter.
--Tagit bort webadressen till Sms Alarms websida, bytt epost till smsalarm@outlook.com
+-Alla fält för inmatning flyttar nu markören till slutet av texten, även fast man vänder skärmen. Möjligt att nu ändra befintliga telefonnummer och fritexter.
+-Tagit bort webadressen till Sms Alarms websida, bytt epost till smsalarm@outlook.com.
+-Knapparna Ändra och ta bort i SMS- och Ordinställningarn aktiveras och inaktiveras nu beroende på om det finns något man kan ändra/tabort.
 
 v2.2.5(version code 13)
 -Översättning till estniska lades till

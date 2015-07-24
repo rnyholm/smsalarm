@@ -27,11 +27,7 @@
     <string name="INFO_PLAY_ALARM_SIGNAL_TWICE_SETTING">Falls gewählt, spielt Sms Alarm zwei Mal ein Alarmsignal für Primär- und Sekundäralarm ab.</string>
     <string name="INFO_SMS_SETTINGS">Geben Sie ein, von welcher Telefonnummer aus Sms Alarm reagieren soll.</string>
     <string name="NO">Nein</string>
-    <string name="NO_PRIMARY_FREE_TEXT_EXISTS">Gibt es keine Wörter für das primäre Alarm, können keine Wörter entfernt werden.</string>
-    <string name="NO_PRIMARY_NUMBER_EXISTS">Gibt es keine Telefonnummern für das primäre Alarm, können keine Nummern entfernt werden.</string>
     <string name="NO_RECEIVED_ALARMS_EXISTS">Keine Benachrichtigungen wurden bisher empfangen.</string>
-    <string name="NO_SECONDARY_FREE_TEXT_EXISTS">Gibt es keine Wörter für das sekundäre Alarm, können keine Wörter entfernt werden.</string>  
-    <string name="NO_SECONDARY_NUMBER_EXISTS">Keine Telefonnummer für Sekundäralarm vorhanden, kann Telefonnummer nicht entfernen.</string>
     <string name="PHONE_NUMBER_DIALOG_HINT">Telefonnummer..</string>
     <string name="PHONE_NUMBER_DIALOG_TITLE">Eine Telefonnummer eingeben</string>
     <string name="PRIMARY_ALARM">PRIMÄRALARM!</string>

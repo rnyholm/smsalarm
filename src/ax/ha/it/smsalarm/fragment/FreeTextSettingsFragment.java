@@ -149,14 +149,9 @@ public class FreeTextSettingsFragment extends SherlockFragment implements Applic
 		removePrimaryFreeTextButton.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				// Only show delete dialog if primary free texts exists
-				if (!primaryFreeTexts.isEmpty()) {
-					// Resolve free text to be removed
-					String primaryFreeTextToBeRemoved = primaryFreeTexts.get(primaryFreeTextSpinner.getSelectedItemPosition());
-					showRemoveFreeTextDialog(RemoveFreeTextDialog.REMOVE_PRIMARY_FREE_TEXT_DIALOG_REQUEST_CODE, primaryFreeTextToBeRemoved);
-				} else {
-					Toast.makeText(context, R.string.NO_PRIMARY_FREE_TEXT_EXISTS, Toast.LENGTH_LONG).show();
-				}
+				// Resolve free text to be removed
+				String primaryFreeTextToBeRemoved = primaryFreeTexts.get(primaryFreeTextSpinner.getSelectedItemPosition());
+				showRemoveFreeTextDialog(RemoveFreeTextDialog.REMOVE_PRIMARY_FREE_TEXT_DIALOG_REQUEST_CODE, primaryFreeTextToBeRemoved);
 			}
 		});
 
@@ -182,13 +177,8 @@ public class FreeTextSettingsFragment extends SherlockFragment implements Applic
 		removeSecondaryFreeTextButton.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				// Only show delete dialog if secondary free texts exists
-				if (!secondaryFreeTexts.isEmpty()) {
-					String secondaryFreeTextToBeRemoved = secondaryFreeTexts.get(secondaryFreeTextSpinner.getSelectedItemPosition());
-					showRemoveFreeTextDialog(RemoveFreeTextDialog.REMOVE_SECONDARY_FREE_TEXT_DIALOG_REQUEST_CODE, secondaryFreeTextToBeRemoved);
-				} else {
-					Toast.makeText(context, R.string.NO_SECONDARY_FREE_TEXT_EXISTS, Toast.LENGTH_LONG).show();
-				}
+				String secondaryFreeTextToBeRemoved = secondaryFreeTexts.get(secondaryFreeTextSpinner.getSelectedItemPosition());
+				showRemoveFreeTextDialog(RemoveFreeTextDialog.REMOVE_SECONDARY_FREE_TEXT_DIALOG_REQUEST_CODE, secondaryFreeTextToBeRemoved);
 			}
 		});
 	}
@@ -387,6 +377,8 @@ public class FreeTextSettingsFragment extends SherlockFragment implements Applic
 			adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 			primaryFreeTextSpinner.setAdapter(adapter);
 		}
+
+		updateButtons();
 	}
 
 	/**
@@ -409,5 +401,19 @@ public class FreeTextSettingsFragment extends SherlockFragment implements Applic
 			adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 			secondaryFreeTextSpinner.setAdapter(adapter);
 		}
+
+		updateButtons();
+	}
+
+	/**
+	 * To update buttons within this fragment, mainly it enables or disables the <b><i>Edit</i></b> and <b><i>Remove</i></b> buttons.
+	 */
+	private void updateButtons() {
+		// Toggle the buttons depending whether or not it's corresponding list got any elements within it
+		editPrimaryFreeTextButton.setEnabled(!primaryFreeTexts.isEmpty());
+		removePrimaryFreeTextButton.setEnabled(!primaryFreeTexts.isEmpty());
+
+		editSecondaryFreeTextButton.setEnabled(!secondaryFreeTexts.isEmpty());
+		removeSecondaryFreeTextButton.setEnabled(!secondaryFreeTexts.isEmpty());
 	}
 }

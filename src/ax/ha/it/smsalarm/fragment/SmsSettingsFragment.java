@@ -151,14 +151,9 @@ public class SmsSettingsFragment extends SherlockFragment implements Application
 		removePrimarySmsNumberButton.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				// Only show delete dialog if primary SMS numbers exists, else show toast
-				if (!primarySmsNumbers.isEmpty()) {
-					// Resolve SMS number to be removed
-					String primarySmsNumberToBeRemoved = primarySmsNumbers.get(primarySmsNumberSpinner.getSelectedItemPosition());
-					showRemoveSmsNumberDialog(RemoveSmsNumberDialog.REMOVE_PRIMARY_SMS_NUMBER_DIALOG_REQUEST_CODE, primarySmsNumberToBeRemoved);
-				} else {
-					Toast.makeText(context, R.string.NO_PRIMARY_NUMBER_EXISTS, Toast.LENGTH_LONG).show();
-				}
+				// Resolve SMS number to be removed
+				String primarySmsNumberToBeRemoved = primarySmsNumbers.get(primarySmsNumberSpinner.getSelectedItemPosition());
+				showRemoveSmsNumberDialog(RemoveSmsNumberDialog.REMOVE_PRIMARY_SMS_NUMBER_DIALOG_REQUEST_CODE, primarySmsNumberToBeRemoved);
 			}
 		});
 
@@ -183,13 +178,8 @@ public class SmsSettingsFragment extends SherlockFragment implements Application
 		removeSecondarySmsNumberButton.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				// Only show delete dialog if secondary SMS numbers exists, else show toast
-				if (!secondarySmsNumbers.isEmpty()) {
-					String secondarySmsNumberToBeRemoved = secondarySmsNumbers.get(secondarySmsNumberSpinner.getSelectedItemPosition());
-					showRemoveSmsNumberDialog(RemoveSmsNumberDialog.REMOVE_SECONDARY_SMS_NUMBER_DIALOG_REQUEST_CODE, secondarySmsNumberToBeRemoved);
-				} else {
-					Toast.makeText(context, R.string.NO_SECONDARY_NUMBER_EXISTS, Toast.LENGTH_LONG).show();
-				}
+				String secondarySmsNumberToBeRemoved = secondarySmsNumbers.get(secondarySmsNumberSpinner.getSelectedItemPosition());
+				showRemoveSmsNumberDialog(RemoveSmsNumberDialog.REMOVE_SECONDARY_SMS_NUMBER_DIALOG_REQUEST_CODE, secondarySmsNumberToBeRemoved);
 			}
 		});
 	}
@@ -396,6 +386,8 @@ public class SmsSettingsFragment extends SherlockFragment implements Application
 
 			primarySmsNumberSpinner.setAdapter(adapter);
 		}
+
+		updateButtons();
 	}
 
 	/**
@@ -421,5 +413,19 @@ public class SmsSettingsFragment extends SherlockFragment implements Application
 
 			secondarySmsNumberSpinner.setAdapter(adapter);
 		}
+
+		updateButtons();
+	}
+
+	/**
+	 * To update buttons within this fragment, mainly it enables or disables the <b><i>Edit</i></b> and <b><i>Remove</i></b> buttons.
+	 */
+	private void updateButtons() {
+		// Toggle the buttons depending whether or not it's corresponding list got any elements within it
+		editPrimarySmsNumberButton.setEnabled(!primarySmsNumbers.isEmpty());
+		removePrimarySmsNumberButton.setEnabled(!primarySmsNumbers.isEmpty());
+
+		editSecondarySmsNumberButton.setEnabled(!secondarySmsNumbers.isEmpty());
+		removeSecondarySmsNumberButton.setEnabled(!secondarySmsNumbers.isEmpty());
 	}
 }
