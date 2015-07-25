@@ -34,7 +34,7 @@ import ax.ha.it.smsalarm.handler.SharedPreferencesHandler;
 import ax.ha.it.smsalarm.handler.SharedPreferencesHandler.DataType;
 import ax.ha.it.smsalarm.handler.SharedPreferencesHandler.PrefKey;
 import ax.ha.it.smsalarm.provider.WidgetProvider;
-import ax.ha.it.smsalarm.util.Util;
+import ax.ha.it.smsalarm.util.Utils;
 
 /**
  * Handles and are responsible for the <b><i>Sms Alarm's Acknowledge</i></b> by call functionality.<br>
@@ -309,7 +309,7 @@ public class Acknowledge extends Activity {
 			Toast.makeText(Acknowledge.this, getString(R.string.TOAST_SENDING_ACKNOWLEDGE_SMS), Toast.LENGTH_LONG).show();
 
 			// Send the actual acknowledge SMS
-			SmsManager.getDefault().sendTextMessage(phoneNumber, null, Util.adjustStringLength(message, Util.SINGLE_SMS_MAX_CHARACTERS), smsSentPendingIntent, null);
+			SmsManager.getDefault().sendTextMessage(phoneNumber, null, Utils.adjustStringLength(message, Utils.SINGLE_SMS_MAX_CHARACTERS), smsSentPendingIntent, null);
 		} else { // No phone number to acknowledge to exists, show toast
 			Toast.makeText(Acknowledge.this, getString(R.string.TOAST_CANNOT_ACKNOWLEDGE_NO_PHONE_NUMBER_EXISTS), Toast.LENGTH_LONG).show();
 		}

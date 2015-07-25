@@ -18,7 +18,7 @@ import ax.ha.it.smsalarm.handler.SharedPreferencesHandler;
 import ax.ha.it.smsalarm.handler.SharedPreferencesHandler.DataType;
 import ax.ha.it.smsalarm.handler.SharedPreferencesHandler.PrefKey;
 import ax.ha.it.smsalarm.receiver.NotificationReceiver;
-import ax.ha.it.smsalarm.util.Util;
+import ax.ha.it.smsalarm.util.Utils;
 
 /**
  * Helper to build up and show {@link Notification}, also creates {@link PendingIntent}'s for the notification.<br>
@@ -105,7 +105,7 @@ public class NotificationService extends IntentService {
 			.setTicker(tickerText)
 			.setWhen(when)
 			.setContentTitle(contentTitle)
-			.setContentText(Util.cleanAlarmCentralAXMessage(alarm.getMessage()))
+			.setContentText(Utils.cleanAlarmCentralAXMessage(alarm.getMessage()))
 			.setContentIntent(notificationPressedPendingIntent)
 			.setDeleteIntent(notificationDismissedPendingIntent)
 			.setAutoCancel(true)

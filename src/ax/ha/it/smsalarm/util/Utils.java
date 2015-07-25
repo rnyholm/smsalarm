@@ -26,8 +26,8 @@ import android.view.View;
  * @version 2.3.1
  * @since 2.3.1
  */
-public class Util {
-	private static final String LOG_TAG = Util.class.getSimpleName();
+public class Utils {
+	private static final String LOG_TAG = Utils.class.getSimpleName();
 
 	// Different valid URI http's
 	public static final String URI_HTTP = "http://";

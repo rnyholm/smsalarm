@@ -21,7 +21,7 @@ import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import ax.ha.it.smsalarm.R;
-import ax.ha.it.smsalarm.util.Util;
+import ax.ha.it.smsalarm.util.Utils;
 
 /**
  * {@link DialogFragment} which let's the user mock a SMS (both sender and message) for testing purpose.
@@ -73,11 +73,11 @@ public class MockSmsDialog extends DialogFragment {
 
 		// Another TextView is needed to display the maximum numbers of characters, so the end result of both TextViews will look like 53/160
 		TextView maxCharsTextView = new TextView(context);
-		maxCharsTextView.setText("/" + Util.SINGLE_SMS_MAX_CHARACTERS);
+		maxCharsTextView.setText("/" + Utils.SINGLE_SMS_MAX_CHARACTERS);
 
 		// Need to define input filters, and it will contain one filter which only allows maximum 160 characters
 		InputFilter[] filters = new InputFilter[1];
-		filters[0] = new InputFilter.LengthFilter(Util.SINGLE_SMS_MAX_CHARACTERS);
+		filters[0] = new InputFilter.LengthFilter(Utils.SINGLE_SMS_MAX_CHARACTERS);
 
 		// Setup the EditTexts
 		// @formatter:off

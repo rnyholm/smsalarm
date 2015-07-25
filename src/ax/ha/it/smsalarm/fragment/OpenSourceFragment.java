@@ -13,7 +13,7 @@ import android.widget.ListView;
 import ax.ha.it.smsalarm.R;
 import ax.ha.it.smsalarm.license.adapter.LicenseItemAdapter;
 import ax.ha.it.smsalarm.license.model.LicenseItem;
-import ax.ha.it.smsalarm.util.Util;
+import ax.ha.it.smsalarm.util.Utils;
 
 import com.actionbarsherlock.app.SherlockListFragment;
 
@@ -81,7 +81,7 @@ public class OpenSourceFragment extends SherlockListFragment {
 
 		// Only if license item got an URI
 		if (!licenseItem.isURIMissing()) {
-			Util.browseURI(getActivity(), licenseItem.getURI());
+			Utils.browseURI(getActivity(), licenseItem.getURI());
 		}
 	}
 }

@@ -36,7 +36,7 @@ import ax.ha.it.smsalarm.handler.SharedPreferencesHandler.DataType;
 import ax.ha.it.smsalarm.handler.SharedPreferencesHandler.PrefKey;
 import ax.ha.it.smsalarm.handler.SoundHandler;
 import ax.ha.it.smsalarm.handler.VibrationHandler;
-import ax.ha.it.smsalarm.util.Util;
+import ax.ha.it.smsalarm.util.Utils;
 
 import com.actionbarsherlock.app.SherlockFragment;
 
@@ -379,7 +379,7 @@ public class SoundSettingsFragment extends SherlockFragment implements Applicati
 							String alarmSignal = data.getData().getPath();
 
 							// If it doesn't exist in the list of user added alarm signals
-							if (!Util.existsInConsiderCases(alarmSignal, userAddedAlarmSignals)) {
+							if (!Utils.existsInConsiderCases(alarmSignal, userAddedAlarmSignals)) {
 								// Add the new alarm signal to the list
 								userAddedAlarmSignals.add(alarmSignal);
 
@@ -416,7 +416,7 @@ public class SoundSettingsFragment extends SherlockFragment implements Applicati
 
 		// Check that all user added alarm signals exist in the file system if not add them to another list for later removal
 		for (String alarmSignalPath : userAddedAlarmSignals) {
-			if (!Util.fileExists(alarmSignalPath)) {
+			if (!Utils.fileExists(alarmSignalPath)) {
 				missingAlarmSignals.add(alarmSignalPath);
 			}
 		}
@@ -432,7 +432,7 @@ public class SoundSettingsFragment extends SherlockFragment implements Applicati
 					missingAlarmSignalsMessage.append(", ");
 				}
 
-				missingAlarmSignalsMessage.append(Util.getBaseFileName(missingAlarmSignalPath));
+				missingAlarmSignalsMessage.append(Utils.getBaseFileName(missingAlarmSignalPath));
 			}
 
 			missingAlarmSignalsMessage.append(" ");
@@ -444,12 +444,12 @@ public class SoundSettingsFragment extends SherlockFragment implements Applicati
 			prefHandler.storePrefs(PrefKey.SHARED_PREF, PrefKey.USER_ADDED_ALARM_SIGNALS_KEY, userAddedAlarmSignals, context);
 
 			// If the selected alarm signal for primary or secondary alarm was removed, set it to the default
-			if (Util.existsInConsiderCases(primaryAlarmSignal, missingAlarmSignals)) {
+			if (Utils.existsInConsiderCases(primaryAlarmSignal, missingAlarmSignals)) {
 				primaryAlarmSignal = soundHandler.resolveAlarmSignal(context, SoundHandler.DEFAULT_PRIMARY_ALARM_SIGNAL_ID);
 				prefHandler.storePrefs(PrefKey.SHARED_PREF, PrefKey.PRIMARY_ALARM_SIGNAL_KEY, primaryAlarmSignal, context);
 			}
 
-			if (Util.existsInConsiderCases(secondaryAlarmSignal, missingAlarmSignals)) {
+			if (Utils.existsInConsiderCases(secondaryAlarmSignal, missingAlarmSignals)) {
 				secondaryAlarmSignal = soundHandler.resolveAlarmSignal(context, SoundHandler.DEFAULT_SECONDARY_ALARM_SIGNAL_ID);
 				prefHandler.storePrefs(PrefKey.SHARED_PREF, PrefKey.SECONDARY_ALARM_SIGNAL_KEY, secondaryAlarmSignal, context);
 			}
@@ -487,14 +487,14 @@ public class SoundSettingsFragment extends SherlockFragment implements Applicati
 	 * To update selected <b><i>Primary Alarm Signal</i></b> {@link TextView} with correct value.
 	 */
 	private void updateSelectedPrimaryAlarmSignalTextView() {
-		selectedPrimaryAlarmSignalTextView.setText(Util.getBaseFileName(primaryAlarmSignal));
+		selectedPrimaryAlarmSignalTextView.setText(Utils.getBaseFileName(primaryAlarmSignal));
 	}
 
 	/**
 	 * To update selected <b><i>Secondary Alarm Signal</i></b> {@link TextView} with correct value.
 	 */
 	private void updateSelectedSecondaryAlarmSignalTextView() {
-		selectedSecondaryAlarmSignalTextView.setText(Util.getBaseFileName(secondaryAlarmSignal));
+		selectedSecondaryAlarmSignalTextView.setText(Utils.getBaseFileName(secondaryAlarmSignal));
 	}
 
 	/**

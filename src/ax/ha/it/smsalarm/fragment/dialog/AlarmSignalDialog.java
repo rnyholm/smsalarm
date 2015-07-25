@@ -23,7 +23,7 @@ import ax.ha.it.smsalarm.handler.SharedPreferencesHandler;
 import ax.ha.it.smsalarm.handler.SharedPreferencesHandler.DataType;
 import ax.ha.it.smsalarm.handler.SharedPreferencesHandler.PrefKey;
 import ax.ha.it.smsalarm.handler.SoundHandler;
-import ax.ha.it.smsalarm.util.Util;
+import ax.ha.it.smsalarm.util.Utils;
 
 /**
  * {@link DialogFragment} which let's the user select <b><i>Alarm Signal</i></b> for the different {@link AlarmType}. This dialog also let's the user
@@ -112,7 +112,7 @@ public class AlarmSignalDialog extends DialogFragment {
 		alarmSignals.addAll(appAlarmSignals);
 
 		for (String userAddedAlarmSignal : userAddedAlarmSignals) {
-			alarmSignals.add(Util.getBaseFileName(userAddedAlarmSignal));
+			alarmSignals.add(Utils.getBaseFileName(userAddedAlarmSignal));
 		}
 
 		// Setup the dialog with correct resources, listeners and values

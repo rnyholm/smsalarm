@@ -28,7 +28,7 @@ import ax.ha.it.smsalarm.handler.SharedPreferencesHandler;
 import ax.ha.it.smsalarm.handler.SharedPreferencesHandler.DataType;
 import ax.ha.it.smsalarm.handler.SharedPreferencesHandler.PrefKey;
 import ax.ha.it.smsalarm.util.InitializableString;
-import ax.ha.it.smsalarm.util.Util;
+import ax.ha.it.smsalarm.util.Utils;
 
 import com.actionbarsherlock.app.SherlockFragment;
 
@@ -199,9 +199,9 @@ public class SmsSettingsFragment extends SherlockFragment implements Application
 					newSmsNumber = data.getStringExtra(AddSmsNumberDialog.ADD_SMS_NUMBER);
 
 					// If input doesn't exist in the list of secondarySmsNumbers and input isn't empty
-					if (!Util.existsInIgnoreCases(newSmsNumber, secondarySmsNumbers) && !"".equals(newSmsNumber)) {
+					if (!Utils.existsInIgnoreCases(newSmsNumber, secondarySmsNumbers) && !"".equals(newSmsNumber)) {
 						// If the new number exists in the list of primary SMS numbers then it's duplicated
-						if (!Util.existsInIgnoreCases(newSmsNumber, primarySmsNumbers)) {
+						if (!Utils.existsInIgnoreCases(newSmsNumber, primarySmsNumbers)) {
 							// Add given input to list
 							primarySmsNumbers.add(newSmsNumber);
 
@@ -230,8 +230,8 @@ public class SmsSettingsFragment extends SherlockFragment implements Application
 				case (AddSmsNumberDialog.ADD_SECONDARY_SMS_NUMBER_DIALOG_REQUEST_CODE):
 					newSmsNumber = data.getStringExtra(AddSmsNumberDialog.ADD_SMS_NUMBER);
 
-					if (!Util.existsInIgnoreCases(newSmsNumber, primarySmsNumbers) && !"".equals(newSmsNumber)) {
-						if (!Util.existsInIgnoreCases(newSmsNumber, secondarySmsNumbers)) {
+					if (!Utils.existsInIgnoreCases(newSmsNumber, primarySmsNumbers) && !"".equals(newSmsNumber)) {
+						if (!Utils.existsInIgnoreCases(newSmsNumber, secondarySmsNumbers)) {
 							secondarySmsNumbers.add(newSmsNumber);
 							prefHandler.storePrefs(PrefKey.SHARED_PREF, PrefKey.SECONDARY_LISTEN_NUMBERS_KEY, secondarySmsNumbers, context);
 							updateSecondarySmsNumberSpinner();
@@ -252,8 +252,8 @@ public class SmsSettingsFragment extends SherlockFragment implements Application
 				case (EditSmsNumberDialog.EDIT_PRIMARY_SMS_NUMBER_DIALOG_REQUEST_CODE):
 					initializableString = (InitializableString) data.getParcelableExtra(EditSmsNumberDialog.EDIT_SMS_NUMBER);
 
-					if (!"".equals(initializableString.getValue()) && !Util.existsInIgnoreCases(initializableString.getValue(), secondarySmsNumbers)) {
-						if (!Util.existsInIgnoreCases(initializableString.getValue(), primarySmsNumbers)) {
+					if (!"".equals(initializableString.getValue()) && !Utils.existsInIgnoreCases(initializableString.getValue(), secondarySmsNumbers)) {
+						if (!Utils.existsInIgnoreCases(initializableString.getValue(), primarySmsNumbers)) {
 							// Replace existing element in list of primary SMS phone numbers with the new one
 							Collections.replaceAll(primarySmsNumbers, initializableString.getInitialValue(), initializableString.getValue());
 
@@ -280,8 +280,8 @@ public class SmsSettingsFragment extends SherlockFragment implements Application
 				case (EditSmsNumberDialog.EDIT_SECONDARY_SMS_NUMBER_DIALOG_REQUEST_CODE):
 					initializableString = (InitializableString) data.getParcelableExtra(EditSmsNumberDialog.EDIT_SMS_NUMBER);
 
-					if (!"".equals(initializableString.getValue()) && !Util.existsInIgnoreCases(initializableString.getValue(), primarySmsNumbers)) {
-						if (!Util.existsInIgnoreCases(initializableString.getValue(), secondarySmsNumbers)) {
+					if (!"".equals(initializableString.getValue()) && !Utils.existsInIgnoreCases(initializableString.getValue(), primarySmsNumbers)) {
+						if (!Utils.existsInIgnoreCases(initializableString.getValue(), secondarySmsNumbers)) {
 							Collections.replaceAll(secondarySmsNumbers, initializableString.getInitialValue(), initializableString.getValue());
 							prefHandler.storePrefs(PrefKey.SHARED_PREF, PrefKey.SECONDARY_LISTEN_NUMBERS_KEY, secondarySmsNumbers, context);
 							updateSecondarySmsNumberSpinner();

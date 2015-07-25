@@ -17,7 +17,7 @@ import ax.ha.it.smsalarm.activity.SmsAlarm;
 import ax.ha.it.smsalarm.alarm.Alarm.AlarmType;
 import ax.ha.it.smsalarm.handler.SharedPreferencesHandler.DataType;
 import ax.ha.it.smsalarm.handler.SharedPreferencesHandler.PrefKey;
-import ax.ha.it.smsalarm.util.Util;
+import ax.ha.it.smsalarm.util.Utils;
 
 /**
  * Class responsible for all sound handling, this means responsible for all interactions with the {@link MediaPlayer} in this application.<br>
@@ -357,9 +357,9 @@ public class SoundHandler {
 
 		// If file exists then it's a user added alarm signal that's going to be played, hence we don't need to set up any assets
 		// file descriptor
-		if (Util.existsInConsiderCases(alarmSignal, userAddedAlarmSignals)) {
+		if (Utils.existsInConsiderCases(alarmSignal, userAddedAlarmSignals)) {
 			// Check that the file actually exists
-			if (Util.fileExists(alarmSignal)) {
+			if (Utils.fileExists(alarmSignal)) {
 				prepareWithAfd = false;
 			} else {
 				// As the file wasn't found on the system set the alarm signal to the default that we know exists

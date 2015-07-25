@@ -27,7 +27,6 @@ import android.widget.RelativeLayout;
 import android.widget.RelativeLayout.LayoutParams;
 import android.widget.TextView;
 import ax.ha.it.smsalarm.R;
-import ax.ha.it.smsalarm.activity.SmsAlarm;
 import ax.ha.it.smsalarm.fragment.dialog.OrganizationDialog;
 import ax.ha.it.smsalarm.handler.CameraHandler;
 import ax.ha.it.smsalarm.handler.SharedPreferencesHandler;

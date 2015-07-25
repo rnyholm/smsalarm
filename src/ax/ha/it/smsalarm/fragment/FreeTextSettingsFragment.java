@@ -28,7 +28,7 @@ import ax.ha.it.smsalarm.handler.SharedPreferencesHandler;
 import ax.ha.it.smsalarm.handler.SharedPreferencesHandler.DataType;
 import ax.ha.it.smsalarm.handler.SharedPreferencesHandler.PrefKey;
 import ax.ha.it.smsalarm.util.InitializableString;
-import ax.ha.it.smsalarm.util.Util;
+import ax.ha.it.smsalarm.util.Utils;
 
 import com.actionbarsherlock.app.SherlockFragment;
 
@@ -199,9 +199,9 @@ public class FreeTextSettingsFragment extends SherlockFragment implements Applic
 					newFreeText = data.getStringExtra(AddFreeTextDialog.ADD_FREE_TEXT);
 
 					// If input doesn't exist in the list of secondaryFreeTexts and input isn't empty
-					if (!Util.existsInIgnoreCases(newFreeText, secondaryFreeTexts) && !"".equals(newFreeText)) {
+					if (!Utils.existsInIgnoreCases(newFreeText, secondaryFreeTexts) && !"".equals(newFreeText)) {
 						// Store input if the list of primaryFreeTexts doesn't contain the new free text
-						if (!Util.existsInIgnoreCases(newFreeText, primaryFreeTexts)) {
+						if (!Utils.existsInIgnoreCases(newFreeText, primaryFreeTexts)) {
 							// Add given input to list
 							primaryFreeTexts.add(newFreeText);
 
@@ -230,8 +230,8 @@ public class FreeTextSettingsFragment extends SherlockFragment implements Applic
 				case (AddFreeTextDialog.ADD_SECONDARY_FREE_TEXT_DIALOG_REQUEST_CODE):
 					newFreeText = data.getStringExtra(AddFreeTextDialog.ADD_FREE_TEXT);
 
-					if (!Util.existsInIgnoreCases(newFreeText, primaryFreeTexts) && !"".equals(newFreeText)) {
-						if (!Util.existsInIgnoreCases(newFreeText, secondaryFreeTexts)) {
+					if (!Utils.existsInIgnoreCases(newFreeText, primaryFreeTexts) && !"".equals(newFreeText)) {
+						if (!Utils.existsInIgnoreCases(newFreeText, secondaryFreeTexts)) {
 							secondaryFreeTexts.add(newFreeText);
 							prefHandler.storePrefs(PrefKey.SHARED_PREF, PrefKey.SECONDARY_LISTEN_FREE_TEXTS_KEY, secondaryFreeTexts, context);
 							updateSecondaryFreeTextSpinner();
@@ -252,8 +252,8 @@ public class FreeTextSettingsFragment extends SherlockFragment implements Applic
 				case (EditFreeTextDialog.EDIT_PRIMARY_FREE_TEXT_DIALOG_REQUEST_CODE):
 					initializableString = (InitializableString) data.getParcelableExtra(EditFreeTextDialog.EDIT_FREE_TEXT);
 
-					if (!"".equals(initializableString.getValue()) && !Util.existsInIgnoreCases(initializableString.getValue(), secondaryFreeTexts)) {
-						if (!Util.existsInIgnoreCases(initializableString.getValue(), primaryFreeTexts)) {
+					if (!"".equals(initializableString.getValue()) && !Utils.existsInIgnoreCases(initializableString.getValue(), secondaryFreeTexts)) {
+						if (!Utils.existsInIgnoreCases(initializableString.getValue(), primaryFreeTexts)) {
 							// Replace existing element in list of primary free texts with the new one
 							Collections.replaceAll(primaryFreeTexts, initializableString.getInitialValue(), initializableString.getValue());
 
@@ -280,8 +280,8 @@ public class FreeTextSettingsFragment extends SherlockFragment implements Applic
 				case (EditFreeTextDialog.EDIT_SECONDARY_FREE_TEXT_DIALOG_REQUEST_CODE):
 					initializableString = (InitializableString) data.getParcelableExtra(EditFreeTextDialog.EDIT_FREE_TEXT);
 
-					if (!"".equals(initializableString.getValue()) && !Util.existsInIgnoreCases(initializableString.getValue(), primaryFreeTexts)) {
-						if (!Util.existsInIgnoreCases(initializableString.getValue(), secondaryFreeTexts)) {
+					if (!"".equals(initializableString.getValue()) && !Utils.existsInIgnoreCases(initializableString.getValue(), primaryFreeTexts)) {
+						if (!Utils.existsInIgnoreCases(initializableString.getValue(), secondaryFreeTexts)) {
 							Collections.replaceAll(secondaryFreeTexts, initializableString.getInitialValue(), initializableString.getValue());
 							prefHandler.storePrefs(PrefKey.SHARED_PREF, PrefKey.SECONDARY_LISTEN_FREE_TEXTS_KEY, secondaryFreeTexts, context);
 							updateSecondaryFreeTextSpinner();
