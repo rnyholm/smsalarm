@@ -39,6 +39,7 @@ använda kvittering
 -Alla fält för inmatning flyttar nu markören till slutet av texten, även fast man vänder skärmen. Möjligt att nu ändra befintliga telefonnummer och fritexter.
 -Tagit bort webadressen till Sms Alarms websida, bytt epost till smsalarm@outlook.com.
 -Knapparna Ändra och ta bort i SMS- och Ordinställningarn aktiveras och inaktiveras nu beroende på om det finns något man kan ändra/tabort.
+-Loggning med en nivå över debug och info görs alltid, dvs. förlitar sig inte på att SmsAlarm.DEBUG är satt till true
 
 v2.2.5(version code 13)
 -Översättning till estniska lades till

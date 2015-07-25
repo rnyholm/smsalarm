@@ -11,7 +11,6 @@ import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
 import android.util.Log;
 import ax.ha.it.smsalarm.R;
-import ax.ha.it.smsalarm.activity.SmsAlarm;
 import ax.ha.it.smsalarm.activity.Splash;
 
 /**
@@ -69,9 +68,7 @@ public class EulaDialog extends DialogFragment {
 							// Call method in activity owning this DialogFragment to do the actual on click handling
 							((Splash) context).doPositiveClick();
 						} else {
-							if (SmsAlarm.DEBUG) {
-								Log.e(LOG_TAG, "Can't handle positive button pressed, context (getActivity()) is of incorrect instance: \"" + context.getClass().getSimpleName() + "\" expected is: \"" + Splash.class.getSimpleName() + "\"");
-							}
+							Log.e(LOG_TAG + ":onCreateDialog()", "Can't handle positive button pressed, context (getActivity()) is of incorrect instance: \"" + context.getClass().getSimpleName() + "\" expected is: \"" + Splash.class.getSimpleName() + "\"");
 						}
 					}
 				})
@@ -82,9 +79,7 @@ public class EulaDialog extends DialogFragment {
 						if (context instanceof Splash) {
 							((Splash) context).doNegativeClick();
 						} else {
-							if (SmsAlarm.DEBUG) {
-								Log.e(LOG_TAG, "Can't handle negative button pressed, context (getActivity()) is of incorrect instance: \"" + context.getClass().getSimpleName() + "\" expected is: \"" + Splash.class.getSimpleName() + "\"");
-							}
+							Log.e(LOG_TAG + ":onCreateDialog()", "Can't handle negative button pressed, context (getActivity()) is of incorrect instance: \"" + context.getClass().getSimpleName() + "\" expected is: \"" + Splash.class.getSimpleName() + "\"");
 						}
 					}
 				})

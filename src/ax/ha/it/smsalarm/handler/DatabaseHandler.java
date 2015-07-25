@@ -304,9 +304,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 					// ...at last get month as integer from m2
 					month2 = cal.get(Calendar.MONTH);
 				} catch (ParseException e) {
-					if (SmsAlarm.DEBUG) {
-						Log.e(LOG_TAG + ":fetchAllAlarmsSorted()", "An error occurred while parsing out Date from given month as String using default Locale", e);
-					}
+					Log.e(LOG_TAG + ":fetchAllAlarmsSorted()", "An error occurred while parsing out Date from given month as String using default Locale", e);
 				}
 
 				if (month1 < month2) {

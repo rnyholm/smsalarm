@@ -10,7 +10,6 @@ import android.content.SharedPreferences;
 import android.content.pm.PackageManager.NameNotFoundException;
 import android.util.Log;
 import ax.ha.it.smsalarm.activity.Acknowledge.AcknowledgeMethod;
-import ax.ha.it.smsalarm.activity.SmsAlarm;
 import ax.ha.it.smsalarm.handler.SharedPreferencesHandler.DataType;
 import ax.ha.it.smsalarm.handler.SharedPreferencesHandler.PrefKey;
 
@@ -144,13 +143,9 @@ public class UpdateHandler extends Application {
 				prefHandler.storePrefs(PrefKey.SHARED_PREF, PrefKey.VERSION_CODE, currentVersionCode, this);
 			}
 		} catch (NameNotFoundException e) {
-			if (SmsAlarm.DEBUG) {
-				Log.e(LOG_TAG + ":onCreate()", "Name of application package could not be found", e);
-			}
+			Log.e(LOG_TAG + ":onCreate()", "Name of application package could not be found", e);
 		} catch (Exception e) {
-			if (SmsAlarm.DEBUG) {
-				Log.e(LOG_TAG + ":onCreate()", "An error occurred while handling update actions, version code is not updated. Current version code is: \"" + currentVersionCode + "\", old version code is: \"" + oldVersionCode + "\"", e);
-			}
+			Log.e(LOG_TAG + ":onCreate()", "An error occurred while handling update actions, version code is not updated. Current version code is: \"" + currentVersionCode + "\", old version code is: \"" + oldVersionCode + "\"", e);
 		}
 	}
 }

@@ -11,7 +11,6 @@ import android.content.Context;
 import android.media.AudioManager;
 import android.os.Vibrator;
 import android.util.Log;
-import ax.ha.it.smsalarm.activity.SmsAlarm;
 import ax.ha.it.smsalarm.alarm.Alarm.AlarmType;
 import ax.ha.it.smsalarm.handler.SharedPreferencesHandler.DataType;
 import ax.ha.it.smsalarm.handler.SharedPreferencesHandler.PrefKey;
@@ -50,9 +49,7 @@ public class VibrationHandler {
 	 */
 	private VibrationHandler() {
 		if (INSTANCE != null) {
-			if (SmsAlarm.DEBUG) {
-				Log.e(LOG_TAG + ":VibrationHandler()", "VibrationHandler already instantiated");
-			}
+			Log.e(LOG_TAG + ":VibrationHandler()", "VibrationHandler already instantiated");
 		}
 
 		// Put the vibration patterns to the map containing vibration name and pattern
@@ -94,9 +91,7 @@ public class VibrationHandler {
 				vibrator.vibrate(vibrationPatterns.get(vibrationPattern), -1);
 			}
 		} else {
-			if (SmsAlarm.DEBUG) {
-				Log.e(LOG_TAG + ":previewVibration()", "Device is in RINGER_MODE_SILENT and should not vibrate");
-			}
+			Log.e(LOG_TAG + ":previewVibration()", "Device is in RINGER_MODE_SILENT and should not vibrate");
 		}
 	}
 
@@ -144,9 +139,7 @@ public class VibrationHandler {
 			}
 		} else {
 			// This is weird, log this case
-			if (SmsAlarm.DEBUG) {
-				Log.e(LOG_TAG + ":alarm()", "Method called with the unsupported AlarmType: \"" + alarmType.toString() + "\", check why. However application can't decide how to handle this case");
-			}
+			Log.e(LOG_TAG + ":alarm()", "Method called with the unsupported AlarmType: \"" + alarmType.toString() + "\", check why. However application can't decide how to handle this case");
 		}
 	}
 

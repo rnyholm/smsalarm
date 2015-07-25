@@ -14,7 +14,6 @@ import android.support.v4.app.DialogFragment;
 import android.text.InputType;
 import android.util.Log;
 import ax.ha.it.smsalarm.R;
-import ax.ha.it.smsalarm.activity.SmsAlarm;
 import ax.ha.it.smsalarm.ui.NoBlanksEditText;
 
 /**
@@ -91,9 +90,7 @@ public class AddFreeTextDialog extends DialogFragment {
 				message = getString(R.string.ADD_SECONDARY_FREE_TEXT_DIALOG_MESSAGE);
 				break;
 			default:
-				if (SmsAlarm.DEBUG) {
-					Log.e(LOG_TAG + ":onCreateDialog()", "Cannot resolve dialog message due to an unsupported request code: \"" + getTargetRequestCode() + "\"");
-				}
+				Log.e(LOG_TAG + ":onCreateDialog()", "Cannot resolve dialog message due to an unsupported request code: \"" + getTargetRequestCode() + "\"");
 		}
 
 		// Setup the dialog with correct resources, listeners and values

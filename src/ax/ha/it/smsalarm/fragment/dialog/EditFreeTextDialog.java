@@ -15,7 +15,6 @@ import android.text.InputType;
 import android.util.Log;
 import android.widget.EditText;
 import ax.ha.it.smsalarm.R;
-import ax.ha.it.smsalarm.activity.SmsAlarm;
 import ax.ha.it.smsalarm.ui.NoBlanksEditText;
 import ax.ha.it.smsalarm.util.InitializableString;
 
@@ -120,9 +119,7 @@ public class EditFreeTextDialog extends DialogFragment {
 				message = getString(R.string.EDIT_SECONDARY_FREE_TEXT_DIALOG_MESSAGE);
 				break;
 			default:
-				if (SmsAlarm.DEBUG) {
-					Log.e(LOG_TAG + ":onCreateDialog()", "Cannot resolve dialog message due to an unsupported request code: \"" + getTargetRequestCode() + "\"");
-				}
+				Log.e(LOG_TAG + ":onCreateDialog()", "Cannot resolve dialog message due to an unsupported request code: \"" + getTargetRequestCode() + "\"");
 		}
 
 		// Setup the dialog with correct resources, listeners and values

@@ -21,7 +21,6 @@ import android.widget.Button;
 import android.widget.Spinner;
 import android.widget.Toast;
 import ax.ha.it.smsalarm.R;
-import ax.ha.it.smsalarm.activity.SmsAlarm;
 import ax.ha.it.smsalarm.fragment.dialog.AddSmsNumberDialog;
 import ax.ha.it.smsalarm.fragment.dialog.EditSmsNumberDialog;
 import ax.ha.it.smsalarm.fragment.dialog.RemoveSmsNumberDialog;
@@ -315,9 +314,7 @@ public class SmsSettingsFragment extends SherlockFragment implements Application
 					updateSecondarySmsNumberSpinner();
 					break;
 				default:
-					if (SmsAlarm.DEBUG) {
-						Log.e(LOG_TAG + ":onActivityResult()", "An unsupported result occurred, result code: \"" + resultCode + "\" and request code: \"" + requestCode + "\"");
-					}
+					Log.e(LOG_TAG + ":onActivityResult()", "An unsupported result occurred, result code: \"" + resultCode + "\" and request code: \"" + requestCode + "\"");
 			}
 		}
 	}

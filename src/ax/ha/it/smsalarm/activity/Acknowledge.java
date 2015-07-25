@@ -207,10 +207,7 @@ public class Acknowledge extends Activity {
 						sendSMS(alarm.getSender(), alarm.getMessage());
 						break;
 					default:
-						if (SmsAlarm.DEBUG) {
-							Log.e(LOG_TAG + ":onCreate()", "An unhandled acknowledge method has occurred, can't decide what to do. Acknowledge method:\"" + acknowledgeMethod.toString() + "\"");
-						}
-						break;
+						Log.e(LOG_TAG + ":onCreate()", "An unhandled acknowledge method has occurred, can't decide what to do. Acknowledge method:\"" + acknowledgeMethod.toString() + "\"");
 				}
 			}
 		});

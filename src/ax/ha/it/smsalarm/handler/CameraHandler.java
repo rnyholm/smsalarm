@@ -12,7 +12,6 @@ import android.hardware.Camera.AutoFocusCallback;
 import android.hardware.Camera.CameraInfo;
 import android.hardware.Camera.Parameters;
 import android.util.Log;
-import ax.ha.it.smsalarm.activity.SmsAlarm;
 
 import com.google.common.base.Optional;
 
@@ -44,9 +43,7 @@ public class CameraHandler {
 	 */
 	private CameraHandler() {
 		if (INSTANCE != null) {
-			if (SmsAlarm.DEBUG) {
-				Log.e(LOG_TAG + ":CameraHandler()", "CameraHandler already instantiated");
-			}
+			Log.e(LOG_TAG + ":CameraHandler()", "CameraHandler already instantiated");
 		}
 	}
 
@@ -89,9 +86,7 @@ public class CameraHandler {
 						flashModeToUse = resolveFlashMode();
 					}
 				} catch (RuntimeException e) {
-					if (SmsAlarm.DEBUG) {
-						Log.e(LOG_TAG + ":toggleCameraFlash()", "An error occurred while initializing the camera", e);
-					}
+					Log.e(LOG_TAG + ":toggleCameraFlash()", "An error occurred while initializing the camera", e);
 				}
 			}
 
@@ -127,9 +122,7 @@ public class CameraHandler {
 						}
 					});
 				} catch (RuntimeException re) {
-					if (SmsAlarm.DEBUG) {
-						Log.e(LOG_TAG + ":toggleCameraFlash()", "An error occurred while starting preview", re);
-					}
+					Log.e(LOG_TAG + ":toggleCameraFlash()", "An error occurred while starting preview", re);
 				}
 			}
 		}

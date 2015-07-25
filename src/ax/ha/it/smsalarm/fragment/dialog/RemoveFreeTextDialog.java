@@ -93,9 +93,7 @@ public class RemoveFreeTextDialog extends DialogFragment {
 				message = getString(R.string.REMOVE_SECONDARY_FREE_TEXT_DIALOG_MESSAGE) + " " + freeText + "?";
 				break;
 			default:
-				if (SmsAlarm.DEBUG) {
-					Log.e(LOG_TAG + ":onCreateDialog()", "Cannot resolve dialog message due to an unsupported request code: \"" + getTargetRequestCode() + "\"");
-				}
+				Log.e(LOG_TAG + ":onCreateDialog()", "Cannot resolve dialog message due to an unsupported request code: \"" + getTargetRequestCode() + "\"");
 		}
 
 		// Setup the dialog with correct resources, listeners and values

@@ -161,9 +161,7 @@ public class SlidingMenuFragment extends SherlockListFragment {
 				confirmMockSharedPrefsDialog.show(getFragmentManager(), ConfirmMockSharedPreferencesDialog.CONFIRM_MOCK_SHARED_PREFERENCES_TAG);
 				break;
 			default:
-				if (SmsAlarm.DEBUG) {
-					Log.e(LOG_TAG + ":onListItemClick()", "Unable to resolve a Fragment for given menu item id: \"" + menuItem.getId() + "\", check if implementation exist for menu item");
-				}
+				Log.e(LOG_TAG + ":onListItemClick()", "Unable to resolve a Fragment for given menu item id: \"" + menuItem.getId() + "\", check if implementation exist for menu item");
 		}
 
 		// Switch fragment, if it was possible to resolve a fragment
@@ -208,9 +206,7 @@ public class SlidingMenuFragment extends SherlockListFragment {
 					Toast.makeText(getActivity(), getString(R.string.DEBUG_TOAST_MOCK_ALARMS_INSERTED), Toast.LENGTH_LONG).show();
 					break;
 				default:
-					if (SmsAlarm.DEBUG) {
-						Log.e(LOG_TAG + ":onActivityResult()", "An unsupported result occurred, result code: \"" + resultCode + "\" and request code: \"" + requestCode + "\"");
-					}
+					Log.e(LOG_TAG + ":onActivityResult()", "An unsupported result occurred, result code: \"" + resultCode + "\" and request code: \"" + requestCode + "\"");
 			}
 		}
 	};

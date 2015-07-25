@@ -13,7 +13,6 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
 import android.util.Log;
-import ax.ha.it.smsalarm.activity.SmsAlarm;
 
 /**
  * Class responsible for all {@link SharedPreferences} handling.<br>
@@ -240,9 +239,7 @@ public class SharedPreferencesHandler {
 
 						return list;
 					} catch (JSONException e) {
-						if (SmsAlarm.DEBUG) {
-							Log.e(LOG_TAG + ":fetchPrefs()", "Failed to retrieve List<String> from shared preferences: \"" + sharedPreferences.getKey() + "\", with key: \"" + sharedPreferencesKey.getKey() + "\", type: \"" + type.name() + "\" and context: \"" + context.toString() + "\"", e);
-						}
+						Log.e(LOG_TAG + ":fetchPrefs()", "Failed to retrieve List<String> from shared preferences: \"" + sharedPreferences.getKey() + "\", with key: \"" + sharedPreferencesKey.getKey() + "\", type: \"" + type.name() + "\" and context: \"" + context.toString() + "\"", e);
 					}
 				} else { // <--If JSON string is empty, return empty List
 					return list;
@@ -254,10 +251,7 @@ public class SharedPreferencesHandler {
 
 		// If application end up here then some error has occurred
 		IllegalArgumentException exception = new IllegalArgumentException("Failed to fetch shared preferences: \"" + sharedPreferences.getKey() + "\", with key: \"" + sharedPreferencesKey.getKey() + "\", data type: \"" + type.name() + "\" and context: \"" + context.toString() + "\". Cause: \"Data type given as argument is unsupported\", valid data types are: \"INTEGER\", \"STRING\", \"BOOLEAN\" and \"LIST\"");
-
-		if (SmsAlarm.DEBUG) {
-			Log.e(LOG_TAG + ":fetchPrefs()", "An exception occurred while fetching shared preferences", exception);
-		}
+		Log.e(LOG_TAG + ":fetchPrefs()", "An exception occurred while fetching shared preferences", exception);
 
 		throw exception;
 	}
@@ -322,10 +316,7 @@ public class SharedPreferencesHandler {
 		} else {
 			// If application end up here then some error has occurred
 			IllegalArgumentException exception = new IllegalArgumentException("Failed to store object to shared preferences: \"" + sharedPreference.getKey() + "\", with key: \"" + sharedPreferencesKey.getKey() + "\" and context: \"" + context.toString() + "\". Cause: \"Object of unsupported instance was given as argument\", given object is instance of: \"" + object.getClass().getSimpleName() + "\", valid instances are: \"int\", \"String\", \"boolean\" and \"List<String>\"");
-
-			if (SmsAlarm.DEBUG) {
-				Log.e(LOG_TAG + ":storePrefs()", "An exception occurred while setting shared preferences", exception);
-			}
+			Log.e(LOG_TAG + ":storePrefs()", "An exception occurred while setting shared preferences", exception);
 
 			throw exception;
 		}

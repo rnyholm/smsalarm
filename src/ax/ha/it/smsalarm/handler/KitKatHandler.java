@@ -11,7 +11,6 @@ import java.util.TimerTask;
 import android.content.Context;
 import android.media.AudioManager;
 import android.util.Log;
-import ax.ha.it.smsalarm.activity.SmsAlarm;
 
 /**
  * Class responsible for any special handling that needs to be done according to <b><i>KitKat</i></b>'s (and higher) retarded behavior when receiving
@@ -147,26 +146,16 @@ public class KitKatHandler {
 
 						break;
 					default:
-						if (SmsAlarm.DEBUG) {
-							Log.e(LOG_TAG + ":handleNotificationBar()", "An unsupported \"NotificationBarAction\" was given as argument");
-						}
+						Log.e(LOG_TAG + ":handleNotificationBar()", "An unsupported \"NotificationBarAction\" was given as argument");
 				}
 			} catch (ClassNotFoundException e) {
-				if (SmsAlarm.DEBUG) {
-					Log.e(LOG_TAG + ":handleNotificationBar()", "An exception occurred while getting class for name:\"android.app.StatusBarManager\"", e);
-				}
+				Log.e(LOG_TAG + ":handleNotificationBar()", "An exception occurred while getting class for name:\"android.app.StatusBarManager\"", e);
 			} catch (NoSuchMethodException e) {
-				if (SmsAlarm.DEBUG) {
-					Log.e(LOG_TAG + ":handleNotificationBar()", "An exception occurred while getting method", e);
-				}
+				Log.e(LOG_TAG + ":handleNotificationBar()", "An exception occurred while getting method", e);
 			} catch (IllegalAccessException e) {
-				if (SmsAlarm.DEBUG) {
-					Log.e(LOG_TAG + ":handleNotificationBar()", "An exception occurred while accessing method", e);
-				}
+				Log.e(LOG_TAG + ":handleNotificationBar()", "An exception occurred while accessing method", e);
 			} catch (InvocationTargetException e) {
-				if (SmsAlarm.DEBUG) {
-					Log.e(LOG_TAG + ":handleNotificationBar()", "An exception occurred while invocing method", e);
-				}
+				Log.e(LOG_TAG + ":handleNotificationBar()", "An exception occurred while invocing method", e);
 			}
 		}
 	}

@@ -64,9 +64,7 @@ public class SoundHandler {
 	 */
 	private SoundHandler() {
 		if (INSTANCE != null) {
-			if (SmsAlarm.DEBUG) {
-				Log.e(LOG_TAG + ":SoundHandler()", "SoundHandler already instantiated");
-			}
+			Log.e(LOG_TAG + ":SoundHandler()", "SoundHandler already instantiated");
 		}
 	}
 
@@ -126,9 +124,7 @@ public class SoundHandler {
 			default:
 				// All other ringer modes than RINGER_MODE_NORMAL ends up here as it's not wanted to make any kind of sound when the device is in any
 				// other mode
-				if (SmsAlarm.DEBUG) {
-					Log.e(LOG_TAG + ":previewSignal()", "Device is not in RINGER_MODE_NORMAL, hence it's not wanted to make any kind of sound");
-				}
+				Log.e(LOG_TAG + ":previewSignal()", "Device is not in RINGER_MODE_NORMAL, hence it's not wanted to make any kind of sound");
 		}
 	}
 
@@ -229,9 +225,7 @@ public class SoundHandler {
 			}
 		} else {
 			// This is weird, log this case
-			if (SmsAlarm.DEBUG) {
-				Log.e(LOG_TAG + ":alarm()", "Method called with the unsupported AlarmType: \"" + alarmType.toString() + "\", check why. However application can't decide how to handle this case");
-			}
+			Log.e(LOG_TAG + ":alarm()", "Method called with the unsupported AlarmType: \"" + alarmType.toString() + "\", check why. However application can't decide how to handle this case");
 		}
 	}
 
@@ -310,13 +304,9 @@ public class SoundHandler {
 				mediaPlayer.prepare();
 			}
 		} catch (IllegalStateException e) {
-			if (SmsAlarm.DEBUG) {
-				Log.e(LOG_TAG + ":prepareMediaPlayer()", "Mediaplayer is in an illegal state for setting datasource or preparing it", e);
-			}
+			Log.e(LOG_TAG + ":prepareMediaPlayer()", "Mediaplayer is in an illegal state for setting datasource or preparing it", e);
 		} catch (IOException e) {
-			if (SmsAlarm.DEBUG) {
-				Log.e(LOG_TAG + ":prepareMediaPlayer()", "An error occurred while setting datasource to mediaplayer or preparing it", e);
-			}
+			Log.e(LOG_TAG + ":prepareMediaPlayer()", "An error occurred while setting datasource to mediaplayer or preparing it", e);
 		}
 	}
 
@@ -338,13 +328,9 @@ public class SoundHandler {
 				mediaPlayer.prepare();
 			}
 		} catch (IllegalStateException e) {
-			if (SmsAlarm.DEBUG) {
-				Log.e(LOG_TAG + ":prepareMediaPlayer()", "Mediaplayer is in an illegal state for setting datasource or preparing it", e);
-			}
+			Log.e(LOG_TAG + ":prepareMediaPlayer()", "Mediaplayer is in an illegal state for setting datasource or preparing it", e);
 		} catch (IOException e) {
-			if (SmsAlarm.DEBUG) {
-				Log.e(LOG_TAG + ":prepareMediaPlayer()", "An error occurred while setting datasource to mediaplayer or preparing it", e);
-			}
+			Log.e(LOG_TAG + ":prepareMediaPlayer()", "An error occurred while setting datasource to mediaplayer or preparing it", e);
 		}
 	}
 
@@ -391,9 +377,7 @@ public class SoundHandler {
 			try {
 				afd = context.getAssets().openFd(PATH_TO_ALARM_SIGNAL_ASSETS + alarmSignal + MP3_EXTENSION);
 			} catch (IOException e) {
-				if (SmsAlarm.DEBUG) {
-					Log.e(LOG_TAG + ":previewSignal()", "An error occurred while opening the FileDescriptor", e);
-				}
+				Log.e(LOG_TAG + ":previewSignal()", "An error occurred while opening the FileDescriptor", e);
 			}
 
 			// Set DataSource and prepare MediaPlayer

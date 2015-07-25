@@ -16,7 +16,6 @@ import android.support.v4.app.DialogFragment;
 import android.util.Log;
 import android.widget.ListView;
 import ax.ha.it.smsalarm.R;
-import ax.ha.it.smsalarm.activity.SmsAlarm;
 import ax.ha.it.smsalarm.alarm.Alarm.AlarmType;
 import ax.ha.it.smsalarm.handler.SharedPreferencesHandler;
 import ax.ha.it.smsalarm.handler.SharedPreferencesHandler.DataType;
@@ -148,9 +147,7 @@ public class AlarmVibrationDialog extends DialogFragment {
 			case (SECONDARY_ALARM_VIBRATION_DIALOG_REQUEST_CODE):
 				return vibrations.indexOf(prefHandler.fetchPrefs(PrefKey.SHARED_PREF, PrefKey.SECONDARY_ALARM_VIBRATION_KEY, DataType.STRING, context, VibrationHandler.VIBRATION_PATTERN_SMS_ALARM));
 			default:
-				if (SmsAlarm.DEBUG) {
-					Log.e(LOG_TAG + ":resolveAlarmVibrationId()", "This AlarmVibrationDialog has been set with wrong target request code, hence alarm vibration id cannot be resolved, returning -1 (no default selection)");
-				}
+				Log.e(LOG_TAG + ":resolveSelectedAlarmVibrationId()", "This AlarmVibrationDialog has been set with wrong target request code, hence alarm vibration id cannot be resolved, returning -1 (no default selection)");
 				return -1;
 		}
 	}

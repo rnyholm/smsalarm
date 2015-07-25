@@ -16,7 +16,6 @@ import android.content.SharedPreferences;
 import android.telephony.PhoneNumberUtils;
 import android.util.Log;
 import ax.ha.it.smsalarm.activity.Acknowledge.AcknowledgeMethod;
-import ax.ha.it.smsalarm.activity.SmsAlarm;
 import ax.ha.it.smsalarm.alarm.Alarm;
 import ax.ha.it.smsalarm.alarm.Alarm.AlarmType;
 import ax.ha.it.smsalarm.handler.DatabaseHandler;
@@ -124,9 +123,7 @@ public class DebugUtils {
 			intent.setAction(SmsReceiver.ACTION_SKIP_ABORT_BROADCAST);
 			context.sendBroadcast(intent);
 		} else {
-			if (SmsAlarm.DEBUG) {
-				Log.e(LOG_TAG, "An error seems to have occurred as the created mock SMS (pdu byte[]) is null, see previous error messages");
-			}
+			Log.e(LOG_TAG + ":dispatchMockSMS()", "An error seems to have occurred as the created mock SMS (pdu byte[]) is null, see previous error messages");
 		}
 	}
 
@@ -173,16 +170,12 @@ public class DebugUtils {
 				byte[] bodybytes = (byte[]) stringToGsm7BitPacked.invoke(null, body);
 				bo.write(bodybytes);
 			} catch (Exception e) {
-				if (SmsAlarm.DEBUG) {
-					Log.e(LOG_TAG, "Failed convert string: \"" + body + "\" to GSM 7 Bit Packed", e);
-				}
+				Log.e(LOG_TAG + ":createMockSMS()", "Failed convert string: \"" + body + "\" to GSM 7 Bit Packed", e);
 			}
 
 			pdu = bo.toByteArray();
 		} catch (IOException e) {
-			if (SmsAlarm.DEBUG) {
-				Log.e(LOG_TAG, "Failed to write created mock SMS to ByteArrayOutputStream", e);
-			}
+			Log.e(LOG_TAG + ":createMockSMS()", "Failed to write created mock SMS to ByteArrayOutputStream", e);
 		}
 
 		return pdu;

@@ -18,7 +18,6 @@ import android.support.v4.app.DialogFragment;
 import android.util.Log;
 import android.widget.ListView;
 import ax.ha.it.smsalarm.R;
-import ax.ha.it.smsalarm.activity.SmsAlarm;
 import ax.ha.it.smsalarm.alarm.Alarm.AlarmType;
 import ax.ha.it.smsalarm.handler.SharedPreferencesHandler;
 import ax.ha.it.smsalarm.handler.SharedPreferencesHandler.DataType;
@@ -248,9 +247,7 @@ public class AlarmSignalDialog extends DialogFragment {
 			case (SECONDARY_ALARM_SIGNAL_DIALOG_REQUEST_CODE):
 				return allAlarmSignals.indexOf(prefHandler.fetchPrefs(PrefKey.SHARED_PREF, PrefKey.SECONDARY_ALARM_SIGNAL_KEY, DataType.STRING, context, soundHandler.resolveAlarmSignal(context, SoundHandler.DEFAULT_SECONDARY_ALARM_SIGNAL_ID)));
 			default:
-				if (SmsAlarm.DEBUG) {
-					Log.e(LOG_TAG + ":resolveAlarmSignalId()", "This AlarmSignalDialog has been set with wrong target request code, hence alarm signal id cannot be resolved, returning -1 (no default selection)");
-				}
+				Log.e(LOG_TAG + ":resolveSelectedAlarmSignalId()", "This AlarmSignalDialog has been set with wrong target request code, hence alarm signal id cannot be resolved, returning -1 (no default selection)");
 				return -1;
 		}
 	}

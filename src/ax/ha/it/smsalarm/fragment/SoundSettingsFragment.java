@@ -398,9 +398,7 @@ public class SoundSettingsFragment extends SherlockFragment implements Applicati
 					}
 					break;
 				default:
-					if (SmsAlarm.DEBUG) {
-						Log.e(LOG_TAG + ":onActivityResult()", "An unsupported result occurred, result code: \"" + resultCode + "\" and request code: \"" + requestCode + "\"");
-					}
+					Log.e(LOG_TAG + ":onActivityResult()", "An unsupported result occurred, result code: \"" + resultCode + "\" and request code: \"" + requestCode + "\"");
 			}
 		}
 	}

@@ -13,7 +13,6 @@ import android.content.Intent;
 import android.support.v4.app.NotificationCompat;
 import android.util.Log;
 import ax.ha.it.smsalarm.R;
-import ax.ha.it.smsalarm.activity.SmsAlarm;
 import ax.ha.it.smsalarm.alarm.Alarm;
 import ax.ha.it.smsalarm.handler.SharedPreferencesHandler;
 import ax.ha.it.smsalarm.handler.SharedPreferencesHandler.DataType;
@@ -86,9 +85,7 @@ public class NotificationService extends IntentService {
 				configureNotification(R.drawable.ic_secondary_alarm, getString(R.string.SECONDARY_ALARM), organization.toUpperCase(), getString(R.string.SECONDARY_ALARM));
 				break;
 			default: // If this happens, something really weird is going on
-				if (SmsAlarm.DEBUG) {
-					Log.e(LOG_TAG + ":onHandleIntent()", "Alarm type couldn't be find when configuring notification");
-				}
+				Log.e(LOG_TAG + ":onHandleIntent()", "Alarm type couldn't be find when configuring notification");
 		}
 
 		// Setup intents for pressing notification and dismissing it, doesn't need to pass over alarm in this intent

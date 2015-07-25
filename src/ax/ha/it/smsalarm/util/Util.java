@@ -17,7 +17,6 @@ import android.net.Uri;
 import android.os.Build;
 import android.util.Log;
 import android.view.View;
-import ax.ha.it.smsalarm.activity.SmsAlarm;
 
 /**
  * Utility class containing different utilities and helper method.<br>
@@ -108,13 +107,9 @@ public class Util {
 	public static void browseURI(Context context, String targetURI) {
 		// Some sanity checks
 		if (targetURI == null || targetURI.length() == 0) {
-			if (SmsAlarm.DEBUG) {
-				Log.e(LOG_TAG + ":browseURI()", "Failed to browse URI, given targetURI is missing");
-			}
+			Log.e(LOG_TAG + ":browseURI()", "Failed to browse URI, given targetURI is missing");
 		} else if (!targetURI.startsWith(URI_HTTP) && !targetURI.startsWith(URI_HTTPS)) {
-			if (SmsAlarm.DEBUG) {
-				Log.e(LOG_TAG + ":browseURI()", "Failed to browse URI, given targetURI isn't a valid URI - doesn't start with either http:// or https://");
-			}
+			Log.e(LOG_TAG + ":browseURI()", "Failed to browse URI, given targetURI isn't a valid URI - doesn't start with either http:// or https://");
 		} else {
 			Uri URI = Uri.parse(targetURI);
 			Intent launchBrowser = new Intent(Intent.ACTION_VIEW, URI);

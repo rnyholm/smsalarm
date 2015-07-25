@@ -31,7 +31,6 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import ax.ha.it.smsalarm.R;
 import ax.ha.it.smsalarm.activity.Acknowledge.AcknowledgeMethod;
-import ax.ha.it.smsalarm.activity.SmsAlarm;
 import ax.ha.it.smsalarm.fragment.dialog.AcknowledgeMessageDialog;
 import ax.ha.it.smsalarm.fragment.dialog.AcknowledgeNumberDialog;
 import ax.ha.it.smsalarm.handler.SharedPreferencesHandler;
@@ -295,9 +294,7 @@ public class AcknowledgeSettingsFragment extends SherlockFragment implements App
 
 					break;
 				default:
-					if (SmsAlarm.DEBUG) {
-						Log.e(LOG_TAG + ":onActivityResult()", "An unsupported result occurred, result code: \"" + resultCode + "\" and request code: \"" + requestCode + "\"");
-					}
+					Log.e(LOG_TAG + ":onActivityResult()", "An unsupported result occurred, result code: \"" + resultCode + "\" and request code: \"" + requestCode + "\"");
 			}
 		}
 	}
@@ -323,9 +320,7 @@ public class AcknowledgeSettingsFragment extends SherlockFragment implements App
 		try {
 			acknowledgeMethodSpinner.setSelection(acknowledgeMethod.ordinal());
 		} catch (IndexOutOfBoundsException e) {
-			if (SmsAlarm.DEBUG) {
-				Log.e(LOG_TAG + ":updateAcknowledgeMethodSpinner()", "An acknowledge method with an index outside the spinners bounds has been set. Acknowledge method: \"" + acknowledgeMethod.toString() + "\"(ordinal:\"" + acknowledgeMethod.ordinal() + "\")", e);
-			}
+			Log.e(LOG_TAG + ":updateAcknowledgeMethodSpinner()", "An acknowledge method with an index outside the spinners bounds has been set. Acknowledge method: \"" + acknowledgeMethod.toString() + "\"(ordinal:\"" + acknowledgeMethod.ordinal() + "\")", e);
 		}
 	}
 
