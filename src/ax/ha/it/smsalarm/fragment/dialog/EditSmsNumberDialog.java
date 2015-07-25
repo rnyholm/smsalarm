@@ -33,7 +33,7 @@ import ax.ha.it.smsalarm.util.InitializableString;
  * @see #EDIT_SECONDARY_SMS_NUMBER_DIALOG_REQUEST_CODE
  */
 public class EditSmsNumberDialog extends DialogFragment {
-	public static final String LOG_TAG = EditSmsNumberDialog.class.getSimpleName();
+	private static final String LOG_TAG = EditSmsNumberDialog.class.getSimpleName();
 
 	// Used as a key when putting data into bundles and intents, dialog tag can come in handy for classes using this dialog
 	public static final String EDIT_SMS_NUMBER = "addSmsNumber";

@@ -17,8 +17,8 @@ import ax.ha.it.smsalarm.R.string;
  * @since 2.3.1
  */
 public class InitializableString implements Parcelable {
-	String initialValue;
-	String value;
+	private String initialValue;
+	private String value;
 
 	/**
 	 * Creates a new instance of {@link InitializableString}. The {@link string} this object is instantiated with will always be stored within this

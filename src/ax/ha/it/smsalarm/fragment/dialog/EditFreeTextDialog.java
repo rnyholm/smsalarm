@@ -33,7 +33,7 @@ import ax.ha.it.smsalarm.util.InitializableString;
  * @see #EDIT_SECONDARY_FREE_TEXT_DIALOG_REQUEST_CODE
  */
 public class EditFreeTextDialog extends DialogFragment {
-	public static final String LOG_TAG = EditFreeTextDialog.class.getSimpleName();
+	private static final String LOG_TAG = EditFreeTextDialog.class.getSimpleName();
 
 	// Used as a key when putting data into bundles and intents, dialog tag can come in handy for classes using this dialog
 	public static final String EDIT_FREE_TEXT = "editFreeText";
