@@ -15,7 +15,7 @@ import android.util.Log;
 /**
  * Class responsible for any special handling that needs to be done according to <b><i>KitKat</i></b>'s (and higher) retarded behavior when receiving
  * an SMS.<br>
- * <b><i>KitKatHandler is a singleton.</i></b>
+ * <b><i>KitKatHandler is a singleton, eagerly initialized to avoid concurrent modification.</i></b>
  * <p>
  * <b><i>Note!<br>
  * This class and it's functionality is still in BETA state.</i></b>
@@ -38,7 +38,7 @@ public class KitKatHandler {
 	}
 
 	// Singleton instance of this class
-	private static KitKatHandler INSTANCE;
+	private static KitKatHandler INSTANCE = new KitKatHandler();
 
 	private static final String LOG_TAG = KitKatHandler.class.getSimpleName();
 
@@ -62,7 +62,9 @@ public class KitKatHandler {
 	 * Creates a new instance of {@link KitKatHandler}.
 	 */
 	private KitKatHandler() {
-		// Just empty...
+		if (INSTANCE != null) {
+			Log.e(LOG_TAG + ":KitKatHandler()", "KitKatHandler already instantiated");
+		}
 	}
 
 	/**
@@ -71,11 +73,6 @@ public class KitKatHandler {
 	 * @return Instance of <code>KitKatHandler</code>.
 	 */
 	public static KitKatHandler getInstance() {
-		// If instance of this object is null create a new one
-		if (INSTANCE == null) {
-			INSTANCE = new KitKatHandler();
-		}
-
 		return INSTANCE;
 	}
 

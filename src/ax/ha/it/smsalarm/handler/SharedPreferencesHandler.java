@@ -16,7 +16,7 @@ import android.util.Log;
 
 /**
  * Class responsible for all {@link SharedPreferences} handling.<br>
- * <b><i>PreferencesHandler is a singleton.</i></b>
+ * <b><i>PreferencesHandler is a singleton, eagerly initialized to avoid concurrent modification.</i></b>
  * 
  * @author Robert Nyholm <robert.nyholm@aland.net>
  * @version 2.3.1
@@ -97,8 +97,8 @@ public class SharedPreferencesHandler {
 		}
 	}
 
-	// Singleton instance of this class
-	private static SharedPreferencesHandler INSTANCE;
+	// Singleton instance of this class, eagerly initialized
+	private static SharedPreferencesHandler INSTANCE = new SharedPreferencesHandler();
 
 	private static final String LOG_TAG = SharedPreferencesHandler.class.getSimpleName();
 
@@ -110,7 +110,9 @@ public class SharedPreferencesHandler {
 	 * Creates a new instance of {@link SharedPreferencesHandler}.
 	 */
 	private SharedPreferencesHandler() {
-		// Just empty...
+		if (INSTANCE != null) {
+			Log.e(LOG_TAG + ":SharedPreferencesHandler()", "SharedPreferencesHandler already instantiated");
+		}
 	}
 
 	/**
@@ -119,11 +121,6 @@ public class SharedPreferencesHandler {
 	 * @return Instance of <code>PreferencesHandler</code>.
 	 */
 	public static SharedPreferencesHandler getInstance() {
-		// If instance of this object is null create a new one
-		if (INSTANCE == null) {
-			INSTANCE = new SharedPreferencesHandler();
-		}
-
 		return INSTANCE;
 	}
 
