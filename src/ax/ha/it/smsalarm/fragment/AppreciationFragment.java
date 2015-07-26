@@ -75,5 +75,6 @@ public class AppreciationFragment extends SherlockFragment implements Applicatio
 	@Override
 	public void setListeners() {
 		// TODO Auto-generated method stub
+		// Remember to set listener for the in app billing helper here
 	}
 }
