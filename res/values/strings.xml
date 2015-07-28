@@ -16,6 +16,7 @@
     <string name="ADD_SECONDARY_PHONE_NUMBER_DIALOG_MESSAGE">Ange ett telefonnummer som Sms Alarm ska larma sekundärlarm på.</string>
     <string name="ALARM_INFO_DIALOG_TITLE">Larminfo</string>
     <string name="ALARM_VIBRATION_DIALOG_TITLE">Välj vibrationsmönster</string>
+    <string name="DONATE">Donera</string>
     <string name="EDIT">Ändra</string>
     <string name="EDIT_FREE_TEXT_DIALOG_TITLE">Ändra ord</string>
     <string name="EDIT_MESSAGE">Ändra meddelande</string>
@@ -34,6 +35,9 @@
     <string name="FLASH_NOTIFICATION_NOT_SUPPORTED_MISSING_CAMERA">Blixtnotifikation stöds inte på grund av att enheten saknar kamera.</string>
     <string name="FLASH_NOTIFICATION_NOT_SUPPORTED_MISSING_CAMERA_FLASH">Blixtnotifikation stöds inte på grund av att enheten saknar blixt.</string>  
     <string name="INFO_ACKNOWLEDGE_SETTINGS">Ställ in om larmkvittering skall användas och i sådana fall på vilket sätt kvittering sker, telefonnummer som kvittering sker mot och kvitteringsmeddelande.</string>
+    <string name="INFO_APPRECIATION">Känner du att Sms Alarm gör skillnad i ditt liv och vill visa ditt stöd för applikationen? Det finns ett par olika sätt att göra det på och det spelar ingen roll hur du gör det, allt stöd uppskattas!</string>
+    <string name="INFO_APPRECIATION_DONATE">Om du vill bidra mera konkret och verkligen visa ditt stöd för framtida utveckling är du välkommen att göra en donation. Liten eller stor, det spelar ingen roll, alla donationer är betydelsefulla! Donationen kommer göras genom Google\'s In-app Billing, alla belopp är exklusive moms.</string>
+    <string name="INFO_APPRECIATION_REVIEW">Recensera Sms Alarm på Google Play&#8482; och om du känner för det, skriv något om den.</string>
     <string name="INFO_ENABLE_SMS_ALARM">Om vald larmar Sms Alarm enligt angiven information, annars gör applikationen inte det.</string>
     <string name="INFO_MISC_SETTINGS">Ställ in din organisations namn, om enhetens kamerablixt ska blinka vid inkommande larm och om Sms Alarm ska vara aktiverat.</string>
     <string name="INFO_PLAY_ALARM_SIGNAL_REPEATEDLY_SETTING">Om vald kommer larmsignalen för både primär- och sekundärlarm att spelas oavbrutet tills notifikationen för inkommande larm har hanterats.</string>
@@ -48,6 +52,7 @@
     <string name="MENU_TITLE_ALL_ALARMS_LOG">Alla mottagna larm</string>
     <string name="MENU_TITLE_ALL_PRIMARY_ALARMS_LOG">Primärlarm</string>
     <string name="MENU_TITLE_ALL_SECONDARY_ALARMS_LOG">Sekundärlarm</string>
+    <string name="MENU_TITLE_APPRECIATION">Visa ditt stöd</string>
     <string name="MENU_TITLE_FREE_TEXT">Ord</string>
     <string name="MENU_TITLE_OPEN_SOURCE">Öppen källkod</string>
     <string name="MENU_TITLE_OTHER">Övrigt</string>
@@ -60,7 +65,8 @@
     <string name="REMOVE_PRIMARY_FREE_TEXT_DIALOG_MESSAGE">Vill du ta bort följande ord från listan av primärlarm: </string>
     <string name="REMOVE_SECONDARY_FREE_TEXT_DIALOG_MESSAGE">Vill du ta bort följande ord från listan av sekundärlarm: </string>
     <string name="REMOVE_PRIMARY_PHONE_NUMBER_DIALOG_MESSAGE">Vill du ta bort följande telefonnummer från listan av primärlarm: </string>
-    <string name="REMOVE_SECONDARY_PHONE_NUMBER_DIALOG_MESSAGE">Vill du ta bort följande telefonnummer från listan av sekundärlarm: </string>    
+    <string name="REMOVE_SECONDARY_PHONE_NUMBER_DIALOG_MESSAGE">Vill du ta bort följande telefonnummer från listan av sekundärlarm: </string>
+    <string name="REVIEW_NOW">Recensera nu!(Google Play&#8482; kommer öppnas)</string>    
     <string name="TITLE_ACKNOWLEDGE_BY">Kvittera genom</string>
     <string name="TITLE_ACKNOWLEDGE_MESSAGE">Meddelande för kvittering</string>
     <string name="TITLE_ACKNOWLEDGE_PHONE_NUMBER">Telefonnummer för kvittering</string>
@@ -68,6 +74,10 @@
     <string name="TITLE_ALARM_INFO_MESSAGE">Meddelande</string>
  	<string name="TITLE_ALARM_SIGNALS">Larmsignaler</string>
  	<string name="TITLE_ALARM_VIBRATIONS">Vibrationsmönster</string>
+ 	<string name="TITLE_APPRECIATION">Visa ditt stöd</string>
+ 	<string name="TITLE_APPRECIATION_DONERA">Donera</string>
+ 	<string name="TITLE_APPRECIATION_REVIEW">Recensera</string>
+ 	<string name="TITLE_DONATION_SIZE">Storlek donation</string>
  	<string name="TITLE_ORGANIZATION">Organisation</string>
  	<string name="TITLE_PLAY_ALARM_SIGNAL_REPEATEDLY_SETTING">Spela upp larmsignalen oavbrutet</string>
  	<string name="TITLE_SOUND_SETTINGS">Ljud- och vibrationsinställningar</string>
@@ -84,6 +94,8 @@
     <string name="TOAST_PHONE_NUMBER_ALREADY_IN_SECONDARY_LIST">Angivet telefonnummer finns redan i listan av sekundärlarm. Ange ett nytt telefonnummer.</string>
     <string name="TOAST_PHONE_NUMBER_MISSING">Ett telefonnummer måste anges.</string> 
     <string name="TOAST_SENDING_ACKNOWLEDGE_SMS">Skickar kvitteringsmeddelande..</string>
+    <string name="TOAST_UNABLE_TO_START_GOOGLE_PLAY">Lyckas inte öppna Google Play&#8482;, kontrollera att applikationen är installerad.</string>
+    <string name="TOAST_UNABLE_TO_SETUP_GOOGLE_IN_APP_BILLING">Ett oväntat fel inträffade vilket inte möjliggör donationer för tillfället, kontakta utvecklaren om problemet kvarstår.</string>
     <!-- NEW STRINGS IN v.2.3.1 END -->
     
     <!-- DUMMY STRINGS(PLACEHOLDER AND DESCRIPTIVES), ONLY EXISTS IN ENGLISH - BEGIN -->

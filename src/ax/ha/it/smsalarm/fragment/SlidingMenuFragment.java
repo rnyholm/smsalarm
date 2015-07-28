@@ -88,8 +88,9 @@ public class SlidingMenuFragment extends SherlockListFragment {
 		adapter.add(new SlidingMenuItem(202, getString(R.string.MENU_TITLE_ALL_PRIMARY_ALARMS_LOG), R.drawable.ic_menu_alarm_log_primary));
 		adapter.add(new SlidingMenuItem(203, getString(R.string.MENU_TITLE_ALL_SECONDARY_ALARMS_LOG), R.drawable.ic_menu_alarm_log_secondary));
 		adapter.add(new SlidingMenuItem(getString(R.string.MENU_TITLE_ABOUT)));
-		adapter.add(new SlidingMenuItem(301, getString(R.string.MENU_TITLE_OPEN_SOURCE), R.drawable.ic_menu_os));
-		adapter.add(new SlidingMenuItem(302, getString(R.string.ABOUT), R.drawable.ic_menu_about));
+		adapter.add(new SlidingMenuItem(301, getString(R.string.MENU_TITLE_APPRECIATION), R.drawable.ic_menu_appreciation));
+		adapter.add(new SlidingMenuItem(302, getString(R.string.MENU_TITLE_OPEN_SOURCE), R.drawable.ic_menu_os));
+		adapter.add(new SlidingMenuItem(303, getString(R.string.ABOUT), R.drawable.ic_menu_about));
 
 		// Build up the testing/debug menu
 		if (SmsAlarm.DEBUG) {
@@ -134,9 +135,12 @@ public class SlidingMenuFragment extends SherlockListFragment {
 				fragment = new SecondaryAlarmLogFragment();
 				break;
 			case (301):
-				fragment = new OpenSourceFragment();
+				fragment = new AppreciationFragment();
 				break;
 			case (302):
+				fragment = new OpenSourceFragment();
+				break;
+			case (303):
 				fragment = new AboutFragment();
 				break;
 			case (401):

@@ -20,6 +20,8 @@ package ax.ha.it.smsalarm.vending.billing.util;
  * caused this exception to be thrown, call {@link #getResult()}.
  */
 public class IabException extends Exception {
+	private static final long serialVersionUID = 3779436303110972511L;
+
 	IabResult mResult;
 
 	public IabException(IabResult r) {
