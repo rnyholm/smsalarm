@@ -3,6 +3,8 @@
  */
 package ax.ha.it.smsalarm.fragment;
 
+import java.math.BigInteger;
+import java.security.SecureRandom;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -86,7 +88,7 @@ public class AppreciationFragment extends SherlockFragment implements Applicatio
 		context = getActivity();
 
 		// Get the application key and initialize the Iab Helper
-		String base64EncodedPublicKey = getString(R.string.APPLICATION_LICENSE_KEY);
+		String base64EncodedPublicKey = PublicRSAKeyUtil.computeKey();
 		iabHelper = new IabHelper(context, base64EncodedPublicKey);
 
 		// Enable debug logging if application is built in a debug environment
@@ -219,5 +221,89 @@ public class AppreciationFragment extends SherlockFragment implements Applicatio
 		ArrayAdapter<String> adapter = new ArrayAdapter<String>(context, android.R.layout.simple_spinner_item, amounts);
 		adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 		donationSizeSpinner.setAdapter(adapter);
+	}
+
+	/**
+	 * Utility class to compute the Public Base64-encoded RSA License Key.
+	 * 
+	 * @author Robert Nyholm <robert.nyholm@aland.net>
+	 * @version 2.3.1
+	 * @since 2.3.1
+	 */
+	private final static class PublicRSAKeyUtil {
+		/**
+		 * To compute the Public Base64-encoded RSA License Key and return it.
+		 * 
+		 * @return Computed Public Base64-encoded RSA License Key.
+		 */
+		public static String computeKey() {
+			return getBeginningPart() + getMiddlePart() + getEndingPart();
+		}
+
+		/**
+		 * To get the beginning part of the Public Base64-encoded RSA License Key.
+		 * 
+		 * @return Beginning of the Key.
+		 */
+		private static String getBeginningPart() {
+			// TODO: REMOVE THIS LINE ONCE ENSURED IT WORKS! -- MIIBIjANBgkqhkiG9w0BAQEFA
+
+			char[] chars = "miibiJanbGKQHKIg9W0baqefa".toCharArray();
+
+			for (int i = 0; i < chars.length; i++) {
+				char c = chars[i];
+
+				// Only swap cases of non-digit characters
+				if (!Character.isDigit(c)) {
+					if (Character.isUpperCase(c)) {
+						chars[i] = Character.toLowerCase(c);
+					} else if (Character.isLowerCase(c)) {
+						chars[i] = Character.toUpperCase(c);
+					}
+				}
+			}
+
+			// Return the swapped string
+			return new String(chars);
+		}
+
+		/**
+		 * To get the Ending part of the Public Base64-encoded RSA License Key.
+		 * 
+		 * @return Ending of the Key.
+		 */
+		private static String getEndingPart() {
+			// TODO: REMOVE THIS LINE ONCE ENSURED IT WORKS! -- l3QhAFhExQ8WksaNI4QIDAQAB
+			return new StringBuilder("BAQADIQ4INaskW8QxEhFAhQ3l").reverse().toString();
+		}
+
+		/**
+		 * To get the Middle part of the Public Base64-encoded RSA License Key.
+		 * 
+		 * @return Middle of the Key.
+		 */
+		private static String getMiddlePart() {
+			return "AOCAQ8AMIIBCgKCAQEApzFAV0cbzGHJ10GxIaX7XKwyNFX4fEFkPqyXyED0sSbTx+CpQ0pGRcyQPAiURnKoW5/6ztu175s037CZRgjNiKAjiqsOKS2J8o8V728jR7xnUHOeEd7d2M65iaP+OX26Gaz+GE3CuCMbWGnM24RojJUJv0ZHOx/N2F70Q3WZ97r3bugiul1yCER/k5//IJK9gAdlyGl8k2HmT6XkdxP68boJv5/tDCczqeO788HOBD2pOqXC8oYQI7fxI8KMzfPvrKVp3N3F+GlwND1VOiL5fLxcFJuoLH3fPwAC4sb7VZzDdPgrAiFESWXeGMKM88tQh7y";
+		}
+	}
+
+	/**
+	 * Utility class to create random and unique tokens using the {@link SecureRandom}, a bit more expensive but a lot safer.
+	 * 
+	 * @author Robert Nyholm <robert.nyholm@aland.net>
+	 * @version 2.3.1
+	 * @since 2.3.1
+	 */
+	private static final class TokenGenerator {
+		private SecureRandom random = new SecureRandom();
+
+		/**
+		 * To get the next token.
+		 * 
+		 * @return Next token.
+		 */
+		public String nextToken() {
+			return new BigInteger(130, random).toString(32);
+		}
 	}
 }
