@@ -6,9 +6,13 @@ package ax.ha.it.smsalarm.fragment;
 import java.math.BigInteger;
 import java.security.SecureRandom;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 
+import android.annotation.SuppressLint;
+import android.app.Activity;
 import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.Intent;
@@ -29,8 +33,10 @@ import android.widget.TextView;
 import android.widget.Toast;
 import ax.ha.it.smsalarm.R;
 import ax.ha.it.smsalarm.activity.SmsAlarm;
+import ax.ha.it.smsalarm.fragment.dialog.ConfirmDonationDialog;
 import ax.ha.it.smsalarm.vending.billing.util.IabHelper;
 import ax.ha.it.smsalarm.vending.billing.util.IabResult;
+import ax.ha.it.smsalarm.vending.billing.util.Purchase;
 
 import com.actionbarsherlock.app.SherlockFragment;
 
@@ -51,14 +57,22 @@ public class AppreciationFragment extends SherlockFragment implements Applicatio
 	private static final String SKU_LARGE = "donate_large";
 	private static final String SKU_XLARGE = "donate_xlarge";
 
-	// To map the product name(id) with an amount
-	private HashMap<String, String> productsAndAmounts = new HashMap<String, String>();
+	private static final String GOOGLE_PLAY_URI = "market://details?id=";
+
+	// Request code for the purchase flow
+	public static final int DONATION_REQUEST_CODE = 101;
+
+	// To map amount's and product name(id)'s
+	private HashMap<String, String> amountsAndProducts = new HashMap<String, String>();
 
 	// Must have the application context
 	private Context context;
 
 	// Need to have a IabHelper in order to handle the billing
-	IabHelper iabHelper;
+	private IabHelper iabHelper;
+
+	// Instance of TokenGenerator, it's quite heavy to initialize so once we get hold of it we want to keep it
+	private TokenGenerator tokenGenerator;
 
 	// The TextView...
 	private TextView reviewNowTextView;
@@ -72,6 +86,9 @@ public class AppreciationFragment extends SherlockFragment implements Applicatio
 	// Indicator variable set after the setup has been done of the IabHelper, this telling whether or not setup was successful or not, if successful
 	// enable donate button else not
 	private boolean enableDonations = true;
+
+	// The generated developer payload must be stored in order for correct verification of the purchase can be made
+	private String developerPayload = "";
 
 	/**
 	 * Creates a new instance of {@link AppreciationFragment}.
@@ -87,7 +104,10 @@ public class AppreciationFragment extends SherlockFragment implements Applicatio
 		// Set context here, it's safe because this fragment has been attached to its container, hence we have access to context
 		context = getActivity();
 
-		// Get the application key and initialize the Iab Helper
+		// Initialize a token generator for later use
+		tokenGenerator = new TokenGenerator();
+
+		// Compute the application key and initialize the Iab Helper
 		String base64EncodedPublicKey = PublicRSAKeyUtil.computeKey();
 		iabHelper = new IabHelper(context, base64EncodedPublicKey);
 
@@ -112,11 +132,22 @@ public class AppreciationFragment extends SherlockFragment implements Applicatio
 		});
 
 		// Build up the products and amounts map
-		productsAndAmounts.put(SKU_XSMALL, "1€");
-		productsAndAmounts.put(SKU_SMALL, "3€");
-		productsAndAmounts.put(SKU_MEDIUM, "5€");
-		productsAndAmounts.put(SKU_LARGE, "10€");
-		productsAndAmounts.put(SKU_XLARGE, "15€");
+		amountsAndProducts.put("1€", SKU_XSMALL);
+		amountsAndProducts.put("3€", SKU_SMALL);
+		amountsAndProducts.put("5€", SKU_MEDIUM);
+		amountsAndProducts.put("10€", SKU_LARGE);
+		amountsAndProducts.put("15€", SKU_XLARGE);
+	}
+
+	@Override
+	public void onDestroy() {
+		super.onDestroy();
+
+		// Unbind the IabHelper, Note. Important!
+		if (iabHelper != null) {
+			iabHelper.dispose();
+			iabHelper = null;
+		}
 	}
 
 	@Override
@@ -170,13 +201,27 @@ public class AppreciationFragment extends SherlockFragment implements Applicatio
 
 	@Override
 	public void setListeners() {
+		// Listener for the review application now, starting Google Play
 		reviewNowTextView.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
 				startGooglePlay();
 			}
 		});
-		// TODO Auto-generated method stub
+
+		// Listener for the donate button, launching the purchase flow
+		donateButton.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				// Get the chosen amount for donation from spinner
+				String donationAmount = (String) donationSizeSpinner.getSelectedItem();
+
+				// Create new instance of ConfirmDonationDialog prepared with selected donation amount
+				ConfirmDonationDialog dialog = ConfirmDonationDialog.newInstance(donationAmount);
+				dialog.setTargetFragment(AppreciationFragment.this, ConfirmDonationDialog.CONFIRM_DONATION_DIALOG_REQUEST_CODE);
+				dialog.show(getFragmentManager(), ConfirmDonationDialog.CONFIRM_DONATION_DIALOG_TAG);
+			}
+		});
 	}
 
 	@Override
@@ -185,9 +230,39 @@ public class AppreciationFragment extends SherlockFragment implements Applicatio
 		if (iabHelper != null) {
 			if (!iabHelper.handleActivityResult(requestCode, resultCode, data)) {
 				// Any handling of activity results not related to In-app Billing goes here...
-				super.onActivityResult(requestCode, resultCode, data);
+				// Only interested in OK results, don't care at all about the others
+				if (resultCode == Activity.RESULT_OK) {
+					// Only interested in certain request codes...
+					switch (requestCode) {
+						case (ConfirmDonationDialog.CONFIRM_DONATION_DIALOG_REQUEST_CODE):
+							// Fetch the confirmed donation amount
+							String confirmedDonationAmount = data.getStringExtra(ConfirmDonationDialog.CONFIRM_DONATION);
+
+							if (SmsAlarm.DEBUG) {
+								Log.d(LOG_TAG + ":onActivityResult()", "A donation with amount: \"" + confirmedDonationAmount + "\" and product id: \"" + amountsAndProducts.get(confirmedDonationAmount) + "\" is about to be done");
+							}
+
+							// Generate token and store it for further processing
+							developerPayload = tokenGenerator.nextToken();
+
+							// Launch the purchase flow. Note, this method must be called from the UI thread
+							iabHelper.launchPurchaseFlow(getActivity(), amountsAndProducts.get(confirmedDonationAmount), DONATION_REQUEST_CODE, purchaseFinishedListener, developerPayload);
+
+							// For test only
+							// android.test.purchased
+							// android.test.canceled
+							// android.test.refunded
+							// android.test.item_unavailable
+							// iabHelper.launchPurchaseFlow(getActivity(), "android.test.purchased", DONATION_REQUEST_CODE, purchaseFinishedListener,
+							// developerPayload);
+
+							break;
+						default:
+							Log.e(LOG_TAG + ":onActivityResult()", "An unsupported result occurred, result code: \"" + resultCode + "\" and request code: \"" + requestCode + "\"");
+					}
+				}
 			} else {
-				// TODO Auto-generated method stub
+				// Activity results related to In-app Billing goes here...
 			}
 		}
 	}
@@ -197,7 +272,7 @@ public class AppreciationFragment extends SherlockFragment implements Applicatio
 	 */
 	private void startGooglePlay() {
 		// Get correct URI to google play from package name
-		Uri uri = Uri.parse("market://details?id=" + context.getPackageName());
+		Uri uri = Uri.parse(GOOGLE_PLAY_URI + context.getPackageName());
 		Intent intent = new Intent(Intent.ACTION_VIEW, uri);
 
 		try {
@@ -214,13 +289,101 @@ public class AppreciationFragment extends SherlockFragment implements Applicatio
 	 * To update the {@link Spinner} containing all possible amounts to donate, with correct values.
 	 */
 	private void updateDonationSizeSpinner() {
-		// Fetch all the amounts into one list
-		List<String> amounts = new ArrayList<String>();
-		amounts.addAll(productsAndAmounts.values());
+		// Fetch all the amounts
+		List<String> amounts = new ArrayList<String>(amountsAndProducts.keySet());
+
+		// Sort the list to ensure correct order of display
+		Collections.sort(amounts, new Comparator<String>() {
+			@Override
+			public int compare(String a1, String a2) {
+				// Safe to it this way because we know the strings contains only digits and € signs
+				a1 = a1.replace("€", "");
+				a2 = a2.replace("€", "");
+
+				if (Integer.valueOf(a1) < Integer.valueOf(a2)) {
+					return -1;
+				} else if (Integer.valueOf(a1) > Integer.valueOf(a2)) {
+					return 1;
+				}
+
+				return 0;
+			}
+		});
 
 		ArrayAdapter<String> adapter = new ArrayAdapter<String>(context, android.R.layout.simple_spinner_item, amounts);
 		adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 		donationSizeSpinner.setAdapter(adapter);
+	}
+
+	// Callback for when a purchase is finished
+	IabHelper.OnIabPurchaseFinishedListener purchaseFinishedListener = new IabHelper.OnIabPurchaseFinishedListener() {
+		@Override
+		public void onIabPurchaseFinished(IabResult result, Purchase purchase) {
+			if (SmsAlarm.DEBUG) {
+				Log.d(LOG_TAG + ".OnIabPurchaseFinishedListener.class:onIabPurchaseFinished()", "Purchase finished: " + result + ", purchase: " + purchase + "\"");
+			}
+
+			// Don't process the purchase any further if IabHelper has been disposed
+			if (iabHelper != null) {
+				// Check for any errors
+				if (result.isSuccess()) {
+					if (verifyDeveloperPayload(purchase)) {
+						// Everything was fine, consume the donation to make it possible to donate the same amount again. Note, this is safe to call
+						// from UI thread
+						iabHelper.consumeAsync(purchase, consumeFinishedListener);
+					} else { // Developer payload couldn't be verified
+						// Log and show toast
+						Log.e(LOG_TAG + ".OnIabPurchaseFinishedListener.class:onIabPurchaseFinished()", "Error purchasing, developer payload couldn't be verified");
+						Toast.makeText(context, getString(R.string.TOAST_DONATION_FAILED_AUTHENTICITY_VERIFICATION_FAIL), Toast.LENGTH_LONG).show();
+					}
+				} else { // An error occurred during purchase
+					// Log and show toast
+					Log.e(LOG_TAG + ".OnIabPurchaseFinishedListener.class:onIabPurchaseFinished()", "Error purchasing, message of result: \"" + result.getMessage() + "\"");
+					Toast.makeText(context, getString(R.string.TOAST_DONATION_FAILED_PURCHASE_ERROR, result.getMessage()), Toast.LENGTH_LONG).show();
+				}
+			}
+		}
+	};
+
+	// Callback for when a consumption is complete
+	IabHelper.OnConsumeFinishedListener consumeFinishedListener = new IabHelper.OnConsumeFinishedListener() {
+		@Override
+		public void onConsumeFinished(Purchase purchase, IabResult result) {
+			// Don't proceed with the consume process if IabHelper has been disposed
+			if (iabHelper != null) {
+				if (result.isSuccess()) {
+					// Show toast telling user a successful donation has been made
+					Toast.makeText(context, getString(R.string.TOAST_DONATION_SUCCESSFUL), Toast.LENGTH_LONG).show();
+				} else { // An error occurred during consuming the purchase
+					// Only log it as it's of no use of displaying it for the user
+					Log.e(LOG_TAG + ".consumeFinishedListener.class", "Error consuming, message of result: \"" + result.getMessage() + "\"");
+				}
+			}
+		}
+	};
+
+	/**
+	 * To verify that given {@link Purchase} contains a developer payload matching the one the purchase flow was launched with.
+	 * 
+	 * @param purchase
+	 *            <code>Purchase</code> which developer payload is checked.
+	 * @return <code>true</code> if the purchase's developer payload matches, else <code>false</code>.
+	 */
+	private boolean verifyDeveloperPayload(Purchase purchase) {
+		// The generated developer payload must have some sane content
+		if (developerPayload == null || developerPayload.length() < 1) {
+			return false;
+		}
+
+		// Fetch developer payload from purchase
+		String purchaseDeveloperPayload = purchase.getDeveloperPayload();
+
+		// The same goes for the developer payload originating from context
+		if (purchaseDeveloperPayload == null || purchaseDeveloperPayload.length() < 1) {
+			return false;
+		}
+
+		return developerPayload.equals(purchase.getDeveloperPayload());
 	}
 
 	/**
@@ -246,8 +409,6 @@ public class AppreciationFragment extends SherlockFragment implements Applicatio
 		 * @return Beginning of the Key.
 		 */
 		private static String getBeginningPart() {
-			// TODO: REMOVE THIS LINE ONCE ENSURED IT WORKS! -- MIIBIjANBgkqhkiG9w0BAQEFA
-
 			char[] chars = "miibiJanbGKQHKIg9W0baqefa".toCharArray();
 
 			for (int i = 0; i < chars.length; i++) {
@@ -273,7 +434,6 @@ public class AppreciationFragment extends SherlockFragment implements Applicatio
 		 * @return Ending of the Key.
 		 */
 		private static String getEndingPart() {
-			// TODO: REMOVE THIS LINE ONCE ENSURED IT WORKS! -- l3QhAFhExQ8WksaNI4QIDAQAB
 			return new StringBuilder("BAQADIQ4INaskW8QxEhFAhQ3l").reverse().toString();
 		}
 
@@ -294,6 +454,7 @@ public class AppreciationFragment extends SherlockFragment implements Applicatio
 	 * @version 2.3.1
 	 * @since 2.3.1
 	 */
+	@SuppressLint("TrulyRandom")
 	private static final class TokenGenerator {
 		private SecureRandom random = new SecureRandom();
 

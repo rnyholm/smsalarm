@@ -10,6 +10,7 @@ import android.support.v4.app.FragmentTransaction;
 import android.view.KeyEvent;
 import ax.ha.it.smsalarm.R;
 import ax.ha.it.smsalarm.fragment.AlarmLogFragment;
+import ax.ha.it.smsalarm.fragment.AppreciationFragment;
 import ax.ha.it.smsalarm.fragment.SlidingMenuFragment;
 import ax.ha.it.smsalarm.fragment.SmsSettingsFragment;
 import ax.ha.it.smsalarm.fragment.SoundSettingsFragment;
@@ -244,6 +245,11 @@ public class SmsAlarm extends SlidingFragmentActivity {
 			// Do further handling in fragments onActivityResult()
 			SoundSettingsFragment soundSettingsFragment = (SoundSettingsFragment) getSupportFragmentManager().findFragmentById(R.id.contentFrame_fl);
 			soundSettingsFragment.onActivityResult(requestCode, resultCode, data);
+		} else if (requestCode == AppreciationFragment.DONATION_REQUEST_CODE) {
+			// Again, find AppreciationFragment by id of content frame, at this point it's on top of the FragmentManagers BackStack so this is safe.
+			// Do further handling in fragments onActivityResult(), this is special in order to handle the purchase process async task properly
+			AppreciationFragment appreciationFragment = (AppreciationFragment) getSupportFragmentManager().findFragmentById(R.id.contentFrame_fl);
+			appreciationFragment.onActivityResult(requestCode, resultCode, data);
 		}
 	}
 }
