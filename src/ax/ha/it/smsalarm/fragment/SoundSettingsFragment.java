@@ -28,7 +28,6 @@ import android.widget.RelativeLayout.LayoutParams;
 import android.widget.TextView;
 import android.widget.Toast;
 import ax.ha.it.smsalarm.R;
-import ax.ha.it.smsalarm.activity.SmsAlarm;
 import ax.ha.it.smsalarm.fragment.dialog.AlarmSignalDialog;
 import ax.ha.it.smsalarm.fragment.dialog.AlarmVibrationDialog;
 import ax.ha.it.smsalarm.handler.SharedPreferencesHandler;
@@ -515,27 +514,21 @@ public class SoundSettingsFragment extends SherlockFragment implements Applicati
 	 * To update use OS sound settings {@link CheckBox} with correct value.
 	 */
 	private void updateUseOsSoundSettingsCheckBox() {
-		if (useOsSoundSettings) {
-			soundSettingCheckBox.setChecked(true);
-		}
+		soundSettingCheckBox.setChecked(useOsSoundSettings);
 	}
 
 	/**
 	 * To update play alarm signal twice {@link CheckBox} with correct value.
 	 */
 	private void updatePlayAlarmSignalTwiceCheckBox() {
-		if (playAlarmSignalTwice) {
-			playAlarmSignalTwiceCheckBox.setChecked(true);
-		}
+		playAlarmSignalTwiceCheckBox.setChecked(playAlarmSignalTwice);
 	}
 
 	/**
 	 * To update play alarm signal repeatedly {@link CheckBox} with correct value.
 	 */
 	private void updatePlayAlarmSignalRepeatedlyCheckBox() {
-		if (playAlarmSignalRepeatedly) {
-			playAlarmSignalRepeatedlyCheckBox.setChecked(true);
-		}
+		playAlarmSignalRepeatedlyCheckBox.setChecked(playAlarmSignalRepeatedly);
 	}
 
 	/**

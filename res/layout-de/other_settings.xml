@@ -68,10 +68,27 @@
             android:textAppearance="?android:attr/textAppearanceSmall" />
 
         <CheckBox
-            android:id="@+id/enableSmsAlarm_chk"
+            android:id="@+id/enableSMSDebugLogging_chk"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_below="@id/useFlashNotificationHint_tv"
+            android:text="@string/TITLE_ENABLE_SMS_DEBUG_LOGGING" />
+
+        <TextView
+            android:id="@+id/enableSMSDebugLoggingHint_tv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/enableSMSDebugLogging_chk"
+            android:layout_marginLeft="38dp"
+            android:layout_marginTop="-6dp"
+            android:text="@string/INFO_ENABLE_SMS_DEBUG_LOGGING"
+            android:textAppearance="?android:attr/textAppearanceSmall" />
+
+        <CheckBox
+            android:id="@+id/enableSmsAlarm_chk"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/enableSMSDebugLoggingHint_tv"
             android:checked="true"
             android:text="@string/TITLE_ENABLE_SMS_ALARM" />
 

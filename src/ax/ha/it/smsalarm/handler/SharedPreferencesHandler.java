@@ -70,7 +70,8 @@ public class SharedPreferencesHandler {
 		SECONDARY_ALARM_SIGNAL_KEY("secondaryAlarmSignalKey"),
 		USER_ADDED_ALARM_SIGNALS_KEY("userAddedAlarmSignalsKey"),
 		PRIMARY_ALARM_VIBRATION_KEY("primaryAlarmVibrationKey"),
-		SECONDARY_ALARM_VIBRATION_KEY("secondaryAlarmVibrationKey");
+		SECONDARY_ALARM_VIBRATION_KEY("secondaryAlarmVibrationKey"),
+		ENABLE_SMS_DEBUG_LOGGING("enableSmsDebugLogging");
 		// @formatter:on
 
 		// The actual key to which data will be stored and fetched from

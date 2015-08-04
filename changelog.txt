@@ -40,6 +40,7 @@ använda kvittering
 -Tagit bort webadressen till Sms Alarms websida, bytt epost till smsalarm@outlook.com.
 -Knapparna Ändra och ta bort i SMS- och Ordinställningarn aktiveras och inaktiveras nu beroende på om det finns något man kan ändra/tabort.
 -Möjligt att göra donationer genom Google's In-app Billing.
+-Möjligt att aktivera loggning av inkomna SMS för att underlätta felsökning.
 
 v2.2.5(version code 13)
 -Översättning till estniska lades till

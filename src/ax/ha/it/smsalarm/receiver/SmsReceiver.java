@@ -29,6 +29,7 @@ import ax.ha.it.smsalarm.handler.VibrationHandler;
 import ax.ha.it.smsalarm.provider.WidgetProvider;
 import ax.ha.it.smsalarm.service.AcknowledgeNotificationService;
 import ax.ha.it.smsalarm.service.NotificationService;
+import ax.ha.it.smsalarm.util.Logger;
 import ax.ha.it.smsalarm.util.Utils;
 import ax.ha.it.smsalarm.util.WakeLocker;
 
@@ -51,6 +52,9 @@ public class SmsReceiver extends BroadcastReceiver {
 	// URI to SMS inbox
 	private static final String SMS_INBOX_URI = "content://sms/inbox";
 
+	// Name of SMS log file
+	private static final String SMS_LOG_FILE = "smslog.txt";
+
 	// How long we should acquire a wake lock
 	private static final int WAKE_LOCKER_ACQUIRE_TIME = 20000;
 
@@ -68,6 +72,7 @@ public class SmsReceiver extends BroadcastReceiver {
 
 	// To handle an incoming alarm properly
 	private boolean enableAlarmAck = false;
+	private boolean enableSMSDebugLogging = false;
 	private boolean enableSmsAlarm = false;
 
 	private AlarmType alarmType = AlarmType.UNDEFINED;
@@ -123,6 +128,12 @@ public class SmsReceiver extends BroadcastReceiver {
 				if (!alarmType.equals(AlarmType.UNDEFINED)) {
 					// Continue handling of received SMS
 					handleSMS(context, intent);
+				}
+
+				// At last if SMS Debug logging is enabled do the logging of income SMS
+				if (enableSMSDebugLogging) {
+					// Instantiate a new Logger object at this point, only if it's needed, we don't want to do unnecessary work in the receiver
+					new Logger(SMS_LOG_FILE).log2File(msgHeader + "\t" + msgBody);
 				}
 			}
 		}
@@ -207,6 +218,7 @@ public class SmsReceiver extends BroadcastReceiver {
 		primaryFreeTexts = (List<String>) prefHandler.fetchPrefs(PrefKey.SHARED_PREF, PrefKey.PRIMARY_LISTEN_FREE_TEXTS_KEY, DataType.LIST, context);
 		secondaryFreeTexts = (List<String>) prefHandler.fetchPrefs(PrefKey.SHARED_PREF, PrefKey.SECONDARY_LISTEN_FREE_TEXTS_KEY, DataType.LIST, context);
 		enableAlarmAck = (Boolean) prefHandler.fetchPrefs(PrefKey.SHARED_PREF, PrefKey.ENABLE_ACK_KEY, DataType.BOOLEAN, context);
+		enableSMSDebugLogging = (Boolean) prefHandler.fetchPrefs(PrefKey.SHARED_PREF, PrefKey.ENABLE_SMS_DEBUG_LOGGING, DataType.BOOLEAN, context);
 		enableSmsAlarm = (Boolean) prefHandler.fetchPrefs(PrefKey.SHARED_PREF, PrefKey.ENABLE_SMS_ALARM_KEY, DataType.BOOLEAN, context, true);
 	}
 

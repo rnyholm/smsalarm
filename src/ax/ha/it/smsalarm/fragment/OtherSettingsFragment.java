@@ -61,17 +61,20 @@ public class OtherSettingsFragment extends SherlockFragment implements Applicati
 
 	// ...CheckBoxes...
 	private CheckBox enableSmsAlarmCheckBox;
+	private CheckBox enableSMSDebugLoggingCheckBox;
 	private CheckBox useFlashNotificationCheckBox;
 
 	// ...and TextViews
 	private TextView enableSmsAlarmInfoTextView;
+	private TextView enableSMSDebugLoggingInfoTextView;
 	private TextView useFlashNotificationInfoTextView;
 
 	// To store the name of organization
 	private String organization = "";
 
-	// To indicate whether Sms Alarm should be enabled or not and if flash notifications should be used
+	// To indicate whether Sms Alarm should be enabled or not, if SMS debug logging and flash notifications should be used
 	private boolean enableSmsAlarm = true;
+	private boolean enableSMSDebugLogging = false;
 	private boolean useFlashNotification = false;
 
 	// Could contain an error describing why Flash Notification isn't supported, if absent it's supported
@@ -119,10 +122,12 @@ public class OtherSettingsFragment extends SherlockFragment implements Applicati
 
 		// Finding CheckBox views
 		enableSmsAlarmCheckBox = (CheckBox) view.findViewById(R.id.enableSmsAlarm_chk);
+		enableSMSDebugLoggingCheckBox = (CheckBox) view.findViewById(R.id.enableSMSDebugLogging_chk);
 		useFlashNotificationCheckBox = (CheckBox) view.findViewById(R.id.useFlashNotification_chk);
 
 		// Finding TextView, views
 		enableSmsAlarmInfoTextView = (TextView) view.findViewById(R.id.enableSmsAlarmHint_tv);
+		enableSMSDebugLoggingInfoTextView = (TextView) view.findViewById(R.id.enableSMSDebugLoggingHint_tv);
 		useFlashNotificationInfoTextView = (TextView) view.findViewById(R.id.useFlashNotificationHint_tv);
 
 		// If Android API level is greater than Jelly Bean
@@ -150,6 +155,12 @@ public class OtherSettingsFragment extends SherlockFragment implements Applicati
 			paramsEnableSmsAlarmInfoTextView.addRule(RelativeLayout.BELOW, enableSmsAlarmCheckBox.getId());
 			paramsEnableSmsAlarmInfoTextView.addRule(RelativeLayout.ALIGN_LEFT, enableSmsAlarmCheckBox.getId());
 
+			// Set layout parameters for the enable SMS debug logging info TextView
+			RelativeLayout.LayoutParams paramsEnableSmsDebugLoggingInfoTextView = new RelativeLayout.LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
+			paramsEnableSmsDebugLoggingInfoTextView.setMargins(pixelsLeft, pixelsTop, 0, 0);
+			paramsEnableSmsDebugLoggingInfoTextView.addRule(RelativeLayout.BELOW, enableSMSDebugLoggingCheckBox.getId());
+			paramsEnableSmsDebugLoggingInfoTextView.addRule(RelativeLayout.ALIGN_LEFT, enableSMSDebugLoggingCheckBox.getId());
+
 			// Set layout parameters for the use flash notification info TextView
 			RelativeLayout.LayoutParams paramsUseFlashNotificationInfoTextView = new RelativeLayout.LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
 			paramsUseFlashNotificationInfoTextView.setMargins(pixelsLeft, pixelsTop, 0, 0);
@@ -158,6 +169,7 @@ public class OtherSettingsFragment extends SherlockFragment implements Applicati
 
 			// Apply the previously configured layout parameters to the correct TextViews
 			enableSmsAlarmInfoTextView.setLayoutParams(paramsEnableSmsAlarmInfoTextView);
+			enableSMSDebugLoggingInfoTextView.setLayoutParams(paramsEnableSmsDebugLoggingInfoTextView);
 			useFlashNotificationInfoTextView.setLayoutParams(paramsUseFlashNotificationInfoTextView);
 		} else { // The device has API level < 17, we just need to check if the locale is German
 			// If the locale on device is German(DE) we need to adjust the margin top for the information TextViews for the CheckBoxes to -6dp
@@ -172,12 +184,18 @@ public class OtherSettingsFragment extends SherlockFragment implements Applicati
 				paramsEnableSmsAlarmInfoTextView.addRule(RelativeLayout.BELOW, enableSmsAlarmCheckBox.getId());
 				paramsEnableSmsAlarmInfoTextView.addRule(RelativeLayout.ALIGN_LEFT, enableSmsAlarmCheckBox.getId());
 
+				RelativeLayout.LayoutParams paramsEnableSmsDebugLoggingInfoTextView = new RelativeLayout.LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
+				paramsEnableSmsDebugLoggingInfoTextView.setMargins(pixelsLeft, pixelsTop, 0, 0);
+				paramsEnableSmsDebugLoggingInfoTextView.addRule(RelativeLayout.BELOW, enableSMSDebugLoggingCheckBox.getId());
+				paramsEnableSmsDebugLoggingInfoTextView.addRule(RelativeLayout.ALIGN_LEFT, enableSMSDebugLoggingCheckBox.getId());
+
 				RelativeLayout.LayoutParams paramsUseFlashNotificationInfoTextView = new RelativeLayout.LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
 				paramsUseFlashNotificationInfoTextView.setMargins(pixelsLeft, pixelsTop, 0, 0);
 				paramsUseFlashNotificationInfoTextView.addRule(RelativeLayout.BELOW, useFlashNotificationCheckBox.getId());
 				paramsUseFlashNotificationInfoTextView.addRule(RelativeLayout.ALIGN_LEFT, useFlashNotificationCheckBox.getId());
 
 				enableSmsAlarmInfoTextView.setLayoutParams(paramsEnableSmsAlarmInfoTextView);
+				enableSMSDebugLoggingInfoTextView.setLayoutParams(paramsEnableSmsDebugLoggingInfoTextView);
 				useFlashNotificationInfoTextView.setLayoutParams(paramsUseFlashNotificationInfoTextView);
 			}
 		}
@@ -200,6 +218,7 @@ public class OtherSettingsFragment extends SherlockFragment implements Applicati
 	@Override
 	public void fetchSharedPrefs() {
 		enableSmsAlarm = (Boolean) prefHandler.fetchPrefs(PrefKey.SHARED_PREF, PrefKey.ENABLE_SMS_ALARM_KEY, DataType.BOOLEAN, context);
+		enableSMSDebugLogging = (Boolean) prefHandler.fetchPrefs(PrefKey.SHARED_PREF, PrefKey.ENABLE_SMS_DEBUG_LOGGING, DataType.BOOLEAN, context);
 		useFlashNotification = (Boolean) prefHandler.fetchPrefs(PrefKey.SHARED_PREF, PrefKey.USE_FLASH_NOTIFICATION, DataType.BOOLEAN, context);
 		organization = (String) prefHandler.fetchPrefs(PrefKey.SHARED_PREF, PrefKey.ORGANIZATION_KEY, DataType.STRING, context);
 	}
@@ -208,6 +227,7 @@ public class OtherSettingsFragment extends SherlockFragment implements Applicati
 	public void updateFragmentView() {
 		updateOrganizationEditText();
 		updateEnableSmsAlarmCheckBox();
+		updateEnableSMSDebugLoggingCheckBox();
 		updateUseFlashNotificationCheckBox();
 	}
 
@@ -236,6 +256,20 @@ public class OtherSettingsFragment extends SherlockFragment implements Applicati
 
 				// Store value to shared preferences
 				prefHandler.storePrefs(PrefKey.SHARED_PREF, PrefKey.ENABLE_SMS_ALARM_KEY, enableSmsAlarm, context);
+			}
+		});
+
+		// Set listener to Enable SMS Debug Logging CheckBox
+		enableSMSDebugLoggingCheckBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+			@Override
+			public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+				if (enableSMSDebugLoggingCheckBox.isChecked()) {
+					enableSMSDebugLogging = true;
+				} else {
+					enableSMSDebugLogging = false;
+				}
+
+				prefHandler.storePrefs(PrefKey.SHARED_PREF, PrefKey.ENABLE_SMS_DEBUG_LOGGING, enableSMSDebugLogging, context);
 			}
 		});
 
@@ -293,14 +327,17 @@ public class OtherSettingsFragment extends SherlockFragment implements Applicati
 		}
 	}
 
+	private void updateEnableSMSDebugLoggingCheckBox() {
+		// Update enable SMS Debug Logging CheckBox
+		enableSMSDebugLoggingCheckBox.setChecked(enableSMSDebugLogging);
+	}
+
 	/**
 	 * To update use flash notification {@link CheckBox} correctly.
 	 */
 	private void updateUseFlashNotificationCheckBox() {
 		// Update Use Flash Notification CheckBox
-		if (useFlashNotification) {
-			useFlashNotificationCheckBox.setChecked(true);
-		}
+		useFlashNotificationCheckBox.setChecked(useFlashNotification);
 	}
 
 	/**
