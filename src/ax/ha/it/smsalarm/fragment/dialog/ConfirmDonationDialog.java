@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2016 Robert Nyholm. All rights reserved.
+ * Copyright (c) 2015 Robert Nyholm. All rights reserved.
  */
 package ax.ha.it.smsalarm.fragment.dialog;
 

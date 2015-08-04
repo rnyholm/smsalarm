@@ -61,17 +61,11 @@ public class AppreciationFragment extends SherlockFragment implements Applicatio
 	// Request code for the purchase flow
 	public static final int DONATION_REQUEST_CODE = 101;
 
-	// To map amount's and product name(id)'s
-	private HashMap<String, String> amountsAndProducts = new HashMap<String, String>();
-
 	// Must have the application context
 	private Context context;
 
 	// Need to have a IabHelper in order to handle the billing
 	private IabHelper iabHelper;
-
-	// Instance of TokenGenerator, it's quite heavy to initialize so once we get hold of it we want to keep it
-	private TokenGenerator tokenGenerator;
 
 	// The TextView...
 	private TextView reviewNowTextView;
@@ -83,19 +77,29 @@ public class AppreciationFragment extends SherlockFragment implements Applicatio
 	private Button donateButton;
 
 	// Indicator variable set after the setup has been done of the IabHelper, this telling whether or not setup was successful or not, if successful
-	// enable donate button else not
+	// enable donate button and spinner with amounts else not
 	private boolean enableDonations = true;
 
 	// The generated developer payload must be stored in order for correct verification of the purchase can be made
 	private String developerPayload = "";
 
-	private Logger logger;
+	// Logger which is needed to log any eventual in app billing problems to file
+	private final Logger logger;
+
+	// Instance of TokenGenerator, it's quite heavy to initialize so once we get hold of it we want to keep it
+	private final TokenGenerator tokenGenerator;
+
+	// To map amount's and product name(id)'s
+	private final HashMap<String, String> amountsAndProducts = new HashMap<String, String>();
 
 	/**
 	 * Creates a new instance of {@link AppreciationFragment}.
 	 */
 	public AppreciationFragment() {
 		logger = new Logger(LOG_FILE);
+
+		// Initialize a token generator for later use
+		tokenGenerator = new TokenGenerator();
 
 		// Build up the products and amounts map
 		amountsAndProducts.put("1€", "donate_xsmall");
@@ -109,11 +113,8 @@ public class AppreciationFragment extends SherlockFragment implements Applicatio
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 
-		// Set context here, it's safe because this fragment has been attached to its container, hence we have access to context
+		// Set context here, it's safe because this fragment has been attached to it's container, hence we have access to context
 		context = getActivity();
-
-		// Initialize a token generator for later use
-		tokenGenerator = new TokenGenerator();
 
 		// Compute the application key and initialize the Iab Helper
 		String base64EncodedPublicKey = PublicRSAKeyUtil.computeKey();
@@ -130,10 +131,13 @@ public class AppreciationFragment extends SherlockFragment implements Applicatio
 					// In case there are unconsumed purchases, fetch them and consume them
 					iabHelper.queryInventoryAsync(queryInventoryListener);
 				} else {
-					// Some problem occurred while setting up the IabHelper, log it, show toast and indicate that the donate button should be disabled
+					// Some problem occurred while setting up the IabHelper, log it, show toast and indicate that the donate button and spinner should
+					// be disabled
 					enableDonations = false;
 
-					Log.e(LOG_TAG + ":onCreate()", "An error occurred while setting up the IabHelper, setup ended in result: \"" + result + "\"");
+					Log.e(LOG_TAG + ".OnIabSetupFinishedListener.class:onIabSetupFinished()", "An error occurred while setting up the IabHelper, setup ended in result: \"" + result.getMessage() + "\"");
+					logger.log2File("An error occurred while setting up the IabHelper, setup ended in result: \"" + result.getMessage() + "\"");
+
 					Toast.makeText(context, getString(R.string.TOAST_UNABLE_TO_SETUP_GOOGLE_IN_APP_BILLING), Toast.LENGTH_LONG).show();
 
 					// Update the UI widgets in case this operation is done after the user interface has been painted
@@ -230,7 +234,7 @@ public class AppreciationFragment extends SherlockFragment implements Applicatio
 
 	@Override
 	public void onActivityResult(int requestCode, int resultCode, Intent data) {
-		// Only precede if the IabHelper is fully initialized
+		// Only proceed if the IabHelper is fully initialized
 		if (iabHelper != null) {
 			if (!iabHelper.handleActivityResult(requestCode, resultCode, data)) {
 				// Any handling of activity results not related to In-app Billing goes here...
@@ -288,7 +292,7 @@ public class AppreciationFragment extends SherlockFragment implements Applicatio
 		Collections.sort(amounts, new Comparator<String>() {
 			@Override
 			public int compare(String a1, String a2) {
-				// Safe to it this way because we know the strings contains only digits and € signs
+				// Safe to do it this way because we know the strings contains only digits and € signs
 				a1 = a1.replace("€", "");
 				a2 = a2.replace("€", "");
 
@@ -313,7 +317,7 @@ public class AppreciationFragment extends SherlockFragment implements Applicatio
 		public void onIabPurchaseFinished(IabResult result, Purchase purchase) {
 			// Don't proceed the purchase any further if IabHelper has been disposed
 			if (iabHelper != null) {
-				// Check for any errors
+				// Handle success results first
 				if (result.isSuccess()) {
 					if (verifyDeveloperPayload(purchase)) {
 						// Everything was fine, consume the donation to make it possible to donate the same amount again. Note, this is safe to call
@@ -339,7 +343,7 @@ public class AppreciationFragment extends SherlockFragment implements Applicatio
 					}
 
 					// Log the error as usual
-					Log.e(LOG_TAG + ".OnIabPurchaseFinishedListener.class:onIabPurchaseFinished()", "Error purchasing, message of result: \"" + result.getMessage() + "\"");
+					Log.e(LOG_TAG + ".OnIabPurchaseFinishedListener.class:onIabPurchaseFinished()", "Error purchasing, result: \"" + result.getMessage() + "\"");
 					logger.log2File("Error purchasing, result: \"" + result.getMessage() + "\"");
 				}
 			}
@@ -355,7 +359,7 @@ public class AppreciationFragment extends SherlockFragment implements Applicatio
 				// Don't care about the success case as the purchase of the donation went through it's fine
 				if (result.isFailure()) {
 					// Log this error to LogCat and file
-					Log.e(LOG_TAG + ".ConsumeFinishedListener.class", "Error consuming, result: \"" + result.getMessage() + "\"");
+					Log.e(LOG_TAG + ".ConsumeFinishedListener.class:onConsumeFinished()", "Error consuming purchase, result: \"" + result.getMessage() + "\"");
 					logger.log2File("Error consuming purchase, result: \"" + result.getMessage() + "\"");
 				}
 			}
@@ -380,7 +384,7 @@ public class AppreciationFragment extends SherlockFragment implements Applicatio
 					}
 				} else {
 					// Log this error to LogCat and file
-					Log.e(LOG_TAG + ".QueryInventoryFinishedListener.class", "Error querying inventory, result: \"" + result.getMessage() + "\"");
+					Log.e(LOG_TAG + ".QueryInventoryFinishedListener.class:onQueryInventoryFinished()", "Error querying inventory, result: \"" + result.getMessage() + "\"");
 					logger.log2File("Error querying inventory, result: \"" + result.getMessage() + "\"");
 				}
 			}

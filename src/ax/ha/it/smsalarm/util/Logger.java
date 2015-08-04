@@ -92,7 +92,7 @@ public class Logger {
 				bW.flush();
 				bW.close();
 			} catch (Exception e) {
-				// An exception occurred while writing to file, log it to LogCat
+				// An exception occurred while writing to file, log it
 				Log.e(LOG_TAG + ":log2File()", "An Exception occurred during writing to file: \"" + fileName + "\"", e);
 			}
 		} else {
@@ -102,8 +102,8 @@ public class Logger {
 	}
 
 	/**
-	 * To check if needed directory or file for the application and this instance of {@link Logger} exists on the file system, if they doesn't
-	 * they are created.
+	 * To check if needed directory or file for the application and this instance of {@link Logger} exists on the file system, if they doesn't they
+	 * are created.
 	 * 
 	 * @param directory
 	 *            File which path represents the directory needed.

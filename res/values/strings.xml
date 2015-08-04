@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <resources>
     <!-- NEW STRINGS IN v.2.3.1 BEGIN -->
-    <!-- REMEMBER TO TRANSLATE ack_methods.xml ALSO -->
+    <!-- REMEMBER TO TRANSLATE ack_methods.xml AND THE DONATION TEXTS ON Google Play ALSO -->
     <string name="ACKNOWLEDGE_MESSAGE_DIALOG_HINT">Meddelande..</string>
     <string name="ACKNOWLEDGE_MESSAGE_DIALOG_MESSAGE">Ange ett meddelande som applikationen kvitterar med.</string>
     <string name="ACKNOWLEDGE_MESSAGE_DIALOG_TITLE">Ange meddelande</string>
@@ -79,7 +79,7 @@
  	<string name="TITLE_APPRECIATION">Visa ditt stöd</string>
  	<string name="TITLE_APPRECIATION_DONERA">Donera</string>
  	<string name="TITLE_APPRECIATION_REVIEW">Recensera</string>
- 	<string name="TITLE_DONATION_SIZE">Storlek donation</string>
+ 	<string name="TITLE_DONATION_SIZE">Belopp att donera</string>
  	<string name="TITLE_ORGANIZATION">Organisation</string>
  	<string name="TITLE_PLAY_ALARM_SIGNAL_REPEATEDLY_SETTING">Spela upp larmsignalen oavbrutet</string>
  	<string name="TITLE_SOUND_SETTINGS">Ljud- och vibrationsinställningar</string>
@@ -99,8 +99,8 @@
     <string name="TOAST_UNABLE_TO_START_GOOGLE_PLAY">Lyckas inte öppna Google Play&#8482;.</string>
     <string name="TOAST_UNABLE_TO_SETUP_GOOGLE_IN_APP_BILLING">Ett fel inträffade vilket inte möjliggör donationer för tillfället.</string>
     <string name="TOAST_DONATION_FAILED_AUTHENTICITY_VERIFICATION_FAIL">Donationen lyckades men giltigheten i transaktionen kunde ej fastställas.</string>
-    <string name="TOAST_DONATION_FAILED_PURCHASE_ERROR">Ett oväntat fel uppstod, donationen misslyckades.</string>
-    <string name="TOAST_DONATION_FAILED_PURCHASE_ERROR_PURCHASE_CANCELED">Donationen avbröts.</string>
+    <string name="TOAST_DONATION_FAILED_PURCHASE_ERROR">Ett fel inträffade vid betalning, donationen misslyckades.</string>
+    <string name="TOAST_DONATION_FAILED_PURCHASE_ERROR_PURCHASE_CANCELED">Betalningen avbröts, ingen donation har gjorts.</string>
     <string name="TOAST_DONATION_SUCCESSFUL">Tack för ditt stöd!</string>
     <!-- NEW STRINGS IN v.2.3.1 END -->
     
