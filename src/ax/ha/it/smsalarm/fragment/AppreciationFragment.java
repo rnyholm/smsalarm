@@ -34,8 +34,10 @@ import android.widget.Toast;
 import ax.ha.it.smsalarm.R;
 import ax.ha.it.smsalarm.activity.SmsAlarm;
 import ax.ha.it.smsalarm.fragment.dialog.ConfirmDonationDialog;
+import ax.ha.it.smsalarm.util.Logger;
 import ax.ha.it.smsalarm.vending.billing.util.IabHelper;
 import ax.ha.it.smsalarm.vending.billing.util.IabResult;
+import ax.ha.it.smsalarm.vending.billing.util.Inventory;
 import ax.ha.it.smsalarm.vending.billing.util.Purchase;
 
 import com.actionbarsherlock.app.SherlockFragment;
@@ -51,11 +53,8 @@ import com.actionbarsherlock.app.SherlockFragment;
 public class AppreciationFragment extends SherlockFragment implements ApplicationFragment {
 	private static final String LOG_TAG = AppreciationFragment.class.getSimpleName();
 
-	private static final String SKU_XSMALL = "donate_xsmall";
-	private static final String SKU_SMALL = "donate_small";
-	private static final String SKU_MEDIUM = "donate_medium";
-	private static final String SKU_LARGE = "donate_large";
-	private static final String SKU_XLARGE = "donate_xlarge";
+	// Name of log file
+	private static final String LOG_FILE = "iablog.txt";
 
 	private static final String GOOGLE_PLAY_URI = "market://details?id=";
 
@@ -90,11 +89,20 @@ public class AppreciationFragment extends SherlockFragment implements Applicatio
 	// The generated developer payload must be stored in order for correct verification of the purchase can be made
 	private String developerPayload = "";
 
+	private Logger logger;
+
 	/**
 	 * Creates a new instance of {@link AppreciationFragment}.
 	 */
 	public AppreciationFragment() {
-		// Just empty...
+		logger = new Logger(LOG_FILE);
+
+		// Build up the products and amounts map
+		amountsAndProducts.put("1€", "donate_xsmall");
+		amountsAndProducts.put("3€", "donate_small");
+		amountsAndProducts.put("5€", "donate_medium");
+		amountsAndProducts.put("10€", "donate_large");
+		amountsAndProducts.put("15€", "donate_xlarge");
 	}
 
 	@Override
@@ -118,25 +126,21 @@ public class AppreciationFragment extends SherlockFragment implements Applicatio
 		iabHelper.startSetup(new IabHelper.OnIabSetupFinishedListener() {
 			@Override
 			public void onIabSetupFinished(IabResult result) {
-				if (!result.isSuccess()) {
+				if (result.isSuccess()) {
+					// In case there are unconsumed purchases, fetch them and consume them
+					iabHelper.queryInventoryAsync(queryInventoryListener);
+				} else {
 					// Some problem occurred while setting up the IabHelper, log it, show toast and indicate that the donate button should be disabled
 					enableDonations = false;
 
 					Log.e(LOG_TAG + ":onCreate()", "An error occurred while setting up the IabHelper, setup ended in result: \"" + result + "\"");
 					Toast.makeText(context, getString(R.string.TOAST_UNABLE_TO_SETUP_GOOGLE_IN_APP_BILLING), Toast.LENGTH_LONG).show();
 
-					// Update the UI widgets in case this operation is done after the user interface has ben painted
+					// Update the UI widgets in case this operation is done after the user interface has been painted
 					updateFragmentView();
 				}
 			}
 		});
-
-		// Build up the products and amounts map
-		amountsAndProducts.put("1€", SKU_XSMALL);
-		amountsAndProducts.put("3€", SKU_SMALL);
-		amountsAndProducts.put("5€", SKU_MEDIUM);
-		amountsAndProducts.put("10€", SKU_LARGE);
-		amountsAndProducts.put("15€", SKU_XLARGE);
 	}
 
 	@Override
@@ -238,23 +242,11 @@ public class AppreciationFragment extends SherlockFragment implements Applicatio
 							// Fetch the confirmed donation amount
 							String confirmedDonationAmount = data.getStringExtra(ConfirmDonationDialog.CONFIRM_DONATION);
 
-							if (SmsAlarm.DEBUG) {
-								Log.d(LOG_TAG + ":onActivityResult()", "A donation with amount: \"" + confirmedDonationAmount + "\" and product id: \"" + amountsAndProducts.get(confirmedDonationAmount) + "\" is about to be done");
-							}
-
 							// Generate token and store it for further processing
 							developerPayload = tokenGenerator.nextToken();
 
 							// Launch the purchase flow. Note, this method must be called from the UI thread
 							iabHelper.launchPurchaseFlow(getActivity(), amountsAndProducts.get(confirmedDonationAmount), DONATION_REQUEST_CODE, purchaseFinishedListener, developerPayload);
-
-							// For test only
-							// android.test.purchased
-							// android.test.canceled
-							// android.test.refunded
-							// android.test.item_unavailable
-							// iabHelper.launchPurchaseFlow(getActivity(), "android.test.purchased", DONATION_REQUEST_CODE, purchaseFinishedListener,
-							// developerPayload);
 
 							break;
 						default:
@@ -319,11 +311,7 @@ public class AppreciationFragment extends SherlockFragment implements Applicatio
 	IabHelper.OnIabPurchaseFinishedListener purchaseFinishedListener = new IabHelper.OnIabPurchaseFinishedListener() {
 		@Override
 		public void onIabPurchaseFinished(IabResult result, Purchase purchase) {
-			if (SmsAlarm.DEBUG) {
-				Log.d(LOG_TAG + ".OnIabPurchaseFinishedListener.class:onIabPurchaseFinished()", "Purchase finished: " + result + ", purchase: " + purchase + "\"");
-			}
-
-			// Don't process the purchase any further if IabHelper has been disposed
+			// Don't proceed the purchase any further if IabHelper has been disposed
 			if (iabHelper != null) {
 				// Check for any errors
 				if (result.isSuccess()) {
@@ -331,15 +319,28 @@ public class AppreciationFragment extends SherlockFragment implements Applicatio
 						// Everything was fine, consume the donation to make it possible to donate the same amount again. Note, this is safe to call
 						// from UI thread
 						iabHelper.consumeAsync(purchase, consumeFinishedListener);
+
+						// As the purchase went through a toast can be shown telling user a successful donation has been made
+						Toast.makeText(context, getString(R.string.TOAST_DONATION_SUCCESSFUL), Toast.LENGTH_LONG).show();
 					} else { // Developer payload couldn't be verified
-						// Log and show toast
-						Log.e(LOG_TAG + ".OnIabPurchaseFinishedListener.class:onIabPurchaseFinished()", "Error purchasing, developer payload couldn't be verified");
+						// Log(both to LogCat and file)
+						Log.e(LOG_TAG + ".OnIabPurchaseFinishedListener.class:onIabPurchaseFinished()", "Error purchasing, developer payload couldn't be verified. Payload of request: \"" + developerPayload + "\", payload of response: \"" + purchase.getDeveloperPayload() + "\"");
+						logger.log2File("Error purchasing, developer payload couldn't be verified. Payload of request: \"" + developerPayload + "\", payload of response: \"" + purchase.getDeveloperPayload() + "\"");
+
+						// Show a toast at last
 						Toast.makeText(context, getString(R.string.TOAST_DONATION_FAILED_AUTHENTICITY_VERIFICATION_FAIL), Toast.LENGTH_LONG).show();
 					}
 				} else { // An error occurred during purchase
-					// Log and show toast
+					// User cancelled purchase, show a more user friendly toast
+					if (result.getResponse() == IabHelper.IABHELPER_USER_CANCELLED) {
+						Toast.makeText(context, R.string.TOAST_DONATION_FAILED_PURCHASE_ERROR_PURCHASE_CANCELED, Toast.LENGTH_LONG).show();
+					} else {
+						Toast.makeText(context, getString(R.string.TOAST_DONATION_FAILED_PURCHASE_ERROR), Toast.LENGTH_LONG).show();
+					}
+
+					// Log the error as usual
 					Log.e(LOG_TAG + ".OnIabPurchaseFinishedListener.class:onIabPurchaseFinished()", "Error purchasing, message of result: \"" + result.getMessage() + "\"");
-					Toast.makeText(context, getString(R.string.TOAST_DONATION_FAILED_PURCHASE_ERROR, result.getMessage()), Toast.LENGTH_LONG).show();
+					logger.log2File("Error purchasing, result: \"" + result.getMessage() + "\"");
 				}
 			}
 		}
@@ -351,12 +352,36 @@ public class AppreciationFragment extends SherlockFragment implements Applicatio
 		public void onConsumeFinished(Purchase purchase, IabResult result) {
 			// Don't proceed with the consume process if IabHelper has been disposed
 			if (iabHelper != null) {
+				// Don't care about the success case as the purchase of the donation went through it's fine
+				if (result.isFailure()) {
+					// Log this error to LogCat and file
+					Log.e(LOG_TAG + ".ConsumeFinishedListener.class", "Error consuming, result: \"" + result.getMessage() + "\"");
+					logger.log2File("Error consuming purchase, result: \"" + result.getMessage() + "\"");
+				}
+			}
+		}
+	};
+
+	// Callback for when a inventory query has finished
+	IabHelper.QueryInventoryFinishedListener queryInventoryListener = new IabHelper.QueryInventoryFinishedListener() {
+		@Override
+		public void onQueryInventoryFinished(IabResult result, Inventory inventory) {
+			// Don't proceed with the query inventory process if IabHelper has been disposed
+			if (iabHelper != null) {
 				if (result.isSuccess()) {
-					// Show toast telling user a successful donation has been made
-					Toast.makeText(context, getString(R.string.TOAST_DONATION_SUCCESSFUL), Toast.LENGTH_LONG).show();
-				} else { // An error occurred during consuming the purchase
-					// Only log it as it's of no use of displaying it for the user
-					Log.e(LOG_TAG + ".consumeFinishedListener.class", "Error consuming, message of result: \"" + result.getMessage() + "\"");
+					// Go through each product and get the purchases
+					for (String key : amountsAndProducts.keySet()) {
+						Purchase purchase = inventory.getPurchase(amountsAndProducts.get(key));
+
+						// If there exists a purchase then consume it
+						if (purchase != null) {
+							iabHelper.consumeAsync(purchase, consumeFinishedListener);
+						}
+					}
+				} else {
+					// Log this error to LogCat and file
+					Log.e(LOG_TAG + ".QueryInventoryFinishedListener.class", "Error querying inventory, result: \"" + result.getMessage() + "\"");
+					logger.log2File("Error querying inventory, result: \"" + result.getMessage() + "\"");
 				}
 			}
 		}

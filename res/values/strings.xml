@@ -96,10 +96,11 @@
     <string name="TOAST_PHONE_NUMBER_ALREADY_IN_SECONDARY_LIST">Angivet telefonnummer finns redan i listan av sekundärlarm. Ange ett nytt telefonnummer.</string>
     <string name="TOAST_PHONE_NUMBER_MISSING">Ett telefonnummer måste anges.</string> 
     <string name="TOAST_SENDING_ACKNOWLEDGE_SMS">Skickar kvitteringsmeddelande..</string>
-    <string name="TOAST_UNABLE_TO_START_GOOGLE_PLAY">Lyckas inte öppna Google Play&#8482;, kontrollera att applikationen är installerad.</string>
-    <string name="TOAST_UNABLE_TO_SETUP_GOOGLE_IN_APP_BILLING">Ett fel inträffade vilket inte möjliggör donationer för tillfället. Kontrollera att Google Play&#8482; är korrekt installerat och uppdaterat.</string>
-    <string name="TOAST_DONATION_FAILED_AUTHENTICITY_VERIFICATION_FAIL">Donationen misslyckades, giltigheten i transaktionen kunde ej fastställas. Kontakta utvecklaren om problemet kvarstår.</string>
-    <string name="TOAST_DONATION_FAILED_PURCHASE_ERROR">Donation misslyckades, följande fel uppstod vid betalning: \"%s\".</string>
+    <string name="TOAST_UNABLE_TO_START_GOOGLE_PLAY">Lyckas inte öppna Google Play&#8482;.</string>
+    <string name="TOAST_UNABLE_TO_SETUP_GOOGLE_IN_APP_BILLING">Ett fel inträffade vilket inte möjliggör donationer för tillfället.</string>
+    <string name="TOAST_DONATION_FAILED_AUTHENTICITY_VERIFICATION_FAIL">Donationen lyckades men giltigheten i transaktionen kunde ej fastställas.</string>
+    <string name="TOAST_DONATION_FAILED_PURCHASE_ERROR">Ett oväntat fel uppstod, donationen misslyckades.</string>
+    <string name="TOAST_DONATION_FAILED_PURCHASE_ERROR_PURCHASE_CANCELED">Donationen avbröts.</string>
     <string name="TOAST_DONATION_SUCCESSFUL">Tack för ditt stöd!</string>
     <!-- NEW STRINGS IN v.2.3.1 END -->
     

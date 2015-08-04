@@ -16,9 +16,6 @@ import android.util.Log;
  * Class responsible for any special handling that needs to be done according to <b><i>KitKat</i></b>'s (and higher) retarded behavior when receiving
  * an SMS.<br>
  * <b><i>KitKatHandler is a singleton, eagerly initialized to avoid concurrent modification.</i></b>
- * <p>
- * <b><i>Note!<br>
- * This class and it's functionality is still in BETA state.</i></b>
  * 
  * @author Robert Nyholm <robert.nyholm@aland.net>
  * @version 2.3.1
