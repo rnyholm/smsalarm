@@ -1,11 +1,11 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="ax.ha.it.smsalarm"
-    android:versionCode="21"
+    android:versionCode="22"
     android:versionName="2.3.1beta">
 
     <instrumentation android:targetPackage="ax.ha.it.smsalarm" android:name="android.test.InstrumentationTestRunner"/>
     
-    <uses-sdk android:minSdkVersion="9" android:targetSdkVersion="22" />
+    <uses-sdk android:minSdkVersion="9" android:targetSdkVersion="21" />
     <uses-feature android:name="android.hardware.telephony" android:required="true"/>
     <uses-feature android:name="android.software.app_widgets" android:required="false"/>
     <uses-feature android:name="android.hardware.camera" android:required="false" />
