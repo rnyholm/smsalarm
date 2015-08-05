@@ -9,94 +9,94 @@
         android:padding="5dp" >
 
         <TextView
-            android:id="@+id/freeTextSettingsTitle_tv"
+            android:id="@+id/regexSettingsTitle_tv"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/TITLE_FREE_TEXT_SETTINGS"
+            android:text="@string/TITLE_REGEX_SETTINGS"
             android:textAppearance="?android:attr/textAppearanceMedium" />
 
         <TextView
-            android:id="@+id/freeTextSettingsInfo_tv"
+            android:id="@+id/regexSettingsInfo_tv"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_below="@id/freeTextSettingsTitle_tv"
-            android:text="@string/INFO_FREE_TEXT_SETTINGS"
+            android:layout_below="@id/regexSettingsTitle_tv"
+            android:text="@string/INFO_REGEX_SETTINGS"
             android:textAppearance="?android:attr/textAppearanceSmall" />
 
         <TextView
-            android:id="@+id/freeTextPrimaryAlarmTitle_tv"
+            android:id="@+id/regexPrimaryAlarmTitle_tv"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_below="@id/freeTextSettingsInfo_tv"
+            android:layout_below="@id/regexSettingsInfo_tv"
             android:layout_marginTop="5dp"
             android:text="@string/TITLE_PRIMARY_ALARM"
             android:textAppearance="?android:attr/textAppearanceMedium" />
 
         <Spinner
-            android:id="@+id/primaryFreeTextSpinner_sp"
+            android:id="@+id/primaryRegexSpinner_sp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_below="@id/freeTextPrimaryAlarmTitle_tv" />
+            android:layout_below="@id/regexPrimaryAlarmTitle_tv" />
 
         <Button
-            android:id="@+id/addPrimaryFreeText_btn"
+            android:id="@+id/addPrimaryRegex_btn"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_below="@id/primaryFreeTextSpinner_sp"
+            android:layout_below="@id/primaryRegexSpinner_sp"
             android:text="@string/ADD" />
 
         <Button
-            android:id="@+id/editPrimaryFreeText_btn"
+            android:id="@+id/editPrimaryRegex_btn"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignBaseline="@id/addPrimaryFreeText_btn"
-            android:layout_toRightOf="@id/addPrimaryFreeText_btn"
+            android:layout_alignBaseline="@id/addPrimaryRegex_btn"
+            android:layout_toRightOf="@id/addPrimaryRegex_btn"
             android:text="@string/EDIT" />
 
         <Button
-            android:id="@+id/deletePrimaryFreeText_btn"
+            android:id="@+id/deletePrimaryRegex_btn"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignBaseline="@+id/editPrimaryFreeText_btn"
-            android:layout_toRightOf="@id/editPrimaryFreeText_btn"
+            android:layout_alignBaseline="@+id/editPrimaryRegex_btn"
+            android:layout_toRightOf="@id/editPrimaryRegex_btn"
             android:text="@string/REMOVE" />
 
         <TextView
-            android:id="@+id/freeTextSecondaryAlarmTitle_tv"
+            android:id="@+id/regexSecondaryAlarmTitle_tv"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_below="@id/addPrimaryFreeText_btn"
+            android:layout_below="@id/addPrimaryRegex_btn"
             android:layout_marginTop="5dp"
             android:text="@string/TITLE_SECONDARY_ALARM"
             android:textAppearance="?android:attr/textAppearanceMedium" />
 
         <Spinner
-            android:id="@+id/secondaryFreeTextSpinner_sp"
+            android:id="@+id/secondaryRegexSpinner_sp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_below="@id/freeTextSecondaryAlarmTitle_tv" />
+            android:layout_below="@id/regexSecondaryAlarmTitle_tv" />
 
         <Button
-            android:id="@+id/addSecondaryFreeText_btn"
+            android:id="@+id/addSecondaryRegex_btn"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_below="@id/secondaryFreeTextSpinner_sp"
+            android:layout_below="@id/secondaryRegexSpinner_sp"
             android:text="@string/ADD" />
 
         <Button
-            android:id="@+id/editSecondaryFreeText_btn"
+            android:id="@+id/editSecondaryRegex_btn"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignBaseline="@id/addSecondaryFreeText_btn"
-            android:layout_toRightOf="@id/addSecondaryFreeText_btn"
+            android:layout_alignBaseline="@id/addSecondaryRegex_btn"
+            android:layout_toRightOf="@id/addSecondaryRegex_btn"
             android:text="@string/EDIT" />
 
         <Button
-            android:id="@+id/deleteSecondaryFreeText_btn"
+            android:id="@+id/deleteSecondaryRegex_btn"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignBaseline="@id/editSecondaryFreeText_btn"
-            android:layout_toRightOf="@id/editSecondaryFreeText_btn"
+            android:layout_alignBaseline="@id/editSecondaryRegex_btn"
+            android:layout_toRightOf="@id/editSecondaryRegex_btn"
             android:text="@string/REMOVE" />
     </RelativeLayout>
 

@@ -23,7 +23,7 @@
     <string name="EULA_TITLE">Nutzungsvereinbarung</string>
     <string name="FREE_TEXT_DIALOG_HINT">Wort..</string>
     <string name="INFO_ENABLE_ACKNOWLEDGE">Falls gewählt, kann der Primäralarm bestätigt werden.</string>
-    <string name="INFO_FREE_TEXT_TRIGGER_SETTINGS">Geben Sie Wörter ein, auf die Sms Alarm reagieren soll, wenn diese in der einkommenden SMS vorhanden sind. Beachten Sie, dass diese Funktion die Groß- und Kleinschreibung nicht beachtet.</string>
+    <string name="INFO_FREE_TEXT_SETTINGS">Geben Sie Wörter ein, auf die Sms Alarm reagieren soll, wenn diese in der einkommenden SMS vorhanden sind. Beachten Sie, dass diese Funktion die Groß- und Kleinschreibung nicht beachtet.</string>
     <string name="INFO_PLAY_ALARM_SIGNAL_TWICE_SETTING">Falls gewählt, spielt Sms Alarm zwei Mal ein Alarmsignal für Primär- und Sekundäralarm ab.</string>
     <string name="INFO_SMS_SETTINGS">Geben Sie ein, von welcher Telefonnummer aus Sms Alarm reagieren soll.</string>
     <string name="NO">Nein</string>
@@ -48,7 +48,7 @@
     <string name="TITLE_ALARM_LOG_NO_ALARM_RECEIVED">Keine Benachrichtigungen wurden bisher empfangen</string> 
     <string name="TITLE_ENABLE_ACKNOWLEDGE">Bestätigung des Primäralarms aktivieren</string>
     <string name="TITLE_ENABLE_SMS_ALARM">Sms Alarm aktivieren</string>
-    <string name="TITLE_FREE_TEXT_TRIGGER_SETTINGS">Worteinstellungen</string>
+    <string name="TITLE_FREE_TEXT_SETTINGS">Worteinstellungen</string>
     <string name="TITLE_MISC_SETTINGS">Andere Einstellungen</string>
     <string name="TITLE_PLAY_ALARM_SIGNAL_TWICE_SETTING">Alarmsignal zwei Mal abspielen</string>
     <string name="TITLE_PRIMARY_ALARM">Primäralarm</string>   

@@ -46,7 +46,8 @@
     <string name="INFO_SOUND_SETTINGS">Ställ in larmsignaler och vibrationsmönster för primär- och sekundärlarm samt om Sms Alarm ska följa enhetens ljudinställningar. Det är också möjligt att ställa in om larmsignalen ska spelas upp två gånger eller oavbrutet.</string>
     <string name="INFO_USE_FLASH_NOTIFICATION">Om vald blinkar kamerans blixt vid inkommande larm. Notera att detta i nuläget är en BETA funktion varvid oväntant beteende kan förekomma vid inkommande larm. Använd på egen risk.</string>
     <string name="INFO_USE_OS_SOUND_SETTINGS">Om vald tar Sms Alarm hänsyn till enhetens ringvolym och ljudlöst läge.</string>
-    <string name="INFO_ENABLE_SMS_DEBUG_LOGGING">Om vald kommer alla inkommande SMS att loggas till filen smslog.txt som finns i mappen SmsAlarm. Loggning görs endast om Sms Alarm är aktiverat och det som loggas är tidpunkt, avsändare och meddelande. Notera att denna funktion används främst i felsökningssyfte, i övrigt bör funktionen vara inaktiverad.</string>	
+    <string name="INFO_ENABLE_SMS_DEBUG_LOGGING">Om vald kommer alla inkommande SMS att loggas till filen smslog.txt som finns i mappen SmsAlarm. Loggning görs endast om Sms Alarm är aktiverat och det som loggas är tidpunkt, avsändare och meddelande. Notera att denna funktion används främst i felsökningssyfte, i övrigt bör funktionen vara inaktiverad.</string>
+    <string name="INFO_REGEX_SETTINGS">Ställ in vilka reguljära uttryck som Sms Alarm ska larma på om en matchning av uttrycket finns i inkommande SMS.</string>
     <string name="LICENSE_APACHE_TITLE">Apache-Licenser</string>
     <string name="LICENSE_OTHER_TITLE">Licenser</string> 
     <string name="MENU_TITLE_ABOUT">Om</string>
@@ -88,6 +89,7 @@
     <string name="TITLE_USE_FLASH_NOTIFICATION">Använd blixtnotifikation(BETA)</string>
     <string name="TITLE_USE_OS_SOUND_SETTINGS">Använd enhetens ljudinställningar</string>
     <string name="TITLE_ENABLE_SMS_DEBUG_LOGGING">Aktivera SMS loggning</string>
+    <string name="TITLE_REGEX_SETTINGS">Inställningar för reguljära uttryck</string>
     <string name="TOAST_ACKNOWLEDGE_SMS_SENT">Kvitteringsmeddelande skickat!</string>
     <string name="TOAST_ALARM_SIGNALS_REMOVED_DUE_TO_MISSING_PATHS">har tagits bort från listan av larmsignaler eftersom de/dem inte kunde hittas på enheten.</string>
     <string name="TOAST_CANNOT_ACKNOWLEDGE_NO_PHONE_NUMBER_EXISTS">Kan ej kvittera! Inget telefonnummer att kvittera till finns. Kontrollera inställningarna och avsändare av mottaget SMS.</string>
@@ -165,7 +167,7 @@
     <string name="EULA_TITLE">User agreement</string>   
     <string name="FREE_TEXT_DIALOG_HINT">Word..</string>   
     <string name="INFO_ENABLE_ACKNOWLEDGE">If selected primary alarm can be acknowledged.</string>
-    <string name="INFO_FREE_TEXT_TRIGGER_SETTINGS">Enter the words that should be used to notify in the Sms Alarm if present in the incoming SMS. Note that this function is not case sensitive.</string>
+    <string name="INFO_FREE_TEXT_SETTINGS">Enter the words that should be used to notify in the Sms Alarm if present in the incoming SMS. Note that this function is not case sensitive.</string>
     <string name="INFO_PLAY_ALARM_SIGNAL_TWICE_SETTING">If selected Sms Alarm will play alarm signal to both primary and secondary alarms twice.</string>
     <string name="INFO_SMS_SETTINGS">Enter the telephone numbers that Sms Alarm should send alerts for incoming SMS.</string>    
     <string name="LICENSE_APACHE_V2_TITLE">Apache License, Version 2.0</string>
@@ -199,7 +201,7 @@
     <string name="TITLE_ALARM_LOG_NO_ALARM_RECEIVED">No alarm has yet been received</string>
     <string name="TITLE_ENABLE_ACKNOWLEDGE">Enable acknowledgment</string>
     <string name="TITLE_ENABLE_SMS_ALARM">Enable Sms Alarm</string>
-    <string name="TITLE_FREE_TEXT_TRIGGER_SETTINGS">Word settings</string>
+    <string name="TITLE_FREE_TEXT_SETTINGS">Word settings</string>
     <string name="TITLE_MISC_SETTINGS">Other settings</string>
     <string name="TITLE_PLAY_ALARM_SIGNAL_TWICE_SETTING">Play alarm signal twice</string>
     <string name="TITLE_PRIMARY_ALARM">Primary alarm</string>   

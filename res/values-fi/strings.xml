@@ -23,7 +23,7 @@
     <string name="EULA_TITLE">Käyttäjäsopimus</string>
     <string name="FREE_TEXT_DIALOG_HINT">Sana..</string>
     <string name="INFO_ENABLE_ACKNOWLEDGE">Jos valittu voidaan ensisijainen hälytys kuitata.</string>
-    <string name="INFO_FREE_TEXT_TRIGGER_SETTINGS">Asenna ne sanat joilla Sms Alarm täytyy hälyttää jos on tulevia viestejä.</string>
+    <string name="INFO_FREE_TEXT_SETTINGS">Asenna ne sanat joilla Sms Alarm täytyy hälyttää jos on tulevia viestejä.</string>
     <string name="INFO_PLAY_ALARM_SIGNAL_TWICE_SETTING">Jos valittu soittaa Sms Alarm hälytysäänen sekä ensi-ja toissijaisenhälytykseen kahdesti, hälytyksen yhteydessä.</string>
     <string name="INFO_SMS_SETTINGS">Asenna ne puhelinnumero joista Sms Alarm täytyy hälyttää viestin.</string>   
     <string name="NO">Ei</string>
@@ -48,7 +48,7 @@
     <string name="TITLE_ALARM_LOG_NO_ALARM_RECEIVED">Hälytystä ei ole saatu vielä</string>
     <string name="TITLE_ENABLE_ACKNOWLEDGE">Aktivoi ensisijaisen hälytysen kuittaus</string>
     <string name="TITLE_ENABLE_SMS_ALARM">Aktivoi Sms Alarm</string>
-    <string name="TITLE_FREE_TEXT_TRIGGER_SETTINGS">Sana-asennuksia</string>
+    <string name="TITLE_FREE_TEXT_SETTINGS">Sana-asennuksia</string>
     <string name="TITLE_MISC_SETTINGS">Muut asetukset</string>
     <string name="TITLE_PLAY_ALARM_SIGNAL_TWICE_SETTING">Soita hälytysääni kahdesti</string>
     <string name="TITLE_PRIMARY_ALARM">Ensisijainen hälytys</string>   

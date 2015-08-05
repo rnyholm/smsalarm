@@ -23,7 +23,7 @@
     <string name="EULA_TITLE">Användaravtal</string>
     <string name="FREE_TEXT_DIALOG_HINT">Ord..</string>
     <string name="INFO_ENABLE_ACKNOWLEDGE">Om vald kan primärlarm kvitteras.</string>
-    <string name="INFO_FREE_TEXT_TRIGGER_SETTINGS">Ställ in vilka ord som Sms Alarm ska larma på om de finns i inkommande SMS. Notera att denna funktion inte är skiftlägeskänslig.</string>
+    <string name="INFO_FREE_TEXT_SETTINGS">Ställ in vilka ord som Sms Alarm ska larma på om de finns i inkommande SMS. Notera att denna funktion inte är skiftlägeskänslig.</string>
     <string name="INFO_PLAY_ALARM_SIGNAL_TWICE_SETTING">Om vald spelar Sms Alarm upp larmsignalen för både primär- och sekundärlarm två gånger vid larm.</string>
     <string name="INFO_SMS_SETTINGS">Ställ in vilka telefonnummer som Sms Alarm ska larma på SMS ifrån.</string>
     <string name="NO">Nej</string>
@@ -48,7 +48,7 @@
     <string name="TITLE_ALARM_LOG_NO_ALARM_RECEIVED">Inga larm har tagits emot ännu</string>    
     <string name="TITLE_ENABLE_ACKNOWLEDGE">Aktivera kvittering av primärlarm</string>
     <string name="TITLE_ENABLE_SMS_ALARM">Aktivera Sms Alarm</string>
-    <string name="TITLE_FREE_TEXT_TRIGGER_SETTINGS">Ord inställningar</string>
+    <string name="TITLE_FREE_TEXT_SETTINGS">Ord inställningar</string>
     <string name="TITLE_MISC_SETTINGS">Övriga inställningar</string>
     <string name="TITLE_PLAY_ALARM_SIGNAL_TWICE_SETTING">Spela upp larmsignal två gånger</string>
     <string name="TITLE_PRIMARY_ALARM">Primärlarm</string>   
