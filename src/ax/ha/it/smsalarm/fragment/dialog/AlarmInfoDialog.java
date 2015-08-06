@@ -66,6 +66,7 @@ public class AlarmInfoDialog extends DialogFragment {
 		TextView receivedTitleTextView = new TextView(context);
 		TextView acknowledgedTitleTextView = new TextView(context);
 		TextView triggerTextTitleTextView = new TextView(context);
+		TextView triggerRegexTitleTextView = new TextView(context);
 		TextView messageTitleTextView = new TextView(context);
 
 		// ...then the actual information...
@@ -74,6 +75,7 @@ public class AlarmInfoDialog extends DialogFragment {
 		TextView receivedTextView = new TextView(context);
 		TextView acknowledgedTextView = new TextView(context);
 		TextView triggerTextTextView = new TextView(context);
+		TextView triggerRegexTextView = new TextView(context);
 		TextView messageTextView = new TextView(context);
 
 		// ...and setting text to the titles using StringBuilder
@@ -103,6 +105,11 @@ public class AlarmInfoDialog extends DialogFragment {
 		triggerTextTitleTextView.setText(sb.toString());
 
 		sb = new StringBuilder();
+		sb.append(getString(R.string.TITLE_ALARM_INFO_TRIGGER_REGEX));
+		sb.append(getString(R.string.COLON));
+		triggerRegexTitleTextView.setText(sb.toString());
+
+		sb = new StringBuilder();
 		sb.append(getString(R.string.TITLE_ALARM_INFO_MESSAGE));
 		sb.append(getString(R.string.COLON));
 		messageTitleTextView.setText(sb.toString());
@@ -113,6 +120,7 @@ public class AlarmInfoDialog extends DialogFragment {
 		receivedTextView.setText(alarm.getReceivedLocalized());
 		acknowledgedTextView.setText(alarm.getAcknowledgedLocalized());
 		triggerTextTextView.setText(alarm.getTriggerText());
+		triggerRegexTextView.setText(alarm.getTriggerRegex());
 		messageTextView.setText(alarm.getMessage());
 
 		// Initialize the different LayoutParameters needed to build a correct dialog
@@ -139,6 +147,7 @@ public class AlarmInfoDialog extends DialogFragment {
 		receivedTextView.setLayoutParams(infoTextViewLayoutParams);
 		acknowledgedTextView.setLayoutParams(infoTextViewLayoutParams);
 		triggerTextTextView.setLayoutParams(infoTextViewLayoutParams);
+		triggerRegexTextView.setLayoutParams(infoTextViewLayoutParams);
 		messageTextView.setLayoutParams(infoTextViewLayoutParams);
 
 		// Now start build up the actual user interface by first setting up a ScrollView and a LinearLayout, also configure them
@@ -188,9 +197,16 @@ public class AlarmInfoDialog extends DialogFragment {
 		LinearLayout ll5 = new LinearLayout(context);
 		ll5.setOrientation(LinearLayout.HORIZONTAL);
 		ll5.setLayoutParams(linearLayoutParams);
-		ll5.addView(messageTitleTextView);
-		ll5.addView(messageTextView);
+		ll5.addView(triggerRegexTitleTextView);
+		ll5.addView(triggerRegexTextView);
 		linearLayout.addView(ll5);
+
+		LinearLayout ll6 = new LinearLayout(context);
+		ll6.setOrientation(LinearLayout.HORIZONTAL);
+		ll6.setLayoutParams(linearLayoutParams);
+		ll6.addView(messageTitleTextView);
+		ll6.addView(messageTextView);
+		linearLayout.addView(ll6);
 
 		// At last add the "main" LinearLayout to the ScrollView
 		scrollView.addView(linearLayout);

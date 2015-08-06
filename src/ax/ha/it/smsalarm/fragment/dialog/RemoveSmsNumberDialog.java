@@ -86,10 +86,10 @@ public class RemoveSmsNumberDialog extends DialogFragment {
 		String message = "";
 		switch (getTargetRequestCode()) {
 			case (REMOVE_PRIMARY_SMS_NUMBER_DIALOG_REQUEST_CODE):
-				message = getString(R.string.REMOVE_PRIMARY_PHONE_NUMBER_DIALOG_MESSAGE) + " " + phoneNumber + "?";
+				message = getString(R.string.REMOVE_PRIMARY_PHONE_NUMBER_DIALOG_MESSAGE, phoneNumber);
 				break;
 			case (REMOVE_SECONDARY_SMS_NUMBER_DIALOG_REQUEST_CODE):
-				message = getString(R.string.REMOVE_SECONDARY_PHONE_NUMBER_DIALOG_MESSAGE) + " " + phoneNumber + "?";
+				message = getString(R.string.REMOVE_SECONDARY_PHONE_NUMBER_DIALOG_MESSAGE, phoneNumber);
 				break;
 			default:
 				Log.e(LOG_TAG + ":onCreateDialog()", "Cannot resolve dialog message due to an unsupported request code: \"" + getTargetRequestCode() + "\"");

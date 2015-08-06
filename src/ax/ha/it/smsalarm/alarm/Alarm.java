@@ -72,6 +72,7 @@ public class Alarm implements Parcelable {
 	private String sender; 													// Sender of alarm(phone number)
 	private String message; 												// Alarm message
 	private String triggerText; 											// Text found in message triggering an alarm
+	private String triggerRegex;											// Regular expression triggering an alarm 
 	private Optional<Date> optionalAcknowledged = Optional.<Date> absent();	// Optional date when the alarm was acknowledged
 	private AlarmType alarmType = AlarmType.UNDEFINED; 						// Indicating which kind of alarm this object is
 	// @formatter:on
@@ -85,10 +86,12 @@ public class Alarm implements Parcelable {
 	 *            Alarm message.
 	 * @param triggerText
 	 *            Text in income message that triggered an alarm.
+	 * @param triggerRegex
+	 *            Regular expression that triggered an alarm due to a match of the alarms content.
 	 * @param alarmType
 	 *            Type of alarm.
 	 */
-	public Alarm(String sender, String message, String triggerText, AlarmType alarmType) {
+	public Alarm(String sender, String message, String triggerText, String triggerRegex, AlarmType alarmType) {
 		// Store a date when this alarm was received
 		received = new Date();
 
@@ -99,6 +102,12 @@ public class Alarm implements Parcelable {
 			this.triggerText = triggerText;
 		} else {
 			this.triggerText = "-";
+		}
+
+		if (triggerRegex.length() > 0) {
+			this.triggerRegex = triggerRegex;
+		} else {
+			this.triggerRegex = "-";
 		}
 
 		// At this point alarm hasn't been acknowledged yet
@@ -119,16 +128,19 @@ public class Alarm implements Parcelable {
 	 *            Alarm message.
 	 * @param triggerText
 	 *            Text in income message that triggered an alarm.
+	 * @param triggerRegex
+	 *            Regular expression that triggered an alarm due to a match of the alarms content.
 	 * @param acknowledged
 	 *            Alarms optional acknowledge date and time as <code>String</code> in milliseconds.
 	 * @param alarmType
 	 *            Type of alarm.
 	 */
-	public Alarm(int id, String received, String sender, String message, String triggerText, String acknowledged, AlarmType alarmType) {
+	public Alarm(int id, String received, String sender, String message, String triggerText, String triggerRegex, String acknowledged, AlarmType alarmType) {
 		this.id = id;
 		this.sender = sender;
 		this.message = message;
 		this.triggerText = triggerText;
+		this.triggerRegex = triggerRegex;
 		this.alarmType = alarmType;
 
 		// Should always exist a date received
@@ -171,6 +183,7 @@ public class Alarm implements Parcelable {
 		dest.writeString(sender);
 		dest.writeString(message);
 		dest.writeString(triggerText);
+		dest.writeString(triggerRegex);
 		dest.writeSerializable(optionalAcknowledged);
 		dest.writeInt(alarmType.ordinal());
 	}
@@ -193,6 +206,7 @@ public class Alarm implements Parcelable {
 		sender = source.readString();
 		message = source.readString();
 		triggerText = source.readString();
+		triggerRegex = source.readString();
 		optionalAcknowledged = (Optional<Date>) source.readSerializable();
 		alarmType = AlarmType.of(source.readInt());
 	}
@@ -298,6 +312,15 @@ public class Alarm implements Parcelable {
 	 */
 	public String getTriggerText() {
 		return triggerText;
+	}
+
+	/**
+	 * To get Alarm's triggering regular expression.
+	 * 
+	 * @return Alarm's triggering regular expression.
+	 */
+	public String getTriggerRegex() {
+		return triggerRegex;
 	}
 
 	/**

@@ -80,9 +80,10 @@ public class SlidingMenuFragment extends SherlockListFragment {
 		adapter.add(new SlidingMenuItem(getString(R.string.MENU_TITLE_SETTINGS)));
 		adapter.add(new SlidingMenuItem(101, getString(R.string.MENU_TITLE_SMS), R.drawable.ic_menu_sms));
 		adapter.add(new SlidingMenuItem(102, getString(R.string.MENU_TITLE_FREE_TEXT), R.drawable.ic_menu_word));
-		adapter.add(new SlidingMenuItem(103, getString(R.string.MENU_TITLE_SOUND), R.drawable.ic_menu_sound));
-		adapter.add(new SlidingMenuItem(104, getString(R.string.MENU_TITLE_ACKNOWLEDGE), R.drawable.ic_menu_ack));
-		adapter.add(new SlidingMenuItem(105, getString(R.string.MENU_TITLE_OTHER), R.drawable.ic_menu_other));
+		adapter.add(new SlidingMenuItem(103, getString(R.string.MENU_TITLE_REGEX), R.drawable.ic_menu_regex));
+		adapter.add(new SlidingMenuItem(104, getString(R.string.MENU_TITLE_SOUND), R.drawable.ic_menu_sound));
+		adapter.add(new SlidingMenuItem(105, getString(R.string.MENU_TITLE_ACKNOWLEDGE), R.drawable.ic_menu_ack));
+		adapter.add(new SlidingMenuItem(106, getString(R.string.MENU_TITLE_OTHER), R.drawable.ic_menu_other));
 		adapter.add(new SlidingMenuItem(getString(R.string.MENU_TITLE_ALARM_LOG)));
 		adapter.add(new SlidingMenuItem(201, getString(R.string.MENU_TITLE_ALL_ALARMS_LOG), R.drawable.ic_menu_alarm_log_all));
 		adapter.add(new SlidingMenuItem(202, getString(R.string.MENU_TITLE_ALL_PRIMARY_ALARMS_LOG), R.drawable.ic_menu_alarm_log_primary));
@@ -117,12 +118,15 @@ public class SlidingMenuFragment extends SherlockListFragment {
 				fragment = new FreeTextSettingsFragment();
 				break;
 			case (103):
-				fragment = new SoundSettingsFragment();
+				fragment = new RegexSettingsFragment();
 				break;
 			case (104):
-				fragment = new AcknowledgeSettingsFragment();
+				fragment = new SoundSettingsFragment();
 				break;
 			case (105):
+				fragment = new AcknowledgeSettingsFragment();
+				break;
+			case (106):
 				fragment = new OtherSettingsFragment();
 				break;
 			case (201):

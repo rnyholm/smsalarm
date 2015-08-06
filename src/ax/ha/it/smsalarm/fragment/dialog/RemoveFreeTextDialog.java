@@ -13,7 +13,6 @@ import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
 import android.util.Log;
 import ax.ha.it.smsalarm.R;
-import ax.ha.it.smsalarm.activity.SmsAlarm;
 
 /**
  * {@link DialogFragment} which let's the user remove a <b><i>Free Text</i></b> from the list of <b><i>Primary or Secondary Alarm Trigger Free
@@ -87,10 +86,10 @@ public class RemoveFreeTextDialog extends DialogFragment {
 		String message = "";
 		switch (getTargetRequestCode()) {
 			case (REMOVE_PRIMARY_FREE_TEXT_DIALOG_REQUEST_CODE):
-				message = getString(R.string.REMOVE_PRIMARY_FREE_TEXT_DIALOG_MESSAGE) + " " + freeText + "?";
+				message = getString(R.string.REMOVE_PRIMARY_FREE_TEXT_DIALOG_MESSAGE, freeText);
 				break;
 			case (REMOVE_SECONDARY_FREE_TEXT_DIALOG_REQUEST_CODE):
-				message = getString(R.string.REMOVE_SECONDARY_FREE_TEXT_DIALOG_MESSAGE) + " " + freeText + "?";
+				message = getString(R.string.REMOVE_SECONDARY_FREE_TEXT_DIALOG_MESSAGE, freeText);
 				break;
 			default:
 				Log.e(LOG_TAG + ":onCreateDialog()", "Cannot resolve dialog message due to an unsupported request code: \"" + getTargetRequestCode() + "\"");

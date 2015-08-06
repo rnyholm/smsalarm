@@ -9,11 +9,15 @@
     <string name="ACKNOWLEDGE_SMS_ERROR_GENERIC">Ett oväntant fel har uppstått.</string>
     <string name="ACKNOWLEDGE_SMS_ERROR_NO_SERVICE">Enheten saknar täckning.</string>
     <string name="ADD_FREE_TEXT_DIALOG_TITLE">Lägg till ord</string>
-    <string name="ADD_FREE_TEXT_HINT">Lägg till ett ord..</string>
+    <string name="ADD_FREE_TEXT_HINT">Lägg till ord..</string>
     <string name="ADD_PHONE_NUMBER_DIALOG_TITLE">Lägg till telefonnummer</string>
     <string name="ADD_PHONE_NUMBER_HINT">Lägg till ett telefonnummer..</string>
     <string name="ADD_PRIMARY_PHONE_NUMBER_DIALOG_MESSAGE">Ange ett telefonnummer som Sms Alarm ska larma primärlarm på.</string>
+    <string name="ADD_PRIMARY_REGEX_DIALOG_MESSAGE">Ange ett reguljärt uttryck som Sms Alarm ska larma primärlarm på om en matchning av uttrycket finns i mottaget SMS.</string>
+    <string name="ADD_REGEX_DIALOG_TITLE">Lägg till reguljärt uttryck</string>
+    <string name="ADD_REGEX_HINT">Lägg till reguljärt uttryck..</string>
     <string name="ADD_SECONDARY_PHONE_NUMBER_DIALOG_MESSAGE">Ange ett telefonnummer som Sms Alarm ska larma sekundärlarm på.</string>
+    <string name="ADD_SECONDARY_REGEX_DIALOG_MESSAGE">Ange ett reguljärt uttryck som Sms Alarm ska larma sekundärlarm på om en matchning av uttrycket finns i mottaget SMS.</string>
     <string name="ALARM_INFO_DIALOG_TITLE">Larminfo</string>
     <string name="ALARM_VIBRATION_DIALOG_TITLE">Välj vibrationsmönster</string>
     <string name="CONFIRM_DONATION_AMOUNT_DIALOG_MESSAGE">Är du säker på att du vill donera %s (exklusive moms) till utvecklaren?</string>
@@ -27,8 +31,11 @@
     <string name="EDIT_PHONE_NUMBER_DIALOG_TITLE">Ändra telefonnummer</string>
     <string name="EDIT_PRIMARY_FREE_TEXT_DIALOG_MESSAGE">Ändra ord som Sms Alarm ska larma primärlarm på om det finns i mottaget SMS.</string>
     <string name="EDIT_PRIMARY_PHONE_NUMBER_DIALOG_MESSAGE">Ändra telefonnummer som Sms Alarm ska larma primärlarm på.</string>
+    <string name="EDIT_PRIMARY_REGEX_DIALOG_MESSAGE">Ändra reguljärt uttryck som Sms Alarm ska larma primärlarm på om en matchning av uttrycket finns i mottaget SMS.</string>
+    <string name="EDIT_REGEX_DIALOG_TITLE">Ändra reguljärt uttryck</string>
     <string name="EDIT_SECONDARY_FREE_TEXT_DIALOG_MESSAGE">Ändra ord som Sms Alarm ska larma sekundärlarm på om det finns i mottaget SMS.</string>
     <string name="EDIT_SECONDARY_PHONE_NUMBER_DIALOG_MESSAGE">Ändra telefonnummer som Sms Alarm ska larma sekundärlarm på.</string>
+    <string name="EDIT_SECONDARY_REGEX_DIALOG_MESSAGE">Ändra reguljärt uttryck som Sms Alarm ska larma sekundärlarm på om en matchning av uttrycket finns i mottaget SMS.</string>
     <string name="ENTER_MESSAGE_HINT">Ange meddelande..</string>
     <string name="ENTER_ORGANIZATION_HINT">Ange organisation..</string>
 	<string name="ENTER_PHONE_NUMBER_HINT">Ange telefonnummer..</string>
@@ -58,6 +65,7 @@
     <string name="MENU_TITLE_ALL_SECONDARY_ALARMS_LOG">Sekundärlarm</string>
     <string name="MENU_TITLE_APPRECIATION">Visa ditt stöd</string>
     <string name="MENU_TITLE_FREE_TEXT">Ord</string>
+    <string name="MENU_TITLE_REGEX">Reguljära uttryck</string>
     <string name="MENU_TITLE_OPEN_SOURCE">Öppen källkod</string>
     <string name="MENU_TITLE_OTHER">Övrigt</string>
     <string name="MENU_TITLE_SETTINGS">Inställningar</string>
@@ -65,17 +73,22 @@
     <string name="MENU_TITLE_SOUND">Ljud och vibration</string>      
     <string name="ORGANIZATION_DIALOG_HINT">Organisation..</string>
     <string name="ORGANIZATION_DIALOG_MESSAGE">Ange din organisations namn.</string>
-    <string name="ORGANIZATION_DIALOG_TITLE">Ange organisation</string>  
-    <string name="REMOVE_PRIMARY_FREE_TEXT_DIALOG_MESSAGE">Vill du ta bort följande ord från listan av primärlarm: </string>
-    <string name="REMOVE_SECONDARY_FREE_TEXT_DIALOG_MESSAGE">Vill du ta bort följande ord från listan av sekundärlarm: </string>
-    <string name="REMOVE_PRIMARY_PHONE_NUMBER_DIALOG_MESSAGE">Vill du ta bort följande telefonnummer från listan av primärlarm: </string>
-    <string name="REMOVE_SECONDARY_PHONE_NUMBER_DIALOG_MESSAGE">Vill du ta bort följande telefonnummer från listan av sekundärlarm: </string>
+    <string name="ORGANIZATION_DIALOG_TITLE">Ange organisation</string>
+    <string name="REGEX_DIALOG_HINT">Reguljärt uttryck..</string>  
+    <string name="REMOVE_PRIMARY_FREE_TEXT_DIALOG_MESSAGE">Vill du ta bort följande ord från listan av primärlarm: %s?</string>
+    <string name="REMOVE_PRIMARY_PHONE_NUMBER_DIALOG_MESSAGE">Vill du ta bort följande telefonnummer från listan av primärlarm: %s?</string>
+    <string name="REMOVE_PRIMARY_REGEX_DIALOG_MESSAGE">Vill du ta bort följande reguljärt uttryck från listan av primärlarm: %s?</string>
+    <string name="REMOVE_REGEX_DIALOG_TITLE">Ta bort reguljärt uttryck</string>
+    <string name="REMOVE_SECONDARY_FREE_TEXT_DIALOG_MESSAGE">Vill du ta bort följande ord från listan av sekundärlarm: %s?</string>
+    <string name="REMOVE_SECONDARY_PHONE_NUMBER_DIALOG_MESSAGE">Vill du ta bort följande telefonnummer från listan av sekundärlarm: %s?</string>
+    <string name="REMOVE_SECONDARY_REGEX_DIALOG_MESSAGE">Vill du ta bort följande reguljärt uttryck från listan av sekundärlarm: %s?</string>
     <string name="REVIEW_NOW">Recensera nu!(Google Play&#8482; kommer öppnas)</string>    
     <string name="TITLE_ACKNOWLEDGE_BY">Kvittera genom</string>
     <string name="TITLE_ACKNOWLEDGE_MESSAGE">Meddelande för kvittering</string>
     <string name="TITLE_ACKNOWLEDGE_PHONE_NUMBER">Telefonnummer för kvittering</string>
     <string name="TITLE_ALARM_INFO_ALARM_TYPE">Larmtyp</string>
     <string name="TITLE_ALARM_INFO_MESSAGE">Meddelande</string>
+    <string name="TITLE_ALARM_INFO_TRIGGER_REGEX">Triggande reguljärt uttryck</string>
  	<string name="TITLE_ALARM_SIGNALS">Larmsignaler</string>
  	<string name="TITLE_ALARM_VIBRATIONS">Vibrationsmönster</string>
  	<string name="TITLE_APPRECIATION">Visa ditt stöd</string>
@@ -106,6 +119,10 @@
     <string name="TOAST_DONATION_FAILED_PURCHASE_ERROR">Ett fel inträffade vid betalning, donationen misslyckades.</string>
     <string name="TOAST_DONATION_FAILED_PURCHASE_ERROR_PURCHASE_CANCELED">Betalningen avbröts, ingen donation har gjorts.</string>
     <string name="TOAST_DONATION_SUCCESSFUL">Tack för ditt stöd!</string>
+    <string name="TOAST_REGEX_ALREADY_IN_PRIMARY_LIST">Angivet reguljärt uttryck finns redan i listan av uttryck för primärlarm. Ange ett nytt uttryck.</string>
+    <string name="TOAST_REGEX_ALREADY_IN_SECONDARY_LIST">Angivet reguljärt uttryck finns redan i listan av uttryck för sekundärlarm. Ange ett nytt uttryck.</string>
+    <string name="TOAST_REGEX_MISSING">Ett reguljärt uttryck måste anges.</string>
+    <string name="TOAST_DUPLICATED_REGEX">Reguljärt uttryck för primär- och sekundärlarm får inte vara lika. Ange ett nytt uttryck.</string>
     <!-- NEW STRINGS IN v.2.3.1 END -->
     
     <!-- DUMMY STRINGS(PLACEHOLDER AND DESCRIPTIVES), ONLY EXISTS IN ENGLISH - BEGIN -->

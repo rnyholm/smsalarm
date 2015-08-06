@@ -49,6 +49,8 @@ public class DebugUtils {
 		prefHandler.storePrefs(PrefKey.SHARED_PREF, PrefKey.SECONDARY_LISTEN_NUMBERS_KEY, Arrays.asList("44444", "55555"), context);
 		prefHandler.storePrefs(PrefKey.SHARED_PREF, PrefKey.PRIMARY_LISTEN_FREE_TEXTS_KEY, Arrays.asList("Grundlarm", "Brand", "test"), context);
 		prefHandler.storePrefs(PrefKey.SHARED_PREF, PrefKey.SECONDARY_LISTEN_FREE_TEXTS_KEY, Arrays.asList("Litet", "Larm"), context);
+		prefHandler.storePrefs(PrefKey.SHARED_PREF, PrefKey.PRIMARY_LISTEN_REGULAR_EXPRESSIONS_KEY, Arrays.asList("\\d+", "\\w+[@]\\w+[.]\\w+"), context);
+		prefHandler.storePrefs(PrefKey.SHARED_PREF, PrefKey.SECONDARY_LISTEN_REGULAR_EXPRESSIONS_KEY, Arrays.asList("w{3}[.]\\w+[.]\\w+"), context);
 		prefHandler.storePrefs(PrefKey.SHARED_PREF, PrefKey.PRIMARY_ALARM_SIGNAL_KEY, SoundHandler.getInstance().resolveAlarmSignal(context, 2), context);
 		prefHandler.storePrefs(PrefKey.SHARED_PREF, PrefKey.SECONDARY_ALARM_SIGNAL_KEY, SoundHandler.getInstance().resolveAlarmSignal(context, 7), context);
 		prefHandler.storePrefs(PrefKey.SHARED_PREF, PrefKey.ENABLE_ACK_KEY, true, context);
@@ -84,7 +86,7 @@ public class DebugUtils {
 	 */
 	public static void dispatchNotification(Context context) {
 		Intent notificationIntent = new Intent(context, NotificationService.class);
-		notificationIntent.putExtra(Alarm.TAG, new Alarm("1234567", "02.02.2012 23:55:40 2.5 Litet larm - Automatlarm vikingline lager(1682) Länsmanshägnan 7 jomala", "", AlarmType.SECONDARY));
+		notificationIntent.putExtra(Alarm.TAG, new Alarm("1234567", "02.02.2012 23:55:40 2.5 Litet larm - Automatlarm vikingline lager(1682) Länsmanshägnan 7 jomala", "", "", AlarmType.SECONDARY));
 		context.startService(notificationIntent);
 	}
 
@@ -97,7 +99,7 @@ public class DebugUtils {
 	 */
 	public static void dispatchAcknowledgeNotification(Context context) {
 		Intent acknowledgeNotificationIntent = new Intent(context, AcknowledgeNotificationService.class);
-		acknowledgeNotificationIntent.putExtra(Alarm.TAG, new Alarm("1234567", "02.02.2012 23:55:40 2.5 Litet larm - Automatlarm vikingline lager(1682) Länsmanshägnan 7 jomala", "larm", AlarmType.PRIMARY));
+		acknowledgeNotificationIntent.putExtra(Alarm.TAG, new Alarm("1234567", "02.02.2012 23:55:40 2.5 Litet larm - Automatlarm vikingline lager(1682) Länsmanshägnan 7 jomala", "larm", "w{3}[.]\\w+[.]\\w+", AlarmType.PRIMARY));
 		context.startService(acknowledgeNotificationIntent);
 	}
 

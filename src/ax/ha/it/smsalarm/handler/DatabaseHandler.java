@@ -23,7 +23,6 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
-import ax.ha.it.smsalarm.activity.SmsAlarm;
 import ax.ha.it.smsalarm.alarm.Alarm;
 import ax.ha.it.smsalarm.alarm.Alarm.AlarmType;
 
@@ -39,9 +38,10 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 	private static final String LOG_TAG = DatabaseHandler.class.getSimpleName();
 
 	// Database Version and the upgrade versions
-	private static final int DB_VERSION = 3;
+	private static final int DB_VERSION = 4;
 	private static final int DB_VERSION_ADD_TRIGGER_TEXT_COL = 2;
-	private static final int DB_VERSION_CHANGE_DATE_FORMAT = DB_VERSION;
+	private static final int DB_VERSION_CHANGE_DATE_FORMAT = 3;
+	private static final int DB_VERSION_ADD_TRIGGER_REGEX_COL = DB_VERSION;
 
 	// Database Name
 	private static final String DB_NAME = "alarmsManager";
@@ -58,6 +58,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 	private static final String KEY_SENDER = "sender";
 	private static final String KEY_MESSAGE = "message";
 	private static final String KEY_TRIGGER_TEXT = "triggerText";
+	private static final String KEY_TRIGGER_REGEX = "triggerRegex";
 	private static final String KEY_ACKNOWLEDGED = "acknowledged";
 	private static final String KEY_ALARM_TYPE = "alarmType";
 
@@ -77,7 +78,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 	@Override
 	public void onCreate(SQLiteDatabase db) {
 		// Build up the query for creating the table
-		String CREATE_ALARMS_TABLE = "CREATE TABLE " + TABLE_ALARMS + "(" + KEY_ID + " INTEGER PRIMARY KEY," + KEY_RECEIVED + " TEXT DEFAULT ''," + KEY_SENDER + " TEXT DEFAULT ''," + KEY_MESSAGE + " TEXT DEFAULT ''," + KEY_TRIGGER_TEXT + " TEXT DEFAULT '-'," + KEY_ACKNOWLEDGED + " TEXT DEFAULT ''," + KEY_ALARM_TYPE + " INTEGER)";
+		String CREATE_ALARMS_TABLE = "CREATE TABLE " + TABLE_ALARMS + "(" + KEY_ID + " INTEGER PRIMARY KEY," + KEY_RECEIVED + " TEXT DEFAULT ''," + KEY_SENDER + " TEXT DEFAULT ''," + KEY_MESSAGE + " TEXT DEFAULT ''," + KEY_TRIGGER_TEXT + " TEXT DEFAULT '-'," + KEY_TRIGGER_REGEX + " TEXT DEFAULT '-'," + KEY_ACKNOWLEDGED + " TEXT DEFAULT ''," + KEY_ALARM_TYPE + " INTEGER)";
 		// Run query
 		db.execSQL(CREATE_ALARMS_TABLE);
 	}
@@ -173,6 +174,26 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 			// Now drop the temporary table
 			db.execSQL(DROP_QUERY);
 		}
+
+		// Upgrade handling for adding regular expression triggering column
+		if (oldVersion < DB_VERSION_ADD_TRIGGER_REGEX_COL) {
+			// The queries needed for the upgrade and data migration
+			String ALTER_QUERY = "ALTER TABLE " + TABLE_ALARMS + " RENAME TO " + TMP + TABLE_ALARMS;
+			String DROP_QUERY = "DROP TABLE " + TMP + TABLE_ALARMS;
+			String INSERT_QUERY = "INSERT INTO " + TABLE_ALARMS + " (" + KEY_ID + "," + KEY_RECEIVED + "," + KEY_SENDER + "," + KEY_MESSAGE + "," + KEY_TRIGGER_TEXT + "," + KEY_ACKNOWLEDGED + "," + KEY_ALARM_TYPE + ")" + "SELECT " + KEY_ID + "," + KEY_RECEIVED + "," + KEY_SENDER + "," + KEY_MESSAGE + "," + KEY_TRIGGER_TEXT + "," + KEY_ACKNOWLEDGED + "," + KEY_ALARM_TYPE + " FROM " + TMP + TABLE_ALARMS;
+
+			// Begin data migration and reconstruction of existing database, beginning with renaming existing table
+			db.execSQL(ALTER_QUERY);
+
+			// Create the new and correct table
+			onCreate(db);
+
+			// Populate new table with existing data from old table(now seen as a temporary table)
+			db.execSQL(INSERT_QUERY);
+
+			// Now drop the temporary table
+			db.execSQL(DROP_QUERY);
+		}
 	}
 
 	/**
@@ -193,6 +214,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 		values.put(KEY_SENDER, alarm.getSender()); 						// Sender of the alarm
 		values.put(KEY_MESSAGE, alarm.getMessage()); 					// Alarm message
 		values.put(KEY_TRIGGER_TEXT, alarm.getTriggerText()); 			// Triggering text of a free text alarm
+		values.put(KEY_TRIGGER_REGEX, alarm.getTriggerRegex());			// Alarm triggering regular expression
 		values.put(KEY_ACKNOWLEDGED, alarm.getAcknowledgedMillisecs());	// Date and time the alarm was acknowledged
 		values.put(KEY_ALARM_TYPE, alarm.getAlarmType().ordinal()); 	// Type of alarm
 		// @formatter:on
@@ -217,7 +239,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 		SQLiteDatabase db = getReadableDatabase();
 
 		// Create query and execute it, store result in cursor
-		Cursor cursor = db.query(TABLE_ALARMS, new String[] { KEY_ID, KEY_RECEIVED, KEY_SENDER, KEY_MESSAGE, KEY_TRIGGER_TEXT, KEY_ACKNOWLEDGED, KEY_ALARM_TYPE }, KEY_ID + "=?", new String[] { String.valueOf(id) }, null, null, null, null);
+		Cursor cursor = db.query(TABLE_ALARMS, new String[] { KEY_ID, KEY_RECEIVED, KEY_SENDER, KEY_MESSAGE, KEY_TRIGGER_TEXT, KEY_TRIGGER_REGEX, KEY_ACKNOWLEDGED, KEY_ALARM_TYPE }, KEY_ID + "=?", new String[] { String.valueOf(id) }, null, null, null, null);
 
 		// Check if we got any results from the query
 		if (cursor != null) {
@@ -226,7 +248,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 		}
 
 		// Create a new alarm object with data resolved from cursor
-		Alarm alarm = new Alarm(cursor.getInt(0), cursor.getString(1), cursor.getString(2), cursor.getString(3), cursor.getString(4), cursor.getString(5), AlarmType.of(cursor.getInt(6)));
+		Alarm alarm = new Alarm(cursor.getInt(0), cursor.getString(1), cursor.getString(2), cursor.getString(3), cursor.getString(4), cursor.getString(5), cursor.getString(6), AlarmType.of(cursor.getInt(7)));
 
 		// Close cursor and database
 		cursor.close();
@@ -259,7 +281,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 		if (cursor.moveToFirst()) {
 			do {
 				// Create a new alarm object and fill it with data from cursor and add it to the list
-				alarmList.add(new Alarm(cursor.getInt(0), cursor.getString(1), cursor.getString(2), cursor.getString(3), cursor.getString(4), cursor.getString(5), AlarmType.of(cursor.getInt(6))));
+				alarmList.add(new Alarm(cursor.getInt(0), cursor.getString(1), cursor.getString(2), cursor.getString(3), cursor.getString(4), cursor.getString(5), cursor.getString(6), AlarmType.of(cursor.getInt(7))));
 			} while (cursor.moveToNext());
 		}
 
@@ -449,6 +471,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 		values.put(KEY_SENDER, alarm.getSender()); 						// Sender of the alarm
 		values.put(KEY_MESSAGE, alarm.getMessage()); 					// Alarm message
 		values.put(KEY_TRIGGER_TEXT, alarm.getTriggerText()); 			// Triggering text of a free text alarm
+		values.put(KEY_TRIGGER_REGEX, alarm.getTriggerRegex());			// Alarm triggering regular expression
 		values.put(KEY_ACKNOWLEDGED, alarm.getAcknowledgedMillisecs());	// Date and time the alarm was acknowledged
 		values.put(KEY_ALARM_TYPE, alarm.getAlarmType().ordinal()); 	// Type of alarm
 		// @formatter:on
@@ -484,6 +507,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 		cv0.put(KEY_SENDER, "12116");
 		cv0.put(KEY_MESSAGE, "Testar ett larm meddelande från 1 januari 2011");
 		cv0.put(KEY_TRIGGER_TEXT, "meddelande");
+		cv0.put(KEY_TRIGGER_REGEX, "");
 		cv0.put(KEY_ACKNOWLEDGED, "1293867465000");
 		cv0.put(KEY_ALARM_TYPE, 0);
 
@@ -492,6 +516,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 		cv1.put(KEY_SENDER, "04571234567");
 		cv1.put(KEY_MESSAGE, "Testar ett larm meddelande från 26 mars 2011");
 		cv1.put(KEY_TRIGGER_TEXT, "");
+		cv1.put(KEY_TRIGGER_REGEX, "w{3}[.]\\w+[.]\\w+");
 		cv1.put(KEY_ACKNOWLEDGED, "-");
 		cv1.put(KEY_ALARM_TYPE, 0);
 
@@ -500,6 +525,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 		cv2.put(KEY_SENDER, "04571234567");
 		cv2.put(KEY_MESSAGE, "Testar ett larm meddelande från 28 mars 2011");
 		cv2.put(KEY_TRIGGER_TEXT, "Testar");
+		cv2.put(KEY_TRIGGER_REGEX, "w{3}[.]\\w+[.]");
 		cv2.put(KEY_ACKNOWLEDGED, "1301307891000");
 		cv2.put(KEY_ALARM_TYPE, 0);
 
@@ -508,6 +534,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 		cv3.put(KEY_SENDER, "12116");
 		cv3.put(KEY_MESSAGE, "Testar ett larm meddelande från 14 maj 2011");
 		cv3.put(KEY_TRIGGER_TEXT, "");
+		cv3.put(KEY_TRIGGER_REGEX, "\\w+[.]");
 		cv3.put(KEY_ACKNOWLEDGED, "-");
 		cv3.put(KEY_ALARM_TYPE, 1);
 
@@ -516,6 +543,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 		cv4.put(KEY_SENDER, "12006");
 		cv4.put(KEY_MESSAGE, "Testar ett larm meddelande från 25 december 2011");
 		cv4.put(KEY_TRIGGER_TEXT, "december");
+		cv4.put(KEY_TRIGGER_REGEX, "");
 		cv4.put(KEY_ACKNOWLEDGED, "-");
 		cv4.put(KEY_ALARM_TYPE, 0);
 
@@ -524,6 +552,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 		cv5.put(KEY_SENDER, "12116");
 		cv5.put(KEY_MESSAGE, "Testar ett larm meddelande från 1 januari 2013");
 		cv5.put(KEY_TRIGGER_TEXT, "");
+		cv5.put(KEY_TRIGGER_REGEX, "w{3}[.]\\w+");
 		cv5.put(KEY_ACKNOWLEDGED, "-");
 		cv5.put(KEY_ALARM_TYPE, 1);
 
@@ -532,6 +561,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 		cv6.put(KEY_SENDER, "12116");
 		cv6.put(KEY_MESSAGE, "Testar ett larm meddelande från 27 januari 2013");
 		cv6.put(KEY_TRIGGER_TEXT, "januari");
+		cv6.put(KEY_TRIGGER_REGEX, "[.]\\w+[.]");
 		cv6.put(KEY_ACKNOWLEDGED, "1359278123000");
 		cv6.put(KEY_ALARM_TYPE, 0);
 
@@ -540,6 +570,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 		cv7.put(KEY_SENDER, "12345");
 		cv7.put(KEY_MESSAGE, "Testar ett larm meddelande från 13 juli 2013");
 		cv7.put(KEY_TRIGGER_TEXT, "");
+		cv7.put(KEY_TRIGGER_REGEX, "");
 		cv7.put(KEY_ACKNOWLEDGED, "-");
 		cv7.put(KEY_ALARM_TYPE, 1);
 
@@ -548,6 +579,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 		cv8.put(KEY_SENDER, "12345");
 		cv8.put(KEY_MESSAGE, "Testar ett larm meddelande från 12 december 2013");
 		cv8.put(KEY_TRIGGER_TEXT, "");
+		cv8.put(KEY_TRIGGER_REGEX, "w{3}\\w+");
 		cv8.put(KEY_ACKNOWLEDGED, "-");
 		cv8.put(KEY_ALARM_TYPE, 1);
 
@@ -556,6 +588,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 		cv9.put(KEY_SENDER, "12345");
 		cv9.put(KEY_MESSAGE, "Testar ett larm meddelande från 1 januari 2014");
 		cv9.put(KEY_TRIGGER_TEXT, "2014");
+		cv9.put(KEY_TRIGGER_REGEX, "w{3}[.]\\w+[.], [.]\\w+");
 		cv9.put(KEY_ACKNOWLEDGED, "1388552118000");
 		cv9.put(KEY_ALARM_TYPE, 0);
 
@@ -564,6 +597,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 		cv10.put(KEY_SENDER, "12116");
 		cv10.put(KEY_MESSAGE, "Testar ett larm meddelande från 19 september 2014");
 		cv10.put(KEY_TRIGGER_TEXT, "");
+		cv10.put(KEY_TRIGGER_REGEX, "");
 		cv10.put(KEY_ACKNOWLEDGED, "-");
 		cv10.put(KEY_ALARM_TYPE, 1);
 
@@ -572,6 +606,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 		cv11.put(KEY_SENDER, "12116");
 		cv11.put(KEY_MESSAGE, "Testar ett larm meddelande från 24 september 2014");
 		cv11.put(KEY_TRIGGER_TEXT, "");
+		cv11.put(KEY_TRIGGER_REGEX, "");
 		cv11.put(KEY_ACKNOWLEDGED, "1411548827000");
 		cv11.put(KEY_ALARM_TYPE, 0);
 
@@ -580,6 +615,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 		cv12.put(KEY_SENDER, "12117");
 		cv12.put(KEY_MESSAGE, "Testar ett larm meddelande från 5 december 2014");
 		cv12.put(KEY_TRIGGER_TEXT, "");
+		cv12.put(KEY_TRIGGER_REGEX, "\\w+[@]\\w+[.]\\w+");
 		cv12.put(KEY_ACKNOWLEDGED, "-");
 		cv12.put(KEY_ALARM_TYPE, 0);
 
@@ -588,6 +624,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 		cv13.put(KEY_SENDER, "12117");
 		cv13.put(KEY_MESSAGE, "Testar ett larm meddelande från 31 december 2014");
 		cv13.put(KEY_TRIGGER_TEXT, "");
+		cv13.put(KEY_TRIGGER_REGEX, "\\w+[@]");
 		cv13.put(KEY_ACKNOWLEDGED, "-");
 		cv13.put(KEY_ALARM_TYPE, 1);
 
@@ -596,6 +633,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 		cv14.put(KEY_SENDER, "12345");
 		cv14.put(KEY_MESSAGE, "Testar ett larm meddelande från 1 januari 2015");
 		cv14.put(KEY_TRIGGER_TEXT, "Testar");
+		cv14.put(KEY_TRIGGER_REGEX, "\\w+[.]\\w+");
 		cv14.put(KEY_ACKNOWLEDGED, "1420102412000");
 		cv14.put(KEY_ALARM_TYPE, 0);
 
@@ -604,6 +642,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 		cv15.put(KEY_SENDER, "12345");
 		cv15.put(KEY_MESSAGE, "Testar ett larm meddelande från 13 januari 2015");
 		cv15.put(KEY_TRIGGER_TEXT, "");
+		cv15.put(KEY_TRIGGER_REGEX, "");
 		cv15.put(KEY_ACKNOWLEDGED, "-");
 		cv15.put(KEY_ALARM_TYPE, 1);
 
@@ -612,6 +651,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 		cv16.put(KEY_SENDER, "12116");
 		cv16.put(KEY_MESSAGE, "Testar ett larm meddelande från 31 januari 2015");
 		cv16.put(KEY_TRIGGER_TEXT, "");
+		cv16.put(KEY_TRIGGER_REGEX, "");
 		cv16.put(KEY_ACKNOWLEDGED, "-");
 		cv16.put(KEY_ALARM_TYPE, 1);
 
@@ -620,6 +660,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 		cv17.put(KEY_SENDER, "04571234567");
 		cv17.put(KEY_MESSAGE, "Testar ett larm meddelande från 8 februari 2015");
 		cv17.put(KEY_TRIGGER_TEXT, "meddelande");
+		cv17.put(KEY_TRIGGER_REGEX, "\\w+[@]");
 		cv17.put(KEY_ACKNOWLEDGED, "1423424571000");
 		cv17.put(KEY_ALARM_TYPE, 0);
 
@@ -628,6 +669,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 		cv18.put(KEY_SENDER, "12006");
 		cv18.put(KEY_MESSAGE, "Testar ett larm meddelande från 6 augusti 2011");
 		cv18.put(KEY_TRIGGER_TEXT, "augusti");
+		cv18.put(KEY_TRIGGER_REGEX, "\\w+[.]\\w+");
 		cv18.put(KEY_ACKNOWLEDGED, "-");
 		cv18.put(KEY_ALARM_TYPE, 1);
 

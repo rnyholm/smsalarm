@@ -6,6 +6,8 @@ package ax.ha.it.smsalarm.receiver;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import android.content.BroadcastReceiver;
 import android.content.ContentValues;
@@ -70,6 +72,10 @@ public class SmsReceiver extends BroadcastReceiver {
 	private List<String> primaryFreeTexts = new ArrayList<String>();
 	private List<String> secondaryFreeTexts = new ArrayList<String>();
 
+	// List of string containing regular expressions triggering an alarm
+	private List<String> primaryRegexs = new ArrayList<String>();
+	private List<String> secondaryRegexs = new ArrayList<String>();
+
 	// To handle an incoming alarm properly
 	private boolean enableAlarmAck = false;
 	private boolean enableSMSDebugLogging = false;
@@ -83,6 +89,9 @@ public class SmsReceiver extends BroadcastReceiver {
 
 	// Text which triggered an alarm if free text triggering is used
 	private String triggerText = "";
+
+	// Regular expression which triggered an alarm if triggering by regular expression is used
+	private String triggerRegex = "";
 
 	/**
 	 * To take proper actions depending on application settings and SMS senders phone number and/or the text contained within that SMS.
@@ -166,7 +175,7 @@ public class SmsReceiver extends BroadcastReceiver {
 		}
 
 		// Create a new alarm from this income SMS(alarm)...
-		Alarm alarm = new Alarm(msgHeader, msgBody, triggerText, alarmType);
+		Alarm alarm = new Alarm(msgHeader, msgBody, triggerText, triggerRegex, alarmType);
 
 		// ...get database access and insert the alarm into database
 		DatabaseHandler db = new DatabaseHandler(context);
@@ -217,6 +226,8 @@ public class SmsReceiver extends BroadcastReceiver {
 		secondarySmsNumbers = (List<String>) prefHandler.fetchPrefs(PrefKey.SHARED_PREF, PrefKey.SECONDARY_LISTEN_NUMBERS_KEY, DataType.LIST, context);
 		primaryFreeTexts = (List<String>) prefHandler.fetchPrefs(PrefKey.SHARED_PREF, PrefKey.PRIMARY_LISTEN_FREE_TEXTS_KEY, DataType.LIST, context);
 		secondaryFreeTexts = (List<String>) prefHandler.fetchPrefs(PrefKey.SHARED_PREF, PrefKey.SECONDARY_LISTEN_FREE_TEXTS_KEY, DataType.LIST, context);
+		primaryRegexs = (List<String>) prefHandler.fetchPrefs(PrefKey.SHARED_PREF, PrefKey.PRIMARY_LISTEN_REGULAR_EXPRESSIONS_KEY, DataType.LIST, context);
+		secondaryRegexs = (List<String>) prefHandler.fetchPrefs(PrefKey.SHARED_PREF, PrefKey.SECONDARY_LISTEN_REGULAR_EXPRESSIONS_KEY, DataType.LIST, context);
 		enableAlarmAck = (Boolean) prefHandler.fetchPrefs(PrefKey.SHARED_PREF, PrefKey.ENABLE_ACK_KEY, DataType.BOOLEAN, context);
 		enableSMSDebugLogging = (Boolean) prefHandler.fetchPrefs(PrefKey.SHARED_PREF, PrefKey.ENABLE_SMS_DEBUG_LOGGING, DataType.BOOLEAN, context);
 		enableSmsAlarm = (Boolean) prefHandler.fetchPrefs(PrefKey.SHARED_PREF, PrefKey.ENABLE_SMS_ALARM_KEY, DataType.BOOLEAN, context, true);
@@ -231,18 +242,19 @@ public class SmsReceiver extends BroadcastReceiver {
 	 * @return <code>true</code> if income SMS was an alarm else <code>false</code>.
 	 * @see #checkSmsAlarm(Context)
 	 * @see #checkFreeTextAlarm(Context)
+	 * @see #checkRegexAlarm(Context)
 	 */
 	private boolean checkAlarm(Context context) {
 		// Figure out if we got an alarm and return appropriate value
 		boolean isSmsAlarm = checkSmsAlarm(context);
 		boolean isFreeTextAlarm = checkFreeTextAlarm(context);
+		boolean isRegexAlarm = checkRegexAlarm(context);
 
-		return isSmsAlarm || isFreeTextAlarm;
+		return isSmsAlarm || isFreeTextAlarm || isRegexAlarm;
 	}
 
 	/**
-	 * To check if received SMS is an <b><i>Alarm</i></b>. The check is done by a <b><i>equality control</i></b> of the senders phone number and the
-	 * phone numbers read from {@link SharedPreferences}.
+	 * To check if received SMS is an <b><i>Alarm</i></b>. The check is done by a <b><i>equality control</i></b> of the senders phone number.
 	 * 
 	 * @param context
 	 *            The Context in which the receiver is running.
@@ -278,7 +290,7 @@ public class SmsReceiver extends BroadcastReceiver {
 
 	/**
 	 * To check if received SMS is a <b><i>Alarm</i></b>.The check is done by a <b><i>equality control</i></b> of the <b><i>words</i></b> within the
-	 * income SMS and the free texts read from {@link SharedPreferences}.
+	 * income SMS.
 	 * 
 	 * @param context
 	 *            The Context in which the receiver is running.
@@ -290,7 +302,7 @@ public class SmsReceiver extends BroadcastReceiver {
 
 		// First check for primary alarm...
 		for (String primaryFreeText : primaryFreeTexts) {
-			// If any of the words within the msgBody exists in the list of primary free texts, store alarm, set the trigger texts and return
+			// If any of the words within the msgBody exists in the list of primary free texts, store alarm, set the trigger texts and indicate alarm
 			if (findWordEqualsIgnore(primaryFreeText, msgBody)) {
 				alarmType = AlarmType.PRIMARY;
 
@@ -320,6 +332,49 @@ public class SmsReceiver extends BroadcastReceiver {
 	}
 
 	/**
+	 * To check if received SMS is a <b><i>Alarm</i></b>.The check is done by a <b><i>regular expression pattern matching</i></b> of the
+	 * <b><i>contents</i></b> of the income SMS.
+	 * 
+	 * @param context
+	 *            The Context in which the receiver is running.
+	 * @return <code>true</code> if income SMS was an <b><i>Regular Expression Match Triggered</i></b> alarm else <code>false</code>.
+	 */
+	private boolean checkRegexAlarm(Context context) {
+		boolean isAlarm = false;
+
+		// First check for primary alarm..
+		for (String primaryRegex : primaryRegexs) {
+			// If contents within the msgBody does match any of the regular expressions within the list of primary regular expressions, store alarm,
+			// set the trigger regular expression and indicate alarm
+			if (matchRegex(primaryRegex, msgBody)) {
+				alarmType = AlarmType.PRIMARY;
+
+				// Need to know the regular expression that triggered the alarm
+				setTriggerRegex(primaryRegex);
+				isAlarm = true;
+			}
+		}
+
+		// Income SMS already figured out to be a primary alarm as it triggered on regular expression, no need for further checks
+		if (!isAlarm) {
+			// ...then secondary alarm if income SMS wasn't resolved as a primary alarm from regular expression triggering
+			for (String secondaryRegex : secondaryRegexs) {
+				if (matchRegex(secondaryRegex, msgBody)) {
+					// Only if current, resolved alarm type isn't primary, we don't want to down grade a primary alarm
+					if (!AlarmType.PRIMARY.equals(alarmType)) {
+						alarmType = AlarmType.SECONDARY;
+
+						setTriggerRegex(secondaryRegex);
+						isAlarm = true;
+					}
+				}
+			}
+		}
+
+		return isAlarm;
+	}
+
+	/**
 	 * Convenience method to set the <b><i>Trigger Text</i></b> of income SMS.
 	 * 
 	 * @param triggerText
@@ -335,6 +390,20 @@ public class SmsReceiver extends BroadcastReceiver {
 	}
 
 	/**
+	 * Convenience method to set the <b><i>Triggering Regular Expression</i></b> of income SMS.
+	 * 
+	 * @param triggerRegex
+	 *            Regular expression to be set as triggering regular expression.
+	 */
+	private void setTriggerRegex(String triggerRegex) {
+		if (this.triggerRegex.length() == 0) {
+			this.triggerRegex = triggerRegex;
+		} else {
+			this.triggerRegex = this.triggerRegex + ", " + triggerRegex;
+		}
+	}
+
+	/**
 	 * To check if <code>String</code>(textToParse) passed in as argument contains another <code>String</code>(wordToFind) passed in as argument. This
 	 * method only checks whole words and not a <code>CharSequence</code>.<br>
 	 * <b><i>Note. Method is not case sensitive.</i></b>
@@ -343,22 +412,52 @@ public class SmsReceiver extends BroadcastReceiver {
 	 *            Word to find.
 	 * @param textToParse
 	 *            Text to look for word in.
-	 * @return <code>true</code> if word is found else <code>false</code>.
+	 * @return <code>true</code> if word is found, else <code>false</code>.
 	 */
 	private boolean findWordEqualsIgnore(String wordToFind, String textToParse) {
+		boolean result = false;
+
 		if (wordToFind != null && textToParse != null) {
 			if ((wordToFind.length() != 0) && (textToParse.length() != 0)) {
 				List<String> words = Arrays.asList(textToParse.split(" "));
 
 				for (String word : words) {
 					if (wordToFind.equalsIgnoreCase(word)) {
-						return true;
+						result = true;
 					}
 				}
 			}
 		}
 
-		return false;
+		return result;
+	}
+
+	/**
+	 * To check if <code>String</code>(textToParse) passed in as argument has any text sequences that matches the regular expression
+	 * <code>String</code>(regex) passed in as argument.
+	 * 
+	 * @param regex
+	 *            Regular expression to find matches of.
+	 * @param textToParse
+	 *            Text to find matches of regular expression in.
+	 * @return <code>true</code> if regular expression has any matches, else <code>false</code>.
+	 */
+	private boolean matchRegex(String regex, String textToParse) {
+		boolean result = false;
+
+		if (regex != null && textToParse != null) {
+			if ((regex.length() != 0) && (textToParse.length() != 0)) {
+				// Compile regular expression into a pattern and try to find a match
+				Pattern pattern = Pattern.compile(regex);
+				Matcher matcher = pattern.matcher(textToParse);
+
+				if (matcher.find()) {
+					result = true;
+				}
+			}
+		}
+
+		return result;
 	}
 
 	/**
