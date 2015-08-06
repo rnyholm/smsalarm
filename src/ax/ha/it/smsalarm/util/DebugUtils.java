@@ -86,7 +86,7 @@ public class DebugUtils {
 	 */
 	public static void dispatchNotification(Context context) {
 		Intent notificationIntent = new Intent(context, NotificationService.class);
-		notificationIntent.putExtra(Alarm.TAG, new Alarm("1234567", "02.02.2012 23:55:40 2.5 Litet larm - Automatlarm vikingline lager(1682) Länsmanshägnan 7 jomala", "", "", AlarmType.SECONDARY));
+		notificationIntent.putExtra(Alarm.TAG, new Alarm("1234567", "02.02.2012 23:55:40 2.5 Litet larm - Automatlarm vikingline lager(1682) Länsmanshägnan 7 jomala", "", AlarmType.SECONDARY));
 		context.startService(notificationIntent);
 	}
 
@@ -99,7 +99,7 @@ public class DebugUtils {
 	 */
 	public static void dispatchAcknowledgeNotification(Context context) {
 		Intent acknowledgeNotificationIntent = new Intent(context, AcknowledgeNotificationService.class);
-		acknowledgeNotificationIntent.putExtra(Alarm.TAG, new Alarm("1234567", "02.02.2012 23:55:40 2.5 Litet larm - Automatlarm vikingline lager(1682) Länsmanshägnan 7 jomala", "larm", "w{3}[.]\\w+[.]\\w+", AlarmType.PRIMARY));
+		acknowledgeNotificationIntent.putExtra(Alarm.TAG, new Alarm("1234567", "02.02.2012 23:55:40 2.5 Litet larm - Automatlarm vikingline lager(1682) Länsmanshägnan 7 jomala", "larm", AlarmType.PRIMARY));
 		context.startService(acknowledgeNotificationIntent);
 	}
 

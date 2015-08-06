@@ -175,7 +175,7 @@ public class SmsReceiver extends BroadcastReceiver {
 		}
 
 		// Create a new alarm from this income SMS(alarm)...
-		Alarm alarm = new Alarm(msgHeader, msgBody, triggerText, triggerRegex, alarmType);
+		Alarm alarm = new Alarm(msgHeader, msgBody, triggerText, alarmType);
 
 		// ...get database access and insert the alarm into database
 		DatabaseHandler db = new DatabaseHandler(context);
