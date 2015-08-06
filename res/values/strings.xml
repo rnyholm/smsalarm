@@ -88,7 +88,6 @@
     <string name="TITLE_ACKNOWLEDGE_PHONE_NUMBER">Telefonnummer för kvittering</string>
     <string name="TITLE_ALARM_INFO_ALARM_TYPE">Larmtyp</string>
     <string name="TITLE_ALARM_INFO_MESSAGE">Meddelande</string>
-    <string name="TITLE_ALARM_INFO_TRIGGER_REGEX">Triggande reguljärt uttryck</string>
  	<string name="TITLE_ALARM_SIGNALS">Larmsignaler</string>
  	<string name="TITLE_ALARM_VIBRATIONS">Vibrationsmönster</string>
  	<string name="TITLE_APPRECIATION">Visa ditt stöd</string>
