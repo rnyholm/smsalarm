@@ -98,6 +98,18 @@
             android:layout_alignBaseline="@id/editSecondaryRegex_btn"
             android:layout_toRightOf="@id/editSecondaryRegex_btn"
             android:text="@string/REMOVE" />
+
+        <TextView
+            android:id="@+id/regexSettingsInfoNote_tv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/addSecondaryRegex_btn"
+            android:layout_marginTop="10dp"
+            android:autoLink="web"
+        	android:linksClickable="true"
+            android:text="@string/INFO_REGEX_SETTINGS_NOTE"
+            android:textAppearance="?android:attr/textAppearanceSmall" />
+
     </RelativeLayout>
 
 </ScrollView>

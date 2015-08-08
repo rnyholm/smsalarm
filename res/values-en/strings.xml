@@ -44,7 +44,6 @@
     <string name="TITLE_ALARM_INFO_ACKNOWLEDGED">Acknowledged</string>        
     <string name="TITLE_ALARM_INFO_RECEIVED">Received</string>
     <string name="TITLE_ALARM_INFO_SENDER">Sender</string>
-    <string name="TITLE_ALARM_INFO_TRIGGER_TEXT">Trigger word</string>
     <string name="TITLE_ALARM_LOG_NO_ALARM_RECEIVED">No alarm has yet been received</string>
     <string name="TITLE_ENABLE_ACKNOWLEDGE">Enable acknowledgment</string>
     <string name="TITLE_ENABLE_SMS_ALARM">Enable Sms Alarm</string>

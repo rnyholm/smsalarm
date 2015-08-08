@@ -55,6 +55,7 @@
     <string name="INFO_USE_OS_SOUND_SETTINGS">Om vald tar Sms Alarm hänsyn till enhetens ringvolym och ljudlöst läge.</string>
     <string name="INFO_ENABLE_SMS_DEBUG_LOGGING">Om vald kommer alla inkommande SMS att loggas till filen smslog.txt som finns i mappen SmsAlarm. Loggning görs endast om Sms Alarm är aktiverat och det som loggas är tidpunkt, avsändare och meddelande. Notera att denna funktion används främst i felsökningssyfte, i övrigt bör funktionen vara inaktiverad.</string>
     <string name="INFO_REGEX_SETTINGS">Ställ in vilka reguljära uttryck som Sms Alarm ska larma på om en matchning av uttrycket finns i inkommande SMS.</string>
+    <string name="INFO_REGEX_SETTINGS_NOTE">Notera. Dessa inställningar riktar sig till den mer avancerade användaren. Läs gärna mer om reguljära uttryck på Wikipedia:\nwikipedia.org/wiki/Regular_expression</string>
     <string name="LICENSE_APACHE_TITLE">Apache-Licenser</string>
     <string name="LICENSE_OTHER_TITLE">Licenser</string> 
     <string name="MENU_TITLE_ABOUT">Om</string>
@@ -88,6 +89,7 @@
     <string name="TITLE_ACKNOWLEDGE_PHONE_NUMBER">Telefonnummer för kvittering</string>
     <string name="TITLE_ALARM_INFO_ALARM_TYPE">Larmtyp</string>
     <string name="TITLE_ALARM_INFO_MESSAGE">Meddelande</string>
+    <string name="TITLE_ALARM_INFO_TRIGGER_TEXT">Triggande text</string>
  	<string name="TITLE_ALARM_SIGNALS">Larmsignaler</string>
  	<string name="TITLE_ALARM_VIBRATIONS">Vibrationsmönster</string>
  	<string name="TITLE_APPRECIATION">Visa ditt stöd</string>
@@ -121,7 +123,7 @@
     <string name="TOAST_REGEX_ALREADY_IN_PRIMARY_LIST">Angivet reguljärt uttryck finns redan i listan av uttryck för primärlarm. Ange ett nytt uttryck.</string>
     <string name="TOAST_REGEX_ALREADY_IN_SECONDARY_LIST">Angivet reguljärt uttryck finns redan i listan av uttryck för sekundärlarm. Ange ett nytt uttryck.</string>
     <string name="TOAST_REGEX_MISSING">Ett reguljärt uttryck måste anges.</string>
-    <string name="TOAST_DUPLICATED_REGEX">Reguljärt uttryck för primär- och sekundärlarm får inte vara lika. Ange ett nytt uttryck.</string>
+    <string name="TOAST_DUPLICATED_REGEX">Reguljära uttryck för primär- och sekundärlarm får inte vara lika. Ange ett nytt uttryck.</string>
     <!-- NEW STRINGS IN v.2.3.1 END -->
     
     <!-- DUMMY STRINGS(PLACEHOLDER AND DESCRIPTIVES), ONLY EXISTS IN ENGLISH - BEGIN -->
@@ -213,7 +215,6 @@
     <string name="TITLE_ALARM_INFO_ACKNOWLEDGED">Acknowledged</string>    
     <string name="TITLE_ALARM_INFO_RECEIVED">Received</string>
     <string name="TITLE_ALARM_INFO_SENDER">Sender</string>
-    <string name="TITLE_ALARM_INFO_TRIGGER_TEXT">Trigger word</string>
     <string name="TITLE_ALARM_LOG_NO_ALARM_RECEIVED">No alarm has yet been received</string>
     <string name="TITLE_ENABLE_ACKNOWLEDGE">Enable acknowledgment</string>
     <string name="TITLE_ENABLE_SMS_ALARM">Enable Sms Alarm</string>

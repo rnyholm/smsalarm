@@ -44,7 +44,6 @@
     <string name="TITLE_ALARM_INFO_ACKNOWLEDGED">Bestätigt</string>      
     <string name="TITLE_ALARM_INFO_RECEIVED">Empfangen</string>
     <string name="TITLE_ALARM_INFO_SENDER">Absender</string>
-    <string name="TITLE_ALARM_INFO_TRIGGER_TEXT">Auslösende Wörter</string>  
     <string name="TITLE_ALARM_LOG_NO_ALARM_RECEIVED">Keine Benachrichtigungen wurden bisher empfangen</string> 
     <string name="TITLE_ENABLE_ACKNOWLEDGE">Bestätigung des Primäralarms aktivieren</string>
     <string name="TITLE_ENABLE_SMS_ALARM">Sms Alarm aktivieren</string>

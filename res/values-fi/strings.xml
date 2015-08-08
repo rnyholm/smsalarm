@@ -44,7 +44,6 @@
     <string name="TITLE_ALARM_INFO_ACKNOWLEDGED">Kuitattu</string>      
     <string name="TITLE_ALARM_INFO_RECEIVED">Vastaanotettu</string>
     <string name="TITLE_ALARM_INFO_SENDER">Lähettäjä</string>
-    <string name="TITLE_ALARM_INFO_TRIGGER_TEXT">Käynnistävä sana</string>
     <string name="TITLE_ALARM_LOG_NO_ALARM_RECEIVED">Hälytystä ei ole saatu vielä</string>
     <string name="TITLE_ENABLE_ACKNOWLEDGE">Aktivoi ensisijaisen hälytysen kuittaus</string>
     <string name="TITLE_ENABLE_SMS_ALARM">Aktivoi Sms Alarm</string>

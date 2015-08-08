@@ -199,9 +199,9 @@ public class RegexSettingsFragment extends SherlockFragment implements Applicati
 					newRegex = data.getStringExtra(AddRegexDialog.ADD_REGEX);
 
 					// If input doesn't exist in the list of secondaryRegexs and input isn't empty
-					if (!Utils.existsInIgnoreCases(newRegex, secondaryRegexs) && !"".equals(newRegex)) {
+					if (!Utils.existsInConsiderCases(newRegex, secondaryRegexs) && !"".equals(newRegex)) {
 						// Store input if the list of primaryRegexs doesn't contain the new regular expression
-						if (!Utils.existsInIgnoreCases(newRegex, primaryRegexs)) {
+						if (!Utils.existsInConsiderCases(newRegex, primaryRegexs)) {
 							// Add given input to list
 							primaryRegexs.add(newRegex);
 
@@ -230,8 +230,8 @@ public class RegexSettingsFragment extends SherlockFragment implements Applicati
 				case (AddRegexDialog.ADD_SECONDARY_REGEX_DIALOG_REQUEST_CODE):
 					newRegex = data.getStringExtra(AddRegexDialog.ADD_REGEX);
 
-					if (!Utils.existsInIgnoreCases(newRegex, primaryRegexs) && !"".equals(newRegex)) {
-						if (!Utils.existsInIgnoreCases(newRegex, secondaryRegexs)) {
+					if (!Utils.existsInConsiderCases(newRegex, primaryRegexs) && !"".equals(newRegex)) {
+						if (!Utils.existsInConsiderCases(newRegex, secondaryRegexs)) {
 							secondaryRegexs.add(newRegex);
 							prefHandler.storePrefs(PrefKey.SHARED_PREF, PrefKey.SECONDARY_LISTEN_REGULAR_EXPRESSIONS_KEY, secondaryRegexs, context);
 							updateSecondaryRegexSpinner();
@@ -252,8 +252,8 @@ public class RegexSettingsFragment extends SherlockFragment implements Applicati
 				case (EditRegexDialog.EDIT_PRIMARY_REGEX_DIALOG_REQUEST_CODE):
 					initializableString = (InitializableString) data.getParcelableExtra(EditRegexDialog.EDIT_REGEX);
 
-					if (!"".equals(initializableString.getValue()) && !Utils.existsInIgnoreCases(initializableString.getValue(), secondaryRegexs)) {
-						if (!Utils.existsInIgnoreCases(initializableString.getValue(), primaryRegexs)) {
+					if (!"".equals(initializableString.getValue()) && !Utils.existsInConsiderCases(initializableString.getValue(), secondaryRegexs)) {
+						if (!Utils.existsInConsiderCases(initializableString.getValue(), primaryRegexs)) {
 							// Replace existing element in list of primary regular expressions with the new one
 							Collections.replaceAll(primaryRegexs, initializableString.getInitialValue(), initializableString.getValue());
 
@@ -280,8 +280,8 @@ public class RegexSettingsFragment extends SherlockFragment implements Applicati
 				case (EditRegexDialog.EDIT_SECONDARY_REGEX_DIALOG_REQUEST_CODE):
 					initializableString = (InitializableString) data.getParcelableExtra(EditRegexDialog.EDIT_REGEX);
 
-					if (!"".equals(initializableString.getValue()) && !Utils.existsInIgnoreCases(initializableString.getValue(), primaryRegexs)) {
-						if (!Utils.existsInIgnoreCases(initializableString.getValue(), secondaryRegexs)) {
+					if (!"".equals(initializableString.getValue()) && !Utils.existsInConsiderCases(initializableString.getValue(), primaryRegexs)) {
+						if (!Utils.existsInConsiderCases(initializableString.getValue(), secondaryRegexs)) {
 							Collections.replaceAll(secondaryRegexs, initializableString.getInitialValue(), initializableString.getValue());
 							prefHandler.storePrefs(PrefKey.SHARED_PREF, PrefKey.SECONDARY_LISTEN_REGULAR_EXPRESSIONS_KEY, secondaryRegexs, context);
 							updateSecondaryRegexSpinner();

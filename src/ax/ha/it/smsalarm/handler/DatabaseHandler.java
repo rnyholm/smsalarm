@@ -23,7 +23,6 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
-import ax.ha.it.smsalarm.activity.SmsAlarm;
 import ax.ha.it.smsalarm.alarm.Alarm;
 import ax.ha.it.smsalarm.alarm.Alarm.AlarmType;
 
@@ -491,7 +490,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 		cv1.put(KEY_RECEIVED, "1301127711000");
 		cv1.put(KEY_SENDER, "04571234567");
 		cv1.put(KEY_MESSAGE, "Testar ett larm meddelande från 26 mars 2011");
-		cv1.put(KEY_TRIGGER_TEXT, "");
+		cv1.put(KEY_TRIGGER_TEXT, "-");
 		cv1.put(KEY_ACKNOWLEDGED, "-");
 		cv1.put(KEY_ALARM_TYPE, 0);
 
@@ -507,7 +506,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 		cv3.put(KEY_RECEIVED, "1305375777000");
 		cv3.put(KEY_SENDER, "12116");
 		cv3.put(KEY_MESSAGE, "Testar ett larm meddelande från 14 maj 2011");
-		cv3.put(KEY_TRIGGER_TEXT, "");
+		cv3.put(KEY_TRIGGER_TEXT, "-");
 		cv3.put(KEY_ACKNOWLEDGED, "-");
 		cv3.put(KEY_ALARM_TYPE, 1);
 
@@ -523,7 +522,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 		cv5.put(KEY_RECEIVED, "1357010018000");
 		cv5.put(KEY_SENDER, "12116");
 		cv5.put(KEY_MESSAGE, "Testar ett larm meddelande från 1 januari 2013");
-		cv5.put(KEY_TRIGGER_TEXT, "");
+		cv5.put(KEY_TRIGGER_TEXT, "-");
 		cv5.put(KEY_ACKNOWLEDGED, "-");
 		cv5.put(KEY_ALARM_TYPE, 1);
 
@@ -539,7 +538,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 		cv7.put(KEY_RECEIVED, "1373695702000");
 		cv7.put(KEY_SENDER, "12345");
 		cv7.put(KEY_MESSAGE, "Testar ett larm meddelande från 13 juli 2013");
-		cv7.put(KEY_TRIGGER_TEXT, "");
+		cv7.put(KEY_TRIGGER_TEXT, "-");
 		cv7.put(KEY_ACKNOWLEDGED, "-");
 		cv7.put(KEY_ALARM_TYPE, 1);
 
@@ -547,7 +546,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 		cv8.put(KEY_RECEIVED, "1386827183000");
 		cv8.put(KEY_SENDER, "12345");
 		cv8.put(KEY_MESSAGE, "Testar ett larm meddelande från 12 december 2013");
-		cv8.put(KEY_TRIGGER_TEXT, "");
+		cv8.put(KEY_TRIGGER_TEXT, "-");
 		cv8.put(KEY_ACKNOWLEDGED, "-");
 		cv8.put(KEY_ALARM_TYPE, 1);
 
@@ -563,7 +562,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 		cv10.put(KEY_RECEIVED, "1411122196000");
 		cv10.put(KEY_SENDER, "12116");
 		cv10.put(KEY_MESSAGE, "Testar ett larm meddelande från 19 september 2014");
-		cv10.put(KEY_TRIGGER_TEXT, "");
+		cv10.put(KEY_TRIGGER_TEXT, "-");
 		cv10.put(KEY_ACKNOWLEDGED, "-");
 		cv10.put(KEY_ALARM_TYPE, 1);
 
@@ -571,7 +570,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 		cv11.put(KEY_RECEIVED, "1411548567000");
 		cv11.put(KEY_SENDER, "12116");
 		cv11.put(KEY_MESSAGE, "Testar ett larm meddelande från 24 september 2014");
-		cv11.put(KEY_TRIGGER_TEXT, "");
+		cv11.put(KEY_TRIGGER_TEXT, "-");
 		cv11.put(KEY_ACKNOWLEDGED, "1411548827000");
 		cv11.put(KEY_ALARM_TYPE, 0);
 
@@ -579,7 +578,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 		cv12.put(KEY_RECEIVED, "1417764826000");
 		cv12.put(KEY_SENDER, "12117");
 		cv12.put(KEY_MESSAGE, "Testar ett larm meddelande från 5 december 2014");
-		cv12.put(KEY_TRIGGER_TEXT, "");
+		cv12.put(KEY_TRIGGER_TEXT, "-");
 		cv12.put(KEY_ACKNOWLEDGED, "-");
 		cv12.put(KEY_ALARM_TYPE, 0);
 
@@ -587,7 +586,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 		cv13.put(KEY_RECEIVED, "1420052131000");
 		cv13.put(KEY_SENDER, "12117");
 		cv13.put(KEY_MESSAGE, "Testar ett larm meddelande från 31 december 2014");
-		cv13.put(KEY_TRIGGER_TEXT, "");
+		cv13.put(KEY_TRIGGER_TEXT, "-");
 		cv13.put(KEY_ACKNOWLEDGED, "-");
 		cv13.put(KEY_ALARM_TYPE, 1);
 
@@ -603,7 +602,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 		cv15.put(KEY_RECEIVED, "1421155434000");
 		cv15.put(KEY_SENDER, "12345");
 		cv15.put(KEY_MESSAGE, "Testar ett larm meddelande från 13 januari 2015");
-		cv15.put(KEY_TRIGGER_TEXT, "");
+		cv15.put(KEY_TRIGGER_TEXT, "-");
 		cv15.put(KEY_ACKNOWLEDGED, "-");
 		cv15.put(KEY_ALARM_TYPE, 1);
 
@@ -611,7 +610,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 		cv16.put(KEY_RECEIVED, "1422716505000");
 		cv16.put(KEY_SENDER, "12116");
 		cv16.put(KEY_MESSAGE, "Testar ett larm meddelande från 31 januari 2015");
-		cv16.put(KEY_TRIGGER_TEXT, "");
+		cv16.put(KEY_TRIGGER_TEXT, "-");
 		cv16.put(KEY_ACKNOWLEDGED, "-");
 		cv16.put(KEY_ALARM_TYPE, 1);
 

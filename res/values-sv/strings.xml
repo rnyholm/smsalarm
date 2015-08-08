@@ -44,7 +44,6 @@
     <string name="TITLE_ALARM_INFO_ACKNOWLEDGED">Kvitterat</string>    
     <string name="TITLE_ALARM_INFO_RECEIVED">Mottaget</string>
     <string name="TITLE_ALARM_INFO_SENDER">Avsändare</string>
-    <string name="TITLE_ALARM_INFO_TRIGGER_TEXT">Triggande ord</string>
     <string name="TITLE_ALARM_LOG_NO_ALARM_RECEIVED">Inga larm har tagits emot ännu</string>    
     <string name="TITLE_ENABLE_ACKNOWLEDGE">Aktivera kvittering av primärlarm</string>
     <string name="TITLE_ENABLE_SMS_ALARM">Aktivera Sms Alarm</string>

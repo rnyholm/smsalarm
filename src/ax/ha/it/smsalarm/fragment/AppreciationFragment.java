@@ -337,7 +337,7 @@ public class AppreciationFragment extends SherlockFragment implements Applicatio
 				} else { // An error occurred during purchase
 					// User cancelled purchase, show a more user friendly toast
 					if (result.getResponse() == IabHelper.IABHELPER_USER_CANCELLED) {
-						Toast.makeText(context, R.string.TOAST_DONATION_FAILED_PURCHASE_ERROR_PURCHASE_CANCELED, Toast.LENGTH_LONG).show();
+						Toast.makeText(context, getString(R.string.TOAST_DONATION_FAILED_PURCHASE_ERROR_PURCHASE_CANCELED), Toast.LENGTH_LONG).show();
 					} else {
 						Toast.makeText(context, getString(R.string.TOAST_DONATION_FAILED_PURCHASE_ERROR), Toast.LENGTH_LONG).show();
 					}

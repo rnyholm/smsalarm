@@ -1,6 +1,6 @@
 SmsAlarm changelog
 
-v2.3.1(version code 22)
+v2.3.1(version code 23)
 -Förbättrat gränssnittet, introducerat en sliding menu
 -Tagit bort onödig loggning
 -Bytt namn på larmsignalen Virve till Nokia THR800
@@ -41,6 +41,7 @@ använda kvittering
 -Knapparna Ändra och ta bort i SMS- och Ordinställningarn aktiveras och inaktiveras nu beroende på om det finns något man kan ändra/tabort.
 -Möjligt att göra donationer genom Google's In-app Billing.
 -Möjligt att aktivera loggning av inkomna SMS för att underlätta felsökning.
+-Möjligt att trigga alarm på reguljära uttryck och pattern matching i inkommande SMS.
 
 v2.2.5(version code 13)
 -Översättning till estniska lades till

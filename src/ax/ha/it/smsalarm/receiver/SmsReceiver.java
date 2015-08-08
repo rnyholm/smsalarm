@@ -90,9 +90,6 @@ public class SmsReceiver extends BroadcastReceiver {
 	// Text which triggered an alarm if free text triggering is used
 	private String triggerText = "";
 
-	// Regular expression which triggered an alarm if triggering by regular expression is used
-	private String triggerRegex = "";
-
 	/**
 	 * To take proper actions depending on application settings and SMS senders phone number and/or the text contained within that SMS.
 	 * 
@@ -306,23 +303,24 @@ public class SmsReceiver extends BroadcastReceiver {
 			if (findWordEqualsIgnore(primaryFreeText, msgBody)) {
 				alarmType = AlarmType.PRIMARY;
 
-				// Need to know the trigger text
-				setTriggerText(primaryFreeText);
 				isAlarm = true;
 			}
 		}
 
 		// Income SMS already figured out to be a primary alarm as it triggered on free text, no need for further checks
 		if (!isAlarm) {
-			// ...then secondary alarm if income SMS wasn't resolved as a primary alarm from free text triggering
-			for (String secondaryFreeText : secondaryFreeTexts) {
-				if (findWordEqualsIgnore(secondaryFreeText, msgBody)) {
-					// Only if current, resolved alarm type isn't primary, we don't want to down grade a primary alarm
-					if (!AlarmType.PRIMARY.equals(alarmType)) {
-						alarmType = AlarmType.SECONDARY;
+			// Only proceed if current, resolved alarm type isn't primary, we don't want to down grade a primary alarm
+			if (!AlarmType.PRIMARY.equals(alarmType)) {
+				// Check if received message trigger primary alarm on regular expression, if so don't proceed, this is to prevent alarm being set to
+				// secondary when it's actually a primary alarm, this is a bit ugly but it works
+				if (notPrimaryRegexAlarm()) {
+					// ...then secondary alarm if income SMS wasn't resolved as a primary alarm from free text triggering
+					for (String secondaryFreeText : secondaryFreeTexts) {
+						if (findWordEqualsIgnore(secondaryFreeText, msgBody)) {
+							alarmType = AlarmType.SECONDARY;
 
-						setTriggerText(secondaryFreeText);
-						isAlarm = true;
+							isAlarm = true;
+						}
 					}
 				}
 			}
@@ -349,22 +347,19 @@ public class SmsReceiver extends BroadcastReceiver {
 			if (matchRegex(primaryRegex, msgBody)) {
 				alarmType = AlarmType.PRIMARY;
 
-				// Need to know the regular expression that triggered the alarm
-				setTriggerRegex(primaryRegex);
 				isAlarm = true;
 			}
 		}
 
 		// Income SMS already figured out to be a primary alarm as it triggered on regular expression, no need for further checks
 		if (!isAlarm) {
-			// ...then secondary alarm if income SMS wasn't resolved as a primary alarm from regular expression triggering
-			for (String secondaryRegex : secondaryRegexs) {
-				if (matchRegex(secondaryRegex, msgBody)) {
-					// Only if current, resolved alarm type isn't primary, we don't want to down grade a primary alarm
-					if (!AlarmType.PRIMARY.equals(alarmType)) {
+			// Only if current, resolved alarm type isn't primary, we don't want to down grade a primary alarm
+			if (!AlarmType.PRIMARY.equals(alarmType)) {
+				// ...then secondary alarm if income SMS wasn't resolved as a primary alarm from regular expression triggering
+				for (String secondaryRegex : secondaryRegexs) {
+					if (matchRegex(secondaryRegex, msgBody)) {
 						alarmType = AlarmType.SECONDARY;
 
-						setTriggerRegex(secondaryRegex);
 						isAlarm = true;
 					}
 				}
@@ -390,22 +385,9 @@ public class SmsReceiver extends BroadcastReceiver {
 	}
 
 	/**
-	 * Convenience method to set the <b><i>Triggering Regular Expression</i></b> of income SMS.
-	 * 
-	 * @param triggerRegex
-	 *            Regular expression to be set as triggering regular expression.
-	 */
-	private void setTriggerRegex(String triggerRegex) {
-		if (this.triggerRegex.length() == 0) {
-			this.triggerRegex = triggerRegex;
-		} else {
-			this.triggerRegex = this.triggerRegex + ", " + triggerRegex;
-		}
-	}
-
-	/**
 	 * To check if <code>String</code>(textToParse) passed in as argument contains another <code>String</code>(wordToFind) passed in as argument. This
 	 * method only checks whole words and not a <code>CharSequence</code>.<br>
+	 * This method does also set the triggering text, the text which triggered an alarm, in this case a specific word was found.<br>
 	 * <b><i>Note. Method is not case sensitive.</i></b>
 	 * 
 	 * @param wordToFind
@@ -424,6 +406,9 @@ public class SmsReceiver extends BroadcastReceiver {
 				for (String word : words) {
 					if (wordToFind.equalsIgnoreCase(word)) {
 						result = true;
+
+						// Set triggering text
+						setTriggerText(word);
 					}
 				}
 			}
@@ -434,7 +419,8 @@ public class SmsReceiver extends BroadcastReceiver {
 
 	/**
 	 * To check if <code>String</code>(textToParse) passed in as argument has any text sequences that matches the regular expression
-	 * <code>String</code>(regex) passed in as argument.
+	 * <code>String</code>(regex) passed in as argument.<br>
+	 * This method does also set the triggering text, the text which triggered an alarm, in this case a regular expression pattern match.
 	 * 
 	 * @param regex
 	 *            Regular expression to find matches of.
@@ -451,8 +437,40 @@ public class SmsReceiver extends BroadcastReceiver {
 				Pattern pattern = Pattern.compile(regex);
 				Matcher matcher = pattern.matcher(textToParse);
 
-				if (matcher.find()) {
+				// Iterate over all occurrences, often this is just once
+				while (matcher.find()) {
 					result = true;
+
+					// Set triggering text
+					setTriggerText(matcher.group());
+				}
+			}
+		}
+
+		return result;
+	}
+
+	/**
+	 * Convenience method to check that any of the primary regular expressions doesn't match any text sequence within the received message. In short
+	 * that a primary alarm will not be triggered due to regular expression pattern matching.<br>
+	 * Note. This method is used to prevent a secondary alarm being triggered for free texts, so it's a bit special.
+	 * 
+	 * @return <code>true</code> if received message doesn't contains any text sequences matching any of the regular expressions set for primary alarm
+	 *         triggering, else <code>false</code>.
+	 */
+	private boolean notPrimaryRegexAlarm() {
+		boolean result = true;
+
+		for (String primaryRegex : primaryRegexs) {
+			if (primaryRegex != null && msgBody != null) {
+				if ((primaryRegex.length() != 0) && (msgBody.length() != 0)) {
+					// Compile regular expression into a pattern and try to find a match
+					Pattern pattern = Pattern.compile(primaryRegex);
+					Matcher matcher = pattern.matcher(msgBody);
+
+					if (matcher.find()) {
+						result = false;
+					}
 				}
 			}
 		}
