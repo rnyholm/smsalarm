@@ -53,7 +53,7 @@
     <string name="INFO_SOUND_SETTINGS">Ställ in larmsignaler och vibrationsmönster för primär- och sekundärlarm samt om Sms Alarm ska följa enhetens ljudinställningar. Det är också möjligt att ställa in om larmsignalen ska spelas upp två gånger eller oavbrutet.</string>
     <string name="INFO_USE_FLASH_NOTIFICATION">Om vald blinkar kamerans blixt vid inkommande larm. Notera att detta i nuläget är en BETA funktion varvid oväntant beteende kan förekomma vid inkommande larm. Använd på egen risk.</string>
     <string name="INFO_USE_OS_SOUND_SETTINGS">Om vald tar Sms Alarm hänsyn till enhetens ringvolym och ljudlöst läge.</string>
-    <string name="INFO_ENABLE_SMS_DEBUG_LOGGING">Om vald kommer alla inkommande SMS att loggas till filen smslog.txt som finns i mappen SmsAlarm. Loggning görs endast om Sms Alarm är aktiverat och det som loggas är tidpunkt, avsändare och meddelande. Notera att denna funktion används främst i felsökningssyfte, i övrigt bör funktionen vara inaktiverad.</string>
+    <string name="INFO_ENABLE_SMS_DEBUG_LOGGING">Om vald kommer alla inkommande SMS att loggas till filen smslog.txt som finns i mappen SmsAlarm. Det som loggas är tidpunkt, avsändare och meddelande. Notera att denna funktion används främst i felsökningssyfte, i övrigt bör funktionen vara inaktiverad.</string>
     <string name="INFO_REGEX_SETTINGS">Ställ in vilka reguljära uttryck som Sms Alarm ska larma på om en matchning av uttrycket finns i inkommande SMS.</string>
     <string name="INFO_REGEX_SETTINGS_NOTE">Notera. Dessa inställningar riktar sig till den mer avancerade användaren. Läs gärna mer om reguljära uttryck på Wikipedia:\nwikipedia.org/wiki/Regular_expression</string>
     <string name="LICENSE_APACHE_TITLE">Apache-Licenser</string>
