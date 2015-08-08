@@ -321,10 +321,8 @@ public class OtherSettingsFragment extends SherlockFragment implements Applicati
 	 * To update enable Sms Alarm {@link CheckBox} correctly.
 	 */
 	private void updateEnableSmsAlarmCheckBox() {
-		// Update enable Sms Alarm CheckBox(default checked=true)
-		if (!enableSmsAlarm) {
-			enableSmsAlarmCheckBox.setChecked(false);
-		}
+		// Update enable Sms Alarm CheckBox
+		enableSmsAlarmCheckBox.setChecked(enableSmsAlarm);
 	}
 
 	private void updateEnableSMSDebugLoggingCheckBox() {
