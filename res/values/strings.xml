@@ -250,7 +250,9 @@
     <string name="DEBUG_MOCK_SMS_SENDER_DIALOG_TITLE">Sender</string>
     <string name="DEBUG_NO">No</string>
     <string name="DEBUG_TOAST_MOCK_ALARMS_INSERTED">Alarms successfully mocked and inserted into the database.</string>
+    <string name="DEBUG_TOAST_SAY_BYE_BYE_TO_THE_DEV_WORLD">Bye bye, come again!</string>
     <string name="DEBUG_TOAST_SHARED_PREFERENCES_MOCKED">Shared preferences successfully mocked.</string>
+    <string name="DEBUG_TOAST_WELCOME_TO_THE_DEV_WORLD">Welcome!</string>
     <string name="DEBUG_YES">Yes</string>
     <!-- STRINGS FOR DEVELOPMENT/DEBUG(ONLY EXISTS IN ENGLISH) - BEGIN -->
 </resources>

@@ -37,6 +37,14 @@ public class SmsAlarm extends SlidingFragmentActivity {
 	// Action that can be set to an intent if fragment should be switched to AlarmLogFragment upon creation/new intent of this activity
 	public static final String ACTION_SWITCH_TO_ALARM_LOG_FRAGMENT = "ax.ha.it.smsalarm.SWITCH_TO_ALARM_LOG_FRAGMENT";
 
+	// Some static limiting constants to be used to decide whether or not the debug/testing menu items should be shown
+	private static final long SHOW_DEBUG_OPTIONS_TIME_LIMIT = 5000;
+	private static final int SHOW_DEBUG_OPTIONS_TAP_LIMIT = 10;
+
+	// Helper variables to decide whether or not the debug/testing menu should be shown
+	private long menuKeyFirstReleased = 0;
+	private int tapCount = 0;
+
 	/**
 	 * Perform initialization of <code>Layout</code>'s, {@link Fragment}'s, the {@link SlidingMenu} and {@link ActionBar}. Configuration of these
 	 * objects is also done within this method as well as initialization of the {@link DatabaseHandler}.
@@ -101,6 +109,47 @@ public class SmsAlarm extends SlidingFragmentActivity {
 			return true;
 		}
 		return super.onKeyDown(keyCode, event);
+	}
+
+	/**
+	 * Listen on {@link KeyEvent}, this override is only interested in <code>KeyEvent</code>'s of type {@link KeyEvent#KEYCODE_MENU} (menu button).
+	 * When that button is released in a high enough frequency the {@link SlidingMenu} will be rebuilt with the debug/testing menu items, if the menu
+	 * doesn't contain the items already. In those cases the items will be removed.
+	 */
+	@Override
+	public boolean onKeyUp(int keyCode, KeyEvent event) {
+		// Only if not in debug mode, else these menu items are showing anyway
+		if (!SmsAlarm.DEBUG) {
+			if (keyCode == KeyEvent.KEYCODE_MENU) {
+				// Get current system time
+				long currentTime = System.currentTimeMillis();
+
+				// If it's the first time user releases the menu key, or it has elapsed to long time since menu key was first released, reset
+				// everything
+				if (menuKeyFirstReleased == 0 || ((currentTime - menuKeyFirstReleased) > SHOW_DEBUG_OPTIONS_TIME_LIMIT)) {
+					menuKeyFirstReleased = currentTime;
+					tapCount = 1;
+				} else { // Just increase the tap counter
+					tapCount++;
+				}
+
+				// The user has tapped the menu key enough times in order to display the debug/testing menu options
+				if (tapCount == SHOW_DEBUG_OPTIONS_TAP_LIMIT) {
+					// Get the support fragment manager and begin transaction
+					FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+					// Get the fragment within the menu frame container and toggle the impose debug flag
+					SlidingMenuFragment slidingMenuFragment = (SlidingMenuFragment) getSupportFragmentManager().findFragmentById(R.id.menuFrame_fl);
+					slidingMenuFragment.toggleImposeDebugMenu();
+
+					// At last detach and attach the fragment once more and commit the transaction
+					ft.detach(slidingMenuFragment);
+					ft.attach(slidingMenuFragment);
+					ft.commit();
+				}
+			}
+		}
+
+		return super.onKeyUp(keyCode, event);
 	}
 
 	@Override

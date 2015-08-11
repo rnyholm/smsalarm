@@ -12,6 +12,8 @@
 	<uses-feature android:name="android.hardware.camera.flash" android:required="false"/>
     
 	<uses-permission android:name="com.android.vending.BILLING" />
+	<uses-permission android:name="android.permission.INTERNET" />
+ 	<uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.CALL_PHONE" />
     <uses-permission android:name="android.permission.RECEIVE_SMS" />
     <uses-permission android:name="android.permission.SEND_SMS" />
@@ -32,7 +34,9 @@
     <application android:label="@string/APPLICATION_NAME"
         android:enabled="true"
         android:icon="@drawable/ic_launcher"
-        android:theme="@style/Theme.Sherlock.Light.DarkActionBar" android:allowBackup="false" android:name="ax.ha.it.smsalarm.handler.UpdateHandler">
+        android:theme="@style/Theme.Sherlock.Light.DarkActionBar" 
+        android:allowBackup="false" 
+        android:name="ax.ha.it.smsalarm.application.SmsAlarmApplication">
         <activity android:name="ax.ha.it.smsalarm.activity.Splash" android:label="@string/APPLICATION_NAME" android:noHistory="true" android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

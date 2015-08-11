@@ -1,7 +1,7 @@
 /**
  * Copyright (c) 2014 Robert Nyholm. All rights reserved.
  */
-package ax.ha.it.smsalarm.handler;
+package ax.ha.it.smsalarm.application;
 
 import java.util.List;
 
@@ -10,23 +10,26 @@ import android.content.SharedPreferences;
 import android.content.pm.PackageManager.NameNotFoundException;
 import android.util.Log;
 import ax.ha.it.smsalarm.activity.Acknowledge.AcknowledgeMethod;
+import ax.ha.it.smsalarm.handler.SharedPreferencesHandler;
 import ax.ha.it.smsalarm.handler.SharedPreferencesHandler.DataType;
 import ax.ha.it.smsalarm.handler.SharedPreferencesHandler.PrefKey;
+import ax.ha.it.smsalarm.handler.SoundHandler;
 
 /**
- * Responsible for any <b><i>update actions</i></b>. In other words if some changes has been made in current release of the application that needs to
- * have some code executed(action) done after update that code is managed by this class. Code that needs to be executed after update is placed in
- * {@link #onCreate()} method.<br>
- * To figure out if the application has been updated the <b><i>version code</i></b> is stored in {@link SharedPreferences}, and depending on logic in
- * the {@link #onCreate()} method correct updates are made, if any are needed.<br>
- * If it's a <b><i>new installation</i></b> of Sms Alarm the current version code is stored into shared preferences.
+ * Application class, which have two main purposes:
+ * <p>
+ * <b><i>1.</i></b> Handle any eventual events upon update of application, in practice some code are executed.<br>
+ * <b><i>2.</i></b> Serve as a handler for the Google Analytics tracking services. By setting up the Google Analytics services within the application
+ * it can be accessible through over the application.
  * 
  * @author Robert Nyholm <robert.nyholm@aland.net>
  * @version 2.3.1
  * @since 2.2.1
  */
-public class UpdateHandler extends Application {
-	private static final String LOG_TAG = UpdateHandler.class.getSimpleName();
+public class SmsAlarmApplication extends Application {
+	private static final String LOG_TAG = SmsAlarmApplication.class.getSimpleName();
+
+	private static final String TRACKING_ID = "UA-66160428-1";
 
 	// To handle shared preferences
 	private final SharedPreferencesHandler prefHandler = SharedPreferencesHandler.getInstance();
@@ -44,12 +47,32 @@ public class UpdateHandler extends Application {
 	private int currentVersionCode;
 	private int oldVersionCode;
 
-	@SuppressWarnings("unchecked")
+	/**
+	 * Creates a new instance of {@link SmsAlarmApplication}.
+	 */
+	public SmsAlarmApplication() {
+		super();
+	}
+
 	@Override
 	public void onCreate() {
 		// Very, very important to call onCreate()
 		super.onCreate();
 
+		// Handle updates if needed
+		handleUpdates();
+	}
+
+	/**
+	 * Responsible for any <b><i>update actions</i></b>. In other words if some changes has been made in current release of the application that needs
+	 * to have some code executed(action) done after update that code is managed by this method. Code that needs to be executed after update is placed
+	 * within this method.<br>
+	 * To figure out if the application has been updated the <b><i>version code</i></b> is stored in {@link SharedPreferences}, and depending on logic
+	 * in this method correct updates are made, if any are needed.<br>
+	 * If it's a <b><i>new installation</i></b> of Sms Alarm the current version code is stored into shared preferences.
+	 */
+	@SuppressWarnings("unchecked")
+	private void handleUpdates() {
 		try {
 			// Get both the current and the old version codes, if it's a new installation(no old version code exists)
 			// the default value to be fetched from the shared preferences is set to the current version code

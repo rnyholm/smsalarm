@@ -38,11 +38,29 @@ import com.jeremyfeinstein.slidingmenu.lib.SlidingMenu;
 public class SlidingMenuFragment extends SherlockListFragment {
 	private static final String LOG_TAG = SlidingMenuFragment.class.getSimpleName();
 
+	// A forceful way of displaying the debug/testing menu items
+	private boolean imposeDebugMenu = false;
+
 	/**
 	 * Creates a new instance of {@link SlidingMenuFragment}.
 	 */
 	public SlidingMenuFragment() {
 		// Just empty...
+	}
+
+	/**
+	 * Toggles the state of whether or not the sliding menu fragment being created should contain the Debug/Testing menu items or not. This method is
+	 * of toggling behavior, in other words if the debug menu is imposed if this method is called it's set to not be imposed and vice versa. <br>
+	 * <b><i>Note.</i></b>This method call makes changes that doesn't take the global {@link SmsAlarm#DEBUG} variable in consideration.
+	 */
+	public void toggleImposeDebugMenu() {
+		if (imposeDebugMenu) {
+			imposeDebugMenu = false;
+			Toast.makeText(getActivity(), getString(R.string.DEBUG_TOAST_SAY_BYE_BYE_TO_THE_DEV_WORLD), Toast.LENGTH_LONG).show();
+		} else {
+			imposeDebugMenu = true;
+			Toast.makeText(getActivity(), getString(R.string.DEBUG_TOAST_WELCOME_TO_THE_DEV_WORLD), Toast.LENGTH_LONG).show();
+		}
 	}
 
 	/**
@@ -94,7 +112,7 @@ public class SlidingMenuFragment extends SherlockListFragment {
 		adapter.add(new SlidingMenuItem(303, getString(R.string.ABOUT), R.drawable.ic_menu_about));
 
 		// Build up the testing/debug menu
-		if (SmsAlarm.DEBUG) {
+		if (imposeDebugMenu || SmsAlarm.DEBUG) {
 			adapter.add(new SlidingMenuItem(getString(R.string.DEBUG_MENU_TITLE_DEVELOP)));
 			adapter.add(new SlidingMenuItem(401, getString(R.string.DEBUG_MENU_TITLE_DISPATCH_MOCK_SMS)));
 			adapter.add(new SlidingMenuItem(402, getString(R.string.DEBUG_MENU_TITLE_NOTIFICATION)));
