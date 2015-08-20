@@ -5,15 +5,21 @@ package ax.ha.it.smsalarm.application;
 
 import java.util.List;
 
+import android.app.Activity;
 import android.app.Application;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager.NameNotFoundException;
+import android.support.v4.app.Fragment;
 import android.util.Log;
 import ax.ha.it.smsalarm.activity.Acknowledge.AcknowledgeMethod;
 import ax.ha.it.smsalarm.handler.SharedPreferencesHandler;
 import ax.ha.it.smsalarm.handler.SharedPreferencesHandler.DataType;
 import ax.ha.it.smsalarm.handler.SharedPreferencesHandler.PrefKey;
 import ax.ha.it.smsalarm.handler.SoundHandler;
+
+import com.google.android.gms.analytics.GoogleAnalytics;
+import com.google.android.gms.analytics.HitBuilders;
+import com.google.android.gms.analytics.Tracker;
 
 /**
  * Application class, which have two main purposes:
@@ -25,11 +31,10 @@ import ax.ha.it.smsalarm.handler.SoundHandler;
  * @author Robert Nyholm <robert.nyholm@aland.net>
  * @version 2.3.1
  * @since 2.2.1
+ * @see GoogleAnalyticsHandler
  */
 public class SmsAlarmApplication extends Application {
 	private static final String LOG_TAG = SmsAlarmApplication.class.getSimpleName();
-
-	private static final String TRACKING_ID = "UA-66160428-1";
 
 	// To handle shared preferences
 	private final SharedPreferencesHandler prefHandler = SharedPreferencesHandler.getInstance();
@@ -58,6 +63,9 @@ public class SmsAlarmApplication extends Application {
 	public void onCreate() {
 		// Very, very important to call onCreate()
 		super.onCreate();
+
+		// Initialize google analytics handler as soon as possible in case any exceptions occurs at an early stage
+		GoogleAnalyticsHandler.initialize(this);
 
 		// Handle updates if needed
 		handleUpdates();
@@ -169,6 +177,278 @@ public class SmsAlarmApplication extends Application {
 			Log.e(LOG_TAG + ":onCreate()", "Name of application package could not be found", e);
 		} catch (Exception e) {
 			Log.e(LOG_TAG + ":onCreate()", "An error occurred while handling update actions, version code is not updated. Current version code is: \"" + currentVersionCode + "\", old version code is: \"" + oldVersionCode + "\"", e);
+		}
+	}
+
+	/**
+	 * A handler/utility class for all interaction with Google Analytics. This class should be <code>null</code> safe.<br>
+	 * <b><i>Note.</i></b> It's very important to initialize this class before usage, a hard failure is guaranteed in all other cases!
+	 * 
+	 * @author Robert Nyholm <robert.nyholm@aland.net>
+	 * @version 2.3.1
+	 * @since 2.3.1
+	 */
+	public static class GoogleAnalyticsHandler {
+		/**
+		 * Different possible report rules which can be used in combination with any other more complex you wan't. This report rule decides whether or
+		 * not the associated object should be reported, get it's data anonymized or get the data reported straight of.
+		 * 
+		 * @author Robert Nyholm <robert.nyholm@aland.net>
+		 * @version 2.3.1
+		 * @since 2.3.1
+		 */
+		public enum ReportRule {
+			NO_REPORT, REPORT_ANONYMIZE, REPORT_RAW;
+		}
+
+		/**
+		 * Different possible categories for events. Use this one when sending events to Google Analytics using the {@link Tracker}.<br>
+		 * Each category holds a separate report name, a more readable name. It's this name that get's sent to Google Analytics.
+		 * 
+		 * @author Robert Nyholm <robert.nyholm@aland.net>
+		 * @version 2.3.1
+		 * @since 2.3.1
+		 */
+		public static enum EventCategory {
+			// @formatter:off
+			ACKNOWLEDGE("Acknowledge"),
+			ALARM("Alarm"),
+			SETTINGS("Settings"),
+			USER_INTERFACE("User interface");
+			// @formatter:on
+
+			// Report text of this category
+			private final String reportText;
+
+			/**
+			 * Creates a new {@link EventCategory} with given report text.
+			 * 
+			 * @param reportText
+			 *            Report text of <code>EventCategory</code>.
+			 */
+			private EventCategory(String reportText) {
+				this.reportText = reportText;
+			}
+
+			/**
+			 * Get the report text of this {@link EventCategory}.
+			 * 
+			 * @return The report text.
+			 */
+			public String getReportText() {
+				return reportText;
+			}
+		}
+
+		/**
+		 * Different possible actions for events. Use this one when sending events to Google Analytics using the {@link Tracker}.<br>
+		 * Each action holds a separate report name, a more readable name. It's this name that get's sent to Google Analytics.
+		 * 
+		 * @author Robert Nyholm <robert.nyholm@aland.net>
+		 * @version 2.3.1
+		 * @since 2.3.1
+		 */
+		public static enum EventAction {
+			// @formatter:off
+			ALARM_TRIGGERED("Alarm of any type triggered"),
+			ACKNOWLEDGE_DONE("Acknowledgement done"),
+			DEBUG_MENU_TOGGLE("Debug menu toggle"),
+			SECONDARY_ALARM_TRIGGERED("Secondary alarm triggered"),
+			SETTINGS_CHANGED("Settings changed"),
+			PRIMARY_ALARM_TRIGGERED("Primary alarm triggered"),
+			WIDGET_INTERACTION("Widget interaction");
+			// @formatter:on
+
+			// Report text of this action
+			private final String reportText;
+
+			/**
+			 * Creates a new {@link EventAction} with given report text.
+			 * 
+			 * @param reportText
+			 *            Report text of <code>EventAction</code>.
+			 */
+			private EventAction(String reportText) {
+				this.reportText = reportText;
+			}
+
+			/**
+			 * Get the report text of this {@link EventAction}.
+			 * 
+			 * @return The report text.
+			 */
+			public String getReportText() {
+				return reportText;
+			}
+		}
+
+		// The Google Analytics tracking ID
+		private static final String TRACKING_ID = "UA-66577026-1";
+
+		// Need objects for Google Analytics and tracker
+		private static GoogleAnalytics analytics;
+		private static Tracker tracker;
+
+		/**
+		 * To initialize {@link GoogleAnalytics} and {@link Tracker} objects within this {@link GoogleAnalyticsHandler}. <br>
+		 * <b><i>Note.</i></b> It's mandatory to run this method before any usage of the handler can be made.
+		 * 
+		 * @param application
+		 *            {@link Application} from where to get a instance of <code>GoogleAnalytics</code>.
+		 */
+		private static void initialize(Application application) {
+			// Setup Google Analytics...
+			analytics = GoogleAnalytics.getInstance(application);
+			analytics.setLocalDispatchPeriod(1800);
+			analytics.setDryRun(false);
+
+			// ...and the tracker
+			tracker = analytics.newTracker(TRACKING_ID);
+			tracker.enableExceptionReporting(true);
+			tracker.enableAutoActivityTracking(true);
+			tracker.setSampleRate(100.0);
+		}
+
+		/**
+		 * To access the global Google Analytics singleton.
+		 * 
+		 * @return Global singleton instance of Google Analytics as a {@link GoogleAnalytics} object.
+		 * @throws IllegalStateException
+		 *             in case <code>GoogleAnalytics</code> is'nt correctly instantiated.
+		 */
+		public static GoogleAnalytics analytics() throws IllegalStateException {
+			if (analytics == null) {
+				throw new IllegalStateException("GoogleAnalytics not instantiated");
+			}
+
+			return analytics;
+		}
+
+		/**
+		 * To access the application tracker.
+		 * 
+		 * @return Application tracker instance as a {@link Tracker} object.
+		 * @throws IllegalStateException
+		 *             in case <code>Tracker</code> is'nt correctly instantiated.
+		 */
+		public static Tracker tracker() throws IllegalStateException {
+			if (tracker == null) {
+				throw new IllegalStateException("Tracker not instantiated");
+			}
+
+			return tracker;
+		}
+
+		/**
+		 * Convenience method to report given {@link Activity} as started through {@link GoogleAnalytics}.
+		 * 
+		 * @param activity
+		 *            <code>Activity</code> which will be reported as started.
+		 */
+		public static void reportActivityStart(Activity activity) {
+			if (activity != null) {
+				analytics().reportActivityStart(activity);
+			}
+		}
+
+		/**
+		 * Convenience method to report given {@link Activity} as stopped through {@link GoogleAnalytics}.
+		 * 
+		 * @param activity
+		 *            <code>Activity</code> which will be reported as stopped.
+		 */
+		public static void reportActivityStop(Activity activity) {
+			if (activity != null) {
+				analytics().reportActivityStop(activity);
+			}
+		}
+
+		/**
+		 * Convenience method to set screen name of {@link Tracker} and send a screen view hit to Google Analytics.
+		 * 
+		 * @param activity
+		 *            {@link Activity} which name will be set as screen name.
+		 */
+		public static void setScreenNameAndSendScreenViewHit(Activity activity) {
+			if (activity != null) {
+				tracker().setScreenName(activity.getClass().getName());
+				tracker().send(new HitBuilders.ScreenViewBuilder().build());
+			}
+		}
+
+		/**
+		 * Convenience method to set screen name of {@link Tracker} and send a screen view hit to Google Analytics.
+		 * 
+		 * @param fragment
+		 *            {@link Fragment} which name will be set as screen name.
+		 */
+		public static void setScreenNameAndSendScreenViewHit(Fragment fragment) {
+			if (fragment != null) {
+				tracker().setScreenName(fragment.getClass().getName());
+				tracker().send(new HitBuilders.ScreenViewBuilder().build());
+			}
+		}
+
+		/**
+		 * Convenience method to send an event to Google Analytics through the {@link Tracker}.
+		 * 
+		 * @param eventCategory
+		 *            {@link EventCategory} of the event.
+		 * @param eventAction
+		 *            {@link EventAction} of the event.
+		 * @param label
+		 *            Label of the event.
+		 */
+		public static void sendEvent(EventCategory eventCategory, EventAction eventAction, String label) {
+			if (eventCategory != null && eventAction != null && label != null) {
+				tracker().send(new HitBuilders.EventBuilder(eventCategory.getReportText(), eventAction.getReportText()).setLabel(label).build());
+			}
+		}
+
+		/**
+		 * Convenience method to send an event to Google Analytics telling some {@link SharedPreferences} has changed, and in case the data should be
+		 * reported to Google Analytics that data will be sent as well, see {@link ReportRule} for more info about that.
+		 * 
+		 * @param prefs
+		 *            <code>SharedPreferences</code> from which object changed will be fetched from.
+		 * @param key
+		 *            Key in <code>SharedPreferences</code> which object has changed.
+		 */
+		public static void sendSettingsChangedEvent(SharedPreferences prefs, String key) {
+			if (prefs != null && key != null) {
+				// Resolve the key
+				PrefKey changedPrefKey = PrefKey.of(key);
+
+				// Figure out if the changed preferences on this key should be reported to Google Analytics
+				if (!ReportRule.NO_REPORT.equals(changedPrefKey.getReportRule())) {
+
+					// Sanity control in case wrong PrefKey was resolved
+					if (prefs.contains(changedPrefKey.getKey())) {
+						// Fetch the object
+						Object object = prefs.getAll().get(changedPrefKey.getKey());
+
+						// When integers or booleans are reported, we don't take the ReportRule.REPORT_ANONYMIZE in consideration. We also don't
+						// need to cast anything as String.valueOf() will work fine for bare objects of these classes
+						if (object instanceof Integer || object instanceof Boolean) {
+							// Special handling for this shared preference, we want to send a resolved name for the acknowledge method, not the
+							// integer which is stored
+							if (PrefKey.ACK_METHOD_KEY.equals(changedPrefKey) && object instanceof Integer) {
+								object = AcknowledgeMethod.of((Integer) object).getReportText();
+							}
+							tracker().send(new HitBuilders.EventBuilder(EventCategory.SETTINGS.getReportText(), EventAction.SETTINGS_CHANGED.getReportText()).setLabel(changedPrefKey.getReportText() + ": " + String.valueOf(object)).build());
+						} else if (object instanceof String) { // Lists will be treated as strings as well
+							// Figure out if the data should be reported straight of or not
+							if (ReportRule.REPORT_RAW.equals(changedPrefKey.getReportRule())) {
+								tracker().send(new HitBuilders.EventBuilder(EventCategory.SETTINGS.getReportText(), EventAction.SETTINGS_CHANGED.getReportText()).setLabel(changedPrefKey.getReportText() + ": " + String.valueOf(object)).build());
+							} else {
+								// Translate string to true or false, if string contains any real data then send true else false
+								boolean used = ((String) object).length() > 0 ? true : false;
+								tracker().send(new HitBuilders.EventBuilder(EventCategory.SETTINGS.getReportText(), EventAction.SETTINGS_CHANGED.getReportText()).setLabel(changedPrefKey.getReportText() + ": " + String.valueOf(used)).build());
+							}
+						}
+					}
+				}
+			}
 		}
 	}
 }

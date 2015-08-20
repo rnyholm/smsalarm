@@ -29,6 +29,9 @@ import android.widget.TextView;
 import android.widget.Toast;
 import ax.ha.it.smsalarm.R;
 import ax.ha.it.smsalarm.alarm.Alarm;
+import ax.ha.it.smsalarm.application.SmsAlarmApplication.GoogleAnalyticsHandler;
+import ax.ha.it.smsalarm.application.SmsAlarmApplication.GoogleAnalyticsHandler.EventAction;
+import ax.ha.it.smsalarm.application.SmsAlarmApplication.GoogleAnalyticsHandler.EventCategory;
 import ax.ha.it.smsalarm.handler.DatabaseHandler;
 import ax.ha.it.smsalarm.handler.SharedPreferencesHandler;
 import ax.ha.it.smsalarm.handler.SharedPreferencesHandler.DataType;
@@ -55,11 +58,33 @@ public class Acknowledge extends Activity {
 	 */
 	public enum AcknowledgeMethod {
 		// @formatter:off
-		CALL, 
-		SMS, 
-		RETURN_RECEIVED_SMS,
-		UNDEFINED;
+		CALL("Place phone call"), 
+		SMS("Send SMS"), 
+		RETURN_RECEIVED_SMS("Return received SMS"),
+		UNDEFINED("Undefined");
 		// @formatter:on
+
+		// The report text of this AcknowledgeMethod
+		private final String reportText;
+
+		/**
+		 * Creates a new {@link AcknowledgeMethod}.
+		 * 
+		 * @param reportText
+		 *            Text of this <code>AcknowledgeMethod</code> which will be sent to Google Analytics.
+		 */
+		private AcknowledgeMethod(String reportText) {
+			this.reportText = reportText;
+		}
+
+		/**
+		 * To get the text of this {@link AcknowledgeMethod} which will be used when data are sent to Google Analytics.
+		 * 
+		 * @return The <code>reportText</code>
+		 */
+		public String getReportText() {
+			return reportText;
+		}
 
 		/**
 		 * To resolve the correct {@link AcknowledgeMethod} from given numerical value. If an unsupported value is given as parameter a enumeration of
@@ -87,6 +112,11 @@ public class Acknowledge extends Activity {
 
 	// Actions for monitoring SMS sent statuses
 	public static final String ACTION_SMS_SENT = "ax.ha.it.smsalarm.SMS_SENT";
+
+	// Some different labels used when sending events to Google Analytics
+	private static final String ACKNOWLEDGEMENT_DONE_BY_PHONE_CALL_LABEL = "Acknowledgement done by phone call";
+	private static final String ACKNOWLEDGEMENT_DONE_BY_SMS_LABEL = "Acknowledgement done by SMS";
+	private static final String ACKNOWLEDGEMENT_DONE_BY_RETURNING_RECEIVED_SMS_LABEL = "Acknowledgement done by returning received SMS";
 
 	// To handle the shared preferences
 	private final SharedPreferencesHandler prefHandler = SharedPreferencesHandler.getInstance();
@@ -192,6 +222,9 @@ public class Acknowledge extends Activity {
 
 							// Place the acknowledge call
 							placeAcknowledgeCall();
+
+							// Report acknowledgement event to Google Analytics
+							GoogleAnalyticsHandler.sendEvent(EventCategory.ACKNOWLEDGE, EventAction.ACKNOWLEDGE_DONE, ACKNOWLEDGEMENT_DONE_BY_PHONE_CALL_LABEL);
 						} else { // No phone number to acknowledge to exists, show toast
 							Toast.makeText(Acknowledge.this, getString(R.string.TOAST_CANNOT_ACKNOWLEDGE_NO_PHONE_NUMBER_EXISTS), Toast.LENGTH_LONG).show();
 						}
@@ -201,10 +234,12 @@ public class Acknowledge extends Activity {
 						// Send the SMS with user given information, data validation of acknowledge number and message will be done within send
 						// message method as well as the internal acknowledgement
 						sendSMS(acknowledgeNumber, acknowledgeMessage);
+						GoogleAnalyticsHandler.sendEvent(EventCategory.ACKNOWLEDGE, EventAction.ACKNOWLEDGE_DONE, ACKNOWLEDGEMENT_DONE_BY_SMS_LABEL);
 						break;
 					case RETURN_RECEIVED_SMS:
 						// Send the SMS with information from received alarm
 						sendSMS(alarm.getSender(), alarm.getMessage());
+						GoogleAnalyticsHandler.sendEvent(EventCategory.ACKNOWLEDGE, EventAction.ACKNOWLEDGE_DONE, ACKNOWLEDGEMENT_DONE_BY_RETURNING_RECEIVED_SMS_LABEL);
 						break;
 					default:
 						Log.e(LOG_TAG + ":onCreate()", "An unhandled acknowledge method has occurred, can't decide what to do. Acknowledge method:\"" + acknowledgeMethod.toString() + "\"");
@@ -218,7 +253,7 @@ public class Acknowledge extends Activity {
 	 * it's needed to place yet another call, because it's sure that this object already has placed a call that didn't get through.
 	 */
 	@Override
-	public void onResume() {
+	protected void onResume() {
 		super.onResume();
 
 		// If, and only if, we already have placed a call
@@ -243,6 +278,9 @@ public class Acknowledge extends Activity {
 				}
 			}.start();
 		}
+
+		// Set the screen name and send screen view hit
+		GoogleAnalyticsHandler.setScreenNameAndSendScreenViewHit(this);
 	}
 
 	@Override
@@ -252,6 +290,8 @@ public class Acknowledge extends Activity {
 		// Initialize the receiver and register it for catching SMS sent results
 		smsSentReceiver = new SmsSentReceiver();
 		registerReceiver(smsSentReceiver, new IntentFilter(ACTION_SMS_SENT));
+
+		GoogleAnalyticsHandler.reportActivityStart(this);
 	}
 
 	@Override
@@ -260,6 +300,8 @@ public class Acknowledge extends Activity {
 
 		// IMPORTANT! Remember to unregister the receiver in order to prevent memory leaks
 		unregisterReceiver(smsSentReceiver);
+
+		GoogleAnalyticsHandler.reportActivityStop(this);
 	}
 
 	/**

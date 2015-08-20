@@ -11,6 +11,7 @@ import ax.ha.it.smsalarm.alarm.Alarm;
 import ax.ha.it.smsalarm.alarm.Alarm.AlarmType;
 import ax.ha.it.smsalarm.alarm.log.adapter.AlarmLogItemAdapter;
 import ax.ha.it.smsalarm.alarm.log.model.AlarmLogItem;
+import ax.ha.it.smsalarm.application.SmsAlarmApplication.GoogleAnalyticsHandler;
 
 /**
  * An extension of {@link AlarmLogFragment}, which holds exactly the same logic and functionality as it's superclass. The only difference is that this
@@ -23,6 +24,15 @@ import ax.ha.it.smsalarm.alarm.log.model.AlarmLogItem;
  * @see PrimaryAlarmLogFragment
  */
 public class SecondaryAlarmLogFragment extends AlarmLogFragment {
+
+	@Override
+	public void onResume() {
+		super.onResume();
+
+		// Set correct screen name and send hit to Google Analytics
+		GoogleAnalyticsHandler.setScreenNameAndSendScreenViewHit(this);
+	}
+
 	/**
 	 * To complete the creation of a {@link AlarmLogFragment} object by setting correct adapter({@link AlarmLogItemAdapter}) and populate the
 	 * <code>AlarmLogFragment</code> with {@link AlarmLogItem}'s, containing {@link Alarm}'s of {@link AlarmType#SECONDARY}.

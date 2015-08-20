@@ -15,10 +15,14 @@ import android.view.Window;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import ax.ha.it.smsalarm.R;
+import ax.ha.it.smsalarm.application.SmsAlarmApplication.GoogleAnalyticsHandler;
+import ax.ha.it.smsalarm.application.SmsAlarmApplication.GoogleAnalyticsHandler.EventAction;
+import ax.ha.it.smsalarm.application.SmsAlarmApplication.GoogleAnalyticsHandler.EventCategory;
 import ax.ha.it.smsalarm.fragment.dialog.EulaDialog;
 import ax.ha.it.smsalarm.handler.SharedPreferencesHandler;
 import ax.ha.it.smsalarm.handler.SharedPreferencesHandler.DataType;
 import ax.ha.it.smsalarm.handler.SharedPreferencesHandler.PrefKey;
+import ax.ha.it.smsalarm.provider.WidgetProvider;
 
 /**
  * Activity just to show splash screen and after a certain time or a tap on screen activity switch to activity {@link SmsAlarm}.<br>
@@ -30,6 +34,9 @@ import ax.ha.it.smsalarm.handler.SharedPreferencesHandler.PrefKey;
  * @since 2.1
  */
 public class Splash extends FragmentActivity {
+	// Action indicating that the Splash was opened through the widget
+	public static final String ACTION_REPORT_OPENED_THROUGH_WIDGET = "ax.ha.it.smsalarm.REPORT_OPENED_THROUGH_WIDGET";
+
 	// To handle the shared preferences
 	private final SharedPreferencesHandler prefHandler = SharedPreferencesHandler.getInstance();
 
@@ -89,6 +96,11 @@ public class Splash extends FragmentActivity {
 			EulaDialog dialog = new EulaDialog();
 			dialog.show(getSupportFragmentManager(), EulaDialog.EULA_DIALOG_TAG);
 		}
+
+		// Report that the application was opened through the widget
+		if (getIntent() != null && ACTION_REPORT_OPENED_THROUGH_WIDGET.equals(getIntent().getAction())) {
+			GoogleAnalyticsHandler.sendEvent(EventCategory.USER_INTERFACE, EventAction.WIDGET_INTERACTION, WidgetProvider.OPEN_SMS_ALARM_LABEL);
+		}
 	}
 
 	/**
@@ -113,6 +125,20 @@ public class Splash extends FragmentActivity {
 		finish();
 	}
 
+	@Override
+	protected void onStart() {
+		super.onStart();
+
+		GoogleAnalyticsHandler.reportActivityStart(this);
+	};
+
+	@Override
+	protected void onResume() {
+		super.onResume();
+
+		GoogleAnalyticsHandler.setScreenNameAndSendScreenViewHit(this);
+	}
+
 	/**
 	 * Removes messages from handler when application pauses.
 	 * 
@@ -123,6 +149,13 @@ public class Splash extends FragmentActivity {
 		super.onPause();
 		removeMessagesFromHandler();
 	}
+
+	@Override
+	protected void onStop() {
+		super.onStop();
+
+		GoogleAnalyticsHandler.reportActivityStop(this);
+	};
 
 	/**
 	 * So switch activity to {@link SmsAlarm}.

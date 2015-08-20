@@ -28,6 +28,7 @@ import android.widget.RelativeLayout.LayoutParams;
 import android.widget.TextView;
 import android.widget.Toast;
 import ax.ha.it.smsalarm.R;
+import ax.ha.it.smsalarm.application.SmsAlarmApplication.GoogleAnalyticsHandler;
 import ax.ha.it.smsalarm.fragment.dialog.AlarmSignalDialog;
 import ax.ha.it.smsalarm.fragment.dialog.AlarmVibrationDialog;
 import ax.ha.it.smsalarm.handler.SharedPreferencesHandler;
@@ -106,6 +107,14 @@ public class SoundSettingsFragment extends SherlockFragment implements Applicati
 
 		// Set context here, it's safe because this fragment has been attached to its container, hence we have access to context
 		context = getActivity();
+	}
+
+	@Override
+	public void onResume() {
+		super.onResume();
+
+		// Set correct screen name and send hit to Google Analytics
+		GoogleAnalyticsHandler.setScreenNameAndSendScreenViewHit(this);
 	}
 
 	@Override

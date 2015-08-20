@@ -9,6 +9,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 import ax.ha.it.smsalarm.R;
+import ax.ha.it.smsalarm.application.SmsAlarmApplication.GoogleAnalyticsHandler;
 
 import com.actionbarsherlock.app.SherlockFragment;
 
@@ -26,6 +27,14 @@ public class AboutFragment extends SherlockFragment {
 	 */
 	public AboutFragment() {
 		// Just empty...
+	}
+
+	@Override
+	public void onResume() {
+		super.onResume();
+
+		// Set correct screen name and send hit to Google Analytics
+		GoogleAnalyticsHandler.setScreenNameAndSendScreenViewHit(this);
 	}
 
 	@Override

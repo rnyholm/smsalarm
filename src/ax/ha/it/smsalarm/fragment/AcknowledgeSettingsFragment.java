@@ -31,6 +31,7 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import ax.ha.it.smsalarm.R;
 import ax.ha.it.smsalarm.activity.Acknowledge.AcknowledgeMethod;
+import ax.ha.it.smsalarm.application.SmsAlarmApplication.GoogleAnalyticsHandler;
 import ax.ha.it.smsalarm.fragment.dialog.AcknowledgeMessageDialog;
 import ax.ha.it.smsalarm.fragment.dialog.AcknowledgeNumberDialog;
 import ax.ha.it.smsalarm.handler.SharedPreferencesHandler;
@@ -96,6 +97,14 @@ public class AcknowledgeSettingsFragment extends SherlockFragment implements App
 
 		// Set context here, it's safe because this fragment has been attached to its container, hence we have access to context
 		context = getActivity();
+	}
+
+	@Override
+	public void onResume() {
+		super.onResume();
+
+		// Set correct screen name and send hit to Google Analytics
+		GoogleAnalyticsHandler.setScreenNameAndSendScreenViewHit(this);
 	}
 
 	@Override

@@ -23,6 +23,7 @@ import ax.ha.it.smsalarm.alarm.Alarm;
 import ax.ha.it.smsalarm.alarm.Alarm.AlarmType;
 import ax.ha.it.smsalarm.alarm.log.adapter.AlarmLogItemAdapter;
 import ax.ha.it.smsalarm.alarm.log.model.AlarmLogItem;
+import ax.ha.it.smsalarm.application.SmsAlarmApplication.GoogleAnalyticsHandler;
 import ax.ha.it.smsalarm.fragment.dialog.AlarmInfoDialog;
 import ax.ha.it.smsalarm.handler.DatabaseHandler;
 import ax.ha.it.smsalarm.handler.SharedPreferencesHandler;
@@ -55,6 +56,14 @@ public class AlarmLogFragment extends SherlockListFragment {
 	 */
 	public AlarmLogFragment() {
 		// Just empty...
+	}
+
+	@Override
+	public void onResume() {
+		super.onResume();
+
+		// Set correct screen name and send hit to Google Analytics
+		GoogleAnalyticsHandler.setScreenNameAndSendScreenViewHit(this);
 	}
 
 	/**

@@ -27,6 +27,7 @@ import android.widget.RelativeLayout;
 import android.widget.RelativeLayout.LayoutParams;
 import android.widget.TextView;
 import ax.ha.it.smsalarm.R;
+import ax.ha.it.smsalarm.application.SmsAlarmApplication.GoogleAnalyticsHandler;
 import ax.ha.it.smsalarm.fragment.dialog.OrganizationDialog;
 import ax.ha.it.smsalarm.handler.CameraHandler;
 import ax.ha.it.smsalarm.handler.SharedPreferencesHandler;
@@ -95,6 +96,14 @@ public class OtherSettingsFragment extends SherlockFragment implements Applicati
 		context = getActivity();
 		// Check the support for flash notification and store the result
 		flashNotificationSupportError = checkFlashNotificationSupport();
+	}
+
+	@Override
+	public void onResume() {
+		super.onResume();
+
+		// Set correct screen name and send hit to Google Analytics
+		GoogleAnalyticsHandler.setScreenNameAndSendScreenViewHit(this);
 	}
 
 	@Override

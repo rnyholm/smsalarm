@@ -15,6 +15,9 @@ import android.widget.ListView;
 import android.widget.Toast;
 import ax.ha.it.smsalarm.R;
 import ax.ha.it.smsalarm.activity.SmsAlarm;
+import ax.ha.it.smsalarm.application.SmsAlarmApplication.GoogleAnalyticsHandler;
+import ax.ha.it.smsalarm.application.SmsAlarmApplication.GoogleAnalyticsHandler.EventAction;
+import ax.ha.it.smsalarm.application.SmsAlarmApplication.GoogleAnalyticsHandler.EventCategory;
 import ax.ha.it.smsalarm.fragment.dialog.ConfirmInsertMockAlarmsDialog;
 import ax.ha.it.smsalarm.fragment.dialog.ConfirmMockSharedPreferencesDialog;
 import ax.ha.it.smsalarm.fragment.dialog.MockSmsDialog;
@@ -38,6 +41,9 @@ import com.jeremyfeinstein.slidingmenu.lib.SlidingMenu;
 public class SlidingMenuFragment extends SherlockListFragment {
 	private static final String LOG_TAG = SlidingMenuFragment.class.getSimpleName();
 
+	// Label used for events sent to Google Analytics
+	private static final String DEBUG_MENU_FORCED_SHOW_LABEL = "Debug menu forced to show";
+
 	// A forceful way of displaying the debug/testing menu items
 	private boolean imposeDebugMenu = false;
 
@@ -46,6 +52,14 @@ public class SlidingMenuFragment extends SherlockListFragment {
 	 */
 	public SlidingMenuFragment() {
 		// Just empty...
+	}
+
+	@Override
+	public void onResume() {
+		super.onResume();
+
+		// Set correct screen name and send hit to Google Analytics
+		GoogleAnalyticsHandler.setScreenNameAndSendScreenViewHit(this);
 	}
 
 	/**
@@ -60,6 +74,9 @@ public class SlidingMenuFragment extends SherlockListFragment {
 		} else {
 			imposeDebugMenu = true;
 			Toast.makeText(getActivity(), getString(R.string.DEBUG_TOAST_WELCOME_TO_THE_DEV_WORLD), Toast.LENGTH_LONG).show();
+
+			// Report to Google Analytics that debug menu has been imposed to show
+			GoogleAnalyticsHandler.sendEvent(EventCategory.USER_INTERFACE, EventAction.DEBUG_MENU_TOGGLE, DEBUG_MENU_FORCED_SHOW_LABEL);
 		}
 	}
 

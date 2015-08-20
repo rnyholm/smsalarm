@@ -11,6 +11,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ListView;
 import ax.ha.it.smsalarm.R;
+import ax.ha.it.smsalarm.application.SmsAlarmApplication.GoogleAnalyticsHandler;
 import ax.ha.it.smsalarm.license.adapter.LicenseItemAdapter;
 import ax.ha.it.smsalarm.license.model.LicenseItem;
 import ax.ha.it.smsalarm.util.Utils;
@@ -34,6 +35,14 @@ public class OpenSourceFragment extends SherlockListFragment {
 	 */
 	public OpenSourceFragment() {
 		// Just empty...
+	}
+
+	@Override
+	public void onResume() {
+		super.onResume();
+
+		// Set correct screen name and send hit to Google Analytics
+		GoogleAnalyticsHandler.setScreenNameAndSendScreenViewHit(this);
 	}
 
 	/**

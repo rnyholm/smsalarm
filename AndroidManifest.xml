@@ -1,6 +1,6 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="ax.ha.it.smsalarm"
-    android:versionCode="23"
+    android:versionCode="24"
     android:versionName="2.3.1beta">
 
     <instrumentation android:targetPackage="ax.ha.it.smsalarm" android:name="android.test.InstrumentationTestRunner"/>
@@ -37,6 +37,11 @@
         android:theme="@style/Theme.Sherlock.Light.DarkActionBar" 
         android:allowBackup="false" 
         android:name="ax.ha.it.smsalarm.application.SmsAlarmApplication">
+        
+        <meta-data
+      		android:name="com.google.android.gms.version"
+     		android:value="@integer/google_play_services_version" />
+        
         <activity android:name="ax.ha.it.smsalarm.activity.Splash" android:label="@string/APPLICATION_NAME" android:noHistory="true" android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -61,9 +66,16 @@
                	<action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
            	</intent-filter>
            	<meta-data android:name="android.appwidget.provider"
-               	android:resource="@xml/widget_configuration" />
+               	android:resource="@xml/widget_config" />
        	</receiver> 
        	<receiver android:name="ax.ha.it.smsalarm.receiver.NotificationReceiver" />
+    	<receiver android:name="com.google.android.gms.analytics.AnalyticsReceiver" android:enabled="true">
+      		<intent-filter>
+        		<action android:name="com.google.android.gms.analytics.ANALYTICS_DISPATCH" />
+      		</intent-filter>
+    	</receiver>
+
+       	<service android:name="com.google.android.gms.analytics.AnalyticsService" android:enabled="true" android:exported="false"/>
         <service android:name="ax.ha.it.smsalarm.service.NotificationService"></service>   
         <service android:name="ax.ha.it.smsalarm.service.AcknowledgeNotificationService"></service>
         <service android:name="ax.ha.it.smsalarm.service.FlashNotificationService"></service>

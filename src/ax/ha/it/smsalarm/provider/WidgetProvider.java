@@ -16,6 +16,9 @@ import ax.ha.it.smsalarm.R;
 import ax.ha.it.smsalarm.activity.SmsAlarm;
 import ax.ha.it.smsalarm.activity.Splash;
 import ax.ha.it.smsalarm.alarm.Alarm;
+import ax.ha.it.smsalarm.application.SmsAlarmApplication.GoogleAnalyticsHandler;
+import ax.ha.it.smsalarm.application.SmsAlarmApplication.GoogleAnalyticsHandler.EventAction;
+import ax.ha.it.smsalarm.application.SmsAlarmApplication.GoogleAnalyticsHandler.EventCategory;
 import ax.ha.it.smsalarm.handler.DatabaseHandler;
 import ax.ha.it.smsalarm.handler.SharedPreferencesHandler;
 import ax.ha.it.smsalarm.handler.SharedPreferencesHandler.DataType;
@@ -33,6 +36,12 @@ public class WidgetProvider extends AppWidgetProvider {
 	// To get access to shared preferences and database
 	private final SharedPreferencesHandler prefHandler = SharedPreferencesHandler.getInstance();
 	private DatabaseHandler db;
+
+	// Some different labels used when sending events to Google Analytics
+	private static final String SMS_ALARM_ACTIVE_STATE_CHANGED_LABEL = "Sms Alarm active state changed";
+	private static final String USE_OPERATING_SYSTEMS_SOUND_SETTINGS_CHANGED_LABEL = "Use operating systems sound settings changed";
+	public static final String OPEN_ALARM_LOG_LABEL = "Alarm log opened";
+	public static final String OPEN_SMS_ALARM_LABEL = "Sms Alarm opened";
 
 	// Max length of the latest alarm length in widget
 	private static final int ALARM_TEXT_MAX_LENGTH = 100;
@@ -78,6 +87,9 @@ public class WidgetProvider extends AppWidgetProvider {
 
 			// Update widget
 			WidgetProvider.updateWidgets(context);
+
+			// Report event to Google Analytics
+			GoogleAnalyticsHandler.sendEvent(EventCategory.USER_INTERFACE, EventAction.WIDGET_INTERACTION, SMS_ALARM_ACTIVE_STATE_CHANGED_LABEL);
 		} else if (TOGGLE_USE_OS_SOUND_SETTINGS.equals(intent.getAction())) {
 			if (useOsSoundSettings) {
 				setUseOsSoundSettingsPref(context, false);
@@ -86,6 +98,7 @@ public class WidgetProvider extends AppWidgetProvider {
 			}
 
 			WidgetProvider.updateWidgets(context);
+			GoogleAnalyticsHandler.sendEvent(EventCategory.USER_INTERFACE, EventAction.WIDGET_INTERACTION, USE_OPERATING_SYSTEMS_SOUND_SETTINGS_CHANGED_LABEL);
 		} else if (UPDATE_WIDGETS.equals(intent.getAction())) {
 			// Call onUpdate to update the widget instances
 			onUpdate(context, manager, AppWidgetManager.getInstance(context).getAppWidgetIds(new ComponentName(context.getPackageName(), getClass().getName())));
@@ -112,6 +125,7 @@ public class WidgetProvider extends AppWidgetProvider {
 			// Set intent to start Sms Alarm and wrap it into a pending intent, rest of the intents
 			// are configured in the same way
 			Intent smsAlarmIntent = new Intent(context, Splash.class);
+			smsAlarmIntent.setAction(Splash.ACTION_REPORT_OPENED_THROUGH_WIDGET);
 			smsAlarmIntent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, appWidgetIds[i]);
 			PendingIntent smsAlarmPendingIntent = PendingIntent.getActivity(context, 0, smsAlarmIntent, PendingIntent.FLAG_UPDATE_CURRENT);
 

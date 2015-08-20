@@ -33,6 +33,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 import ax.ha.it.smsalarm.R;
 import ax.ha.it.smsalarm.activity.SmsAlarm;
+import ax.ha.it.smsalarm.application.SmsAlarmApplication.GoogleAnalyticsHandler;
 import ax.ha.it.smsalarm.fragment.dialog.ConfirmDonationDialog;
 import ax.ha.it.smsalarm.util.Logger;
 import ax.ha.it.smsalarm.vending.billing.util.IabHelper;
@@ -145,6 +146,14 @@ public class AppreciationFragment extends SherlockFragment implements Applicatio
 				}
 			}
 		});
+	}
+
+	@Override
+	public void onResume() {
+		super.onResume();
+
+		// Set correct screen name and send hit to Google Analytics
+		GoogleAnalyticsHandler.setScreenNameAndSendScreenViewHit(this);
 	}
 
 	@Override

@@ -6,7 +6,6 @@ package ax.ha.it.smsalarm.util;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.atomic.AtomicInteger;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -14,9 +13,7 @@ import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
-import android.os.Build;
 import android.util.Log;
-import android.view.View;
 
 /**
  * Utility class containing different utilities and helper method.<br>
@@ -35,9 +32,6 @@ public class Utils {
 
 	// Max length of single SMS
 	public static final int SINGLE_SMS_MAX_CHARACTERS = 160;
-
-	// Used when figuring out unique View ID's
-	private static final AtomicInteger sNextGeneratedId = new AtomicInteger(1);
 
 	/**
 	 * To check if given <code>String</code> exists in given <code>List</code> of <code>Strings</code>.<br>
@@ -203,37 +197,6 @@ public class Utils {
 		}
 
 		return strippedString;
-	}
-
-	/**
-	 * To generate a <b><i>unique</i></b> ID to be used for different {@link View}'s. <br>
-	 * This method is compatible with <b><i>all</i></b> API-versions, but if current build SDK is at a minimum level of <b><i>Jelly Bean(17)</i></b>
-	 * then the API provided method {@link View#generateViewId()} will be used to get a unique <code>View</code> ID. If API level is lower then the
-	 * previously mentioned one the ID will be generated with i "trial and error" approach.
-	 * <p>
-	 * Snatched from StackOverflow: http://stackoverflow.com/questions/1714297/android-view-setidint-id-programmatically-how-to-avoid-id-conflicts
-	 * 
-	 * @return Unique {@link Integer} to be used as an ID in different <code>View</code>'s.
-	 */
-	@SuppressLint("NewApi")
-	public static int generateViewId() {
-		// SDK's below Jelly Bean MR1 doen's support view ID generation, hence it's needed to be generated this way
-		if (Build.VERSION.SDK_INT < Build.VERSION_CODES.JELLY_BEAN_MR1) {
-			for (;;) {
-				final int result = sNextGeneratedId.get();
-				// AAPT-generated IDs have the high byte nonzero; clamp to the range under that.
-				int newValue = result + 1;
-
-				if (newValue > 0x00FFFFFF) {
-					newValue = 1; // Roll over to 1, not 0.
-				}
-				if (sNextGeneratedId.compareAndSet(result, newValue)) {
-					return result;
-				}
-			}
-		}
-
-		return View.generateViewId();
 	}
 
 	/**

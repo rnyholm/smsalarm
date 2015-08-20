@@ -21,6 +21,7 @@ import android.widget.Button;
 import android.widget.Spinner;
 import android.widget.Toast;
 import ax.ha.it.smsalarm.R;
+import ax.ha.it.smsalarm.application.SmsAlarmApplication.GoogleAnalyticsHandler;
 import ax.ha.it.smsalarm.fragment.dialog.AddFreeTextDialog;
 import ax.ha.it.smsalarm.fragment.dialog.EditFreeTextDialog;
 import ax.ha.it.smsalarm.fragment.dialog.RemoveFreeTextDialog;
@@ -79,6 +80,14 @@ public class FreeTextSettingsFragment extends SherlockFragment implements Applic
 
 		// Set context here, it's safe because this fragment has been attached to its container, hence we have access to context
 		context = getActivity();
+	}
+
+	@Override
+	public void onResume() {
+		super.onResume();
+
+		// Set correct screen name and send hit to Google Analytics
+		GoogleAnalyticsHandler.setScreenNameAndSendScreenViewHit(this);
 	}
 
 	@Override

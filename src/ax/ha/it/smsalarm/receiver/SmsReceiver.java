@@ -21,6 +21,9 @@ import android.os.PowerManager;
 import android.telephony.SmsMessage;
 import ax.ha.it.smsalarm.alarm.Alarm;
 import ax.ha.it.smsalarm.alarm.Alarm.AlarmType;
+import ax.ha.it.smsalarm.application.SmsAlarmApplication.GoogleAnalyticsHandler;
+import ax.ha.it.smsalarm.application.SmsAlarmApplication.GoogleAnalyticsHandler.EventAction;
+import ax.ha.it.smsalarm.application.SmsAlarmApplication.GoogleAnalyticsHandler.EventCategory;
 import ax.ha.it.smsalarm.handler.DatabaseHandler;
 import ax.ha.it.smsalarm.handler.KitKatHandler;
 import ax.ha.it.smsalarm.handler.SharedPreferencesHandler;
@@ -50,6 +53,12 @@ public class SmsReceiver extends BroadcastReceiver {
 	// Debug actions to skip abort broadcast, by not disabling this while dispatching a test SMS will cause an exception. Also if this action is set
 	// then the income SMS will not be stored into the inbox
 	public static final String ACTION_SKIP_ABORT_BROADCAST = "ax.ha.it.smsalarm.SKIP_ABORT_BROADCAST";
+
+	// Some different labels used when sending events to Google Analytics
+	private static final String ALARM_TRIGGERED_LABEL = "Alarm triggered";
+	private static final String SMS_TRIGGERED_ALARM_LABEL = "Alarm triggered by income SMS(phone number matching)";
+	private static final String FREE_TEXT_TRIGGERED_ALARM_LABEL = "Alarm triggered by word matching";
+	private static final String REGEX_TRIGGERED_ALARM_LABEL = "Alarm triggered by regular expression matching";
 
 	// URI to SMS inbox
 	private static final String SMS_INBOX_URI = "content://sms/inbox";
@@ -134,6 +143,9 @@ public class SmsReceiver extends BroadcastReceiver {
 				if (!alarmType.equals(AlarmType.UNDEFINED)) {
 					// Continue handling of received SMS
 					handleSMS(context, intent);
+
+					// Report alarm triggered
+					GoogleAnalyticsHandler.sendEvent(EventCategory.ALARM, EventAction.ALARM_TRIGGERED, ALARM_TRIGGERED_LABEL);
 				}
 
 				// At last if SMS Debug logging is enabled do the logging of income SMS
@@ -268,6 +280,9 @@ public class SmsReceiver extends BroadcastReceiver {
 			if (!isAlarm && msgHeader.equals(primarySmsNumber)) {
 				alarmType = AlarmType.PRIMARY;
 				isAlarm = true;
+
+				// Report alarm was triggered to Google Analytics
+				GoogleAnalyticsHandler.sendEvent(EventCategory.ALARM, EventAction.PRIMARY_ALARM_TRIGGERED, SMS_TRIGGERED_ALARM_LABEL);
 			}
 		}
 
@@ -278,6 +293,9 @@ public class SmsReceiver extends BroadcastReceiver {
 				if (!isAlarm && msgHeader.equals(secondarySmsNumber)) {
 					alarmType = AlarmType.SECONDARY;
 					isAlarm = true;
+
+					// Again report alarm was triggered to Google Analytics
+					GoogleAnalyticsHandler.sendEvent(EventCategory.ALARM, EventAction.SECONDARY_ALARM_TRIGGERED, SMS_TRIGGERED_ALARM_LABEL);
 				}
 			}
 		}
@@ -302,8 +320,10 @@ public class SmsReceiver extends BroadcastReceiver {
 			// If any of the words within the msgBody exists in the list of primary free texts, store alarm, set the trigger texts and indicate alarm
 			if (findWordEqualsIgnore(primaryFreeText, msgBody)) {
 				alarmType = AlarmType.PRIMARY;
-
 				isAlarm = true;
+
+				// Report alarm was triggered to Google Analytics
+				GoogleAnalyticsHandler.sendEvent(EventCategory.ALARM, EventAction.PRIMARY_ALARM_TRIGGERED, FREE_TEXT_TRIGGERED_ALARM_LABEL);
 			}
 		}
 
@@ -318,8 +338,9 @@ public class SmsReceiver extends BroadcastReceiver {
 					for (String secondaryFreeText : secondaryFreeTexts) {
 						if (findWordEqualsIgnore(secondaryFreeText, msgBody)) {
 							alarmType = AlarmType.SECONDARY;
-
 							isAlarm = true;
+
+							GoogleAnalyticsHandler.sendEvent(EventCategory.ALARM, EventAction.SECONDARY_ALARM_TRIGGERED, FREE_TEXT_TRIGGERED_ALARM_LABEL);
 						}
 					}
 				}
@@ -346,8 +367,9 @@ public class SmsReceiver extends BroadcastReceiver {
 			// set the trigger regular expression and indicate alarm
 			if (matchRegex(primaryRegex, msgBody)) {
 				alarmType = AlarmType.PRIMARY;
-
 				isAlarm = true;
+
+				GoogleAnalyticsHandler.sendEvent(EventCategory.ALARM, EventAction.PRIMARY_ALARM_TRIGGERED, REGEX_TRIGGERED_ALARM_LABEL);
 			}
 		}
 
@@ -359,8 +381,9 @@ public class SmsReceiver extends BroadcastReceiver {
 				for (String secondaryRegex : secondaryRegexs) {
 					if (matchRegex(secondaryRegex, msgBody)) {
 						alarmType = AlarmType.SECONDARY;
-
 						isAlarm = true;
+
+						GoogleAnalyticsHandler.sendEvent(EventCategory.ALARM, EventAction.SECONDARY_ALARM_TRIGGERED, REGEX_TRIGGERED_ALARM_LABEL);
 					}
 				}
 			}

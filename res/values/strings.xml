@@ -155,7 +155,7 @@
     <!-- APPLICATION INFO BEGIN -->
     <string name="APPLICATION_NAME">Sms Alarm</string>
 	<string name="APPLICATION_VERSION">2.3.1beta</string>   
-	<string name="APPLICATION_BUILD">20150808</string>
+	<string name="APPLICATION_BUILD">20150820</string>
 	<!-- APPLICATION INFO END -->
     
     <string name="ABOUT">About Sms Alarm</string>

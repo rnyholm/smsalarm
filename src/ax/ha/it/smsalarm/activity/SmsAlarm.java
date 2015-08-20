@@ -9,6 +9,9 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.view.KeyEvent;
 import ax.ha.it.smsalarm.R;
+import ax.ha.it.smsalarm.application.SmsAlarmApplication.GoogleAnalyticsHandler;
+import ax.ha.it.smsalarm.application.SmsAlarmApplication.GoogleAnalyticsHandler.EventAction;
+import ax.ha.it.smsalarm.application.SmsAlarmApplication.GoogleAnalyticsHandler.EventCategory;
 import ax.ha.it.smsalarm.fragment.AlarmLogFragment;
 import ax.ha.it.smsalarm.fragment.AppreciationFragment;
 import ax.ha.it.smsalarm.fragment.SlidingMenuFragment;
@@ -32,7 +35,7 @@ import com.jeremyfeinstein.slidingmenu.lib.app.SlidingFragmentActivity;
  */
 public class SmsAlarm extends SlidingFragmentActivity {
 	// Important flag, if set all eventual DEBUG logging and the Debug/Test menu will be shown, set false for production!
-	public static final boolean DEBUG = true;
+	public static final boolean DEBUG = false;
 
 	// Action that can be set to an intent if fragment should be switched to AlarmLogFragment upon creation/new intent of this activity
 	public static final String ACTION_SWITCH_TO_ALARM_LOG_FRAGMENT = "ax.ha.it.smsalarm.SWITCH_TO_ALARM_LOG_FRAGMENT";
@@ -63,6 +66,20 @@ public class SmsAlarm extends SlidingFragmentActivity {
 		configureActionBar();
 	}
 
+	@Override
+	protected void onStart() {
+		super.onStart();
+
+		GoogleAnalyticsHandler.reportActivityStart(this);
+	};
+
+	@Override
+	protected void onResume() {
+		super.onResume();
+
+		GoogleAnalyticsHandler.setScreenNameAndSendScreenViewHit(this);
+	}
+
 	/**
 	 * When application pauses the widget({@link WidgetProvider}) will be updated.
 	 */
@@ -73,6 +90,13 @@ public class SmsAlarm extends SlidingFragmentActivity {
 		// Update all widgets associated to this application
 		WidgetProvider.updateWidgets(this);
 	}
+
+	@Override
+	protected void onStop() {
+		super.onStop();
+
+		GoogleAnalyticsHandler.reportActivityStop(this);
+	};
 
 	@Override
 	protected void onNewIntent(Intent intent) {
@@ -257,6 +281,9 @@ public class SmsAlarm extends SlidingFragmentActivity {
 			if (getSlidingMenu().isMenuShowing()) {
 				toggle();
 			}
+
+			// Report to Google Analytics that the alarm log fragment was opened through widget interaction
+			GoogleAnalyticsHandler.sendEvent(EventCategory.USER_INTERFACE, EventAction.WIDGET_INTERACTION, WidgetProvider.OPEN_ALARM_LOG_LABEL);
 		} else {
 			ft.replace(R.id.contentFrame_fl, new SmsSettingsFragment());
 		}
