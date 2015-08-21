@@ -63,6 +63,7 @@ public class DebugUtils {
 		prefHandler.storePrefs(PrefKey.SHARED_PREF, PrefKey.ENABLE_SMS_DEBUG_LOGGING, false, context);
 		prefHandler.storePrefs(PrefKey.SHARED_PREF, PrefKey.ORGANIZATION_KEY, "Test Räddningstjänst", context);
 		prefHandler.storePrefs(PrefKey.SHARED_PREF, PrefKey.USE_FLASH_NOTIFICATION, false, context);
+		prefHandler.storePrefs(PrefKey.SHARED_PREF, PrefKey.SHOW_SPLASH_SCREEN_KEY, true, context);
 	}
 
 	/**

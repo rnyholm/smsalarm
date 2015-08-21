@@ -49,6 +49,9 @@ public class Splash extends FragmentActivity {
 	// Variable indicating whether user license is agreed or not
 	private boolean endUserLicenseAgreed = false;
 
+	// Whether or not the splash screen should be shown or not
+	private boolean showSplashScreen = false;
+
 	// For the TextView displaying version, needed in order to edit it
 	private TextView versionTextView;
 
@@ -64,15 +67,27 @@ public class Splash extends FragmentActivity {
 		requestWindowFeature(Window.FEATURE_NO_TITLE);
 		setContentView(R.layout.splash);
 
+		// Report that the application was opened through the widget
+		if (getIntent() != null && ACTION_REPORT_OPENED_THROUGH_WIDGET.equals(getIntent().getAction())) {
+			GoogleAnalyticsHandler.sendEvent(EventCategory.USER_INTERFACE, EventAction.WIDGET_INTERACTION, WidgetProvider.OPEN_SMS_ALARM_LABEL);
+		}
+
 		// Text with correct version number
 		versionTextView = (TextView) findViewById(R.id.splashVersion_tv);
 		versionTextView.setText(String.format(getString(R.string.SPLASH_VERSION), getString(R.string.APPLICATION_VERSION)));
 
-		// Fetch value from shared preferences, this is to decide if user has agreed user the user license before or not
+		// Fetch value from shared preferences, this is to decide if user has agreed user the user license before or not and to figure out if splash
+		// screen should be shown or not
 		endUserLicenseAgreed = (Boolean) prefHandler.fetchPrefs(PrefKey.SHARED_PREF, PrefKey.END_USER_LICENSE_AGREED, DataType.BOOLEAN, this, false);
+		showSplashScreen = (Boolean) prefHandler.fetchPrefs(PrefKey.SHARED_PREF, PrefKey.SHOW_SPLASH_SCREEN_KEY, DataType.BOOLEAN, this, true);
 
 		// Only set up onClickListener and start Runnable if user has agreed the end user license agreement
 		if (endUserLicenseAgreed) {
+			// Skip splash screen switch activity directly
+			if (!showSplashScreen) {
+				switchActivity();
+			}
+
 			// Get a handle to the layout by finding it's id
 			RelativeLayout splashRelativeLayout = (RelativeLayout) findViewById(R.id.splash_rl);
 
@@ -84,7 +99,8 @@ public class Splash extends FragmentActivity {
 				}
 			});
 
-			// Initialize a handler object, used to put a thread to sleep, activity will be switched after thread has been a sleep for a given time
+			// Initialize a handler object, used to put a thread to sleep, activity will be switched after thread has been a sleep for a given
+			// time
 			handler = new Handler();
 			handler.postDelayed(new Runnable() {
 				@Override
@@ -95,11 +111,6 @@ public class Splash extends FragmentActivity {
 		} else { // Else show dialog requesting for user to agree the license
 			EulaDialog dialog = new EulaDialog();
 			dialog.show(getSupportFragmentManager(), EulaDialog.EULA_DIALOG_TAG);
-		}
-
-		// Report that the application was opened through the widget
-		if (getIntent() != null && ACTION_REPORT_OPENED_THROUGH_WIDGET.equals(getIntent().getAction())) {
-			GoogleAnalyticsHandler.sendEvent(EventCategory.USER_INTERFACE, EventAction.WIDGET_INTERACTION, WidgetProvider.OPEN_SMS_ALARM_LABEL);
 		}
 	}
 

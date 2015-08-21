@@ -64,19 +64,23 @@ public class OtherSettingsFragment extends SherlockFragment implements Applicati
 	private CheckBox enableSmsAlarmCheckBox;
 	private CheckBox enableSMSDebugLoggingCheckBox;
 	private CheckBox useFlashNotificationCheckBox;
+	private CheckBox showSplashScreenCheckBox;
 
 	// ...and TextViews
 	private TextView enableSmsAlarmInfoTextView;
 	private TextView enableSMSDebugLoggingInfoTextView;
 	private TextView useFlashNotificationInfoTextView;
+	private TextView showSplashScreenInfoTextView;
 
 	// To store the name of organization
 	private String organization = "";
 
-	// To indicate whether Sms Alarm should be enabled or not, if SMS debug logging and flash notifications should be used
+	// To indicate whether Sms Alarm should be enabled or not, if SMS debug logging, if flash notifications should be used and if splash screen should
+	// be shown
 	private boolean enableSmsAlarm = true;
 	private boolean enableSMSDebugLogging = false;
 	private boolean useFlashNotification = false;
+	private boolean showSplashScreen = true;
 
 	// Could contain an error describing why Flash Notification isn't supported, if absent it's supported
 	private Optional<String> flashNotificationSupportError;
@@ -133,11 +137,13 @@ public class OtherSettingsFragment extends SherlockFragment implements Applicati
 		enableSmsAlarmCheckBox = (CheckBox) view.findViewById(R.id.enableSmsAlarm_chk);
 		enableSMSDebugLoggingCheckBox = (CheckBox) view.findViewById(R.id.enableSMSDebugLogging_chk);
 		useFlashNotificationCheckBox = (CheckBox) view.findViewById(R.id.useFlashNotification_chk);
+		showSplashScreenCheckBox = (CheckBox) view.findViewById(R.id.showSplashScreen_chk);
 
 		// Finding TextView, views
 		enableSmsAlarmInfoTextView = (TextView) view.findViewById(R.id.enableSmsAlarmHint_tv);
 		enableSMSDebugLoggingInfoTextView = (TextView) view.findViewById(R.id.enableSMSDebugLoggingHint_tv);
 		useFlashNotificationInfoTextView = (TextView) view.findViewById(R.id.useFlashNotificationHint_tv);
+		showSplashScreenInfoTextView = (TextView) view.findViewById(R.id.showSplashScreenHint_tv);
 
 		// If Android API level is greater than Jelly Bean
 		if (Build.VERSION.SDK_INT > Build.VERSION_CODES.JELLY_BEAN) {
@@ -176,10 +182,17 @@ public class OtherSettingsFragment extends SherlockFragment implements Applicati
 			paramsUseFlashNotificationInfoTextView.addRule(RelativeLayout.BELOW, useFlashNotificationCheckBox.getId());
 			paramsUseFlashNotificationInfoTextView.addRule(RelativeLayout.ALIGN_LEFT, useFlashNotificationCheckBox.getId());
 
+			// Set layout parameters for the show splash screen info TextView
+			RelativeLayout.LayoutParams paramsShowSplashScreenInfoTextView = new RelativeLayout.LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
+			paramsShowSplashScreenInfoTextView.setMargins(pixelsLeft, pixelsTop, 0, 0);
+			paramsShowSplashScreenInfoTextView.addRule(RelativeLayout.BELOW, showSplashScreenCheckBox.getId());
+			paramsShowSplashScreenInfoTextView.addRule(RelativeLayout.ALIGN_LEFT, showSplashScreenCheckBox.getId());
+
 			// Apply the previously configured layout parameters to the correct TextViews
 			enableSmsAlarmInfoTextView.setLayoutParams(paramsEnableSmsAlarmInfoTextView);
 			enableSMSDebugLoggingInfoTextView.setLayoutParams(paramsEnableSmsDebugLoggingInfoTextView);
 			useFlashNotificationInfoTextView.setLayoutParams(paramsUseFlashNotificationInfoTextView);
+			showSplashScreenInfoTextView.setLayoutParams(paramsShowSplashScreenInfoTextView);
 		} else { // The device has API level < 17, we just need to check if the locale is German
 			// If the locale on device is German(DE) we need to adjust the margin top for the information TextViews for the CheckBoxes to -6dp
 			if ("de".equals(Locale.getDefault().getLanguage())) {
@@ -203,9 +216,15 @@ public class OtherSettingsFragment extends SherlockFragment implements Applicati
 				paramsUseFlashNotificationInfoTextView.addRule(RelativeLayout.BELOW, useFlashNotificationCheckBox.getId());
 				paramsUseFlashNotificationInfoTextView.addRule(RelativeLayout.ALIGN_LEFT, useFlashNotificationCheckBox.getId());
 
+				RelativeLayout.LayoutParams paramsShowSplashScreenInfoTextView = new RelativeLayout.LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
+				paramsShowSplashScreenInfoTextView.setMargins(pixelsLeft, pixelsTop, 0, 0);
+				paramsShowSplashScreenInfoTextView.addRule(RelativeLayout.BELOW, showSplashScreenCheckBox.getId());
+				paramsShowSplashScreenInfoTextView.addRule(RelativeLayout.ALIGN_LEFT, showSplashScreenCheckBox.getId());
+
 				enableSmsAlarmInfoTextView.setLayoutParams(paramsEnableSmsAlarmInfoTextView);
 				enableSMSDebugLoggingInfoTextView.setLayoutParams(paramsEnableSmsDebugLoggingInfoTextView);
 				useFlashNotificationInfoTextView.setLayoutParams(paramsUseFlashNotificationInfoTextView);
+				showSplashScreenInfoTextView.setLayoutParams(paramsShowSplashScreenInfoTextView);
 			}
 		}
 
@@ -229,6 +248,7 @@ public class OtherSettingsFragment extends SherlockFragment implements Applicati
 		enableSmsAlarm = (Boolean) prefHandler.fetchPrefs(PrefKey.SHARED_PREF, PrefKey.ENABLE_SMS_ALARM_KEY, DataType.BOOLEAN, context);
 		enableSMSDebugLogging = (Boolean) prefHandler.fetchPrefs(PrefKey.SHARED_PREF, PrefKey.ENABLE_SMS_DEBUG_LOGGING, DataType.BOOLEAN, context);
 		useFlashNotification = (Boolean) prefHandler.fetchPrefs(PrefKey.SHARED_PREF, PrefKey.USE_FLASH_NOTIFICATION, DataType.BOOLEAN, context);
+		showSplashScreen = (Boolean) prefHandler.fetchPrefs(PrefKey.SHARED_PREF, PrefKey.SHOW_SPLASH_SCREEN_KEY, DataType.BOOLEAN, context, true);
 		organization = (String) prefHandler.fetchPrefs(PrefKey.SHARED_PREF, PrefKey.ORGANIZATION_KEY, DataType.STRING, context);
 	}
 
@@ -238,6 +258,7 @@ public class OtherSettingsFragment extends SherlockFragment implements Applicati
 		updateEnableSmsAlarmCheckBox();
 		updateEnableSMSDebugLoggingCheckBox();
 		updateUseFlashNotificationCheckBox();
+		updateShowSplashScreenCheckBox();
 	}
 
 	@Override
@@ -295,6 +316,20 @@ public class OtherSettingsFragment extends SherlockFragment implements Applicati
 				prefHandler.storePrefs(PrefKey.SHARED_PREF, PrefKey.USE_FLASH_NOTIFICATION, useFlashNotification, context);
 			}
 		});
+
+		// Set listener to Show Splash Screen CheckBox
+		showSplashScreenCheckBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+			@Override
+			public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+				if (showSplashScreenCheckBox.isChecked()) {
+					showSplashScreen = true;
+				} else {
+					showSplashScreen = false;
+				}
+
+				prefHandler.storePrefs(PrefKey.SHARED_PREF, PrefKey.SHOW_SPLASH_SCREEN_KEY, showSplashScreen, context);
+			}
+		});
 	}
 
 	@Override
@@ -345,6 +380,14 @@ public class OtherSettingsFragment extends SherlockFragment implements Applicati
 	private void updateUseFlashNotificationCheckBox() {
 		// Update Use Flash Notification CheckBox
 		useFlashNotificationCheckBox.setChecked(useFlashNotification);
+	}
+
+	/**
+	 * To update show splash screen {@link CheckBox} correctly.
+	 */
+	private void updateShowSplashScreenCheckBox() {
+		// Update Show Splash Screen CheckBox
+		showSplashScreenCheckBox.setChecked(showSplashScreen);
 	}
 
 	/**

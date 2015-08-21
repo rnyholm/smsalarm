@@ -77,6 +77,7 @@ public class SharedPreferencesHandler {
 		ENABLE_SMS_DEBUG_LOGGING("enableSmsDebugLogging", ReportRule.REPORT_RAW, "Enable SMS debugging"),
 		PRIMARY_LISTEN_REGULAR_EXPRESSIONS_KEY("primaryListenRegularExpressionsKey", ReportRule.REPORT_ANONYMIZE, "Primary alarm triggering regular expressions used"),
 		SECONDARY_LISTEN_REGULAR_EXPRESSIONS_KEY("secondaryListenRegularExpressionsKey", ReportRule.REPORT_ANONYMIZE, "Secondary alarm triggering regular expressions used"),
+		SHOW_SPLASH_SCREEN_KEY("showSplashScreenKey", ReportRule.REPORT_RAW, "Show splash screen"),
 		UNDEFINED_KEY("undefinedKey", ReportRule.NO_REPORT, "Undefined setting");
 		// @formatter:on
 

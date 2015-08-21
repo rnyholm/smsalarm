@@ -56,6 +56,7 @@
     <string name="INFO_ENABLE_SMS_DEBUG_LOGGING">Om vald kommer alla inkommande SMS att loggas till filen smslog.txt som finns i mappen SmsAlarm. Det som loggas är tidpunkt, avsändare och meddelande. Notera att denna funktion används främst i felsökningssyfte, i övrigt bör funktionen vara inaktiverad.</string>
     <string name="INFO_REGEX_SETTINGS">Ställ in vilka reguljära uttryck som Sms Alarm ska larma på om en matchning av uttrycket finns i inkommande SMS.</string>
     <string name="INFO_REGEX_SETTINGS_NOTE">Notera. Dessa inställningar riktar sig till den mer avancerade användaren. Läs gärna mer om reguljära uttryck på Wikipedia:\nwikipedia.org/wiki/Regular_expression</string>
+    <string name="INFO_SHOW_SPLASH_SCREEN">Om vald kommer startskärmen att visas.</string>
     <string name="LICENSE_APACHE_TITLE">Apache-Licenser</string>
     <string name="LICENSE_OTHER_TITLE">Licenser</string> 
     <string name="MENU_TITLE_ABOUT">Om</string>
@@ -96,34 +97,35 @@
  	<string name="TITLE_APPRECIATION_DONERA">Donera</string>
  	<string name="TITLE_APPRECIATION_REVIEW">Recensera</string>
  	<string name="TITLE_DONATION_SIZE">Belopp att donera</string>
+    <string name="TITLE_ENABLE_SMS_DEBUG_LOGGING">Aktivera SMS loggning</string>
  	<string name="TITLE_ORGANIZATION">Organisation</string>
  	<string name="TITLE_PLAY_ALARM_SIGNAL_REPEATEDLY_SETTING">Spela upp larmsignalen oavbrutet</string>
+    <string name="TITLE_REGEX_SETTINGS">Inställningar för reguljära uttryck</string>
+ 	<string name="TITLE_SHOW_SPLASH_SCREEN">Visa startskärm</string>
  	<string name="TITLE_SOUND_SETTINGS">Ljud- och vibrationsinställningar</string>
  	<string name="TITLE_UNDEFINED_ALARM">Odefinierat larm</string>
     <string name="TITLE_USE_FLASH_NOTIFICATION">Använd blixtnotifikation(BETA)</string>
     <string name="TITLE_USE_OS_SOUND_SETTINGS">Använd enhetens ljudinställningar</string>
-    <string name="TITLE_ENABLE_SMS_DEBUG_LOGGING">Aktivera SMS loggning</string>
-    <string name="TITLE_REGEX_SETTINGS">Inställningar för reguljära uttryck</string>
     <string name="TOAST_ACKNOWLEDGE_SMS_SENT">Kvitteringsmeddelande skickat!</string>
     <string name="TOAST_ALARM_SIGNALS_REMOVED_DUE_TO_MISSING_PATHS">har tagits bort från listan av larmsignaler eftersom de/dem inte kunde hittas på enheten.</string>
     <string name="TOAST_CANNOT_ACKNOWLEDGE_NO_PHONE_NUMBER_EXISTS">Kan ej kvittera! Inget telefonnummer att kvittera till finns. Kontrollera inställningarna och avsändare av mottaget SMS.</string>
     <string name="TOAST_CANNOT_SEND_ACKNOWLEDGE_SMS">Kan ej skicka kvitteringsmeddelande!</string>
-    <string name="TOAST_FREE_TEXT_MISSING">Ett ord måste anges.</string>
-    <string name="TOAST_PATH_ALREADY_IN_ALARM_SIGNAL_PATH_LIST">Vald ljudsignal finns redan i listan av larmsignaler.</string>
-    <string name="TOAST_PHONE_NUMBER_ALREADY_IN_PRIMARY_LIST">Angivet telefonnummer finns redan i listan av primärlarm. Ange ett nytt telefonnummer.</string>
-    <string name="TOAST_PHONE_NUMBER_ALREADY_IN_SECONDARY_LIST">Angivet telefonnummer finns redan i listan av sekundärlarm. Ange ett nytt telefonnummer.</string>
-    <string name="TOAST_PHONE_NUMBER_MISSING">Ett telefonnummer måste anges.</string> 
-    <string name="TOAST_SENDING_ACKNOWLEDGE_SMS">Skickar kvitteringsmeddelande..</string>
-    <string name="TOAST_UNABLE_TO_START_GOOGLE_PLAY">Lyckas inte öppna Google Play&#8482;.</string>
-    <string name="TOAST_UNABLE_TO_SETUP_GOOGLE_IN_APP_BILLING">Ett fel inträffade vilket inte möjliggör donationer för tillfället.</string>
     <string name="TOAST_DONATION_FAILED_AUTHENTICITY_VERIFICATION_FAIL">Donationen lyckades men giltigheten i transaktionen kunde ej fastställas.</string>
     <string name="TOAST_DONATION_FAILED_PURCHASE_ERROR">Ett fel inträffade vid betalning, donationen misslyckades.</string>
     <string name="TOAST_DONATION_FAILED_PURCHASE_ERROR_PURCHASE_CANCELED">Betalningen avbröts, ingen donation har gjorts.</string>
     <string name="TOAST_DONATION_SUCCESSFUL">Tack för ditt stöd!</string>
+    <string name="TOAST_DUPLICATED_REGEX">Reguljära uttryck för primär- och sekundärlarm får inte vara lika. Ange ett nytt uttryck.</string>
+    <string name="TOAST_FREE_TEXT_MISSING">Ett ord måste anges.</string>
+    <string name="TOAST_PATH_ALREADY_IN_ALARM_SIGNAL_PATH_LIST">Vald ljudsignal finns redan i listan av larmsignaler.</string>
+    <string name="TOAST_PHONE_NUMBER_ALREADY_IN_PRIMARY_LIST">Angivet telefonnummer finns redan i listan av primärlarm. Ange ett nytt telefonnummer.</string>
+    <string name="TOAST_PHONE_NUMBER_ALREADY_IN_SECONDARY_LIST">Angivet telefonnummer finns redan i listan av sekundärlarm. Ange ett nytt telefonnummer.</string>
+    <string name="TOAST_PHONE_NUMBER_MISSING">Ett telefonnummer måste anges.</string>
     <string name="TOAST_REGEX_ALREADY_IN_PRIMARY_LIST">Angivet reguljärt uttryck finns redan i listan av uttryck för primärlarm. Ange ett nytt uttryck.</string>
     <string name="TOAST_REGEX_ALREADY_IN_SECONDARY_LIST">Angivet reguljärt uttryck finns redan i listan av uttryck för sekundärlarm. Ange ett nytt uttryck.</string>
-    <string name="TOAST_REGEX_MISSING">Ett reguljärt uttryck måste anges.</string>
-    <string name="TOAST_DUPLICATED_REGEX">Reguljära uttryck för primär- och sekundärlarm får inte vara lika. Ange ett nytt uttryck.</string>
+    <string name="TOAST_REGEX_MISSING">Ett reguljärt uttryck måste anges.</string> 
+    <string name="TOAST_SENDING_ACKNOWLEDGE_SMS">Skickar kvitteringsmeddelande..</string>
+    <string name="TOAST_UNABLE_TO_START_GOOGLE_PLAY">Lyckas inte öppna Google Play&#8482;.</string>
+    <string name="TOAST_UNABLE_TO_SETUP_GOOGLE_IN_APP_BILLING">Ett fel inträffade vilket inte möjliggör donationer för tillfället.</string>
     <!-- NEW STRINGS IN v.2.3.1 END -->
     
     <!-- DUMMY STRINGS(PLACEHOLDER AND DESCRIPTIVES), ONLY EXISTS IN ENGLISH - BEGIN -->
@@ -155,7 +157,7 @@
     <!-- APPLICATION INFO BEGIN -->
     <string name="APPLICATION_NAME">Sms Alarm</string>
 	<string name="APPLICATION_VERSION">2.3.1beta</string>   
-	<string name="APPLICATION_BUILD">20150820</string>
+	<string name="APPLICATION_BUILD">20150821</string>
 	<!-- APPLICATION INFO END -->
     
     <string name="ABOUT">About Sms Alarm</string>
