@@ -29,8 +29,6 @@
         android:permissionGroup="android.permission-group.HARDWARE_CONTROLS" 
         android:protectionLevel="normal" />
     
-    <supports-screens android:largeScreens="true" android:xlargeScreens="true" />
-    
     <application android:label="@string/APPLICATION_NAME"
         android:enabled="true"
         android:icon="@drawable/ic_launcher"

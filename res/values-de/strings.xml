@@ -7,8 +7,7 @@
     <string name="ABOUT_THIS_APPLICATION">Diese Anwendung wird in der Hoffnung entwickelt und vertrieben, dass sie von Nutzen ist, aber ohne jede Garantie, dass sie in jeder Situation wie beabsichtigt funktioniert.</string>  
     <string name="ABOUT_VERSION">Version: %s</string>  
     <string name="ACKNOWLEDGE">Bestätigungsbenachrichtigung</string>   
-    <string name="ACKNOWLEDGE_LINE_BUSY">Leitung besetzt, rufe zurück in:</string>
-    <string name="ACKNOWLEDGE_PHONE_NUMBER_DIALOG_MESSAGE">Eine Telefonnummer für die Anwendung eingeben, an welche eine Bestätigung gesendet wird.</string>  
+    <string name="ACKNOWLEDGE_LINE_BUSY">Leitung besetzt, rufe zurück in:</string>  
 	<string name="ADD">Hinzufügen</string>
 	<string name="ADD_PRIMARY_FREE_TEXT_DIALOG_MESSAGE">Geben Sie ein Wort ein, auf das Sms Alarm als primäres Alarm reagiert, wenn dieses in der empfangenen SMS erscheint.</string>
 	<string name="ADD_SECONDARY_FREE_TEXT_DIALOG_MESSAGE">Geben Sie ein Wort ein, auf das Sms Alarm als sekundäres Alarm reagieren soll, wenn dieses in der empfangenen SMS erscheint.</string>       

@@ -7,8 +7,7 @@
     <string name="ABOUT_THIS_APPLICATION">This application is developed and distributed in the hope that it will be of use, but without any warranty that it will function as intended in all situations.</string>
     <string name="ABOUT_VERSION">Version: %s</string>  
     <string name="ACKNOWLEDGE">Acknowledge Alarm</string>   
-    <string name="ACKNOWLEDGE_LINE_BUSY">Line busy, will call back in:</string>
-    <string name="ACKNOWLEDGE_PHONE_NUMBER_DIALOG_MESSAGE">Enter a telephone number for the application to send an acknowledgment to.</string>  
+    <string name="ACKNOWLEDGE_LINE_BUSY">Line busy, will call back in:</string>  
 	<string name="ADD">Add</string>
 	<string name="ADD_PRIMARY_FREE_TEXT_DIALOG_MESSAGE">Enter a word that Sms Alarm will alert the primary alarm on, if present in the received SMS.</string>
 	<string name="ADD_SECONDARY_FREE_TEXT_DIALOG_MESSAGE">Enter a word that Sms Alarm will alert the secondary alarm on, if present in the received SMS.</string>       

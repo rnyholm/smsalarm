@@ -7,8 +7,7 @@
     <string name="ABOUT_THIS_APPLICATION">Tämä sovellus on kehitetty ja levitetään siinä toivossa, että se olisi hyödyllinen, mutta ilman mitään takeita siitä, että se toimii tarkoitetulla tavalla kaikissa tilanteissa.</string>
     <string name="ABOUT_VERSION">Versio: %s</string>  
     <string name="ACKNOWLEDGE">Kuittaa hälytys</string>  
-    <string name="ACKNOWLEDGE_LINE_BUSY">Varattu, soitaa takaisin, jos:</string>
-    <string name="ACKNOWLEDGE_PHONE_NUMBER_DIALOG_MESSAGE">Anna puh.nro. johon applikaatio kuittaa.</string>    
+    <string name="ACKNOWLEDGE_LINE_BUSY">Varattu, soitaa takaisin, jos:</string>    
 	<string name="ADD">Lisää</string>
 	<string name="ADD_PRIMARY_FREE_TEXT_DIALOG_MESSAGE">Anna sana jolla Sms Alarm ensihälyttää jos viesti on vastaanotettu.</string>
 	<string name="ADD_SECONDARY_FREE_TEXT_DIALOG_MESSAGE">Anna sana jolla Sms Alarm hälyttää toissijaisesti jos viesti on vastaanotettu.</string>       

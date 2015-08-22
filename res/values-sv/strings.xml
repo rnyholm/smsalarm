@@ -7,8 +7,7 @@
     <string name="ABOUT_THIS_APPLICATION">Denna applikation utvecklas och distribueras i hopp om att den ska komma till nytta, men helt utan någon garanti att den kommer fungera som tänkt i alla situationer.</string>  
     <string name="ABOUT_VERSION">Version: %s</string>    
     <string name="ACKNOWLEDGE">Kvittera Larm</string>  
-    <string name="ACKNOWLEDGE_LINE_BUSY">Upptaget, återuppringer om:</string>
-    <string name="ACKNOWLEDGE_PHONE_NUMBER_DIALOG_MESSAGE">Ange ett telefonnummer som applikationen kvitterar till.</string>  
+    <string name="ACKNOWLEDGE_LINE_BUSY">Upptaget, återuppringer om:</string> 
 	<string name="ADD">Lägg till</string>
 	<string name="ADD_PRIMARY_FREE_TEXT_DIALOG_MESSAGE">Ange ett ord som Sms Alarm ska larma primärlarm på om det finns i mottaget SMS.</string>
 	<string name="ADD_SECONDARY_FREE_TEXT_DIALOG_MESSAGE">Ange ett ord som Sms Alarm ska larma sekundärlarm på om det finns i mottaget SMS.</string>       
