@@ -283,7 +283,8 @@ public class SmsAlarmApplication extends Application {
 		}
 
 		// The Google Analytics tracking ID
-		private static final String TRACKING_ID = "UA-66577026-1";
+		private static final String TRACKING_ID_DEVELOPMENT = "UA-66577026-1";
+		private static final String TRACKING_ID_PRODUCTION = "UA-66577026-2";
 
 		// Need objects for Google Analytics and tracker
 		private static GoogleAnalytics analytics;
@@ -302,8 +303,8 @@ public class SmsAlarmApplication extends Application {
 			analytics.setLocalDispatchPeriod(1800);
 			analytics.setDryRun(false);
 
-			// ...and the tracker
-			tracker = analytics.newTracker(TRACKING_ID);
+			// ...and the tracker, remember to use correct tracking id
+			tracker = analytics.newTracker(TRACKING_ID_DEVELOPMENT);
 			tracker.enableExceptionReporting(true);
 			tracker.enableAutoActivityTracking(true);
 			tracker.setSampleRate(100.0);
