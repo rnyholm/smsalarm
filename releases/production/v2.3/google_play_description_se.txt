@@ -1,0 +1,46 @@
+Sms Alarm är applikationen alla personer som tar emot viktiga meddelanden per SMS behöver. Applikationen lämpar 
+sig perfekt för personal inom räddningstjänsten, sjöräddningen, första hjälp organisationer med flera. Utöver dessa
+användargrupper är Sms Alarm en applikation som också passar systemadministratörer, servicepersonal, fastighetsskötare
+med flera, ja applikationen passar för alla som inte kan missa ett viktigt SMS.
+
+När Sms Alarm triggas på ett inkommande SMS, enligt hur du ställt in applikationen, så kommer enheten att spela upp en
+annan meddelandesignal och vibrera på ett specifikt sätt så du känner igen ett viktigt SMS även om din Android enhet är
+i ljudlöst läge. Dessutom kommer en annan notifikation att visas. Möjlighet till kvittering genom samtal, SMS eller returnera
+mottaget SMS finns. Alla mottagna larm loggas till en larmlogg som nås genom applikationen. Dessa är de grundläggande
+funktionerna men du kan ställa in mycket mera i applikationen så den passar just dig.
+
+Kort användarmanual
+
+Även fast många anpassningsmöjligheter finns är Sms Alarm strukturerad och smidig att använda. Det du behöver göra för att
+komma igång och använda applikationen är att ställa in den att reagera på inkommande SMS. Detta kan du göra genom att antingen
+ställa in applikationen att reagera på SMS från ett visst telefonnummer(notera att ibland behövs telefonnumret ställas in med riktnummer)
+eller genom att ställa in ord som applikationen reagerar på om de finns i mottaget SMS. UTöver dessa sätt kan du även ställa
+in applikationen på att reagera på reguljära uttryck. Detta är en lite mer avancerad inställning men mycket kraftfull då den reagerar
+på vissa mönster i inkommande SMS, det är just dessa mönster som du ställer in i applikationen.
+
+För att få applikationen att larma som du vill kan du välja mellan ett antal färdiga larmsignaler, eller lägga till dina egna. 
+Du kan även välja mellan olika vibrationsmönster. Man kan välja om Sms Alarm ska följa enhetens ljud inställningar, om larmsignalen
+ska spelas upp två gånger eller repeteras tills notifikationen med inkommande larm har hanterats.
+
+Kvittering går även att ställa in om du behöver. Detta kan göras på tre olika sätt, antingen genom att ringa ett samtal, skicka
+ett fördefinierat SMS eller returnera mottaget SMS. Om du valt att ringa ett samtal behöver du även ange ett telefonnummer som applikationen 
+ska kvittera till genom att ringa. Om du valt att skicka ett fördefinierat SMS behöver du utöver att ange ett telefonnummer även ange
+en meddelande text, denna text skickas sen i ett SMS till telefonnumret du ställt in. Om du däremot valt att returnera mottaget SMS
+behöver du inte ställa in något mera, mottaget SMS kommer skicka till dess avsändare vid kvittering.
+
+De sista inställningarna man kan göra är att ställa in sin organisations namn, detta namn används inte på andra ställen än i notifikationstexten.
+Man kan även ställa in om blixtnotifikation ska användas, vilket innebär att kamerans blixt kommer blinka vid inkommande larm tills
+notifikationen har hanterats. Man kan även ställa in om SMS loggning ska användas, detta kan vara bra att ha då det ibland är 
+svårt att ställa in rätt telefonnummer som Sms Alarm ska reagera på. Loggningen loggar alla inkommande larm till en loggfil som heter 
+smslog.txt och finns i mappen SmsAlarm. I loggen står tidpunkt för mottaget SMS, avsändarens telefonnummer och meddelandetexten, detta gör
+det mycket enklare att ställa in applikationen rätt. När loggningen ej behövs mera bör den stängas av. Till sist kan man välja att inaktivera 
+startskärm och hela applikationen i sig.
+
+Sms Alarm har även en lite widget i vilken man kan se information om Sms Alarm är aktiverat, om applikationen följer enhetens ljudinställnigar 
+samt det senast mottagna larmet. Det går även att inaktivera/aktivera Sms Alarm och ställa in om applikationen ska följa
+eller inte följa enhetens ljudinställningar direkt från widgeten. Om man trycker på senast mottagna larm så kommer larmloggen
+att öppnas som visar alla mottagna larm. Trycker man på Sms Alarm ikonen i widgeten så kommer Sms Alarm att öppnas.
+
+Tveka inte att kontakta utvecklaren vid frågor och eventuella problem.
+
+
