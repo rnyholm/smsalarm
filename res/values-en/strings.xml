@@ -40,7 +40,7 @@
     <string name="EDIT">Edit</string>
     <string name="EDIT_FREE_TEXT_DIALOG_TITLE">Edit word</string>
     <string name="EDIT_MESSAGE">Edit message</string>
-    <string name="EDIT_ORGANIZATION">Edit organization</string>
+    <string name="EDIT_ORGANIZATION">Edit organisation</string>
     <string name="EDIT_PHONE_NUMBER">Edit phone number</string>
     <string name="EDIT_PHONE_NUMBER_DIALOG_TITLE">Edit phone number</string>
     <string name="EDIT_PRIMARY_FREE_TEXT_DIALOG_MESSAGE">Edit word which Sms Alarm will trigger primary alarm on if it is found in the received SMS.</string>
@@ -70,14 +70,14 @@
     <string name="INFO_ENABLE_ACKNOWLEDGE">If selected primary alarm can be acknowledged.</string>
     <string name="INFO_ENABLE_SMS_ALARM">If selected, Sms Alarm will trigger alarms according to given information, else the application does not.</string>
     <string name="INFO_ENABLE_SMS_DEBUG_LOGGING">If selected, all incoming SMS\'s will be logged to the file smslog.txt in the folder SmsAlarm. The information that will be logged is time received, sender and message. Note that this feature is used mainly for debugging purposes, otherwise it should be disabled.</string>
-    <string name="INFO_FREE_TEXT_SETTINGS">Enter the words that should be used to notify in the Sms Alarm if present in the incoming SMS. Note that this function is not case sensitive.</string>
+    <string name="INFO_FREE_TEXT_SETTINGS">Set the words that Sms Alarm will trigger an alarm on if it\'s found in the incoming SMS. Note that this function is not case sensitive.</string>
     <string name="INFO_MISC_SETTINGS">Set your organisation\'s name, if the device\'s camera flash should flash upon incoming alarms, if the splash screen should be shown and if Sms Alarm should be enabled. It is also possible to enable SMS logging which can facilitate troubleshooting.</string>
     <string name="INFO_PLAY_ALARM_SIGNAL_REPEATEDLY_SETTING">If selected, the alarm signal for both primary and secondary alarms will be played repeatedly until the notification of the incoming alarm is handled.</string>
     <string name="INFO_PLAY_ALARM_SIGNAL_TWICE_SETTING">If selected Sms Alarm will play alarm signal to both primary and secondary alarms twice.</string>
     <string name="INFO_REGEX_SETTINGS">Set the regular expressions that Sms Alarm will trigger an alarm on if a match of the expression is found in the incoming SMS.</string>
-    <string name="INFO_REGEX_SETTINGS_NOTE">Note. These settings are addressed to the more advanced user. Learn more about regular expressions at Wikipedia:\nwikipedia.org/wiki/Regular expression</string>
+    <string name="INFO_REGEX_SETTINGS_NOTE">Note. These settings are addressed to the more advanced user. Learn more about regular expressions at Wikipedia:\nwikipedia.org/wiki/Regular_expression</string>
     <string name="INFO_SHOW_SPLASH_SCREEN">If selected the splash screen will be shown.</string>
-    <string name="INFO_SMS_SETTINGS">Enter the telephone numbers that Sms Alarm should send alerts for incoming SMS.</string>
+    <string name="INFO_SMS_SETTINGS">Set the telephone numbers that Sms Alarm will trigger an alarm on if the receiver of incoming SMS is the same as any set telephone number.</string>
     <string name="INFO_SOUND_SETTINGS">Set the alarm signals and vibration patterns for both primary and secondary alarms. It is also possible to set if Sms Alarm should follow the device\'s sound settings and if the alarm signal should be played twice or repeatedly.</string>
     <string name="INFO_USE_FLASH_NOTIFICATION">If selected, the device\'s camera flash will flash upon incoming alarm. Note that this is currently a BETA feature wherein unexpected behaviour can occur when an alarm is received. Use it at your own risk.</string>
     <string name="INFO_USE_OS_SOUND_SETTINGS">If selected, Sms Alarm will take the device\'s ring volume and silent mode into consideration.</string>
