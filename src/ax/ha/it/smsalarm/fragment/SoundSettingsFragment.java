@@ -218,8 +218,8 @@ public class SoundSettingsFragment extends SherlockFragment implements Applicati
 
 				RelativeLayout.LayoutParams paramsPlayAlarmSignalRepeatedlyInfoTextView = new RelativeLayout.LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
 				paramsPlayAlarmSignalRepeatedlyInfoTextView.setMargins(pixelsLeft, pixelsTop, 0, 0);
-				paramsPlayAlarmSignalRepeatedlyInfoTextView.addRule(RelativeLayout.BELOW, playAlarmSignalTwiceCheckBox.getId());
-				paramsPlayAlarmSignalRepeatedlyInfoTextView.addRule(RelativeLayout.ALIGN_LEFT, playAlarmSignalTwiceCheckBox.getId());
+				paramsPlayAlarmSignalRepeatedlyInfoTextView.addRule(RelativeLayout.BELOW, playAlarmSignalRepeatedlyCheckBox.getId());
+				paramsPlayAlarmSignalRepeatedlyInfoTextView.addRule(RelativeLayout.ALIGN_LEFT, playAlarmSignalRepeatedlyCheckBox.getId());
 
 				soundSettingInfoTextView.setLayoutParams(paramsSoundSettingInfoTextView);
 				playAlarmSignalTwiceInfoTextView.setLayoutParams(paramsPlayAlarmSignalTwiceInfoTextView);
