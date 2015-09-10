@@ -304,7 +304,7 @@ public class SmsAlarmApplication extends Application {
 			analytics.setDryRun(false);
 
 			// ...and the tracker, remember to use correct tracking id
-			tracker = analytics.newTracker(TRACKING_ID_DEVELOPMENT);
+			tracker = analytics.newTracker(TRACKING_ID_PRODUCTION);
 			tracker.enableExceptionReporting(true);
 			tracker.enableAutoActivityTracking(true);
 			tracker.setSampleRate(100.0);
