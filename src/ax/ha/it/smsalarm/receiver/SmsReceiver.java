@@ -8,6 +8,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import java.util.regex.PatternSyntaxException;
 
 import android.content.BroadcastReceiver;
 import android.content.ContentValues;
@@ -37,6 +38,8 @@ import ax.ha.it.smsalarm.service.NotificationService;
 import ax.ha.it.smsalarm.util.Logger;
 import ax.ha.it.smsalarm.util.Utils;
 import ax.ha.it.smsalarm.util.WakeLocker;
+
+import com.google.common.base.Optional;
 
 /**
  * Class responsible for receiving SMS and handle them accordingly to the application settings.
@@ -456,16 +459,19 @@ public class SmsReceiver extends BroadcastReceiver {
 
 		if (regex != null && textToParse != null) {
 			if ((regex.length() != 0) && (textToParse.length() != 0)) {
-				// Compile regular expression into a pattern and try to find a match
-				Pattern pattern = Pattern.compile(Pattern.quote(regex));
-				Matcher matcher = pattern.matcher(textToParse);
+				// Resolve pattern and try to find a match if possible
+				Optional<Pattern> optionalPattern = resolvePattern(regex);
+				if (optionalPattern.isPresent()) {
+					Pattern pattern = optionalPattern.get();
+					Matcher matcher = pattern.matcher(textToParse);
 
-				// Iterate over all occurrences, often this is just once
-				while (matcher.find()) {
-					result = true;
+					// Iterate over all occurrences, often this is just once
+					while (matcher.find()) {
+						result = true;
 
-					// Set triggering text
-					setTriggerText(matcher.group());
+						// Set triggering text
+						setTriggerText(matcher.group());
+					}
 				}
 			}
 		}
@@ -487,18 +493,50 @@ public class SmsReceiver extends BroadcastReceiver {
 		for (String primaryRegex : primaryRegexs) {
 			if (primaryRegex != null && msgBody != null) {
 				if ((primaryRegex.length() != 0) && (msgBody.length() != 0)) {
-					// Compile regular expression into a pattern and try to find a match
-					Pattern pattern = Pattern.compile(Pattern.quote(primaryRegex));
-					Matcher matcher = pattern.matcher(msgBody);
+					// Resolve pattern and try to find a match if possible
+					Optional<Pattern> optionalPattern = resolvePattern(primaryRegex);
+					if (optionalPattern.isPresent()) {
+						Pattern pattern = optionalPattern.get();
+						Matcher matcher = pattern.matcher(msgBody);
 
-					if (matcher.find()) {
-						result = false;
+						if (matcher.find()) {
+							result = false;
+						}
 					}
 				}
 			}
 		}
 
 		return result;
+	}
+
+	/**
+	 * To resolve a {@link Pattern} from given <code>regular expression</code>. This method will first try to resolve the <code>Pattern</code> from
+	 * given regular expression straight away, if that's not possible the given regular expression will be escaped then the <code>Pattern</code> will
+	 * be tried to be resolved once more.
+	 * 
+	 * @param regex
+	 *            Regular expression from which a pattern will be resolved, if possible.
+	 * @return An {@link Optional} containing resolved <code>Pattern</code> if it's possible to be resolved, else an {@link Optional#absent()} is
+	 *         returned.
+	 */
+	private Optional<Pattern> resolvePattern(String regex) {
+		Optional<Pattern> resolvedPattern = Optional.<Pattern> absent();
+
+		if (regex != null && regex.length() != 0) {
+			// Only try to resolve the pattern twice and as long as it hasn't been resolved
+			for (int tries = 0; tries < 2 && !resolvedPattern.isPresent(); tries++) {
+				// Try to compile the regular expression straight away..
+				try {
+					resolvedPattern = Optional.<Pattern> fromNullable(Pattern.compile(regex));
+				} catch (PatternSyntaxException pse) {
+					// ... something was wrong with it, as a fall back try to escape it for the next pattern compilation
+					regex = regex.replaceAll("([^a-zA-Z0-9])", "\\\\$1");
+				}
+			}
+		}
+
+		return resolvedPattern;
 	}
 
 	/**
