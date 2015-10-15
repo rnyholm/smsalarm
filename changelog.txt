@@ -2,6 +2,7 @@ SmsAlarm changelog
 
 v2.3.2(version code 30)
 -Escapar reguljärt uttryck som en fallback för att undvika PatternSyntaxException
+-Öppnar SMS/MMS inboxen med paket och class som ny komponent istället för intent med typ
 
 v2.3.1(version code 29)
 -Förbättrat gränssnittet, introducerat en sliding menu
