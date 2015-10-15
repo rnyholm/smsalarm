@@ -457,7 +457,7 @@ public class SmsReceiver extends BroadcastReceiver {
 		if (regex != null && textToParse != null) {
 			if ((regex.length() != 0) && (textToParse.length() != 0)) {
 				// Compile regular expression into a pattern and try to find a match
-				Pattern pattern = Pattern.compile(regex);
+				Pattern pattern = Pattern.compile(Pattern.quote(regex));
 				Matcher matcher = pattern.matcher(textToParse);
 
 				// Iterate over all occurrences, often this is just once
@@ -488,7 +488,7 @@ public class SmsReceiver extends BroadcastReceiver {
 			if (primaryRegex != null && msgBody != null) {
 				if ((primaryRegex.length() != 0) && (msgBody.length() != 0)) {
 					// Compile regular expression into a pattern and try to find a match
-					Pattern pattern = Pattern.compile(primaryRegex);
+					Pattern pattern = Pattern.compile(Pattern.quote(primaryRegex));
 					Matcher matcher = pattern.matcher(msgBody);
 
 					if (matcher.find()) {

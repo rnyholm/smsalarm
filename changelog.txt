@@ -1,5 +1,8 @@
 SmsAlarm changelog
 
+v2.3.2(version code 30)
+-Konverterar om angivet reguljärt uttryck till korrekt escapat reguljärt uttryck innan matchning för att undvika PatternSyntaxException
+
 v2.3.1(version code 29)
 -Förbättrat gränssnittet, introducerat en sliding menu
 -Tagit bort onödig loggning
