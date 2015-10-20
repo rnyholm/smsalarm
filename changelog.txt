@@ -1,5 +1,8 @@
 SmsAlarm changelog
 
+v2.3.4(version code 32)
+-Byggde om applikationen eftersom ett ClassNotFoundException lite mystiskt uppstod
+
 v2.3.3(version code 31)
 -Öppnar SMS/MMS inboxen med typ istället för paket och klass
 
