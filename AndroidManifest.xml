@@ -1,7 +1,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="ax.ha.it.smsalarm"
-    android:versionCode="30"
-    android:versionName="2.3.2">
+    android:versionCode="31"
+    android:versionName="2.3.3">
 
     <instrumentation android:targetPackage="ax.ha.it.smsalarm" android:name="android.test.InstrumentationTestRunner"/>
     

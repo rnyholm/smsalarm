@@ -5,7 +5,6 @@ package ax.ha.it.smsalarm.receiver;
 
 import android.app.Notification;
 import android.content.BroadcastReceiver;
-import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import ax.ha.it.smsalarm.activity.Acknowledge;
@@ -31,9 +30,11 @@ public class NotificationReceiver extends BroadcastReceiver {
 	public static final String ACTION_OPEN_INBOX = "ax.ha.it.smsalarm.OPEN_INBOX";
 	public static final String ACTION_ACKNOWLEDGE = "ax.ha.it.smsalarm.ACKNOWLEDGE";
 
-	// Components package and class for launching the MMS inbox properly
-	private static final String MMS_INBOX_PACKAGE = "com.android.mms";
-	private static final String MMS_INBOX_CLASS = "com.android.mms.ui.ConversationList";
+	// This string and intent opens the messaging directory on the Android device, however due to this page;
+	// http://stackoverflow.com/questions/3708737/go-to-inbox-in-android fetched 21.10-11, this way of achieve the
+	// "go to messaging directory" is highly unrecommended.Thats because this method uses undocumented API and is not part of the Android
+	// core.This may or may not work on some devices and versions!
+	private static final String SMS_MIME_TYPE = "vnd.android-dir/mms-sms";
 
 	@Override
 	public void onReceive(Context context, Intent intent) {
@@ -52,7 +53,7 @@ public class NotificationReceiver extends BroadcastReceiver {
 		if (ACTION_OPEN_INBOX.equals(intentAction)) {
 			// Setup next intent
 			Intent inboxIntent = new Intent(Intent.ACTION_MAIN);
-			inboxIntent.setComponent(new ComponentName(MMS_INBOX_PACKAGE, MMS_INBOX_CLASS));
+			inboxIntent.setType(SMS_MIME_TYPE);
 			inboxIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK); // Must set this flag in order to start activity from outside an activity
 
 			// Use application context to start activity
