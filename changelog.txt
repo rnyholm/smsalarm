@@ -1,64 +1,67 @@
 SmsAlarm changelog
 
+v2.3.5(version code 33)
+-Fixade bugg med felaktig sÃ¶kvÃ¤g nÃ¤r man valde egen alarmsignal.
+
 v2.3.4(version code 32)
 -Byggde om applikationen eftersom ett ClassNotFoundException lite mystiskt uppstod
 
 v2.3.3(version code 31)
--Öppnar SMS/MMS inboxen med typ istället för paket och klass
+-ï¿½ppnar SMS/MMS inboxen med typ istï¿½llet fï¿½r paket och klass
 
 v2.3.2(version code 30)
--Escapar reguljärt uttryck som en fallback för att undvika PatternSyntaxException
--Öppnar SMS/MMS inboxen med paket och class som ny komponent istället för intent med typ
+-Escapar reguljï¿½rt uttryck som en fallback fï¿½r att undvika PatternSyntaxException
+-ï¿½ppnar SMS/MMS inboxen med paket och class som ny komponent istï¿½llet fï¿½r intent med typ
 
 v2.3.1(version code 29)
--Förbättrat gränssnittet, introducerat en sliding menu
--Tagit bort onödig loggning
--Bytt namn på larmsignalen Virve till Nokia THR800
--Fixade bugg att shared preference HAS_CALLED kan vara "true" när applikationen går in i Acknowledge.class,
-resulterar i att ett kvitteringssamtal rings direkt när man e inne i kvitterings gränssnittet
--Alla ikoner som används i applikationen finns lokalt i projektet istället för att hämtas från Android resources
--Möjlighet att blinka med kamerans blixt vid inkommande larm, dock bara en BETA feature ännu
--En debugg/testmeny har lagts till för underlätta testande
+-Fï¿½rbï¿½ttrat grï¿½nssnittet, introducerat en sliding menu
+-Tagit bort onï¿½dig loggning
+-Bytt namn pï¿½ larmsignalen Virve till Nokia THR800
+-Fixade bugg att shared preference HAS_CALLED kan vara "true" nï¿½r applikationen gï¿½r in i Acknowledge.class,
+resulterar i att ett kvitteringssamtal rings direkt nï¿½r man e inne i kvitterings grï¿½nssnittet
+-Alla ikoner som anvï¿½nds i applikationen finns lokalt i projektet istï¿½llet fï¿½r att hï¿½mtas frï¿½n Android resources
+-Mï¿½jlighet att blinka med kamerans blixt vid inkommande larm, dock bara en BETA feature ï¿½nnu
+-En debugg/testmeny har lagts till fï¿½r underlï¿½tta testande
 -En egen sida som listar alla open source licenser har lagts till
--Sms Alarm ha fått en ny launcher ikon
--Vibratorn inaktiv när man testlyssnar på larmsignalerna
--Ombyggt gränssnitt för ljud- och vibrationsinställningarna
--Möjligt att testlyssna på larmsignaler direkt i dialogen där man väljer larmsignal
--Möjligt att välja egna larmsignaler
--Möjligt att spela upp larmsignal för inkommande larm(primär- och sekundärlarm) till notifikationen för larmet tagits hand om
--Bytt namn på shared preferences MESSAGE_TONE -> ALARM_SIGNAL
--Möjligt att välja vibrationsmönster för respektive larmtyp
--Möjligt att tysta/stoppa larmsignalen och vibrationen för inkommande larm genom att hantera notifikationen för larmet
--Eventuella mellanslag tas bort från det inkommande meddelandes telefonnummer
--Utökade områdena att trycka på i widgeten -> lättare att trycka rätt
--Estninska översättningarna borttagna
--Alla ikoner finns nu för respektive upplösning
--Larmloggen är flyttad in till applikationen
--Finns tre olika larmloggar, en för alla larm, en för primärlarm och en för sekundärlarm
--Larmloggen visar larm per år och månad, totalt antal mottagna larm visas också per månad
--Dialog som visar larminfo visas med fullständiga information om larmet när man trycker på ett larm i någondera larmlogg
--Möjligt att kvittera ett larm på nytt om man missat att göra det ifrån notifikationsbaren, detta görs då via alarm loggen
-genom att trycka på ett larm där. För att ett larm ska vara giltigt för kvittering måste larmet vara ett primärlarm,
-inte redan vara kvitterat och måste ha tagits emot inom de senaste 24 timmarna. Utöver detta måste användaren ha valt att 
-använda kvittering
--Widgeten visar nu larmtyp medans triggande ord har tagits bort. Informationen vissas nu också i samma följd som den görs i dialogen för larminfo
--Fixade bugg som gjorde att mottaget primärlarm nergraderades till ett sekundär larm om applikationen triggade sekundärlarmet på ord.
--Gränssnittet använder paddings istället för marginaler vilket leder till att gränssnittet renderas effektivare.
--Möjlighet att kvittera genom SMS, både till förinställt nummer med förinställt meddelande och genom att returnera mottaget SMS. SMS:et kan vara max 160 tecken långt.
--Räddningstjänst har bytts ut till organisation, på så vis blir appen mindre specifik för just räddningstjänsten.
--Alla fält för inmatning flyttar nu markören till slutet av texten, även fast man vänder skärmen. Möjligt att nu ändra befintliga telefonnummer och fritexter.
+-Sms Alarm ha fï¿½tt en ny launcher ikon
+-Vibratorn inaktiv nï¿½r man testlyssnar pï¿½ larmsignalerna
+-Ombyggt grï¿½nssnitt fï¿½r ljud- och vibrationsinstï¿½llningarna
+-Mï¿½jligt att testlyssna pï¿½ larmsignaler direkt i dialogen dï¿½r man vï¿½ljer larmsignal
+-Mï¿½jligt att vï¿½lja egna larmsignaler
+-Mï¿½jligt att spela upp larmsignal fï¿½r inkommande larm(primï¿½r- och sekundï¿½rlarm) till notifikationen fï¿½r larmet tagits hand om
+-Bytt namn pï¿½ shared preferences MESSAGE_TONE -> ALARM_SIGNAL
+-Mï¿½jligt att vï¿½lja vibrationsmï¿½nster fï¿½r respektive larmtyp
+-Mï¿½jligt att tysta/stoppa larmsignalen och vibrationen fï¿½r inkommande larm genom att hantera notifikationen fï¿½r larmet
+-Eventuella mellanslag tas bort frï¿½n det inkommande meddelandes telefonnummer
+-Utï¿½kade omrï¿½dena att trycka pï¿½ i widgeten -> lï¿½ttare att trycka rï¿½tt
+-Estninska ï¿½versï¿½ttningarna borttagna
+-Alla ikoner finns nu fï¿½r respektive upplï¿½sning
+-Larmloggen ï¿½r flyttad in till applikationen
+-Finns tre olika larmloggar, en fï¿½r alla larm, en fï¿½r primï¿½rlarm och en fï¿½r sekundï¿½rlarm
+-Larmloggen visar larm per ï¿½r och mï¿½nad, totalt antal mottagna larm visas ocksï¿½ per mï¿½nad
+-Dialog som visar larminfo visas med fullstï¿½ndiga information om larmet nï¿½r man trycker pï¿½ ett larm i nï¿½gondera larmlogg
+-Mï¿½jligt att kvittera ett larm pï¿½ nytt om man missat att gï¿½ra det ifrï¿½n notifikationsbaren, detta gï¿½rs dï¿½ via alarm loggen
+genom att trycka pï¿½ ett larm dï¿½r. Fï¿½r att ett larm ska vara giltigt fï¿½r kvittering mï¿½ste larmet vara ett primï¿½rlarm,
+inte redan vara kvitterat och mï¿½ste ha tagits emot inom de senaste 24 timmarna. Utï¿½ver detta mï¿½ste anvï¿½ndaren ha valt att 
+anvï¿½nda kvittering
+-Widgeten visar nu larmtyp medans triggande ord har tagits bort. Informationen vissas nu ocksï¿½ i samma fï¿½ljd som den gï¿½rs i dialogen fï¿½r larminfo
+-Fixade bugg som gjorde att mottaget primï¿½rlarm nergraderades till ett sekundï¿½r larm om applikationen triggade sekundï¿½rlarmet pï¿½ ord.
+-Grï¿½nssnittet anvï¿½nder paddings istï¿½llet fï¿½r marginaler vilket leder till att grï¿½nssnittet renderas effektivare.
+-Mï¿½jlighet att kvittera genom SMS, bï¿½de till fï¿½rinstï¿½llt nummer med fï¿½rinstï¿½llt meddelande och genom att returnera mottaget SMS. SMS:et kan vara max 160 tecken lï¿½ngt.
+-Rï¿½ddningstjï¿½nst har bytts ut till organisation, pï¿½ sï¿½ vis blir appen mindre specifik fï¿½r just rï¿½ddningstjï¿½nsten.
+-Alla fï¿½lt fï¿½r inmatning flyttar nu markï¿½ren till slutet av texten, ï¿½ven fast man vï¿½nder skï¿½rmen. Mï¿½jligt att nu ï¿½ndra befintliga telefonnummer och fritexter.
 -Tagit bort webadressen till Sms Alarms websida, bytt epost till smsalarm@outlook.com.
--Knapparna Ändra och ta bort i SMS- och Ordinställningarn aktiveras och inaktiveras nu beroende på om det finns något man kan ändra/tabort.
--Möjligt att göra donationer genom Google's In-app Billing.
--Möjligt att aktivera loggning av inkomna SMS för att underlätta felsökning.
--Möjligt att trigga alarm på reguljära uttryck och pattern matching i inkommande SMS.
--Möjligt att komma åt debug/testmenyn även fast applikationen är byggd för produktion.
--Anonym användardata samlas in genom Google Analytics
--Möjligt att inaktivera startskärmen
--Översatt till svenska, engelska, finska och tyska
+-Knapparna ï¿½ndra och ta bort i SMS- och Ordinstï¿½llningarn aktiveras och inaktiveras nu beroende pï¿½ om det finns nï¿½got man kan ï¿½ndra/tabort.
+-Mï¿½jligt att gï¿½ra donationer genom Google's In-app Billing.
+-Mï¿½jligt att aktivera loggning av inkomna SMS fï¿½r att underlï¿½tta felsï¿½kning.
+-Mï¿½jligt att trigga alarm pï¿½ reguljï¿½ra uttryck och pattern matching i inkommande SMS.
+-Mï¿½jligt att komma ï¿½t debug/testmenyn ï¿½ven fast applikationen ï¿½r byggd fï¿½r produktion.
+-Anonym anvï¿½ndardata samlas in genom Google Analytics
+-Mï¿½jligt att inaktivera startskï¿½rmen
+-ï¿½versatt till svenska, engelska, finska och tyska
 
 v2.2.5(version code 13)
--Översättning till estniska lades till
+-ï¿½versï¿½ttning till estniska lades till
 
 v2.2.4(version code 12)
 -Fixade NoSuchMethodError som resulterade i att appen krashade
@@ -70,61 +73,61 @@ v2.2.2(version code 10)
 -Fixade textinmatningsbugg
 
 v2.2.1(version code 9)
--Möjligt att lägga till fler än ett telefonnummer för primärlarm
--Möjligt att ange alfanumeriska tecken för telefonnummer
--Möjligt att ställa in fritexttriggning både för primär- och sekundärlarm
--Widgeten har fått ett till fält där den triggande texten syns, widgetenhar dessutom fått en annan formatering av kvitteringstiden
--Alarmloggen har utökats för att även visa det triggande ordet
--Ökade prioritet för SmsReceivern till 999
+-Mï¿½jligt att lï¿½gga till fler ï¿½n ett telefonnummer fï¿½r primï¿½rlarm
+-Mï¿½jligt att ange alfanumeriska tecken fï¿½r telefonnummer
+-Mï¿½jligt att stï¿½lla in fritexttriggning bï¿½de fï¿½r primï¿½r- och sekundï¿½rlarm
+-Widgeten har fï¿½tt ett till fï¿½lt dï¿½r den triggande texten syns, widgetenhar dessutom fï¿½tt en annan formatering av kvitteringstiden
+-Alarmloggen har utï¿½kats fï¿½r att ï¿½ven visa det triggande ordet
+-ï¿½kade prioritet fï¿½r SmsReceivern till 999
 -Target Android API level flyttades till 19(KitKat)
--Lade till hantering för sms mottagning och KitKat(beta)
+-Lade till hantering fï¿½r sms mottagning och KitKat(beta)
 
 v2.1.4(version code 8)
--Lade till hantering för ytterligare landskoder(USA, Canada, Slovenia, Österrike, Nya Zeeland och Storbrittanien)
--Bättre versionshantering, behöver bara ändra versionsnumret i manifest och i default string resursen
+-Lade till hantering fï¿½r ytterligare landskoder(USA, Canada, Slovenia, ï¿½sterrike, Nya Zeeland och Storbrittanien)
+-Bï¿½ttre versionshantering, behï¿½ver bara ï¿½ndra versionsnumret i manifest och i default string resursen
 
 v2.1.3(version code 7)
--Patch, fixade bug som ledde till att applikationen stoppas om SD kortet inte är tillgängligt för skrivning.
+-Patch, fixade bug som ledde till att applikationen stoppas om SD kortet inte ï¿½r tillgï¿½ngligt fï¿½r skrivning.
 
 v2.1.2(version code 6)
--Patch, fixade bug som ledde till att applikationen tvångsavslutas om man avbryter kvittering och sedan ringer ett samtal
+-Patch, fixade bug som ledde till att applikationen tvï¿½ngsavslutas om man avbryter kvittering och sedan ringer ett samtal
 
 v2.1.1(version code 5)
--Patch, ökade tiden för hur länge ett samtal måste vara utan att återuppringning ska ske
+-Patch, ï¿½kade tiden fï¿½r hur lï¿½nge ett samtal mï¿½ste vara utan att ï¿½teruppringning ska ske
 
 v2.1(version code 4) 
--Möjligt att kvittera ett inkommande primärlarm till ett telefonnummer
--Kvitteringen återuppringer o code 13m upptaget vid kvittering, beta stadie ännu
+-Mï¿½jligt att kvittera ett inkommande primï¿½rlarm till ett telefonnummer
+-Kvitteringen ï¿½teruppringer o code 13m upptaget vid kvittering, beta stadie ï¿½nnu
 -Fel loggas till fil
--Förbättrat hanteringen av datalagring och hämtning av data
--Förbättrat gränssnitt, mera anpassat för Android version 4.0 och uppåt
--SmsAlarm kan lyssna på flera telefonnummer än ett för sekundärlarm
--Ny ikon i notifikationsfältet för sekundärlarm, grått kryss
--Notifikationern skriver inte över varandra
--Möjlighet att spela upp larmsignalen två gånger vid larm
--Möjlighet att inaktivera SmsAlarm helt och hållet
--Möjlighet att ange sin räddningstjänsts namn
--Nytt vibrationsmönster
--Nya ringsignaler för sökare Swissphone Quattro 86, Swissphone Quattro 98, Swissphone Quattro XLS,
+-Fï¿½rbï¿½ttrat hanteringen av datalagring och hï¿½mtning av data
+-Fï¿½rbï¿½ttrat grï¿½nssnitt, mera anpassat fï¿½r Android version 4.0 och uppï¿½t
+-SmsAlarm kan lyssna pï¿½ flera telefonnummer ï¿½n ett fï¿½r sekundï¿½rlarm
+-Ny ikon i notifikationsfï¿½ltet fï¿½r sekundï¿½rlarm, grï¿½tt kryss
+-Notifikationern skriver inte ï¿½ver varandra
+-Mï¿½jlighet att spela upp larmsignalen tvï¿½ gï¿½nger vid larm
+-Mï¿½jlighet att inaktivera SmsAlarm helt och hï¿½llet
+-Mï¿½jlighet att ange sin rï¿½ddningstjï¿½nsts namn
+-Nytt vibrationsmï¿½nster
+-Nya ringsignaler fï¿½r sï¿½kare Swissphone Quattro 86, Swissphone Quattro 98, Swissphone Quattro XLS,
  Swissphone Patron Pro, Swissphone DE 900, Motorola Pageboy 2000, Motorola Firestorm, Motorola BMD,
- Bosch FME 87, Bosch FME 88, AEG TSE80, Virve samt några diverse sökarljud. Totalt 67 nya sökarljud
--Applikationen följer enhetens ljudinställningar på ett mycket stabilare sätt
--Skärmen tänds vid inkommande larm(om den är mörk), och är tänd i 20 sekunder innan den släcks igen
--Lysdioden blinkar rött vid inkommande larm, när skärmen släcks, detta beror helt förstås också på om enheten stöder detta
+ Bosch FME 87, Bosch FME 88, AEG TSE80, Virve samt nï¿½gra diverse sï¿½karljud. Totalt 67 nya sï¿½karljud
+-Applikationen fï¿½ljer enhetens ljudinstï¿½llningar pï¿½ ett mycket stabilare sï¿½tt
+-Skï¿½rmen tï¿½nds vid inkommande larm(om den ï¿½r mï¿½rk), och ï¿½r tï¿½nd i 20 sekunder innan den slï¿½cks igen
+-Lysdioden blinkar rï¿½tt vid inkommande larm, nï¿½r skï¿½rmen slï¿½cks, detta beror helt fï¿½rstï¿½s ocksï¿½ pï¿½ om enheten stï¿½der detta
 -Kontakt information finns i "Om Sms Alarm" dialogen
--Inkommande larm(sms som applikationen reagerar på) loggas till en html fil
--Widget har lagts till med vilken man kan toggla om sms alarm ska vara aktiverat och om enheten ska använda sig av enhetens ljudinställningar.
-Dessutom visas senast mottagna larm(primär och sekundär). Man kan även komma direkt till Sms Alarm härifrån och även komma till alarmlog-filen.
--Sms Alarm finns nu på svenska, engelska, tyska och finska.
+-Inkommande larm(sms som applikationen reagerar pï¿½) loggas till en html fil
+-Widget har lagts till med vilken man kan toggla om sms alarm ska vara aktiverat och om enheten ska anvï¿½nda sig av enhetens ljudinstï¿½llningar.
+Dessutom visas senast mottagna larm(primï¿½r och sekundï¿½r). Man kan ï¿½ven komma direkt till Sms Alarm hï¿½rifrï¿½n och ï¿½ven komma till alarmlog-filen.
+-Sms Alarm finns nu pï¿½ svenska, engelska, tyska och finska.
 
 v1.1.2(version code 3)
 -Gjort om about dialogen
 -Lokaliserat appen till engelska, svenska och finska
--Lagt till stöd för kompensering av flera landskoder(svenska, norska, danska, tyska)
+-Lagt till stï¿½d fï¿½r kompensering av flera landskoder(svenska, norska, danska, tyska)
 
 v1.1(version code 1)
--Sms Alarm reagerar på två numer(primär- och sekundär).
--Det är möjligt att ställa in appen så den tar hänsyn till telefonens ljudinställningar på ett korrekt sätt.
--Bättre hantering av mottagna sms.
--Förbättrat gränssnitt.
--SmsReceivern har fått ökad prioritet
+-Sms Alarm reagerar pï¿½ tvï¿½ numer(primï¿½r- och sekundï¿½r).
+-Det ï¿½r mï¿½jligt att stï¿½lla in appen sï¿½ den tar hï¿½nsyn till telefonens ljudinstï¿½llningar pï¿½ ett korrekt sï¿½tt.
+-Bï¿½ttre hantering av mottagna sms.
+-Fï¿½rbï¿½ttrat grï¿½nssnitt.
+-SmsReceivern har fï¿½tt ï¿½kad prioritet

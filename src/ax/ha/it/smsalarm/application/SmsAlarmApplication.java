@@ -5,6 +5,10 @@ package ax.ha.it.smsalarm.application;
 
 import java.util.List;
 
+import com.google.android.gms.analytics.GoogleAnalytics;
+import com.google.android.gms.analytics.HitBuilders;
+import com.google.android.gms.analytics.Tracker;
+
 import android.app.Activity;
 import android.app.Application;
 import android.content.SharedPreferences;
@@ -17,16 +21,11 @@ import ax.ha.it.smsalarm.handler.SharedPreferencesHandler.DataType;
 import ax.ha.it.smsalarm.handler.SharedPreferencesHandler.PrefKey;
 import ax.ha.it.smsalarm.handler.SoundHandler;
 
-import com.google.android.gms.analytics.GoogleAnalytics;
-import com.google.android.gms.analytics.HitBuilders;
-import com.google.android.gms.analytics.Tracker;
-
 /**
  * Application class, which have two main purposes:
  * <p>
  * <b><i>1.</i></b> Handle any eventual events upon update of application, in practice some code are executed.<br>
- * <b><i>2.</i></b> Serve as a handler for the Google Analytics tracking services. By setting up the Google Analytics services within the application
- * it can be accessible through over the application.
+ * <b><i>2.</i></b> Serve as a handler for the Google Analytics tracking services. By setting up the Google Analytics services within the application it can be accessible through over the application.
  * 
  * @author Robert Nyholm <robert.nyholm@aland.net>
  * @version 2.3.1
@@ -72,11 +71,10 @@ public class SmsAlarmApplication extends Application {
 	}
 
 	/**
-	 * Responsible for any <b><i>update actions</i></b>. In other words if some changes has been made in current release of the application that needs
-	 * to have some code executed(action) done after update that code is managed by this method. Code that needs to be executed after update is placed
-	 * within this method.<br>
-	 * To figure out if the application has been updated the <b><i>version code</i></b> is stored in {@link SharedPreferences}, and depending on logic
-	 * in this method correct updates are made, if any are needed.<br>
+	 * Responsible for any <b><i>update actions</i></b>. In other words if some changes has been made in current release of the application that needs to have some code executed(action) done after
+	 * update that code is managed by this method. Code that needs to be executed after update is placed within this method.<br>
+	 * To figure out if the application has been updated the <b><i>version code</i></b> is stored in {@link SharedPreferences}, and depending on logic in this method correct updates are made, if any
+	 * are needed.<br>
 	 * If it's a <b><i>new installation</i></b> of Sms Alarm the current version code is stored into shared preferences.
 	 */
 	@SuppressWarnings("unchecked")
@@ -190,8 +188,8 @@ public class SmsAlarmApplication extends Application {
 	 */
 	public static class GoogleAnalyticsHandler {
 		/**
-		 * Different possible report rules which can be used in combination with any other more complex you wan't. This report rule decides whether or
-		 * not the associated object should be reported, get it's data anonymized or get the data reported straight of.
+		 * Different possible report rules which can be used in combination with any other more complex you wan't. This report rule decides whether or not the associated object should be reported, get
+		 * it's data anonymized or get the data reported straight of.
 		 * 
 		 * @author Robert Nyholm <robert.nyholm@aland.net>
 		 * @version 2.3.1
@@ -211,10 +209,7 @@ public class SmsAlarmApplication extends Application {
 		 */
 		public static enum EventCategory {
 			// @formatter:off
-			ACKNOWLEDGE("Acknowledge"),
-			ALARM("Alarm"),
-			SETTINGS("Settings"),
-			USER_INTERFACE("User interface");
+			ACKNOWLEDGE("Acknowledge"), ALARM("Alarm"), SETTINGS("Settings"), USER_INTERFACE("User interface");
 			// @formatter:on
 
 			// Report text of this category
@@ -250,13 +245,8 @@ public class SmsAlarmApplication extends Application {
 		 */
 		public static enum EventAction {
 			// @formatter:off
-			ALARM_TRIGGERED("Alarm of any type triggered"),
-			ACKNOWLEDGE_DONE("Acknowledgement done"),
-			DEBUG_MENU_TOGGLE("Debug menu toggle"),
-			SECONDARY_ALARM_TRIGGERED("Secondary alarm triggered"),
-			SETTINGS_CHANGED("Settings changed"),
-			PRIMARY_ALARM_TRIGGERED("Primary alarm triggered"),
-			WIDGET_INTERACTION("Widget interaction");
+			ALARM_TRIGGERED("Alarm of any type triggered"), ACKNOWLEDGE_DONE("Acknowledgement done"), DEBUG_MENU_TOGGLE("Debug menu toggle"), SECONDARY_ALARM_TRIGGERED("Secondary alarm triggered"), SETTINGS_CHANGED("Settings changed"), PRIMARY_ALARM_TRIGGERED(
+					"Primary alarm triggered"), WIDGET_INTERACTION("Widget interaction");
 			// @formatter:on
 
 			// Report text of this action
@@ -407,8 +397,8 @@ public class SmsAlarmApplication extends Application {
 		}
 
 		/**
-		 * Convenience method to send an event to Google Analytics telling some {@link SharedPreferences} has changed, and in case the data should be
-		 * reported to Google Analytics that data will be sent as well, see {@link ReportRule} for more info about that.
+		 * Convenience method to send an event to Google Analytics telling some {@link SharedPreferences} has changed, and in case the data should be reported to Google Analytics that data will be
+		 * sent as well, see {@link ReportRule} for more info about that.
 		 * 
 		 * @param prefs
 		 *            <code>SharedPreferences</code> from which object changed will be fetched from.

@@ -7,13 +7,20 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
+import com.actionbarsherlock.app.SherlockFragment;
+import com.google.common.base.Optional;
+
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.Resources;
+import android.database.Cursor;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.provider.MediaStore;
+import android.support.v4.content.CursorLoader;
 import android.util.Log;
 import android.util.TypedValue;
 import android.view.LayoutInflater;
@@ -38,11 +45,8 @@ import ax.ha.it.smsalarm.handler.SoundHandler;
 import ax.ha.it.smsalarm.handler.VibrationHandler;
 import ax.ha.it.smsalarm.util.Utils;
 
-import com.actionbarsherlock.app.SherlockFragment;
-
 /**
- * {@link Fragment} containing all the views and user interface widgets for the <b><i>Sound Settings</i></b>. <code>Fragment</code> does also contain
- * all logic for the widgets.
+ * {@link Fragment} containing all the views and user interface widgets for the <b><i>Sound Settings</i></b>. <code>Fragment</code> does also contain all logic for the widgets.
  * 
  * @author Robert Nyholm <robert.nyholm@aland.net>
  * @version 2.3.1
@@ -123,10 +127,10 @@ public class SoundSettingsFragment extends SherlockFragment implements Applicati
 
 		// @formatter:off
 		// Ensure this fragment has data, UI-widgets and logic set before the view is returned
-		fetchSharedPrefs();		// Fetch shared preferences needed by objects in this fragment
-		findViews(view);		// Find UI widgets and link link them to objects in this fragment
-		setListeners();			// Set necessary listeners
-		updateFragmentView();	// Update all UI widgets with fetched data from shared preferences
+		fetchSharedPrefs(); // Fetch shared preferences needed by objects in this fragment
+		findViews(view); // Find UI widgets and link link them to objects in this fragment
+		setListeners(); // Set necessary listeners
+		updateFragmentView(); // Update all UI widgets with fetched data from shared preferences
 		// @formatter:on
 
 		return view;
@@ -345,48 +349,51 @@ public class SoundSettingsFragment extends SherlockFragment implements Applicati
 		if (resultCode == Activity.RESULT_OK || requestCode == AlarmSignalDialog.ADD_ALARM_SIGNAL_FROM_PRIMARY_DIALOG_REQUEST_CODE || requestCode == AlarmSignalDialog.ADD_ALARM_SIGNAL_FROM_SECONDARY_DIALOG_REQUEST_CODE) {
 			// Only interested in certain request codes...
 			switch (requestCode) {
-				case (AlarmSignalDialog.PRIMARY_ALARM_SIGNAL_DIALOG_REQUEST_CODE):
-					// Get the chosen primary alarm signal
-					primaryAlarmSignal = data.getStringExtra(AlarmSignalDialog.ALARM_SIGNAL);
+			case (AlarmSignalDialog.PRIMARY_ALARM_SIGNAL_DIALOG_REQUEST_CODE):
+				// Get the chosen primary alarm signal
+				primaryAlarmSignal = data.getStringExtra(AlarmSignalDialog.ALARM_SIGNAL);
 
-					// Store to shared preferences
-					prefHandler.storePrefs(PrefKey.SHARED_PREF, PrefKey.PRIMARY_ALARM_SIGNAL_KEY, primaryAlarmSignal, context);
+				// Store to shared preferences
+				prefHandler.storePrefs(PrefKey.SHARED_PREF, PrefKey.PRIMARY_ALARM_SIGNAL_KEY, primaryAlarmSignal, context);
 
-					// Update selected primary alarm signal TextView
-					updateSelectedPrimaryAlarmSignalTextView();
-					break;
-				case (AlarmSignalDialog.SECONDARY_ALARM_SIGNAL_DIALOG_REQUEST_CODE):
-					secondaryAlarmSignal = data.getStringExtra(AlarmSignalDialog.ALARM_SIGNAL);
-					prefHandler.storePrefs(PrefKey.SHARED_PREF, PrefKey.SECONDARY_ALARM_SIGNAL_KEY, secondaryAlarmSignal, context);
+				// Update selected primary alarm signal TextView
+				updateSelectedPrimaryAlarmSignalTextView();
+				break;
+			case (AlarmSignalDialog.SECONDARY_ALARM_SIGNAL_DIALOG_REQUEST_CODE):
+				secondaryAlarmSignal = data.getStringExtra(AlarmSignalDialog.ALARM_SIGNAL);
+				prefHandler.storePrefs(PrefKey.SHARED_PREF, PrefKey.SECONDARY_ALARM_SIGNAL_KEY, secondaryAlarmSignal, context);
 
-					updateSelectedSecondaryAlarmSignalTextView();
-					break;
-				case (AlarmVibrationDialog.PRIMARY_ALARM_VIBRATION_DIALOG_REQUEST_CODE):
-					primaryAlarmVibration = data.getStringExtra(AlarmVibrationDialog.ALARM_VIBRATION);
-					prefHandler.storePrefs(PrefKey.SHARED_PREF, PrefKey.PRIMARY_ALARM_VIBRATION_KEY, primaryAlarmVibration, context);
+				updateSelectedSecondaryAlarmSignalTextView();
+				break;
+			case (AlarmVibrationDialog.PRIMARY_ALARM_VIBRATION_DIALOG_REQUEST_CODE):
+				primaryAlarmVibration = data.getStringExtra(AlarmVibrationDialog.ALARM_VIBRATION);
+				prefHandler.storePrefs(PrefKey.SHARED_PREF, PrefKey.PRIMARY_ALARM_VIBRATION_KEY, primaryAlarmVibration, context);
 
-					updateSelectedPrimaryAlarmVibrationTextView();
-					break;
-				case (AlarmVibrationDialog.SECONDARY_ALARM_VIBRATION_DIALOG_REQUEST_CODE):
-					secondaryAlarmVibration = data.getStringExtra(AlarmVibrationDialog.ALARM_VIBRATION);
-					prefHandler.storePrefs(PrefKey.SHARED_PREF, PrefKey.SECONDARY_ALARM_VIBRATION_KEY, secondaryAlarmVibration, context);
+				updateSelectedPrimaryAlarmVibrationTextView();
+				break;
+			case (AlarmVibrationDialog.SECONDARY_ALARM_VIBRATION_DIALOG_REQUEST_CODE):
+				secondaryAlarmVibration = data.getStringExtra(AlarmVibrationDialog.ALARM_VIBRATION);
+				prefHandler.storePrefs(PrefKey.SHARED_PREF, PrefKey.SECONDARY_ALARM_VIBRATION_KEY, secondaryAlarmVibration, context);
 
-					updateSelectedSecondaryAlarmVibrationTextView();
-					break;
-				case (AlarmSignalDialog.ADD_ALARM_SIGNAL_FROM_PRIMARY_DIALOG_REQUEST_CODE):
-					// Fall through to next case as the same actions are taken for both
-				case (AlarmSignalDialog.ADD_ALARM_SIGNAL_FROM_SECONDARY_DIALOG_REQUEST_CODE):
-					// Resolve request code from intents request code, in case the user added an own alarm signal
-					int resolvedRequestCode = AlarmSignalDialog.fromIntentToDialogRequestCode(requestCode);
+				updateSelectedSecondaryAlarmVibrationTextView();
+				break;
+			case (AlarmSignalDialog.ADD_ALARM_SIGNAL_FROM_PRIMARY_DIALOG_REQUEST_CODE):
+				// Fall through to next case as the same actions are taken for both
+			case (AlarmSignalDialog.ADD_ALARM_SIGNAL_FROM_SECONDARY_DIALOG_REQUEST_CODE):
+				// Resolve request code from intents request code, in case the user added an own alarm signal
+				int resolvedRequestCode = AlarmSignalDialog.fromIntentToDialogRequestCode(requestCode);
 
-					if (resolvedRequestCode == AlarmSignalDialog.PRIMARY_ALARM_SIGNAL_DIALOG_REQUEST_CODE || resolvedRequestCode == AlarmSignalDialog.SECONDARY_ALARM_SIGNAL_DIALOG_REQUEST_CODE) {
-						// Handle the OK result by checking if selected alarm signal already exists, if not add it to the list and store it to shared
-						// preferences
-						if (resultCode == Activity.RESULT_OK) {
-							// Get the path to the selected alarm signal
-							String alarmSignal = data.getData().getPath();
+				if (resolvedRequestCode == AlarmSignalDialog.PRIMARY_ALARM_SIGNAL_DIALOG_REQUEST_CODE || resolvedRequestCode == AlarmSignalDialog.SECONDARY_ALARM_SIGNAL_DIALOG_REQUEST_CODE) {
+					// Handle the OK result by checking if selected alarm signal already exists, if not add it to the list and store it to shared
+					// preferences
+					if (resultCode == Activity.RESULT_OK) {
+						// Resolve the real path
+						Optional<String> optionalAlarmSignal = resolveRealPath(data.getData());
 
-							// If it doesn't exist in the list of user added alarm signals
+						// If it doesn't exist in the list of user added alarm signals
+						if (optionalAlarmSignal.isPresent()) {
+							String alarmSignal = optionalAlarmSignal.get();
+
 							if (!Utils.existsInConsiderCases(alarmSignal, userAddedAlarmSignals)) {
 								// Add the new alarm signal to the list
 								userAddedAlarmSignals.add(alarmSignal);
@@ -400,23 +407,64 @@ public class SoundSettingsFragment extends SherlockFragment implements Applicati
 								Toast.makeText(context, R.string.TOAST_PATH_ALREADY_IN_ALARM_SIGNAL_PATH_LIST, Toast.LENGTH_LONG).show();
 							}
 						}
-
-						// Show dialog again
-						showAlarmSignalDialog(resolvedRequestCode);
 					}
-					break;
-				default:
-					Log.e(LOG_TAG + ":onActivityResult()", "An unsupported result occurred, result code: \"" + resultCode + "\" and request code: \"" + requestCode + "\"");
+
+					// Show dialog again
+					showAlarmSignalDialog(resolvedRequestCode);
+				}
+				break;
+			default:
+				Log.e(LOG_TAG + ":onActivityResult()", "An unsupported result occurred, result code: \"" + resultCode + "\" and request code: \"" + requestCode + "\"");
 			}
 		}
 	}
 
 	/**
-	 * To validate that <b><i>User Added Alarm Signals</i></b> exists on the device. If they don't they will be removed, the changes will be persisted
-	 * to {@link SharedPreferences} and a message will be created and displayed for the user as a {@link Toast} explaining which alarm signals that
-	 * was removed and why.<br>
-	 * <b><i>Note.</i></b> If the selected alarm signal for either primary or secondary alarm has been removed, then the default alarm signal for
-	 * corresponding alarm type will be set as the selected alarm signal, and also stored to <code>SharedPreferences</code>.
+	 * To resolve a real path to given {@link Uri}. If given <code>uri</code> is <code>null</code> or path cannot be resolved an {@link Optional#absent()} {@link Optional} is returned, else the
+	 * resolved path will be wrapped into an <code>Optional</code> and returned.
+	 * 
+	 * @param uri
+	 *            <code>URI</code> from which a real path will be resolved.
+	 * @return Resolved path.
+	 */
+	private Optional<String> resolveRealPath(Uri uri) {
+		Optional<String> resolvedPath = Optional.<String> absent();
+
+		// Only if we got a uri
+		if (uri != null) {
+			Cursor cursor = null;
+
+			try {
+				// Define the projection and initialize a cursor loader
+				String[] projection = { MediaStore.Audio.Media.DATA };
+				CursorLoader loader = new CursorLoader(context, uri, projection, null, null, null);
+
+				// Load the cursor from the loader
+				cursor = loader.loadInBackground();
+
+				// Get column index which we should have, if not an exception will be thrown
+				int column_index = cursor.getColumnIndexOrThrow(MediaStore.Audio.Media.DATA);
+
+				// Move to first entry in cursor and fetch the string which is the real path in this case
+				cursor.moveToFirst();
+				resolvedPath = Optional.<String> fromNullable(cursor.getString(column_index));
+			} finally {
+				// Finally remember to close the cursor properly
+				if (cursor != null) {
+					cursor.close();
+					cursor = null;
+				}
+			}
+		}
+
+		return resolvedPath;
+	}
+
+	/**
+	 * To validate that <b><i>User Added Alarm Signals</i></b> exists on the device. If they don't they will be removed, the changes will be persisted to {@link SharedPreferences} and a message will
+	 * be created and displayed for the user as a {@link Toast} explaining which alarm signals that was removed and why.<br>
+	 * <b><i>Note.</i></b> If the selected alarm signal for either primary or secondary alarm has been removed, then the default alarm signal for corresponding alarm type will be set as the selected
+	 * alarm signal, and also stored to <code>SharedPreferences</code>.
 	 */
 	private void validateUserAddedAlarmSignals() {
 		// Need a temporary list of alarm signal, the once that doesn't exist on the file system will be placed here for removal
@@ -541,8 +589,8 @@ public class SoundSettingsFragment extends SherlockFragment implements Applicati
 	}
 
 	/**
-	 * To toggle the play alarm signal twice user interface components between being <b><i>enabled or disabled</i></b>. This depends on if the setting
-	 * to play alarm signal repeatedly has been set <b><i>true</i></b> or <b><i>false</i></b>.<br>
+	 * To toggle the play alarm signal twice user interface components between being <b><i>enabled or disabled</i></b>. This depends on if the setting to play alarm signal repeatedly has been set
+	 * <b><i>true</i></b> or <b><i>false</i></b>.<br>
 	 * If it has been set to <code>true</code> then the UI components will be <b><i>disabled</i></b> else <b><i>enabled</i></b>.
 	 */
 	private void togglePlayAlarmSignalTwiceComponents() {
@@ -551,8 +599,8 @@ public class SoundSettingsFragment extends SherlockFragment implements Applicati
 	}
 
 	/**
-	 * To toggle the play alarm signal repeatedly user interface components between being <b><i>enabled or disabled</i></b>. This depends on if the
-	 * setting to play alarm signal twice has been set <b><i>true</i></b> or <b><i>false</i></b>. <br>
+	 * To toggle the play alarm signal repeatedly user interface components between being <b><i>enabled or disabled</i></b>. This depends on if the setting to play alarm signal twice has been set
+	 * <b><i>true</i></b> or <b><i>false</i></b>. <br>
 	 * If it has been set to <code>true</code> then the UI components will be <b><i>disabled</i></b> else <b><i>enabled</i></b>.
 	 */
 	private void togglePlayAlarmSignalRepeatedlyComponents() {

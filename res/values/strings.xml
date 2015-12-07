@@ -2,8 +2,8 @@
 <resources>
     <!-- APPLICATION INFO BEGIN -->
     <string name="APPLICATION_NAME">Sms Alarm</string>
-    <string name="APPLICATION_VERSION">2.3.4</string>
-    <string name="APPLICATION_BUILD">20151020</string>
+    <string name="APPLICATION_VERSION">2.3.5</string>
+    <string name="APPLICATION_BUILD">20151207</string>
     <!-- APPLICATION INFO END -->
 
     <string name="ABOUT">About Sms Alarm</string>
