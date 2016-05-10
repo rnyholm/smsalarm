@@ -3,6 +3,10 @@
  */
 package ax.ha.it.smsalarm.activity;
 
+import com.actionbarsherlock.view.MenuItem;
+import com.jeremyfeinstein.slidingmenu.lib.SlidingMenu;
+import com.jeremyfeinstein.slidingmenu.lib.app.SlidingFragmentActivity;
+
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -13,7 +17,6 @@ import ax.ha.it.smsalarm.application.SmsAlarmApplication.GoogleAnalyticsHandler;
 import ax.ha.it.smsalarm.application.SmsAlarmApplication.GoogleAnalyticsHandler.EventAction;
 import ax.ha.it.smsalarm.application.SmsAlarmApplication.GoogleAnalyticsHandler.EventCategory;
 import ax.ha.it.smsalarm.fragment.AlarmLogFragment;
-import ax.ha.it.smsalarm.fragment.AppreciationFragment;
 import ax.ha.it.smsalarm.fragment.SlidingMenuFragment;
 import ax.ha.it.smsalarm.fragment.SmsSettingsFragment;
 import ax.ha.it.smsalarm.fragment.SoundSettingsFragment;
@@ -21,16 +24,12 @@ import ax.ha.it.smsalarm.fragment.dialog.AlarmSignalDialog;
 import ax.ha.it.smsalarm.handler.DatabaseHandler;
 import ax.ha.it.smsalarm.provider.WidgetProvider;
 
-import com.actionbarsherlock.view.MenuItem;
-import com.jeremyfeinstein.slidingmenu.lib.SlidingMenu;
-import com.jeremyfeinstein.slidingmenu.lib.app.SlidingFragmentActivity;
-
 /**
- * Main activity for <b><i>Sms Alarm</i></b>. Holds a user interface consisting of a <code>ContenFrame</code>, <code>SlidingMenu</code> and a
- * <code>ActionBar</code>, which in turn will be populated with other {@link Fragment}'s, which holds there own user interface and logics.
+ * Main activity for <b><i>Sms Alarm</i></b>. Holds a user interface consisting of a <code>ContenFrame</code>, <code>SlidingMenu</code> and a <code>ActionBar</code>, which in turn will be populated
+ * with other {@link Fragment}'s, which holds there own user interface and logics.
  * 
  * @author Robert Nyholm <robert.nyholm@aland.net>
- * @version 2.3.1
+ * @version 2.4.1
  * @since 0.9beta
  */
 public class SmsAlarm extends SlidingFragmentActivity {
@@ -49,8 +48,8 @@ public class SmsAlarm extends SlidingFragmentActivity {
 	private int tapCount = 0;
 
 	/**
-	 * Perform initialization of <code>Layout</code>'s, {@link Fragment}'s, the {@link SlidingMenu} and {@link ActionBar}. Configuration of these
-	 * objects is also done within this method as well as initialization of the {@link DatabaseHandler}.
+	 * Perform initialization of <code>Layout</code>'s, {@link Fragment}'s, the {@link SlidingMenu} and {@link ActionBar}. Configuration of these objects is also done within this method as well as
+	 * initialization of the {@link DatabaseHandler}.
 	 */
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -110,8 +109,8 @@ public class SmsAlarm extends SlidingFragmentActivity {
 	}
 
 	/**
-	 * Overridden in such way that if the {@link SlidingMenu} is showing when <b><i>back button</i></b> is pressed, the sliding menu will be closed.
-	 * If it's not showing when back button is pressed the application will follow the usual back pressed behavior.
+	 * Overridden in such way that if the {@link SlidingMenu} is showing when <b><i>back button</i></b> is pressed, the sliding menu will be closed. If it's not showing when back button is pressed the
+	 * application will follow the usual back pressed behavior.
 	 */
 	@Override
 	public void onBackPressed() {
@@ -123,8 +122,8 @@ public class SmsAlarm extends SlidingFragmentActivity {
 	}
 
 	/**
-	 * Listen on {@link KeyEvent}, this override is only interested in <code>KeyEvent</code>'s of type {@link KeyEvent#KEYCODE_MENU} (menu button).
-	 * When that button is pressed the {@link SlidingMenu} will be toggled, id it's not showing it will be shown and vice versa.
+	 * Listen on {@link KeyEvent}, this override is only interested in <code>KeyEvent</code>'s of type {@link KeyEvent#KEYCODE_MENU} (menu button). When that button is pressed the {@link SlidingMenu}
+	 * will be toggled, id it's not showing it will be shown and vice versa.
 	 */
 	@Override
 	public boolean onKeyDown(int keyCode, KeyEvent event) {
@@ -136,9 +135,8 @@ public class SmsAlarm extends SlidingFragmentActivity {
 	}
 
 	/**
-	 * Listen on {@link KeyEvent}, this override is only interested in <code>KeyEvent</code>'s of type {@link KeyEvent#KEYCODE_MENU} (menu button).
-	 * When that button is released in a high enough frequency the {@link SlidingMenu} will be rebuilt with the debug/testing menu items, if the menu
-	 * doesn't contain the items already. In those cases the items will be removed.
+	 * Listen on {@link KeyEvent}, this override is only interested in <code>KeyEvent</code>'s of type {@link KeyEvent#KEYCODE_MENU} (menu button). When that button is released in a high enough
+	 * frequency the {@link SlidingMenu} will be rebuilt with the debug/testing menu items, if the menu doesn't contain the items already. In those cases the items will be removed.
 	 */
 	@Override
 	public boolean onKeyUp(int keyCode, KeyEvent event) {
@@ -179,11 +177,11 @@ public class SmsAlarm extends SlidingFragmentActivity {
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
 		switch (item.getItemId()) {
-			case android.R.id.home:
-				toggle();
-				return true;
-			default:
-				return super.onOptionsItemSelected(item);
+		case android.R.id.home:
+			toggle();
+			return true;
+		default:
+			return super.onOptionsItemSelected(item);
 		}
 	}
 
@@ -194,9 +192,9 @@ public class SmsAlarm extends SlidingFragmentActivity {
 	 */
 	private void configureActionBar() {
 		// @formatter:off
-		getSupportActionBar().setDisplayHomeAsUpEnabled(true);	// By pressing action bar icon the menu will opens
-		getSupportActionBar().setIcon(R.drawable.ic_launcher);	// Icon in action bar
-		setSlidingActionBarEnabled(true);						// Action bar slides along with the menu
+		getSupportActionBar().setDisplayHomeAsUpEnabled(true); // By pressing action bar icon the menu will opens
+		getSupportActionBar().setIcon(R.drawable.ic_launcher); // Icon in action bar
+		setSlidingActionBarEnabled(true); // Action bar slides along with the menu
 		// @formatter:on
 	}
 
@@ -208,13 +206,13 @@ public class SmsAlarm extends SlidingFragmentActivity {
 	private void configureSlidingMenu() {
 		// @formatter:off
 		SlidingMenu sm = getSlidingMenu();
-		sm.setMode(SlidingMenu.LEFT);							// Menu slide in from left
-		sm.setTouchModeAbove(SlidingMenu.TOUCHMODE_FULLSCREEN);	// Menu can be opened with a sliding move anywhere on screen
-		sm.setShadowWidthRes(R.dimen.shadow_width);				// Width of menus shadow
-		sm.setShadowDrawable(R.drawable.shadow);				// Shadows drawable
-		sm.setBehindOffsetRes(R.dimen.slidingmenu_offset);		// Margin on the right side of screen when menu is open
-		sm.setFadeEnabled(true);								// Want menu to fade in and out
-		sm.setFadeDegree(0.35f);								// Fading value
+		sm.setMode(SlidingMenu.LEFT); // Menu slide in from left
+		sm.setTouchModeAbove(SlidingMenu.TOUCHMODE_FULLSCREEN); // Menu can be opened with a sliding move anywhere on screen
+		sm.setShadowWidthRes(R.dimen.shadow_width); // Width of menus shadow
+		sm.setShadowDrawable(R.drawable.shadow); // Shadows drawable
+		sm.setBehindOffsetRes(R.dimen.slidingmenu_offset); // Margin on the right side of screen when menu is open
+		sm.setFadeEnabled(true); // Want menu to fade in and out
+		sm.setFadeDegree(0.35f); // Fading value
 		// @formatter:on
 	}
 
@@ -223,8 +221,8 @@ public class SmsAlarm extends SlidingFragmentActivity {
 	 * If no <code>savedInstanceState</code> exists a new instance of {@link SlidingMenuFragment} will be placed in the <code>MenuFrame</code>.
 	 * 
 	 * @param savedInstanceState
-	 *            If the activity is being re-initialized after previously being shut down then this Bundle contains the data it most recently
-	 *            supplied in {@link #onSaveInstanceState}. <b><i>Note: Otherwise it is null.</i></b>
+	 *            If the activity is being re-initialized after previously being shut down then this Bundle contains the data it most recently supplied in {@link #onSaveInstanceState}. <b><i>Note:
+	 *            Otherwise it is null.</i></b>
 	 */
 	private void setMenuFragment(Bundle savedInstanceState) {
 		// Activity is not being re-created, set new instance of SlidingMenuFragment to menu frame
@@ -237,15 +235,14 @@ public class SmsAlarm extends SlidingFragmentActivity {
 
 	/**
 	 * To set correct {@link Fragment} to the <code>ContentFrame</code>.<br>
-	 * If no <code>savedInstanceState</code> exists and if {@link SmsAlarm#ACTION_SWITCH_TO_ALARM_LOG_FRAGMENT} hasn't been set as action to this
-	 * activities {@link Intent} a new instance of the default <code>Fragment</code> {@link SmsSettingsFragment} will be placed in the
-	 * <code>ContentFrame</code>.<br>
-	 * If {@link SmsAlarm#ACTION_SWITCH_TO_ALARM_LOG_FRAGMENT} has been set as action to this activities <code>Intent</code> then a new instance of
-	 * <code>Fragment</code> {@link AlarmLogFragment} will be placed in the <code>ContentFrame</code>.
+	 * If no <code>savedInstanceState</code> exists and if {@link SmsAlarm#ACTION_SWITCH_TO_ALARM_LOG_FRAGMENT} hasn't been set as action to this activities {@link Intent} a new instance of the
+	 * default <code>Fragment</code> {@link SmsSettingsFragment} will be placed in the <code>ContentFrame</code>.<br>
+	 * If {@link SmsAlarm#ACTION_SWITCH_TO_ALARM_LOG_FRAGMENT} has been set as action to this activities <code>Intent</code> then a new instance of <code>Fragment</code> {@link AlarmLogFragment} will
+	 * be placed in the <code>ContentFrame</code>.
 	 * 
 	 * @param savedInstanceState
-	 *            If the activity is being re-initialized after previously being shut down then this Bundle contains the data it most recently
-	 *            supplied in {@link #onSaveInstanceState}. <b><i>Note: Otherwise it is null.</i></b>
+	 *            If the activity is being re-initialized after previously being shut down then this Bundle contains the data it most recently supplied in {@link #onSaveInstanceState}. <b><i>Note:
+	 *            Otherwise it is null.</i></b>
 	 * @see #setContentFragment(Intent)
 	 */
 	private void setContentFragment(Bundle savedInstanceState) {
@@ -258,17 +255,15 @@ public class SmsAlarm extends SlidingFragmentActivity {
 
 	/**
 	 * To set correct {@link Fragment} to the <code>ContentFrame</code>.<br>
-	 * What <code>Fragment</code> is to be placed in the <code>ContentFrame</code> depends on if given {@link Intent} has
-	 * {@link SmsAlarm#ACTION_SWITCH_TO_ALARM_LOG_FRAGMENT} set as action.<br>
+	 * What <code>Fragment</code> is to be placed in the <code>ContentFrame</code> depends on if given {@link Intent} has {@link SmsAlarm#ACTION_SWITCH_TO_ALARM_LOG_FRAGMENT} set as action.<br>
 	 * If the <code>Intent</code> is missing that action then the default {@link SmsSettingsFragment} will be placed in the <code>ContentFrame</code>. <br>
 	 * On the other hand if the action exists then a {@link AlarmLogFragment} will be placed in the <code>ContentFrame</code>.
 	 * <p>
-	 * Note. If the <code>SlidingMenu</code> is showing when an <code>AlarmLogFragment</code> is placed in the <code>ContentView</code> it will be
-	 * placed in background, this is to ensure the <code>AlarmLogFragment</code> is on top.
+	 * Note. If the <code>SlidingMenu</code> is showing when an <code>AlarmLogFragment</code> is placed in the <code>ContentView</code> it will be placed in background, this is to ensure the
+	 * <code>AlarmLogFragment</code> is on top.
 	 * 
 	 * @param intent
-	 *            <code>Intent</code> which action are checked and from it a decision what <code>Fragment</code> that should be placed in
-	 *            <code>ContentFrame</code> are taken.
+	 *            <code>Intent</code> which action are checked and from it a decision what <code>Fragment</code> that should be placed in <code>ContentFrame</code> are taken.
 	 */
 	private void setContentFragment(Intent intent) {
 		FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
@@ -321,11 +316,6 @@ public class SmsAlarm extends SlidingFragmentActivity {
 			// Do further handling in fragments onActivityResult()
 			SoundSettingsFragment soundSettingsFragment = (SoundSettingsFragment) getSupportFragmentManager().findFragmentById(R.id.contentFrame_fl);
 			soundSettingsFragment.onActivityResult(requestCode, resultCode, data);
-		} else if (requestCode == AppreciationFragment.DONATION_REQUEST_CODE) {
-			// Again, find AppreciationFragment by id of content frame, at this point it's on top of the FragmentManagers BackStack so this is safe.
-			// Do further handling in fragments onActivityResult(), this is special in order to handle the purchase process async task properly
-			AppreciationFragment appreciationFragment = (AppreciationFragment) getSupportFragmentManager().findFragmentById(R.id.contentFrame_fl);
-			appreciationFragment.onActivityResult(requestCode, resultCode, data);
 		}
 	}
 }

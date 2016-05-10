@@ -1,5 +1,8 @@
 SmsAlarm changelog
 
+v2.4.1(version code 34)
+-Tog bort möjlighet att donera
+
 v2.3.5(version code 33)
 -Fixade bugg med felaktig sökväg när man valde egen alarmsignal.
 

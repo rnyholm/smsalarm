@@ -1,7 +1,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="ax.ha.it.smsalarm"
-    android:versionCode="33"
-    android:versionName="2.3.5">
+    android:versionCode="34"
+    android:versionName="2.4.1">
 
     <instrumentation android:targetPackage="ax.ha.it.smsalarm" android:name="android.test.InstrumentationTestRunner"/>
     
@@ -11,7 +11,6 @@
     <uses-feature android:name="android.hardware.camera" android:required="false" />
 	<uses-feature android:name="android.hardware.camera.flash" android:required="false"/>
     
-	<uses-permission android:name="com.android.vending.BILLING" />
 	<uses-permission android:name="android.permission.INTERNET" />
  	<uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.CALL_PHONE" />

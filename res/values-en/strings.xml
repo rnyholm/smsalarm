@@ -34,9 +34,6 @@
     <string name="ALARM_VIBRATION_DIALOG_TITLE">Choose vibration pattern</string>
     <string name="APPLICATION_DESCR">The Alarm application for Android&#8482;</string>
     <string name="CANCEL">Cancel</string>
-    <string name="CONFIRM_DONATION_AMOUNT_DIALOG_MESSAGE">Are you sure you want to donate %s (excluding VAT) to the developer of Sms Alarm?</string>
-    <string name="DONATE">Donate</string>
-    <string name="DONATE_DIALOG_TITLE">Confirm donation</string>
     <string name="EDIT">Edit</string>
     <string name="EDIT_FREE_TEXT_DIALOG_TITLE">Edit word</string>
     <string name="EDIT_MESSAGE">Edit message</string>
@@ -64,9 +61,7 @@
     <string name="FLASH_NOTIFICATION_NOT_SUPPORTED_MISSING_CAMERA_FLASH">Flash notification is not supported because the device has no flash.</string>
     <string name="FREE_TEXT_DIALOG_HINT">Word..</string>
     <string name="INFO_ACKNOWLEDGE_SETTINGS">Set if acknowledgment of alarms should be used and in that case how it should be done, phone number that the acknowledgment is done to and message for acknowledgment.</string>
-    <string name="INFO_APPRECIATION">Do you feel that Sms Alarm makes a difference in your life and want to show your support for the application? There are a couple of ways to do it and it does not matter how you do it, all support is appreciated!</string>
-    <string name="INFO_APPRECIATION_DONATE">If you want to contribute more hands on and really show your support for future development, you are welcome to make a donation. Small or large, it does not matter, all donations are important!\nThe donation will be done by Google\'s In-app Billing. All amounts are exclusive VAT.</string>
-    <string name="INFO_APPRECIATION_REVIEW">Review Sms Alarm at Google Play&#8482; and if you feel you for it, write something about it.</string>
+    <string name="INFO_APPRECIATION">Do you feel that Sms Alarm makes a difference in your life and want to show your support for the application? Review Sms Alarm at Google Play&#8482; and if you feel you for it, write something about it.</string>
     <string name="INFO_ENABLE_ACKNOWLEDGE">If selected primary alarm can be acknowledged.</string>
     <string name="INFO_ENABLE_SMS_ALARM">If selected, Sms Alarm will trigger alarms according to given information, else the application does not.</string>
     <string name="INFO_ENABLE_SMS_DEBUG_LOGGING">If selected, all incoming SMS\'s will be logged to the file smslog.txt in the folder SmsAlarm. The information that will be logged is time received, sender and message. Note that this feature is used mainly for debugging purposes, otherwise it should be disabled.</string>
@@ -137,9 +132,6 @@
     <string name="TITLE_ALARM_SIGNALS">Alarm signals</string>
     <string name="TITLE_ALARM_VIBRATIONS">Vibration patterns</string>
     <string name="TITLE_APPRECIATION">Show your support</string>
-    <string name="TITLE_APPRECIATION_DONERA">Donate</string>
-    <string name="TITLE_APPRECIATION_REVIEW">Review</string>
-    <string name="TITLE_DONATION_SIZE">Amount to donate</string>
     <string name="TITLE_ENABLE_ACKNOWLEDGE">Enable acknowledgment</string>
     <string name="TITLE_ENABLE_SMS_ALARM">Enable Sms Alarm</string>
     <string name="TITLE_ENABLE_SMS_DEBUG_LOGGING">Enable SMS logging</string>
@@ -161,10 +153,6 @@
     <string name="TOAST_ALARM_SIGNALS_REMOVED_DUE_TO_MISSING_PATHS">has been removed from the list of alarm signals as they could not be found on the device.</string>
     <string name="TOAST_CANNOT_ACKNOWLEDGE_NO_PHONE_NUMBER_EXISTS">Cannot acknowledge! No phone number to acknowledge to exists. Check the settings and the sender of the received SMS.</string>
     <string name="TOAST_CANNOT_SEND_ACKNOWLEDGE_SMS">Cannot send acknowledgement message!</string>
-    <string name="TOAST_DONATION_FAILED_AUTHENTICITY_VERIFICATION_FAIL">The donation was successful but the validity of the transaction could not be determined.</string>
-    <string name="TOAST_DONATION_FAILED_PURCHASE_ERROR">An error occurred during payment, the donation failed.</string>
-    <string name="TOAST_DONATION_FAILED_PURCHASE_ERROR_PURCHASE_CANCELED">The payment was cancelled, no donation has been done.</string>
-    <string name="TOAST_DONATION_SUCCESSFUL">Thanks for your support!</string>
     <string name="TOAST_DUPLICATED_FREE_TEXTS">Word for primary and secondary alarm cannot be same. Enter a new word.</string>
     <string name="TOAST_DUPLICATED_PHONE_NUMBERS">Telephone number for primary and secondary alarms may not be the same. Enter a new telephone number.</string>
     <string name="TOAST_DUPLICATED_REGEX">Regular expressions for primary and secondary alarms may cannot be the same. Enter a new expression.</string>
@@ -179,7 +167,6 @@
     <string name="TOAST_REGEX_ALREADY_IN_SECONDARY_LIST">Specified regular expression is already in the list of expressions for secondary alarms. Enter a new expression.</string>
     <string name="TOAST_REGEX_MISSING">A regular expression must be specified.</string>
     <string name="TOAST_SENDING_ACKNOWLEDGE_SMS">Sending acknowledgement message..</string>
-    <string name="TOAST_UNABLE_TO_SETUP_GOOGLE_IN_APP_BILLING">An error has occurred which does not allow donations at the moment.</string>
     <string name="TOAST_UNABLE_TO_START_GOOGLE_PLAY">Unable to open Google Play&#8482;.</string>
     <string name="WIDGET_NOT_AGREED_EULA">You must start Sms Alarm and agree to the user agreement before you may use this widget.</string>
     <string name="YES">Yes</string>

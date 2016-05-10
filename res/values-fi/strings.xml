@@ -34,9 +34,6 @@
     <string name="ALARM_VIBRATION_DIALOG_TITLE">Valitse värähtelykuvio</string>
     <string name="APPLICATION_DESCR">Hälytyssovellus Android&#8482;</string>
     <string name="CANCEL">Peruuta</string>
-    <string name="CONFIRM_DONATION_AMOUNT_DIALOG_MESSAGE">Oletko varma, haluatko lahjoittaa %s (ilman alvia) Sms Alarmin kehittäjälle?</string>
-    <string name="DONATE">Lahjoita</string>
-    <string name="DONATE_DIALOG_TITLE">Vahvista lahjoitus</string>
     <string name="EDIT">Vaihda</string>
     <string name="EDIT_FREE_TEXT_DIALOG_TITLE">Vaihda teksti</string>
     <string name="EDIT_MESSAGE">Vaihda viesti</string>
@@ -64,9 +61,7 @@
     <string name="FLASH_NOTIFICATION_NOT_SUPPORTED_MISSING_CAMERA_FLASH">Salamailmoitus ei ole tuettu koska laitteesta puuttuu salama.</string>
     <string name="FREE_TEXT_DIALOG_HINT">Sana..</string>
     <string name="INFO_ACKNOWLEDGE_SETTINGS">Aseta käytetäänkö hälytyskuittausta, jos niin: ilmoita kuittaustapa, -puhelinnumero ja -viesti.</string>
-    <string name="INFO_APPRECIATION">Onko Sms Alarm ollut sinulle hyödyllinen ja haluatko näyttää arvostuksesi? On muutama eri tapa tehdä se ja kaikki ovat yhtä tervetulleita!</string>
-    <string name="INFO_APPRECIATION_DONATE">Jos haluat lahjoittaa rahaa ja todella näyttää tukesi, on se tervetullut. Iso tai pieni, sillä ei ole väliä! Kaikki lahjoitukset ovat tärkeitä!\nLahjoitukset tehdään käyttäen Google In-app Billingia. Mikään summa ei sisällä alvia.</string>
-    <string name="INFO_APPRECIATION_REVIEW">Arvostele Sms Alarm palvelussa Google Play&#8482; ja jos haluat, kirjoita jotain siitä.</string>
+    <string name="INFO_APPRECIATION">Onko Sms Alarm ollut sinulle hyödyllinen ja haluatko näyttää arvostuksesi? Arvostele Sms Alarm palvelussa Google Play&#8482; ja jos haluat, kirjoita jotain siitä.</string>
     <string name="INFO_ENABLE_ACKNOWLEDGE">Jos valittu voidaan ensisijainen hälytys kuitata.</string>
     <string name="INFO_ENABLE_SMS_ALARM">Valittuna, Sms Alarm hälyttäännetun tiedon perustella, muuten ei.</string>
     <string name="INFO_ENABLE_SMS_DEBUG_LOGGING">Valittuna kaikki viestit tallennetaan tiedostoon smslog.txt kansioon SmsAlarm. Se tallentaa ajankohdan, lähettäjän ja viestin. Huomioi, käytä toimintoa lähinnä virheen etsinnässä, mulloin pois käytöstä.</string>
@@ -137,9 +132,6 @@
     <string name="TITLE_ALARM_SIGNALS">Hälytyssignaalit</string>
     <string name="TITLE_ALARM_VIBRATIONS">Värinäkuvio</string>
     <string name="TITLE_APPRECIATION">Näytä tukesi</string>
-    <string name="TITLE_APPRECIATION_DONERA">Lahjoita</string>
-    <string name="TITLE_APPRECIATION_REVIEW">Arvostele</string>
-    <string name="TITLE_DONATION_SIZE">Lahjoituksen suuruus</string>
     <string name="TITLE_ENABLE_ACKNOWLEDGE">Aktivoi ensisijaisen hälytysen kuittaus</string>
     <string name="TITLE_ENABLE_SMS_ALARM">Aktivoi Sms Alarm</string>
     <string name="TITLE_ENABLE_SMS_DEBUG_LOGGING">Aktivoi SMS-tallennus</string>
@@ -161,10 +153,6 @@
     <string name="TOAST_ALARM_SIGNALS_REMOVED_DUE_TO_MISSING_PATHS">poistettu hälytyslistalta sillä niitä ei löydetty laitteesta.</string>
     <string name="TOAST_CANNOT_ACKNOWLEDGE_NO_PHONE_NUMBER_EXISTS">Ei voi kuitata! Ei asetettua puhelinnumeroa. Tarkista asetukset ja viestin lähettäjä.</string>
     <string name="TOAST_CANNOT_SEND_ACKNOWLEDGE_SMS">Ei voi lähettää kuittausviestiä!</string>
-    <string name="TOAST_DONATION_FAILED_AUTHENTICITY_VERIFICATION_FAIL">Lahjoitus onnistui, mutta rahan siirtoa ei voitu varmistaa.</string>
-    <string name="TOAST_DONATION_FAILED_PURCHASE_ERROR">Maksun aikana ilmeni ongelma, lahjoitus epäonnistui.</string>
-    <string name="TOAST_DONATION_FAILED_PURCHASE_ERROR_PURCHASE_CANCELED">Maksu keskeytyi, lahjoitusta ei ole tehty.</string>
-    <string name="TOAST_DONATION_SUCCESSFUL">Kiitos tuestasi!</string>
     <string name="TOAST_DUPLICATED_FREE_TEXTS">Ensi- ja toissijaisenhälytyksen sana ei saa olla sama. Anna uusi sana.</string>
     <string name="TOAST_DUPLICATED_PHONE_NUMBERS">Puhelinnumero ensisijaiseen ja toissijaiseen hälytykseen ei voi olla sama. Anna uusi puhelinnumero.</string>
     <string name="TOAST_DUPLICATED_REGEX">Säännöllinen lauseke ei voi olla sama ensi- ja toissijaiselle hälytykselle.</string>
@@ -179,7 +167,6 @@
     <string name="TOAST_REGEX_ALREADY_IN_SECONDARY_LIST">Annettu säännöllinen lauseke on jo toissijaisella hälytyslistalla. Aseta uusi lauseke.</string>
     <string name="TOAST_REGEX_MISSING">Aseta säännöllinen lauseke.</string>
     <string name="TOAST_SENDING_ACKNOWLEDGE_SMS">Ilmoittaa kuittausviestin..</string>
-    <string name="TOAST_UNABLE_TO_SETUP_GOOGLE_IN_APP_BILLING">Ilmaantui virhe, joka ei mehdollista lahjoituksia tällä hetkellä.</string>
     <string name="TOAST_UNABLE_TO_START_GOOGLE_PLAY">Ei onnistu avaamaan palvelua Google Play&#8482;.</string>
     <string name="WIDGET_NOT_AGREED_EULA">Sinun täytyy aloittaa Sms Alarm ja hyväksyä käyttösopimus ennen kuin voit käyttää tätä widget.</string>
     <string name="YES">Kyllä</string>

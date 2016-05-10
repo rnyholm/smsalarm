@@ -34,9 +34,6 @@
     <string name="ALARM_VIBRATION_DIALOG_TITLE">Välj vibrationsmönster</string>
     <string name="APPLICATION_DESCR">Larmapplikationen för Android&#8482;</string>
     <string name="CANCEL">Avbryt</string>
-    <string name="CONFIRM_DONATION_AMOUNT_DIALOG_MESSAGE">Är du säker på att du vill donera %s (exklusive moms) till utvecklaren?</string>
-    <string name="DONATE">Donera</string>
-    <string name="DONATE_DIALOG_TITLE">Bekräfta donation</string>
     <string name="EDIT">Ändra</string>
     <string name="EDIT_FREE_TEXT_DIALOG_TITLE">Ändra ord</string>
     <string name="EDIT_MESSAGE">Ändra meddelande</string>
@@ -64,9 +61,7 @@
     <string name="FLASH_NOTIFICATION_NOT_SUPPORTED_MISSING_CAMERA_FLASH">Blixtnotifikation stöds inte på grund av att enheten saknar blixt.</string>
     <string name="FREE_TEXT_DIALOG_HINT">Ord..</string>
     <string name="INFO_ACKNOWLEDGE_SETTINGS">Ställ in om larmkvittering skall användas och i sådana fall på vilket sätt kvittering sker, telefonnummer som kvittering sker mot och kvitteringsmeddelande.</string>
-    <string name="INFO_APPRECIATION">Känner du att Sms Alarm gör skillnad i ditt liv och vill visa ditt stöd för applikationen? Det finns ett par olika sätt att göra det på och det spelar ingen roll hur du gör det, allt stöd uppskattas!</string>
-    <string name="INFO_APPRECIATION_DONATE">Om du vill bidra mera konkret och verkligen visa ditt stöd för framtida utveckling är du välkommen att göra en donation. Liten eller stor, det spelar ingen roll, alla donationer är betydelsefulla!\nDonationen kommer göras genom Google\'s In-app Billing. Alla belopp är exklusive moms.</string>
-    <string name="INFO_APPRECIATION_REVIEW">Recensera Sms Alarm på Google Play&#8482; och om du känner för det, skriv något om den.</string>
+    <string name="INFO_APPRECIATION">Känner du att Sms Alarm gör skillnad i ditt liv och vill visa ditt stöd för applikationen? Recensera Sms Alarm på Google Play&#8482; och om du känner för det, skriv något om den.</string>
     <string name="INFO_ENABLE_ACKNOWLEDGE">Om vald kan primärlarm kvitteras.</string>
     <string name="INFO_ENABLE_SMS_ALARM">Om vald larmar Sms Alarm enligt angiven information, annars gör applikationen inte det.</string>
     <string name="INFO_ENABLE_SMS_DEBUG_LOGGING">Om vald kommer alla inkommande SMS att loggas till filen smslog.txt som finns i mappen SmsAlarm. Det som loggas är tidpunkt, avsändare och meddelande. Notera att denna funktion används främst i felsökningssyfte, i övrigt bör funktionen vara inaktiverad.</string>
@@ -137,9 +132,6 @@
     <string name="TITLE_ALARM_SIGNALS">Larmsignaler</string>
     <string name="TITLE_ALARM_VIBRATIONS">Vibrationsmönster</string>
     <string name="TITLE_APPRECIATION">Visa ditt stöd</string>
-    <string name="TITLE_APPRECIATION_DONERA">Donera</string>
-    <string name="TITLE_APPRECIATION_REVIEW">Recensera</string>
-    <string name="TITLE_DONATION_SIZE">Belopp att donera</string>
     <string name="TITLE_ENABLE_ACKNOWLEDGE">Aktivera kvittering av primärlarm</string>
     <string name="TITLE_ENABLE_SMS_ALARM">Aktivera Sms Alarm</string>
     <string name="TITLE_ENABLE_SMS_DEBUG_LOGGING">Aktivera SMS loggning</string>
@@ -161,10 +153,6 @@
     <string name="TOAST_ALARM_SIGNALS_REMOVED_DUE_TO_MISSING_PATHS">har tagits bort från listan av larmsignaler eftersom de inte kunde hittas på enheten.</string>
     <string name="TOAST_CANNOT_ACKNOWLEDGE_NO_PHONE_NUMBER_EXISTS">Kan ej kvittera! Inget telefonnummer att kvittera till finns. Kontrollera inställningarna och avsändare av mottaget SMS.</string>
     <string name="TOAST_CANNOT_SEND_ACKNOWLEDGE_SMS">Kan ej skicka kvitteringsmeddelande!</string>
-    <string name="TOAST_DONATION_FAILED_AUTHENTICITY_VERIFICATION_FAIL">Donationen lyckades men giltigheten i transaktionen kunde ej fastställas.</string>
-    <string name="TOAST_DONATION_FAILED_PURCHASE_ERROR">Ett fel inträffade vid betalning, donationen misslyckades.</string>
-    <string name="TOAST_DONATION_FAILED_PURCHASE_ERROR_PURCHASE_CANCELED">Betalningen avbröts, ingen donation har gjorts.</string>
-    <string name="TOAST_DONATION_SUCCESSFUL">Tack för ditt stöd!</string>
     <string name="TOAST_DUPLICATED_FREE_TEXTS">Ord för primär- och sekundärlarm får inte vara lika. Ange ett nytt ord.</string>
     <string name="TOAST_DUPLICATED_PHONE_NUMBERS">Telefonnummer för primär- och sekundärlarm får inte vara lika. Ange ett nytt telefonnummer.</string>
     <string name="TOAST_DUPLICATED_REGEX">Reguljära uttryck för primär- och sekundärlarm får inte vara lika. Ange ett nytt uttryck.</string>
@@ -179,7 +167,6 @@
     <string name="TOAST_REGEX_ALREADY_IN_SECONDARY_LIST">Angivet reguljärt uttryck finns redan i listan av uttryck för sekundärlarm. Ange ett nytt uttryck.</string>
     <string name="TOAST_REGEX_MISSING">Ett reguljärt uttryck måste anges.</string>
     <string name="TOAST_SENDING_ACKNOWLEDGE_SMS">Skickar kvitteringsmeddelande..</string>
-    <string name="TOAST_UNABLE_TO_SETUP_GOOGLE_IN_APP_BILLING">Ett fel inträffade vilket inte möjliggör donationer för tillfället.</string>
     <string name="TOAST_UNABLE_TO_START_GOOGLE_PLAY">Lyckas inte öppna Google Play&#8482;.</string>
     <string name="WIDGET_NOT_AGREED_EULA">Du måste starta Sms Alarm och godkänna användaravtalet innan du kan använda denna widget.</string>
     <string name="YES">Ja</string>
